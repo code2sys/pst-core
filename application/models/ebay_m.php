@@ -1394,7 +1394,7 @@ class Ebay_M extends Master_M {
 //        $this->pr($uploadXML);
 //        die("1234");
         if ($store_feed == true) {
-            $file_path = dirname(__DIR__) . '/ebayFeeds/ebayfeed_un.xml';
+            $file_path = STORE_DIRECTORY . '/ebayFeeds/ebayfeed_un.xml';
             if (file_exists($file_path)) {
                 unlink($file_path);
             }
@@ -1408,7 +1408,7 @@ class Ebay_M extends Master_M {
             $doc->loadXML($xml);
             $doc->formatOutput = TRUE;
 //Save XML as a file
-            $file = dirname(__DIR__) . '/ebayFeeds/ebayfeed.xml';
+            $file = STORE_DIRECTORY . '/ebayFeeds/ebayfeed.xml';
             if (file_exists($file)) {
                 unlink($file);
             }
@@ -1688,7 +1688,7 @@ class Ebay_M extends Master_M {
 //        $this->pr($uploadXML);
 //        die("1234");
         if ($store_feed == true) {
-            $file_path = dirname(__DIR__) . '/ebayFeeds/ebayfeed_update_un.xml';
+            $file_path = STORE_DIRECTORY . '/ebayFeeds/ebayfeed_update_un.xml';
             if (file_exists($file_path)) {
                 unlink($file_path);
             }
@@ -1702,7 +1702,7 @@ class Ebay_M extends Master_M {
             $doc->loadXML($xml);
             $doc->formatOutput = TRUE;
 //Save XML as a file
-            $file = dirname(__DIR__) . '/ebayFeeds/ebayfeed_update.xml';
+            $file = STORE_DIRECTORY . '/ebayFeeds/ebayfeed_update.xml';
             if (file_exists($file)) {
                 unlink($file);
             }

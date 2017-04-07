@@ -15,6 +15,16 @@ Creating a Store
 Boostrap The Database Commands
 -------------------------------
 
+<pre>
+mysql dev_jbdev --user=root -p < required/20170407.001.JLBSchema.sql 
+mysql dev_jbdev --user=root -p < required/20170407.002.JLBEbaySchema.sql 
+mysql dev_jbdev --user=root -p < required/20170407.003.JLBBasicData.sql 
+mysql dev_jbdev --user=root -p < required/20170407.004.JLBStore.sql 
+php database_update.php --config_file ../store/environment.php  --directories required/ --record_only
+</pre>
+
+Thereafter, you should be able to just use: php database_update.php --config_file ../store/environment.php  --directories required/
+
 
 Add in the Symlinks 
 --------------------
@@ -39,5 +49,20 @@ Virtual Host Configuration
 ---------------------------
 
 
+
+
+Cron Jobs
+---------
+
+Make sure to change to your directory...
+
+<pre>
+*	*	*	*	*	cd /var/www/jbdev.powersporttechnologies.com/store && php html/index.php croncontrol/emails
+15	*	*	*	*	cd /var/www/jbdev.powersporttechnologies.com/store && php html/index.php croncontrol/hourly
+0	2	*	*	*	cd /var/www/jbdev.powersporttechnologies.com/store && php html/index.php croncontrol/daily
+0	22	*	*	6	cd /var/www/jbdev.powersporttechnologies.com/store && php html/index.php croncontrol/weeklys
+0	0	1	*	*	cd /var/www/jbdev.powersporttechnologies.com/store && php html/index.php croncontrol/monthly
+*	*	*	*	*	cd /var/www/jbdev.powersporttechnologies.com/store && php html/index.php croncontrol/processparts
+</pre>
 
 

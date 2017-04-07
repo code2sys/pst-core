@@ -64,7 +64,7 @@ class CronControl extends Master_Controller {
 	private function _runJob($job_model)
 	{
         // Can we obtain the lock?
-        $fp = fopen(__DIR__ . "/../../cronlock/" . $job_model . ".lock", "w") or die("Could not obtain cronlock: " . __DIR__ . "/../../cronlock/" . $job_model . ".lock");
+        $fp = fopen(STORE_DIRECTORY . "/cronlock/" . $job_model . ".lock", "w") or die("Could not obtain cronlock: " . STORE_DIRECTORY . "/cronlock/" . $job_model . ".lock");
 
         if (flock($fp, LOCK_EX | LOCK_NB)) {
             // Load the model

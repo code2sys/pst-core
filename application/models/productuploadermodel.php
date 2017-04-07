@@ -147,7 +147,7 @@ class Productuploadermodel extends CI_Model {
 
     public function __construct() {
         parent::__construct();
-        $this->upload_directory = __DIR__ . "/../../uploads";
+        $this->upload_directory = STORE_DIRECTORY . "/uploads";
         $this->productupload_cache = array();
     }
 

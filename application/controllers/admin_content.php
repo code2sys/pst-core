@@ -242,7 +242,7 @@ class Admin_Content extends Master_Controller {
         }
         $uploadData = $this->input->post();
         if (!empty($uploadData)) {
-            $file = dirname(__DIR__) . '/craglistFeed/delimited.txt';
+            $file = STORE_DIRECTORY . '/craglistFeed/delimited.txt';
             //echo dirname(__DIR__);exit;
             $this->load->model('reporting_m');
             $csv = $this->reporting_m->getProductForcraglist();
@@ -314,7 +314,7 @@ class Admin_Content extends Master_Controller {
         $uploadData = $this->input->post();
         if (!empty($uploadData)) {
 
-            $file = dirname(__DIR__) . '/googleFeed/csvfile.csv';
+            $file = STORE_DIRECTORY . '/googleFeed/csvfile.csv';
 //            echo dirname(__DIR__);exit;
             $this->load->model('reporting_m');
             $csv = $this->reporting_m->getProductsForGoogle();

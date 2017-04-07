@@ -859,7 +859,7 @@ class Welcome extends Master_Controller {
     }
 
     public function cycletraderSalesFile() {
-        $file_path = dirname(__DIR__) . '/cycletraderFeed/cycle_trader_feed.txt';
+        $file_path = STORE_DIRECTORY . '/cycletraderFeed/cycle_trader_feed.txt';
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename=' . basename($file_path));
 //        header('Content-Disposition: attachment; filename=' . $file_path);
@@ -913,7 +913,7 @@ class Welcome extends Master_Controller {
         //header("Pragma: no-cache");
         //header("Expires: 0");
         //echo $csv;
-        $filename = dirname(__DIR__) . '/craglistFeed/csvfile.csv';
+        $filename = STORE_DIRECTORY . '/craglistFeed/csvfile.csv';
         header("Content-Type: text/csv");
         $file = $filename;
         header("Content-Disposition: attachment; filename=google_product.csv");
@@ -966,8 +966,8 @@ class Welcome extends Master_Controller {
     public function ebaySalesFile() {
         error_reporting(E_ALL);
         ini_set('display_errors', 1);
-        $file_path = dirname(__DIR__) . '/ebayFeeds/ebayfeed.xml';
-        $csv_file_path = dirname(__DIR__) . '/ebayFeeds/ebayfeed.csv';
+        $file_path = STORE_DIRECTORY . '/ebayFeeds/ebayfeed.xml';
+        $csv_file_path = STORE_DIRECTORY . '/ebayFeeds/ebayfeed.csv';
         $xml = file_get_contents($file_path);
 // replace '&' followed by a bunch of letters, numbers
 // and underscores and an equal sign with &amp;
@@ -1010,7 +1010,7 @@ class Welcome extends Master_Controller {
 //        }
 //        die("happy");
 
-        $xmlString = file_get_contents(dirname(__DIR__) . "/ebayFeeds/_unzipped.xml"); //The XML file.
+        $xmlString = file_get_contents(STORE_DIRECTORY . "/ebayFeeds/_unzipped.xml"); //The XML file.
         $xml = simplexml_load_string($xmlString, "SimpleXMLElement", LIBXML_NOCDATA); // extension that allows us to easily manipulate and get XML data.
         $json = json_encode($xml); //json encode xml file.
         $response_array = json_decode($json, TRUE); //array in json_decode.
@@ -1049,7 +1049,7 @@ class Welcome extends Master_Controller {
         //header("Pragma: no-cache");
         //header("Expires: 0");
         //echo $csv;
-        $filename = dirname(__DIR__) . '/googleFeed/csvfile.csv';
+        $filename = STORE_DIRECTORY . '/googleFeed/csvfile.csv';
         header("Content-Type: text/csv");
         $file = $filename;
         header("Content-Disposition: attachment; filename=google_product.csv");
@@ -1068,7 +1068,7 @@ class Welcome extends Master_Controller {
     }
 
     public function googleSalesXMLNew() {
-        $file = dirname(__DIR__) . '/googleFeed/csvfile.csv';
+        $file = STORE_DIRECTORY . '/googleFeed/csvfile.csv';
         //echo dirname(__DIR__);exit;
         $this->load->model('reporting_m');
         $rows = $this->reporting_m->getProductsForGoogle();

@@ -761,15 +761,15 @@ class Portalmodel extends Master_M {
     public function addImage($part_id, $upload) {
         require_once(__DIR__ . "/../../simpleimage.php");
 
-        $path = tempnam(__DIR__ . "/../../html/storeimages/", "t");
+        $path = tempnam(STORE_DIRECTORY . "/html/storeimages/", "t");
         $thumbnail_file = basename($path) . ".png";
         $image_file = substr($thumbnail_file, 1);
 
         $image = new SimpleImage();
         $image->load($upload['tmp_name']);
-        $image->save(__DIR__ . "/../../html/storeimages/" . $image_file, IMAGETYPE_PNG);
+        $image->save(STORE_DIRECTORY . "/html/storeimages/" . $image_file, IMAGETYPE_PNG);
         $image->setMaxDimension(144);
-        $image->save(__DIR__ . "/../../html/storeimages/" . $thumbnail_file, IMAGETYPE_PNG);
+        $image->save(STORE_DIRECTORY . "/html/storeimages/" . $thumbnail_file, IMAGETYPE_PNG);
 
         $this->db->query("insert into partimage (part_id, original_filename, path) values (?, ?, ?)", array($part_id, $upload['name'], "store/" . $image_file));
         $partimage_id = $this->db->insert_id();
@@ -782,7 +782,7 @@ class Portalmodel extends Master_M {
 
     public function removeImage($partimage_id) {
         $image = $this->getPartImage($partimage_id);
-        $store_directory = __DIR__ . "/../../html/storeimages/";
+        $store_directory = STORE_DIRECTORY . "/html/storeimages/";
         $base_name = basename($image["path"]);
 
         $file = $store_directory . $base_name;
