@@ -783,7 +783,7 @@ h1.hdng {
 }
 h3.head-tx {
     color: #fff;
-    background: url(../images/bg-color-3.png)no-repeat center;
+    background: url('/branding/bg-color-3.png') no-repeat center;
     margin: 0;
     background-size: cover;
     font-size: 20px;
@@ -983,7 +983,6 @@ img.powerlogo-a {
 			list-style-type: none;
 			margin: 44px 0;
 			padding: 0px;
-			/* width: 171px; */
 			overflow: hidden;
 			height: 50px;
 			float: right;
@@ -1252,7 +1251,6 @@ ul.lSPager.lSGallery {
     list-style-type: none;
     margin: 44px 0;
     padding: 0px;
-    /* width: 171px; */
     overflow: hidden;
     height: 50px;
     float: right;

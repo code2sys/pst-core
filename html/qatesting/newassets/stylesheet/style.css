@@ -143,7 +143,7 @@ ul.active li:hover a{ color:#fff;display:block;text-decoration:none;}
 .sbHolder{margin-right:25px !important}
 ul.SubNavs{padding:0;text-align:left}
 .compLogoSliderBg{background:url(../images/compLogoSliderBg.png) repeat-x left center; height:54px;display:block;margin-bottom:45px;}
-.leftBar{width:220px; margin-right:20px; float:left}
+.leftBar{width:240px; margin-right:0px; float:left}
 .leftBar .box{background:#fff;border:1px solid #ccc; margin:0 0 8px; min-height:inherit; text-align:left; padding:0; box-shadow:none;}
 .box h1{background:#000;font-size:20px; color:#fff; padding:10px 20px;margin:0;}
 .box .boxInner{padding:10px 20px;}
@@ -163,7 +163,7 @@ ul.SubNavs{padding:0;text-align:left}
 .productListView a{display:inline-block;background-position:center; background-repeat:no-repeat;width:42px; height:42px;}
 .prodDetailSec{float:left;width:425px;}
 .prodDetailSec h1{font-size:20px; font-weight:bold; color:#000; margin-bottom:5px;letter-spacing:-1px;}
-.blueTickSec{margin-left:10px; visibility:hidden;}
+.blueTickSec{margin-left:10px;}
 .blueTickSec span{font-size:13px; color:black; font-weight:bold; margin-right:5px; background:url(../images/blueTick.png) no-repeat left center; padding-left:20px; display:inline-block;}
 .priceDetaiSect{width:400px; margin-left:10px;margin-top:60px;}
 .priceDetaiSect .leftCol{float:left;width:200px; margin-right:10px;}
@@ -459,9 +459,9 @@ a.revBtn{background-image:url(../images/whiteStar.png); background-repeat:no-rep
 }
 
 .tlg .sbHolder{
-	background:#ff0900;
-	border-color:#ff0900;
+	background:#3F51B5;
 }
+
 
 .brndimg {
 	text-align:center;
@@ -508,7 +508,7 @@ a.revBtn{background-image:url(../images/whiteStar.png); background-repeat:no-rep
 }
 
 .tablinks.active{
-	background:#ff0900;
+	background:rgb(52,120,206);
 }
 
 .shopactv.active {

@@ -14,9 +14,9 @@
 				<fieldset style="position:relative">
 					<div class="up-buttons">
 						<?php if (MOTORCYCLE_SHOP_NEW): ?>
-						<a href="?fltr=new" class="up-buttons-2" style="<?php echo $_GET['fltr'] == 'new' ? 'background:#ff0900;color:white;' : '';?>">new</a>
+						<a href="?fltr=new" class="benz_views-product up-buttons-2 <?php echo $_GET['fltr'] == 'new' ? 'active' : ''; ?>">new</a>
 						<?php endif; ?>
-						<a href="?fltr=pre-owned" class="up-buttons-2" style="<?php echo $_GET['fltr'] == 'pre-owned' ? 'background:#ff0900;color:white;' : '';?>">Pre-Owned</a>
+						<a href="?fltr=pre-owned" class="benz_views-product up-buttons-2 <?php echo $_GET['fltr'] == 'pre-owned' ? 'active' : '';?>">Pre-Owned</a>
 					</div>
 					<!--<span class="glyphicon glyphicon-search search-icon"></span>-->
 					<!--<input type="text" class="brandsearch sd-input it-4 js-searchable-box" placeholder="Search by Brand">-->

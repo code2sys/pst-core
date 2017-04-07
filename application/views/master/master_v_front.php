@@ -80,8 +80,8 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 			<p class="creditCar_b fltL_b">
 				<span>Ph : <?php echo $store_name['phone'];?></span>				
 				<a href="<?php echo site_url('pages/index/contactus') ?>"><i class="fa fa-map-marker" aria-hidden="true"></i> MAP & HOURS</a>
-				<img style="margin:-5px 0 0 6px;" src="<?php echo $new_assets_url; ?>images/szk01.png" alt="Suzuki" />
-			</p>			
+				<?php if (FALSE !== ($string = joverride_viewpiece("master-master_v_front-1"))) { echo $string; } ?>
+			</p>
 			<div class="loginSec_b navbar-right">
 				<?php if(@$_SESSION['userRecord']): ?>
 					<b>Welcome: <?php echo @$_SESSION['userRecord']['first_name']; ?></b> <span class="fltR seperator_b">|</span> <b><a href="<?php echo $s_baseURL.'welcome/logout'; ?>"><u>Logout</u></a></b>
@@ -110,7 +110,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 	<div class="header_b">
 		<div class="container_b">
 			<a href="<?php echo base_url();?>" class="logoCont fltL logo-tp_b">
-				<img src="<?php echo $new_assets_url; ?>images/6gear-header-logo.png" width="200" height="50">
+				<img src="/logo.png" width="200" height="50">
 			</a>
 			<div class="vehicleCategory">
 				<a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">

@@ -283,7 +283,7 @@ if (isset($keywords) &&	$keywords != "") {
 	<div class="header_b">
 		<div class="container_b">
 			<a href="<?php echo base_url();?>" class="logoCont fltL logo-tp_b">
-				<img src="<?php echo $new_assets_url1; ?>images/6gear-header-logo.png" width="200" height="50">
+				<img src="/logo.png" width="200" height="50">
 			</a>
 			<div class="vehicleCategory">
 				<a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">

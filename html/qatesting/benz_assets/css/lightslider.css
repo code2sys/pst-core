@@ -1,7 +1,5 @@
 .lSSlideOuter {
     overflow: hidden;
-	border:2px solid #cbcccc;
-	padding:10px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -109,9 +107,9 @@
     -webkit-user-select: none;
 }
 
-.lSSlideOuter .lSPager.lSGallery li.active, .lSSlideOuter .lSPager.lSGallery li:hover {    
-	border-color:#ff0900;
-	opacity:1;
+.lSSlideOuter .lSPager.lSGallery li.active, .lSSlideOuter .lSPager.lSGallery li:hover {
+    border:1.5px solid #fff;
+    opacity:0.9;
 }
 .lSSlideOuter .lSPager.lSGallery img {
     display: block;
@@ -142,14 +140,15 @@
 .lSAction > .lSPrev {
     background-position: 0 0;
     left: 10px;
-	background: url(../images/arrow-left1.png)no-repeat;
-	
+    background: url('../images/1-2.png')no-repeat;
+
 }
 .lSAction > .lSNext {
     background-position: -32px 0;
     right: 10px;
-	background: url(../images/controls.png)no-repeat;
+    background: url('../images/1.png')no-repeat;
 }
+
 .lSAction > a.disabled {
     pointer-events: none;
 }
@@ -204,10 +203,6 @@
 }
 .lSSlideOuter .lightSlider > *,  .lSSlideOuter .lSGallery li {
     float: left;	
-}
-.lSSlideOuter .lSGallery li {
-	border:2px solid transparent;
-	padding:4px;
 }
 .lSSlideOuter.lSrtl .lightSlider > *,  .lSSlideOuter.lSrtl .lSGallery li {
     float: right !important;

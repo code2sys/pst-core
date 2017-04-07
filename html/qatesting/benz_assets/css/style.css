@@ -112,9 +112,8 @@ a.loginLink_b {
 /* HEADER CSS */
 
 .header_b {
-    /* padding: 10px 0px 2px; */
+    padding: 10px 0px 2px;
     background-color: #eee;
-	padding:5px 0;
 }
 .vehicleCategory_b {
     float: left;
@@ -176,7 +175,7 @@ a.loginLink_b {
     padding: 0% 1% 1% 0;
 }
 .one-fifth h3 {
-    color: #ff0900;
+    color: white;
     text-transform: uppercase;
     font-size: 17px;
     line-height: 25px;
@@ -184,7 +183,7 @@ a.loginLink_b {
     margin: 5px 0 10px 0;
 }
 .one-fifth h3 span {
-    color: #ff0900;
+    color: #3478ce;
 }
 .one-fifth ul {
     width: 100%;
@@ -242,16 +241,16 @@ a.social img {
 	border-radius: 0;
 }
 .one-fifth input[type="button"] {
-    background: #ff0900;
+    background: #3399cc;
     color: white;
-	height:26px;
+    height:26px;
     font-size: 13px;
     border: none;
     width: 85px;
     height: 24px;
     margin: 10px 0px;
-	-webkit-border-radius: 0;
-	border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
 }
 hr.ftr-line {
     height: 1px;
@@ -321,8 +320,7 @@ a.ftrimg1 {
     width: 13px;
 }
 .bg {
-    /* background: url(../images/banner-strip.jpg)no-repeat; */
-    background: url(../images/6gear-bennar.jpg)no-repeat;
+    background: url(../images/banner-strip.png)no-repeat;
     background-size: cover;
     float: left;
     padding: 25px 0;
@@ -355,28 +353,29 @@ a.ftrimg1 {
 }
 
 .head-txt {
-    font-size: 18px;	
+    font-size: 17px;
     text-transform: uppercase;
     font-family: 'Helvetica';
-    color: #565656;
+    color: #3478ce;
     font-weight: 600;
     padding: 15px 0;
     margin: 0;
 }
+
 .item .item-box p {
     line-height: 20px;
     text-transform: uppercase;
     font-size: 14px;
     font-family: 'Helvetica';
     font-weight: 600;
-    color: #222222;
+    color: #000;
     margin: 4% 0 0 0;
 }
 .item .item-box h2 {
     text-transform: uppercase;
     font-family: 'Helvetica';
     font-weight: 600;
-    color: #ff0900;
+    color: #e03e25;
     margin: 5px 0;
     font-size: 14px;
 }
@@ -407,7 +406,7 @@ a.ftrimg1 {
 .testi h3,
 .fltrbar h4 {
     text-transform: uppercase;
-    box-shadow: 0 4px 0 #ff0900;
+    box-shadow: 0 4px 0 #0044ab;
     font-family: 'Helvetica';
     font-size: 20px;
     padding: 0;
@@ -502,7 +501,7 @@ a.ftrimg1 {
 .filterBar .owl-theme .owl-controls .owl-buttons div {
     position: absolute;
     color: #fff;
-    background:#565656;
+    background: #1757b1;
     width: 30px;
     height: 30px;
     line-height: 25px;
@@ -526,14 +525,15 @@ a.ftrimg1 {
     width: 100%;
 }
 .head-txt span {
-    float: right;    
+    float: right;
+    font-size: 15px;
     text-transform: capitalize;
-    line-height: normal;
-    background: url(../images/arrow-shp.png)no-repeat right center;
+    line-height: 34px;
+    background: url(../images/arrow1.png)no-repeat right center;
     padding-right: 15px;
 }
-.head-txt span a{
-	color:#ff0900
+.head-txt span  a {
+    color:#0074d4
 }
 .sw .btn-secc {   
 	background-image: -webkit-linear-gradient(top, #838383, #454545);
@@ -615,8 +615,7 @@ h1.hdng {
 }
 .actv {
     display: inline-block;
-    box-shadow: 0 3px 0 #ff0900;
-    color: #ff0900;
+    box-shadow: 0 3px 0 #0074d4;
 }
 .testi h3:after {
     content: url(../images/social.png);
@@ -795,7 +794,7 @@ h1.hdng {
 }
 h3.head-tx {
     color: #fff;
-    background: url(../images/bg-color-img.png)no-repeat center;
+    background: url(../images/bg-color-3.png)no-repeat center;
     margin: 0;
     background-size: cover;
     font-size: 20px;
@@ -924,9 +923,10 @@ h3.head-tx {
     margin: 0 0 3px 0;
 }
 .mid-r-text .mid-text-left p:last-child {
-    color: #ff0900;
+    color: rgb(25, 98, 236);
     margin: 0 0 5px 0;
 }
+
 .mid-r-text .mid-text-right {
     width: 100%;
     padding: 19px 30px 0 10px;
@@ -951,7 +951,7 @@ h3.head-tx {
 .mid .mid-r .mid-r-but a {
     text-decoration: none;
     display: block;
-    background: url('../images/backa-img.png');
+    background: url('../images/backa.png');
     background-size: cover;
     color: #fff;
     font-family: 'proxima_novasemibold';
@@ -963,6 +963,7 @@ h3.head-tx {
     border-radius: 6px;
     transition: all 0.6s;
 }
+
 .mid .mid-r .mid-r-but a:hover {
     box-shadow: 0 2px 5px black;
 }
@@ -1216,7 +1217,7 @@ img.powerlogo-a {
 
 .lslide img {
 	width:100%;
-	height:435px;
+	height:484px;
 }
 
 .prod-ls .nav>li>a{
@@ -1245,9 +1246,12 @@ img.powerlogo-a {
 	width:100%;
 }
 
-ul.lSPager.lSGallery {	
-	margin-top:0 !important
+ul.lSPager.lSGallery {
+    position:absolute;
+    bottom:8px;
+    right:16px;
 }
+
 
 .vehicleCategory_b .last {
 	position:relative; 
@@ -1294,11 +1298,11 @@ img.powerlogo-a {
 }
 
 .fltrbx .up-buttons .up-buttons-1:hover,
-.fltrbx .up-buttons .up-buttons-2:hover{background:#ff0900;}
+.fltrbx .up-buttons .up-buttons-2:hover{background:#144ce0;}
 
 .fltrbx .up-buttons .up-buttons-1:hover::after,
 .fltrbx .up-buttons .up-buttons-2:hover::after {
-	border-color: #ff0900 transparent transparent transparent;
+	border-color: #144ce0 transparent transparent transparent;
 }
 
 .mid .mid-r:hover {
@@ -1353,7 +1357,7 @@ img.powerlogo-a {
 	height:36px;
     font-size: 12px;
     float: right;
-    background: #ff0900;
+    background: #0074d4;
 	line-height:18px;
 }
 
@@ -1469,8 +1473,8 @@ h4.expand_heading {
 }
 
 .featured-listings a{
-	float: right;
-    color: #ff0900;
+    float: right;
+    color: #000;
     font-size: 15px;
     line-height: 40px;
     text-transform: capitalize;
@@ -1534,7 +1538,7 @@ form input.text{
     border-radius: 0;
 }*/
 
-.section_head a{color:#000 !important ;}
+.section_head a{color:#256dbd !important ;}
 
 .loginSec_b b {
 	font-size:16px;
@@ -1586,14 +1590,16 @@ img.crdt {
 }
 
 .txt-title {
-	width:100%;
-	float:left;
-	color: #ff0900;
+    width:100%;
+    float:left;
+    color: #0071bd;
     font-size: 18px;
     font-family: 'Open Sans';
     font-weight: 600;
-	margin:20px 0;	
+    margin:20px 0;
 }
+
+
 
 hr.brdr {
     margin-top: 0;
@@ -1609,31 +1615,34 @@ hr.brdr {
 }
 
 .col-md-12 .bttn {
-	padding: 12px 60px;
-	/* background:#2d3798; */
-	background:#ff0900;	
+    padding: 12px 60px;
+    background:#2d3798;
     color: #fff;
     font-size: 16px;
-	font-weight:600;
+    font-weight:600;
     border-radius: 0;
-	font-family:'Open Sans';
-	margin:30px 0 10px;
+    font-family:'Open Sans';
+    margin:30px 0 10px;
 }
 
 .col-md-12 .bttn:focus,
 .col-md-12 .bttn:hover {
 	color:#fff
 }
-.clo {		
+.clo {
     position: relative;
-    opacity: 1;	            
+    opacity: 1;
+    color: #626262;
+    padding: 4px 0;
     text-align: center;
-    text-transform: uppercase;    
+    text-transform: uppercase;
+    padding: 0;
     line-height: normal;
-    color: #ff0900;
+    color: #3478ce;
     font-size: 16px;
-    font-weight: 700; 
+    font-weight: 700;
 }
+
 .area .modal-header{
 	background:#f2f2f2;
 }
@@ -1840,18 +1849,19 @@ p.creditCar_b.loct a i{
 }
 
 .btn-large {
-    width: 52px;		
-    color: #fff;            
-	border-radius: 50%;    
+    width: 52px;
+    color: #fff;
+    border-radius: 50%;
     cursor: pointer;
     vertical-align: middle;
-	text-align: center;    
-	box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
-	background:#F44336;
+    text-align: center;
+    box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+    background:#F44336;
     height: 52px;
-	margin:0 0 10px;
-	display:none;
+    margin:0 0 10px;
+    display:none;
 }
+
 
 .togle-icon {
 	line-height: 54px !important;	     
@@ -1908,11 +1918,11 @@ p.creditCar_b.loct a i{
 	margin:0;
 }
 
-.vehicleCategory a span{	
+.vehicleCategory a span{
     display: inline-block;
-    padding-bottom: 0px;
-	line-height:16px;
+    padding-bottom: 4px;
 }
+
 
 
 /*
@@ -1950,22 +1960,26 @@ p.creditCar_b.loct a i{
     font-size: 10px;
     font-family: 'Helvetica','Lucida Sans', Arial, sans-serif;
     float: left;
+    letter-spacing:0px;
     font-weight: normal;
     line-height: normal;
 }
-.garage_active .fa-check,.garage_delete .fa-times{
-	font-size:14px;
+.leftBar .garage_active p,.leftBar .garage_delete p  {
+    padding: 4px 2px 0px 2px !important
 }
-.container .leftBar {
-	width:24%;
-	margin:0;
+.garage_active p,.garage_delete p {
+    padding-top:0 !important
 }
-.side_item  img{
-	width:22px !important
+.garage_active .fa-check, .garage_delete .fa-times {
+    font-size: 14px;
+
 }
-.leftBar .garage_active p, .leftBar .garage_delete p {
-    padding: 4px 2px 8px 2px !important;
+.leftBar .box img,
+.side_section img {
+    width:22px !important
 }
-.sidebar .garage_active p,.sidebar .garage_delete p {
-	padding: 0px 2px 8px 2px !important;
+
+.garage_delete .fa-times {
+    color:#F00
 }
+

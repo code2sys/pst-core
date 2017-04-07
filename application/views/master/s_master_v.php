@@ -114,8 +114,7 @@ if (isset($keywords) &&	$keywords != "") {
 			</style>
 			<!-- LOGO -->
 			<div class="logo">
-				<img src="<?php echo base_url('qatesting/benz_assets/images/power-sports-header-logo.png'); ?>">
-				<!--<img src="<?php echo base_url('qatesting/benz_assets/images/power-sports-logo.png'); ?>">-->
+				<img src="/logo.png">
 			</div>
 			<div id="desktop_cart">
 				<?php if(@$accountAddress['phone']){?>
