@@ -1,0 +1,81 @@
+
+
+/*
+
+1. Copy widget code with 'inherit' for background and text color, and 'None' for border style.
+
+2. Include a css file based on the following in your page.
+You made need to put !important after a declaration to override the default.
+*/
+
+#reviews{
+    width: 850px !important;
+    margin:0 auto;
+}
+.cornerImg{ background:url(../images/reviewSecCornerImg.png) no-repeat left top; display:block; height:25px;}
+.revHeading{font-size:16px !important; color:#7d7e83 !important; margin-bottom:-2px !important; }
+.shadowEffect{box-shadow: -2px 0px 0px #e7e5e6;
+    margin-left: 14px;
+    margin-top: -20px;}
+#reviews table tr td{
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom:1px solid #cecece !important;
+    border-radius:10px;
+}
+.sa_rounded .sa_review{
+
+}
+.sa_review {
+    /* The div that contains the entire review. */
+
+}
+
+.sa_displayname {
+    /* The name of the reviewer. */
+
+}
+
+.sa_info {
+    /* Location of the reviewer. */
+
+}
+
+.sa_comments {
+    /* Review comments. */
+
+}
+
+
+
+.sa_star {
+    /* The review star. (inactive) */
+
+    /* This is how we do it:
+
+     - An image with the gray star is right above the gold star.
+    background: url("https://www.shopperapproved.com/widgets/widgetstar.png") no-repeat;
+
+     - A specific height and width are given to only include the gray star....
+    width: 24px;
+    height: 24px;
+    */
+}
+
+.sa_activestar {
+    /* The review star. (active) */
+
+    /* ... now to go active we shift the image up to only show the gold star.
+    background-position: 0 -24px;
+    */
+}
+
+.sa_date {
+    /* The review date. */
+
+}
+
+.sa_comments::before{
+    content:"" !important;
+}

@@ -1,0 +1,1 @@
+<a href="javascript:void(0)" onclick="openModal('<?php echo $div; ?>', <?php echo $height; ?>, <?php echo $width; ?>); <?php echo $addfuncs; ?>" <?php echo $styles; ?> ><?php echo $text; ?></a>

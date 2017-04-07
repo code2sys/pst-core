@@ -1,0 +1,91 @@
+/************************ Header CSS ***********************/
+/*
+.fltL{float:left}
+.fltR{float:right}
+.clear{clear:both;line-height:0; padding:0;}
+.container{width:1000px; margin:0 auto}
+.containerOuter{width:1225px; margin:0 auto;}
+.alignCenter{text-align:center}
+a{text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+.mt5{margin-top:5px;}
+.mt10{margin-top:10px}
+.ml5{margin-left:5px}
+.ml10{margin-left:10px}
+.mr5{margin-right:5px}
+.mr10{margin-right:10px}
+.mb5{margin-bottom:5px}
+.mb10{margin-bottom:10px}
+.mb25{margin-bottom:25px;}
+.mb30{margin-bottom:30px;}
+
+
+.pl5{padding-left:5px}
+.pl10{padding-left:10px}
+.pr5{padding-right:5px}
+.pr10{padding-right:10px}
+.pt5{paddig-top:5px}
+.pt10{padding-top:10px}
+.pb5{padding-bottom:5px}
+.pb10{padding-bottom:10px}
+
+.bdrBottom{border-bottom:1px dotted #ccc;}
+
+.topBar{background:#000; padding:10px 80px 0; height:28px;}
+.creditCar{font-size:12px !important; font-style:italic;color:#fff;line-height:18px !important;margin:0 !important}
+.creditCar span{color:#ffed00}
+.topHeaderNav{margin-left:60px; float:left}
+.topHeaderNav ul{list-style:none; padding:0}
+.topHeaderNav ul li a{font-size:14px; color:#fff; font-weight:bold; margin-right:25px;text-decoration:none;}
+.topHeaderNav ul li a:hover{text-decoration:underline;}
+.topHeaderNav ul li{display:inline;}
+a.homeLink{background:url(../images/homeIcon.png) no-repeat left center; padding-left:25px; height:16px;}
+a.accountLink{background:url(../images/accountIcon.png) no-repeat left center; padding-left:25px; height:16px;}
+a.wishListLink{background:url(../images/wishListIcon.png) no-repeat left center; padding-left:25px; height:16px;}
+a.shoppingCartLink{background:url(../images/shoppingCartIcon.png) no-repeat left center; padding-left:25px; height:16px;}
+.loginSec{float:right;}
+.loginSec a{font-size:14px; font-weight:bold; display:inline; color:#fff; text-decoration:none;}
+.loginSec a:hover{text-decoration:underline}
+.seperator{color:#fff; height:15px; margin-top:-2px}
+a.loginLink{background:url(../images/loginIcon.png) no-repeat left center; padding-left:20px; height:16px;}
+.header{padding:10px 75px; background-color:#eee;}
+.vehicleCategory{float:left; margin-left:100px;margin-top:15px}
+.vehicleCategory a{font-size:12px; color:#000; font-weight:bold;display:inline;margin-right:30px; text-decoration:none;display:inline-block;line-height:60px;}
+.vehicleCategory a:hover{text-decoration:underline;}
+a.bike{background:url(../images/bike.png) no-repeat left center; padding-left:65px; height:60px;}
+a.atv{background:url(../images/atv.png) no-repeat left center; padding-left:65px; height:60px;}
+a.streetBike{background:url(../images/streetBike.png) no-repeat left center; padding-left:65px; height:60px;}
+a.utv{background:url(../images/utv.png) no-repeat left center; padding-left:65px; height:60px;}
+.searchHolder{float:right; margin-top:25px;}
+.searchHolder .goBtn{padding:11px 8px; color:#fff; font-size:12px; float:right; background:#000;}
+.searchHolder input{background:#fff;border:1px solid #cbcbcb; float:right; padding:10px; width:130px;margin-right:2px}
+.productNav{background:#391752; padding:10px 20px;}
+.productNavCont{width:840px; margin:0 auto;position:relative;}
+
+.productNavCont span{color:#fff;display:inline-block;}
+.productNavCont ul li{display:inline-block;position:relative;}
+.productNavCont ul li a{font-size:14px; color:#fff;margin-right:10px; margin-left:10px;}
+
+.filterBar{background:url(../images/filterBar.png) repeat-x left center; height:71px; }
+.filterBarCont{padding:20px 0px;}
+.filterBarCont h1{font-size:22px; color:#fff;margin-right:35px; float:left;font-weight:bold; font-style:italic}
+.selectField{border:1px solid #3d1957; background:#5a2c7d; color:#fff;padding:5px 10px; float:left;margin-right:35px;width:175px;}
+.addToCat{background:#fff; color:#7b1fa2;border:1px solid #7b1fa2; padding:5px 15px; float:right;font-size:14px}
+.freeShippingBanner{background:url(../images/freeShippingBanner.png) repeat-x left center; height:50px;}
+.freeShippingBanner h1{font-size: 22px;color: #339933;margin:15px 35px 0 110px;float: left;font-weight: bold;font-style: italic;}
+.moreInfoArrow{background:url(../images/longArrow.png) no-repeat left center; height:42px; display:block;font-size:20px; color:#fff; float:left; padding-left:18px; width:675px;line-height:44px;margin-top:5px}
+.moreInfoArrow a{font-weight:bold; color:#fff;}
+.greenMap{background:url(../images/greenMap.png) no-repeat center; width:85px; height:50px; display:block; float:left;}
+
+ul.active{position:absolute; background:#fff; border:1px solid #391752;z-index:2;top:27px;left:-45px; min-width:245px;}
+ul.active span.toolTip{background:url(../images/dropDownToolTip.png) no-repeat center top; height:12px; display:block;margin-top:-12px;}
+ul.active li{overflow:hidden;display:inline;	}
+ul.active li:hover{background:none scroll 0 0 #7b1fa2;display:block;}
+ul.active li a{padding:15px;margin:0; font-size:13px; font-weight:bold; color:#797979;display:block;text-transform:uppercase}
+ul.active li:hover a{ color:#fff;display:block;text-decoration:none;}
+*/
+/******************************* Header CSS END *************************************/
+
+
+

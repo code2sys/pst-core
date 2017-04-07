@@ -1,0 +1,173 @@
+/****************** POPUPS ***********************/
+
+.hide {
+	display:none;
+}
+.modal_wrap {
+	height:auto;
+	width:auto;
+}
+.modal_box {
+	background: #FFF;
+	border:1px #000 solid;
+	border-bottom:1px #AAA solid;
+	height:auto;
+	padding:4%;
+	width:auto;
+	/*BORDER RADIUS*/
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+.modal_box h1 {
+	color:#000000;
+	font-family: 'Helvetica','Lucida Sans', Arial, sans-serif;
+	font-weight: 400;
+	line-height: 1.1;
+	font-size:24px;
+	letter-spacing:-1px;
+	margin-bottom: 5px;
+	margin-top: 0px;
+}
+.modal_box p {
+	font-family: 'Helvetica','Lucida Sans', Arial, sans-serif;
+	font-weight:normal;
+	line-height: 24px;
+	margin: 0px;
+	margin-bottom: 5px;
+	word-spacing: 2px;
+}
+
+/* Overlay */
+#simplemodal-overlay {
+	background-color:#000; 
+	cursor:wait;
+}
+
+/* Container */
+#simplemodal-container a.modalCloseImg {
+ 	background:url(../images/x.png) no-repeat; 
+	cursor:pointer;
+	width:25px; 
+	height:29px; 
+	display:inline; 
+	z-index:3200; 
+	position:absolute; 
+	top:-15px; 
+	right:-16px; 
+}
+
+#simplemodal-container {
+	background-color:#333; 
+	border:1px solid #000; 
+	height:auto;
+	padding:10px;
+	width:400px; 
+	/*BORDER RADIUS*/
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+}
+
+#simplemodal-container .simplemodal-data, #simplemodal-containersmall .simplemodal-data  
+{ 
+	padding:2px; 
+}
+
+/* specific for this popup */
+#simplemodal-container .simplemodal-data, #simplemodal-container .simplemodal-data 
+{  
+}
+
+
+
+/* =====================================================================================================================================
+   ====== Media Queries ================================================================================================================ 
+   ===================================================================================================================================== */
+
+@media only screen and (min-width : 150px) and (max-width : 850px) {
+
+	.hide {
+		display:none;
+	}
+	.modal_wrap {
+		height:auto;
+		width:auto;
+	}
+	.modal_box {
+		background: #FFF;
+		border:1px #000 solid;
+		border-bottom:1px #AAA solid;
+		height:auto;
+		padding:16%;
+		width:auto;
+		/*BORDER RADIUS*/
+		border-radius: 5px;
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+	}
+	.modal_box h1 {
+		color:#000000;
+		font-family: 'Helvetica','Lucida Sans', Arial, sans-serif;
+		font-weight: 400;
+		line-height: 1.1;
+		font-size:24px;
+		letter-spacing:-1px;
+		margin-bottom: 5px;
+		margin-top: 0px;
+	}
+	.modal_box p {
+		font-family: 'Helvetica','Lucida Sans', Arial, sans-serif;
+		font-weight:normal;
+		line-height: 24px;
+		margin: 0px;
+		margin-bottom: 5px;
+		word-spacing: 2px;
+	}
+	
+	/* Overlay */
+	
+	#simplemodal-overlay 
+	{
+		background-color:#000; 
+		cursor:wait;
+	}
+	
+	/* Container */
+	
+	#simplemodal-container a.modalCloseImg {
+	 	background:url(../images/x.png) no-repeat; 
+		cursor:pointer;
+		width:25px; 
+		height:29px; 
+		display:inline; 
+		z-index:3200; 
+		position:absolute; 
+		top:-15px; 
+		right:-16px; 
+	}
+	#simplemodal-container {
+		background-color:#333; 
+		border:1px solid #000; 
+		height:auto;
+		padding:10px;
+		width:100%; 
+	}
+	#simplemodal-container .simplemodal-data, #simplemodal-containersmall .simplemodal-data  
+	{ 
+		padding:2px; 
+	}
+	
+	/* specific for this popup */
+	#simplemodal-container .simplemodal-data, #simplemodal-container .simplemodal-data 
+	{  
+	}
+
+
+}
+
+
+
+
+
+

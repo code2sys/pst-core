@@ -1,0 +1,52 @@
+.imagesCont{overflow:hidden}
+.imagesCont .imgHolder{width:25%;float:left;}
+.imagesCont .imgHolder img{width:100%; height:280px;}
+.imagesCont .imgHolder p{margin:0; text-align:center; border-right:1px solid #818181;color:#fff;font-size:12px;}
+.imgHolder .imagLabel{background:#391752;padding:10px 0;margin-top:-5px;}
+
+.rmv{border:none !important; background:none !important; height:400px; width:100% !important; margin-bottom:0px !important;}
+.rmv .main-vdo{width:78%; float:left; height:350px;}
+.rmv .main-vdo ul{width:97.5%; float:left; margin:0; padding:5px; background:rgba(192, 192, 192, 0.48); }
+.rmv .main-vdo ul li{float:left; margin:0 15px 0 0px; list-style:none;}
+.rmv .main-vdo ul li strong{float:left; margin:4px 7px 0 0;}
+.rmv .main-vdo ul li .ggl{max-width:59px; overflow:hidden; float:right;}
+.rmv .main-vdo ul li.subs{float:right;}
+.rmv .main-vdo iframe{width:98%; height:340px; border:4px solid silver;}
+.rmv .rltv-vdo{width:20%; float:right;}
+.rmv .rltv-vdo ul{width:100%; float:left; margin:0px; padding:0px; max-height:347px; overflow-y:auto;}
+.rmv .rltv-vdo ul li{width:100%; float:left; list-style:none; position:relative;}
+.rmv .rltv-vdo ul li img.ply{position:absolute; top:23%; right:40%; height:30px; width:30px;}
+.rmv .rltv-vdo ul li p{margin:0px 0px 0px 0px; padding:0px; text-align:center;}
+.rmv .rltv-vdo ul li p:hover{color:red; cursor:pointer;}
+.rmv .rltv-vdo ul li img{width:100%; height:72px; cursor:pointer;}
+
+.brndimg{width:100%; float:left; padding: 3% 0 7px 0%;}
+.brndimg img{height:65px; /*float:left;*/ margin:-12px 10px 7px 0; width:102px;}
+.brndimg b{font-size:22px; float:left; margin:19px 0 0 0;}
+.vdottl{float:left; width:100%; margin:8px 0 2px 12px !important;}
+p.expand_headingend{/* background: url(../images/expand_collapse.png) no-repeat top right; */ border-bottom: 1px #CCC solid; border-left: 1px #CCC solid; border-right: 1px #CCC solid; font-size: 13px; font-weight: 700; height: auto; margin: 0px; padding: 10px 0px; text-indent: 5px; text-shadow: 0px 1px #FFF; width: 99.6%; color:#999;}
+p.expand_headingend a{color:#999;}
+
+.prodct_vdo{width:100%; float:left; height:auto; margin:0 0 2% 0;}
+.prodct_vdo .lft{width:80%; float:left;}
+.prodct_vdo .lft iframe{width:98%; height:340px; border:4px solid silver;}
+.prodct_vdo .lft ul{width:97.5%; float:left; margin:0; padding:5px; background:rgba(192, 192, 192, 0.48); }
+.prodct_vdo .lft ul li{float:left; margin:0 15px 0 0px; list-style:none;}
+.prodct_vdo .lft ul li strong{float:left; margin:0px 7px 0 0;}
+.prodct_vdo .lft ul li.subs{float:right;}
+.prodct_vdo .lft ul li .ggl{max-width:59px; overflow:hidden; float:right;}
+.prodct_vdo .ryt{width:20%; float:left;}
+.prodct_vdo .ryt ul{width:100%; float:left; margin:0px; padding:0px; max-height:375px; overflow-y:auto;}
+.prodct_vdo .ryt ul li{width:100%; float:left; list-style:none; position:relative;}
+.prodct_vdo .ryt ul li img.ply{position:absolute; top:23%; right:40%; height:30px; width:30px;}
+.prodct_vdo .ryt ul li p{margin:0px 0px 0px 0px; padding:0px; text-align:center;}
+.prodct_vdo .ryt ul li p:hover{color:red; cursor:pointer;}
+.prodct_vdo .ryt ul li img{width:100%; height:72px; cursor:pointer;}
+
+
+.wrap span.nwprdct{color:#444; font-size:12px; width:auto; float:left; padding-bottom:5px; font-weight:bold;}
+.wrap span.nwprdct a{color:#000;}
+.ftrhdng{color:#FFF; font-size:28px; line-height:1.429; font-weight:bold; letter-spacing:-1px; margin:0;}
+p.rplch{font-size:18px; color:#444; font-weight:bold;}
+p.rplch1{font-size:22px; font-weight:200; margin:8px 0 12px 0; float:left; letter-spacing:-1px; color:#999; font-family:sans-serif !important;}
+

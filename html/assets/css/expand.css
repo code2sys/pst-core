@@ -1,0 +1,83 @@
+@charset "UTF-8";
+
+/* ===== EXPANDER ===== */
+
+h4.expand_heading {
+	background: url(../images/expand_collapse.png) no-repeat top right;
+	border-bottom:1px #CCC solid;
+	border-left:1px #CCC solid;
+	border-right:1px #CCC solid;
+	font-size: 14px;
+	font-weight: 700;
+	height: auto;
+	margin:0px;
+	padding:10px 0px;
+	text-indent:5px;
+	text-shadow:0px 1px #FFF;
+	width: 99.6%;
+}
+h4.expand_heading a {
+	color: #444;
+	display: block;
+	text-decoration: none;
+}
+h4.expand_heading a:hover {
+	color: #393;
+}
+h4.active {
+	background-position: bottom right;
+}
+.toggle_container {
+	background:#FFF;
+	border-left:1px #CCC solid;
+	border-right:1px #CCC solid;
+	clear: both;
+	margin:0px;
+	padding:0px;
+	overflow-y: scroll !important;
+	width:100%;	
+	max-height:282px;
+}
+
+/* ======== EXPAND NAVIGATION ======== */
+
+.expand_nav {
+	width:100%;
+}
+.expand_nav ul {
+	list-style:none;
+	margin:0px;
+	padding:0px;
+	width:100%;
+}
+.expand_nav li{
+	border-bottom:1px #DDD solid;
+	height:46px;
+	margin:0px;
+	text-align:left;
+	width:100%;
+}
+.expand_nav li a{
+	background: #FBFBFB;
+	color:#393;
+	display:block;
+	font-size:12px;
+	font-weight: 600;
+	margin:0px; 
+	padding:14px 0px;   
+	text-decoration:none;
+	text-indent:0px;
+	width:100%;
+}
+.expand_nav li a:hover, .expand_nav ul li:hover a {
+	background:#FFF;
+	color:#636;
+	height:18px;
+	text-shadow:0px 1px #FFF;
+	width:100%;
+}
+.expand_nav img {
+	float:left;
+	margin:-5px 5px 0px 5px;
+	width:30px;
+}

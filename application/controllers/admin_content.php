@@ -1,0 +1,366 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+require_once(APPPATH . 'controllers/Master_Controller.php');
+
+class Admin_Content extends Master_Controller {
+
+    function __construct() {
+        parent::__construct();
+        //if(!@$_SESSION['userRecord']['admin'])
+        //	redirect('welcome');
+        if ($_SESSION['userRecord']['user_type'] == 'employee') {
+            
+        } else if (!@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        $this->load->model('admin_m');
+        $this->setNav('admin/nav_v', 1);
+        //$this->output->enable_profiler(TRUE);
+    }
+
+    private function validateEmailSettingsForm() {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('post', 'POST', 'required|xss_clean');
+        $this->form_validation->set_rules('email_logo', 'Email Logo', 'xss_clean');
+        $this->form_validation->set_rules('email_order_complete', 'Email Order Complete', 'xss_clean');
+        $this->form_validation->set_rules('email_order_complete_attachment', 'Email Order Complete Attachment', 'xss_clean');
+        $this->form_validation->set_rules('registration_email', 'Registration Email', 'xss_clean');
+        $this->form_validation->set_rules('registration_email_text', 'Registration Email Text', 'xss_clean');
+        $this->form_validation->set_rules('forgot_pass_email_text', 'Forgot Password Email Text', 'xss_clean');
+        $this->form_validation->set_rules('mass_email_text', 'Mass Email Text', 'xss_clean');
+        $this->form_validation->set_rules('mass_email_attachment', 'Mass Email Attachment', 'xss_clean');
+        $this->form_validation->set_rules('mass_email_attachment_doc', 'Mass Email Attachment Document', 'xss_clean');
+        $this->form_validation->set_rules('mass_email_list', 'Mass Email List', 'xss_clean');
+        $this->form_validation->set_rules('mass_email_list_doc', 'Mass Email List Doc', 'xss_clean');
+        return $this->form_validation->run();
+    }
+
+    private function validatePages() {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('active', 'Active', 'xss_clean');
+        return $this->form_validation->run();
+    }
+
+    private function validateSliderImageSettingsForm() {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('page', 'Page', 'required|numeric|xss_clean');
+        return $this->form_validation->run();
+    }
+
+    private function validateSocialMedia() {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('sm_fblink', 'Facebook Link', 'trim|max_length[256]|prep_url|xss_clean');
+        $this->form_validation->set_rules('sm_twlink', 'Twitter Link', 'trim|max_length[256]|prep_url|xss_clean');
+        $this->form_validation->set_rules('sm_blglink', 'Blog Link', 'trim|max_length[256]|prep_url|xss_clean');
+        $this->form_validation->set_rules('sm_ytlink', 'YouTube Link', 'trim|max_length[256]|prep_url|xss_clean');
+        $this->form_validation->set_rules('sm_gplink', 'Google Plus Link', 'trim|max_length[256]|prep_url|xss_clean');
+        $this->form_validation->set_rules('sm_gpid', 'Google Plus Page Id', 'trim|max_length[256]|xss_clean');
+        return $this->form_validation->run();
+    }
+
+    public function images($pageId = 0) {
+        if ($this->validateSliderImageSettingsForm() === TRUE) {
+            if (@$_FILES['image']['name']) {
+                $config['max_height'] = '400';
+                $config['max_width'] = '1024';
+                $config['allowed_types'] = 'jpg|jpeg|png|gif|tif';
+                $this->load->model('file_handling_m');
+                $data = $this->file_handling_m->add_new_file('image', $config);
+                if (@$data['error'])
+                    $this->_mainData['errors'][] = $data['the_errors'];
+                else {
+                    $uploadData['image'] = $data['file_name'];
+                    $uploadData['pageId'] = $this->input->post('page');
+                    $this->admin_m->updateSlider($uploadData);
+                }
+            }
+        }
+        $this->load->model('pages_m');
+        $this->_mainData['activePage'] = $pageId;
+        $this->_mainData['pages'] = array('0' => 'Main Home Page',
+            '13' => 'Dirt Bike Landing Page',
+            '2' => 'ATV Landing Page',
+            '3' => 'Street Bike Landing Page',
+            '4' => 'UTV Landing Page');
+        if (is_numeric($pageId)) {
+            $this->_mainData['bannerImages'] = $this->admin_m->getSliderImages($pageId);
+            $this->renderMasterPage('admin/master_v', 'admin/upload_slider_images_v', $this->_mainData);
+        } elseif ($pageId = 'brand') {
+            $this->renderMasterPage('admin/master_v', 'admin/upload_brand_images_v', $this->_mainData);
+        }
+    }
+
+    public function remove_image($id, $pageId) {
+        if (is_numeric($id)) {
+            $this->admin_m->removeImage($id, $this->config->item('upload_path'));
+            redirect('admin_content/images/' . $pageId);
+        }
+    }
+
+    public function social_media() {
+        if (!$this->checkValidAccess('social_media') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if ($this->validateSocialMedia() === TRUE) {
+            $this->_mainData['success'] = $this->admin_m->updateSMSettings($this->input->post());
+        }
+        $this->_mainData['SMSettings'] = $this->admin_m->getSMSettings();
+        $this->renderMasterPage('admin/master_v', 'admin/sm_settings_v', $this->_mainData);
+    }
+
+    public function reviews() {
+        if (!$this->checkValidAccess('reviews') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        $this->_mainData['reviews'] = $this->admin_m->getNewReviews();
+        $this->renderMasterPage('admin/master_v', 'admin/comments_v', $this->_mainData);
+    }
+
+    public function review_approval($reviewId) {
+        if (!$this->checkValidAccess('reviews') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_numeric($reviewId)) {
+            $this->admin_m->approveReview($reviewId, $_SESSION['userRecord']['id']);
+        }
+        redirect('admin_content/reviews');
+    }
+
+    public function review_reject($reviewId) {
+        if (!$this->checkValidAccess('reviews') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_numeric($reviewId)) {
+            $this->admin_m->deleteReview($reviewId);
+        }
+        redirect('admin_content/reviews');
+    }
+
+    public function pages() {
+        if (!$this->checkValidAccess('pages') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        $this->load->model('pages_m');
+        if ($this->validatePages() === TRUE) {
+            $this->pages_m->editPageActive($this->input->post());
+            $this->_mainData['success'] = 'Your changes have been made.';
+        }
+
+        $this->_mainData['pages'] = $this->pages_m->getPages();
+        $this->renderMasterPage('admin/master_v', 'admin/pages/list_v', $this->_mainData);
+    }
+
+    public function email() {
+        if (!$this->checkValidAccess('email') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if ($this->validateEmailSettingsForm() === TRUE) {
+            $uploadData = $this->input->post();
+            $this->load->model('file_handling_m');
+            if (@$_FILES['email_logo']['name']) {
+                $config['max_height'] = '300';
+                $config['max_width'] = '500';
+                $config['allowed_types'] = 'jpg|jpeg|png|gif|tif';
+                $data = $this->file_handling_m->add_new_file('email_logo', $config);
+                if (@$data['error'])
+                    $this->_mainData['errors'][] = $data['the_errors'];
+                else
+                    $uploadData['email_logo'] = $data['file_name'];
+            }
+            if (@$_FILES['mass_email_attachment_doc']['name']) {
+                $data = $this->file_handling_m->add_new_file('mass_email_attachment_doc');
+                if (@$data['error'])
+                    $this->_mainData['errors'][] = $data['the_errors'];
+                else
+                    $uploadData['mass_email_attachment_doc'] = $data['file_name'];
+            }
+            if (@$_FILES['mass_email_list_doc']['name']) {
+                $data = $this->file_handling_m->add_new_file('mass_email_list_doc');
+                if (@$data['error'])
+                    $this->_mainData['errors'][] = $data['the_errors'];
+                else
+                    $uploadData['mass_email_list_doc'] = $data['file_name'];
+            }
+
+            $uploadData['email_order_complete'] = (@$uploadData['email_order_complete']) ? TRUE : FALSE;
+            $uploadData['email_order_complete_attachment'] = (@$uploadData['email_order_complete_attachment']) ? TRUE : FALSE;
+            $uploadData['registration_email'] = (@$uploadData['registration_email']) ? TRUE : FALSE;
+            $this->admin_m->updateSettings($uploadData);
+        }
+
+        $this->_mainData['emailSettings'] = $this->admin_m->getEmailSettings();
+        $this->renderMasterPage('admin/master_v', 'admin/email_v', $this->_mainData);
+    }
+
+    public function download_emails() {
+        if (!$this->checkValidAccess('email') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        //$getUserEmails = $this->admin_m->getUserEmails();
+        $getContactTable = $this->admin_m->getContactTable();
+        $getNewsLetters = $this->admin_m->getNewsLetters();
+        //array(0=>array('email'=>"All Users Emails")), $getUserEmails, 
+        //0=>array('email'=>"All Contact Emails")),
+        $newArray = array_merge(array(0 => array('email' => "All Users Emails")), $getContactTable, array(0 => array('email' => "All News Letters Emails")), $getNewsLetters);
+
+        $csv = $this->array2csv($newArray);
+        header("Content-type: text/csv");
+        header("Content-Disposition: attachment; filename=emails.csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        echo $csv;
+        exit;
+    }
+
+    function array2csv(array &$array) {
+        if (count($array) == 0) {
+            return null;
+        }
+        ob_start();
+        $df = fopen("php://output", 'w');
+        fputcsv($df, array_keys(reset($array)));
+        foreach ($array as $row) {
+            fputcsv($df, $row);
+        }
+        fclose($df);
+        return ob_get_clean();
+    }
+
+    public function debug($param) {
+
+        echo "<pre>";
+        print_r($param);
+        echo "</pre>";
+    }
+
+    public function craglist_feeds() {
+        if (!$this->checkValidAccess('data_feeds') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        $uploadData = $this->input->post();
+        if (!empty($uploadData)) {
+            $file = dirname(__DIR__) . '/craglistFeed/delimited.txt';
+            //echo dirname(__DIR__);exit;
+            $this->load->model('reporting_m');
+            $csv = $this->reporting_m->getProductForcraglist();
+            $csv_handler = fopen($file, 'w');
+            // JLB 10-07-16
+            fwrite($csv_handler, $csv);
+            // foreach ($csv as $c) {
+            // fputcsv($csv_handler, $c);
+            // }
+            fclose($csv_handler);
+            $data = array('run_by' => 'admin', 'status' => '1');
+            $this->admin_m->update_craglist_feeds_log($data);
+        }
+        $this->_mainData['cycletrader_feeds'] = $this->admin_m->get_cycletrader_feed_log();
+        $this->_mainData['craglist_feeds'] = $this->admin_m->get_craglist_feed_log();
+        $this->_mainData['feed'] = $this->admin_m->get_feed_log();
+        $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);
+    }
+
+    public function cycletrader_feeds() {
+        if (!$this->checkValidAccess('data_feeds') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        $uploadData = $this->input->post();
+        if (!empty($uploadData)) {
+            $this->load->model('reporting_m');
+            $csv = $this->reporting_m->getProductForcycletrader();
+            $data = array('run_by' => 'admin', 'status' => '1');
+            $this->admin_m->update_cycletrader_feeds_log($data);
+        }
+        $this->_mainData['cycletrader_feeds'] = $this->admin_m->get_cycletrader_feed_log();
+        $this->_mainData['craglist_feeds'] = $this->admin_m->get_craglist_feed_log();
+        $this->_mainData['feed'] = $this->admin_m->get_feed_log();
+        $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);
+    }
+
+    public function ebay_feeds() {
+//        if (!$this->checkValidAccess('data_feeds') && !@$_SESSION['userRecord']['admin']) {
+//            redirect('');
+//        }
+
+        $this->load->model('ebay_m');
+        $this->load->model('Ebaysetting');
+        $uploadData = $this->input->post();
+//        if (!empty($uploadData)) {
+        $csv = $this->ebay_m->generateEbayFeed(0, 0);
+        $data = array('run_by' => 'admin', 'status' => '1');
+        $this->ebay_m->update_ebay_feeds_log($data);
+//        }
+
+        $this->_mainData['cycletrader_feeds'] = $this->admin_m->get_cycletrader_feed_log();
+//        $this->_mainData['craglist_feeds'] = $this->admin_m->get_craglist_feed_log();
+        $this->_mainData['feed'] = $this->admin_m->get_feed_log();
+        $this->_mainData['ebay_feeds'] = $this->ebay_m->get_ebay_feed_log();
+
+        $this->_mainData['ebaysettings'] = $this->Ebaysetting->getEbaySettings();
+        $this->_mainData['ebayshippingsettings'] = $this->Ebaysetting->getEbayShippingSettings();
+        $this->_mainData['paypalemail'] = $this->Ebaysetting->check_paypalemail();
+        $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);
+    }
+
+    public function feeds() {
+        ini_set('memory_limit', '999M');
+
+        if (!$this->checkValidAccess('data_feeds') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        $uploadData = $this->input->post();
+        if (!empty($uploadData)) {
+
+            $file = dirname(__DIR__) . '/googleFeed/csvfile.csv';
+//            echo dirname(__DIR__);exit;
+            $this->load->model('reporting_m');
+            $csv = $this->reporting_m->getProductsForGoogle();
+            $csv_handler = fopen($file, 'w');
+            // JLB 10-07-16
+            fwrite($csv_handler, $csv);
+            foreach ($csv as $c) {
+                fputcsv($csv_handler, $c);
+            }
+            fclose($csv_handler);
+            $data = array('run_by' => 'admin', 'status' => '1');
+            $this->admin_m->update_feed_log($data);
+        }
+        $this->_mainData['cycletrader_feeds'] = $this->admin_m->get_cycletrader_feed_log();
+//        $this->_mainData['craglist_feeds'] = $this->admin_m->get_craglist_feed_log();
+        $this->_mainData['feed'] = $this->admin_m->get_feed_log();
+        $this->load->model('Ebaysetting');
+        $this->_mainData['ebaysettings'] = $this->Ebaysetting->getEbaySettings();
+        $this->_mainData['ebayshippingsettings'] = $this->Ebaysetting->getEbayShippingSettings();
+        $this->_mainData['paypalemail'] = $this->Ebaysetting->check_paypalemail();
+        $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);
+    }
+
+    public function ebay_settings() {
+        $formData = $this->input->post();
+        if (!empty($formData)) {
+            echo 'hi';
+            $this->load->model('Ebaysetting');
+            echo '2';
+            $this->Ebaysetting->saveSetting($formData);
+            echo '3';
+            $_SESSION['userRecord'] = '';
+            echo 'hi';
+        } else {
+            echo 'xpe';
+        }
+    }
+
+    public function paypal_email() {
+//        echo $this->input->post('paypal_email');
+        $formData = $this->input->post();
+        if (!empty($formData)) {
+
+            $this->load->model('Ebaysetting');
+            $this->Ebaysetting->add_paypal_email($formData);
+        }
+    }
+
+}

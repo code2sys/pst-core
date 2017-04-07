@@ -1,0 +1,145 @@
+@charset "UTF-8";
+/* CSS Document */
+
+.main_nav_wrap {
+	background:#063;
+	background:-webkit-linear-gradient(#06C 0%, #039 100%);
+	background:-moz-linear-gradient(#06C 0%, #039 100%);
+	background:-ms-linear-gradient(#06C 0%, #039 100%);
+	border-bottom:1px #036 solid;
+	height:43px;
+	width:100%;
+}
+.main_nav {
+	height:43px;
+	margin:0 auto;
+	width:94%;
+}
+.main_nav ul {
+	background:url(../images/admin_nav_divider.png) top right no-repeat;
+	height: 43px;
+	float:left;
+	list-style: none; 
+	margin: 0; 
+	padding: 0 2px 0 0;
+	width:auto; 
+}
+.main_nav li{
+	background:url(../images/admin_nav_divider.png) top left no-repeat;
+	float:left;
+	height:43px;
+	margin:0px;
+	width:130px;
+}
+.main_nav li a {
+	color: #FFF;
+	display:block;  
+	font-family:Helvetica, sans-serif;
+	font-size:13px;
+	font-weight:bold; 
+	margin:0px; 
+	padding:15px 5px;
+	text-decoration:none;
+	text-align:center;
+	text-shadow: 0px 1px #000;
+	width:120px;
+}
+.main_nav li a:hover, .main_nav ul li:hover a {
+	background:url(../images/admin_nav_divider.png) top left no-repeat #06C;
+	color:#FFF;
+	height:13px;
+	text-shadow: none;
+	width: 120px;
+	/* Shadow */
+	-moz-box-shadow:none;
+	-webkit-box-shadow:none;
+	box-shadow:none;
+}
+.main_nav ul li a.active {
+	background:url(../images/admin_nav_divider.png) top left no-repeat #06C;
+	color:#FFF;
+	width: 120px;
+	padding: 15px 5px;
+	height:13px;
+	/* text-shadow: 0px 1px 2px #333; */
+}
+
+/* ======== DROP DOWN ======== */
+
+.main_nav li ul{
+	background: #EEE;
+	border:1px #039 solid;
+	display: none;
+	height: auto;
+	margin-top:0;
+	padding-right:0;
+	position: relative;
+	width: 160px;
+	z-index: 200;
+	/* BOX SHADOW */
+	-moz-box-shadow:0 2px 3px #CCC;
+	-webkit-box-shadow:0 2px 3px #CCC;
+	box-shadow:0 2px 3px #CCC;
+
+}
+.main_nav li:hover ul {
+	display:block;
+}
+.main_nav li li {
+	background-image: none;
+	border-left:none;
+	border-bottom:1px #CCC solid;
+	display: block;
+	float: none;
+	height: 36px;
+	width: 160px;
+	/* Shadow */
+	-moz-box-shadow:none;
+	-webkit-box-shadow:none;
+	box-shadow:none;
+}
+.main_nav li:hover li a {
+	background: none;
+	color:#333;
+	font-family:Helvetica, sans-serif;
+	font-size:12px;
+	font-weight:600;
+	height: 16px;
+	width: 160px;
+	text-shadow: none;
+}
+.main_nav li ul a {
+	display: block;
+	font-size: 13px;
+	font-style: normal;
+	height: auto;
+	margin: 0px;
+	padding: 10px 0px 10px 15px;
+	text-align: left;
+}
+.main_nav li ul a:hover, .main_nav li ul li ul li ul li:hover a {
+	background:#FFF;
+	color:#333;
+	height: 16px;
+	width: 145px;
+	text-decoration:none;
+	text-shadow: none;
+}
+.main_nav p {
+	clear:left;
+}	
+
+/* ======== DROP DOWN 2 ======== */
+	
+#nav li ul ul {
+	left:160px;
+	top:-36px;
+}
+.main_nav li:hover ul ul, .main_nav li:hover ul ul ul, .main_nav li:hover ul ul ul ul{
+	display:none;
+}
+
+
+
+
+
