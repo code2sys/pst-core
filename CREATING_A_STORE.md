@@ -10,6 +10,7 @@ Creating a Store
 6. Add in the symlinks.
 7. Create an apache virtual host configuration.
 8. Set up the cron jobs.
+9. Put the site name in html/site.txt.
 
 
 Boostrap The Database Commands
