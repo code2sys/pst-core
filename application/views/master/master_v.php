@@ -32,8 +32,11 @@ if (isset($keywords) &&	$keywords != "") {
 <html lang="en">
 <head>
 	<title><?php echo $page_title; ?></title>
-	
-    <?php
+	<?php if (SEARCH_NOINDEX): ?>
+		<meta name="robots" content="noindex" />
+	<?php endif; ?>
+
+	<?php
 	$new_assets_url = jsite_url( "/qatesting/newassets/");
 	$new_assets_url1 = jsite_url( "/qatesting/benz_assets/");
 	

@@ -35,6 +35,9 @@ if (isset($keywords) &&	$keywords != "") {
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<title><?php echo $page_title; ?></title>
+	<?php if (SEARCH_NOINDEX): ?>
+		<meta name="robots" content="noindex" />
+	<?php endif; ?>
 
 <meta name="description" content="<?php print htmlentities($meta_description, ENT_QUOTES | ENT_COMPAT); ?>">
 <meta name="keywords" content="<?php echo htmlentities($meta_keywords, ENT_QUOTES | ENT_COMPAT);  ?>">	
