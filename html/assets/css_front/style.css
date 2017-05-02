@@ -108,7 +108,7 @@ h1.hdng{font-size:26px; font-family:OpenSans; line-height:40px;}
 .footer .pdngtp{padding:10px 0 0 0;}
 .sw .cntnr{width:1170px;} 
 .footer .cntnr{width:1170px;}
-.map{background:/* url("../images_front/us-map.png") no-repeat; */ width:30% !important; min-height:200px;  background-size:49% 59%; background-position:41% 49%;}
+.map{background:url("../images_front/us-map.png") no-repeat; width:30% !important; min-height:200px;  background-size:49% 59%; background-position:41% 49%;}
 .fw .one-fifth{width:22%; float:left; padding:0% 1% 1% 0;}
 .fw .one-fifth h3{color:#6699cc; text-transform:uppercase; font-size:17px; line-height:25px; font-weight:normal; margin:5px 0 10px 0;}
 .fw .one-fifth h3.nwsltr{margin:25px 0 0 0;} 
@@ -171,7 +171,7 @@ a.social img{width:30px; height:30px;}
 /* SIZING CHART PAGE CSS STARTS HERE */
 .szchrt{padding:15px 0px 10px 0px;}
 .szchrt p.hdn{line-height:40px; font-size:25px; font-weight:bold;}
-.szchrt p.hdn a{float:right; font-size:14px; background:black; font-weight:normal; line-height:25px; color:white; padding:5px 10px; border-radius:5px; margin:4px 0 0 0;}
+.szchrt p.hdn a{float:right; font-size:14px; background:#003ca2; font-weight:normal; line-height:25px; color:white; padding:5px 10px; border-radius:5px; margin:4px 0 0 0;}
 .szchrt p.hdn a:hover{text-decoration:none;}
 .szchrt ul{width:100%; float:left; margin:15px 0px;}
 .szchrt ul li{width:15%; box-shadow:0px 1px 3px white; float:left; margin:0 9px 20px 9px; min-height:220px; border-bottom:1px solid silver; padding:10px 0 0 0;}
@@ -179,19 +179,19 @@ a.social img{width:30px; height:30px;}
 .szchrt ul li a.szimg{width:100%; float:left; height:158px; text-align:center;}
 .szchrt ul li a img{max-width:90%; margin:0 5%; max-height:158px;}
 .szchrt ul li p{font-size:14px; line-height:20px; text-align:center; float:left; width:100%;}
-.szchrt ul li p a{font-size:14px; color:#f35607;}
+.szchrt ul li p a{font-size:14px; color:#d15845;}
 .szchrt ul li p a:hover{text-decoration:none;}
 .szchrt .acrdn{width:100%; float:left; line-height:20px; margin:1% 0 3% 0;}
 .szchrt .active{}
 .szchrt .active .acrdn-hdng h1 span .optn{transform:rotate(90deg);}
 .szchrt .acrdn .acrdn-hdng{width:99%; float:left;}
-.szchrt .acrdn .acrdn-hdng .h1-sz-ttl{background:black; color:white; width:99%; float:left; line-height:40px; padding:0 5px;}
-.szchrt .acrdn .acrdn-hdng .h1-sz-ttl h1{color:white;float:left; line-height:40px; padding:0 5px; margin:5px 0; font-size:30px;}
+.szchrt .acrdn .acrdn-hdng .h1-sz-ttl{background:#003ca2; color:white; width:99%; float:left; line-height:40px; padding:0 5px;}
+.szchrt .acrdn .acrdn-hdng .h1-sz-ttl h1{color:white;float:left; line-height:40px; padding:0 5px;}
 .szchrt .acrdn .acrdn-hdng .h1-sz-ttl span{float:left; cursor:pointer;}
 .szchrt .acrdn .acrdn-hdng .h1-sz-ttl a{float:right; font-size:14px; font-weight:normal; color:white;}
 .szchrt .acrdn .acrdn-hdng .h1-sz-ttl a:hover{text-decoration:none;}
 .szchrt .acrdn .acrdn-cntnt{width:99%; float:left;}
-.szchrt .acrdn .acrdn-cntnt table{width:90%; text-align:left; margin:0 0 0 5%; border-top:1px solid white;}
+.szchrt .acrdn .acrdn-cntnt table{width:90%; text-align:left; margin:0 0 0 5%;}
 .szchrt .acrdn .acrdn-cntnt table tr{}
 .szchrt .acrdn .acrdn-cntnt table tr th{background:black; color:white; padding:8px 6px; font-size:17px;}
 .szchrt .acrdn .acrdn-cntnt table tr td{background:rgba(192, 192, 192, 0.32); color:gray; padding:8px 6px; }
@@ -203,7 +203,7 @@ a.social img{width:30px; height:30px;}
 .desDetailTxt table tr th{background:black; color:white; padding:8px 6px; font-size:17px;}
 .desDetailTxt table tr td{background:rgba(192, 192, 192, 0.32); color:gray; padding:8px 6px; }
 .fl-wdh .rulerimg{}
-.fl-wdh .rulerimg a{color:rgb(242, 89, 0);}
+.fl-wdh .rulerimg a{color:rgba(0, 20, 255, 0.82);}
 .fl-wdh .rulerimg a:hover{text-decoration:none; color:grey;}
 .fl-wdh .rulerimg a img{width:70px; vertical-align:bottom;}
 /* PRODUCT DETAIL PAGE SIZING CHART CSS ENDS HERE */

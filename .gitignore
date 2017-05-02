@@ -39,3 +39,6 @@ com_crashlytics_export_strings.xml
 Thumbs.db
 .DS_Store
 environment.php
+composer.lock
+composer.phar
+vendor

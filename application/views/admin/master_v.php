@@ -35,10 +35,6 @@
   <script src="<?php echo $assets; ?>/wdCalendar/src/Plugins/jquery.datepicker.js"></script>
   <script src="<?php echo $assets; ?>/js/jquery-ui-1.10.4.js"></script>
   <script src="<?php echo $assets; ?>/js_front/jquery.dataTables.min.js"></script>
-  
-  <script src="<?php echo $assets; ?>/js/jquery.flot.min.js"></script>
-  <script src="<?php echo $assets; ?>/js/jquery.flot.time.js"></script>
-  <script src="<?php echo $assets; ?>/js/jquery.flot.symbol.js"></script>
    <?php echo @$script; ?>
    <script>
    	var base_url = '<?php echo base_url(); ?>';
@@ -46,6 +42,7 @@
    </script>
 </head>
 <body class="body">
+
 <style>
 /* Background Loading (start)*/
 #loading-background {

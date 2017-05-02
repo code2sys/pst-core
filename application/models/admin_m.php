@@ -2294,7 +2294,7 @@ class Admin_M extends Master_M {
 				$this->updateRecord('motorcycle', $post, $where, FALSE);
 				$motorcycle_id = $id;
 			}
-		} 
+		}
 		return $motorcycle_id;
     }
 	
@@ -2330,7 +2330,9 @@ class Admin_M extends Master_M {
 	
 	public function getMotorcycleImage( $id ) {
         $where = array('motorcycle_id' => $id);
-        $record = $this->selectRecords('motorcycleimage', $where);
+        $orderBy = 'priority_number asc';
+		//$this->db->order_by('priority_number asc');
+        $record = $this->selectRecords('motorcycleimage', $where, $orderBy);
         return $record;
 	}
 	
@@ -2354,6 +2356,12 @@ class Admin_M extends Master_M {
 		//$data = array('description' => $post['descr']);
 		$where = array('id' => $id);
 		$this->updateRecord('motorcycleimage', $pst, $where, FALSE);
+	}
+	
+	public function updateImageOrder( $id, $ord ) {
+        $where = array('id' => $id);
+		$data = array('priority_number'=>$ord);
+		$this->updateRecord('motorcycleimage', $data, $where, FALSE);
 	}
 	
 	public function deleteMotorcycle( $prod_id ) {

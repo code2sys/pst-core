@@ -1,6 +1,6 @@
+
 <div class="content_wrap">
     <div class="content">
-
         <h1><i class="fa fa-rss"></i>&nbsp;Data Feeds</h1>
         <h3>View Edit and Manage Data Feeds</h3>
         <br>
@@ -13,22 +13,21 @@
                     </tr>
                     <tr>
                         <td><input type="submit" name="getFeed" value="Generate Google Product Feed"></td>
-                        <td>Status : <?php echo isset($feed['status']) && $feed['status'] == 1 ? 'Completed' : 'Processing'; ?></td>
-                        <td>Last Run : <?php echo isset($feed['run_at']) ? date('m/d/y H:i:s', strtotime($feed['run_at'])) : ''; ?></td>
+                        <td>Last Run : <?php   echo isset($feed['run_at']) ? date('m/d/y H:i:s', strtotime($feed['run_at'])) : ''; ?></td>
                         <td>Feed URL : <a href="<?php echo site_url() . 'welcome/googleSalesXML'; ?>"><?php echo site_url() . 'welcome/googleSalesXML'; ?></a></td>
                     </tr>
                 </table>
             </form>
-<!--            <form action="<?php //echo "#"; //echo base_url('admin_content/craglist_feeds');              ?>" method="post" id="form_example" class="form_standard">
+<!--            <form action="<?php //echo "#"; //echo base_url('admin_content/craglist_feeds');               ?>" method="post" id="form_example" class="form_standard">
                 <table width="100%" cellpadding="6">
                     <tr>
                         <th colspan="4"><h2>Craigslist Product Data Feed:</h2></th>
                     </tr>
                     <tr>
                         <td><input type="submit" name="getcraglist_feeds" value="Generate Craigslist Product Feed"></td>
-                        <td>Status : <?php //echo isset($craglist_feeds['status']) && $craglist_feeds['status'] == 1 ? 'Completed' : 'Processing';             ?></td>
-                        <td>Last Run : <?php //echo isset($craglist_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($craglist_feeds['run_at'])) : '';             ?></td>
-                        <td>Feed URL : <a href="<?php //echo "#"; //echo site_url().'welcome/craglistSalesXML';             ?>"><?php //echo site_url() . 'welcome/craglistSalesXML';             ?></a></td>
+                        <td>Status : <?php //echo isset($craglist_feeds['status']) && $craglist_feeds['status'] == 1 ? 'Completed' : 'Processing';              ?></td>
+                        <td>Last Run : <?php //echo isset($craglist_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($craglist_feeds['run_at'])) : '';              ?></td>
+                        <td>Feed URL : <a href="<?php //echo "#"; //echo site_url().'welcome/craglistSalesXML';              ?>"><?php //echo site_url() . 'welcome/craglistSalesXML';              ?></a></td>
                     </tr>
                 </table>
             </form>-->
@@ -59,7 +58,23 @@
                         <td>Feed URL : <a href="<?php echo site_url() . 'welcome/ebaySalesFile'; ?>"><?php echo site_url() . 'welcome/ebaySalesFile'; ?></a></td>
                         <td>Hit Ebay : <a href="<?php echo site_url() . 'welcome/hit_ebay'; ?>"><?php echo site_url() . 'welcome/hit_ebay'; ?></a></td>
                         <td>Check Ebay Feed Status : <a href="<?php echo site_url() . 'welcome/ebay_status'; ?>"><?php echo site_url() . 'welcome/ebay_status'; ?></a></td>
-                        <!--<td>Check Feed Status File: <a href="<?php echo site_url() . 'welcome/ebay_download_xml'; ?>"><?php echo site_url() . 'welcome/ebay_download_xml'; ?></a></td>-->
+                    </tr>
+                    <tr>
+                        <td>Generate End Product XML: <a href="<?php echo site_url() . 'welcome/create_ebay_end_xml'; ?>">create_ebay_end_xml</a></td>
+                        <td>End all products on ebay: <a href="<?php echo site_url() . 'welcome/hit_ebay_end'; ?>">end_all_products</a></td>
+                    </tr>
+                      <tr>
+                        <td>Generate Update Product XML: <a href="<?php echo site_url() . 'welcome/create_old_product_xml'; ?>">create_old_product_xml</a></td>
+                        <td>Update Product on Ebay: <a href="<?php echo site_url() . 'welcome/hit_ebay_update'; ?>">send_update_ebay</a></td>
+                    </tr>
+                    <tr>
+                        <td>Generate New Product XML: <a href="<?php echo site_url() . 'admin_content/create_new_product_xml'; ?>">create_new_product_xml</a></td>
+                        <td>Add Product on Ebay: <a href="<?php echo base_url('welcome/hit_ebay/'); ?>">send_new_ebay</a></td>
+                    </tr>
+                     <tr>
+                            <td>Check Previous Running Jobs: <a href="<?php echo site_url() . 'welcome/list_all_feeds'; ?>">list_all_feeds</a></td>
+                        <td>Abort Job: <a href="<?php echo base_url('admin_content/send_new_ebay/'); ?>">send_new_ebay</a></td>
+                        <td>Check Status: <a href="<?php echo base_url('admin_content/send_new_ebay/'); ?>">check status</a></td>
                     </tr>
                 </table>
             </form><br>
@@ -71,7 +86,15 @@
                         <td><button type="submit" name="paypal">Update</button></td>
                     </tr>
                 </table>
-
+            </form><br>
+            <form action="<?php echo base_url('admin_content/ebay_quantity'); ?>" method="post" id="form_example" class="form_standard">
+                <table class="paypal_email" width="100" cellpadding="1">
+                    <tr>
+                        <td><h3>Ebay Listing Quantity:</h3></td>
+                        <td><input type="number" name="quantity" value="<?php echo $paypalemail[0]['quantity']; ?>"></td>
+                        <td><input type="submit" value="add"></td>
+                    </tr>
+                </table>
             </form><br>
             <form action="<?php echo base_url('admin_content/ebay_settings'); ?>" method="post" id="form_example" class="form_standard">
                 <table class="ebay_setting" width="100">

@@ -63,8 +63,8 @@
 			
 						<form action="<?php echo base_url('admin/shipping_rules'); ?>" method="post" id="form_example" class="form_standard">
 			<div class="tabular_data">
-				<?php echo form_submit('create_new', 'Create New', 'class="new" id="button"'); ?>
-				<?php echo form_submit('edit', 'Edit',  'class="edit hide" id="button"'); ?>
+				<?php //echo form_submit('create_new', 'Create New', 'class="new" id="button"'); ?>
+				<?php //echo form_submit('edit', 'Edit',  'class="edit hide" id="button"'); ?>
 				<div class="clear"></div>
 				 <input type="hidden" name="id" value='' id="id">
 				<table cellpadding="3" style="width:100%;">

@@ -45,7 +45,7 @@ class Motorcycle_M extends Master_M {
 		$where = array('motorcycle.id' => $id );
         $record = $this->selectRecord('motorcycle', $where);
 		$iwhere = array('motorcycleimage.motorcycle_id' => $id );
-		$this->db->order_by('motorcycleimage.id asc');
+		$this->db->order_by('motorcycleimage.priority_number asc');
 		$record['images'] = $this->selectRecords('motorcycleimage', $iwhere);
 		$vwhere = array('motorcycle_video.part_id' => $id );
 		$this->db->order_by('motorcycle_video.id asc');
@@ -266,7 +266,10 @@ class Motorcycle_M extends Master_M {
 	}
 	
 	public function getFeaturedMonster() {
-		$where = array('motorcycle.featured' => '1' );
+		$where = array(
+					'motorcycle.featured' => '1',
+					'motorcycleimage.priority_number' => '0',
+				);
 		$this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
 		$this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id', 'left');
 		$this->db->select('motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type');

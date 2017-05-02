@@ -67,15 +67,15 @@ a img {
 }
 
 a:link {
-	color: #000;
+	color: #393;
 	text-decoration: none;
 }
 a:visited {
-	color: #000;
+	color: #393;
 	text-decoration: none;
 }
 a:hover {
-	color: #f25900;
+	color: #606;
 	text-decoration: none;
 }
 a:active {
@@ -121,7 +121,7 @@ a:active {
 	width:350px;
 }
 .logo img {
-	width:108px;	
+	width:96%px;	
 }
 
 /* ======== HEADER RIGHT ======== */
@@ -1094,10 +1094,10 @@ a.button_full:active {
 	/* ======== INPUT PURPLE BUTTON ======== */
 
 	.input_button_purple { 
-	background:/* url(../images/button_bg.png) top left repeat-x #DDD */ black;
-	background: black/* -webkit-linear-gradient(#639 1%, #306 100%) */;
-	background: black /* -moz-linear-gradient(#639 1%, #306 100%) */;
-	background:black /* -ms-linear-gradient(#639 1%, #306 100%) */;
+	background:url(../images/button_bg.png) top left repeat-x #DDD;
+	background:-webkit-linear-gradient(#639 1%, #306 100%);
+	background:-moz-linear-gradient(#639 1%, #306 100%);
+	background:-ms-linear-gradient(#639 1%, #306 100%);
 	border:1px #AAA solid;
 	color: #FFF;
 	float:left;
@@ -1116,7 +1116,7 @@ a.button_full:active {
 }
 
 .input_button_purple:hover{
-	background:#000;
+	background:#639;
 	border:1px #999 solid;
 	color: #FFF;
 	cursor: pointer;
@@ -2111,6 +2111,6 @@ a.button_purple:active {
 	
 }
 
-#desktop_cart a{color:#000 !important;}
-#desktop_cart .phonee{color:#000 !important;}
+#desktop_cart a{color:#0073d4 !important;}
+#desktop_cart .phonee{color:#0073d4 !important;}
 

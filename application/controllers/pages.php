@@ -91,7 +91,8 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('physical_address[country]', 'Country', 'required|xss_clean');
 		$this->form_validation->set_rules('housing_info[owns]', 'Do you rent or own your home, or other ?', 'required|xss_clean');
 		$this->form_validation->set_rules('housing_info[rent]', 'Rent / Mortgage Monthly Amount', 'required|xss_clean');
-		$this->form_validation->set_rules('housing_info[]', 'Time at Current Residence', 'required|xss_clean');
+		$this->form_validation->set_rules('housing_info[months]', 'Time at Current Residence(Month)', 'required|xss_clean');
+		$this->form_validation->set_rules('housing_info[years]', 'Time at Current Residence(Year)', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[occupation]', 'Occupation', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[emp_name]', 'Employer Name', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[emp_addr]', 'Employer Address', 'required|xss_clean');
@@ -100,7 +101,8 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('employer_info[emp_zip]', 'Employer Zip', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[emp_phone]', 'Employer Phone', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[salary]', 'Salary(Annually Gross)', 'required|xss_clean');
-		$this->form_validation->set_rules('employer_info[]', 'Time at Employer', 'required|xss_clean');
+		$this->form_validation->set_rules('employer_info[months]', 'Time at Employer(Month)', 'required|xss_clean');
+		$this->form_validation->set_rules('employer_info[years]', 'Time at Employer(Year)', 'required|xss_clean');
 		return $this->form_validation->run();
 	}
 	

@@ -253,6 +253,20 @@ class Admin extends Master_Controller {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('vehicle_type', 'Vehicle Type', 'required');
         $this->form_validation->set_rules('condition', 'Condition', 'required');
+        $this->form_validation->set_rules('sku', 'Sku', 'required');
+		$this->form_validation->set_rules('category', 'Category', 'required');
+        return $this->form_validation->run();
+    }
+
+	protected function validateNewSku() {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('sku', 'Sku', 'required');
+        return $this->form_validation->run();
+    }
+	
+	protected function validateNewCat() {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('category', 'Category', 'required');
         return $this->form_validation->run();
     }
 	
@@ -414,62 +428,6 @@ class Admin extends Master_Controller {
 
     public function index() {
         $this->load->model('reporting_m');
-        $this->load->model('admin_m');
-        $this->_mainData['totalOrders'] = $this->reporting_m->getOrdersPerMonthDashboard(date('Y-m-d'));
-        $this->_mainData['totalCustomers'] = $this->reporting_m->getCusomersPerMonthDashboard();
-        $arr = array();
-        $arr['status'][] = 'approved';
-        $arr['status'][] = 'processing';
-        $arr['days'] = 30;
-        $arr['limit'] = 5;
-
-        $this->_mainData['orders'] = $this->admin_m->getOrders($arr);
-        $this->_mainData['chartOrders'] = $this->reporting_m->getOrderForMonthChart();
-        $chartOrdersDaily = $this->reporting_m->getOrderForDailyChart();
-        $chartOrdersWeekly = $this->reporting_m->getOrderForWeeklyChart();
-        $chartOrdersYearly = $this->reporting_m->getOrderForYearlyChart();
-        $this->_mainData['totalReviews'] = $this->reporting_m->getTotalReviews();
-        $this->_mainData['totalRevenue'] = $this->reporting_m->getTotalRevenue(date('Y-m-d'));
-        
-        $days = array();
-        $cnt = 0;
-        $str = $str1 = $str2 = $str3 = array();
-        $days = $days1 = $days2 = $days3 = array();
-        foreach( $this->_mainData['chartOrders'] as $key => $order ) {
-            $days[] = $key;
-            $str[] = $order;
-        }
-        
-        foreach( $chartOrdersDaily as $key => $order ) {
-            $days1[] = $key;
-            $str1[] = $order;
-        }
-        
-        $days2 = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-        foreach( $chartOrdersWeekly as $key => $order ) {
-            //$days2[] = $key;
-            $str2[] = $order;
-        }
-        
-        $days3 = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
-        foreach( $chartOrdersYearly as $key => $order ) {
-            $str3[] = $order;
-        }
-        
-        $this->_mainData['days'] = $days;
-        $this->_mainData['str'] = $str;
-        
-        $this->_mainData['days1'] = $days1;
-        $this->_mainData['str1'] = $str1;
-        
-        $this->_mainData['days2'] = $days2;
-        $this->_mainData['str2'] = $str2;
-        
-        $this->_mainData['days3'] = $days3;
-        $this->_mainData['str3'] = $str3;
-        
-        $this->_mainData['dashboard'] = $this->checkValidAccess('dashboard');
-        
         $this->setNav('admin/nav_v', 0);
         $this->renderMasterPage('admin/master_v', 'admin/home_v', $this->_mainData);
     }
@@ -1069,12 +1027,15 @@ class Admin extends Master_Controller {
 		if(!$this->checkValidAccess('shipping') && !@$_SESSION['userRecord']['admin']) {
 			redirect('');
 		}
+
         if ($this->validateEditShippingRules() === TRUE) {
             $this->admin_m->updateShippingRules($this->input->post());
         }
+
         $this->setNav('admin/nav_v', 2);
         $this->_mainData['shippingRules'] = $this->admin_m->getShippingRules();
         $this->load_countries();
+
         $this->renderMasterPage('admin/master_v', 'admin/shipping_rules_v', $this->_mainData);
     }
 
@@ -1825,7 +1786,7 @@ class Admin extends Master_Controller {
         $this->_mainData['productListTable'] = $this->generateAdPdtListTableMotorcycle('category.display_page', 'ASC', 1, $filter, $cat);
 
         // Pagination
-//        $this->_mainData['pages'] = $this->generateAdPdtListTableMotorcycle($this->admin_m->getProductCount());
+        // $this->_mainData['pages'] = $this->generateAdPdtListTableMotorcycle($this->admin_m->getProductCount());
         $this->_mainData['currentPage'] = 1;
         $this->_mainData['display_pages'] = $this->_pagination;
         $this->_mainData['pagination'] = $this->load->view('admin/pagination/product_list_v', $this->_mainData, TRUE);
@@ -1865,12 +1826,15 @@ class Admin extends Master_Controller {
               $this->load->helper('async');
 
               
-        if ($this->validateMotorcycle() === TRUE) {
+        if (($this->validateMotorcycle() === TRUE) && ($this->validateNewSku() === TRUE)&& ($this->validateNewCat() === TRUE)) {
             $id = $this->admin_m->updateMotorcycle($id, $this->input->post());
-	}
+			redirect('admin/motorcycle_edit/' . $id.'/updated');
+		}else{
+			$this->motorcycle_edit($id);
+		}
        
         curl_request_async();
-        redirect('admin/motorcycle_edit/' . $id.'/updated');
+		
     }
 	
     public function motorcycle_description($id = NULL) {
@@ -1919,15 +1883,45 @@ class Admin extends Master_Controller {
 					$mid = $k;
 				}
 				$this->admin_m->updateMotorcycleImageDescription($mid, $arr);
+			}elseif(isset($_POST['orderSubmit'])){
+				$arr = explode(",",$this->input->post('order'));
+				foreach($arr as $k=>$v)
+				{
+					$rr[] = explode("=",$v);
+				}
+				foreach($rr as $k=>$v){
+					$img = $v[0];
+					$ord = $v[1];
+					$this->admin_m->updateImageOrder($img, $ord);
+				}
+				// echo "<pre>";
+				// print_r($rr);
+				// echo "</pre>";
+				// exit;
 			} else {
-				$arr = array();
-				$img = time().'_'.str_replace(' ','_',$_FILES["file"]['name']);
-				$dir = dirname(dirname(__DIR__)).'/html/media/'.$img;
-				move_uploaded_file($_FILES['file']['tmp_name'], $dir);
-				$arr['description'] = $_POST['description'];
-				$arr['image_name'] = $img;
-				$arr['motorcycle_id'] = $id;
-				$this->admin_m->updateMotorcycleImage($id, $arr);
+				$res['img'] = $this->admin_m->getMotorcycleImage($id);
+				$ord = end($res['img']);
+				$prt = $ord['priority_number'];
+				// echo "<pre>";
+				// print_r($ord['priority_number']);
+				// echo "</pre>";exit;
+				foreach ($_FILES['file']['name'] as $key => $val) {
+					if($prt==""){
+						$prt = 0;
+					}else{
+						$prt = $prt + 1;
+					}
+					$arr = array();
+					$img = time().'_'.str_replace(' ','_',$val);
+					$dir = dirname(dirname(__DIR__)).'/html/media/'.$img;
+					move_uploaded_file($_FILES["file"]["tmp_name"][$key], $dir);
+					$arr['description'] = $_POST['description'];
+					$arr['image_name'] = $img;
+					$arr['motorcycle_id'] = $id;
+					$arr['priority_number'] = $prt;
+					$this->admin_m->updateMotorcycleImage($id, $arr);
+					$prt++;
+				}
 			}
             redirect('admin/motorcycle_images/' . $id.'/updated');
         }

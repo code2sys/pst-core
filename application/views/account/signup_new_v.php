@@ -207,7 +207,7 @@ td:first-child{
 			</div>
 			
 			<div id="section44" class="cart_wrap_left" style="background: none; border:none; padding: 10px; width: 30%;padding-top: 130px; display:none;">
-			<h1 style="display: inline; margin-right: 30px; color:#000000;font-size: 20px;">OR</h1> <a href="<?php echo $s_baseURL;?>checkout/?g=084e0343a0486ff05530df6c705c8bb4" style="background:#f25900; padding: 15px; border-radius:5px; color:#FFFFFF; font-size: 20px;">Proceed as Guest &rsaquo;</a>
+			<h1 style="display: inline; margin-right: 30px; color:#000000;font-size: 20px;">OR</h1> <a href="<?php echo $s_baseURL;?>checkout/?g=084e0343a0486ff05530df6c705c8bb4" style="background:#FFAA33; padding: 15px; border-radius:5px; color:#FFFFFF; font-size: 20px;">Proceed as Guest &rsaquo;</a>
 			</div>
 			
 			<div id="section22" class="cart_wrap_left" style="background: none; border:none; padding: 18px; width: 30%;">

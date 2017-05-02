@@ -163,7 +163,7 @@ $reference = json_decode($application['reference']);
 								<label for="dob" >Date of Birth</label>
 							</td>
 							<td>
-								<?php echo $contact_info->day.'-'.$contact_info->month.'-'.$contact_info->year;?>
+								<?php echo $contact_info->dob;?>
 							</td>
 						</tr>
 						
