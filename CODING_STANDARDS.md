@@ -71,3 +71,29 @@ Observe that they've injected an image tag in there. There should be a symbolic 
 Git Flow
 --------
 
+Git flow is a popular technique for managing a project like this. We're going to use it. Here are some articles:
+
+* http://nvie.com/posts/a-successful-git-branching-model/
+* https://www.atlassian.com/git/tutorials/comparing-workflows
+* https://github.com/nvie/gitflow
+
+Here's the idea:
+
+* master is the branch that is in use in production.
+* develop is where you should start coding.
+* You should create a feature branch (e.g., git flow feature start 20170409.001.JLBProject)
+    * Use the date in YYYYMMDD
+    * Include the numbers using a three digit serial number starting 001
+    * Identify yourself, e.g., I always use JLB
+    * Give your project some identifier so you can recognize what feature you were working on - e.g. eBay, Motorcycles, etc
+    * Remember, you're never going to be putting customer-specific code in here. You are going to put that in custom.css, custom.js, an override, or something else just for that customer. This code is supposed to be reusable for every customer.
+* Have Brandt review your feature branch in your development environment.
+* Once that is OK, and it passes all his testing, you can finish the feature branch.
+* Deploy changes to the develop website, develop.powersporttechnologies.com. Verify your functionality there that it works OK once merged into develop. If there is a train wreck there, you will need to alert everybody that develop is dirty, then you'll need to fix it.
+* Don't merge to master. That is the job of the build master. Currently, I (JLB) am the build master. Brandt can appoint other people to be the build master.
+* When things are good to go, let me know, and I'll merge to master and deploy to staging.powersporttechnologies.com. You'll probably need to verify functionality there, too.
+* After that, we're going to send it to the stores. You can verify in demo.powersporttechnologies.com [once we get that converted to this] or in a particular customer store.
+* Make sure Brandt knows how the code is moving and what feature is moving. 
+
+
+

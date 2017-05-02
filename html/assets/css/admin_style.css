@@ -1189,3 +1189,160 @@ p.cmplt{background-color:green !important;float:left; margin:0px 0 5px -5px !imp
 .bg {
 	background:#F6F6F6 !important;
 }
+
+
+
+
+
+/**Custom Dashboard Style Code by Pradeep**/
+.dash-sec-1{
+	width:100%;
+	display:block;
+}
+.container{
+	width:1100px;
+	margin:0 auto;
+	
+}
+.col-total{
+	width:23%;
+	float:left;
+	margin-top:20px;
+        margin-left: 20px;
+}
+.col-total+.col-total{
+	margin-left:2%;
+}
+.total-1{
+	width:100%;
+	background:#0096e5;
+	display:inline-block;
+	float:left;
+}
+.main {
+    width: 60%;
+    float: left;
+    text-align: left;
+    color: white;
+    padding: 10px 0 10px 10px;
+	font-family: RUBIK-REGULAR;
+    font-size: 14px;
+}
+.grow {
+    width: 32%;
+    float: left;
+    text-align: right;
+    color: white;
+    padding: 10px 0px 8px 0px;
+	font-family: 'proxima_nova_rgregular';
+	font-size: 14px;
+}
+.grow .fa{
+	color:white;
+	font-size:18px;
+	padding-right:3px;
+}
+
+.total-2{
+	width:100%;
+	background:rgba(0, 150, 229, 0.82);
+	display:inline-block;
+	float:left;
+}
+.total-3{
+	width:100%;
+	background:rgba(46, 169, 233, 0.76);
+	display:inline-block;
+	
+}
+.main1{
+	width:43%;
+	float:left;
+	text-align:left;
+	color:white;
+    padding: 10px 0 10px 10px;
+}
+.grow1 {
+    width: 48%;
+    float: left;
+    text-align: right;
+    color: white;
+    padding: 15px 0 15px 0;
+    font-family: 'open_sansregular';
+    font-size: 30px !important;
+    font-weight: bold !important;
+}
+.main1 .fa{
+    color: rgba(255, 255, 255, 0.53);
+    font-size: 45px;
+}
+.main2{
+	width:100%;
+	float:left;
+	text-align:left;
+	color:white;
+	padding:10px;
+	font-size:14px;
+    font-family: RUBIK-REGULAR;
+}
+.table-section{
+	width:100%;
+	float:left;
+	margin:30px 0 0 20px;
+}
+.table-head{
+	width:99%;
+	font-size:18px;
+	text-align:left;
+	border-bottom:1px solid gray;
+	background:rgba(128, 128, 128, 0.04);
+	padding: 7px 0 7px 10px;
+	font-family: 'open_sanssemibold';
+        margin-top: 0px !important;
+}
+.table-head .fa{
+	font-size:20px;
+	padding: 0 10px 0 0px;
+	
+}
+	
+.sarni{
+    width: 97%;
+    border: 1px solid gray;
+}
+.sarni table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+.sarni thead{
+	border-bottom:1px solid gray;
+}
+.sarni th{
+    color:black;
+    width:15%;
+    padding: 10px 13px;
+    text-align: left;
+    font-size: 14px;
+    font-family: 'open_sanssemibold';
+    border: none !important;
+}
+.sarni td{
+    width:15%;
+    padding: 18px 20px;
+    text-align: left;
+    font-size: 14px;
+    font-family:RUBIK-REGULAR;
+    border: none !important;
+}
+.sarni tr{
+	border-bottom:1px solid gray;
+}
+.sarni tr:nth-child(5n) {
+    border:none;
+}
+.sarni td .fa {
+    color: #ffffff;
+    font-size: 15px;
+}
+/**Custom Dashboard Style Code by Pradeep**/

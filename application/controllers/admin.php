@@ -414,6 +414,62 @@ class Admin extends Master_Controller {
 
     public function index() {
         $this->load->model('reporting_m');
+        $this->load->model('admin_m');
+        $this->_mainData['totalOrders'] = $this->reporting_m->getOrdersPerMonthDashboard(date('Y-m-d'));
+        $this->_mainData['totalCustomers'] = $this->reporting_m->getCusomersPerMonthDashboard();
+        $arr = array();
+        $arr['status'][] = 'approved';
+        $arr['status'][] = 'processing';
+        $arr['days'] = 30;
+        $arr['limit'] = 5;
+
+        $this->_mainData['orders'] = $this->admin_m->getOrders($arr);
+        $this->_mainData['chartOrders'] = $this->reporting_m->getOrderForMonthChart();
+        $chartOrdersDaily = $this->reporting_m->getOrderForDailyChart();
+        $chartOrdersWeekly = $this->reporting_m->getOrderForWeeklyChart();
+        $chartOrdersYearly = $this->reporting_m->getOrderForYearlyChart();
+        $this->_mainData['totalReviews'] = $this->reporting_m->getTotalReviews();
+        $this->_mainData['totalRevenue'] = $this->reporting_m->getTotalRevenue(date('Y-m-d'));
+        
+        $days = array();
+        $cnt = 0;
+        $str = $str1 = $str2 = $str3 = array();
+        $days = $days1 = $days2 = $days3 = array();
+        foreach( $this->_mainData['chartOrders'] as $key => $order ) {
+            $days[] = $key;
+            $str[] = $order;
+        }
+        
+        foreach( $chartOrdersDaily as $key => $order ) {
+            $days1[] = $key;
+            $str1[] = $order;
+        }
+        
+        $days2 = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
+        foreach( $chartOrdersWeekly as $key => $order ) {
+            //$days2[] = $key;
+            $str2[] = $order;
+        }
+        
+        $days3 = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+        foreach( $chartOrdersYearly as $key => $order ) {
+            $str3[] = $order;
+        }
+        
+        $this->_mainData['days'] = $days;
+        $this->_mainData['str'] = $str;
+        
+        $this->_mainData['days1'] = $days1;
+        $this->_mainData['str1'] = $str1;
+        
+        $this->_mainData['days2'] = $days2;
+        $this->_mainData['str2'] = $str2;
+        
+        $this->_mainData['days3'] = $days3;
+        $this->_mainData['str3'] = $str3;
+        
+        $this->_mainData['dashboard'] = $this->checkValidAccess('dashboard');
+        
         $this->setNav('admin/nav_v', 0);
         $this->renderMasterPage('admin/master_v', 'admin/home_v', $this->_mainData);
     }

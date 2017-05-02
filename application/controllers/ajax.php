@@ -506,7 +506,8 @@ class Ajax extends Master_Controller {
 		
 		$orderDetails = $this->account_m->getOrderDistributorDetails($post['order_id'], $distributor_id);
 		
-        $distributors = $this->order_m->getDistributors();
+                $distributors = $this->order_m->getDistributors();
+                $distributorDetails = $this->order_m->getDistributorsDetails();
 		$store_name = $this->admin_m->getAdminShippingProfile();
 		
 		$address = "Dealer Name:<br>";
@@ -558,6 +559,22 @@ class Ajax extends Master_Controller {
 			$products .= "</tr>";
 		}
 		$products .= "</tbody></table>";
+                
+                //$products .= "<tfoot>";
+		foreach( $orderDetails as $orderDetail ) {
+			foreach ($orderDetail['distributorRecs'] as $distRec): ?>
+				<?php $distributor = $distributors[$distRec['distributor_id']]; ?>
+				<?php $dealer_number = $distributorDetails[$distRec['distributor_id']]['dealer_number']; ?>
+				<?php $username = $distributorDetails[$distRec['distributor_id']]['username']; ?>
+				<?php $password = $distributorDetails[$distRec['distributor_id']]['password']; ?>
+				<?php
+			endforeach;
+			
+			$products .= " Distributor : ".strip_tags($distributor)."<br>";
+			$products .= " Dealer Number : ".strip_tags($dealer_number)."</br>";
+			$products .= " Username : ".strip_tags($username)."</br>";
+			$products .= " Password : ".strip_tags($password)."</br>";
+		}
 		
 		$headers  = 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -569,7 +586,7 @@ class Ajax extends Master_Controller {
 		
 		//echo $products;
 		mail("bvojcek@powersporttechnologies.com", "Order Send to PST from MM", $address.$products, $headers);
-		//mail("pardy@benzaitens.com", "Order Send to PST from MM", $address.$products, $headers);
+		//mail("pradeep.shekhawat@outlook.com", "Order Send to PST from MM", $address.$products, $headers);
 		$this->account_m->updateOrderPST($post['order_id']);
 	}
 	

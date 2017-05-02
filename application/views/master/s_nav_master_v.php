@@ -39,9 +39,12 @@ if (isset($keywords) &&	$keywords != "") {
 	$new_assets_url = jsite_url("/qatesting/newassets/");
 	$new_assets_url1 = jsite_url("/qatesting/benz_assets/");
 	?>
-    
-    
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<?php if (SEARCH_NOINDEX): ?>
+		<meta name="robots" content="noindex" />
+	<?php endif; ?>
+
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 	<!--<meta name="viewport" content="user-scalable = yes">-->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">

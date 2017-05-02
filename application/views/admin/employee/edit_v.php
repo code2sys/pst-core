@@ -3,7 +3,7 @@
 .flds{width:1000px; height:26px; padding:3px; border:1px solid #D8D9DA; color:#A7A7A7;box-shadow: inset 0 1px 1px rgba(0,0,0,0.075); font-size:15px;}
 #bnz table tr td{border:1px solid white;}
 label{cursor:pointer;}
-.twnty{width:25%; float:left;}
+.twnty{width:16%; float:left;}
 </style>
 
 <div class="content_wrap">
@@ -80,31 +80,37 @@ label{cursor:pointer;}
 							</td>
 						</tr>
 						<tr>
-							<td class="lft">
-								<h4>Content</h4>
-								<label class="checkbox">
-									<input type="checkbox" value="social_media" name="permission[social_media]" <?php echo in_array('social_media', $employee['permissions']) ? 'checked' : '';?>/>Social Media
-								</label>
-								<label class="checkbox">
-									<input type="checkbox" value="reviews" name="permission[reviews]" <?php echo in_array('reviews', $employee['permissions']) ? 'checked' : '';?>/>Reviews
-								</label>
-								<label class="checkbox">
-									<input type="checkbox" value="pages" name="permission[pages]" <?php echo in_array('pages', $employee['permissions']) ? 'checked' : '';?>/>Pages
-								</label>
-								<label class="checkbox">
-									<input type="checkbox" value="email" name="permission[email]" <?php echo in_array('email', $employee['permissions']) ? 'checked' : '';?>/>Email
-								</label>
-								<label class="checkbox">
-									<input type="checkbox" value="data_feeds" name="permission[data_feeds]" <?php echo in_array('data_feeds', $employee['permissions']) ? 'checked' : '';?>/>Data Feeds
-								</label>
-								<!--<label class="checkbox">
-									<input type="checkbox" value="company_info" name="permission[company_info]" <?php echo in_array('company_info', $employee['permissions']) ? 'checked' : '';?>/>Company Info
-								</label>-->
-								<label class="checkbox">
-									<input type="checkbox" value="distributors" name="permission[distributors]" <?php echo in_array('distributors', $employee['permissions']) ? 'checked' : '';?>/>Distributors
-								</label>
-							</td>
-							<td>
+							<td colspan="2">
+								<div class="twnty">
+                                                                    <h4>Dashboard</h4>
+                                                                    <label class="checkbox">
+                                                                            <input type="checkbox" value="dashboard" name="permission[dashboard]" <?php echo in_array('dashboard', $employee['permissions']) ? 'checked' : '';?>/>Dashboard
+                                                                    </label>
+                                                                </div>
+								<div class="twnty">
+                                                                    <h4>Content</h4>
+                                                                    <label class="checkbox">
+                                                                            <input type="checkbox" value="social_media" name="permission[social_media]" <?php echo in_array('social_media', $employee['permissions']) ? 'checked' : '';?>/>Social Media
+                                                                    </label>
+                                                                    <label class="checkbox">
+                                                                            <input type="checkbox" value="reviews" name="permission[reviews]" <?php echo in_array('reviews', $employee['permissions']) ? 'checked' : '';?>/>Reviews
+                                                                    </label>
+                                                                    <label class="checkbox">
+                                                                            <input type="checkbox" value="pages" name="permission[pages]" <?php echo in_array('pages', $employee['permissions']) ? 'checked' : '';?>/>Pages
+                                                                    </label>
+                                                                    <label class="checkbox">
+                                                                            <input type="checkbox" value="email" name="permission[email]" <?php echo in_array('email', $employee['permissions']) ? 'checked' : '';?>/>Email
+                                                                    </label>
+                                                                    <label class="checkbox">
+                                                                            <input type="checkbox" value="data_feeds" name="permission[data_feeds]" <?php echo in_array('data_feeds', $employee['permissions']) ? 'checked' : '';?>/>Data Feeds
+                                                                    </label>
+                                                                    <!--<label class="checkbox">
+                                                                            <input type="checkbox" value="company_info" name="permission[company_info]" <?php echo in_array('company_info', $employee['permissions']) ? 'checked' : '';?>/>Company Info
+                                                                    </label>-->
+                                                                    <label class="checkbox">
+                                                                            <input type="checkbox" value="distributors" name="permission[distributors]" <?php echo in_array('distributors', $employee['permissions']) ? 'checked' : '';?>/>Distributors
+                                                                    </label>
+                                                                </div>
 								<div class="twnty">
 									<h4>Store</h4>
 									<label class="checkbox">

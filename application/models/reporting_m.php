@@ -28,6 +28,165 @@ class Reporting_M extends Master_M {
         return $num;
     }
 
+    //Custom code to get ever month orders by pradep
+    public function getOrdersPerMonthDashboard($monthTS) {
+        
+        $year = date('Y', strtotime($monthTS));
+        $previousYear = ($year-1);
+        
+        $data = array();
+        
+        $st = strtotime($previousYear.'-01-01');
+        $ed = strtotime($previousYear.'-12-31');
+        
+        $this->db->where('order_date >', $st);
+        $this->db->where('order_date <', $ed);
+        $this->db->from('order');
+        $data[$previousYear] = $this->db->count_all_results();
+        
+        $st = strtotime(date('Y').'-01-01');
+        $ed = strtotime(date('Y').'-12-31');
+        
+        $this->db->where('order_date >', $st);
+        $this->db->where('order_date <', $ed);
+        $this->db->from('order');
+        $data[date('Y')] = $this->db->count_all_results();
+        return $data;
+    }
+    //End Pradeep Custom Code
+    
+    //Custom code to get customers by pradep
+    public function getCusomersPerMonthDashboard() {
+        //$this->db->where('user_type', 'customer');
+        $this->db->from('user');
+        $num = $this->db->count_all_results();
+        return $num;
+    }
+    //End Pradeep Custom Code
+    
+    //Custom code to get reviews by pradep
+    public function getTotalReviews() {
+        $where = array('approval_id IS NULL' => NULL);
+        $this->db->where('approval_id IS NULL', NULL);
+        $this->db->from('reviews');
+        $num = $this->db->count_all_results();
+        return $num;
+    }
+    //End Pradeep Custom Code
+    
+    public function getOrderForMonthChart() {
+        $month = date('m');
+        $number = cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'));
+        $i = 1;
+        $num = array();
+        while ($i <= $number) {
+            $dt = date('Y-m-').$i;
+            $st = strtotime($dt);
+            $ed = strtotime($dt.' 23:59:00');
+            
+            $this->db->where('order_date >', $st);
+            $this->db->where('order_date <', $ed);
+            
+            $this->db->from('order');
+            $num[$i] = $this->db->count_all_results();
+            $i++;
+        }
+        return $num;
+    }
+    
+    public function getOrderForDailyChart() {
+        $month = date('m');
+        $number = 23;
+        $i = 0;
+        $num = array();
+        while ($i <= $number) {
+            $dt = date('Y-m-d');
+            $st = strtotime($dt.' '.$i.':00:00');
+            $ed = strtotime($dt.' '.$i.':59:00');
+            
+            $this->db->where('order_date >', $st);
+            $this->db->where('order_date <', $ed);
+            
+            $this->db->from('order');
+            $num[$i] = $this->db->count_all_results();
+            $i++;
+        }
+        return $num;
+    }
+    
+    public function getOrderForWeeklyChart() {
+        $date = date('d')-date("N");
+        //$date = date('d', strtotime(date('Y-m-d').' -'.date("N").' days'));//date('');
+        $number = ($date+7);
+        $i = $date;
+        $num = array();
+        while ($i < $number) {
+            $dt = date('Y-m-').$i;
+            $st = strtotime($dt);
+            $ed = strtotime($dt.' 23:59:00');
+            
+            $this->db->where('order_date >', $st);
+            $this->db->where('order_date <', $ed);
+            
+            $this->db->from('order');
+            $num[$i] = $this->db->count_all_results();
+            $i++;
+        }
+        return $num;
+    }
+    
+    public function getOrderForYearlyChart() {
+        $number = 13;
+        $i = 01;
+        $num = array();
+        while ($i < $number) {
+            $dt = date('Y-').sprintf("%02d", $i).'-01';
+            $st = strtotime($dt);
+            $ed = strtotime(date('Y-').sprintf("%02d", $i).'-30'.' 23:59:00');
+            
+            $this->db->where('order_date >', $st);
+            $this->db->where('order_date <', $ed);
+            
+            $this->db->from('order');
+            $num[sprintf("%02d", $i)] = $this->db->count_all_results();
+            $i++;
+        }
+        return $num;
+    }
+    
+    
+    public function getTotalRevenue($monthTS) {
+        
+        $year = date('Y', strtotime($monthTS));
+        $previousYear = ($year-1);
+        
+        $data = array();
+        
+        $st = strtotime($previousYear.'-01-01');
+        $ed = strtotime($previousYear.'-12-31');
+        
+        $this->db->where('order_date >', $st);
+        $this->db->where('order_date <', $ed);
+        //$this->db->from('order');
+        $this->db->select('sum(sales_price) as total');
+        $record = $this->db->get('order');
+        $total = $record->row_array();
+        $data[$previousYear] = $total['total'];
+        
+        $st = strtotime(date('Y').'-01-01');
+        $ed = strtotime(date('Y').'-12-31');
+        
+        $this->db->where('order_date >', $st);
+        $this->db->where('order_date <', $ed);
+        //$this->db->from('order');
+        $this->db->select('sum(sales_price) as total');
+        $record = $this->db->get('order');
+        $total = $record->row_array();
+        $data[date('Y')] = $total['total'];
+        //$data[date('Y')] = $this->db->count_all_results();
+        return $data;
+    }
+    
     private function array2csv(array &$array) {
         if (count($array) == 0) {
             return null;
