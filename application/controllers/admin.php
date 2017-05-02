@@ -1972,7 +1972,7 @@ class Admin extends Master_Controller {
 					}
 					$arr = array();
 					$img = time().'_'.str_replace(' ','_',$val);
-					$dir = dirname(dirname(__DIR__)).'/html/media/'.$img;
+					$dir = STORE_DIRECTORY.'/html/media/'.$img;
 					move_uploaded_file($_FILES["file"]["tmp_name"][$key], $dir);
 					$arr['description'] = $_POST['description'];
 					$arr['image_name'] = $img;
