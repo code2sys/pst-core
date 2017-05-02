@@ -796,21 +796,22 @@ class Admin extends Master_Controller {
         if (is_null($id)) {
             redirect('admin/brand');
         } else {
+            if (@$_FILES['image']['name']) {
+                $config['allowed_types'] = 'jpg|jpeg|png|gif|tif';
+                $config['file_name'] = str_replace("'", '-', str_replace('%', '', str_replace(' ', '_', $brandData['name'])));
+                $this->load->model('file_handling_m');
+                $data = $this->file_handling_m->add_new_file_brand('image', $config);
+                if (@$data['error'])
+                    $this->_mainData['errors'] = $data['the_errors'];
+                else {
+                    $brandData['image'] = $data['file_name'];
+                    $this->admin_m->updateBrand($brandData);
+                }
+            }
+
             $brandData = $this->admin_m->getBrand($id);
             $this->_mainData['brands'] = array($brandData);
             $this->_mainData['id'] = $id;
-        }
-        if (@$_FILES['image']['name']) {
-            $config['allowed_types'] = 'jpg|jpeg|png|gif|tif';
-            $config['file_name'] = str_replace("'", '-', str_replace('%', '', str_replace(' ', '_', $brandData['name'])));
-            $this->load->model('file_handling_m');
-            $data = $this->file_handling_m->add_new_file_brand('image', $config);
-            if (@$data['error'])
-                $this->_mainData['errors'] = $data['the_errors'];
-            else {
-                $brandData['image'] = $data['file_name'];
-                $this->admin_m->updateBrand($brandData);
-            }
         }
 
         $this->setNav('admin/nav_v', 2);
