@@ -82,7 +82,7 @@ $cstdata = (array) json_decode($product['data']);
                     <tr>
                         <td style="width:50px;"><b>Category:</b></td>
                         <td>
-							<input type="text" name="category" value="<?php echo $product['name']==''?$_POST['name']:$product['name']; ?>" class="text small">
+							<input type="text" name="category" value="<?php echo $product['name']==''?$_POST['category']:$product['name']; ?>" class="text small">
                         </td>
                     </tr>
                     <tr>
@@ -91,7 +91,7 @@ $cstdata = (array) json_decode($product['data']);
 							<select name="vehicle_type" class="small-hndr" style="border-radius:0;">
 							<option value="">Select Vehicle</option>
 							<?php foreach( $vehicles as $v ) { ?>
-								<option value="<?php echo $v['id'];?>" <?php if($product['vehicle_type'] == $v['id']) { echo "selected"; } ?>><?php echo $v['name'];?></option>
+								<option value="<?php echo $v['id'];?>" <?php if($product['vehicle_type'] == $v['id']) { echo "selected"; }else if($_POST['vehicle_type']==$v['id']){echo "selected";} ?>><?php echo $v['name'];?></option>
 							<?php } ?>
 							</select>
                         </td>
@@ -145,7 +145,7 @@ $cstdata = (array) json_decode($product['data']);
 									<td class="inr-td scnd wdt">
 										<input type="number" name="mileage" value="<?php echo $product['mileage']==''?$_POST['mileage']:$product['mileage']; ?>" class="text small small-hndr frst mlg">
 									</td>
-									<td style="width:90px;" class="min-wdh"><b>Egine Hours:</b></td>
+									<td style="width:90px;" class="min-wdh"><b>Engine Hours:</b></td>
 									<td class="inr-td scnd">
 										<input type="number" name="engine_hours" value="<?php echo $product['engine_hours']==''?$_POST['engine_hours']:$product['engine_hours']; ?>" class="text small small-hndr eh">
 									</td>

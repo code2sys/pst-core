@@ -1893,7 +1893,7 @@ class Admin extends Master_Controller {
               $this->load->helper('async');
 
               
-        if (($this->validateMotorcycle() === TRUE) && ($this->validateNewSku() === TRUE)&& ($this->validateNewCat() === TRUE)) {
+        if ($this->validateMotorcycle() === TRUE) {
             $id = $this->admin_m->updateMotorcycle($id, $this->input->post());
 			redirect('admin/motorcycle_edit/' . $id.'/updated');
 		}else{
