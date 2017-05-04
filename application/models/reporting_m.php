@@ -68,6 +68,7 @@ class Reporting_M extends Master_M {
     public function getTotalReviews() {
         $where = array('approval_id IS NULL' => NULL);
         $this->db->where('approval_id IS NULL', NULL);
+        $this->db->where('user_id IS NOT NULL', NULL);
         $this->db->from('reviews');
         $num = $this->db->count_all_results();
         return $num;
