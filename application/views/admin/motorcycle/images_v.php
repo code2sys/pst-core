@@ -141,7 +141,7 @@ $(document).ready(function(){
 								<form class="form_standard" enctype="multipart/form-data" method="post">
 									<div style="display:grid">
 										<input type="file" name="file[]" multiple value="" required>
-										<span style="margin:10px 0px 10px 0px;">Drag-and-drop pictures to the input field.</span>
+										<span style="margin:10px 0px 10px 0px;">Hold control button to select and upload multiple images at once.</span>
 									</div>
 									<input id="name" name="description" placeholder="Description" class="text medium" /><br>
 									<input type="submit" name="submit" value="Add Image"></b>
