@@ -155,7 +155,7 @@ echo $CI->load->view("braintree", array(
 <?php foreach($category as $id => $ref){ $catd = $ref['label'];}  ?>
 <script>
 	var ctd = '<?php echo $catd; ?>';
-	
+        
 	if(ctd=='UTV PARTS'){
 		$("#stp").removeClass('actv');
 		$('#sdp').removeClass('actv');

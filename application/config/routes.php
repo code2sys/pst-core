@@ -45,6 +45,7 @@ $route['Motorcycle_List'] = 'welcome/benzProduct';
 $route['motorcycle/([a-zA-z0-9_-]+)'] = 'welcome/benzDetails/$1/$2';
 $route['streetbikeparts'] = 'streetbikeparts/index';
 $route['dirtbikeparts'] = 'dirtbikeparts/index';
+$route['vtwin'] = 'vtwin/index';
 $route['checkout'] = 'checkout/index';
 
 $route['atvparts'] = 'atvparts/index';
