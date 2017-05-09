@@ -286,15 +286,21 @@ if (isset($keywords) &&	$keywords != "") {
 	<div class="header_b">
 		<div class="container_b">
 			<a href="<?php echo base_url();?>" class="logoCont fltL logo-tp_b">
-				<img src="/logo.png" width="200" height="50">
+				<img src="/assets/images/power-sports-logo.png" width="200" height="50">
 			</a>
-			<div class="vehicleCategory">
+			<!--<div class="vehicleCategory">
 				<a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">
 					<div class="stre-bk_b">
 						<img src="<?php echo $new_assets_url1; ?>images/streetBike.png">
 					</div>
 					<span id="stp">Shop Street Parts & Accessories</span>
 				</a>
+				<a href="<?php echo base_url('vtwin'); ?>" class="vtwin">
+					<div class="stre-bk_b">
+						<img src="<?php echo $new_assets_url1; ?>images/vtwin.png">
+					</div>
+					<span id="svp">Shop VTwin Parts & Accessories</span>
+				</a>				
 				<a href="<?php echo base_url('dirtbikeparts'); ?>" class="bike">
 					<div class="stre-bk_b">
 						<img src="<?php echo $new_assets_url1; ?>images/bike.png">
@@ -319,12 +325,13 @@ if (isset($keywords) &&	$keywords != "") {
 					</div>
 					<span id="sbb">Shop by Brand</span>
 				</a>
-			</div>	
+			</div>-->
 			<div class="side-hdr">
 				<div class="sidebar-menu">
 					<span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
 					<ul class="mb-drpdwn">
 						<li><a href="<?php echo base_url('streetbikeparts'); ?>">Shop Street</a></li>
+						<li><a href="<?php echo base_url('vtwin'); ?>">Shop VTwin</a></li>
 						<li><a href="<?php echo base_url('dirtbikeparts'); ?>">Shop Dirt</a></li>
 						<li><a href="<?php echo base_url('atvparts'); ?>">Shop ATV</a></li>				
 						<li><a href="<?php echo base_url('utvparts'); ?>">Shop UTV</a></li>
@@ -358,6 +365,47 @@ if (isset($keywords) &&	$keywords != "") {
 				<div class="clear"></div>
 			</div>
 			<div class="clear"></div>						
+		</div>
+            <div class="container_b">
+			<div class="vehicleCategory">
+				<a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">
+					<div class="stre-bk_b">
+						<img src="<?php echo $new_assets_url1; ?>images/streetBike.png">
+					</div>
+					<span id="stp">Shop Street Parts & Accessories</span>
+				</a>
+				<a href="<?php echo base_url('vtwin'); ?>" class="vtwin">
+					<div class="stre-bk_b">
+						<img src="<?php echo $new_assets_url1; ?>images/vtwin.png">
+					</div>
+					<span id="svp">Shop VTwin Parts & Accessories</span>
+				</a>				
+				<a href="<?php echo base_url('dirtbikeparts'); ?>" class="bike">
+					<div class="stre-bk_b">
+						<img src="<?php echo $new_assets_url1; ?>images/bike.png">
+					</div>
+					<span id="sdp">Shop Dirt Parts & Accessories</span>
+				</a>
+				<a href="<?php echo base_url('atvparts'); ?>" class="atv">
+					<div class="stre-bk_b">
+						<img src="<?php echo $new_assets_url1; ?>images/atv.png">
+					</div>
+					<span id="sap">Shop ATV Parts & Accessories</span>
+				</a>
+				<a href="<?php echo base_url('utvparts'); ?>" class="utv">
+					<div class="stre-bk_b">
+						<img src="<?php echo $new_assets_url1; ?>images/utv.png">
+					</div>
+					<span id="sup">Shop UTV Parts & Accessories</span>
+				</a>				
+				<a href="<?php echo base_url('Motorcycle_Gear_Brands'); ?>" class="last">
+					<div class="stre-bk_b" style="height:45px;">
+						<img src="<?php echo $new_assets_url1; ?>images/brand-tag.png">
+					</div>
+					<span id="sbb">Shop by Brand</span>
+				</a>
+			</div>	
+			<div class="clear"></div>
 		</div>
 	</div>
 		
