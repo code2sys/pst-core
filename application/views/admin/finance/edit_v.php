@@ -243,24 +243,6 @@ $reference = json_decode($application['reference']);
 							</td>
 							<td>
 								<input type="date" name='contact_info[dob]' value="<?php echo $contact_info->dob;?>">
-								<!--<select name="contact_info[day]">
-									<option value="">Day</option>
-									<?php for($d=1;$d<=31;$d++) { ?>
-									<option value="<?php echo $d;?>" <?php echo $contact_info->day == $d ? 'selected' : '';?>><?php echo $d;?></option>
-									<?php } ?>
-								</select>
-								<select name="contact_info[month]">
-									<option value="">Month</option>
-									<?php for($m=1;$m<=12;$m++) { ?>
-									<option value="<?php echo $m;?>" <?php echo $contact_info->month == $m ? 'selected' : '';?>><?php echo $m;?></option>
-									<?php } ?>
-								</select>
-								<select name="contact_info[year]">
-									<option value="">Year</option>
-									<?php for($y=1950;$y<=2017;$y++) { ?>
-									<option value="<?php echo $y;?>" <?php echo $contact_info->year == $y ? 'selected' : '';?>><?php echo $y;?></option>
-									<?php } ?>
-								</select>-->
 								<span><b>*</b></span>
 							</td>
 						</tr>
@@ -294,10 +276,6 @@ $reference = json_decode($application['reference']);
 							</td>
 							<td>
 								<?php echo form_dropdown('physical_address[state]', $states, $physical_address->state, 'id="billing_state"'); ?>
-								<!--<select name="physical_address[state]">
-									<option value="">Select</option>
-									<option value="delhi" <?php echo $physical_address->state == 'delhi' ? 'selected' : '';?>>Delhi</option>
-								</select>-->
 								<span><b>*</b></span>
 							</td>
 						</tr>
@@ -371,13 +349,13 @@ $reference = json_decode($application['reference']);
 							<td>
 								<select name="housing_info[months]">
 									<option value="">Months</option>
-									<?php for($m=1;$m<=12;$m++) { ?>
+									<?php for($m=0;$m<=12;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $housing_info->months==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Months
 								<select name="housing_info[years]">
 									<option value="">Years</option>
-									<?php for($y=1;$y<=100;$y++) { ?>
+									<?php for($y=0;$y<=100;$y++) { ?>
 									<option value="<?php echo $y;?>" <?php echo $housing_info->years==$y?'selected':'';?>><?php echo $y;?></option>
 									<?php } ?>
 								</select>Years
@@ -468,13 +446,13 @@ $reference = json_decode($application['reference']);
 							<td>
 								<select name="previous_add[months]">
 									<option value="">Months</option>
-									<?php for($m=1;$m<=12;$m++) { ?>
+									<?php for($m=0;$m<=12;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $previous_add->months==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Months
 								<select name="previous_add[years]">
 									<option value="">Years</option>
-									<?php for($m=1;$m<=100;$m++) { ?>
+									<?php for($m=0;$m<=100;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $previous_add->years==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Years
@@ -566,13 +544,13 @@ $reference = json_decode($application['reference']);
 							<td>
 								<select name="employer_info[month]">
 									<option value="">Months</option>
-									<?php for($m=1;$m<=12;$m++) { ?>
+									<?php for($m=0;$m<=12;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $employer_info->month==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Months
 								<select name="employer_info[year]">
 									<option value="">Years</option>
-									<?php for($m=1;$m<=100;$m++) { ?>
+									<?php for($m=0;$m<=100;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $employer_info->year==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Years
