@@ -55,10 +55,7 @@ if (isset($keywords) &&	$keywords != "") {
 	
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css_front/media.css" type="text/css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/style.css" />
-	<?php /*?>	<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/header.css" /><?php */?>
-		
 
-	<?php /*?><link href="<?php echo $new_assets_url;?>stylesheet/skdslider.css" rel="stylesheet"><?php */?>
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css/jquery.bxslider.css" type="text/css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>/css/responsive.css" type="text/css" />	
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css/benz.css" type="text/css" />

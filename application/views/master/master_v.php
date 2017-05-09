@@ -74,7 +74,6 @@ if (isset($keywords) &&	$keywords != "") {
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css/jquery.bxslider.css" type="text/css" />
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css/magnific-popup.css" type="text/css">
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css/jquery.selectbox.css" type="text/css">
-	<!--<link rel="stylesheet" href="<?php echo $assets; ?>/css/flexisel.css" type="text/css">-->
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css/expand.css" type="text/css">
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css/modal.css" type="text/css">
 	<link rel="stylesheet" href="<?php echo $assets; ?>/font-awesome-4.1.0/css/font-awesome.min.css">
@@ -87,8 +86,6 @@ if (isset($keywords) &&	$keywords != "") {
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/owl.transitions.css" />	
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/font-awesome.css" />
 	
-	<!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lucida+Sans:400,500,600,700,900,800,300" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica:400,500,600,700,900,800,300%22%20/%3E" />-->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300%22%20/%3E">
 	
 	
@@ -300,12 +297,7 @@ if (isset($keywords) &&	$keywords != "") {
 		
 		<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/style.css" />
 		<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/custom.css" />
-		
-		<?php /*?><script type="text/javascript" src="<?php echo $new_assets_url;?>homepage_slider/js/DiagonalSlider.js"></script>
-		<link rel="stylesheet" type="text/css" href="<?php echo $new_assets_url;?>homepage_slider/css/diagonalSlider2.css">
-		<link rel="stylesheet" type="text/css" href="<?php echo $new_assets_url;?>homepage_slider/css/diagonalSlider1.css">
-		<script type="text/javascript" src="<?php echo $new_assets_url;?>homepage_slider/js/script.js"></script><?php */?>
-		
+
 	<div class="topBar_b">
 		<div class="container_b">
 			<p class="creditCar_b fltL_b">

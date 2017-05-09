@@ -69,8 +69,6 @@ if (isset($keywords) &&	$keywords != "") {
 	
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css_front/media.css" type="text/css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/style.css" />
-	<?php /*?>	<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/header.css" /><?php */?>
-	<?php /*?><link href="<?php echo $new_assets_url;?>stylesheet/skdslider.css" rel="stylesheet"><?php */?>
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css/jquery.bxslider.css" type="text/css" />
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css/benz.css" type="text/css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>stylesheet/custom.css" />
@@ -82,22 +80,10 @@ if (isset($keywords) &&	$keywords != "") {
 	<link rel="stylesheet" href="<?php echo $assets; ?>/font-awesome-4.1.0/css/font-awesome.min.css">
 	<meta name="msvalidate.01" content="EBE52F3C372A020CF12DD8D06A48F87C" />
 	<script src="<?php echo $new_assets_url;?>js/jquery.js"></script>
-	<?php /*?><script src="<?php echo $new_assets_url;?>js/skdslider.min.js"></script><?php */?>
 	<script src="<?php echo $assets; ?>/js/jquery.simplemodal.js"></script>
 	<script src="<?php echo $assets; ?>/js/custom.js"></script>	
 	<script type="text/javascript" src="<?php echo $assets; ?>/js/rating.js"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>/css/rating.css" />
-<?php /*?><script type="text/javascript">
-		jQuery(document).ready(function(){
-			jQuery('#demo1').skdslider({'delay':5000, 'animationSpeed': 2000,'showNextPrev':true,'showPlayButton':true,'autoSlide':true,'animationType':'fading'});
-			jQuery('#demo2').skdslider({'delay':5000, 'animationSpeed': 1000,'showNextPrev':true,'showPlayButton':false,'autoSlide':true,'animationType':'sliding'});
-			jQuery('#demo3').skdslider({'delay':5000, 'animationSpeed': 2000,'showNextPrev':true,'showPlayButton':true,'autoSlide':true,'animationType':'fading'});
-			
-			jQuery('#responsive').change(function(){
-			  $('#responsive_wrapper').width(jQuery(this).val());
-			});
-		});
-</script><?php */?>
 
 	<script>
 	$(document).ready(function(){

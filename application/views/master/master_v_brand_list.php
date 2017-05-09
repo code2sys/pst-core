@@ -290,12 +290,7 @@ if (isset($keywords) &&	$keywords != "") {
 		
 		<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/style.css" />
 		<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/custom.css" />
-		
-		<?php /*?><script type="text/javascript" src="<?php echo $new_assets_url;?>homepage_slider/js/DiagonalSlider.js"></script>
-		<link rel="stylesheet" type="text/css" href="<?php echo $new_assets_url;?>homepage_slider/css/diagonalSlider2.css">
-		<link rel="stylesheet" type="text/css" href="<?php echo $new_assets_url;?>homepage_slider/css/diagonalSlider1.css">
-		<script type="text/javascript" src="<?php echo $new_assets_url;?>homepage_slider/js/script.js"></script><?php */?>
-		
+
 		<div class="topBar_b">
 		<div class="container_b">
 			<p class="creditCar_b fltL_b">
