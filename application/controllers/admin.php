@@ -796,10 +796,12 @@ class Admin extends Master_Controller {
         if (is_null($id)) {
             redirect('admin/brand');
         } else {
+
             $brandData = $this->admin_m->getBrand($id);
             $this->_mainData['brands'] = array($brandData);
             $this->_mainData['id'] = $id;
         }
+
         if (@$_FILES['image']['name']) {
             $config['allowed_types'] = 'jpg|jpeg|png|gif|tif';
             $config['file_name'] = str_replace("'", '-', str_replace('%', '', str_replace(' ', '_', $brandData['name'])));
@@ -811,7 +813,13 @@ class Admin extends Master_Controller {
                 $brandData['image'] = $data['file_name'];
                 $this->admin_m->updateBrand($brandData);
             }
+
+            // just get it again
+            $brandData = $this->admin_m->getBrand($id);
+            $this->_mainData['brands'] = array($brandData);
+            $this->_mainData['id'] = $id;
         }
+
 
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/brand/brand_images_v', $this->_mainData);
@@ -1885,7 +1893,7 @@ class Admin extends Master_Controller {
               $this->load->helper('async');
 
               
-        if (($this->validateMotorcycle() === TRUE) && ($this->validateNewSku() === TRUE)&& ($this->validateNewCat() === TRUE)) {
+        if ($this->validateMotorcycle() === TRUE) {
             $id = $this->admin_m->updateMotorcycle($id, $this->input->post());
 			redirect('admin/motorcycle_edit/' . $id.'/updated');
 		}else{
@@ -1972,7 +1980,7 @@ class Admin extends Master_Controller {
 					}
 					$arr = array();
 					$img = time().'_'.str_replace(' ','_',$val);
-					$dir = dirname(dirname(__DIR__)).'/html/media/'.$img;
+					$dir = STORE_DIRECTORY.'/html/media/'.$img;
 					move_uploaded_file($_FILES["file"]["tmp_name"][$key], $dir);
 					$arr['description'] = $_POST['description'];
 					$arr['image_name'] = $img;
