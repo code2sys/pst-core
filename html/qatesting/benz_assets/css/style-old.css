@@ -1300,12 +1300,12 @@ img.powerlogo-a {
 
 /* HEADER CSS */
 
-.vehicleCategory {float: left; padding: 0 15px;width:100%;}
+.vehicleCategory {float: left; padding: 0 15px;}
 
 .vehicleCategory a {
     font-size: 12px;
     color: #003ca2;
-    width: 186px;
+    width: 145px;
     font-weight: bold;
     text-decoration: none;
     display: inline-block;
@@ -1324,13 +1324,12 @@ img.powerlogo-a {
 .searchHolder {
     float: right;
     margin-top: 18px;
-    width: 350px;
 }
 .searchHolder .form_standard input.medium_search {
     background: #fff;
     border: 1px solid #cbcbcb;    
     padding:9px 10px;
-    width: 300px;
+    width: 160px;
     margin: 0 2px 0 0;
 	line-height:0px;
     border-radius: 0;
@@ -1351,7 +1350,7 @@ img.powerlogo-a {
 
 .vehicleCategory .last {
     position: relative;
-    bottom: 13px;
+    bottom: 18px;
 }
 
 .filterBarCont .sbHolder {
@@ -1875,8 +1874,7 @@ p.creditCar_b.loct a i{
 	border-radius:0;
 	padding:6px;    	
 	height:36px;
-	/*width:150px;*/
-        width:311px;
+	width:150px;
 	background:#fff;
 	border:1px solid #cbcbcb;
 	-webkit-box-shadow: none;
@@ -1903,7 +1901,6 @@ p.creditCar_b.loct a i{
 .vehicleCategory a span{	
     display: inline-block;
     padding-bottom: 4px;
-    width: 75%;
 }
 
 

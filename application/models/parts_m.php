@@ -2322,7 +2322,7 @@ class Parts_M extends Master_M {
 
 
             $getPriorityCategories = array();
-            $thePriorities = array(20409, 20416, 20419, 20422);
+            $thePriorities = array(20409, 69597, 20416, 20419, 20422);
 
             for ($i = 0; $i <= 3; $i++) {
 
@@ -2480,6 +2480,7 @@ class Parts_M extends Master_M {
                 $topCategories[1]['id'] = 20416;
                 $topCategories[2]['id'] = 20419;
                 $topCategories[3]['id'] = 20422;
+                $topCategories[4]['id'] = 69597;
                 $keyToUse = array_rand($topCategories);
                 $data['navCategories'] = $this->getCategories($topCategories[$keyToUse]['id']);
                 $data['parent'] = $topCategories[$keyToUse]['id'];
@@ -2490,6 +2491,7 @@ class Parts_M extends Master_M {
             $topCategories[1]['id'] = 20416;
             $topCategories[2]['id'] = 20419;
             $topCategories[3]['id'] = 20422;
+            $topCategories[4]['id'] = 69597;
             $keyToUse = array_rand($topCategories);
 
             $data['navCategories'] = $this->getCategories($topCategories[$keyToUse]['id']);

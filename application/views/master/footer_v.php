@@ -155,10 +155,15 @@ try {
 	
 </script>
 <?php echo @$footerscript; ?>
-<?php foreach($category as $id => $ref){ $catd = $ref['label'];} ?>
+<?php foreach($category as $id => $ref){
+    $catd = $ref['label'];
+}
+?>
 <script>
 	var ctd = '<?php echo $catd; ?>';
 	
+        //  alert(ctd);
+        
 	if(ctd=='UTV PARTS'){
 		$("#stp").removeClass('actv');
 		$('#sdp').removeClass('actv');
@@ -183,13 +188,19 @@ try {
 		$('#sap').addClass('actv');
 		$('#sup').removeClass('actv');
 		$('#sbb').removeClass('actv');
+	}else if(ctd=='V TWIN PARTS'){
+		$("#stp").removeClass('actv');
+		$('#sdp').removeClass('actv');
+		$('#svp').addClass('actv');
+		$('#sup').removeClass('actv');
+		$('#sbb').removeClass('actv');
 	}
 	
 </script>
 
 <script>
 	var ct = '<?php echo $top_parent; ?>';
-	
+        
 	if(ct=='20422'){
 		$("#stp").removeClass('actv');
 		$('#sdp').removeClass('actv');
@@ -212,6 +223,12 @@ try {
 		$("#stp").removeClass('actv');
 		$('#sdp').removeClass('actv');
 		$('#sap').addClass('actv');
+		$('#sup').removeClass('actv');
+		$('#sbb').removeClass('actv');
+	}else if(ct=='69597'){
+		$("#stp").removeClass('actv');
+		$('#sdp').removeClass('actv');
+		$('#svp').addClass('actv');
 		$('#sup').removeClass('actv');
 		$('#sbb').removeClass('actv');
 	}
