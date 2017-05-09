@@ -251,24 +251,6 @@
 							</td>
 							<td>
 								<input type="date" name='contact_info[dob]' value="<?php echo $_POST['contact_info']['dob'];?>">
-								<!--<select name="contact_info[day]">
-									<option value="">Day</option>
-									<?php for($d=1;$d<=31;$d++) { ?>
-									<option value="<?php echo $d;?>" <?php echo $_POST['contact_info']['day']==$d?'selected':'';?>><?php echo $d;?></option>
-									<?php } ?>
-								</select>
-								<select name="contact_info[month]">
-									<option value="">Month</option>
-									<?php for($m=1;$m<=12;$m++) { ?>
-									<option value="<?php echo $m;?>" <?php echo $_POST['contact_info']['month']==$m?'selected':'';?>><?php echo $m;?></option>
-									<?php } ?>
-								</select>
-								<select name="contact_info[year]">
-									<option value="">Year</option>
-									<?php for($y=1950;$y<=2017;$y++) { ?>
-									<option value="<?php echo $y;?>" <?php echo $_POST['contact_info']['year']==$y?'selected':'';?>><?php echo $y;?></option>
-									<?php } ?>
-								</select>-->
 								<span><b>*</b></span>
 							</td>
 						</tr>
@@ -375,13 +357,13 @@
 							<td>
 								<select name="housing_info[months]">
 									<option value="">Months</option>
-									<?php for($m=1;$m<=12;$m++) { ?>
+									<?php for($m=0;$m<=12;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $_POST['housing_info']['months']==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Months
 								<select name="housing_info[years]">
 									<option value="">Years</option>
-									<?php for($y=1;$y<=100;$y++) { ?>
+									<?php for($y=0;$y<=100;$y++) { ?>
 									<option value="<?php echo $y;?>" <?php echo $_POST['housing_info']['years']==$y?'selected':'';?>><?php echo $y;?></option>
 									<?php } ?>
 								</select>Years
@@ -454,7 +436,7 @@
 							</td>
 							<td>
 								<?php echo form_dropdown('previous_add[state]', $states, $_POST['previous_add']['state'], 'id="billing_state"'); ?>
-								<!--<input name="previous_add[state]" placeholder="" value="<?php echo $_POST['previous_add']['state'];?>" />-->
+
 							</td>
 						</tr>
 						<tr>
@@ -472,13 +454,13 @@
 							<td>
 								<select name="previous_add[months]">
 									<option value="">Months</option>
-									<?php for($m=1;$m<=12;$m++) { ?>
+									<?php for($m=0;$m<=12;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $_POST['previous_add']['months']==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Months
 								<select name="previous_add[years]">
 									<option value="">Years</option>
-									<?php for($m=1;$m<=100;$m++) { ?>
+									<?php for($m=0;$m<=100;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $_POST['previous_add']['years']==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Years
@@ -532,7 +514,6 @@
 							</td>
 							<td>
 								<?php echo form_dropdown('employer_info[state]', $states, $_POST['employer_info']['state'], 'id="billing_state"'); ?>
-								<!--<input name="employer_info[emp_state]" placeholder="" value="<?php echo $_POST['employer_info']['emp_state'];?>" />-->
 								<span><b>*</b></span>
 							</td>
 						</tr>
@@ -570,13 +551,13 @@
 							<td>
 								<select name="employer_info[month]">
 									<option value="">Months</option>
-									<?php for($m=1;$m<=12;$m++) { ?>
+									<?php for($m=0;$m<=12;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $_POST['employer_info']['month']==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Months
 								<select name="employer_info[year]">
 									<option value="">Years</option>
-									<?php for($m=1;$m<=100;$m++) { ?>
+									<?php for($m=0;$m<=100;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $_POST['employer_info']['year']==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Years
