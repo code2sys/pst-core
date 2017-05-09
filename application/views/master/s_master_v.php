@@ -52,11 +52,6 @@ if (isset($keywords) &&	$keywords != "") {
 
 	<!-- END CSS LINKS --> 
 	
-	<!--<link rel="stylesheet" type="text/css" href="<?php echo $s_assets; ?>/benz_assets/paypal/css/app.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo $s_assets; ?>/benz_assets/paypal/css/overrides.css">-->
-    <!--<script src="<?php echo $s_assets; ?>/benz_assets/paypal/javascript/vendor/jquery-2.1.4.min.js"></script>
-    <script src="<?php echo $s_assets; ?>/benz_assets/paypal/javascript/vendor/jquery.lettering-0.6.1.min.js"></script>
-    <script src="<?php echo $s_assets; ?>/benz_assets/paypal/javascript/demo.js"></script>-->
 	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
 	
 	<!-- jQuery library -->

@@ -381,7 +381,7 @@ class Shopping extends Master_Controller {
         $getTopParentTemp = explode("_", $getTopParentTemp);
 
         if (isset($getTopParentTemp[0]) && $getTopParentTemp[0] == 'dirt-bike-parts' || $getTopParentTemp[0] == 'atv-parts' ||
-                $getTopParentTemp[0] == 'street-bike-parts' || $getTopParentTemp[0] == 'utv-parts') {
+                $getTopParentTemp[0] == 'street-bike-parts' || $getTopParentTemp[0] == 'utv-parts' || $getTopParentTemp[0] == 'v-twin-parts') {
 
             $top_parent = 20416;
 
@@ -391,14 +391,17 @@ class Shopping extends Master_Controller {
                 $top_parent = 20419;
             } else if ($getTopParentTemp[0] == "utv-parts") {
                 $top_parent = 20422;
+            } else if ($getTopParentTemp[0] == "v-twin-parts") {
+                $top_parent = 69597;
             }
 
             $this->_mainData['cat_header'] = 1;
             $this->_mainData['top_parent'] = $top_parent;
-
+            
             /*  GETTING CATEGORIES FOR TOP NAV */
             $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent(0, $top_parent);
             $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
+            
         }
 
         $this->setFooterView('master/footer_v.php');
@@ -1015,6 +1018,8 @@ class Shopping extends Master_Controller {
                     $parentt = 20419;
                 } elseif (!empty($session_based_breadcrumb['category'][20422])) {
                     $parentt = 20422;
+                } elseif (!empty($session_based_breadcrumb['category'][69597])) {
+                    $parentt = 69597;
                 }
             }
         }
@@ -1022,7 +1027,7 @@ class Shopping extends Master_Controller {
         if (empty($parentt) && !empty($this->_mainData['secondBreadCrumb'][0]['id'])) {
             $parentt = $this->_mainData['secondBreadCrumb'][0]['id']; // Getting top level Category from second breadcrumb.
         }
-
+        
         /*  GETTING CATEGORIES FOR TOP NAV */
         $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent($partId, (!empty($parentt)) ? $parentt : 0);
         $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
