@@ -2,9 +2,8 @@
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class DirtBikeParts extends Master_Controller {
 
-	private $_pageId = 1;
-	private $_machineTypeId = 13;
-	private $_categoryId= 20416;
+	private $_pageId = TOP_LEVEL_PAGE_ID_DIRT;
+	private $_categoryId= TOP_LEVEL_CAT_DIRT_BIKES;
 
 	function __construct()
 	{

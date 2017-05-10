@@ -1,3 +1,81 @@
+Update #2 May 10, 2017
+======================
+
+There is no need to check in backup, work-in-progress, or other files that aren't directly used. This just clutters up the repository and gets confusing when you do a search.
+
+
+Update May 10, 2017
+===================
+
+
+First new rule as a general principle:
+
+**Bad practices in the code should not be perpetuated because it was like that, so you figured doing it like that again was OK, even if you know it's a bad idea.**
+
+
+Which has a specific version that approaches commandment level:
+
+**Though Shalt Not Hardcode ID Numbers.**
+
+Here's what goes wrong:
+
+1. You add a value to a table in your development environment. You want this to be special.
+2. The auto-incrementing serial number key on that table gives it an ID number.
+3. You put that ID number in your code. 
+4. Eventually, some day, there is a train wreck. It could be immediately upon launch - for example, if a customer already added something to that table, so the number is just plain wrong. It could be weeks down the line when some maintenance programmer has no idea what that ID number means. This creates a trap for the future. 
+
+Exogenous vs. Endogenous Keys
+------------------------------
+
+First, the definitions:
+
+Exogenous: relating to or developing from external factors.
+Endogenous: having an internal cause or origin.
+
+When you tell me a page is named "VTwin", that a part is produced by Tucker Rocky with part number 123-456, or that a user has email address bvojcek@powersporttechnologies.com, you are telling me something about an endogenous key.  
+
+Back in the original days of databases, before RDBMs packages were good with indexes, you would look into the data to find an obvious key. First and last name, email address, government ID number, etc. Now, you might still do that, and make the key unique, but all databases anymore are made with tables having auto-incrementing serial number.
+
+Quick, which tells you something about what you are looking at _if you can't see my database_:
+
+* I am looking at a user named Brandt Vojcek
+* I am looking at the third user in my user table
+
+Which one lets you answer in any meaningful way, "Who are you looking at?"?
+
+A Good Solution To This Problem
+--------------------------------
+
+A good way to solve this problem of wanting to get the ID number for a specific category, page, etc - is to name it and fetch it using a query. Yes, queries take time, and, yes, at some point, we will have to do a performance review of everything. However, correctness comes before performance, and we have a compelling need for maintainable, correct code in this software project. Therefore, the following:
+
+<code>
+$query = $this->db->query("Select user_id from user where email = ?", array("bvojcek@powersporttechnologies.com"));
+$row = $query->result_array();
+$user_id = $row[0];
+</code>
+
+Is superior to
+
+<code>
+$user_id = 5;
+</code>
+
+Because nobody will know what user ID 5 means after some time.
+
+
+An OK Solution To This Problem
+-------------------------------
+
+Let's say you don't want to write the query; you are convinced that this number will change infrequently. Still, you should not be hard coding a magic constant. This is just bad practice. 
+
+1. PHP has a mechanism for constants. Make a feature branch in the store repository, edit environment.dist.php, and add in your new constant there. Further, make a comment in front of it explaining where that constant comes from.
+2. Reference that constant in your code.
+3. Add a note at the top of CREATING_A_STORE.md that explains that this constant has to be created.
+4. Send a message to the build master explaining that, when your code is deployed, all the stores need this new constant to be filled in.
+
+It's going to make so much more sense to future programmers if they can see that it is VTWIN_CATEGORY_NUMBER instead of 12345 in the code.
+
+
 Coding Standards
 ================
 

@@ -201,31 +201,31 @@ try {
 <script>
 	var ct = '<?php echo $top_parent; ?>';
         
-	if(ct=='20422'){
+	if(ct=='<?php echo TOP_LEVEL_CAT_UTV_PARTS; ?>'){
 		$("#stp").removeClass('actv');
 		$('#sdp').removeClass('actv');
 		$('#sap').removeClass('actv');
 		$('#sup').addClass('actv');
 		$('#sbb').removeClass('actv');
-	}else if(ct=='20416'){
+	}else if(ct=='<?php echo TOP_LEVEL_CAT_DIRT_BIKES; ?>'){
 		$("#stp").removeClass('actv');
 		$('#sdp').addClass('actv');
 		$('#sap').removeClass('actv');
 		$('#sup').removeClass('actv');
 		$('#sbb').removeClass('actv');
-	}else if(ct=='20409'){
+	}else if(ct=='<?php echo TOP_LEVEL_CAT_STREET_BIKES; ?>'){
 		$("#stp").addClass('actv');
 		$('#sdp').removeClass('actv');
 		$('#sap').removeClass('actv');
 		$('#sup').removeClass('actv');
 		$('#sbb').removeClass('actv');
-	}else if(ct=='20419'){
+	}else if(ct=='<?php echo TOP_LEVEL_CAT_ATV_PARTS; ?>'){
 		$("#stp").removeClass('actv');
 		$('#sdp').removeClass('actv');
 		$('#sap').addClass('actv');
 		$('#sup').removeClass('actv');
 		$('#sbb').removeClass('actv');
-	}else if(ct=='69597'){
+	}else if(ct=='<?php echo TOP_LEVEL_CAT_VTWIN_PARTS; ?>'){
 		$("#stp").removeClass('actv');
 		$('#sdp').removeClass('actv');
 		$('#svp').addClass('actv');

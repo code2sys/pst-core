@@ -6,7 +6,7 @@ require_once(APPPATH . 'controllers/Master_Controller.php');
 
 class Welcome extends Master_Controller {
 
-    private $_pageId = 0;
+    private $_pageId = TOP_LEVEL_PAGE_ID_HOME;
 
     function pr($d) {
         echo "<pre>";
