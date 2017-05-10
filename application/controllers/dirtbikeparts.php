@@ -4,7 +4,7 @@ class DirtBikeParts extends Master_Controller {
 
 	private $_pageId = 1;
 	private $_machineTypeId = 13;
-	private $_categoryId= 20416;
+	private $_categoryId= TOP_LEVEL_CAT_DIRT_BIKES;
 
 	function __construct()
 	{

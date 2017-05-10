@@ -1809,7 +1809,7 @@ class Parts_M extends Master_M
 			
 			
 			$getPriorityCategories = array();
-			$thePriorities = array(20409, 20416, 20419, 20422);
+			$thePriorities = array(20409, TOP_LEVEL_CAT_DIRT_BIKES, 20419, 20422);
 			
 			for( $i=0; $i<=3; $i++ ){
 				
@@ -1848,7 +1848,7 @@ class Parts_M extends Master_M
 				if($key==20409){
 					$breadCrumb[$counter]['link'] = "streetbikeparts";
 					$returnURL .= $this->tag_creating($cat).'_';
-				}else if($key==20416){
+				}else if($key==TOP_LEVEL_CAT_DIRT_BIKES){
 					$breadCrumb[$counter]['link'] = "dirtbikeparts";
 					$returnURL .= $this->tag_creating($cat).'_';
 				}else if($key==20419){
@@ -1881,7 +1881,7 @@ class Parts_M extends Master_M
 			$topCategories[0]['id'] = 20409;
 			$topCategories[0]['link'] = "streetbikeparts";
 			$topCategories[0]['name'] = "STREET BIKE PARTS";
-			$topCategories[1]['id'] = 20416;
+			$topCategories[1]['id'] = TOP_LEVEL_CAT_DIRT_BIKES;
 			$topCategories[1]['link'] = "dirtbikeparts";
 			$topCategories[1]['name'] = "DIRT BIKE PARTS";
 			$topCategories[2]['id'] = 20419;
@@ -1929,7 +1929,7 @@ class Parts_M extends Master_M
 			$row = $get->row();
 			$categories = $this->getParentCategores($row->category_id);
 			
-			if( !empty($categories) && (isset($categories[20422]) || isset($categories[20409]) || isset($categories[20416]) || isset($categories[20419])) ){
+			if( !empty($categories) && (isset($categories[20422]) || isset($categories[20409]) || isset($categories[TOP_LEVEL_CAT_DIRT_BIKES]) || isset($categories[20419])) ){
 				reset($categories);
 				$first_key = key($categories);
 				$data['navCategories'] = $this->getCategories($first_key);
@@ -1938,7 +1938,7 @@ class Parts_M extends Master_M
 			}else{
 			
 				$topCategories[0]['id'] = 20409;
-				$topCategories[1]['id'] = 20416;
+				$topCategories[1]['id'] = TOP_LEVEL_CAT_DIRT_BIKES;
 				$topCategories[2]['id'] = 20419;
 				$topCategories[3]['id'] = 20422;
 				$keyToUse = array_rand($topCategories);
@@ -1949,7 +1949,7 @@ class Parts_M extends Master_M
 		}else{
 			
 			$topCategories[0]['id'] = 20409;
-			$topCategories[1]['id'] = 20416;
+			$topCategories[1]['id'] = TOP_LEVEL_CAT_DIRT_BIKES;
 			$topCategories[2]['id'] = 20419;
 			$topCategories[3]['id'] = 20422;
 			$keyToUse = array_rand($topCategories);

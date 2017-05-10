@@ -127,7 +127,7 @@ echo $CI->load->view("braintree", array(
 		$('#sap').removeClass('actv');
 		$('#sup').addClass('actv');
 		$('#sbb').removeClass('actv');
-	}else if(ct=='20416'){
+	}else if(ct== '<?php echo TOP_LEVEL_CAT_DIRT_BIKES; ?>'){
 		$("#stp").removeClass('actv');
 		$('#sdp').addClass('actv');
 		$('#sap').removeClass('actv');

@@ -383,7 +383,7 @@ class Shopping extends Master_Controller {
         if (isset($getTopParentTemp[0]) && $getTopParentTemp[0] == 'dirt-bike-parts' || $getTopParentTemp[0] == 'atv-parts' ||
                 $getTopParentTemp[0] == 'street-bike-parts' || $getTopParentTemp[0] == 'utv-parts' || $getTopParentTemp[0] == 'v-twin-parts') {
 
-            $top_parent = 20416;
+            $top_parent = TOP_LEVEL_CAT_DIRT_BIKES;
 
             if ($getTopParentTemp[0] == "street-bike-parts") {
                 $top_parent = 20409;
@@ -573,7 +573,7 @@ class Shopping extends Master_Controller {
         if (isset($getTopParentTemp[0]) && $getTopParentTemp[0] == 'dirt-bike-parts' || $getTopParentTemp[0] == 'atv-parts' ||
                 $getTopParentTemp[0] == 'street-bike-parts' || $getTopParentTemp[0] == 'utv-parts') {
 
-            $top_parent = 20416;
+            $top_parent = TOP_LEVEL_CAT_DIRT_BIKES;
 
             if ($getTopParentTemp[0] == "street-bike-parts") {
                 $top_parent = 20409;
@@ -1012,8 +1012,8 @@ class Shopping extends Master_Controller {
 
                 if (!empty($session_based_breadcrumb['category'][20409])) {
                     $parentt = 20409;
-                } elseif (!empty($session_based_breadcrumb['category'][20416])) {
-                    $parentt = 20416;
+                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_DIRT_BIKES])) {
+                    $parentt = TOP_LEVEL_CAT_DIRT_BIKES;
                 } elseif (!empty($session_based_breadcrumb['category'][20419])) {
                     $parentt = 20419;
                 } elseif (!empty($session_based_breadcrumb['category'][20422])) {
@@ -1254,8 +1254,8 @@ class Shopping extends Master_Controller {
 
                 if (!empty($session_based_breadcrumb['category'][20409])) {
                     $parentt = 20409;
-                } elseif (!empty($session_based_breadcrumb['category'][20416])) {
-                    $parentt = 20416;
+                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_DIRT_BIKES])) {
+                    $parentt = TOP_LEVEL_CAT_DIRT_BIKES;
                 } elseif (!empty($session_based_breadcrumb['category'][20419])) {
                     $parentt = 20419;
                 } elseif (!empty($session_based_breadcrumb['category'][20422])) {

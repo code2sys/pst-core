@@ -2079,7 +2079,7 @@ class Admin_M extends Master_M {
 
 
             $getPriorityCategories = array();
-            $thePriorities = array(20409, 20416, 20419, 20422);
+            $thePriorities = array(20409, TOP_LEVEL_CAT_DIRT_BIKES, 20419, 20422);
 
             for ($i = 0; $i <= 3; $i++) {
 
@@ -2115,7 +2115,7 @@ class Admin_M extends Master_M {
                 if ($key == 20409) {
                     $breadCrumb[$counter]['link'] = "streetbikeparts";
                     $returnURL .= $this->tag_creating($cat) . '_';
-                } else if ($key == 20416) {
+                } else if ($key == TOP_LEVEL_CAT_DIRT_BIKES) {
                     $breadCrumb[$counter]['link'] = "dirtbikeparts";
                     $returnURL .= $this->tag_creating($cat) . '_';
                 } else if ($key == 20419) {
@@ -2146,7 +2146,7 @@ class Admin_M extends Master_M {
             $topCategories[0]['id'] = 20409;
             $topCategories[0]['link'] = "streetbikeparts";
             $topCategories[0]['name'] = "STREET BIKE PARTS";
-            $topCategories[1]['id'] = 20416;
+            $topCategories[1]['id'] = TOP_LEVEL_CAT_DIRT_BIKES;
             $topCategories[1]['link'] = "dirtbikeparts";
             $topCategories[1]['name'] = "DIRT BIKE PARTS";
             $topCategories[2]['id'] = 20419;
