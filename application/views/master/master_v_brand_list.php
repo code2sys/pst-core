@@ -560,11 +560,11 @@ if (isset($keywords) &&	$keywords != "") {
 			<div class="sliderCont">
 			<?php 
 				$catImage = "dirt_bike.jpg";
-				if($top_parent==20409){
+				if($top_parent==TOP_LEVEL_CAT_STREET_BIKES){
 					$catImage = "street_bike.jpg";
-				}else if($top_parent==20419){
+				}else if($top_parent==TOP_LEVEL_CAT_ATV_PARTS){
 					$catImage = "atv.jpg";
-				}else if($top_parent==20422){
+				}else if($top_parent==TOP_LEVEL_CAT_UTV_PARTS){
 					$catImage = "utv.jpg";
 				}
 			?>
