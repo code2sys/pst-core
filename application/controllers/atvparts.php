@@ -2,7 +2,7 @@
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class ATVParts extends Master_Controller {
 
-	private $_pageId = 2;
+	private $_pageId = TOP_LEVEL_PAGE_ID_ATV;
 	private $_categoryId = TOP_LEVEL_CAT_ATV_PARTS;
 
 	function __construct()
