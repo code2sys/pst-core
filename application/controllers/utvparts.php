@@ -3,7 +3,7 @@ require_once(APPPATH . 'controllers/Master_Controller.php');
 class UTVParts extends Master_Controller {
 
 	private $_pageId = 4;
-	private $_categoryId = 20422;
+	private $_categoryId = TOP_LEVEL_CAT_UTV_PARTS;
 
 	function __construct()
 	{

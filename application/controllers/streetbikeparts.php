@@ -3,7 +3,7 @@ require_once(APPPATH . 'controllers/Master_Controller.php');
 class StreetBikeParts extends Master_Controller {
 	private $_pageId = 3;
 	private $_machineTypeId = 13;
-	private $_categoryId = 20409;
+	private $_categoryId = TOP_LEVEL_CAT_STREET_BIKES;
 
 	function __construct()
 	{

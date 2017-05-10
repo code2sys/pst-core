@@ -386,13 +386,13 @@ class Shopping extends Master_Controller {
             $top_parent = TOP_LEVEL_CAT_DIRT_BIKES;
 
             if ($getTopParentTemp[0] == "street-bike-parts") {
-                $top_parent = 20409;
+                $top_parent = TOP_LEVEL_CAT_STREET_BIKES;
             } else if ($getTopParentTemp[0] == "atv-parts") {
-                $top_parent = 20419;
+                $top_parent = TOP_LEVEL_CAT_ATV_PARTS;
             } else if ($getTopParentTemp[0] == "utv-parts") {
-                $top_parent = 20422;
+                $top_parent = TOP_LEVEL_CAT_UTV_PARTS;
             } else if ($getTopParentTemp[0] == "v-twin-parts") {
-                $top_parent = 69597;
+                $top_parent = TOP_LEVEL_CAT_VTWIN_PARTS;
             }
 
             $this->_mainData['cat_header'] = 1;
@@ -576,11 +576,11 @@ class Shopping extends Master_Controller {
             $top_parent = TOP_LEVEL_CAT_DIRT_BIKES;
 
             if ($getTopParentTemp[0] == "street-bike-parts") {
-                $top_parent = 20409;
+                $top_parent = TOP_LEVEL_CAT_STREET_BIKES;
             } else if ($getTopParentTemp[0] == "atv-parts") {
-                $top_parent = 20419;
+                $top_parent = TOP_LEVEL_CAT_ATV_PARTS;
             } else if ($getTopParentTemp[0] == "utv-parts") {
-                $top_parent = 20422;
+                $top_parent = TOP_LEVEL_CAT_UTV_PARTS;
             }
 
             $this->_mainData['cat_header'] = 1;
@@ -1010,16 +1010,16 @@ class Shopping extends Master_Controller {
             $session_based_breadcrumb = $this->_mainData['breadcrumbs'];
             if (!empty($session_based_breadcrumb['category'])) {
 
-                if (!empty($session_based_breadcrumb['category'][20409])) {
-                    $parentt = 20409;
+                if (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_STREET_BIKES])) {
+                    $parentt = TOP_LEVEL_CAT_STREET_BIKES;
                 } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_DIRT_BIKES])) {
                     $parentt = TOP_LEVEL_CAT_DIRT_BIKES;
-                } elseif (!empty($session_based_breadcrumb['category'][20419])) {
-                    $parentt = 20419;
-                } elseif (!empty($session_based_breadcrumb['category'][20422])) {
-                    $parentt = 20422;
-                } elseif (!empty($session_based_breadcrumb['category'][69597])) {
-                    $parentt = 69597;
+                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_ATV_PARTS])) {
+                    $parentt = TOP_LEVEL_CAT_ATV_PARTS;
+                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_UTV_PARTS])) {
+                    $parentt = TOP_LEVEL_CAT_UTV_PARTS;
+                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_VTWIN_PARTS])) {
+                    $parentt = TOP_LEVEL_CAT_VTWIN_PARTS;
                 }
             }
         }
@@ -1031,7 +1031,7 @@ class Shopping extends Master_Controller {
         /*  GETTING CATEGORIES FOR TOP NAV */
         $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent($partId, (!empty($parentt)) ? $parentt : 0);
         $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
-        $this->_mainData['top_parent'] = (!empty($parentt)) ? $parentt : 20409;
+        $this->_mainData['top_parent'] = (!empty($parentt)) ? $parentt : TOP_LEVEL_CAT_STREET_BIKES;
 
         $cats = array();
         foreach($this->_mainData['secondBreadCrumb'] as $cat ) {
@@ -1252,14 +1252,14 @@ class Shopping extends Master_Controller {
             $session_based_breadcrumb = $this->_mainData['breadcrumbs'];
             if (!empty($session_based_breadcrumb['category'])) {
 
-                if (!empty($session_based_breadcrumb['category'][20409])) {
-                    $parentt = 20409;
+                if (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_STREET_BIKES])) {
+                    $parentt = TOP_LEVEL_CAT_STREET_BIKES;
                 } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_DIRT_BIKES])) {
                     $parentt = TOP_LEVEL_CAT_DIRT_BIKES;
-                } elseif (!empty($session_based_breadcrumb['category'][20419])) {
-                    $parentt = 20419;
-                } elseif (!empty($session_based_breadcrumb['category'][20422])) {
-                    $parentt = 20422;
+                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_ATV_PARTS])) {
+                    $parentt = TOP_LEVEL_CAT_ATV_PARTS;
+                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_UTV_PARTS])) {
+                    $parentt = TOP_LEVEL_CAT_UTV_PARTS;
                 }
             }
         }
@@ -1271,7 +1271,7 @@ class Shopping extends Master_Controller {
         /*  GETTING CATEGORIES FOR TOP NAV */
         $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent($partId, (!empty($parentt)) ? $parentt : 0);
         $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
-        $this->_mainData['top_parent'] = (!empty($parentt)) ? $parentt : 20409;
+        $this->_mainData['top_parent'] = (!empty($parentt)) ? $parentt : TOP_LEVEL_CAT_STREET_BIKES;
 
         $cats = array();
         foreach($this->_mainData['secondBreadCrumb'] as $cat ) {

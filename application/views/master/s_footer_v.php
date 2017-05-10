@@ -121,7 +121,7 @@ echo $CI->load->view("braintree", array(
 <script>
 	var ct = '<?php echo $top_parent; ?>';
 	
-	if(ct=='20422'){
+	if(ct=='<?php echo TOP_LEVEL_CAT_UTV_PARTS; ?>'){
 		$("#stp").removeClass('actv');
 		$('#sdp').removeClass('actv');
 		$('#sap').removeClass('actv');
@@ -133,13 +133,13 @@ echo $CI->load->view("braintree", array(
 		$('#sap').removeClass('actv');
 		$('#sup').removeClass('actv');
 		$('#sbb').removeClass('actv');
-	}else if(ct=='20409'){
+	}else if(ct=='<?php echo TOP_LEVEL_CAT_STREET_BIKES; ?>'){
 		$("#stp").addClass('actv');
 		$('#sdp').removeClass('actv');
 		$('#sap').removeClass('actv');
 		$('#sup').removeClass('actv');
 		$('#sbb').removeClass('actv');
-	}else if(ct=='20419'){
+	}else if(ct=='<?php echo TOP_LEVEL_CAT_ATV_PARTS; ?>'){
 		$("#stp").removeClass('actv');
 		$('#sdp').removeClass('actv');
 		$('#sap').removeClass('actv');

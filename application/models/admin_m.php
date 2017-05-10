@@ -2067,7 +2067,7 @@ class Admin_M extends Master_M {
               Streetbike	- 20409	- Priority 1
               Dirtbike		- 20416	- Priority 2,
               Atv			- 20419	- Priority 3,
-              Utv			- 20422	- Priority 4
+              Utv			- TOP_LEVEL_CAT_UTV_PARTS	- Priority 4
              */
             $getPriorityCategories = array();
 
@@ -2079,7 +2079,7 @@ class Admin_M extends Master_M {
 
 
             $getPriorityCategories = array();
-            $thePriorities = array(20409, TOP_LEVEL_CAT_DIRT_BIKES, 20419, 20422);
+            $thePriorities = array(TOP_LEVEL_CAT_STREET_BIKES, TOP_LEVEL_CAT_DIRT_BIKES, TOP_LEVEL_CAT_ATV_PARTS, TOP_LEVEL_CAT_UTV_PARTS);
 
             for ($i = 0; $i <= 3; $i++) {
 
@@ -2112,16 +2112,16 @@ class Admin_M extends Master_M {
                 $breadCrumb[$counter]['id'] = $key;
                 $breadCrumb[$counter]['name'] = $cat;
 
-                if ($key == 20409) {
+                if ($key == TOP_LEVEL_CAT_STREET_BIKES) {
                     $breadCrumb[$counter]['link'] = "streetbikeparts";
                     $returnURL .= $this->tag_creating($cat) . '_';
                 } else if ($key == TOP_LEVEL_CAT_DIRT_BIKES) {
                     $breadCrumb[$counter]['link'] = "dirtbikeparts";
                     $returnURL .= $this->tag_creating($cat) . '_';
-                } else if ($key == 20419) {
+                } else if ($key == TOP_LEVEL_CAT_ATV_PARTS) {
                     $breadCrumb[$counter]['link'] = "atvparts";
                     $returnURL .= $this->tag_creating($cat) . '_';
-                } else if ($key == 20422) {
+                } else if ($key == TOP_LEVEL_CAT_UTV_PARTS) {
                     $breadCrumb[$counter]['link'] = "utvparts";
                     $returnURL .= $this->tag_creating($cat) . '_';
                 } else {
@@ -2143,16 +2143,16 @@ class Admin_M extends Master_M {
             $tot = count($breadCrumb);
         } else {
 
-            $topCategories[0]['id'] = 20409;
+            $topCategories[0]['id'] = TOP_LEVEL_CAT_STREET_BIKES;
             $topCategories[0]['link'] = "streetbikeparts";
             $topCategories[0]['name'] = "STREET BIKE PARTS";
             $topCategories[1]['id'] = TOP_LEVEL_CAT_DIRT_BIKES;
             $topCategories[1]['link'] = "dirtbikeparts";
             $topCategories[1]['name'] = "DIRT BIKE PARTS";
-            $topCategories[2]['id'] = 20419;
+            $topCategories[2]['id'] = TOP_LEVEL_CAT_ATV_PARTS;
             $topCategories[2]['link'] = "atvparts";
             $topCategories[2]['name'] = "ATV PARTS";
-            $topCategories[3]['id'] = 20422;
+            $topCategories[3]['id'] = TOP_LEVEL_CAT_UTV_PARTS;
             $topCategories[3]['link'] = "utvparts";
             $topCategories[3]['name'] = "UTV PARTS";
             $keyToUse = array_rand($topCategories);
