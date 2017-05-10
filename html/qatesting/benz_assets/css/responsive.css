@@ -1805,7 +1805,7 @@ span.glyphicon-filter {
 		text-align:center;
 	}
 	.cnet {
-		width:50%;
+		/*width:50%;*/
 		float:left;
 	}
 	.pr {
@@ -2601,7 +2601,7 @@ span.glyphicon-filter {
 		margin-top: 0 !important;
 		position: absolute;
 		right:10px;
-		top:15px;
+		top:38px;
 	}
 	.header_b {
 		position:relative;
@@ -2743,7 +2743,7 @@ span.glyphicon-filter {
 		margin: 0 0 15px !important;
 	}	
 	.cnet,.fb-frem{
-		width:50% !important;
+		/*width:50% !important;*/
 		float:left !important
 	}
 	.sldr-section {
@@ -2763,6 +2763,7 @@ span.glyphicon-filter {
 	}
 	.logo-tp_b {
 		margin:0 !important
+                margin-left: 36px !important;
 	}
 }
 
@@ -2790,7 +2791,7 @@ span.glyphicon-filter {
 		margin: 0 0 6px;
 	}
 	.cnet,.fb-frem{
-		width:50% !important;
+		/*width:50% !important;*/
 		float:left !important
 	}
 	.searchHolder .form_standard input.medium_search {
@@ -2923,7 +2924,7 @@ span.glyphicon-filter {
 		padding:10px 9px;
 	}	
 	.logo-tp_b {		
-		width:100%;
+		width:200px;
 		margin:0 0 20px;
 		text-align:center;
 	}	
@@ -3404,7 +3405,7 @@ span.glyphicon-filter {
 		margin-right:15px !important;
 	}
 	.searchHolder {
-		margin-top:35px;
+		/*margin-top:35px;*/
 	}
 	
 	#toggle {
@@ -3427,3 +3428,10 @@ span.glyphicon-filter {
 }
 
 
+.logo-tp_b {
+    margin-top: 20px !important;
+}
+
+.search-bx {
+    width: 311px !important;
+}
