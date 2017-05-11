@@ -462,6 +462,7 @@ class Reporting_M extends Master_M {
         }
 
         if ($part_count < $offset) {
+            error_log("Returning due to part count $part_count offset $offset ");
             return;
         }
 
