@@ -81,12 +81,8 @@ if (!function_exists("sub_googleSalesXMLNew")) {
         $file = STORE_DIRECTORY . '/googleFeed/csvfile.csv';
         //echo dirname(__DIR__);exit;
         $CI->load->model('reporting_m');
-        $rows = $CI->reporting_m->getProductsForGoogle();
         $csv_handler = fopen($file, 'w');
-        // JLB 10-07-16
-        foreach ($rows as $row) {
-            fputcsv($csv_handler, $row);
-        }
+        $CI->reporting_m->getProductsForGoogle($csv_handler);
         fclose($csv_handler);
         $data = array('run_by' => 'cron', 'status' => '1');
         $CI->load->model('admin_m');

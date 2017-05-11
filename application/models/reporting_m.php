@@ -430,7 +430,7 @@ class Reporting_M extends Master_M {
 		return $partNumberRecs;
 	}
 	
-    public function getProductsForGoogle() {
+    public function getProductsForGoogle($handle = null) {
         //partnumber.promotion_id AS promotion_id
         //CASE WHEN partnumber.closeout_market_place = 0 THEN 'current' ELSE 'closeout' END AS custom_lable_0,
         //CASE WHEN answer = 'mens' THEN part.name WHEN answer = 'womens' THEN part.name WHEN answer = 'boys' THEN part.name WHEN answer = 'girls' THEN part.name WHEN answer != '' THEN CONCAT (part.name, ' - ', answer) ELSE part.name END AS title,
@@ -715,10 +715,18 @@ class Reporting_M extends Master_M {
         // echo '</pre>';
         // exit;
         //return $partnumbers;
+        if (is_null($handle)) {
+            $csv = $this->array2csv($partnumbers);
+            $csv = str_replace('"', '', $csv);
+            return $csv;
+        } else {
+            $keys = array_keys(reset($partnumbers));
+            fputcsv($handle, $keys);
 
-        $csv = $this->array2csv($partnumbers);
-        $csv = str_replace('"', '', $csv);
-        return $csv;
+            foreach ($partnumbers as $row) {
+                fputcsv($handle, $row);
+            }
+        }
     }
 
     public function check_array_duplicacy($title, $arr) {
