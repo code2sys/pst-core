@@ -431,6 +431,8 @@ class Reporting_M extends Master_M {
 	}
 	
     public function getProductsForGoogle($handle = null) {
+        error_log("AAA");
+
         //partnumber.promotion_id AS promotion_id
         //CASE WHEN partnumber.closeout_market_place = 0 THEN 'current' ELSE 'closeout' END AS custom_lable_0,
         //CASE WHEN answer = 'mens' THEN part.name WHEN answer = 'womens' THEN part.name WHEN answer = 'boys' THEN part.name WHEN answer = 'girls' THEN part.name WHEN answer != '' THEN CONCAT (part.name, ' - ', answer) ELSE part.name END AS title,
@@ -478,6 +480,7 @@ class Reporting_M extends Master_M {
         //echo $sql;exit;
         $query = $this->db->query($sql);
         $partnumbers = $query->result_array();
+        error_log("BBB");
 
 
         $query->free_result();
@@ -490,6 +493,9 @@ class Reporting_M extends Master_M {
                 $cpn[$v['brand_id']][] = array('coupon' => $v['couponCode'], 'closeout' => $v['closeout']);
             }
         }
+
+        error_log("CCC");
+
 
         $allCurrentCoupons = null;
         $allCoupons = null;
@@ -514,6 +520,7 @@ class Reporting_M extends Master_M {
         $productsArr = array();
         $partnumbers1 = array();
 
+        error_log("DDD");
 
         // //
         // $qry = "SELECT partpartnumber.partnumber_id, `partquestion`.`part_id` as part_id
@@ -709,6 +716,9 @@ class Reporting_M extends Master_M {
 //                die("*******");
             }
         }
+
+        error_log("FFF");
+
 
         // echo '<pre>';
         // print_r( $partnumbers1);
