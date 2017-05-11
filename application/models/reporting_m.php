@@ -458,7 +458,7 @@ class Reporting_M extends Master_M {
             foreach ($query->result_array() as $row) {
                 $part_count = $row['cnt'];
             }
-            $limit_string = " OFFSET $offset LIMIT $limit ";
+            $limit_string = " LIMIT $limit OFFSET $offset ";
         }
 
         if ($part_count < $offset) {
