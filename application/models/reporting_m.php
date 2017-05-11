@@ -453,7 +453,7 @@ class Reporting_M extends Master_M {
 					JOIN partbrand ON partbrand.part_id = partpartnumber.part_id
 					JOIN brand ON brand.brand_id = partbrand.brand_id
 					WHERE sale > 0 AND partnumber.price != 0
-					GROUP BY title, ref_id, part_own_id ";
+					GROUP BY part.name, partnumber.partnumber_id, part.part_id ";
             $query = $this->db->query($sql);
             foreach ($query->result_array() as $row) {
                 $part_count = $row['cnt'];
