@@ -18,6 +18,9 @@ class CronJobDaily extends AbstractCronJob
         error_log("5");
 		$this->customProductSorting();
         error_log("6");
+        $this->load->model("reporting_m");
+        $this->reporting_m->getProductForcycletrader();
+        error_log("7");
         // and generate that google feed!
         sub_googleSalesXMLNew();
 	}
