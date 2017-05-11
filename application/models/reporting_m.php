@@ -430,8 +430,40 @@ class Reporting_M extends Master_M {
 		return $partNumberRecs;
 	}
 	
-    public function getProductsForGoogle($handle = null) {
+    public function getProductsForGoogle($handle = null)
+    {
+        $this->sub_getProductsForGoogle($handle, 0, is_null($handle) ? 0 : 1000);
+    }
+
+    public function sub_getProductsForGoogle($handle, $offset = 0, $limit = 0) {
         error_log("AAA");
+        $part_count = 0;
+        $limit_string = "";
+        if ($limit > 0) {
+            // what's the count?
+            $sql = "Select count(*) as cnt FROM part
+					JOIN partpartnumber ON partpartnumber.part_id = part.part_id
+					JOIN partnumber ON partnumber.partnumber_id = partpartnumber.partnumber_id
+					JOIN partnumberpartquestion ON partnumberpartquestion.partnumber_id = partnumber.partnumber_id
+					JOIN partimage ON partimage.part_id = partpartnumber.part_id
+					JOIN partcategory ON partcategory.part_id = partpartnumber.part_id
+					JOIN category ON category.category_id = partcategory.category_id
+					JOIN partvariation ON partvariation.partnumber_id = partnumber.partnumber_id
+					LEFT JOIN partdealervariation ON partdealervariation.partnumber_id = partnumber.partnumber_id
+					JOIN partbrand ON partbrand.part_id = partpartnumber.part_id
+					JOIN brand ON brand.brand_id = partbrand.brand_id
+					WHERE sale > 0 AND partnumber.price != 0
+					GROUP BY title, ref_id, part_own_id order by title";
+            $query = $this->db->query($sql);
+            foreach ($query->result_array() as $row) {
+                $part_count = $row['cnt'];
+            }
+            $limit_string = " OFFSET $offset LIMIT $limit ";
+        }
+
+        if ($part_count < $offset) {
+            return;
+        }
 
         //partnumber.promotion_id AS promotion_id
         //CASE WHEN partnumber.closeout_market_place = 0 THEN 'current' ELSE 'closeout' END AS custom_lable_0,
@@ -474,7 +506,7 @@ class Reporting_M extends Master_M {
 					JOIN partbrand ON partbrand.part_id = partpartnumber.part_id
 					JOIN brand ON brand.brand_id = partbrand.brand_id
 					WHERE sale > 0 AND partnumber.price != 0
-					GROUP BY title, ref_id, part_own_id order by title";
+					GROUP BY title, ref_id, part_own_id order by title $limit_string";
 
         //GROUP BY title, ref_id, part_own_id order by title";
         //echo $sql;exit;
@@ -730,12 +762,18 @@ class Reporting_M extends Master_M {
             $csv = str_replace('"', '', $csv);
             return $csv;
         } else {
-            $keys = array_keys(reset($partnumbers));
-            fputcsv($handle, $keys);
+            if ($offset == 0) {
+                $keys = array_keys(reset($partnumbers));
+                fputcsv($handle, $keys);
+            }
 
             foreach ($partnumbers as $row) {
                 fputcsv($handle, $row);
             }
+        }
+
+        if ($limit > 0) {
+            return $this->sub_getProductsForGoogle($handle, $offset + $limit, $limit);
         }
     }
 
