@@ -1068,19 +1068,7 @@ class Welcome extends Master_Controller {
     }
 
     public function googleSalesXMLNew() {
-        $file = STORE_DIRECTORY . '/googleFeed/csvfile.csv';
-        //echo dirname(__DIR__);exit;
-        $this->load->model('reporting_m');
-        $rows = $this->reporting_m->getProductsForGoogle();
-        $csv_handler = fopen($file, 'w');
-        // JLB 10-07-16
-        foreach ($rows as $row) {
-            fputcsv($csv_handler, $row);
-        }
-        fclose($csv_handler);
-        $data = array('run_by' => 'cron', 'status' => '1');
-        $this->load->model('admin_m');
-        $this->admin_m->update_feed_log($data);
+        sub_googleSalesXMLNew();
     }
 
     public function SalesFBXML() {
