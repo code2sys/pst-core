@@ -78,20 +78,15 @@ if (!function_exists("joverride_viewpiece")) {
 if (!function_exists("sub_googleSalesXMLNew")) {
     function sub_googleSalesXMLNew() {
         $CI =& get_instance();
-        error_log("A");
         $file = STORE_DIRECTORY . '/googleFeed/csvfile.csv';
         //echo dirname(__DIR__);exit;
-        error_log("B");
 
         $CI->load->model('reporting_m');
         $csv_handler = fopen($file, 'w');
-        error_log("C");
         $CI->reporting_m->getProductsForGoogle($csv_handler);
-        error_log("D");
         fclose($csv_handler);
         $data = array('run_by' => 'cron', 'status' => '1');
         $CI->load->model('admin_m');
-        error_log("E");
         $CI->admin_m->update_feed_log($data);
     }
 }

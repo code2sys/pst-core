@@ -7,20 +7,13 @@ class CronJobDaily extends AbstractCronJob
 
 	public function runJob()
 	{
-        error_log("1");
         $this->markCloseoutDate();
-        error_log("2");
 		$this->priceToSaleCleanUp();
-        error_log("3");
 		$this->catAndBrandCleanUp();
-        error_log("4");
 		$this->closeoutReprisingSchedule();
-        error_log("5");
 		$this->customProductSorting();
-        error_log("6");
         $this->load->model("reporting_m");
         $this->reporting_m->getProductForcycletrader();
-        error_log("7");
         // and generate that google feed!
         sub_googleSalesXMLNew();
 	}

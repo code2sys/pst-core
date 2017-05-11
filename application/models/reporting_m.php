@@ -436,7 +436,6 @@ class Reporting_M extends Master_M {
     }
 
     public function sub_getProductsForGoogle($handle, $offset = 0, $limit = 0) {
-        error_log("AAA");
         $part_count = 0;
         $limit_string = "";
         if ($limit > 0) {
@@ -461,7 +460,6 @@ class Reporting_M extends Master_M {
         }
 
         if ($part_count < $offset) {
-            error_log("Returning due to part count $part_count offset $offset ");
             return;
         }
 
@@ -512,8 +510,6 @@ class Reporting_M extends Master_M {
         //echo $sql;exit;
         $query = $this->db->query($sql);
         $partnumbers = $query->result_array();
-        error_log("BBB");
-
 
         $query->free_result();
         $cpn = array();
@@ -525,9 +521,6 @@ class Reporting_M extends Master_M {
                 $cpn[$v['brand_id']][] = array('coupon' => $v['couponCode'], 'closeout' => $v['closeout']);
             }
         }
-
-        error_log("CCC");
-
 
         $allCurrentCoupons = null;
         $allCoupons = null;
@@ -551,8 +544,6 @@ class Reporting_M extends Master_M {
         // echo '</pre>';exit;
         $productsArr = array();
         $partnumbers1 = array();
-
-        error_log("DDD");
 
         // //
         // $qry = "SELECT partpartnumber.partnumber_id, `partquestion`.`part_id` as part_id
@@ -748,8 +739,6 @@ class Reporting_M extends Master_M {
 //                die("*******");
             }
         }
-
-        error_log("FFF");
 
 
         // echo '<pre>';
