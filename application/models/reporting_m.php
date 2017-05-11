@@ -441,7 +441,7 @@ class Reporting_M extends Master_M {
         $limit_string = "";
         if ($limit > 0) {
             // what's the count?
-            $sql = "Select count(*) as cnt FROM part
+            $sql = "Select count(*) as cnt FROM (Select distinct part.name, partnumber.partnumber_id, part.part_id FROM part
 					JOIN partpartnumber ON partpartnumber.part_id = part.part_id
 					JOIN partnumber ON partnumber.partnumber_id = partpartnumber.partnumber_id
 					JOIN partnumberpartquestion ON partnumberpartquestion.partnumber_id = partnumber.partnumber_id
@@ -452,8 +452,7 @@ class Reporting_M extends Master_M {
 					LEFT JOIN partdealervariation ON partdealervariation.partnumber_id = partnumber.partnumber_id
 					JOIN partbrand ON partbrand.part_id = partpartnumber.part_id
 					JOIN brand ON brand.brand_id = partbrand.brand_id
-					WHERE sale > 0 AND partnumber.price != 0
-					GROUP BY part.name, partnumber.partnumber_id, part.part_id ";
+					WHERE sale > 0 AND partnumber.price != 0) AS CountTab";
             $query = $this->db->query($sql);
             foreach ($query->result_array() as $row) {
                 $part_count = $row['cnt'];
