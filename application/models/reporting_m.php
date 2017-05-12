@@ -432,7 +432,7 @@ class Reporting_M extends Master_M {
 	
     public function getProductsForGoogle($handle = null)
     {
-        $this->sub_getProductsForGoogle($handle, 0, is_null($handle) ? 0 : 1000);
+        $this->sub_getProductsForGoogle($handle, 0, is_null($handle) ? 0 : 5000);
     }
 
     public function sub_getProductsForGoogle($handle, $offset = 0, $limit = 0) {

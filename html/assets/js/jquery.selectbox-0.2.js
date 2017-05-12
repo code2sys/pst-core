@@ -407,8 +407,8 @@
 				diff = viewportHeight - (offset.top - scrollTop) - height / 2,
 				onOpen = this._get(inst, 'onOpen');
 			el.css({
-				"top": height + "px",
-				"maxHeight": (diff - height) + "px"
+				"top": height + "px" /*,
+				"maxHeight": (diff - height) + "px" */
 			});
 			inst.settings.effect === "fade" ? el.fadeIn(inst.settings.speed) : el.slideDown(inst.settings.speed);
 			$("#sbToggle_" + inst.uid).addClass(inst.settings.classToggleOpen);
