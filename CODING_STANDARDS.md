@@ -1,3 +1,9 @@
+Update May 11, 2017
+===================
+
+* Do not use !important CSS rules.
+* Check your CSS on a narrow screen to simulate a mobile browser.
+
 Update #2 May 10, 2017
 ======================
 
