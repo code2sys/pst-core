@@ -1964,3 +1964,12 @@ p.creditCar_b.loct a i{
 .garage_delete .fa-times {
 	color:#F00
 }
+
+.cstm-sdbr {
+    margin-bottom: 0px;
+    padding: 0px;
+    border: none;
+}
+.fiter-menu1 {
+    display: none;
+}
