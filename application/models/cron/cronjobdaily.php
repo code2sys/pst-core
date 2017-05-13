@@ -12,6 +12,10 @@ class CronJobDaily extends AbstractCronJob
 		$this->catAndBrandCleanUp();
 		$this->closeoutReprisingSchedule();
 		$this->customProductSorting();
+        $this->load->model("reporting_m");
+        $this->reporting_m->getProductForcycletrader();
+        // and generate that google feed!
+        sub_googleSalesXMLNew();
 	}
 	
 	private function priceToSaleCleanUp()

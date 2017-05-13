@@ -1,3 +1,9 @@
+Update May 10, 2017 JLB
+=======================
+
+We added fields to the environment.dist.php for symbolic constants for the categories that are special. You will need to verify that these numbers are correct in your environment.
+
+
 Creating a Store
 ================
 

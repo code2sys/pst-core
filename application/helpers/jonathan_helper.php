@@ -74,3 +74,19 @@ if (!function_exists("joverride_viewpiece")) {
         }
     }
 }
+
+if (!function_exists("sub_googleSalesXMLNew")) {
+    function sub_googleSalesXMLNew() {
+        $CI =& get_instance();
+        $file = STORE_DIRECTORY . '/googleFeed/csvfile.csv';
+        //echo dirname(__DIR__);exit;
+
+        $CI->load->model('reporting_m');
+        $csv_handler = fopen($file, 'w');
+        $CI->reporting_m->getProductsForGoogle($csv_handler);
+        fclose($csv_handler);
+        $data = array('run_by' => 'cron', 'status' => '1');
+        $CI->load->model('admin_m');
+        $CI->admin_m->update_feed_log($data);
+    }
+}

@@ -3480,3 +3480,9 @@ span.glyphicon-filter {
     margin-top: 20px !important;
 }
 
+/*
+DON'T DO THIS. Important rules are bad not good.
+.search-bx {
+    width: 311px !important;
+}
+*/
