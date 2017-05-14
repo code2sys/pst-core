@@ -352,9 +352,9 @@ class Shopping extends Master_Controller {
 
         $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters, NULL);
         // Created Variables for it in Category section, but calling it here to take advantage of breadcrumbs.
-        $this->loadSidebar('widgets/category_filter_v');
-        $this->loadSidebar('widgets/brand_filter_v');
-        $this->loadSidebar('widgets/question_filter_v');
+        $this->loadSidebar('widgets/category_filter_v_product');
+        $this->loadSidebar('widgets/brand_filter_v_product');
+        $this->loadSidebar('widgets/question_filter_v_product');
         // PAGINATION
         $this->_mainData['pages'] = $this->adpdtPagination($this->parts_m->getSearchCount($listParameters));
         $this->_mainData['currentPage'] = 1;
@@ -374,6 +374,7 @@ class Shopping extends Master_Controller {
 
         $this->setNav('master/navigation_v', 0);
         $this->_mainData['pages'] = $this->pages_m->getPages(1, 'footer');
+        $this->_mainData['custom_sidebar'] = true;
 
         $this->_mainData['new_header'] = 1;
 
