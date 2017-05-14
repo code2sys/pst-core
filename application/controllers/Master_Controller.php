@@ -91,7 +91,7 @@ class Master_Controller extends CI_Controller {
 		$title = WEBSITE_NAME;
 		$this->setMasterPageVars('title', $title);
 		$logo = $this->config->item('assets')."/images/logo.png";
-		$logo_new = $this->config->item('benz_assets')."/images/power-sports-logo.png";
+		$logo_new = $this->config->item('benz_assets')."/logo.png";
 		$this->setMasterPageVars('logo', $logo);
 		$s_logo = $this->config->item('s_assets')."/images/logo.png";
 		$this->setMasterPageVars('s_logo', $s_logo);
