@@ -1048,7 +1048,7 @@ var google_remarketing_only = true;
 	//}
 	
 </script>
-	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>stylesheet/custom.css" />
+	<link rel="stylesheet" href="/custom.css" />
 
 </body>
 </html>	
