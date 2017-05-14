@@ -1047,6 +1047,8 @@ var google_remarketing_only = true;
 	//	$("#mainVideo")[0].src = "https://www.youtube.com/embed/"+vidId+"?rel=0&autoplay=1";
 	//}
 	
-</script>	
+</script>
+	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>stylesheet/custom.css" />
+
 </body>
 </html>	
