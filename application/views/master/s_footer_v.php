@@ -150,6 +150,8 @@ echo $CI->load->view("braintree", array(
 </script>
 </body>
 	<link type="text/css" rel="stylesheet" href="<?php echo $s_assets; ?>/css_front/style.css">
+<link rel="stylesheet" href="<?php echo jsite_url("/custom.css"); ?>" />
+
 </html>
 <script>
 	function submitNewsletter()

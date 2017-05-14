@@ -93,6 +93,8 @@ echo $CI->load->view("braintree", array(
 
 </body>
 	<link type="text/css" rel="stylesheet" href="<?php echo $assets; ?>/css_front/style.css">
+<link rel="stylesheet" href="<?php echo jsite_url("/custom.css"); ?>" />
+
 </html>
 <script>
 
