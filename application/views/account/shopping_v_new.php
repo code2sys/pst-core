@@ -529,6 +529,10 @@ $detect = new Mobile_Detect;
         {
             $('#fitment').removeClass('active');
         }
+        if ($('#sizechart').length)
+        {
+            $('#sizechart').removeClass('active');
+        }
         $('#reviews').removeClass('active');
         $('#' + tab).addClass('active');
 

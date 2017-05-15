@@ -1,3 +1,9 @@
+Update May 14, 2017
+===================
+
+When there is a file like the customer's logo, do not upload a PST logo and then reference that directly. The logo file is /logo.png.
+
+
 Update May 11, 2017
 ===================
 
