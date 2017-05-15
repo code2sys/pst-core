@@ -42,6 +42,7 @@ class Reporting_M extends Master_M {
         $this->db->where('order_date >', $st);
         $this->db->where('order_date <', $ed);
         $this->db->from('order');
+        $this->db->join(' (select * from order_status where status = "Approved") order_status ', '`order`.id = order_status.order_id');
         $data[$previousYear] = $this->db->count_all_results();
         
         $st = strtotime(date('Y').'-01-01');
@@ -50,6 +51,7 @@ class Reporting_M extends Master_M {
         $this->db->where('order_date >', $st);
         $this->db->where('order_date <', $ed);
         $this->db->from('order');
+        $this->db->join(' (select * from order_status where status = "Approved") order_status ', '`order`.id = order_status.order_id');
         $data[date('Y')] = $this->db->count_all_results();
         return $data;
     }
