@@ -39,7 +39,7 @@ class Reporting_M extends Master_M {
         $st = strtotime($previousYear.'-01-01');
         $ed = strtotime($previousYear.'-12-31');
 
-        $query = $this->db->query("Select count(*) as cnt from `order` join (select * from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date > ? and order_date < ?", array($st, $ed));
+        $query = $this->db->query("Select count(distinct `order`.id) as cnt from `order` join (select * from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date > ? and order_date < ?", array($st, $ed));
         foreach ($query->result_array() as $row) {
             $data[$previousYear] = $row['cnt'];
         }
@@ -48,7 +48,7 @@ class Reporting_M extends Master_M {
         $ed = strtotime(date('Y').'-12-31');
 
 
-        $query = $this->db->query("Select count(*) as cnt from `order` join (select * from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date > ? and order_date < ?", array($st, $ed));
+        $query = $this->db->query("Select count(distinct `order`.id) as cnt from `order` join (select * from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date > ? and order_date < ?", array($st, $ed));
         foreach ($query->result_array() as $row) {
             $data[date('Y')] = $row['cnt'];
         }
