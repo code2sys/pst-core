@@ -376,7 +376,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelFontFamily: 'Verdana, Arial',
             axisLabelPadding: 3,
             tickFormatter: function (v, axis) {
-                return v.toFixed(axis.tickDecimals); // v;
+                return v.toFixed(2); // v;
             }
         },
         legend: {
