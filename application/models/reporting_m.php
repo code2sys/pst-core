@@ -38,21 +38,21 @@ class Reporting_M extends Master_M {
         
         $st = strtotime($previousYear.'-01-01');
         $ed = strtotime($previousYear.'-12-31');
-        
-        $this->db->where('order_date >', $st);
-        $this->db->where('order_date <', $ed);
-        $this->db->from('order');
-        $this->db->join(' (select * from order_status where status = "Approved") order_status ', '`order`.id = order_status.order_id');
-        $data[$previousYear] = $this->db->count_all_results();
-        
+
+        $query = $this->db->query("Select count(*) as cnt from `order` join (select * from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date > ? and order_date < ?", array($st, $ed));
+        foreach ($query->result_array() as $row) {
+            $data[$previousYear] = $row['cnt'];
+        }
+
         $st = strtotime(date('Y').'-01-01');
         $ed = strtotime(date('Y').'-12-31');
-        
-        $this->db->where('order_date >', $st);
-        $this->db->where('order_date <', $ed);
-        $this->db->from('order');
-        $this->db->join(' (select * from order_status where status = "Approved") order_status ', '`order`.id = order_status.order_id');
-        $data[date('Y')] = $this->db->count_all_results();
+
+
+        $query = $this->db->query("Select count(*) as cnt from `order` join (select * from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date > ? and order_date < ?", array($st, $ed));
+        foreach ($query->result_array() as $row) {
+            $data[date('Y')] = $row['cnt'];
+        }
+
         return $data;
     }
     //End Pradeep Custom Code
