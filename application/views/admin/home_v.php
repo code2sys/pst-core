@@ -296,7 +296,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelFontFamily: 'Verdana, Arial',
             axisLabelPadding: 3,
             tickFormatter: function (v, axis) {
-                return v;
+                return v.toFixed(0); // v;
             },
             minTickSize: 1
         },
@@ -337,7 +337,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelFontFamily: 'Verdana, Arial',
             axisLabelPadding: 3,
             tickFormatter: function (v, axis) {
-                return v.toFixed(2); // v;
+                return v.toFixed(0); // v;
             },
             minTickSize: 1
         },
@@ -378,7 +378,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelFontFamily: 'Verdana, Arial',
             axisLabelPadding: 3,
             tickFormatter: function (v, axis) {
-                return v.toFixed(2); // v;
+                return v.toFixed(0); // v;
             },
             minTickSize: 1
         },
@@ -420,7 +420,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelFontFamily: 'Verdana, Arial',
             axisLabelPadding: 3,
             tickFormatter: function (v, axis) {
-                return v.toFixed(2); // v;
+                return v.toFixed(0); // v;
             },
             minTickSize: 1
         },
