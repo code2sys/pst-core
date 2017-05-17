@@ -62,7 +62,7 @@ if (!function_exists("jsite_url")) {
 if (!function_exists("joverride_viewpiece")) {
     function joverride_viewpiece($viewpiece, $require_instead = false, $params = array()) {
         $filename = STORE_DIRECTORY . "/overrides/" . $viewpiece;
-        if (file_exists(filename)) {
+        if (file_exists($filename)) {
             if ($require_instead) {
                 require($filename);
                 return TRUE;
