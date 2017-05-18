@@ -183,7 +183,7 @@
 								<label for="dl" >Driver's License</label>
 							</td>
 							<td>
-								<input name="dl" placeholder="" value="<?php echo $_POST('dl');?>" />
+								<input name="dl" placeholder="" value="<?php echo $_POST['dl'];?>" />
 							</td>
 						</tr>
 						<tr>
