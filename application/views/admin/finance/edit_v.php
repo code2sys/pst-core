@@ -172,7 +172,7 @@ $reference = json_decode($application['reference']);
 						</tr>
 						<tr>
 							<td>
-								<label for="dl" >Driver's Lisence</label>
+								<label for="dl" >Driver's License</label>
 							</td>
 							<td>
 								<input name="dl" placeholder="" value="<?php echo $application['driver_licence'];?>" />

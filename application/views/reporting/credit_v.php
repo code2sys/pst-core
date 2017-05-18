@@ -43,7 +43,7 @@ $reference = json_decode($credit['reference']);
 	Cell(90,6, $contact_info->mname,0,1,'L',0);
 	Cell(90,6, 'Last Name :-',0,0,'L',0);
 	Cell(90,6, $credit['last_name'],0,1,'L',0);
-	Cell(90,6, "Driver's Lisence :-",0,0,'L',0);
+	Cell(90,6, "Driver's License :-",0,0,'L',0);
 	Cell(90,6, $credit['driver_licence'],0,1,'L',0);
 	Cell(90,6, 'Work Phone :-',0,0,'L',0);
 	Cell(90,6, $contact_info->wphone,0,1,'L',0);
