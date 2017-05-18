@@ -180,10 +180,10 @@
 						</tr>
 						<tr>
 							<td>
-								<label for="dl" >Driver's Lisence</label>
+								<label for="dl" >Driver's License</label>
 							</td>
 							<td>
-								<input name="dl" placeholder="" value="<?php echo set_value('dl');?>" />
+								<input name="dl" placeholder="" value="<?php echo $_POST('dl');?>" />
 							</td>
 						</tr>
 						<tr>
@@ -265,7 +265,7 @@
 								<label for="paddress" >Physical Address</label>
 							</td>
 							<td>
-								<input name="physical_address[paddress]" placeholder="" value="<?php echo $_POST['paddress'];?>" />
+								<input name="physical_address[paddress]" placeholder="" value="<?php echo $_POST['physical_address']['paddress'];?>" />
 								<span><b>*</b></span>
 							</td>
 						</tr>

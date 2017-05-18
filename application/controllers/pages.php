@@ -101,8 +101,8 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('employer_info[emp_zip]', 'Employer Zip', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[emp_phone]', 'Employer Phone', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[salary]', 'Salary(Annually Gross)', 'required|xss_clean');
-		$this->form_validation->set_rules('employer_info[months]', 'Time at Employer(Month)', 'required|xss_clean');
-		$this->form_validation->set_rules('employer_info[years]', 'Time at Employer(Year)', 'required|xss_clean');
+		$this->form_validation->set_rules('employer_info[month]', 'Time at Employer(Month)', 'required|xss_clean');
+		$this->form_validation->set_rules('employer_info[year]', 'Time at Employer(Year)', 'required|xss_clean');
 		return $this->form_validation->run();
 	}
 	
