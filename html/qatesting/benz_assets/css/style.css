@@ -1928,11 +1928,11 @@ p.creditCar_b.loct a i{
 
 }
 .hidden_table tr .star{
-    position: absolute;
+/*    position: absolute; */
     top: 16px;
     right: 10px;
     font-size: 15px;
-    z-index: ;
+/*    z-index: ; */
     padding: 0 10px;
 }
 
