@@ -452,9 +452,6 @@ class Admin extends Master_Controller {
         $this->_mainData['ytdRevenueLastYear'] = $this->reporting_m->getRevenueWithinDateRange(date("Y-01-01 00:00:00", $last_year), date("Y-m-d H:i:s", $last_year));
         $this->_mainData['ytdOrderCountLastYear'] = $this->reporting_m->getOrdersWithinDateRange(date("Y-01-01 00:00:00", $last_year), date("Y-m-d H:i:s", $last_year));
 
-        print "HERE";
-        exit();
-
         $days = array();
         $cnt = 0;
         $str = $str1 = $str2 = $str3 = array();

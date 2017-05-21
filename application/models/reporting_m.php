@@ -22,7 +22,7 @@ class Reporting_M extends Master_M {
         return $cnt;
     }
 
-    protected function getOrdersWithinDateRange($start_date_time, $end_date_time) {
+    public function getOrdersWithinDateRange($start_date_time, $end_date_time) {
         $cnt = 0;
         $query = $this->db->query("Select count(distinct `order`.id) as cnt from `order` join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date >= unix_timestamp(?) and order_date <= unix_timestamp(?) ", array($start_date_time, $end_date_time));
         foreach ($query->result_array() as $row) {
