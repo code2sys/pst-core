@@ -9,15 +9,46 @@ class Reporting_M extends Master_M {
         parent::__construct();
     }
 
+    /*
+     *  JLB 05-21-17
+     * Why didn't we just make one function instead of making so many duplicate calculations?
+     */
+    public function getRevenueWithinDateRange($start_date_time, $end_date_time) {
+        $query = $this->db->query("Select sum(sales_price) as cnt from `order` join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date >= unix_timestamp(?) and order_date <= unix_timestamp(?) ", array($start_date_time, $end_date_time));
+        $cnt = 0;
+        foreach ($query->result_array() as $row) {
+            $cnt = $row['cnt'];
+        }
+        return $cnt;
+    }
+
+    protected function getOrdersWithinDateRange($start_date, $end_date) {
+        $cnt = 0;
+        $query = $this->db->query("Select count(distinct `order`.id) as cnt from `order` join (select * from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date >= ? and order_date <= ?", array(strtotime($start_date), startotime($end_date)));
+        foreach ($query->result_array() as $row) {
+            $cnt = $row['cnt'];
+        }
+        return $cnt;
+    }
+
+    /*
+     *
+     */
     public function getOrdersPerMonth($monthTS) {
+        $year = date("Y", strtotime($monthTS));
+
+        for ($i = 0; $i < 12; $i++) {
+            $mn[$i] =
+        }
+
         $i = 0;
         $num = array();
         $mn = date('m', $monthTS);
         $st = strtotime(date('Y-m-01', $monthTS));
-        $ed = strtotime(date('Y-m-t', $monthTS));
+        $ed = strtotime(date('Y-m-t 23:59:59', $monthTS));
         while ($i < 12) {
-            $this->db->where('order_date >', $st);
-            $this->db->where('order_date <', $ed);
+            $this->db->where('order_date >=', $st);
+            $this->db->where('order_date <=', $ed);
             $this->db->from('order');
             $num[$mn] = $this->db->count_all_results();
             $i++;
@@ -25,6 +56,7 @@ class Reporting_M extends Master_M {
             $ed = strtotime(date('Y-m-t', $st));
             $mn = date('m', $st);
         }
+
         return $num;
     }
 
@@ -85,7 +117,7 @@ class Reporting_M extends Master_M {
         while ($i <= $number) {
             $dt = date('Y-m-').$i;
             $st = strtotime($dt);
-            $ed = strtotime($dt.' 23:59:00');
+            $ed = strtotime($dt.' 23:59:59');
             
             $this->db->where('order_date >', $st);
             $this->db->where('order_date <', $ed);
@@ -105,10 +137,10 @@ class Reporting_M extends Master_M {
         while ($i <= $number) {
             $dt = date('Y-m-d');
             $st = strtotime($dt.' '.$i.':00:00');
-            $ed = strtotime($dt.' '.$i.':59:00');
+            $ed = strtotime($dt.' '.$i.':59:59');
             
-            $this->db->where('order_date >', $st);
-            $this->db->where('order_date <', $ed);
+            $this->db->where('order_date >= ', $st);
+            $this->db->where('order_date <= ', $ed);
             
             $this->db->from('order');
             $num[$i] = $this->db->count_all_results();
@@ -126,10 +158,10 @@ class Reporting_M extends Master_M {
         while ($i < $number) {
             $dt = date('Y-m-').$i;
             $st = strtotime($dt);
-            $ed = strtotime($dt.' 23:59:00');
+            $ed = strtotime($dt.' 23:59:59');
             
-            $this->db->where('order_date >', $st);
-            $this->db->where('order_date <', $ed);
+            $this->db->where('order_date >= ', $st);
+            $this->db->where('order_date <= ', $ed);
             
             $this->db->from('order');
             $num[$i] = $this->db->count_all_results();
@@ -145,10 +177,10 @@ class Reporting_M extends Master_M {
         while ($i < $number) {
             $dt = date('Y-').sprintf("%02d", $i).'-01';
             $st = strtotime($dt);
-            $ed = strtotime(date('Y-').sprintf("%02d", $i).'-30'.' 23:59:00');
+            $ed = strtotime(date('Y-').sprintf("%02d", $i).'-30'.' 23:59:59');
             
-            $this->db->where('order_date >', $st);
-            $this->db->where('order_date <', $ed);
+            $this->db->where('order_date >= ', $st);
+            $this->db->where('order_date <= ', $ed);
             
             $this->db->from('order');
             $num[sprintf("%02d", $i)] = $this->db->count_all_results();
@@ -158,37 +190,37 @@ class Reporting_M extends Master_M {
     }
     
     
-    public function getTotalRevenue($monthTS) {
-        
-        $year = date('Y', strtotime($monthTS));
-        $previousYear = ($year-1);
-        
-        $data = array();
-        
-        $st = strtotime($previousYear.'-01-01');
-        $ed = strtotime($previousYear.'-12-31');
-        
-        $this->db->where('order_date >', $st);
-        $this->db->where('order_date <', $ed);
-        //$this->db->from('order');
-        $this->db->select('sum(sales_price) as total');
-        $record = $this->db->get('order');
-        $total = $record->row_array();
-        $data[$previousYear] = $total['total'];
-        
-        $st = strtotime(date('Y').'-01-01');
-        $ed = strtotime(date('Y').'-12-31');
-        
-        $this->db->where('order_date >', $st);
-        $this->db->where('order_date <', $ed);
-        //$this->db->from('order');
-        $this->db->select('sum(sales_price) as total');
-        $record = $this->db->get('order');
-        $total = $record->row_array();
-        $data[date('Y')] = $total['total'];
-        //$data[date('Y')] = $this->db->count_all_results();
-        return $data;
-    }
+//    public function getTotalRevenue($monthTS) {
+//
+//        $year = date('Y', strtotime($monthTS));
+//        $previousYear = ($year-1);
+//
+//        $data = array();
+//
+//        $st = strtotime($previousYear.'-01-01');
+//        $ed = strtotime($previousYear.'-12-31 23:59:59');
+//
+//        $this->db->where('order_date >= ', $st);
+//        $this->db->where('order_date <= ', $ed);
+//        //$this->db->from('order');
+//        $this->db->select('sum(sales_price) as total');
+//        $record = $this->db->get('order');
+//        $total = $record->row_array();
+//        $data[$previousYear] = $total['total'];
+//
+//        $st = strtotime(date('Y').'-01-01');
+//        $ed = strtotime(date('Y').'-12-31');
+//
+//        $this->db->where('order_date >', $st);
+//        $this->db->where('order_date <', $ed);
+//        //$this->db->from('order');
+//        $this->db->select('sum(sales_price) as total');
+//        $record = $this->db->get('order');
+//        $total = $record->row_array();
+//        $data[date('Y')] = $total['total'];
+//        //$data[date('Y')] = $this->db->count_all_results();
+//        return $data;
+//    }
     
     private function array2csv(array &$array) {
         if (count($array) == 0) {
