@@ -37,9 +37,6 @@ class Reporting_M extends Master_M {
     public function getOrdersPerMonth($monthTS) {
         $year = date("Y", strtotime($monthTS));
 
-        for ($i = 0; $i < 12; $i++) {
-            $mn[$i] =
-        }
 
         $i = 0;
         $num = array();
