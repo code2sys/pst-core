@@ -32,7 +32,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 
                 </div>
                 <div class="col-total">
-                    <div class="total-1">
+                    <div class="total-1" last_year="<?php echo $ytdRevenueLastYear; ?>" this_year="<?php echo $ytdRevenueThisYear; ?>">
                         <p class="main">TOTAL SALES YTD</P>
                         <p class="grow"><?php if ($ytdRevenueLastYear > 0 && $ytdRevenueLastYear != $ytdRevenueThisYear): ?><i class="fa fa-caret-<?php if ($ytdRevenueLastYear < $ytdRevenueThisYear): ?>up<?php else: ?>down<?php endif; ?>" aria-hidden="true"></i><?php echo number_format(100 * ($ytdRevenueThisYear - $ytdRevenueLastYear) / (1.0 * $ytdRevenueLastYear), 0); ?>%<?php endif; ?></P>
                     </div>
