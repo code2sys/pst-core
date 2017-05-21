@@ -431,7 +431,7 @@ class Admin extends Master_Controller {
 
         $this->load->model('admin_m');
         $this->_mainData['totalOrders'] = $this->reporting_m->getOrdersPerMonthDashboard(date('Y-m-d'));
-        $this->_mainData['totalCustomers'] = $this->reporting_m->getCusomersPerMonthDashboard();
+        $this->_mainData['totalCustomers'] = $this->reporting_m->getCountCustomersWithOrders();
         $arr = array();
         $arr['status'][] = 'approved';
         $arr['status'][] = 'processing';

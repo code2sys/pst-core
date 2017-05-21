@@ -31,6 +31,15 @@ class Reporting_M extends Master_M {
         return $cnt;
     }
 
+    public function getCountCustomersWithOrders() {
+        $cnt = 0;
+        $query = $this->db->query("Select count(distinct `order`.user_id) as cnt from `order` join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id  ", array());
+        foreach ($query->result_array() as $row) {
+            $cnt = $row['cnt'];
+        }
+        return $cnt;
+    }
+
     /*
      *
      */
