@@ -19,12 +19,12 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             <div class="container" style="min-height: 220px;">
                 <div class="col-total">
                     <div class="total-1">
-                        <p class="main">TOTAL ORDERS</P>
-                        <p class="grow"><i class="fa fa-caret-up" aria-hidden="true"></i><?php echo $orderPer . '%'; ?></P>
+                        <p class="main">TOTAL ORDERS YTD</P>
+                        <p class="grow"><?php if ($ytdOrderCountLastYear > 0 && $ytdOrderCountLastYear != $ytdOrderCountThisYear): ?><i class="fa fa-caret-<?php if ($ytdOrderCountLastYear < $ytdOrderCountThisYear): ?>up<?php else: ?>down<?php endif; ?>" aria-hidden="true"></i><?php echo number_format(100 * ($ytdOrderCountThisYear - $ytdOrderCountLastYear) / (1.0 * $ytdOrderCountLastYear), 0); ?>%<?php endif; ?></P>
                     </div>
                     <div class="total-2">
                         <p class="main1"><i class="fa fa-shopping-cart" aria-hidden="true"></i></P>
-                        <p class="grow1"><?php echo $totalOrders[date('Y')]; ?></P>
+                        <p class="grow1"><?php echo number_format($ytdOrderCountThisYear, 0); ?></P>
                     </div>
                     <div class="total-3">
                         <p class="main2"><a href="<?php echo site_url('admin/orders'); ?>" style="color:white;">View More...</a></P>
