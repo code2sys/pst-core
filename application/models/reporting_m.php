@@ -31,9 +31,9 @@ class Reporting_M extends Master_M {
         return $cnt;
     }
 
-    public function getCountCustomersWithOrders() {
+    public function getCountCustomersforDashboard() {
         $cnt = 0;
-        $query = $this->db->query("Select count(distinct `order`.user_id) as cnt from `order` join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id  ", array());
+        $query = $this->db->query("Select count(distinct user.id) as cnt from user join  contact on user.billing_id = contact.id;", array());
         foreach ($query->result_array() as $row) {
             $cnt = $row['cnt'];
         }
