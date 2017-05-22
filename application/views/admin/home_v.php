@@ -327,7 +327,9 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
             axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 3
+            axisLabelPadding: 3,
+            tickFormatter: function(val, axis) { return val < axis.max ? '$' + val.toFixed(2) : "$ Revenue";}
+
         }],
         legend: {
             noColumns: 0,
@@ -364,7 +366,9 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
             axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 3
+            axisLabelPadding: 3,
+            tickFormatter: function(val, axis) { return val < axis.max ? '$' + val.toFixed(2) : "$ Revenue";}
+
         }],
         legend: {
             noColumns: 0,
@@ -401,7 +405,9 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
             axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 3
+            axisLabelPadding: 3,
+            tickFormatter: function(val, axis) { return val < axis.max ? '$' + val.toFixed(2) : "$ Revenue";}
+
         }],
         legend: {
             noColumns: 0,
@@ -438,7 +444,8 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
             axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 3
+            axisLabelPadding: 3,
+            tickFormatter: function(val, axis) { return val < axis.max ? '$' + val.toFixed(2) : "$ Revenue";}
         }],
         legend: {
             noColumns: 0,
