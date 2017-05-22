@@ -397,7 +397,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             minTickSize: 1
         }, {
             minTickSize: 25.00,
-            position: "right",
+            position: 0,
             color: "blue",
             axisLabel: "$",
             axisLabelUseCanvas: true,
