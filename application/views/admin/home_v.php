@@ -509,7 +509,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             },
             {
-                label: " $ Reenue ",
+                label: " $ Revenue ",
                 data: sevenDaysDataDollars,
                 yaxis: 2,
                 bars: {
