@@ -389,14 +389,14 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //    });
     
     var options = {
-        series: {
-            bars: {
-                show: true,
-                barWidth: 0.15,
-                align: "center",
-                order: 1
-            }
-        },
+//        series: {
+//            bars: {
+//                show: true,
+//                barWidth: 0.15,
+//                align: "center",
+//                order: 1
+//            }
+//        },
 //        bars: {
 //            align: "center",
 //            barWidth: 0.5
@@ -440,14 +440,14 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         }
     };
     var options1 = {
-        series: {
-            bars: {
-                show: true,
-                barWidth: 0.15,
-                align: "center",
-                order: 1
-            }
-        },
+//        series: {
+//            bars: {
+//                show: true,
+//                barWidth: 0.15,
+//                align: "center",
+//                order: 1
+//            }
+//        },
 //        bars: {
 //            align: "center",
 //            barWidth: 0.5
@@ -491,14 +491,14 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         }
     };
     var options2 = {
-        series: {
-            bars: {
-                show: true,
-                barWidth: 0.15,
-                align: "center",
-                order: 1
-            }
-        },
+//        series: {
+//            bars: {
+//                show: true,
+//                barWidth: 0.15,
+//                align: "center",
+//                order: 1
+//            }
+//        },
 //        bars: {
 //            align: "center",
 //            barWidth: 0.5
@@ -542,14 +542,14 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         }
     };
     var options3 = {
-        series: {
-            bars: {
-                show: true,
-                barWidth: 0.15,
-                align: "center",
-                order: 1
-            }
-        },
+//        series: {
+//            bars: {
+//                show: true,
+//                barWidth: 0.15,
+//                align: "center",
+//                order: 1
+//            }
+//        },
 //        bars: {
 //            align: "center",
 //            barWidth: 0.5
