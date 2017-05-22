@@ -73,27 +73,6 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             </div>
         </div>
 
-           <?php
-
-            print "Today: <br/><pre>";
-            print_r($todaysData);
-            print "</pre><br/><br/>";
-
-            print "7 day: <br/><pre>";
-            print_r($sevenDayData);
-            print "</pre><br/><br/>";
-
-            print "30 day: <br/><pre>";
-            print_r($thirtyDayData);
-            print "</pre><br/><br/>";
-
-            print "1 year: <br/><pre>";
-            print_r($oneYearData);
-            print "</pre><br/><br/>";
-
-            ?>
-
-
         <div class="dash-sec-1">
             <div class="container">
                 <div class="panel-heading">
