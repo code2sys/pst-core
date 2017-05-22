@@ -1,3 +1,27 @@
+Update May 22, 2017
+===================
+
+Changing Text
+-------------
+
+Eventually, this site needs an override of all end-user-visible language so that it can be edited at will.  In the short term, we will use constant overrides.
+
+I had to change the wording from SCHEDULE TEST DRIVE to SCHEDULE A DEMO for Six Gear. Once again - we use wording overrides. Be sure to follow the naming convention and to give your new constant a unique name.
+
+Addition to environment.php - only as appropriate:
+
+<pre>
+// wording override
+define('WORDING_SCHEDULE_TEST_DRIVE', 'SCHEDULE A DEMO');
+</pre>
+
+Change to the view to use the constant only if defined:
+
+<pre>
+<li style="margin-right:10px;" data-toggle="modal" data-target="#myModal"><a href="#"><?php if (defined('WORDING_SCHEDULE_TEST_DRIVE')) { echo WORDING_SCHEDULE_TEST_DRIVE; } else { ?>SCHEDULE TEST DRIVE<?php } ?></a></li>
+</pre>
+
+
 Update May 14, 2017
 ===================
 

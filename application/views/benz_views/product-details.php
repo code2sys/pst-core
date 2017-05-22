@@ -230,7 +230,7 @@ unset($motorcycle['videos'][0]);
 					<div class="form-group">						
 						<input type="text" class="form-control" placeholder="zip code" name="zipcode">
 					</div>				
-					<h3 class="txt-title">Want to Schedule a Test Drive?</h3>
+					<h3 class="txt-title"><?php if (defined('WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE')) { echo WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE; } else { ?>Want to Schedule a Test Drive?<?php } ?></h3>
 					
 					<div class="form-group">						
 						<input type="text" class="form-control" placeholder="date of ride" name="date_of_ride">
