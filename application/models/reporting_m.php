@@ -13,6 +13,72 @@ class Reporting_M extends Master_M {
      *  JLB 05-21-17
      * Why didn't we just make one function instead of making so many duplicate calculations?
      */
+    public function getDashboardStatsByHour($start_date_time, $end_date_time) {
+        $matches = $this->sub_getDashboardStatsByInterval($start_date_time, $end_date_time, "year(from_unixtime(order_date)) as year, month(from_unixtime(order_date)) as month, day(from_unixtime(order_date)) as day, hour(from_unixtime(order_date)) as hour", "year, month, hour");
+
+        return $this->sub_explodeForAllTime($matches, $start_date_time, $end_date_time, "1 hour");
+    }
+
+    protected function sub_explodeForAllTime($matches, $start_date_time, $end_date_time, $time_increment) {
+
+        // now, explode out all the options in the range...
+        $out_rows = array();
+
+        // We're going to do a modified merge sort.
+        $start_timestamp = strtotime($start_date_time);
+        $end_timestamp = strtotime($end_date_time);
+
+        $current_out_row = 0;
+
+        $current_timestamp = $start_timestamp;
+
+        while ($current_timestamp <= $end_timestamp) {
+            $year = intVal(date("Y", $current_timestamp));
+            $month = intVal(date("m", $current_timestamp));
+            $day = inVal(date("d", $current_timestamp));
+            $hour = intVal(date("H", $current_timestamp));
+
+            if ($current_out_row < count($matches) && (!array_key_exists("year", $matches[$current_out_row]) || intVal($matches[$current_out_row]["year"]) == $year) && (!array_key_exists("month", $matches[$current_out_row]) || intVal($matches[$current_out_row]["month"]) == $month) && (!array_key_exists("day", $matches[$current_out_row]) || intVal($matches[$current_out_row]["day"]) == $day) && (!array_key_exists("hour", $matches[$current_out_row]) || intVal($matches[$current_out_row]["hour"]) == $hour)) {
+                // then we have to shove it along
+                $out_rows[] = $matches[$current_out_row];
+                $current_out_row++;
+            } else {
+                $out_rows[] = array(
+                    "total_sales_dollars" => 0,
+                    "number_orders" => 0,
+                    "distinct_customers" => 0,
+                    "year" => $year,
+                    "month" => $month,
+                    "date" => $day,
+                    "hour" => $hour
+                );
+            }
+
+            $current_timestamp = strtotime($time_increment, $current_timestamp);
+        }
+
+        return $out_rows;
+    }
+
+    public function getDashboardStatsByDay($start_date_time, $end_date_time) {
+        $matches = $this->sub_getDashboardStatsByInterval($start_date_time, $end_date_time, "year(from_unixtime(order_date)) as year, month(from_unixtime(order_date)) as month, day(from_unixtime(order_date)) as day", "year, month, day");
+
+        // now, explode out all the options in the range...
+        return $this->sub_explodeForAllTime($matches, $start_date_time, $end_date_time, "1 day");
+    }
+
+    public function getDashboardStatsByMonth($start_date_time, $end_date_time) {
+        $matches = $this->sub_getDashboardStatsByInterval($start_date_time, $end_date_time, "year(from_unixtime(order_date)) as year, month(from_unixtime(order_date)) as month", "year, month");
+
+        // now, explode out all the options in the range...
+        return $this->sub_explodeForAllTime($matches, $start_date_time, $end_date_time, "1 month");
+    }
+
+    protected function sub_getDashboardStatsByInterval($start_date_time, $end_date_time, $selection_labels, $grouping_labels) {
+        $query = $this->db->query("select sum(sales_price) as total_sales_dollars, count(distinct `order`.id) as number_orders, count(distinct user_id) as distinct_customers, $selection_labels from `order` join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id  where order_date >= unix_timestamp(?) and order_date <= unix_timestamp(?) group by $grouping_labels order by $grouping_labels", array($start_date_time, $end_date_time));
+        return $query->result_array();
+    }
+
     public function getRevenueWithinDateRange($start_date_time, $end_date_time) {
         $query = $this->db->query("Select sum(sales_price) as cnt from `order` join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date >= unix_timestamp(?) and order_date <= unix_timestamp(?) ", array($start_date_time, $end_date_time));
         $cnt = 0;
