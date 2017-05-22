@@ -599,6 +599,52 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             }
         ], options3);
         $("#flot-placeholder3").UseTooltip();
+
+        //tooltip function
+        function showTooltip(x, y, contents, areAbsoluteXY) {
+            var rootElt = 'body';
+
+            $('<div id="tooltip" class="tooltip-with-bg">' + contents + '</div>').css( {
+                position: 'absolute',
+                display: 'none',
+                'z-index':'1010',
+                top: y,
+                left: x
+            }).prependTo(rootElt).show();
+        };
+
+        //add tooltip event
+        $("#flot-placeholder2").bind("plothover", function (event, pos, item) {
+            if (item) {
+                if (previousPoint != item.datapoint) {
+                    previousPoint = item.datapoint;
+
+                    //delete de prÃ©cÃ©dente tooltip
+                    $('.tooltip-with-bg').remove();
+
+                    var x = item.datapoint[0];
+
+                    //All the bars concerning a same x value must display a tooltip with this value and not the shifted value
+                    if(item.series.bars.order){
+                        for(var i=0; i < item.series.data.length; i++){
+                            if(item.series.data[i][3] == item.datapoint[0])
+                                x = item.series.data[i][0];
+                        }
+                    }
+
+                    var y = item.datapoint[1];
+
+                    showTooltip(item.pageX+5, item.pageY+5,x + " = " + y);
+
+                }
+            }
+            else {
+                $('.tooltip-with-bg').remove();
+                previousPoint = null;
+            }
+
+        });
+
     });
 
     function gd(year, month, day) {
