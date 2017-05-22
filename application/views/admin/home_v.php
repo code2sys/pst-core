@@ -386,8 +386,8 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             tickLength: 1
         },
         yaxes: [{
-            position: 0,
-            color: "black",
+            position: "left",
+            color: "blue",
             axisLabel: "#",
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
@@ -397,8 +397,8 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             minTickSize: 1
         }, {
             minTickSize: 25.00,
-            position: 0,
-            color: "blue",
+            position: "right",
+            color: "red",
             axisLabel: "$",
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
