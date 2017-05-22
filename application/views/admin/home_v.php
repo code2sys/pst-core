@@ -179,12 +179,6 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         user-select: none;
     }
 </style>
-<!--
-<?php
-
-print_r($oneYearsData);
-?>
--->
 
 <script>
     var todaysDataOrders = <?php
