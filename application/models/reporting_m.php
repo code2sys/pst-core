@@ -35,7 +35,7 @@ class Reporting_M extends Master_M {
         while ($current_timestamp <= $end_timestamp) {
             $year = intVal(date("Y", $current_timestamp));
             $month = intVal(date("m", $current_timestamp));
-            $day = inVal(date("d", $current_timestamp));
+            $day = intVal(date("d", $current_timestamp));
             $hour = intVal(date("H", $current_timestamp));
 
             if ($current_out_row < count($matches) && (!array_key_exists("year", $matches[$current_out_row]) || intVal($matches[$current_out_row]["year"]) == $year) && (!array_key_exists("month", $matches[$current_out_row]) || intVal($matches[$current_out_row]["month"]) == $month) && (!array_key_exists("day", $matches[$current_out_row]) || intVal($matches[$current_out_row]["day"]) == $day) && (!array_key_exists("hour", $matches[$current_out_row]) || intVal($matches[$current_out_row]["hour"]) == $hour)) {
