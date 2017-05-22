@@ -247,7 +247,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 $i + 1, round($sevenDaysData[$i]["total_sales_dollars"], 2)
             );
             $sevenDays_keys_orders[] = array(
-                $i + 1, date("m/d", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $sevenDaysData[$i]["year"], $sevenDaysData[$i]["month"], $sevenDaysData[$i]["day"])))
+                $i + 1, date("m-d", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $sevenDaysData[$i]["year"], $sevenDaysData[$i]["month"], $sevenDaysData[$i]["day"])))
             );
         }
         echo json_encode($sevenDays_data_orders, JSON_NUMERIC_CHECK);
@@ -275,7 +275,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 $i + 1, round($thirtyDaysData[$i]["total_sales_dollars"], 2)
             );
             $thirtyDays_keys_orders[] = array(
-                $i + 1, date("m/d", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $thirtyDaysData[$i]["year"], $thirtyDaysData[$i]["month"], $thirtyDaysData[$i]["day"])))
+                $i + 1, date("m-d", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $thirtyDaysData[$i]["year"], $thirtyDaysData[$i]["month"], $thirtyDaysData[$i]["day"])))
             );
         }
         echo json_encode($thirtyDays_data_orders, JSON_NUMERIC_CHECK);
@@ -303,7 +303,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 $i + 1, round($oneYearsData[$i]["total_sales_dollars"], 2)
             );
             $oneYears_keys_orders[] = array(
-                $i + 1, date("m/d", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $oneYearsData[$i]["year"], $oneYearsData[$i]["month"], $oneYearsData[$i]["day"])))
+                $i + 1, date("m-Y", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $oneYearsData[$i]["year"], $oneYearsData[$i]["month"], $oneYearsData[$i]["day"])))
             );
         }
         echo json_encode($oneYears_data_orders, JSON_NUMERIC_CHECK);
@@ -434,7 +434,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            ticks: ticks
         },
         yaxis: {
-            allowDecimals: false
+            allowDecimals: false,
 //            axisLabel: "Average Temperature",
 //            axisLabelUseCanvas: true,
 //            axisLabelFontSizePixels: 12,
@@ -481,7 +481,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            ticks: ticks
         },
         yaxis: {
-            allowDecimals: false
+            allowDecimals: false,
 //            axisLabel: "Average Temperature",
 //            axisLabelUseCanvas: true,
 //            axisLabelFontSizePixels: 12,
@@ -528,7 +528,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            ticks: ticks
         },
         yaxis: {
-            allowDecimals: false
+            allowDecimals: false,
 //            axisLabel: "Average Temperature",
 //            axisLabelUseCanvas: true,
 //            axisLabelFontSizePixels: 12,
@@ -575,7 +575,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            ticks: ticks
         },
         yaxis: {
-            allowDecimals: false
+            allowDecimals: false,
 //            axisLabel: "Average Temperature",
 //            axisLabelUseCanvas: true,
 //            axisLabelFontSizePixels: 12,
