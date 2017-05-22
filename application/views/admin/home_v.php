@@ -614,7 +614,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         };
 
         //add tooltip event
-        $("#flot-placeholder2").bind("plothover", function (event, pos, item) {
+        var ttfunc = function (event, pos, item) {
             if (item) {
                 if (previousPoint != item.datapoint) {
                     previousPoint = item.datapoint;
@@ -634,7 +634,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 
                     var y = item.datapoint[1];
 
-                    showTooltip(item.pageX, item.pageY+10, y);
+                    showTooltip(item.pageX, item.pageY - 15, y);
 
                 }
             }
@@ -643,7 +643,12 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 previousPoint = null;
             }
 
-        });
+        };
+
+        $("#flot-placeholder").bind("plothover", ttfunc);
+        $("#flot-placeholder1").bind("plothover", ttfunc);
+        $("#flot-placeholder2").bind("plothover", ttfunc);
+        $("#flot-placeholder3").bind("plothover", ttfunc);
 
     });
 
