@@ -515,6 +515,13 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            ticks: ticks
         },
         yaxis: [{
+            position: "left",
+            color: "black",
+            axisLabel: "#",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 3,
             allowDecimals: false,
 //            axisLabel: "Average Temperature",
 //            axisLabelUseCanvas: true,
@@ -527,8 +534,13 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             minTickSize: 1
         }, {
             minTickSize: 25.00,
-            alignTicksWithAxis: 2,
-            position: "right"
+            position: "right",
+            color: "black",
+            axisLabel: "PI * x",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 3
         }],
         legend: {
             noColumns: 0,
