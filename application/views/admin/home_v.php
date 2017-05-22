@@ -386,7 +386,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             tickLength: 1
         },
         yaxis: [{
-            position: "left",
+            position: 0,
             color: "black",
             axisLabel: "#",
             axisLabelUseCanvas: true,
