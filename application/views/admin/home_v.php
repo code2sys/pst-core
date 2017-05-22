@@ -531,7 +531,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             {
                 label: "# Orders",
                 data: thirtyDaysData,
-                yaxis: 0,
+                yaxis: 1,
                 bars: {
                     show: true,
                     barWidth: 0.1,
@@ -541,7 +541,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             {
                 label: "# Customers",
                 data: thirtyDaysDataCustomers,
-                yaxis: 0,
+                yaxis: 2,
                 bars: {
                     show: true,
                     barWidth: 0.1,
