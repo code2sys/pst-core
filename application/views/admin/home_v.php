@@ -496,7 +496,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             }
         ], options);
-        $("#flot-placeholder").UseTooltip();
+        //$("#flot-placeholder").UseTooltip();
         
         $.plot($("#flot-placeholder1"), [
             {
@@ -530,7 +530,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             }
         ], options1);
-        $("#flot-placeholder1").UseTooltip();
+        //$("#flot-placeholder1").UseTooltip();
         
         $.plot($("#flot-placeholder2"), [
             {
@@ -564,7 +564,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             }
         ], options2);
-        $("#flot-placeholder2").UseTooltip();
+        //$("#flot-placeholder2").UseTooltip();
 
         $.plot($("#flot-placeholder3"), [
             {
@@ -598,7 +598,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             }
         ], options3);
-        $("#flot-placeholder3").UseTooltip();
+        //$("#flot-placeholder3").UseTooltip();
 
         //tooltip function
         function showTooltip(x, y, contents, areAbsoluteXY) {
