@@ -309,13 +309,25 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             ticks: <?php echo json_encode($todays_keys_orders); ?>,
             tickLength: 1
         },
-        yaxis: [{
+        yaxes: [{
+            position: "left",
+            color: "blue",
+            axisLabel: "#",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 3,
             allowDecimals: false,
             minTickSize: 1
         }, {
             minTickSize: 25.00,
-            alignTicksWithAxis: 2,
-            position: "right"
+            position: "right",
+            color: "red",
+            axisLabel: "$",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 3
         }],
         legend: {
             noColumns: 0,
@@ -329,44 +341,30 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         }
     };
     var options1 = {
-//        series: {
-//            bars: {
-//                show: true,
-//                barWidth: 0.15,
-//                align: "center",
-//                order: 1
-//            }
-//        },
-//        bars: {
-//            align: "center",
-//            barWidth: 0.5
-//        },
         xaxis: {
             mode: "categories",
             ticks: <?php echo json_encode($sevenDays_keys_orders); ?>,
             tickLength: 1
-//            axisLabel: "World Cities",
-//            axisLabelUseCanvas: true,
-//            axisLabelFontSizePixels: 12,
-//            axisLabelFontFamily: 'Verdana, Arial',
-//            axisLabelPadding: 10,
-//            ticks: ticks
         },
-        yaxis: [{
+        yaxes: [{
+            position: "left",
+            color: "blue",
+            axisLabel: "#",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 3,
             allowDecimals: false,
-//            axisLabel: "Average Temperature",
-//            axisLabelUseCanvas: true,
-//            axisLabelFontSizePixels: 12,
-//            axisLabelFontFamily: 'Verdana, Arial',
-//            axisLabelPadding: 3,
-//            tickFormatter: function (v, axis) {
-//                return v.toFixed(0); // v;
-//            },
             minTickSize: 1
         }, {
             minTickSize: 25.00,
-            alignTicksWithAxis: 2,
-            position: "right"
+            position: "right",
+            color: "red",
+            axisLabel: "$",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 3
         }],
         legend: {
             noColumns: 0,
@@ -417,44 +415,30 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         }
     };
     var options3 = {
-//        series: {
-//            bars: {
-//                show: true,
-//                barWidth: 0.15,
-//                align: "center",
-//                order: 1
-//            }
-//        },
-//        bars: {
-//            align: "center",
-//            barWidth: 0.5
-//        },
         xaxis: {
             mode: "categories",
             ticks: <?php echo json_encode($oneYears_keys_orders); ?>,
             tickLength: 1
-//            axisLabel: "World Cities",
-//            axisLabelUseCanvas: true,
-//            axisLabelFontSizePixels: 12,
-//            axisLabelFontFamily: 'Verdana, Arial',
-//            axisLabelPadding: 10,
-//            ticks: ticks
         },
-        yaxis: [{
+        yaxes: [{
+            position: "left",
+            color: "blue",
+            axisLabel: "#",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 3,
             allowDecimals: false,
-//            axisLabel: "Average Temperature",
-//            axisLabelUseCanvas: true,
-//            axisLabelFontSizePixels: 12,
-//            axisLabelFontFamily: 'Verdana, Arial',
-//            axisLabelPadding: 3,
-//            tickFormatter: function (v, axis) {
-//                return v.toFixed(0); // v;
-//            },
             minTickSize: 1
         }, {
             minTickSize: 25.00,
-            alignTicksWithAxis: 2,
-            position: "right"
+            position: "right",
+            color: "red",
+            axisLabel: "$",
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial',
+            axisLabelPadding: 3
         }],
         legend: {
             noColumns: 0,
@@ -471,7 +455,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
     $(document).ready(function () {
         $.plot($("#flot-placeholder"), [
             {
-                label: "# Orders",
+                label: " # Orders ",
                 data: todaysDataOrders,
                 yaxis: 1,
                 bars: {
@@ -481,7 +465,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             },
             {
-                label: "# Customers",
+                label: " # Customers ",
                 data: todaysDataCustomers,
                 yaxis: 1,
                 bars: {
@@ -491,7 +475,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             },
             {
-                label: "$ Sales",
+                label: " $ Revenue ",
                 data: todaysDataDollars,
                 yaxis: 2,
                 bars: {
@@ -505,7 +489,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         
         $.plot($("#flot-placeholder1"), [
             {
-                label: "# Orders",
+                label: " # Orders ",
                 data: sevenDaysDataOrders,
                 yaxis: 1,
                 bars: {
@@ -515,7 +499,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             },
             {
-                label: "# Customers",
+                label: " # Customers ",
                 data: sevenDaysDataCustomers,
                 yaxis: 1,
                 bars: {
@@ -525,7 +509,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             },
             {
-                label: "$ Sales",
+                label: " $ Reenue ",
                 data: sevenDaysDataDollars,
                 yaxis: 2,
                 bars: {
@@ -539,7 +523,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         
         $.plot($("#flot-placeholder2"), [
             {
-                label: "# Orders",
+                label: " # Orders ",
                 data: thirtyDaysData,
                 yaxis: 1,
                 bars: {
@@ -549,7 +533,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             },
             {
-                label: "# Customers",
+                label: " # Customers ",
                 data: thirtyDaysDataCustomers,
                 yaxis: 1,
                 bars: {
@@ -559,7 +543,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             },
             {
-                label: "$ Sales",
+                label: " $ Revenue ",
                 data: thirtyDaysDataDollars,
                 yaxis: 2,
                 bars: {
@@ -573,7 +557,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 
         $.plot($("#flot-placeholder3"), [
             {
-                label: "# Orders",
+                label: " # Orders ",
                 data: oneYearsData,
                 yaxis: 1,
                 bars: {
@@ -583,7 +567,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             },
             {
-                label: "# Customers",
+                label: " # Customers ",
                 data: oneYearsDataCustomers,
                 yaxis: 1,
                 bars: {
@@ -593,7 +577,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 }
             },
             {
-                label: "$ Sales",
+                label: " $ Revenue ",
                 data: oneYearsDataDollars,
                 yaxis: 2,
                 bars: {
