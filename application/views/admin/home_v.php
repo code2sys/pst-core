@@ -634,7 +634,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 
                     var y = item.datapoint[1];
 
-                    showTooltip(item.pageX+5, item.pageY+5,x + " = " + y);
+                    showTooltip(item.pageX+5, item.pageY+5, y);
 
                 }
             }
