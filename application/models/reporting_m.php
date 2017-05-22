@@ -9,15 +9,118 @@ class Reporting_M extends Master_M {
         parent::__construct();
     }
 
+    /*
+     *  JLB 05-21-17
+     * Why didn't we just make one function instead of making so many duplicate calculations?
+     */
+    public function getDashboardStatsByHour($start_date_time, $end_date_time) {
+        $matches = $this->sub_getDashboardStatsByInterval($start_date_time, $end_date_time, "year(from_unixtime(order_date)) as year, month(from_unixtime(order_date)) as month, day(from_unixtime(order_date)) as day, hour(from_unixtime(order_date)) as hour", "year, month, hour");
+
+        return $this->sub_explodeForAllTime($matches, $start_date_time, $end_date_time, "1 hour");
+    }
+
+    protected function sub_explodeForAllTime($matches, $start_date_time, $end_date_time, $time_increment) {
+
+        // now, explode out all the options in the range...
+        $out_rows = array();
+
+        // We're going to do a modified merge sort.
+        $start_timestamp = strtotime($start_date_time);
+        $end_timestamp = strtotime($end_date_time);
+
+        $current_out_row = 0;
+
+        $current_timestamp = $start_timestamp;
+
+        while ($current_timestamp <= $end_timestamp) {
+            $year = intVal(date("Y", $current_timestamp));
+            $month = intVal(date("m", $current_timestamp));
+            $day = intVal(date("d", $current_timestamp));
+            $hour = intVal(date("H", $current_timestamp));
+
+            if ($current_out_row < count($matches) && (!array_key_exists("year", $matches[$current_out_row]) || intVal($matches[$current_out_row]["year"]) == $year) && (!array_key_exists("month", $matches[$current_out_row]) || intVal($matches[$current_out_row]["month"]) == $month) && (!array_key_exists("day", $matches[$current_out_row]) || intVal($matches[$current_out_row]["day"]) == $day) && (!array_key_exists("hour", $matches[$current_out_row]) || intVal($matches[$current_out_row]["hour"]) == $hour)) {
+                // then we have to shove it along
+                $out_rows[] = $matches[$current_out_row];
+                $current_out_row++;
+            } else {
+                $out_rows[] = array(
+                    "total_sales_dollars" => 0,
+                    "number_orders" => 0,
+                    "distinct_customers" => 0,
+                    "year" => $year,
+                    "month" => $month,
+                    "day" => $day,
+                    "hour" => $hour
+                );
+            }
+
+            $current_timestamp = strtotime($time_increment, $current_timestamp);
+        }
+
+        return $out_rows;
+    }
+
+    public function getDashboardStatsByDay($start_date_time, $end_date_time) {
+        $matches = $this->sub_getDashboardStatsByInterval($start_date_time, $end_date_time, "year(from_unixtime(order_date)) as year, month(from_unixtime(order_date)) as month, day(from_unixtime(order_date)) as day", "year, month, day");
+
+        // now, explode out all the options in the range...
+        return $this->sub_explodeForAllTime($matches, $start_date_time, $end_date_time, "1 day");
+    }
+
+    public function getDashboardStatsByMonth($start_date_time, $end_date_time) {
+        $matches = $this->sub_getDashboardStatsByInterval($start_date_time, $end_date_time, "year(from_unixtime(order_date)) as year, month(from_unixtime(order_date)) as month", "year, month");
+
+        // now, explode out all the options in the range...
+        return $this->sub_explodeForAllTime($matches, $start_date_time, $end_date_time, "1 month");
+    }
+
+    protected function sub_getDashboardStatsByInterval($start_date_time, $end_date_time, $selection_labels, $grouping_labels) {
+        $query = $this->db->query("select sum(sales_price) as total_sales_dollars, count(distinct `order`.id) as number_orders, count(distinct user_id) as distinct_customers, $selection_labels from `order` join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id  where order_date >= unix_timestamp(?) and order_date <= unix_timestamp(?) group by $grouping_labels order by $grouping_labels", array($start_date_time, $end_date_time));
+        return $query->result_array();
+    }
+
+    public function getRevenueWithinDateRange($start_date_time, $end_date_time) {
+        $query = $this->db->query("Select sum(sales_price) as cnt from `order` join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date >= unix_timestamp(?) and order_date <= unix_timestamp(?) ", array($start_date_time, $end_date_time));
+        $cnt = 0;
+        foreach ($query->result_array() as $row) {
+            $cnt = $row['cnt'];
+        }
+        return $cnt;
+    }
+
+    public function getOrdersWithinDateRange($start_date_time, $end_date_time) {
+        $cnt = 0;
+        $query = $this->db->query("Select count(distinct `order`.id) as cnt from `order` join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date >= unix_timestamp(?) and order_date <= unix_timestamp(?) ", array($start_date_time, $end_date_time));
+        foreach ($query->result_array() as $row) {
+            $cnt = $row['cnt'];
+        }
+        return $cnt;
+    }
+
+    public function getCountCustomersforDashboard() {
+        $cnt = 0;
+        $query = $this->db->query("Select count(distinct user.id) as cnt from user join  contact on user.billing_id = contact.id;", array());
+        foreach ($query->result_array() as $row) {
+            $cnt = $row['cnt'];
+        }
+        return $cnt;
+    }
+
+    /*
+     *
+     */
     public function getOrdersPerMonth($monthTS) {
+        $year = date("Y", strtotime($monthTS));
+
+
         $i = 0;
         $num = array();
         $mn = date('m', $monthTS);
         $st = strtotime(date('Y-m-01', $monthTS));
-        $ed = strtotime(date('Y-m-t', $monthTS));
+        $ed = strtotime(date('Y-m-t 23:59:59', $monthTS));
         while ($i < 12) {
-            $this->db->where('order_date >', $st);
-            $this->db->where('order_date <', $ed);
+            $this->db->where('order_date >=', $st);
+            $this->db->where('order_date <=', $ed);
             $this->db->from('order');
             $num[$mn] = $this->db->count_all_results();
             $i++;
@@ -25,6 +128,7 @@ class Reporting_M extends Master_M {
             $ed = strtotime(date('Y-m-t', $st));
             $mn = date('m', $st);
         }
+
         return $num;
     }
 
@@ -85,7 +189,7 @@ class Reporting_M extends Master_M {
         while ($i <= $number) {
             $dt = date('Y-m-').$i;
             $st = strtotime($dt);
-            $ed = strtotime($dt.' 23:59:00');
+            $ed = strtotime($dt.' 23:59:59');
             
             $this->db->where('order_date >', $st);
             $this->db->where('order_date <', $ed);
@@ -105,10 +209,10 @@ class Reporting_M extends Master_M {
         while ($i <= $number) {
             $dt = date('Y-m-d');
             $st = strtotime($dt.' '.$i.':00:00');
-            $ed = strtotime($dt.' '.$i.':59:00');
+            $ed = strtotime($dt.' '.$i.':59:59');
             
-            $this->db->where('order_date >', $st);
-            $this->db->where('order_date <', $ed);
+            $this->db->where('order_date >= ', $st);
+            $this->db->where('order_date <= ', $ed);
             
             $this->db->from('order');
             $num[$i] = $this->db->count_all_results();
@@ -126,10 +230,10 @@ class Reporting_M extends Master_M {
         while ($i < $number) {
             $dt = date('Y-m-').$i;
             $st = strtotime($dt);
-            $ed = strtotime($dt.' 23:59:00');
+            $ed = strtotime($dt.' 23:59:59');
             
-            $this->db->where('order_date >', $st);
-            $this->db->where('order_date <', $ed);
+            $this->db->where('order_date >= ', $st);
+            $this->db->where('order_date <= ', $ed);
             
             $this->db->from('order');
             $num[$i] = $this->db->count_all_results();
@@ -145,10 +249,10 @@ class Reporting_M extends Master_M {
         while ($i < $number) {
             $dt = date('Y-').sprintf("%02d", $i).'-01';
             $st = strtotime($dt);
-            $ed = strtotime(date('Y-').sprintf("%02d", $i).'-30'.' 23:59:00');
+            $ed = strtotime(date('Y-').sprintf("%02d", $i).'-30'.' 23:59:59');
             
-            $this->db->where('order_date >', $st);
-            $this->db->where('order_date <', $ed);
+            $this->db->where('order_date >= ', $st);
+            $this->db->where('order_date <= ', $ed);
             
             $this->db->from('order');
             $num[sprintf("%02d", $i)] = $this->db->count_all_results();
@@ -158,37 +262,37 @@ class Reporting_M extends Master_M {
     }
     
     
-    public function getTotalRevenue($monthTS) {
-        
-        $year = date('Y', strtotime($monthTS));
-        $previousYear = ($year-1);
-        
-        $data = array();
-        
-        $st = strtotime($previousYear.'-01-01');
-        $ed = strtotime($previousYear.'-12-31');
-        
-        $this->db->where('order_date >', $st);
-        $this->db->where('order_date <', $ed);
-        //$this->db->from('order');
-        $this->db->select('sum(sales_price) as total');
-        $record = $this->db->get('order');
-        $total = $record->row_array();
-        $data[$previousYear] = $total['total'];
-        
-        $st = strtotime(date('Y').'-01-01');
-        $ed = strtotime(date('Y').'-12-31');
-        
-        $this->db->where('order_date >', $st);
-        $this->db->where('order_date <', $ed);
-        //$this->db->from('order');
-        $this->db->select('sum(sales_price) as total');
-        $record = $this->db->get('order');
-        $total = $record->row_array();
-        $data[date('Y')] = $total['total'];
-        //$data[date('Y')] = $this->db->count_all_results();
-        return $data;
-    }
+//    public function getTotalRevenue($monthTS) {
+//
+//        $year = date('Y', strtotime($monthTS));
+//        $previousYear = ($year-1);
+//
+//        $data = array();
+//
+//        $st = strtotime($previousYear.'-01-01');
+//        $ed = strtotime($previousYear.'-12-31 23:59:59');
+//
+//        $this->db->where('order_date >= ', $st);
+//        $this->db->where('order_date <= ', $ed);
+//        //$this->db->from('order');
+//        $this->db->select('sum(sales_price) as total');
+//        $record = $this->db->get('order');
+//        $total = $record->row_array();
+//        $data[$previousYear] = $total['total'];
+//
+//        $st = strtotime(date('Y').'-01-01');
+//        $ed = strtotime(date('Y').'-12-31');
+//
+//        $this->db->where('order_date >', $st);
+//        $this->db->where('order_date <', $ed);
+//        //$this->db->from('order');
+//        $this->db->select('sum(sales_price) as total');
+//        $record = $this->db->get('order');
+//        $total = $record->row_array();
+//        $data[date('Y')] = $total['total'];
+//        //$data[date('Y')] = $this->db->count_all_results();
+//        return $data;
+//    }
     
     private function array2csv(array &$array) {
         if (count($array) == 0) {

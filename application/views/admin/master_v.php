@@ -39,6 +39,8 @@
 	<script src="<?php echo $assets; ?>/js/jquery.flot.min.js"></script>
 	<script src="<?php echo $assets; ?>/js/jquery.flot.time.js"></script>
 	<script src="<?php echo $assets; ?>/js/jquery.flot.symbol.js"></script>
+	<script src="<?php echo $assets; ?>/js/jquery.flot.categories.js"></script>
+	<script src="<?php echo $assets; ?>/js/jquery.flot.orderBars.js"></script>
 
 
 	<?php echo @$script; ?>
