@@ -282,7 +282,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 $i, round($oneYearsData[$i]["total_sales_dollars"], 2)
             );
             $oneYears_keys_orders[] = array(
-                $i, date("m-Y", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $oneYearsData[$i]["year"], $oneYearsData[$i]["month"], $oneYearsData[$i]["day"])))
+                $i, date("M y", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $oneYearsData[$i]["year"], $oneYearsData[$i]["month"], $oneYearsData[$i]["day"])))
             );
         }
         echo json_encode($oneYears_data_orders, JSON_NUMERIC_CHECK);
