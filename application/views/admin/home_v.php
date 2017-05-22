@@ -433,7 +433,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            axisLabelPadding: 10,
 //            ticks: ticks
         },
-        yaxis: {
+        yaxis: [{
             allowDecimals: false,
 //            axisLabel: "Average Temperature",
 //            axisLabelUseCanvas: true,
@@ -443,8 +443,13 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            tickFormatter: function (v, axis) {
 //                return v.toFixed(0); // v;
 //            },
-            minTickSize: 1
-        },
+            minTickSize: 1,
+            position: "left"
+        }, {
+            minTickSize: 25.00,
+            alignTicksWithAxis: 2,
+            position: "right"
+        }],
         legend: {
             noColumns: 0,
             labelBoxBorderColor: "#000000",
@@ -480,7 +485,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            axisLabelPadding: 10,
 //            ticks: ticks
         },
-        yaxis: {
+        yaxis: [{
             allowDecimals: false,
 //            axisLabel: "Average Temperature",
 //            axisLabelUseCanvas: true,
@@ -490,8 +495,13 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            tickFormatter: function (v, axis) {
 //                return v.toFixed(0); // v;
 //            },
-            minTickSize: 1
-        },
+            minTickSize: 1,
+            position: "left"
+        }, {
+            minTickSize: 25.00,
+            alignTicksWithAxis: 2,
+            position: "right"
+        }],
         legend: {
             noColumns: 0,
             labelBoxBorderColor: "#000000",
@@ -527,7 +537,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            axisLabelPadding: 10,
 //            ticks: ticks
         },
-        yaxis: {
+        yaxis: [{
             allowDecimals: false,
 //            axisLabel: "Average Temperature",
 //            axisLabelUseCanvas: true,
@@ -537,8 +547,13 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            tickFormatter: function (v, axis) {
 //                return v.toFixed(0); // v;
 //            },
-            minTickSize: 1
-        },
+            minTickSize: 1,
+            position: "left"
+        }, {
+            minTickSize: 25.00,
+            alignTicksWithAxis: 2,
+            position: "right"
+        }],
         legend: {
             noColumns: 0,
             labelBoxBorderColor: "#000000",
@@ -574,7 +589,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            axisLabelPadding: 10,
 //            ticks: ticks
         },
-        yaxis: {
+        yaxis: [{
             allowDecimals: false,
 //            axisLabel: "Average Temperature",
 //            axisLabelUseCanvas: true,
@@ -584,8 +599,13 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            tickFormatter: function (v, axis) {
 //                return v.toFixed(0); // v;
 //            },
-            minTickSize: 1
-        },
+            minTickSize: 1,
+            position: "left"
+        }, {
+            minTickSize: 25.00,
+            alignTicksWithAxis: 2,
+            position: "right"
+        }],
         legend: {
             noColumns: 0,
             labelBoxBorderColor: "#000000",
@@ -726,15 +746,18 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         $.plot($("#flot-placeholder"), [
             {
                 label: "# Orders",
-                data: todaysDataOrders
+                data: todaysDataOrders,
+                yaxis: 1
             },
             {
                 label: "# Customers",
-                data: todaysDataCustomers
+                data: todaysDataCustomers,
+                yaxis: 1
             },
             {
                 label: "$ Sales",
-                data: todaysDataDollars
+                data: todaysDataDollars,
+                yaxis: 2
             }
         ], options);
         $("#flot-placeholder").UseTooltip();
@@ -742,15 +765,18 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         $.plot($("#flot-placeholder1"), [
             {
                 label: "# Orders",
-                data: sevenDaysDataOrders
+                data: sevenDaysDataOrders,
+                yaxis: 1
             },
             {
                 label: "# Customers",
-                data: sevenDaysDataCustomers
+                data: sevenDaysDataCustomers,
+                yaxis: 1
             },
             {
                 label: "$ Sales",
-                data: sevenDaysDataDollars
+                data: sevenDaysDataDollars,
+                yaxis: 2
             }
         ], options1);
         $("#flot-placeholder1").UseTooltip();
@@ -759,14 +785,17 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             {
                 label: "# Orders",
                 data: thirtyDaysData,
+                yaxis: 1
             },
             {
                 label: "# Customers",
-                data: thirtyDaysDataCustomers
+                data: thirtyDaysDataCustomers,
+                yaxis: 1
             },
             {
                 label: "$ Sales",
-                data: thirtyDaysDataDollars
+                data: thirtyDaysDataDollars,
+                yaxis: 2
             }
         ], options2);
         $("#flot-placeholder2").UseTooltip();
@@ -774,15 +803,18 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         $.plot($("#flot-placeholder3"), [
             {
                 label: "# Orders",
-                data: oneYearsData
+                data: oneYearsData,
+                yaxis: 1
             },
             {
                 label: "# Customers",
-                data: oneYearsDataCustomers
+                data: oneYearsDataCustomers,
+                yaxis: 1
             },
             {
                 label: "$ Sales",
-                data: oneYearsDataDollars
+                data: oneYearsDataDollars,
+                yaxis: 2
             }
         ], options3);
         $("#flot-placeholder3").UseTooltip();
