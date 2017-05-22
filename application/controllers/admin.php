@@ -443,7 +443,7 @@ class Admin extends Master_Controller {
         $chartOrdersDaily = $this->reporting_m->getOrderForDailyChart();
         $chartOrdersWeekly = $this->reporting_m->getOrderForWeeklyChart();
         $chartOrdersYearly = $this->reporting_m->getOrderForYearlyChart();
-        $this->_mainData['totalReviews'] = count($this->admin_m->getNewReviews();); // $this->reporting_m->getTotalReviews();
+        $this->_mainData['totalReviews'] = count($this->admin_m->getNewReviews()); // $this->reporting_m->getTotalReviews();
 
         $now = time();
         $this->_mainData['ytdRevenueThisYear'] = $this->reporting_m->getRevenueWithinDateRange(date('Y-01-01 00:00:00', $now), date('Y-m-d H:i:s', $now));
