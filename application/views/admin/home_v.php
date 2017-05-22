@@ -318,7 +318,8 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelFontFamily: 'Verdana, Arial',
             axisLabelPadding: 3,
             allowDecimals: false,
-            minTickSize: 1
+            minTickSize: 1,
+            tickFormatter: function(val, axis) { return val.toFixed(0); }
         }, {
             minTickSize: 25.00,
             position: "right",
@@ -357,7 +358,8 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelFontFamily: 'Verdana, Arial',
             axisLabelPadding: 3,
             allowDecimals: false,
-            minTickSize: 1
+            minTickSize: 1,
+            tickFormatter: function(val, axis) { return val.toFixed(0); }
         }, {
             minTickSize: 25.00,
             position: "right",
@@ -396,7 +398,8 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelFontFamily: 'Verdana, Arial',
             axisLabelPadding: 3,
             allowDecimals: false,
-            minTickSize: 1
+            minTickSize: 1,
+            tickFormatter: function(val, axis) { return val.toFixed(0); }
         }, {
             minTickSize: 25.00,
             position: "right",
@@ -435,7 +438,8 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             axisLabelFontFamily: 'Verdana, Arial',
             axisLabelPadding: 3,
             allowDecimals: false,
-            minTickSize: 1
+            minTickSize: 1,
+            tickFormatter: function(val, axis) { return val.toFixed(0); }
         }, {
             minTickSize: 25.00,
             position: "right",
