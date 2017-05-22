@@ -422,8 +422,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            tickFormatter: function (v, axis) {
 //                return v.toFixed(0); // v;
 //            },
-            minTickSize: 1,
-            position: "left"
+            minTickSize: 1
         }, {
             minTickSize: 25.00,
             alignTicksWithAxis: 2,
@@ -474,8 +473,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            tickFormatter: function (v, axis) {
 //                return v.toFixed(0); // v;
 //            },
-            minTickSize: 1,
-            position: "left"
+            minTickSize: 1
         }, {
             minTickSize: 25.00,
             alignTicksWithAxis: 2,
@@ -526,8 +524,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            tickFormatter: function (v, axis) {
 //                return v.toFixed(0); // v;
 //            },
-            minTickSize: 1,
-            position: "left"
+            minTickSize: 1
         }, {
             minTickSize: 25.00,
             alignTicksWithAxis: 2,
@@ -578,8 +575,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //            tickFormatter: function (v, axis) {
 //                return v.toFixed(0); // v;
 //            },
-            minTickSize: 1,
-            position: "left"
+            minTickSize: 1
         }, {
             minTickSize: 25.00,
             alignTicksWithAxis: 2,
