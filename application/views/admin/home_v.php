@@ -750,7 +750,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 yaxis: 1,
                 bars: {
                     show: true,
-                    barWidth: 0.2,
+                    barWidth: 0.1,
                     align: "left"
                 }
             },
@@ -760,7 +760,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 yaxis: 1,
                 bars: {
                     show: true,
-                    barWidth: 0.2,
+                    barWidth: 0.1,
                     align: "center"
                 }
             },
@@ -770,7 +770,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 yaxis: 2,
                 bars: {
                     show: true,
-                    barWidth: 0.2,
+                    barWidth: 0.1,
                     align: "right"
                 }
             }
@@ -784,7 +784,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 yaxis: 1,
                 bars: {
                     show: true,
-                    barWidth: 0.2,
+                    barWidth: 0.1,
                     align: "left"
                 }
             },
@@ -794,7 +794,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 yaxis: 1,
                 bars: {
                     show: true,
-                    barWidth: 0.2,
+                    barWidth: 0.1,
                     align: "center"
                 }
             },
@@ -804,7 +804,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 yaxis: 2,
                 bars: {
                     show: true,
-                    barWidth: 0.2,
+                    barWidth: 0.1,
                     align: "right"
                 }
             }
@@ -818,7 +818,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 yaxis: 1,
                 bars: {
                     show: true,
-                    barWidth: 0.2,
+                    barWidth: 0.1,
                     align: "left"
                 }
             },
@@ -828,7 +828,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 yaxis: 1,
                 bars: {
                     show: true,
-                    barWidth: 0.2,
+                    barWidth: 0.1,
                     align: "center"
                 }
             },
@@ -838,7 +838,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 yaxis: 2,
                 bars: {
                     show: true,
-                    barWidth: 0.2,
+                    barWidth: 0.1,
                     align: "right"
                 }
             }
@@ -852,7 +852,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 yaxis: 1,
                 bars: {
                     show: true,
-                    barWidth: 0.2,
+                    barWidth: 0.1,
                     align: "left"
                 }
             },
@@ -862,7 +862,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 yaxis: 1,
                 bars: {
                     show: true,
-                    barWidth: 0.2,
+                    barWidth: 0.1,
                     align: "center"
                 }
             },
@@ -872,7 +872,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                 yaxis: 2,
                 bars: {
                     show: true,
-                    barWidth: 0.2,
+                    barWidth: 0.1,
                     align: "right"
                 }
             }
