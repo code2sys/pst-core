@@ -189,16 +189,16 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 
         for ($i = 0; $i < count($todaysData); $i++) {
             $todays_data_orders[] = array(
-                $i + 1, $todaysData[$i]["number_orders"]
+                $i, $todaysData[$i]["number_orders"]
             );
             $todays_data_customers[] = array(
-                $i + 1, $todaysData[$i]["distinct_customers"]
+                $i, $todaysData[$i]["distinct_customers"]
             );
             $todays_data_dollars[] = array(
-                $i + 1, round($todaysData[$i]["total_sales_dollars"], 2)
+                $i, round($todaysData[$i]["total_sales_dollars"], 2)
             );
             $todays_keys_orders[] = array(
-                $i + 1, date("g a", strtotime(sprintf("%04d-%02d-%02d %02d:00:00", $todaysData[$i]["year"], $todaysData[$i]["month"], $todaysData[$i]["day"], $todaysData[$i]["hour"])))
+                $i, date("g a", strtotime(sprintf("%04d-%02d-%02d %02d:00:00", $todaysData[$i]["year"], $todaysData[$i]["month"], $todaysData[$i]["day"], $todaysData[$i]["hour"])))
             );
         }
 
@@ -217,16 +217,16 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 
         for ($i = 0; $i < count($sevenDaysData); $i++) {
             $sevenDays_data_orders[] = array(
-                $i + 1, $sevenDaysData[$i]["number_orders"]
+                $i, $sevenDaysData[$i]["number_orders"]
             );
             $sevenDays_data_customers[] = array(
-                $i + 1, $sevenDaysData[$i]["distinct_customers"]
+                $i, $sevenDaysData[$i]["distinct_customers"]
             );
             $sevenDays_data_dollars[] = array(
-                $i + 1, round($sevenDaysData[$i]["total_sales_dollars"], 2)
+                $i, round($sevenDaysData[$i]["total_sales_dollars"], 2)
             );
             $sevenDays_keys_orders[] = array(
-                $i + 1, date("m-d", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $sevenDaysData[$i]["year"], $sevenDaysData[$i]["month"], $sevenDaysData[$i]["day"])))
+                $i, date("m-d", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $sevenDaysData[$i]["year"], $sevenDaysData[$i]["month"], $sevenDaysData[$i]["day"])))
             );
         }
         echo json_encode($sevenDays_data_orders, JSON_NUMERIC_CHECK);
@@ -245,16 +245,16 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 
         for ($i = 0; $i < count($thirtyDaysData); $i++) {
             $thirtyDays_data_orders[] = array(
-                $i + 1, $thirtyDaysData[$i]["number_orders"]
+                $i, $thirtyDaysData[$i]["number_orders"]
             );
             $thirtyDays_data_customers[] = array(
-                $i + 1, $thirtyDaysData[$i]["distinct_customers"]
+                $i, $thirtyDaysData[$i]["distinct_customers"]
             );
             $thirtyDays_data_dollars[] = array(
-                $i + 1, round($thirtyDaysData[$i]["total_sales_dollars"], 2)
+                $i, round($thirtyDaysData[$i]["total_sales_dollars"], 2)
             );
             $thirtyDays_keys_orders[] = array(
-                $i + 1, date("m-d", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $thirtyDaysData[$i]["year"], $thirtyDaysData[$i]["month"], $thirtyDaysData[$i]["day"])))
+                $i, date("m-d", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $thirtyDaysData[$i]["year"], $thirtyDaysData[$i]["month"], $thirtyDaysData[$i]["day"])))
             );
         }
         echo json_encode($thirtyDays_data_orders, JSON_NUMERIC_CHECK);
@@ -273,16 +273,16 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 
         for ($i = 0; $i < count($oneYearsData); $i++) {
             $oneYears_data_orders[] = array(
-                $i + 1, $oneYearsData[$i]["number_orders"]
+                $i, $oneYearsData[$i]["number_orders"]
             );
             $oneYears_data_customers[] = array(
-                $i + 1, $oneYearsData[$i]["distinct_customers"]
+                $i, $oneYearsData[$i]["distinct_customers"]
             );
             $oneYears_data_dollars[] = array(
-                $i + 1, round($oneYearsData[$i]["total_sales_dollars"], 2)
+                $i, round($oneYearsData[$i]["total_sales_dollars"], 2)
             );
             $oneYears_keys_orders[] = array(
-                $i + 1, date("m-Y", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $oneYearsData[$i]["year"], $oneYearsData[$i]["month"], $oneYearsData[$i]["day"])))
+                $i, date("m-Y", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $oneYearsData[$i]["year"], $oneYearsData[$i]["month"], $oneYearsData[$i]["day"])))
             );
         }
         echo json_encode($oneYears_data_orders, JSON_NUMERIC_CHECK);
