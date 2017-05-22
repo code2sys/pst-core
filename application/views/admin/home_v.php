@@ -356,29 +356,29 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 //        i++;
 //    });
     
-    var dataset = [
-        { label: "Orders", data: data, color: "#85A7FF" },
-        { label: "Customers", data: data, color: "#5482FF" },
-        { label: "Dollars", data: data, color: "#FF5482" }
-    ];
-    
-    var dataset1 = [
-        { label: "Orders", data: data1, color: "#85A7FF" },
-        { label: "Customers", data: data1, color: "#5482FF" },
-        { label: "Dollars", data: data, color: "#FF5482" }
-    ];
-    
-    var dataset2 = [
-        { label: "Orders", data: data2, color: "#85A7FF" },
-        { label: "Customers", data: data2, color: "#5482FF" },
-        { label: "Dollars", data: data, color: "#FF5482" }
-    ];
-    
-    var dataset3 = [
-        { label: "Orders", data: data3, color: "#85A7FF" },
-        { label: "Customers", data: data3, color: "#5482FF" },
-        { label: "Dollars", data: data, color: "#FF5482" }
-    ];
+//    var dataset = [
+//        { label: "Orders", data: data, color: "#85A7FF" },
+//        { label: "Customers", data: data, color: "#5482FF" },
+//        { label: "Dollars", data: data, color: "#FF5482" }
+//    ];
+//
+//    var dataset1 = [
+//        { label: "Orders", data: data1, color: "#85A7FF" },
+//        { label: "Customers", data: data1, color: "#5482FF" },
+//        { label: "Dollars", data: data, color: "#FF5482" }
+//    ];
+//
+//    var dataset2 = [
+//        { label: "Orders", data: data2, color: "#85A7FF" },
+//        { label: "Customers", data: data2, color: "#5482FF" },
+//        { label: "Dollars", data: data, color: "#FF5482" }
+//    ];
+//
+//    var dataset3 = [
+//        { label: "Orders", data: data3, color: "#85A7FF" },
+//        { label: "Customers", data: data3, color: "#5482FF" },
+//        { label: "Dollars", data: data, color: "#FF5482" }
+//    ];
 //
 //    var ticks = new Array();
 //    var ticks1 = new Array();
