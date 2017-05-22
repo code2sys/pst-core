@@ -191,7 +191,7 @@ $media_url = jsite_url("/media/");
                                     <h3 class="txt-title"><?php if (defined('WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE')) { echo WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE; } else { ?>Want to Schedule a Test Drive?<?php } ?></h3>
 
                                     <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="date of ride" name="date_of_ride">
+                                        <input type="text" class="form-control" placeholder="<?php if (defined('WORDING_PLACEHOLDER_DATE_OF_RIDE')) { echo WORDING_PLACEHOLDER_DATE_OF_RIDE; } else { ?>date of ride<?php } ?>" name="date_of_ride">
                                     </div>
                                     <hr class="brdr">
                                     <h3 class="txt-title">Trade in?</h3>
