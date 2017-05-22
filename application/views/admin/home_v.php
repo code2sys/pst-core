@@ -81,7 +81,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                             <i class="fa fa-calendar"></i> <i class="caret"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="chrt" data-cstm="daily"><a href="javascript:void(0);">Today</a></li>
+                            <li class="chrt " data-cstm="daily"><a href="javascript:void(0);">Today</a></li>
                             <li class="chrt" data-cstm="weekly"><a href="javascript:void(0);">Week</a></li>
                             <li class="chrt active" data-cstm="monthly"><a href="javascript:void(0);">Month</a></li>
                             <li class="chrt" data-cstm="yearly"><a href="javascript:void(0);">Year</a></li>
@@ -89,9 +89,9 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                     </div>
                     <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Sales Analytics</h3>
                 </div>
-                <div id="flot-placeholder" style="width:100%;height:500px;margin:0 auto" class="monthly chrt1"></div>
-                <div id="flot-placeholder1" style="width:100%;height:500px;margin:0 auto;" class="daily chrt1"></div>
-                <div id="flot-placeholder2" style="width:100%;height:500px;margin:0 auto;" class="weekly chrt1"></div>
+                <div id="flot-placeholder2" style="width:100%;height:500px;margin:0 auto" class="monthly chrt1"></div>
+                <div id="flot-placeholder" style="width:100%;height:500px;margin:0 auto;" class="daily chrt1"></div>
+                <div id="flot-placeholder1" style="width:100%;height:500px;margin:0 auto;" class="weekly chrt1"></div>
                 <div id="flot-placeholder3" style="width:100%;height:500px;margin:0 auto;" class="yearly chrt1"></div>
             </div>
         </div>
@@ -916,7 +916,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
     });
     jQuery(document).ready(function() {
        jQuery('#flot-placeholder1').hide();
-       jQuery('#flot-placeholder2').hide();
+       jQuery('#flot-placeholder').hide();
        jQuery('#flot-placeholder3').hide();
     });
 </script>
