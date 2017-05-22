@@ -82,12 +82,12 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                         </a>
                         <ul class="dropdown-menu">
                             <li class="chrt " data-cstm="daily"><a href="javascript:void(0);">Today</a></li>
-                            <li class="chrt" data-cstm="weekly"><a href="javascript:void(0);">Week</a></li>
-                            <li class="chrt active" data-cstm="monthly"><a href="javascript:void(0);">Month</a></li>
-                            <li class="chrt" data-cstm="yearly"><a href="javascript:void(0);">Year</a></li>
+                            <li class="chrt" data-cstm="weekly"><a href="javascript:void(0);">Last 7 Days</a></li>
+                            <li class="chrt active" data-cstm="monthly"><a href="javascript:void(0);">Last 30 Days</a></li>
+                            <li class="chrt" data-cstm="yearly"><a href="javascript:void(0);">Last 12 Months</a></li>
                         </ul>
                     </div>
-                    <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Sales Analytics</h3>
+                    <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Sales Analytics <span class="monthly labelspanners">Last 30 Days</span><span class="daily labelspanners">Today</span><span class="weekly labelspanners">Last 7 Days</span><span class="yearly labelspanners">Last 12 Months</span></h3>
                 </div>
                 <div id="flot-placeholder2" style="width:100%;height:500px;margin:0 auto" class="monthly chrt1"></div>
                 <div id="flot-placeholder" style="width:100%;height:500px;margin:0 auto;" class="daily chrt1"></div>
@@ -912,12 +912,15 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         jQuery('.chrt').removeClass('active');
         jQuery(this).addClass('active');
         jQuery('.chrt1').hide();
+        jQuery('.labelspanners').hide();
         jQuery('.'+cstm).show();
     });
     jQuery(document).ready(function() {
        jQuery('#flot-placeholder1').hide();
        jQuery('#flot-placeholder').hide();
        jQuery('#flot-placeholder3').hide();
+        jQuery('.labelspanners').hide();
+        jQuery('.labelspanners.monthly').show();
     });
 </script>
 <style>
