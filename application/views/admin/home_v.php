@@ -747,17 +747,32 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             {
                 label: "# Orders",
                 data: todaysDataOrders,
-                yaxis: 1
+                yaxis: 1,
+                bars: {
+                    show: true,
+                    barWidth: 0.2,
+                    align: "left"
+                }
             },
             {
                 label: "# Customers",
                 data: todaysDataCustomers,
-                yaxis: 1
+                yaxis: 1,
+                bars: {
+                    show: true,
+                    barWidth: 0.2,
+                    align: "center"
+                }
             },
             {
                 label: "$ Sales",
                 data: todaysDataDollars,
-                yaxis: 2
+                yaxis: 2,
+                bars: {
+                    show: true,
+                    barWidth: 0.2,
+                    align: "right"
+                }
             }
         ], options);
         $("#flot-placeholder").UseTooltip();
@@ -766,17 +781,32 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             {
                 label: "# Orders",
                 data: sevenDaysDataOrders,
-                yaxis: 1
+                yaxis: 1,
+                bars: {
+                    show: true,
+                    barWidth: 0.2,
+                    align: "left"
+                }
             },
             {
                 label: "# Customers",
                 data: sevenDaysDataCustomers,
-                yaxis: 1
+                yaxis: 1,
+                bars: {
+                    show: true,
+                    barWidth: 0.2,
+                    align: "center"
+                }
             },
             {
                 label: "$ Sales",
                 data: sevenDaysDataDollars,
-                yaxis: 2
+                yaxis: 2,
+                bars: {
+                    show: true,
+                    barWidth: 0.2,
+                    align: "right"
+                }
             }
         ], options1);
         $("#flot-placeholder1").UseTooltip();
@@ -785,17 +815,32 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             {
                 label: "# Orders",
                 data: thirtyDaysData,
-                yaxis: 1
+                yaxis: 1,
+                bars: {
+                    show: true,
+                    barWidth: 0.2,
+                    align: "left"
+                }
             },
             {
                 label: "# Customers",
                 data: thirtyDaysDataCustomers,
-                yaxis: 1
+                yaxis: 1,
+                bars: {
+                    show: true,
+                    barWidth: 0.2,
+                    align: "center"
+                }
             },
             {
                 label: "$ Sales",
                 data: thirtyDaysDataDollars,
-                yaxis: 2
+                yaxis: 2,
+                bars: {
+                    show: true,
+                    barWidth: 0.2,
+                    align: "right"
+                }
             }
         ], options2);
         $("#flot-placeholder2").UseTooltip();
@@ -804,17 +849,32 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             {
                 label: "# Orders",
                 data: oneYearsData,
-                yaxis: 1
+                yaxis: 1,
+                bars: {
+                    show: true,
+                    barWidth: 0.2,
+                    align: "left"
+                }
             },
             {
                 label: "# Customers",
                 data: oneYearsDataCustomers,
-                yaxis: 1
+                yaxis: 1,
+                bars: {
+                    show: true,
+                    barWidth: 0.2,
+                    align: "center"
+                }
             },
             {
                 label: "$ Sales",
                 data: oneYearsDataDollars,
-                yaxis: 2
+                yaxis: 2,
+                bars: {
+                    show: true,
+                    barWidth: 0.2,
+                    align: "right"
+                }
             }
         ], options3);
         $("#flot-placeholder3").UseTooltip();
