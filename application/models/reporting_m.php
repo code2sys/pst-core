@@ -49,7 +49,7 @@ class Reporting_M extends Master_M {
                     "distinct_customers" => 0,
                     "year" => $year,
                     "month" => $month,
-                    "date" => $day,
+                    "day" => $day,
                     "hour" => $hour
                 );
             }

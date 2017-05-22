@@ -453,9 +453,9 @@ class Admin extends Master_Controller {
         $this->_mainData['ytdOrderCountLastYear'] = $this->reporting_m->getOrdersWithinDateRange(date("Y-01-01 00:00:00", $last_year), date("Y-m-d H:i:s", $last_year));
 
         $this->_mainData["todaysData"] = $this->reporting_m->getDashboardStatsByHour(date("Y-m-d 00:00:00"), date("Y-m-d 23:59:59"));
-        $this->_mainData["sevenDayData"] = $this->reporting_m->getDashboardStatsByDay(date("Y-m-d 00:00:00", strtotime("-7 days")), date("Y-m-d 23:59:59"));
-        $this->_mainData["thirtyDayData"] = $this->reporting_m->getDashboardStatsByDay(date("Y-m-d 00:00:00", strtotime("-30 days")), date("Y-m-d 23:59:59"));
-        $this->_mainData["oneYearData"] = $this->reporting_m->getDashboardStatsByMonth(date("Y-m-01 00:00:00", strtotime("-1 year")), date("Y-m-d 23:59:59"));
+        $this->_mainData["sevenDaysData"] = $this->reporting_m->getDashboardStatsByDay(date("Y-m-d 00:00:00", strtotime("-7 days")), date("Y-m-d 23:59:59"));
+        $this->_mainData["thirtyDaysData"] = $this->reporting_m->getDashboardStatsByDay(date("Y-m-d 00:00:00", strtotime("-30 days")), date("Y-m-d 23:59:59"));
+        $this->_mainData["oneYearsData"] = $this->reporting_m->getDashboardStatsByMonth(date("Y-m-01 00:00:00", strtotime("-1 year")), date("Y-m-d 23:59:59"));
 
 //        $days = array();
 //        $cnt = 0;

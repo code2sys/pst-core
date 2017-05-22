@@ -202,123 +202,247 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
 </style>
 
 <script>
-    //******* 2012 Average Temperature - BAR CHART
-    var dt = <?php echo json_encode($str); ?>;
-    var dys = <?php echo json_encode($days); ?>;
-    
-    var dt1 = <?php echo json_encode($str1); ?>;
-    var dys1 = <?php echo json_encode($days1); ?>;
-    
-    var dt2 = <?php echo json_encode($str2); ?>;
-    var dys2 = <?php echo json_encode($days2); ?>;
-    
-    var dt3 = <?php echo json_encode($str3); ?>;
-    var dys3 = <?php echo json_encode($days3); ?>;
-    
-    var data = new Array();
-    var i = 0;
-    jQuery.each( dt, function( key, value ) {
-        data.push([i, Math.round(value)]);
-        i++;
-    });
-    
-    var data1 = new Array();
-    var i = 0;
-    jQuery.each( dt1, function( key, value ) {
-        data1.push([i, Math.round(value)]);
-        i++;
-    });
-    
-    var data2 = new Array();
-    var i = 0;
-    jQuery.each( dt2, function( key, value ) {
-        data2.push([i, Math.round(value)]);
-        i++;
-    });
-    
-    var data3 = new Array();
-    var i = 0;
-    jQuery.each( dt3, function( key, value ) {
-        data3.push([i, Math.round(value)]);
-        i++;
-    });
+    var todaysDataOrders = <?php
+        $todays_data_orders = array();
+        $todays_keys_orders = array();
+        $todays_data_customers = array();
+        $todays_data_dollars = array();
+
+        for ($i = 0; $i < count($todaysData); $i++) {
+            $todays_data_orders[] = array(
+                $i + 1, $todaysData[$i]["number_orders"]
+            );
+            $todays_data_customers[] = array(
+                $i + 1, $todaysData[$i]["distinct_customers"]
+            );
+            $todays_data_dollars[] = array(
+                $i + 1, round($todaysData[$i]["total_sales_dollars"], 2)
+            );
+            $todays_keys_orders[] = array(
+                $i + 1, date("g a", strtotime(sprintf("%04d-%02d-%02d %02d:00:00", $todaysData[$i]["year"], $todaysData[$i]["month"], $todaysData[$i]["day"], $todaysData[$i]["hour"])))
+            );
+        }
+
+        echo json_encode($todays_data_orders, JSON_NUMERIC_CHECK);
+
+        ?>;
+    var todaysDataCustomers = <?php echo json_encode($todays_data_customers, JSON_NUMERIC_CHECK); ?>;
+    var todaysDataDollars = <?php echo json_encode($todays_data_dollars, JSON_NUMERIC_CHECK); ?>;
+
+    var sevenDaysDataOrders = <?php
+
+        $sevenDays_data_orders = array();
+        $sevenDays_keys_orders = array();
+        $sevenDays_data_customers = array();
+        $sevenDays_data_dollars = array();
+
+        for ($i = 0; $i < count($sevenDaysData); $i++) {
+            $sevenDays_data_orders[] = array(
+                $i + 1, $sevenDaysData[$i]["number_orders"]
+            );
+            $sevenDays_data_customers[] = array(
+                $i + 1, $sevenDaysData[$i]["distinct_customers"]
+            );
+            $sevenDays_data_dollars[] = array(
+                $i + 1, round($sevenDaysData[$i]["total_sales_dollars"], 2)
+            );
+            $sevenDays_keys_orders[] = array(
+                $i + 1, date("m/d", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $sevenDaysData[$i]["year"], $sevenDaysData[$i]["month"], $sevenDaysData[$i]["day"])))
+            );
+        }
+        echo json_encode($sevenDays_data_orders, JSON_NUMERIC_CHECK);
+
+
+    ?>;
+    var sevenDaysDataCustomers = <?php echo json_encode($sevenDays_data_customers, JSON_NUMERIC_CHECK); ?>;
+    var sevenDaysDataDollars = <?php echo json_encode($sevenDays_data_dollars, JSON_NUMERIC_CHECK); ?>;
+
+    var thirtyDaysData = <?php
+
+        $thirtyDays_data_orders = array();
+        $thirtyDays_keys_orders = array();
+        $thirtyDays_data_customers = array();
+        $thirtyDays_data_dollars = array();
+
+        for ($i = 0; $i < count($thirtyDaysData); $i++) {
+            $thirtyDays_data_orders[] = array(
+                $i + 1, $thirtyDaysData[$i]["number_orders"]
+            );
+            $thirtyDays_data_customers[] = array(
+                $i + 1, $thirtyDaysData[$i]["distinct_customers"]
+            );
+            $thirtyDays_data_dollars[] = array(
+                $i + 1, round($thirtyDaysData[$i]["total_sales_dollars"], 2)
+            );
+            $thirtyDays_keys_orders[] = array(
+                $i + 1, date("m/d", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $thirtyDaysData[$i]["year"], $thirtyDaysData[$i]["month"], $thirtyDaysData[$i]["day"])))
+            );
+        }
+        echo json_encode($thirtyDays_data_orders, JSON_NUMERIC_CHECK);
+
+
+        ?>;
+    var thirtyDaysDataCustomers = <?php echo json_encode($thirtyDays_data_customers, JSON_NUMERIC_CHECK); ?>;
+    var thirtyDaysDataDollars = <?php echo json_encode($thirtyDays_data_dollars, JSON_NUMERIC_CHECK); ?>;
+
+    var oneYearsData = <?php
+
+        $oneYears_data_orders = array();
+        $oneYears_keys_orders = array();
+        $oneYears_data_customers = array();
+        $oneYears_data_dollars = array();
+
+        for ($i = 0; $i < count($oneYearsData); $i++) {
+            $oneYears_data_orders[] = array(
+                $i + 1, $oneYearsData[$i]["number_orders"]
+            );
+            $oneYears_data_customers[] = array(
+                $i + 1, $oneYearsData[$i]["distinct_customers"]
+            );
+            $oneYears_data_dollars[] = array(
+                $i + 1, round($oneYearsData[$i]["total_sales_dollars"], 2)
+            );
+            $oneYears_keys_orders[] = array(
+                $i + 1, date("m/d", strtotime(sprintf("%04d-%02d-%02d 00:00:00", $oneYearsData[$i]["year"], $oneYearsData[$i]["month"], $oneYearsData[$i]["day"])))
+            );
+        }
+        echo json_encode($oneYears_data_orders, JSON_NUMERIC_CHECK);
+
+
+        ?>;
+    var oneYearsDataCustomers = <?php echo json_encode($oneYears_data_customers, JSON_NUMERIC_CHECK); ?>;
+    var oneYearsDataDollars = <?php echo json_encode($oneYears_data_dollars, JSON_NUMERIC_CHECK); ?>;
+
+//
+//
+//    //******* 2012 Average Temperature - BAR CHART
+//    var dt = <?php //echo json_encode($str); ?>//;
+//    var dys = <?php //echo json_encode($days); ?>//;
+//
+//    var dt1 = <?php //echo json_encode($str1); ?>//;
+//    var dys1 = <?php //echo json_encode($days1); ?>//;
+//
+//    var dt2 = <?php //echo json_encode($str2); ?>//;
+//    var dys2 = <?php //echo json_encode($days2); ?>//;
+//
+//    var dt3 = <?php //echo json_encode($str3); ?>//;
+//    var dys3 = <?php //echo json_encode($days3); ?>//;
+//
+//    var data = new Array();
+//    var i = 0;
+//    jQuery.each( dt, function( key, value ) {
+//        data.push([i, Math.round(value)]);
+//        i++;
+//    });
+//
+//    var data1 = new Array();
+//    var i = 0;
+//    jQuery.each( dt1, function( key, value ) {
+//        data1.push([i, Math.round(value)]);
+//        i++;
+//    });
+//
+//    var data2 = new Array();
+//    var i = 0;
+//    jQuery.each( dt2, function( key, value ) {
+//        data2.push([i, Math.round(value)]);
+//        i++;
+//    });
+//
+//    var data3 = new Array();
+//    var i = 0;
+//    jQuery.each( dt3, function( key, value ) {
+//        data3.push([i, Math.round(value)]);
+//        i++;
+//    });
     
     var dataset = [
         { label: "Orders", data: data, color: "#85A7FF" },
-        { label: "Customers", data: data, color: "#5482FF" }
+        { label: "Customers", data: data, color: "#5482FF" },
+        { label: "Dollars", data: data, color: "#FF5482" }
     ];
     
     var dataset1 = [
         { label: "Orders", data: data1, color: "#85A7FF" },
-        { label: "Customers", data: data1, color: "#5482FF" }
+        { label: "Customers", data: data1, color: "#5482FF" },
+        { label: "Dollars", data: data, color: "#FF5482" }
     ];
     
     var dataset2 = [
         { label: "Orders", data: data2, color: "#85A7FF" },
-        { label: "Customers", data: data2, color: "#5482FF" }
+        { label: "Customers", data: data2, color: "#5482FF" },
+        { label: "Dollars", data: data, color: "#FF5482" }
     ];
     
     var dataset3 = [
         { label: "Orders", data: data3, color: "#85A7FF" },
-        { label: "Customers", data: data3, color: "#5482FF" }
+        { label: "Customers", data: data3, color: "#5482FF" },
+        { label: "Dollars", data: data, color: "#FF5482" }
     ];
-    
-    var ticks = new Array();
-    var ticks1 = new Array();
-    var ticks2 = new Array();
-    var ticks3 = new Array();
-    
-    var i = 0;
-    jQuery.each( dys, function( key, value ) {
-        ticks.push([i, Math.round(value)]);
-        i++;
-    });
-
-    var i = 0;
-    jQuery.each( dys1, function( key, value ) {
-        ticks1.push([i, Math.round(value)]);
-        i++;
-    });
-    
-    var i = 0;
-    jQuery.each( dys2, function( key, value ) {
-        ticks2.push([i, value]);
-        i++;
-    });
-    
-    var i = 0;
-    jQuery.each( dys3, function( key, value ) {
-        ticks3.push([i, value]);
-        i++;
-    });
+//
+//    var ticks = new Array();
+//    var ticks1 = new Array();
+//    var ticks2 = new Array();
+//    var ticks3 = new Array();
+//
+//    var i = 0;
+//    jQuery.each( dys, function( key, value ) {
+//        ticks.push([i, Math.round(value)]);
+//        i++;
+//    });
+//
+//    var i = 0;
+//    jQuery.each( dys1, function( key, value ) {
+//        ticks1.push([i, Math.round(value)]);
+//        i++;
+//    });
+//
+//    var i = 0;
+//    jQuery.each( dys2, function( key, value ) {
+//        ticks2.push([i, value]);
+//        i++;
+//    });
+//
+//    var i = 0;
+//    jQuery.each( dys3, function( key, value ) {
+//        ticks3.push([i, value]);
+//        i++;
+//    });
     
     var options = {
         series: {
             bars: {
-                show: true
+                show: true,
+                barWidth: 0.15,
+                align: "center",
+                order: 1
             }
         },
-        bars: {
-            align: "center",
-            barWidth: 0.5
-        },
+//        bars: {
+//            align: "center",
+//            barWidth: 0.5
+//        },
         xaxis: {
-            axisLabel: "World Cities",
-            axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
-            axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 10,
-            ticks: ticks
+            mode: "categories",
+            ticks: <?php echo json_encode($todays_keys_orders); ?>,
+            tickLength: 1
+//            axisLabel: "World Cities",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 10,
+//            ticks: ticks
         },
         yaxis: {
-            axisLabel: "Average Temperature",
-            axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
-            axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 3,
-            tickFormatter: function (v, axis) {
-                return v.toFixed(0); // v;
-            },
+            allowDecimals: false
+//            axisLabel: "Average Temperature",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 3,
+//            tickFormatter: function (v, axis) {
+//                return v.toFixed(0); // v;
+//            },
             minTickSize: 1
         },
         legend: {
@@ -332,34 +456,40 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
         }
     };
-
     var options1 = {
         series: {
             bars: {
-                show: true
+                show: true,
+                barWidth: 0.15,
+                align: "center",
+                order: 1
             }
         },
-        bars: {
-            align: "center",
-            barWidth: 0.5
-        },
+//        bars: {
+//            align: "center",
+//            barWidth: 0.5
+//        },
         xaxis: {
-            axisLabel: "World Cities",
-            axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
-            axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 10,
-            ticks: ticks1
+            mode: "categories",
+            ticks: <?php echo json_encode($sevenDays_keys_orders); ?>,
+            tickLength: 1
+//            axisLabel: "World Cities",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 10,
+//            ticks: ticks
         },
         yaxis: {
-            axisLabel: "Average Temperature",
-            axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
-            axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 3,
-            tickFormatter: function (v, axis) {
-                return v.toFixed(0); // v;
-            },
+            allowDecimals: false
+//            axisLabel: "Average Temperature",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 3,
+//            tickFormatter: function (v, axis) {
+//                return v.toFixed(0); // v;
+//            },
             minTickSize: 1
         },
         legend: {
@@ -369,38 +499,44 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         },
         grid: {
             hoverable: true,
-            borderWidth: 2,        
+            borderWidth: 2,
             backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
         }
     };
-    
     var options2 = {
         series: {
             bars: {
-                show: true
+                show: true,
+                barWidth: 0.15,
+                align: "center",
+                order: 1
             }
         },
-        bars: {
-            align: "center",
-            barWidth: 0.5
-        },
+//        bars: {
+//            align: "center",
+//            barWidth: 0.5
+//        },
         xaxis: {
-            axisLabel: "World Cities",
-            axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
-            axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 10,
-            ticks: ticks2
+            mode: "categories",
+            ticks: <?php echo json_encode($thirtyDays_keys_orders); ?>,
+            tickLength: 1
+//            axisLabel: "World Cities",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 10,
+//            ticks: ticks
         },
         yaxis: {
-            axisLabel: "Average Temperature",
-            axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
-            axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 3,
-            tickFormatter: function (v, axis) {
-                return v.toFixed(0); // v;
-            },
+            allowDecimals: false
+//            axisLabel: "Average Temperature",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 3,
+//            tickFormatter: function (v, axis) {
+//                return v.toFixed(0); // v;
+//            },
             minTickSize: 1
         },
         legend: {
@@ -410,39 +546,44 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         },
         grid: {
             hoverable: true,
-            borderWidth: 2,        
+            borderWidth: 2,
             backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
         }
     };
-    
     var options3 = {
         series: {
             bars: {
                 show: true,
-                fill: true
+                barWidth: 0.15,
+                align: "center",
+                order: 1
             }
         },
-        bars: {
-            align: "center",
-            barWidth: 0.5
-        },
+//        bars: {
+//            align: "center",
+//            barWidth: 0.5
+//        },
         xaxis: {
-            axisLabel: "World Cities",
-            axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
-            axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 10,
-            ticks: ticks3
+            mode: "categories",
+            ticks: <?php echo json_encode($oneYears_keys_orders); ?>,
+            tickLength: 1
+//            axisLabel: "World Cities",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 10,
+//            ticks: ticks
         },
         yaxis: {
-            axisLabel: "Average Temperature",
-            axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
-            axisLabelFontFamily: 'Verdana, Arial',
-            axisLabelPadding: 3,
-            tickFormatter: function (v, axis) {
-                return v.toFixed(0); // v;
-            },
+            allowDecimals: false
+//            axisLabel: "Average Temperature",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 3,
+//            tickFormatter: function (v, axis) {
+//                return v.toFixed(0); // v;
+//            },
             minTickSize: 1
         },
         legend: {
@@ -452,22 +593,198 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
         },
         grid: {
             hoverable: true,
-            borderWidth: 2,        
+            borderWidth: 2,
             backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
         }
     };
+//
+//    var options1 = {
+//        series: {
+//            bars: {
+//                show: true
+//            }
+//        },
+//        bars: {
+//            align: "center",
+//            barWidth: 0.5
+//        },
+//        xaxis: {
+//            axisLabel: "World Cities",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 10,
+//            ticks: ticks1
+//        },
+//        yaxis: {
+//            axisLabel: "Average Temperature",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 3,
+//            tickFormatter: function (v, axis) {
+//                return v.toFixed(0); // v;
+//            },
+//            minTickSize: 1
+//        },
+//        legend: {
+//            noColumns: 0,
+//            labelBoxBorderColor: "#000000",
+//            position: "nw"
+//        },
+//        grid: {
+//            hoverable: true,
+//            borderWidth: 2,
+//            backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
+//        }
+//    };
+//
+//    var options2 = {
+//        series: {
+//            bars: {
+//                show: true
+//            }
+//        },
+//        bars: {
+//            align: "center",
+//            barWidth: 0.5
+//        },
+//        xaxis: {
+//            axisLabel: "World Cities",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 10,
+//            ticks: ticks2
+//        },
+//        yaxis: {
+//            axisLabel: "Average Temperature",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 3,
+//            tickFormatter: function (v, axis) {
+//                return v.toFixed(0); // v;
+//            },
+//            minTickSize: 1
+//        },
+//        legend: {
+//            noColumns: 0,
+//            labelBoxBorderColor: "#000000",
+//            position: "nw"
+//        },
+//        grid: {
+//            hoverable: true,
+//            borderWidth: 2,
+//            backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
+//        }
+//    };
+//
+//    var options3 = {
+//        series: {
+//            bars: {
+//                show: true,
+//                fill: true
+//            }
+//        },
+//        bars: {
+//            align: "center",
+//            barWidth: 0.5
+//        },
+//        xaxis: {
+//            axisLabel: "World Cities",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 10,
+//            ticks: ticks3
+//        },
+//        yaxis: {
+//            axisLabel: "Average Temperature",
+//            axisLabelUseCanvas: true,
+//            axisLabelFontSizePixels: 12,
+//            axisLabelFontFamily: 'Verdana, Arial',
+//            axisLabelPadding: 3,
+//            tickFormatter: function (v, axis) {
+//                return v.toFixed(0); // v;
+//            },
+//            minTickSize: 1
+//        },
+//        legend: {
+//            noColumns: 0,
+//            labelBoxBorderColor: "#000000",
+//            position: "nw"
+//        },
+//        grid: {
+//            hoverable: true,
+//            borderWidth: 2,
+//            backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
+//        }
+//    };
     
     $(document).ready(function () {
-        $.plot($("#flot-placeholder"), dataset, options);
+        $.plot($("#flot-placeholder"), [
+            {
+                label: "# Orders",
+                data: todaysDataOrders
+            },
+            {
+                label: "# Customers",
+                data: todaysDataCustomers
+            },
+            {
+                label: "$ Sales",
+                data: todaysDataDollars
+            }
+        ], options);
         $("#flot-placeholder").UseTooltip();
         
-        $.plot($("#flot-placeholder1"), dataset1, options1);
+        $.plot($("#flot-placeholder1"), [
+            {
+                label: "# Orders",
+                data: sevenDaysDataOrders
+            },
+            {
+                label: "# Customers",
+                data: sevenDaysDataCustomers
+            },
+            {
+                label: "$ Sales",
+                data: sevenDaysDataDollars
+            }
+        ], options1);
         $("#flot-placeholder1").UseTooltip();
         
-        $.plot($("#flot-placeholder2"), dataset2, options2);
+        $.plot($("#flot-placeholder2"), [
+            {
+                label: "# Orders",
+                data: thirtyDaysData,
+            },
+            {
+                label: "# Customers",
+                data: thirtyDaysDataCustomers
+            },
+            {
+                label: "$ Sales",
+                data: thirtyDaysDataDollars
+            }
+        ], options2);
         $("#flot-placeholder2").UseTooltip();
 
-        $.plot($("#flot-placeholder3"), dataset3, options3);
+        $.plot($("#flot-placeholder3"), [
+            {
+                label: "# Orders",
+                data: oneYearsData
+            },
+            {
+                label: "# Customers",
+                data: oneYearsDataCustomers
+            },
+            {
+                label: "$ Sales",
+                data: oneYearsDataDollars
+            }
+        ], options3);
         $("#flot-placeholder3").UseTooltip();
     });
 
