@@ -385,7 +385,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
             ticks: <?php echo json_encode($thirtyDays_keys_orders); ?>,
             tickLength: 1
         },
-        yaxis: [{
+        yaxes: [{
             position: 0,
             color: "black",
             axisLabel: "#",
