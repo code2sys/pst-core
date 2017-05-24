@@ -402,7 +402,9 @@ class Welcome extends Master_Controller {
 
 
         $filter = array();
-        if (isset($_GET['fltr'])) {
+        if (isset($_REQUEST['condition'])) {
+            $filter['condition'] = $_REQUEST['fltr'] == 'new' ? '1' : '2';
+        } else if (isset($_GET['fltr'])) {
             $filter['condition'] = $_GET['fltr'] == 'new' ? '1' : '2';
         }
 
