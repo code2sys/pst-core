@@ -1974,6 +1974,6 @@ p.creditCar_b.loct a i{
     display: none;
 }
 
-.fltrbar .mypagination li.active a {
-    background: #ccc;
+.mypagination ul li.active a {
+    background: #aaa;
 }
