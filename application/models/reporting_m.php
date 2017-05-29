@@ -538,7 +538,16 @@ class Reporting_M extends Master_M {
 	
     public function getProductsForGoogle($handle = null)
     {
-        $this->sub_getProductsForGoogle($handle, 0, is_null($handle) ? 0 : 5000);
+        $offset = 0;
+        $limit = is_null($handle) ? 0 : 5000;
+        if ($limit > 0) {
+            while ($this->sub_getProductsForGoogle($handle, $offset, $limit)) {
+                $offset += $limit;
+            }
+
+        } else {
+            $this->sub_getProductsForGoogle($handle, 0, 0);
+        }
     }
 
     public function sub_getProductsForGoogle($handle, $offset = 0, $limit = 0) {
@@ -566,7 +575,7 @@ class Reporting_M extends Master_M {
         }
 
         if ($part_count < $offset) {
-            return;
+            return false;
         }
 
         //partnumber.promotion_id AS promotion_id
@@ -651,47 +660,7 @@ class Reporting_M extends Master_M {
         $productsArr = array();
         $partnumbers1 = array();
 
-        // //
-        // $qry = "SELECT partpartnumber.partnumber_id, `partquestion`.`part_id` as part_id
-        // FROM (`partnumberpartquestion`)
-        // JOIN `partnumber` ON `partnumber`.`partnumber_id` = `partnumberpartquestion`.`partnumber_id`
-        // LEFT JOIN `partnumbermodel` ON `partnumbermodel`.`partnumber_id` = `partnumber`.`partnumber_id`
-        // JOIN `partpartnumber` ON `partpartnumber`.`partnumber_id` = `partnumber`.`partnumber_id`
-        // JOIN `partquestion` ON `partquestion`.`partquestion_id` = `partnumberpartquestion`.`partquestion_id`
-        // WHERE `productquestion` =  0
-        // AND  (partnumber.universalfit > 0 OR partnumbermodel.partnumbermodel_id is not null) 
-        // group by `question`";
-        // //group by `question`";
-        // //echo $qry;exit;
-        // $query = $this->db->query($qry);
-        // $ptnum = $query->result_array();
-        // $query->free_result();
-        // //echo '<pre>';
-        // //print_r($ptnum);
-        // //echo '</pre>';exit;
-        // if(count($ptnum) > 0) {
-        // $parts1 = array();
-        // foreach($ptnum as $krec => $rec) {
-        // if($rec['part_id'] != $rec['pid']) {
-        // }
-        // //$arr = explode(',', $rec['part_ids']);
-        // $sql = "SELECT part.part_id
-        // FROM part
-        // JOIN partpartnumber ON partpartnumber.part_id = part.part_id
-        // WHERE partpartnumber.partnumber_id = '".$rec['partnumber_id']."'";
-        // $query = $this->db->query($sql);
-        // $results = $query->result_array();
-        // $query->free_result();
-        // //if(!in_array(@$results[0]['part_id'], $parts1[$rec['part_id']])) {
-        // //$parts1[$rec['part_id']][] = @$results[0]['part_id'];
-        // //}
-        // }
-        // }
-        //echo '<pre>';
-        //print_r($partnumbers);
-        //echo '</pre>';exit;
-        //
-			
+
 		$gender_arr = array('mens', 'womens', 'boys', 'girls');
 
         if ($partnumbers) {
@@ -867,9 +836,7 @@ class Reporting_M extends Master_M {
             }
         }
 
-        if ($limit > 0) {
-            return $this->sub_getProductsForGoogle($handle, $offset + $limit, $limit);
-        }
+        return true;
     }
 
     public function check_array_duplicacy($title, $arr) {
