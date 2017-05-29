@@ -711,12 +711,12 @@ class Reporting_M extends Master_M {
                         }
                     }
                     foreach ($PriceArr as $pa) {
-                        $finalPriceArr['retail_min'] += $pa['retail_min'];
-                        $finalPriceArr['retail_max'] += $pa['retail_max'];
-                        $finalPriceArr['sale_min'] += $pa['sale_min'];
-                        $finalPriceArr['sale_max'] += $pa['sale_max'];
-                        $finalPriceArr['dealer_sale_min'] += $pa['dealer_sale_min'];
-                        $finalPriceArr['dealer_sale_max'] += $pa['dealer_sale_max'];
+                        $finalPriceArr['retail_min'] += array_key_exists("retail_min", $pa) ? $pa['retail_min'] : 0;
+                        $finalPriceArr['retail_max'] += array_key_exists("retail_max", $pa) ? $pa['retail_max'] : 0;
+                        $finalPriceArr['sale_min'] += array_key_exists("sale_min", $pa) ? $pa['sale_min'] : 0;
+                        $finalPriceArr['sale_max'] += array_key_exists("sale_max", $pa) ? $pa['sale_max'] : 0;
+                        $finalPriceArr['dealer_sale_min'] += array_key_exists("dealer_sale_min", $pa) ? $pa['dealer_sale_min'] : 0;
+                        $finalPriceArr['dealer_sale_max'] += array_key_exists("dealer_sale_max", $pa) ? $pa['dealer_sale_max'] : 0;
                     }
                     $part['price'] = $this->calculateMarkupReporting($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup'], $finalPriceArr['dealer_sale_min'], $finalPriceArr['dealer_sale_max'], $finalPriceArr['cnt'])['sale_min'];
                 }
@@ -727,10 +727,11 @@ class Reporting_M extends Master_M {
                 $part['google_product_category'] = "";
                 $part['promotion_id'] = "";
 
-                if (!array_search($part['answer'], $a)) {
+                // JLB 05-29-17 I have no idea what $a is. This throws an error.
+                // if (!array_search($part['answer'], $a)) {
 					$prt = $this->getQuestionAnswerByNumberFeed($part['part_own_id'], $part['id']);
                     $part['title'] = $part['title'] . ' - ' . $prt['answer'];
-                }
+                // }
                 unset($part['answer']);
 
                 $tempArr = array();
