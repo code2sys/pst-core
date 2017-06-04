@@ -1,3 +1,60 @@
+
+Update June 4, 2017
+===================
+
+
+Some feedback on the motorcycle code; I don't know who did all of this, so please consider this as general advice:
+
+1. The motorcycle functionality was added to the welcome controller. Then, the routes config was changed to handle the different URLs. When there is a major new area of functionality - make a new controller for it. The current code in develop now uses motorcycle_ci.php as the controller.
+2. Next, there were about 10 instances in the code where you broke out the condition, brands, years, and categories. These had subtle differences:
+    
+    * Sometimes, you didn't want one of the fields - e.g., brands, years, categories
+    * Sometimes, it came from $_POST instead of $_GET
+    * Sometimes, you expected something to be an array, other times you expected it to be a string. 
+    * Sometimes, you used the where_in function (which I think prevents SQL injection), and other times, you built a string (which looked ripe for being exploited)
+
+So, I made two functions in motorcycle_m:
+
+* assembleFilterFromRequest - this exists to create the original $filter array based on inputs
+* buildWhere - this exists to factor out handling the $filter array from six functions in motorcycle_m.
+
+There were three more occurrences, but I removed those functions. I could not find them called anywhere in the code, and having getMotorcycles and getFilterMotorcyclces in the same model, with almost the same code, except you were passing in an offset and calling it $limit in one of them, was really confusing.
+
+Don't these functions seem shorter and easier to make correct?
+
+<pre>
+    public function getFilterTotal( $filter ) {
+        $where = $this->buildWhere($filter);
+        $this->db->select('count(id)');
+        $record = $this->selectRecord('motorcycle', $where);
+        return $record['cnt'];
+    }
+
+    public function getMotorcycleMake($filter = array()) {
+        $where = $this->buildWhere($filter);
+        $this->db->select('make');
+        $this->db->group_by('make');
+        $record = $this->selectRecords('motorcycle', $where);
+        return $record;
+    }
+</pre>
+
+Before, they all had about 30-50 lines of duplicated code with subtle variations. Now, there are just three optional parameters to buildWhere to turn them on and off:
+
+<pre>
+    public function getMotorcycleYear($filter = array()) {
+        $where = $this->buildWhere($filter, true);
+        $this->db->select('year');
+        $this->db->group_by('year');
+        $record = $this->selectRecords('motorcycle', $where);
+        return $record;
+    }
+</pre>
+
+This fixes several things discovered in the motorcycle code when testing for BX and it applied to all stores, including that the page numbers were not reliably calculated correctly (even though you computed the bikes to show correctly - showing again the problem of having copy-and-pasted the code with subtle variations....)  and that the filters were not being applied when you changed pages - e.g., if you applied a filter that limited it to, say, two pages, and switched to page 2, suddenly, the filter would fall off the results but shown checked on the page.
+
+
+
 Update May 22, 2017
 ===================
 
