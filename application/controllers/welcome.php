@@ -305,137 +305,19 @@ class Welcome extends Master_Controller {
     }
 
     public function benz() {
-        // $this->load->view('benz_views/header.php');
-        // $this->load->view('benz_views/index.php');
-        // $this->load->view('benz_views/footer.php');
-
-        $this->load->model('motorcycle_m');
-        $this->_mainData['featured'] = $this->motorcycle_m->getFeaturedMonster();
-        $this->renderMasterPage('benz_views/header.php', 'benz_views/index.php', $this->_mainData);
+        header("Location: " . site_url("motorcycle_ci/benz"));
     }
 
     public function benzProduct() {
-        $filter = array();
-        if (isset($_GET['fltr'])) {
-            $filter['condition'] = $_GET['fltr'] == 'new' ? '1' : '2';
-        }
-
-        if (isset($_GET['brands']) && $_GET['brands'] != "") {
-            $brnds = explode('$', $_GET['brands']);
-            $brnds = array_filter($brnds);
-            $filter['brands'] = $brnds;
-        }
-        if (isset($_GET['years']) && $_GET['years'] != "") {
-            $years = explode('$', $_GET['years']);
-            $years = array_filter($years);
-            $filter['years'] = $years;
-        }
-        if (isset($_GET['categories']) && $_GET['categories'] != "") {
-            $categories = explode('$', $_GET['categories']);
-            $categories = array_filter($categories);
-            $filter['categories'] = $categories;
-        }
-        if (isset($_GET['vehicles']) && $_GET['vehicles'] != "") {
-            $vehicles = explode('$', $_GET['vehicles']);
-            $vehicles = array_filter($vehicles);
-            $filter['vehicles'] = $vehicles;
-        }
-
-        $this->load->model('motorcycle_m');
-
-        $this->_mainData['vehicles'] = $this->motorcycle_m->getMotorcycleVehicle($filter);
-        $this->_mainData['brands'] = $this->motorcycle_m->getMotorcycleMake($filter);
-        $this->_mainData['years'] = $this->motorcycle_m->getMotorcycleYear($filter);
-        $this->_mainData['categories'] = $this->motorcycle_m->getMotorcycleCategory($filter);
-        $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter);
-
-        $total = $this->motorcycle_m->getTotal($filter);
-        $this->_mainData['pages'] = ceil($total / 6);
-
-        $recently = $_SESSION['recentlyMotorcycle'];
-        $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
-
-        $this->renderMasterPage('benz_views/header.php', 'benz_views/product.php', $this->_mainData);
-        // $this->load->view('benz_views/header.php');
-        // $this->load->view('benz_views/product.php');
-        // $this->load->view('benz_views/footer.php');
+        header("Location: " . site_url("motorcycle_ci/benzProduct"));
     }
 
     public function benzDetails($title = null) {
-        $this->load->model('motorcycle_m');
-        $title1 = str_replace('_', ' ', urldecode($title));
-        $id = $this->motorcycle_m->getMotorcycleIdByTitle($title1);
-        // echo urldecode($title);
-        // echo $id.'<br>';
-        // echo $title;exit;
-        if ($id == null) {
-            redirect('welcome/benzProduct');
-        }
-
-        // $this->load->view('benz_views/header.php');
-        // $this->load->view('benz_views/product-details.php');
-        // $this->load->view('benz_views/footer.php');
-
-        $recently = $_SESSION['recentlyMotorcycle'];
-        $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
-
-        $this->_mainData['motorcycle'] = $this->motorcycle_m->getMotorcycle($id);
-        $_SESSION['recentlyMotorcycle'][$id] = $id;
-
-        if (@$this->_mainData['motorcycle']['images'][0]['image_name']) {
-            //$metaTag = '<meta property="og:image" content="'.$this->_mainData['motorcycle']['images'][0]['image_name'].'"/>';
-            $metaTag = '<meta property="og:image" content="' . jsite_url('/media/') . $this->_mainData['motorcycle']['images'][0]['image_name'] . '"/>';
-            $this->setMasterPageVars('metatag', $metaTag);
-        }
-
-        $this->renderMasterPage('benz_views/header.php', 'benz_views/product-details.php', $this->_mainData);
+        header("Location: " . site_url("motorcycle_ci/benzDetails/$title"));
     }
 
     public function filterMotorcycle() {
-        $this->load->model('motorcycle_m');
-        $filter = $this->input->post();
-        $curPage = $this->input->post("page") ? $this->input->post("page") : 0;
-        $offset = ($curPage * 6);
-
-        unset($filter['page']);
-        $motorcycles['motorcycles'] = $this->motorcycle_m->getFilterMotorcycles($filter, $offset);
-
-
-        $filter = array();
-        if (isset($_REQUEST['condition'])) {
-            $filter['condition'] = $_REQUEST['condition'] == 'new' ? '1' : '2';
-        } else if (isset($_GET['fltr'])) {
-            $filter['condition'] = $_GET['fltr'] == 'new' ? '1' : '2';
-        }
-
-        if (isset($_GET['brands']) && $_GET['brands'] != "") {
-            $brnds = explode('$', $_GET['brands']);
-            $brnds = array_filter($brnds);
-            $filter['brands'] = $brnds;
-        }
-        if (isset($_GET['years']) && $_GET['years'] != "") {
-            $years = explode('$', $_GET['years']);
-            $years = array_filter($years);
-            $filter['years'] = $years;
-        }
-        if (isset($_GET['categories']) && $_GET['categories'] != "") {
-            $categories = explode('$', $_GET['categories']);
-            $categories = array_filter($categories);
-            $filter['categories'] = $categories;
-        }
-        if (isset($_GET['vehicles']) && $_GET['vehicles'] != "") {
-            $vehicles = explode('$', $_GET['vehicles']);
-            $vehicles = array_filter($vehicles);
-            $filter['vehicles'] = $vehicles;
-        }
-
-
-        $total = $this->motorcycle_m->getTotal($filter);
-        $motorcycles['pages'] = ceil($total / 6);
-        $motorcycles['page'] = $curPage;
-
-        $filteredProducts = $this->load->view('benz_views/filter-product.php', $motorcycles, true);
-        echo $filteredProducts;
+        header("Location: " . site_url("motorcycle_ci/filterMotorcycle"));
     }
 
     public function product_search() {

@@ -41,8 +41,8 @@
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';  
 $route['Motorcycle_Gear_Brands'] = 'shopping/brands';
-$route['Motorcycle_List'] = 'welcome/benzProduct';
-$route['motorcycle/([a-zA-z0-9_-]+)'] = 'welcome/benzDetails/$1/$2';
+$route['Motorcycle_List'] = 'motorcycle_ci/benzProduct';
+$route['motorcycle/([a-zA-z0-9_-]+)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['streetbikeparts'] = 'streetbikeparts/index';
 $route['dirtbikeparts'] = 'dirtbikeparts/index';
 $route['vtwin'] = 'vtwin/index';
@@ -52,13 +52,13 @@ $route['atvparts'] = 'atvparts/index';
 $route['utvparts'] = 'utvparts/index';
 $route['admin'] = 'admin/index';
 
-$route['atv/(:any)/(:any)'] = 'welcome/benzDetails/$1/$2';
-$route['utv/(:any)/(:any)'] = 'welcome/benzDetails/$1/$2';
-$route['streetbike/(:any)/(:any)'] = 'welcome/benzDetails/$1/$2';
-$route['dirtbike/(:any)/(:any)'] = 'welcome/benzDetails/$1/$2';
-$route['watercraft/(:any)/(:any)'] = 'welcome/benzDetails/$1/$2';
-$route['snowmobile/(:any)/(:any)'] = 'welcome/benzDetails/$1/$2';
-$route['utility/(:any)/(:any)'] = 'welcome/benzDetails/$1/$2';
+$route['atv/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
+$route['utv/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
+$route['streetbike/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
+$route['dirtbike/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
+$route['watercraft/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
+$route['snowmobile/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
+$route['utility/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 
 $route['([a-zA-z0-9_-]+)'] = "shopping/brand/$1/$2";
 //$route['atvparts'] = 'atvparts/index';
