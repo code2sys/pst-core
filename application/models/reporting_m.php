@@ -538,7 +538,16 @@ class Reporting_M extends Master_M {
 	
     public function getProductsForGoogle($handle = null)
     {
-        $this->sub_getProductsForGoogle($handle, 0, is_null($handle) ? 0 : 5000);
+        $offset = 0;
+        $limit = is_null($handle) ? 0 : 5000;
+        if ($limit > 0) {
+            while ($this->sub_getProductsForGoogle($handle, $offset, $limit)) {
+                $offset += $limit;
+            }
+
+        } else {
+            $this->sub_getProductsForGoogle($handle, 0, 0);
+        }
     }
 
     public function sub_getProductsForGoogle($handle, $offset = 0, $limit = 0) {
@@ -566,7 +575,7 @@ class Reporting_M extends Master_M {
         }
 
         if ($part_count < $offset) {
-            return;
+            return false;
         }
 
         //partnumber.promotion_id AS promotion_id
@@ -651,47 +660,7 @@ class Reporting_M extends Master_M {
         $productsArr = array();
         $partnumbers1 = array();
 
-        // //
-        // $qry = "SELECT partpartnumber.partnumber_id, `partquestion`.`part_id` as part_id
-        // FROM (`partnumberpartquestion`)
-        // JOIN `partnumber` ON `partnumber`.`partnumber_id` = `partnumberpartquestion`.`partnumber_id`
-        // LEFT JOIN `partnumbermodel` ON `partnumbermodel`.`partnumber_id` = `partnumber`.`partnumber_id`
-        // JOIN `partpartnumber` ON `partpartnumber`.`partnumber_id` = `partnumber`.`partnumber_id`
-        // JOIN `partquestion` ON `partquestion`.`partquestion_id` = `partnumberpartquestion`.`partquestion_id`
-        // WHERE `productquestion` =  0
-        // AND  (partnumber.universalfit > 0 OR partnumbermodel.partnumbermodel_id is not null) 
-        // group by `question`";
-        // //group by `question`";
-        // //echo $qry;exit;
-        // $query = $this->db->query($qry);
-        // $ptnum = $query->result_array();
-        // $query->free_result();
-        // //echo '<pre>';
-        // //print_r($ptnum);
-        // //echo '</pre>';exit;
-        // if(count($ptnum) > 0) {
-        // $parts1 = array();
-        // foreach($ptnum as $krec => $rec) {
-        // if($rec['part_id'] != $rec['pid']) {
-        // }
-        // //$arr = explode(',', $rec['part_ids']);
-        // $sql = "SELECT part.part_id
-        // FROM part
-        // JOIN partpartnumber ON partpartnumber.part_id = part.part_id
-        // WHERE partpartnumber.partnumber_id = '".$rec['partnumber_id']."'";
-        // $query = $this->db->query($sql);
-        // $results = $query->result_array();
-        // $query->free_result();
-        // //if(!in_array(@$results[0]['part_id'], $parts1[$rec['part_id']])) {
-        // //$parts1[$rec['part_id']][] = @$results[0]['part_id'];
-        // //}
-        // }
-        // }
-        //echo '<pre>';
-        //print_r($partnumbers);
-        //echo '</pre>';exit;
-        //
-			
+
 		$gender_arr = array('mens', 'womens', 'boys', 'girls');
 
         if ($partnumbers) {
@@ -742,12 +711,12 @@ class Reporting_M extends Master_M {
                         }
                     }
                     foreach ($PriceArr as $pa) {
-                        $finalPriceArr['retail_min'] += $pa['retail_min'];
-                        $finalPriceArr['retail_max'] += $pa['retail_max'];
-                        $finalPriceArr['sale_min'] += $pa['sale_min'];
-                        $finalPriceArr['sale_max'] += $pa['sale_max'];
-                        $finalPriceArr['dealer_sale_min'] += $pa['dealer_sale_min'];
-                        $finalPriceArr['dealer_sale_max'] += $pa['dealer_sale_max'];
+                        $finalPriceArr['retail_min'] += array_key_exists("retail_min", $pa) ? $pa['retail_min'] : 0;
+                        $finalPriceArr['retail_max'] += array_key_exists("retail_max", $pa) ? $pa['retail_max'] : 0;
+                        $finalPriceArr['sale_min'] += array_key_exists("sale_min", $pa) ? $pa['sale_min'] : 0;
+                        $finalPriceArr['sale_max'] += array_key_exists("sale_max", $pa) ? $pa['sale_max'] : 0;
+                        $finalPriceArr['dealer_sale_min'] += array_key_exists("dealer_sale_min", $pa) ? $pa['dealer_sale_min'] : 0;
+                        $finalPriceArr['dealer_sale_max'] += array_key_exists("dealer_sale_max", $pa) ? $pa['dealer_sale_max'] : 0;
                     }
                     $part['price'] = $this->calculateMarkupReporting($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup'], $finalPriceArr['dealer_sale_min'], $finalPriceArr['dealer_sale_max'], $finalPriceArr['cnt'])['sale_min'];
                 }
@@ -758,10 +727,11 @@ class Reporting_M extends Master_M {
                 $part['google_product_category'] = "";
                 $part['promotion_id'] = "";
 
-                if (!array_search($part['answer'], $a)) {
+                // JLB 05-29-17 I have no idea what $a is. This throws an error.
+                // if (!array_search($part['answer'], $a)) {
 					$prt = $this->getQuestionAnswerByNumberFeed($part['part_own_id'], $part['id']);
                     $part['title'] = $part['title'] . ' - ' . $prt['answer'];
-                }
+                // }
                 unset($part['answer']);
 
                 $tempArr = array();
@@ -867,9 +837,7 @@ class Reporting_M extends Master_M {
             }
         }
 
-        if ($limit > 0) {
-            return $this->sub_getProductsForGoogle($handle, $offset + $limit, $limit);
-        }
+        return true;
     }
 
     public function check_array_duplicacy($title, $arr) {

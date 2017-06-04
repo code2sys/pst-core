@@ -2771,7 +2771,7 @@ class Parts_M extends Master_M {
             $this->db->group_by('partvariation_id');
             $partvariations = $this->selectRecords('partnumber', $where);
 
-            if (@partvariations) {
+            if (@$partvariations) {
                 foreach ($partvariations as $partvariation) {
                     $this->db->select('MIN(category.mark_up) as markup');
                     $where = array('partcategory.part_id' => $partvariation['part_id'], 'category.mark_up > ' => 0);
