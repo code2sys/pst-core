@@ -314,6 +314,7 @@
 			</div>
 			<div class="one-fifth">
 				<h3>quick links</h3>
+				<?php print_r($pages); ?>
 				<ul class="clear">
 					<li><a href="<?php echo site_url('pages/index/shippingquestions');?>">Shipping  Questions</a></li>
 					<li><a href="<?php echo site_url('pages/index/returnpolicy');?>">Return Policy</a></li>
