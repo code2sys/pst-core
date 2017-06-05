@@ -12,6 +12,17 @@ require_once(__DIR__ . "/welcome.php");
 
 class Motorcycle_CI extends Welcome {
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (defined("MOTORCYCLE_SHOP_DISABLE") && MOTORCYCLE_SHOP_DISABLE) {
+            // redirect it
+            header("Location: /");
+            exit();
+        }
+    }
+
     /*
      * JLB 06-04-17
      * Migrated from Welcome. Why do we dump EVERYTHING there???
