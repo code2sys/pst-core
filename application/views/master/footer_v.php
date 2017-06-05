@@ -22,6 +22,7 @@ $new_assets_url1 = jsite_url( "/qatesting/benz_assets/");
 				</ul>				
 			</div>
 			<div class="one-fifth">
+				<?php print_r($pages); ?>
 				<h3>quick links</h3>
 				<ul class="clear">
 					<li><a href="<?php echo site_url('pages/index/shippingquestions');?>">Shipping  Questions</a></li>
