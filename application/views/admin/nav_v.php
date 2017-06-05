@@ -63,9 +63,11 @@ if (!is_null($pageIndex) && $pageIndex < 9)
 					<?php if(in_array('customers', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
 						<li><a href="<?php echo base_url('/admin/customers'); ?>" ><i class="fa fa-users"></i>&nbsp;Customer</a></li>
 					<?php } ?>
+                    <?php if (!defined("MOTORCYCLE_SHOP_DISABLE") || !MOTORCYCLE_SHOP_DISABLE): ?>
 					<?php if(in_array('mInventory', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
 						<li><a href="<?php echo base_url('/admin/mInventory'); ?>" ><i class="fa fa-motorcycle"></i>&nbsp;Motorcycle Inventory</a></li>
 					<?php } ?>
+                    <?php endif; ?>
                     <!--<li><a href="<?php echo base_url('/admin/wishlists'); ?>" ><i class="fa fa-magic"></i>&nbsp;Wishlist</a></li> -->
                     <!--<li><a href="<?php echo base_url('/admin/closeout_rules'); ?>" ><i class="fa fa-cubes"></i>&nbsp;Closeout Schedule</a></li>-->
                 </ul>
