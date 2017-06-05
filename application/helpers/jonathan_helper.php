@@ -90,3 +90,28 @@ if (!function_exists("sub_googleSalesXMLNew")) {
         $CI->admin_m->update_feed_log($data);
     }
 }
+
+// We need to print out the footer without always relying on the same code copied-and-pasted everywhere.
+function jprint_interactive_footer($pages) {
+    ?>
+<div class="one-fifth">
+    <?php
+    if (is_array($pages) && count($pages) > 0) {
+        ?>
+    <h3>quick links</h3>
+    <ul class="clear">
+
+        <?php
+        foreach ($pages as $p) {
+        ?>
+        <li><a href="<?php echo site_url('pages/index/' . $p['tag']); ?>"><?php echo $p['label']; ?></a></li>
+            <?php
+        }
+        ?>
+    </ul>
+        <?php
+    }
+    ?>
+</div>
+    <?php
+}

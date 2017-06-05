@@ -65,7 +65,7 @@
 															  <input id="icon" name="icon" value="<?php echo @$pageRec['icon']; ?>" class="text large" /></td>
 						</tr>
 						<tr>
-							<td>Location</td><td><span style="font-size:10px;">*Limit 5 pages for Footer.</span><br />
+							<td>Location</td><td><span style="font-size:10px;">*Limit <?php echo FOOTER_PAGE_LIMIT; ?> pages for Footer.</span><br />
 																	<?php if(@$location): foreach($location as $key => $loc): ?>
 																		<?php echo form_checkbox('location[]', $key, is_numeric(array_search($key, $pageRec['location'])) );  ?> <?php echo $loc; ?><br />
 																	<?php endforeach; endif; ?>
