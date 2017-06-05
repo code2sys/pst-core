@@ -312,17 +312,10 @@
 					<li><a href="<?php echo site_url('pages/index/aboutus');?>">About Us</a></li>
 				</ul>				
 			</div>
-			<div class="one-fifth">
-				<h3>quick links</h3>
-				<?php print_r($pages); ?>
-				<ul class="clear">
-					<li><a href="<?php echo site_url('pages/index/shippingquestions');?>">Shipping  Questions</a></li>
-					<li><a href="<?php echo site_url('pages/index/returnpolicy');?>">Return Policy</a></li>
-					<li><a href="<?php echo site_url('pages/index/privacypolicy');?>">Privacy Policy</a></li>
-					<li><a href="<?php echo site_url('pages/index/termsofservice');?>">Terms of Service</a></li>
-					<li><a href="<?php echo site_url('pages/index/paymentoptions');?>">Payment Option</a></li>
-				</ul>
-			</div>
+			<?php
+			jprint_interactive_footer($pages); ?>
+			?>
+
 			<div class="one-fifth map">
 				<h3>Contact Us</h3>
 				<ul class="clear">
