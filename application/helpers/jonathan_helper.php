@@ -93,6 +93,14 @@ if (!function_exists("sub_googleSalesXMLNew")) {
 
 // We need to print out the footer without always relying on the same code copied-and-pasted everywhere.
 function jprint_interactive_footer($pages) {
+
+    if (!isset($pages) || is_null($pages) || !is_array($pages)) {
+        // Well, if there is nothing here, then let's go get the real deal.
+        $CI =& get_instance();
+        $CI->load->model('pages_m');
+        $pages = $CI->pages_m->getPages(1, 'footer');
+    }
+
     ?>
 <div class="one-fifth">
     <?php
