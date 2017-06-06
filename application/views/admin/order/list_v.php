@@ -1,6 +1,6 @@
 	<div class="content_wrap">
 		<div class="content">
-		<a href="<?php echo base_url('admin/order_edit'); ?>" id="button">Create Order</a>
+		<a href="<?php echo base_url('admin/create_order'); ?>" id="button">Create Order</a>
 		<div class="clear"></div>
 		
 		<!-- VALIDATION ALERT -->

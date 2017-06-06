@@ -1391,3 +1391,56 @@ p.cmplt{background-color:green !important;float:left; margin:0px 0 5px -5px !imp
 	font-size: 15px;
 }
 /**Custom Dashboard Style Code by Pradeep**/
+
+
+
+/**Custom Create Order Style Code by Pradeep**/
+/* highlight results */
+.ui-autocomplete span.hl_results {
+    background-color: #ffff66;
+}
+ 
+/* loading - the AJAX indicator */
+.ui-autocomplete-loading {
+    background: white url('../img/ui-anim_basic_16x16.gif') right center no-repeat;
+}
+ 
+.ui-autocomplete {
+    max-height: 250px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding for vertical scrollbar */
+    padding-right: 5px;
+}
+ 
+.ui-autocomplete li {
+    font-size: 16px;
+}
+ 
+* html .ui-autocomplete {
+    height: 250px;
+}
+
+.ui-helper-hidden-accessible {
+    display:none !important;
+}
+/**Custom Create Order Style Code by Pradeep**/
+
+.wdth-25 {
+    width: 25%;
+    float:left;
+}
+.wdth-75 {
+    width: 71%;
+    float:left;
+    padding: 10px;
+}
+ul.ui-autocomplete.ui-menu{
+    width:400px;
+    list-style-type: none;
+    background-color: lightgrey;
+}
+
+
+
