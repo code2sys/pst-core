@@ -853,9 +853,6 @@ class Shopping extends Master_Controller {
                 if (count($post['question']) == 1)
                     unset($post['question']);
             }
-			// echo '<pre>';
-			// print_r($post);
-			// echo '</pre>';exit;
             if (($this->_mainData['garageNeeded']) && ($this->_mainData['validRide']) && (@$_SESSION['garage'] )) {
                 if (!is_numeric(strpos($post['display_name'], '|||Fits')))
                     $post['display_name'] .= '|||Fits :: ' . $_SESSION['activeMachine']['name'] . '||';

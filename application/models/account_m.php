@@ -942,6 +942,17 @@ class Account_M extends Master_M
 								$data['fitment'] = $dftmnt['make'].' '.$dftmnt['model'].' '.$dftmnt['year'];
 							}
 							$data['fitment'] = $product['ftmnt'];
+                                                        
+                                                        $this->db->select('partnumber.partnumber_id');
+                                                        $disWhere = array('partnumber' => $sku);
+                                                        $distributorcs = $this->selectRecord('partnumber', $disWhere);
+                                                        
+                                                        $disWhere = array('partnumber_id' => $distributorcs['partnumber_id']);
+                                                        $this->db->join('distributor', 'distributor.distributor_id=partvariation.distributor_id');
+                                                        $distributorDtl = $this->selectRecord('partvariation', $disWhere);
+                                                        
+                                                        $data['distributor'] = array('id' => $distributorDtl['distributor_id'], 'qty' => @$product['qty'], 'part_number' => $distributorDtl['part_number'], 'distributor_name' => $distributorDtl['name'], 'dis_cost' => $distributorDtl['cost']);
+                                                        $data['distributor'] = json_encode($data['distributor']);
 					  		$this->createRecord('order_product', $data, FALSE);
 				  		}
 							//Static Order Screen
@@ -957,6 +968,7 @@ class Account_M extends Master_M
 									  partnumber.sale,
 									  partvariation.stock_code,
 									  order_product.product_sku,
+									  order_product.distributor,
 									  order_product.status');
 							$where = array('order_id' => $orderId, 'productquestion' => 0);
 							$this->db->join('partnumber', 'partnumber.partnumber = order_product.product_sku', 'LEFT');
@@ -984,6 +996,18 @@ class Account_M extends Master_M
 								$data['fitment'] = $dftmnt['make'].' '.$dftmnt['model'].' '.$dftmnt['year'];
 							}
 							$data['fitment'] = $product['ftmnt'];
+                                                        
+                                                $this->db->select('partnumber.partnumber_id');
+                                                $disWhere = array('partnumber' => $key);
+                                                $distributorcs = $this->selectRecord('partnumber', $disWhere);
+
+                                                $disWhere = array('partnumber_id' => $distributorcs['partnumber_id']);
+                                                $this->db->join('distributor', 'distributor.distributor_id=partvariation.distributor_id');
+                                                $distributorDtl = $this->selectRecord('partvariation', $disWhere);
+
+                                                $data['distributor'] = array('id' => $distributorDtl['distributor_id'], 'qty' => @$product['qty'], 'part_number' => $distributorDtl['part_number'], 'distributor_name' => $distributorDtl['name'], 'dis_cost' => $distributorDtl['cost']);
+                                                $data['distributor'] = json_encode($data['distributor']);
+                                                
 			  			$this->createRecord('order_product', $data, FALSE);
 						//Static Order Screen
 						$this->db->select('partnumber.partnumber_id, 
@@ -1006,6 +1030,7 @@ class Account_M extends Master_M
 						if(@$staticOrder) {
 							foreach( $staticOrder as $k => $v ) {
 								$v['order_id'] = $orderId;
+                                                                $v['distributor'] = $distributorDtl['distributor'];
 								$this->createRecord('order_product_details', $v, FALSE);
 							}
 						}
@@ -1238,4 +1263,13 @@ class Account_M extends Master_M
 		// echo "</pre>";exit;
 	   $this->db->insert('finance_applications', $data );
 	}
+        
+        public function createGuestCustomer( $customerData, $orderId ) {
+            $where = array('id' => $orderId);
+            $order = $this->selectRecord('order', $where);
+            if(!@$order['user_id']) {
+                return $this->createRecord('user', $customerData, FALSE);
+            }
+            return $order['user_id'];
+        }
 }

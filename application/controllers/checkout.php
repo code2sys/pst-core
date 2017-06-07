@@ -885,6 +885,16 @@ var sa_products = { '.$rating.' };
 				$this->load->model('order_m');
 				$this->order_m->updateStatus($_SESSION['newOrderNum'], 'Declined', 'Zero Balance at Payment Submit!');
 			} elseif( @$result->success ) {
+                                $transaction = $result->transaction;
+                                //$arr = array('braintree_transaction_id' => $transaction->id);
+                                
+				$this->load->model('admin_m');
+				//$this->admin_m->updateOrderPaymentByAdmin( $_SESSION['newOrderNum'], $arr );
+                                
+                                $transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction->id, 'transaction_date' => time());
+                                $transaction['amount'] = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'],2);
+                                $this->admin_m->addOrderTransaction($transaction);
+                                
 				$this->completeOrder(@$user_id);
 			} else {
 				$this->_mainData['processingError'] = "Your payment has failed to process.  " .@$response ."<br />Please check your billing information and card and try again.";

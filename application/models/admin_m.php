@@ -108,8 +108,8 @@ class Admin_M extends Master_M {
                 $custom_where1 = "(";
                 foreach ($filter as $search) {
                     //$custom_where .= 'MATCH(motorcycle.title) AGAINST("' . trim($search) . '")';
-					$custom_where .= 'title like "%' . trim($search) . '%"';
-					$custom_where1 .= 'sku like "%' . trim($search) . '%"';
+                    $custom_where .= 'title like "%' . trim($search) . '%"';
+                    $custom_where1 .= 'sku like "%' . trim($search) . '%"';
                 }
                 $custom_where = rtrim($custom_where, 'OR') . ')';
                 $custom_where1 = rtrim($custom_where1, 'OR') . ')';
@@ -153,10 +153,10 @@ class Admin_M extends Master_M {
         $record['partnumbers'] = $this->selectRecords('partnumber', $where);
         return $record;
     }
-	
+
     public function getAdminMotorcycle($part_id) {
         $where = array('motorcycle.id' => $part_id);
-		$this->db->join('motorcycle_category', 'motorcycle_category.id = motorcycle.category');
+        $this->db->join('motorcycle_category', 'motorcycle_category.id = motorcycle.category');
         $record = $this->selectRecord('motorcycle', $where);
         return $record;
     }
@@ -166,7 +166,7 @@ class Admin_M extends Master_M {
         $record = $this->selectRecords('part_video', $where);
         return $record;
     }
-    
+
     public function getProductSizeChart($part_id) {
         $where = array('part_id' => $part_id);
         $record = $this->selectRecord('part_sizechart', $where);
@@ -374,20 +374,20 @@ class Admin_M extends Master_M {
         $this->db->limit($limit);
         $this->db->order_by('recCreated ASC');
         $records = $this->selectRecords('queued_parts');
-		// echo '<pre>';
-		// print_r($records);
-		// echo '</pre>';
+        // echo '<pre>';
+        // print_r($records);
+        // echo '</pre>';
         if ($records) {
             for ($i = 0; $i < count($records); $i++) {
-				$category = $this->getSecondBreadCrumb( $records[$i]['part_id'] );
-				$category_markup = array();
-				foreach( $category as $cat ) {
-					$category_markup[] = $cat['id'];
-				}
+                $category = $this->getSecondBreadCrumb($records[$i]['part_id']);
+                $category_markup = array();
+                foreach ($category as $cat) {
+                    $category_markup[] = $cat['id'];
+                }
 
-				$this->db->select('MIN(category.mark_up) as markup');
+                $this->db->select('MIN(category.mark_up) as markup');
                 $where = array('category.mark_up > ' => 0);
-				$this->db->where_in('category_id', $category_markup);
+                $this->db->where_in('category_id', $category_markup);
                 //$this->db->join('partcategory', 'partcategory.category_id = category.category_id');
                 $categories = $this->selectRecord('category', $where);
 
@@ -408,7 +408,7 @@ class Admin_M extends Master_M {
                 $this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
                 $partnumbers = $this->selectRecords('partnumber', $where);
 
-				$this->db->select('partnumber.*, partdealervariation.cost as dealer_cost');
+                $this->db->select('partnumber.*, partdealervariation.cost as dealer_cost');
                 $where = array('partpartnumber.part_id' => $records[$i]['part_id'], 'partnumber.price > ' => 0);
                 $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id ');
                 $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
@@ -419,11 +419,11 @@ class Admin_M extends Master_M {
                 $categoryMarkUp = is_numeric(@$categories['markup']) ? $categories['markup'] : 0;
                 $brandMarkUp = is_numeric(@$brand_markup['markup']) ? $brand_markup['markup'] : 0;
                 //$brandMAPPercent = is_numeric(@$brand_map_percent['map_percent']) ? $brand_map_percent['map_percent'] : NULL;
-		$brandMAPPercent = (array_key_exists("map_percent", $brand_map_percent) && !is_null($brand_map_percent["map_percent"]) && is_numeric(@$brand_map_percent['map_percent'])) ? $brand_map_percent['map_percent'] : NULL;
-				
+                $brandMAPPercent = (array_key_exists("map_percent", $brand_map_percent) && !is_null($brand_map_percent["map_percent"]) && is_numeric(@$brand_map_percent['map_percent'])) ? $brand_map_percent['map_percent'] : NULL;
+
                 if ($partnumbers) {
                     foreach ($partnumbers as $rec) {
-						//echo $categoryMarkUp.' : '. $brandMarkUp.' : '.$brandMAPPercent.' : '.$productMarkUp;
+                        //echo $categoryMarkUp.' : '. $brandMarkUp.' : '.$brandMAPPercent.' : '.$productMarkUp;
                         $finalMarkUp = 0;
                         $productMarkUp = $rec['markup'];
 
@@ -432,9 +432,9 @@ class Admin_M extends Master_M {
                         } else {
                             // Calculate category and Brand Percent Mark up
 
-							if ($brandMarkUp > 0) {
+                            if ($brandMarkUp > 0) {
                                 $finalMarkUp = $brandMarkUp;
-							} else if ($categoryMarkUp > 0) {
+                            } else if ($categoryMarkUp > 0) {
                                 $finalMarkUp = $categoryMarkUp;
                                 if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp))
                                     $finalMarkUp = $brandMarkUp;
@@ -468,8 +468,8 @@ class Admin_M extends Master_M {
                         $this->updateRecord('partnumber', $data, $where, FALSE);
                     }
                 }
-				
-				//Dealer Inventory
+
+                //Dealer Inventory
                 if ($partdealernumbers) {
                     foreach ($partdealernumbers as $rec) {
                         $finalMarkUp = 0;
@@ -479,40 +479,40 @@ class Admin_M extends Master_M {
                             $finalSalesPrice = ($rec['dealer_cost'] * $productMarkUp / 100) + $rec['dealer_cost'];
                         } else {
                             // Calculate category and Brand Percent Mark up
-			    if ($brandMarkUp > 0) {
+                            if ($brandMarkUp > 0) {
                                 $finalMarkUp = $brandMarkUp;
-			    }else if ($categoryMarkUp > 0) {
+                            } else if ($categoryMarkUp > 0) {
                                 $finalMarkUp = $categoryMarkUp;
                                 if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp)) {
                                     $finalMarkUp = $brandMarkUp;
-				}
+                                }
                             }
                             //else
                             // Get Final Sales Price for Calculating vs MAP Pricing
 
                             if ($finalMarkUp > 0) {
                                 $finalSalesPrice = ($rec['dealer_cost'] * $finalMarkUp / 100) + $rec['dealer_cost'];
-			}
+                            }
 
                             // Calculate MAP Pricing
                             if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
                                 $mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
                                 if ($mapPrice > $finalSalesPrice) {
                                     $finalSalesPrice = $mapPrice;
-				}
-			    }
+                                }
+                            }
                         }
                         if (!isset($finalSalesPrice)) {
                             $finalSalesPrice = $rec['price'];
-			}
+                        }
 
                         if ($finalSalesPrice > $rec['price']) {
                             $finalSalesPrice = $rec['price'];
-			}
+                        }
 
                         if ($finalSalesPrice < $rec['dealer_cost']) {
                             $finalSalesPrice = $rec['price'];
-			}
+                        }
 
                         $data = array('dealer_sale' => $finalSalesPrice,
                             'exclude_market_place' => $exclude,
@@ -521,7 +521,7 @@ class Admin_M extends Master_M {
                         $this->updateRecord('partnumber', $data, $where, FALSE);
                     }
                 }
-				
+
                 $where = array('part_id' => $records[$i]['part_id']);
                 $this->deleteRecord('queued_parts', $where);
             }
@@ -534,18 +534,18 @@ class Admin_M extends Master_M {
         $records = $this->selectRecords('queued_parts');
         if ($records) {
             for ($i = 0; $i < count($records); $i++) {
-				$category = $this->getSecondBreadCrumb( $records[$i]['part_id'] );
-				$category_markup = array();
-				foreach( $category as $cat ) {
-					$category_markup[] = $cat['id'];
-				}
+                $category = $this->getSecondBreadCrumb($records[$i]['part_id']);
+                $category_markup = array();
+                foreach ($category as $cat) {
+                    $category_markup[] = $cat['id'];
+                }
 
-				$this->db->select('MIN(category.mark_up) as markup');
+                $this->db->select('MIN(category.mark_up) as markup');
                 $where = array('category.mark_up > ' => 0);
-				$this->db->where_in('category_id', $category_markup);
+                $this->db->where_in('category_id', $category_markup);
                 //$this->db->join('partcategory', 'partcategory.category_id = category.category_id');
                 $categories = $this->selectRecord('category', $where);
-				
+
                 // $this->db->select('MIN(category.mark_up) as markup');
                 // $where = array('partcategory.part_id' => $records[$i]['part_id'], 'category.mark_up > ' => 0);
                 // $this->db->join('partcategory', 'partcategory.category_id = category.category_id');
@@ -572,8 +572,8 @@ class Admin_M extends Master_M {
                 $closeout = $brand_markup['closeout_market_place'];
                 $categoryMarkUp = is_numeric(@$categories['markup']) ? $categories['markup'] : 0;
                 $brandMarkUp = is_numeric(@$brand_markup['markup']) ? $brand_markup['markup'] : 0;
-	//     $brandMAPPercent = is_numeric(@$brand_map_percent['map_percent']) ? $brand_map_percent['map_percent'] : NULL;
-		$brandMAPPercent = (array_key_exists("map_percent", $brand_map_percent) && !is_null($brand_map_percent["map_percent"]) && is_numeric(@$brand_map_percent['map_percent'])) ? $brand_map_percent['map_percent'] : NULL;
+                //     $brandMAPPercent = is_numeric(@$brand_map_percent['map_percent']) ? $brand_map_percent['map_percent'] : NULL;
+                $brandMAPPercent = (array_key_exists("map_percent", $brand_map_percent) && !is_null($brand_map_percent["map_percent"]) && is_numeric(@$brand_map_percent['map_percent'])) ? $brand_map_percent['map_percent'] : NULL;
                 if ($partnumbers) {
                     foreach ($partnumbers as $rec) {
                         $finalMarkUp = 0;
@@ -584,15 +584,15 @@ class Admin_M extends Master_M {
                         } else {
                             // Calculate category and Brand Percent Mark up
 
-							if ($brandMarkUp > 0) {
+                            if ($brandMarkUp > 0) {
                                 $finalMarkUp = $brandMarkUp;
-							} else if ($categoryMarkUp > 0) {
+                            } else if ($categoryMarkUp > 0) {
                                 $finalMarkUp = $categoryMarkUp;
                                 if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp))
                                     $finalMarkUp = $brandMarkUp;
                             }
                             // elseif ($brandMarkUp > 0)
-                                // $finalMarkUp = $brandMarkUp;
+                            // $finalMarkUp = $brandMarkUp;
                             // Get Final Sales Price for Calculating vs MAP Pricing
 
                             if ($finalMarkUp > 0)
@@ -624,13 +624,13 @@ class Admin_M extends Master_M {
             }
         }
     }
-	
+
     public function updatePart($id, $post) {
         echo '<pre>';
         print_r($post);
-        print_r($id);   
-            
-       die("********");
+        print_r($id);
+
+        die("********");
         $markup = $post['markup'];
         $excludeMarketPlace = ($post['market_places'] == 'exclude_market_place') ? 1 : 0;
         $closeoutMarketPlace = ($post['market_places'] == 'closeout_market_place') ? 1 : 0;
@@ -783,12 +783,12 @@ class Admin_M extends Master_M {
             $this->db->insert_batch('part_video', $arr);
         }
     }
-    
-    public function updateProductSizeChart( $arr ) {
+
+    public function updateProductSizeChart($arr) {
         $where = array('part_id' => $arr['part_id']);
         $part_sizechart = $this->selectRecord('part_sizechart', $where);
         //$part_sizechart = 
-        if(empty($part_sizechart)) {
+        if (empty($part_sizechart)) {
             $this->db->insert('part_sizechart', $arr);
         } else {
             $this->db->where('part_id', $arr['part_id']);
@@ -982,41 +982,41 @@ class Admin_M extends Master_M {
         return $records;
     }
 
-    public function getAllCloseoutRepringRule( $brand_id = null ) {
+    public function getAllCloseoutRepringRule($brand_id = null) {
         $records = FALSE;
-		$where = array('brand_id' => $brand_id, 'status != 2 ' => null);
+        $where = array('brand_id' => $brand_id, 'status != 2 ' => null);
         $records = $this->selectRecords('closeout_rules', $where);
         return $records;
     }
-	
-	public function updateCloseoutRules( $data ) {
-		foreach( $data as $k => $v ) {
-			$where = array('id' => $v['id']);
-			if( @$v['brand_id'] ) {
-				$where['brand_id'] = $v['brand_id'];
-			}
-			$record = $this->selectRecord('closeout_rules', $where);
-			if( @$record ) {
-				$where = array('id' => $v['id']);
-				unset($v['id']);
-				$this->updateRecord('closeout_rules', $v, $where, FALSE);
-			} else {
-				unset($v['id']);
-				$this->db->insert('closeout_rules', $v);
-			}
-		}
-	}
-	
+
+    public function updateCloseoutRules($data) {
+        foreach ($data as $k => $v) {
+            $where = array('id' => $v['id']);
+            if (@$v['brand_id']) {
+                $where['brand_id'] = $v['brand_id'];
+            }
+            $record = $this->selectRecord('closeout_rules', $where);
+            if (@$record) {
+                $where = array('id' => $v['id']);
+                unset($v['id']);
+                $this->updateRecord('closeout_rules', $v, $where, FALSE);
+            } else {
+                unset($v['id']);
+                $this->db->insert('closeout_rules', $v);
+            }
+        }
+    }
+
     public function updateDistributors($formFields) {
         $where = array('id' => $formFields['id']);
         $this->updateRecord('accounts', $formFields, $where, FALSE);
     }
-	
-	public function deleteCloseoutRepringRule( $rule_id ) {
+
+    public function deleteCloseoutRepringRule($rule_id) {
         $where = array('id' => $rule_id);
-		$data = array('status' => 2);
-        $this->updateRecord('closeout_rules', $data , $where, FALSE);
-	}
+        $data = array('status' => 2);
+        $this->updateRecord('closeout_rules', $data, $where, FALSE);
+    }
 
     //***************************************** END DISTRIBUTORS *********************************//
 
@@ -1027,7 +1027,7 @@ class Admin_M extends Master_M {
             //$return = $this->updateRecord('config', $configdata, $where, FALSE);
             unset($data['data']);
         }
-		$data['google_trust'] = json_encode($data['google_trust']);
+        $data['google_trust'] = json_encode($data['google_trust']);
         $where = array('id' => 1);
         $return = $this->updateRecord('contact', $data, $where, FALSE);
     }
@@ -1100,9 +1100,27 @@ class Admin_M extends Master_M {
         // Create Order record including total product sales and shipping
         $orderRec['contact_id'] = $order['billing_id'];
         $orderRec['shipping_id'] = $order['shipping_id'];
+        $orderRec['order_id'] = $order['order_id'];
+        $orderRec['product_cost'] = $order['product_cost'];
+        $orderRec['shipping_cost'] = $order['shipping_cost'];
+        $orderRec['user_id'] = $order['user_id'];
         if (@$order['transAmount'])
             $orderRec['sales_price'] = @$order['transAmount'] - @$order['shipping'] - @$order['tax'];
         $orderRec['shipping'] = @$order['shipping'];
+        
+        $where1 = array('order_id' => $order['order_id']);
+        $products = $this->selectRecords('order_product', $where1);
+
+        $grandTotal = 0;
+        foreach( $products as $productData ) {
+            if( $productData['status'] != 'Refunded' ) {
+                $grandTotal += $productData['price'];
+            }
+        }
+        
+        if (@$grandTotal)
+            $orderRec['sales_price'] = @$grandTotal;
+        
         $orderRec['tax'] = @$order['tax'];
         if (@$order['special_instr'])
             $orderRec['special_instr'] = @$order['special_instr'];
@@ -1154,11 +1172,11 @@ class Admin_M extends Master_M {
                 'shipping.zip AS shipping_zip, ' .
                 'shipping.company AS shipping_company');
         $records = FALSE;
-		
-		if( $filter['limit'] ) {
+
+        if ($filter['limit']) {
             $this->db->limit($filter['limit'], $filter['offset']);
-		}
-		
+        }
+
         //if (!is_null($limit))
         //$this->setOrderFilter(@$filter);
         if (@$filter) {
@@ -1168,7 +1186,7 @@ class Admin_M extends Master_M {
                 $custom_where .= ' shipping.phone like "%' . strtoupper(trim($filter['search'])) . '%" OR';
                 $custom_where .= ' shipping.email like "%' . strtoupper(trim($filter['search'])) . '%" OR';
                 $custom_where .= ' concat(shipping.first_name," ", shipping.last_name) like "%' . strtoupper(trim($filter['search'])) . '%" OR';
-				
+
                 $custom_where .= ' CONCAT_WS(" ", shipping.street_address,shipping.address_2,shipping.city,shipping.state,shipping.zip) like "%' . strtoupper(trim($filter['search'])) . '%" OR';
                 //$custom_where .= ' shipping.last_name like "%'.strtoupper(trim($filter['search'])).'%" OR';
                 $custom_where = rtrim($custom_where, 'OR') . ')';
@@ -1231,8 +1249,8 @@ class Admin_M extends Master_M {
         //	$this->db->where('order.order_date >',$predate);
         //}
         $this->db->order_by('order.id DESC');
-        $this->db->join('contact', 'contact.id = order.contact_id');
-        $this->db->join('contact shipping', 'shipping.id = order.contact_id');
+        $this->db->join('contact', 'contact.id = order.contact_id', 'left');
+        $this->db->join('contact shipping', 'shipping.id = order.contact_id', 'left');
         //$this->db->join('order_status order_status', 'order_status.order_id = order.id', 'left');
 
         $this->db->group_by('order.id');
@@ -1300,11 +1318,11 @@ class Admin_M extends Master_M {
     public function update_feed_log($data) {
         $this->db->insert('google_feed_log', $data);
     }
-    
+
     public function update_cycletrader_feeds_log($data) {
         $this->db->insert('cycle_feed_log', $data);
     }
-    
+
     public function update_craglist_feeds_log($data) {
 //        $this->db->insert('google_feed_log', $data);
     }
@@ -1315,12 +1333,14 @@ class Admin_M extends Master_M {
         $results = $query->result_array();
         return $results[0];
     }
+
     public function get_craglist_feed_log() {
         $sql = "SELECT * FROM google_feed_log order by run_at desc limit 1";
         $query = $this->db->query($sql);
         $results = $query->result_array();
         return $results[0];
     }
+
     public function get_cycletrader_feed_log() {
         $sql = "SELECT * FROM cycle_feed_log order by run_at desc limit 1";
         $query = $this->db->query($sql);
@@ -1329,692 +1349,677 @@ class Admin_M extends Master_M {
     }
 
     public function updateDistributorInventory($arr) {
-		$error = array();
-		$scs = array();
-		$imprt = array();
+        $error = array();
+        $scs = array();
+        $imprt = array();
         foreach ($arr as $k => $v) {
             //$where = array('partnumber_id' => $v['partnumber'], 'distributor_id' => $v['distributor_id']);
-            $where = array( 'distributor_id' => $v['distributor_id']);
-			$distributor = $this->selectRecord('distributor', $where);
+            $where = array('distributor_id' => $v['distributor_id']);
+            $distributor = $this->selectRecord('distributor', $where);
             $where = array('part_number' => $v['partnumber'], 'distributor_id' => $v['distributor_id']);
-			$distributorInventory = $this->selectRecord('partvariation', $where);
-			$dealerInventory = $this->selectRecord('partdealervariation', $where);
-			$imported = false;
-			if( empty($distributorInventory) ) {
-				if (USE_PORTAL_WS) {
-					$output = file_get_contents("http://" . WS_HOST . "/migrateparts/index/" . STORE_NAME . "/" . urlencode($distributor["name"]) . "/" . urlencode($v["partnumber"]));
-				} else {
-					exec(sprintf('/usr/bin/php /var/www/portal.powersporttechnologies.com/html/index.php "cron/migratePartByVendorPartNumberToStore/%s/%s/%s"', STORE_NAME, $distributor['name'], $v['partnumber']), $output);
-				}
-			
-				if( empty($output) ) {
-					$imprt[] = $v;
-					$imported = true;
-					$where = array('part_number' => $v['partnumber'], 'distributor_id' => $v['distributor_id']);
-					$distributorInventory = $this->selectRecord('partvariation', $where);
-					$scs[$v['partnumber']] = $v;
-				}
-			}
-			
-			if( empty($dealerInventory) && !empty($distributorInventory) ) {
-				$data = $distributorInventory;
-				$data['cost'] = $v['cost'];
-				$data['quantity_available'] = $v['quantity'];
-				unset($data['bulk_insert_round']);
-				unset($data['ext_partvariation_id']);
-				unset($data['protect']);
-				unset($data['customerdistributor_id']);
-				$this->db->insert('partdealervariation', $data);
-				
-				$dt = array('protect' => 1);
-				$cwhere = array('partvariation_id' => $data['partvariation_id']);
-				$this->updateRecord('partvariation', $dt, $cwhere, FALSE);
-				
-				$where = array('part_number' => $v['partnumber'], 'distributor_id' => $v['distributor_id']);
-				$dealerInventory = $this->selectRecord('partdealervariation', $where);
-				
-				$scs[$v['partnumber']] = $v;
-			} else if( !empty( $dealerInventory ) ) {
-				$data = array('quantity_available' => $v['quantity']);
-				if ($v['cost'] > 0) {
-					$data['price'] = $v['cost'];
-					$data['cost'] = $v['cost'];
-				}
-				$success = $this->updateRecord('partdealervariation', $data, $where, FALSE);
-				$dt = array('protect' => 1);
-				$cwhere = array('partvariation_id' => $data['partvariation_id']);
-				$this->updateRecord('partvariation', $dt, $cwhere, FALSE);
-				$scs[$v['partnumber']] = $v;
-			}
-			
-			$where = array('partpartnumber.partnumber_id' => $dealerInventory['partnumber_id'], 'partnumber.price > ' => 0);
-			$this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id ');
-			$this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
-			$partnumbers = $this->selectRecord('partnumber', $where);
-			
-			
-			// $this->db->select('MIN(category.mark_up) as markup');
-			// $where = array('partcategory.part_id' => $partnumbers['part_id'], 'category.mark_up > ' => 0);
-			// $this->db->join('partcategory', 'partcategory.category_id = category.category_id');
-			// $categories = $this->selectRecord('category', $where);
-			$category = $this->getSecondBreadCrumb( $partnumbers['part_id'] );
-			$category_markup = array();
-			foreach( $category as $cat ) {
-				$category_markup[] = $cat['id'];
-			}
+            $distributorInventory = $this->selectRecord('partvariation', $where);
+            $dealerInventory = $this->selectRecord('partdealervariation', $where);
+            $imported = false;
+            if (empty($distributorInventory)) {
+                if (USE_PORTAL_WS) {
+                    $output = file_get_contents("http://" . WS_HOST . "/migrateparts/index/" . STORE_NAME . "/" . urlencode($distributor["name"]) . "/" . urlencode($v["partnumber"]));
+                } else {
+                    exec(sprintf('/usr/bin/php /var/www/portal.powersporttechnologies.com/html/index.php "cron/migratePartByVendorPartNumberToStore/%s/%s/%s"', STORE_NAME, $distributor['name'], $v['partnumber']), $output);
+                }
 
-			$this->db->select('MIN(category.mark_up) as markup');
-			$where = array('category.mark_up > ' => 0);
-			$this->db->where_in('category_id', $category_markup);
-			//$this->db->join('partcategory', 'partcategory.category_id = category.category_id');
-			$categories = $this->selectRecord('category', $where);
+                if (empty($output)) {
+                    $imprt[] = $v;
+                    $imported = true;
+                    $where = array('part_number' => $v['partnumber'], 'distributor_id' => $v['distributor_id']);
+                    $distributorInventory = $this->selectRecord('partvariation', $where);
+                    $scs[$v['partnumber']] = $v;
+                }
+            }
 
-			$this->db->select('MIN(brand.mark_up) as markup, 
+            if (empty($dealerInventory) && !empty($distributorInventory)) {
+                $data = $distributorInventory;
+                $data['cost'] = $v['cost'];
+                $data['quantity_available'] = $v['quantity'];
+                unset($data['bulk_insert_round']);
+                unset($data['ext_partvariation_id']);
+                unset($data['protect']);
+                unset($data['customerdistributor_id']);
+                $this->db->insert('partdealervariation', $data);
+
+                $dt = array('protect' => 1);
+                $cwhere = array('partvariation_id' => $data['partvariation_id']);
+                $this->updateRecord('partvariation', $dt, $cwhere, FALSE);
+
+                $where = array('part_number' => $v['partnumber'], 'distributor_id' => $v['distributor_id']);
+                $dealerInventory = $this->selectRecord('partdealervariation', $where);
+
+                $scs[$v['partnumber']] = $v;
+            } else if (!empty($dealerInventory)) {
+                $data = array('quantity_available' => $v['quantity']);
+                if ($v['cost'] > 0) {
+                    $data['price'] = $v['cost'];
+                    $data['cost'] = $v['cost'];
+                }
+                $success = $this->updateRecord('partdealervariation', $data, $where, FALSE);
+                $dt = array('protect' => 1);
+                $cwhere = array('partvariation_id' => $data['partvariation_id']);
+                $this->updateRecord('partvariation', $dt, $cwhere, FALSE);
+                $scs[$v['partnumber']] = $v;
+            }
+
+            $where = array('partpartnumber.partnumber_id' => $dealerInventory['partnumber_id'], 'partnumber.price > ' => 0);
+            $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id ');
+            $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
+            $partnumbers = $this->selectRecord('partnumber', $where);
+
+
+            // $this->db->select('MIN(category.mark_up) as markup');
+            // $where = array('partcategory.part_id' => $partnumbers['part_id'], 'category.mark_up > ' => 0);
+            // $this->db->join('partcategory', 'partcategory.category_id = category.category_id');
+            // $categories = $this->selectRecord('category', $where);
+            $category = $this->getSecondBreadCrumb($partnumbers['part_id']);
+            $category_markup = array();
+            foreach ($category as $cat) {
+                $category_markup[] = $cat['id'];
+            }
+
+            $this->db->select('MIN(category.mark_up) as markup');
+            $where = array('category.mark_up > ' => 0);
+            $this->db->where_in('category_id', $category_markup);
+            //$this->db->join('partcategory', 'partcategory.category_id = category.category_id');
+            $categories = $this->selectRecord('category', $where);
+
+            $this->db->select('MIN(brand.mark_up) as markup, 
 											  MAX(brand.exclude_market_place) as exclude_market_place, 
 											  MAX(brand.closeout_market_place) as closeout_market_place');
-			$where = array('partbrand.part_id' => $partnumbers['part_id']);
-			$this->db->join('partbrand', 'partbrand.brand_id = brand.brand_id');
-			$brand_markup = $this->selectRecord('brand', $where);
+            $where = array('partbrand.part_id' => $partnumbers['part_id']);
+            $this->db->join('partbrand', 'partbrand.brand_id = brand.brand_id');
+            $brand_markup = $this->selectRecord('brand', $where);
 
-			$this->db->select('MIN(brand.map_percent) as map_percent, ');
-			$where = array('partbrand.part_id' => $partnumbers['part_id'], 'brand.map_percent IS NOT NULL ' => NULL);
-			$this->db->join('partbrand', 'partbrand.brand_id = brand.brand_id');
-			$brand_map_percent = $this->selectRecord('brand', $where);
+            $this->db->select('MIN(brand.map_percent) as map_percent, ');
+            $where = array('partbrand.part_id' => $partnumbers['part_id'], 'brand.map_percent IS NOT NULL ' => NULL);
+            $this->db->join('partbrand', 'partbrand.brand_id = brand.brand_id');
+            $brand_map_percent = $this->selectRecord('brand', $where);
 
-			$where = array('partpartnumber.part_id' => $partnumbers['part_id'], 'partnumber.price > ' => 0);
-			$this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id ');
-			$this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
-			$partnumbers = $this->selectRecords('partnumber', $where);
-			$categoryMarkUp = is_numeric(@$categories['markup']) ? $categories['markup'] : 0;
-			$brandMarkUp = is_numeric(@$brand_markup['markup']) ? $brand_markup['markup'] : 0;
-			$brandMAPPercent = (array_key_exists("map_percent", $brand_map_percent) && !is_null($brand_map_percent["map_percent"]) && is_numeric(@$brand_map_percent['map_percent'])) ? $brand_map_percent['map_percent'] : NULL;
-			
-			if ($partnumbers) {
-				foreach ($partnumbers as $rec) {
-					$finalMarkUp = 0;
-					$productMarkUp = $rec['markup'];
+            $where = array('partpartnumber.part_id' => $partnumbers['part_id'], 'partnumber.price > ' => 0);
+            $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id ');
+            $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
+            $partnumbers = $this->selectRecords('partnumber', $where);
+            $categoryMarkUp = is_numeric(@$categories['markup']) ? $categories['markup'] : 0;
+            $brandMarkUp = is_numeric(@$brand_markup['markup']) ? $brand_markup['markup'] : 0;
+            $brandMAPPercent = (array_key_exists("map_percent", $brand_map_percent) && !is_null($brand_map_percent["map_percent"]) && is_numeric(@$brand_map_percent['map_percent'])) ? $brand_map_percent['map_percent'] : NULL;
 
-					if ($productMarkUp > 0) { // Product Markup Trumps everything
-						$finalSalesPrice = ($rec['cost'] * $productMarkUp / 100) + $rec['cost'];
-						//echo 'product Markup : '.$productMarkUp.' : '.$finalSalesPrice.'<br>';
-					} else {
-						// Calculate category and Brand Percent Mark up
+            if ($partnumbers) {
+                foreach ($partnumbers as $rec) {
+                    $finalMarkUp = 0;
+                    $productMarkUp = $rec['markup'];
 
-						if ($brandMarkUp > 0) {
-							$finalMarkUp = $brandMarkUp;
-						}else if ($categoryMarkUp > 0) {
-							$finalMarkUp = $categoryMarkUp;
-							if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp))
-								$finalMarkUp = $brandMarkUp;
-						}
-						// if ($categoryMarkUp > 0) {
-							// $finalMarkUp = $categoryMarkUp;
-							// if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp))
-								// $finalMarkUp = $brandMarkUp;
-						// }
-						// elseif ($brandMarkUp > 0)
-							// $finalMarkUp = $brandMarkUp;
-						// Get Final Sales Price for Calculating vs MAP Pricing
+                    if ($productMarkUp > 0) { // Product Markup Trumps everything
+                        $finalSalesPrice = ($rec['cost'] * $productMarkUp / 100) + $rec['cost'];
+                        //echo 'product Markup : '.$productMarkUp.' : '.$finalSalesPrice.'<br>';
+                    } else {
+                        // Calculate category and Brand Percent Mark up
 
-						if ($finalMarkUp > 0)
-							$finalSalesPrice = ($rec['cost'] * $finalMarkUp / 100) + $rec['cost'];
+                        if ($brandMarkUp > 0) {
+                            $finalMarkUp = $brandMarkUp;
+                        } else if ($categoryMarkUp > 0) {
+                            $finalMarkUp = $categoryMarkUp;
+                            if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp))
+                                $finalMarkUp = $brandMarkUp;
+                        }
+                        // if ($categoryMarkUp > 0) {
+                        // $finalMarkUp = $categoryMarkUp;
+                        // if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp))
+                        // $finalMarkUp = $brandMarkUp;
+                        // }
+                        // elseif ($brandMarkUp > 0)
+                        // $finalMarkUp = $brandMarkUp;
+                        // Get Final Sales Price for Calculating vs MAP Pricing
 
-						//echo 'category/brand Markup : '.$finalMarkUp.' : '.$finalSalesPrice.'<br>';
-						
-						// Calculate MAP Pricing
-						if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
-							$mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
-							if ($mapPrice > $finalSalesPrice) {
-								$finalSalesPrice = $mapPrice;
-							}
-							//echo 'final saleprice : '.$mapPrice.' : '.$finalSalesPrice.'<br>';
-						}
-					}
-					if (!isset($finalSalesPrice)) {
-						$finalSalesPrice = $rec['price'];
-						//echo 'final price : '.$finalSalesPrice.'<br>';
-					}
+                        if ($finalMarkUp > 0)
+                            $finalSalesPrice = ($rec['cost'] * $finalMarkUp / 100) + $rec['cost'];
 
-					$data = array('dealer_sale' => $finalSalesPrice);
-					$where = array('partnumber_id' => $rec['partnumber_id']);
-					$this->updateRecord('partnumber', $data, $where, FALSE);
-				}
-			}
+                        //echo 'category/brand Markup : '.$finalMarkUp.' : '.$finalSalesPrice.'<br>';
+                        // Calculate MAP Pricing
+                        if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
+                            $mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
+                            if ($mapPrice > $finalSalesPrice) {
+                                $finalSalesPrice = $mapPrice;
+                            }
+                            //echo 'final saleprice : '.$mapPrice.' : '.$finalSalesPrice.'<br>';
+                        }
+                    }
+                    if (!isset($finalSalesPrice)) {
+                        $finalSalesPrice = $rec['price'];
+                        //echo 'final price : '.$finalSalesPrice.'<br>';
+                    }
+
+                    $data = array('dealer_sale' => $finalSalesPrice);
+                    $where = array('partnumber_id' => $rec['partnumber_id']);
+                    $this->updateRecord('partnumber', $data, $where, FALSE);
+                }
+            }
         }
-		
+
         foreach ($arr as $k => $v) {
-			if( empty($scs[$v['partnumber']]) ) {
-				$error[$v['partnumber']] = $v;
-			}
-		}
-		
-		// foreach( $imprt as $key => $val ) {
-			// $where = array('part_number' => $val['partnumber'], 'distributor_id' => $val['distributor_id']);
-			// $dealerInventory = $this->selectRecord('partdealervariation', $where);
-			
-			// $where = array('partnumber.partnumber_id' => $dealerInventory['partnumber_id']);
-			// $partnumbers = $this->selectRecord('partnumber', $where);
-			
-			// $where = array('partnumber.partnumber_id' => $dealerInventory['partnumber_id']);
-			// $data = array('sale' => $partnumbers['dealer_sale']);
-			// $this->updateRecord('partnumber', $data, $where, FALSE);
-		// }
+            if (empty($scs[$v['partnumber']])) {
+                $error[$v['partnumber']] = $v;
+            }
+        }
+
+        // foreach( $imprt as $key => $val ) {
+        // $where = array('part_number' => $val['partnumber'], 'distributor_id' => $val['distributor_id']);
+        // $dealerInventory = $this->selectRecord('partdealervariation', $where);
+        // $where = array('partnumber.partnumber_id' => $dealerInventory['partnumber_id']);
+        // $partnumbers = $this->selectRecord('partnumber', $where);
+        // $where = array('partnumber.partnumber_id' => $dealerInventory['partnumber_id']);
+        // $data = array('sale' => $partnumbers['dealer_sale']);
+        // $this->updateRecord('partnumber', $data, $where, FALSE);
+        // }
 //exit;
-		$msg = array('success' => $scs, 'error' => $error);
-		return $msg;
+        $msg = array('success' => $scs, 'error' => $error);
+        return $msg;
     }
 
     public function deleteSizeChart($id) {
         $where = array('id' => $id);
         $this->deleteRecord('brand_sizechart', $where);
     }
-	
-	public function getAllCustomers( $filter = null, $limit = false, $offset = 0 ) {
-		if( $filter['sort'] == 'orders' ) {
-			$this->db->select('contact.first_name AS first_name, '.
-					'contact.last_name AS last_name, '.
-					'contact.street_address AS street_address, '.
-					'contact.address_2 AS address_2, '.
-					'contact.city AS city, '.
-					'contact.state AS state, '.
-					'contact.zip AS zip, '.
-					'contact.country AS country, '.
-					'contact.email AS email, '.
-					'contact.phone AS phone, '.
-					'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status,'.
-					"(select count(distinct `order_status`.`order_id`) from `order_status` inner join `order` on `order`.`id` = `order_status`.`order_id` where `order`.`user_id` = `user`.`id`) as orders, (select c.first_name from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee"
-					);
-					//select count(distinct order_status.order_id), order_status.status from `order_status` inner join `order` on order.id = order_status.order_id where order.user_id = 8;
-			$this->db->join('contact', 'contact.id = user.billing_id');
-			//$this->db->join('order', 'order.contact_id = user.billing_id', 'left');
-			
-			// if( strtolower($filter['sorter']) == 'desc' ) {
-				// $this->db->join('order_status', 'order_status.order_id = order.id', 'left');
-				// $sts = array('declined', 'batch order', 'processing', 'back order', 'partially shipped', 'will_call', 'shipped/complete', 'returned', 'refunded', 'approved');
-				// $this->db->where_in('order_status.status', $sts);
-				// //$this->db->where('order.order_date is not null');
-			// }
-			
-			if( isset($filter['search']) && $filter['search'] != '' ) {
-				$this->db->where('( concat(contact.first_name, " ", contact.last_name) like "%'.$filter['search'].'%"',null);
-				$this->db->or_where('email like "%'.$filter['search'].'%"');
-				$this->db->or_where('phone like "%'.$filter['search'].'%" )');
-			}
-			
-			if( $filter['custom'] == 'own' ) {
-				$this->db->where('user.created_by', $_SESSION['userRecord']['id']);
-			} else if( $filter['custom'] == 'web' ) {
-				$this->db->where('user.created_by IS NULL');
-			}
-			
-			if( $limit > 0 ) {
-				$this->db->limit($limit, $offset);
-			}
-			
-			if( $filter['sort'] == 'orders' ) {
-				$this->db->order_by('orders '.$filter['sorter']);
-			}
-			
-			$this->db->group_by('user.id');
-			$records = $this->selectRecords('user', $where);
-			
-			foreach( $records as &$record ) {
-				$dt = date('Y-m-d H:i:s');
-				$this->db->where('user_id', $record['id']);
-				$this->db->where('is_completed', '0');
-				$this->db->where('start_datetime <=', $dt);
-				//$this->db->where('end_datetime >=', $dt);
-				$reminders = $this->selectRecord('user_reminder');
-				
-				$record['reminder'] = $reminders;
-			}
-			
-			//echo $this->db->last_query();exit;
 
-				
-				// $this->db->select('count(order.id) AS orders, user.billing_id');
-				// $this->db->join('user', 'user.billing_id = order.contact_id');
-				// $this->db->join('order_status', 'order_status.order_id = order.id');
-				// $sts = array('declined', 'batch order', 'processing', 'back order', 'partially shipped', 'will_call', 'shipped/complete', 'returned', 'refunded');
-				// $this->db->where_in('order_status.status', $sts);
-				// if( $limit > 0 ) {
-					// $this->db->limit($limit, $offset);
-				// }
-				// $this->db->group_by('user.billing_id');
-				// $this->db->order_by('orders '.$filter['sorter']);
-				// $ordr = $this->selectRecords('order');
-				
-				// $records = array();
-				// foreach( $ordr as $k => $v ) {
-					// $this->db->select('contact.first_name AS first_name, '.
-										// 'contact.last_name AS last_name, '.
-										// 'contact.street_address AS street_address, '.
-										// 'contact.address_2 AS address_2, '.
-										// 'contact.city AS city, '.
-										// 'contact.state AS state, '.
-										// 'contact.zip AS zip, '.
-										// 'contact.country AS country, '.
-										// 'contact.email AS email, '.
-										// 'contact.phone AS phone, '.
-										// 'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status'
-										// );
-					// $this->db->join('contact', 'contact.id = user.billing_id');
-					
-					// if( isset($filter['search']) && $filter['search'] != '' ) {
-						// $this->db->where('( concat(contact.first_name, " ", contact.last_name) like "%'.$filter['search'].'%"',null);
-						// $this->db->or_where('email like "%'.$filter['search'].'%"');
-						// $this->db->or_where('phone like "%'.$filter['search'].'%" )');
-					// }
-					
-					// if( isset($filter['user_type']) && $filter['user_type'] != '' ) {
-						// $this->db->where('user.user_type = "'.$filter['user_type'].'"');
-					// }
-					
-					// if( $filter['sort'] == 'first_name' ) {
-						// $this->db->order_by('contact.first_name ASC');
-					// }
+    public function getAllCustomers($filter = null, $limit = false, $offset = 0) {
+        if ($filter['sort'] == 'orders') {
+            $this->db->select('contact.first_name AS first_name, ' .
+                    'contact.last_name AS last_name, ' .
+                    'contact.street_address AS street_address, ' .
+                    'contact.address_2 AS address_2, ' .
+                    'contact.city AS city, ' .
+                    'contact.state AS state, ' .
+                    'contact.zip AS zip, ' .
+                    'contact.country AS country, ' .
+                    'contact.email AS email, ' .
+                    'contact.phone AS phone, ' .
+                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status,' .
+                    "(select count(distinct `order_status`.`order_id`) from `order_status` inner join `order` on `order`.`id` = `order_status`.`order_id` where `order`.`user_id` = `user`.`id`) as orders, (select c.first_name from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee"
+            );
+            //select count(distinct order_status.order_id), order_status.status from `order_status` inner join `order` on order.id = order_status.order_id where order.user_id = 8;
+            $this->db->join('contact', 'contact.id = user.billing_id');
+            //$this->db->join('order', 'order.contact_id = user.billing_id', 'left');
+            // if( strtolower($filter['sorter']) == 'desc' ) {
+            // $this->db->join('order_status', 'order_status.order_id = order.id', 'left');
+            // $sts = array('declined', 'batch order', 'processing', 'back order', 'partially shipped', 'will_call', 'shipped/complete', 'returned', 'refunded', 'approved');
+            // $this->db->where_in('order_status.status', $sts);
+            // //$this->db->where('order.order_date is not null');
+            // }
 
-					// $this->db->where("user.id = '".$v['billing_id']."'",null);
-					// $record = $this->selectRecord('user', $where);
-					// $record['orders'] = $v['orders'];
-					// $records[] = $record;
-				// }
-		} else if( $filter['sort'] == 'reminders' ) {
-			$dt = date('Y-m-d H:i:s');
-			$this->db->select('contact.first_name AS first_name, '.
-								'contact.last_name AS last_name, '.
-								'contact.street_address AS street_address, '.
-								'contact.address_2 AS address_2, '.
-								'contact.city AS city, '.
-								'contact.state AS state, '.
-								'contact.zip AS zip, '.
-								'contact.country AS country, '.
-								'contact.email AS email, '.
-								'contact.phone AS phone, '.
-								'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, '.
-								'(select c.first_name from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee,'.
-								"(select 10 from user_reminder as ur inner join user as us on us.id = ur.user_id where ur.start_datetime <= '".$dt."' and ur.user_id=user.id and ur.is_completed = '0' limit 1) as strt_tm"
-							 );
-			$this->db->join('contact', 'contact.id = user.billing_id');
-			
-			if( isset($filter['search']) && $filter['search'] != '' ) {
-				$this->db->where('( concat(contact.first_name, " ", contact.last_name) like "%'.$filter['search'].'%"',null);
-				$this->db->or_where('email like "%'.$filter['search'].'%"');
-				$this->db->or_where('phone like "%'.$filter['search'].'%" )');
-			}
-			
-			if( isset($filter['user_type']) && $filter['user_type'] != '' ) {
-				$this->db->where('user.user_type = "'.$filter['user_type'].'"');
-			}
-			
-			if( $filter['custom'] == 'own' ) {
-				$this->db->where('user.created_by', $_SESSION['userRecord']['id']);
-			} else if( $filter['custom'] == 'web' ) {
-				$this->db->where('user.created_by IS NULL');
-			}
-			
-			if( $limit > 0 ) {
-				$this->db->limit($limit, $offset);
-			}
-			
-			$this->db->order_by("strt_tm DESC");
+            if (isset($filter['search']) && $filter['search'] != '') {
+                $this->db->where('( concat(contact.first_name, " ", contact.last_name) like "%' . $filter['search'] . '%"', null);
+                $this->db->or_where('email like "%' . $filter['search'] . '%"');
+                $this->db->or_where('phone like "%' . $filter['search'] . '%" )');
+            }
 
-			$this->db->group_by('user.id');
-			$records = $this->selectRecords('user', $where);
-			
-			foreach( $records as &$record ) {
-					$this->db->select('order.id AS order_id, order_status.status ');
-					$this->db->join('user', 'user.id = order.user_id');
-					$this->db->join('order_status', 'order_status.order_id = order.id');
-					$sts = array('declined', 'batch order', 'processing', 'back order', 'partially shipped', 'will_call', 'shipped/complete', 'returned', 'refunded', 'approved');
-					$this->db->where('order.user_id', $record['id']);
-					$this->db->where_in('order_status.status', $sts);
-					$this->db->order_by('order_status.datetime DESC');
-					//$this->db->group_by('order.id');
-					$ordr = $this->selectRecords('order');
-					$odr = array();
-					foreach( $ordr as $order ) {
-						$where = array('order_id' => $order['order_id']);
-						$this->db->order_by('datetime DESC');
-						$statusRec = $this->selectRecord('order_status', $where);
-						$rcrd = $order;
-						$rcrd['status'] = $statusRec['status'];
-						if( empty($odr[$order['order_id']]) ) {
-							$odr[$order['order_id']] = $rcrd;
-						}
-					}
-					
-				$this->db->where('user_id', $record['id']);
-				$this->db->where('is_completed', '0');
-				$this->db->where('start_datetime <=', $dt);
-				//$this->db->where('end_datetime >=', $dt);
-				$reminders = $this->selectRecord('user_reminder');
-				
-				$record['reminder'] = $reminders;
-				$record['orders'] = count($odr);
-			}
-		} else {
-			$this->db->select('contact.first_name AS first_name, '.
-								'contact.last_name AS last_name, '.
-								'contact.street_address AS street_address, '.
-								'contact.address_2 AS address_2, '.
-								'contact.city AS city, '.
-								'contact.state AS state, '.
-								'contact.zip AS zip, '.
-								'contact.country AS country, '.
-								'contact.email AS email, '.
-								'contact.phone AS phone, '.
-								'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, '.
-								'(select c.first_name from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee'
-							 );
-			$this->db->join('contact', 'contact.id = user.billing_id');
-			
-			if( isset($filter['search']) && $filter['search'] != '' ) {
-				$this->db->where('( concat(contact.first_name, " ", contact.last_name) like "%'.$filter['search'].'%"',null);
-				$this->db->or_where('email like "%'.$filter['search'].'%"');
-				$this->db->or_where('phone like "%'.$filter['search'].'%" )');
-			}
-			
-			if( isset($filter['user_type']) && $filter['user_type'] != '' ) {
-				$this->db->where('user.user_type = "'.$filter['user_type'].'"');
-			}
-			
-			if( $filter['custom'] == 'own' ) {
-				$this->db->where('user.created_by', $_SESSION['userRecord']['id']);
-			} else if( $filter['custom'] == 'web' ) {
-				$this->db->where('user.created_by IS NULL');
-			}
-			
-			if( $limit > 0 ) {
-				$this->db->limit($limit, $offset);
-			}
-			
-			if( $filter['sort'] == 'first_name' ) {
-				$this->db->order_by('contact.first_name '.$filter['sorter']);
-			}
+            if ($filter['custom'] == 'own') {
+                $this->db->where('user.created_by', $_SESSION['userRecord']['id']);
+            } else if ($filter['custom'] == 'web') {
+                $this->db->where('user.created_by IS NULL');
+            }
 
-			$this->db->group_by('user.id');
-			$records = $this->selectRecords('user', $where);
-			
-			foreach( $records as &$record ) {
-					$this->db->select('order.id AS order_id, order_status.status ');
-					$this->db->join('user', 'user.id = order.user_id');
-					$this->db->join('order_status', 'order_status.order_id = order.id');
-					$sts = array('declined', 'batch order', 'processing', 'back order', 'partially shipped', 'will_call', 'shipped/complete', 'returned', 'refunded', 'approved');
-					$this->db->where('order.user_id', $record['id']);
-					$this->db->where_in('order_status.status', $sts);
-					$this->db->order_by('order_status.datetime DESC');
-					//$this->db->group_by('order.id');
-					$ordr = $this->selectRecords('order');
-					$odr = array();
-					foreach( $ordr as $order ) {
-						$where = array('order_id' => $order['order_id']);
-						$this->db->order_by('datetime DESC');
-						$statusRec = $this->selectRecord('order_status', $where);
-						$rcrd = $order;
-						$rcrd['status'] = $statusRec['status'];
-						if( empty($odr[$order['order_id']]) ) {
-							$odr[$order['order_id']] = $rcrd;
-						}
-					}
+            if ($limit > 0) {
+                $this->db->limit($limit, $offset);
+            }
 
-				$dt = date('Y-m-d H:i:s');
-				$this->db->where('user_id', $record['id']);
-				$this->db->where('is_completed', '0');
-				$this->db->where('start_datetime <=', $dt);
-				//$this->db->where('end_datetime >=', $dt);
-				$reminders = $this->selectRecord('user_reminder');
-				
-				$record['reminder'] = $reminders;
-				$record['orders'] = count($odr);
-			}
-		}
-		
-		// echo '<pre>';
-		// print_r($records);
-		// echo '</pre>';
-		return $records;
-	}
-	
-	public function getAllCustomersCount( $filter ) {
-		$this->db->select('count(user.id) as cnt');
-		$this->db->join('contact', 'contact.id = user.billing_id');
-		
-		if( isset($filter['search']) && $filter['search'] != '' ) {
-			$this->db->where('concat(contact.first_name, " ", contact.last_name) like "%'.$filter['search'].'%"',null);
-			$this->db->or_where('email like "%'.$filter['search'].'%"');
-			$this->db->or_where('phone like "%'.$filter['search'].'%"');
-		}
-		
-		if( isset($filter['user_type']) && $filter['user_type'] != '' ) {
-			$this->db->where('user.user_type = "'.$filter['user_type'].'"');
-		}
-		
-		$record = $this->selectRecord('user', $where);
-		return $record['cnt'];
-	}
-	
-	public function getCustomerDetail( $user_id = null, $emp = false ) {
-		if( $user_id == null ) {
-			return array();
-		}
-		
-		$this->db->select('contact.first_name AS first_name, '.
-							'contact.last_name AS last_name, '.
-							'contact.street_address AS street_address, '.
-							'contact.address_2 AS address_2, '.
-							'contact.city AS city, '.
-							'contact.state AS state, '.
-							'contact.zip AS zip, '.
-							'contact.country AS country, '.
-							'contact.email AS email, '.
-							'contact.phone AS phone, '.
-							'contact.company AS company, user.id, user.status, user.admin, user.cc_permission, user.username, user.notes, user.user_type'
-							);
-		//$where = array("user.first_name != ''" => null);
-		$this->db->join('contact', 'contact.id = user.billing_id');
-		
-		if( $user_id != '' ) {
-			$this->db->where('user.id = "'.$user_id.'"',null);
-		}
-		
-		if( isset($filter['user_type']) && $filter['user_type'] != '' ) {
-			$this->db->where('user.user_type = "'.$filter['user_type'].'"');
-		}
-		
-		$this->db->order_by('contact.first_name ASC');
-		$record = $this->selectRecord('user', $where);
-		
-		if( $emp ) {
-			$this->db->where('user_id', $user_id);
-			$permissions = $this->selectRecords('userpermissions');
-			$userPerm = array();
-			foreach( $permissions as $permission ) {
-				$userPerm[$permission['id']] = $permission['permission'];
-			}
-			$record['permissions'] = $userPerm;
-		} else {
-			//Get user orders
-			$this->db->select('order.id AS order_id, ' .
-					'order.user_id AS user_id, ' .
-					'order.contact_id AS contact_id, ' .
-					'order.shipping_id AS shipping_id, ' .
-					'order.sales_price AS sales_price, ' .
-					'order.shipping AS shipping, ' .
-					'order.weight AS weight, ' .
-					'order.tax AS tax, ' .
-					'order.Reveived_date AS processed_date, ' .
-					'order.will_call AS will_call, ' .
-					'order.process_date AS process_date, ' .
-					'order.batch_number AS batch_number, ' .
-					'order.special_instr AS special_instr, ' .
-					'order.Reveived_date AS Reveived_date,' .
-					'order.order_date AS order_date, order_status.status ');
-			$this->db->join('user', 'user.id = order.user_id');
-			$this->db->join('order_status', 'order_status.order_id = order.id');
-			$sts = array('declined', 'batch order', 'processing', 'back order', 'partially shipped', 'will_call', 'shipped/complete', 'returned', 'refunded', 'approved');
-			$this->db->where('order.user_id', $record['id']);
-			$this->db->where_in('order_status.status', $sts);
-			$this->db->order_by('order_status.datetime DESC');
-			//$this->db->group_by('order.id');
-			$ordr = $this->selectRecords('order');
-			$odr = array();
-			foreach( $ordr as $order ) {
-				$where = array('order_id' => $order['order_id']);
-				$this->db->order_by('datetime DESC');
-				$statusRec = $this->selectRecord('order_status', $where);
-				$rcrd = $order;
-				$rcrd['status'] = $statusRec['status'];
-				if( empty($odr[$order['order_id']]) ) {
-					$odr[$order['order_id']] = $rcrd;
-				}
-			}
-			
-			$record['orders'] = $odr;
-		}
-		return $record;
-	}
-	
-	public function getUserBillingId( $user_id ) {
-		$this->db->select('billing_id');
-		$this->db->where('id = "'.$user_id.'"');
-		$record = $this->selectRecord('user');
-		return $record['billing_id'];
-	}
-	
-	public function updateCustomerInfo( $data ) {
-		$where = array( 'id' => $data['id'] );
-		unset( $data['id'] );
-		$this->updateRecord('contact', $data, $where, FALSE);
-	}
-	
-	public function createNewEmployee($data) {
-		$this->load->library('encrypt');
-		$contactData = array(
-						  'email' =>  @$data['email'],
-						  'first_name' => @$data['first_name'],
-						  'last_name' => @$data['last_name'],
-						  'street_address' => @$data['street_address'],
-						  'address_2' => @$data['address_2'],
-						  'city' => @$data['city'],
-						  'state' => @$data['state'],
-						  'zip' => @$data['zip'],
-						  'country' => @$data['country'],
-						  'phone' => @$data['phone'],
-						  );
-		$billingId = $this->createRecord('contact', $contactData, FALSE);
-		$userData = array(
-						  'username' =>            $data['username'],
-						  'password' =>            $this->encrypt->encode($data['password']),
-						  'lost_password_email' => $data['email'],
-						  'billing_id' =>          @$billingId,
-						  'user_type'  =>		   'employee',
-						  'cc_permission'  =>	   $data['cc_permission'] == 1 ? 1 : 0,
-						  'admin'  =>	   		   $data['admin'] == 1 ? 1 : 0,
-						  'status'  =>	   		   $data['status'] == 1 ? 1 : 0,
-						  );
-		$userId = $this->createRecord('user', $userData, FALSE);
-		$permissions = $this->db->query("delete from userpermissions where user_id = '".$userId."'");
-		
-		if( $data['prmsion'] != '' ) {
-			$data['permission'][$data['prmsion']] = $data['prmsion'];
-		}
-		// echo '<pre>';
-		// print_r($data);
-		// echo '</pre>';exit;
-		foreach( $data['permission'] as $val ) {
-			$dt = array( 'user_id' => $userId, 'permission' => $val );
-			$this->createRecord('userpermissions', $dt, FALSE);
-		}
-		return $userId;
-	}
-	
-	public function updateEmployeeInfo( $data ) {
-		$userData = array();
-		if(@$data['password']) {
-			$this->load->library('encrypt');
-			$userData['password'] = $this->encrypt->encode($data['password']);
-		}
-			$userData['cc_permission'] = $data['cc_permission'] == 1 ? 1 : 0;
-			$userData['admin'] = $data['admin'] == 1 ? 1 : 0;
-			$userData['status'] = $data['status'] == 1 ? 1 : 0;
-			$where = array('id' => $data['id']);
-			$this->updateRecord('user', $userData, $where, FALSE);
-		
-		$permissions = $this->db->query("delete from userpermissions where user_id = '".$data['id']."'");
-		
-		if( $data['prmsion'] != '' ) {
-			$data['permission'][$data['prmsion']] = $data['prmsion'];
-		}
-		foreach( $data['permission'] as $val ) {
-			$dt = array( 'user_id' => $data['id'], 'permission' => $val );
-			$this->createRecord('userpermissions', $dt, FALSE);
-		}
-		
-		$where = array('id' => $data['billing_id']);
-		unset($data['id']);
-		unset($data['billing_id']);
-		$return = $this->updateRecord('contact', $data, $where, FALSE);
-		return $return;
-	}
-	
-	public function createNewCustomer( $data ) {
-		$this->load->library('encrypt');
-		$contactData = array(
-						  'email' =>  @$data['email'],
-						  'first_name' => @$data['first_name'],
-						  'last_name' => @$data['last_name'],
-						  'street_address' => @$data['street_address'],
-						  'address_2' => @$data['address_2'],
-						  'city' => @$data['city'],
-						  'state' => @$data['state'],
-						  'zip' => @$data['zip'],
-						  'country' => @$data['country'],
-						  'phone' => @$data['phone'],
-						  );
-		$billingId = $this->createRecord('contact', $contactData, FALSE);
-		$userData = array(
-						  'username' =>            $data['email'],
-						  'password' =>            $this->encrypt->encode($data['password']),
-						  'lost_password_email' => $data['email'],
-						  'billing_id' =>          @$billingId,
-						  'user_type'  =>		   'normal',
-						  'admin'  =>	   		   0,
-						  'created_by' =>			$data['created_by']
-						  );
-		$userId = $this->createRecord('user', $userData, FALSE);
-		return $userId;
-	}
-	
-	
-	public function updateContact($post, $type = 'billing', $userId = NULL, $notes)
-	{
-		$contactId = FALSE;
-		$typeId = 'billing_id';
-		if($userId) // Updating User Record
-		{
-			$where = array('id' => $userId);
-			$userRec = $this->selectRecord('user', $where);
-			if(empty($post['email']))
-				$post['email'] = $userRec['lost_password_email'];
-			
-			$cwhere = array('id' => $userRec['billing_id']);
-			$contactId = $this->updateRecord('contact', $post, $cwhere, FALSE);
-			$post = array('notes' => $notes);
-			$this->updateRecord('user', $post, $where, FALSE);
-		}
-		else // Create Contact Record not associated with User Record
-			$contactId = $this->createRecord('contact', $post, FALSE);
-		
-		return $contactId;
-	}
-	
-	public function deleteEmployee( $user_id = null ) {
+            if ($filter['sort'] == 'orders') {
+                $this->db->order_by('orders ' . $filter['sorter']);
+            }
+
+            $this->db->group_by('user.id');
+            $records = $this->selectRecords('user', $where);
+
+            foreach ($records as &$record) {
+                $dt = date('Y-m-d H:i:s');
+                $this->db->where('user_id', $record['id']);
+                $this->db->where('is_completed', '0');
+                $this->db->where('start_datetime <=', $dt);
+                //$this->db->where('end_datetime >=', $dt);
+                $reminders = $this->selectRecord('user_reminder');
+
+                $record['reminder'] = $reminders;
+            }
+
+            //echo $this->db->last_query();exit;
+            // $this->db->select('count(order.id) AS orders, user.billing_id');
+            // $this->db->join('user', 'user.billing_id = order.contact_id');
+            // $this->db->join('order_status', 'order_status.order_id = order.id');
+            // $sts = array('declined', 'batch order', 'processing', 'back order', 'partially shipped', 'will_call', 'shipped/complete', 'returned', 'refunded');
+            // $this->db->where_in('order_status.status', $sts);
+            // if( $limit > 0 ) {
+            // $this->db->limit($limit, $offset);
+            // }
+            // $this->db->group_by('user.billing_id');
+            // $this->db->order_by('orders '.$filter['sorter']);
+            // $ordr = $this->selectRecords('order');
+            // $records = array();
+            // foreach( $ordr as $k => $v ) {
+            // $this->db->select('contact.first_name AS first_name, '.
+            // 'contact.last_name AS last_name, '.
+            // 'contact.street_address AS street_address, '.
+            // 'contact.address_2 AS address_2, '.
+            // 'contact.city AS city, '.
+            // 'contact.state AS state, '.
+            // 'contact.zip AS zip, '.
+            // 'contact.country AS country, '.
+            // 'contact.email AS email, '.
+            // 'contact.phone AS phone, '.
+            // 'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status'
+            // );
+            // $this->db->join('contact', 'contact.id = user.billing_id');
+            // if( isset($filter['search']) && $filter['search'] != '' ) {
+            // $this->db->where('( concat(contact.first_name, " ", contact.last_name) like "%'.$filter['search'].'%"',null);
+            // $this->db->or_where('email like "%'.$filter['search'].'%"');
+            // $this->db->or_where('phone like "%'.$filter['search'].'%" )');
+            // }
+            // if( isset($filter['user_type']) && $filter['user_type'] != '' ) {
+            // $this->db->where('user.user_type = "'.$filter['user_type'].'"');
+            // }
+            // if( $filter['sort'] == 'first_name' ) {
+            // $this->db->order_by('contact.first_name ASC');
+            // }
+            // $this->db->where("user.id = '".$v['billing_id']."'",null);
+            // $record = $this->selectRecord('user', $where);
+            // $record['orders'] = $v['orders'];
+            // $records[] = $record;
+            // }
+        } else if ($filter['sort'] == 'reminders') {
+            $dt = date('Y-m-d H:i:s');
+            $this->db->select('contact.first_name AS first_name, ' .
+                    'contact.last_name AS last_name, ' .
+                    'contact.street_address AS street_address, ' .
+                    'contact.address_2 AS address_2, ' .
+                    'contact.city AS city, ' .
+                    'contact.state AS state, ' .
+                    'contact.zip AS zip, ' .
+                    'contact.country AS country, ' .
+                    'contact.email AS email, ' .
+                    'contact.phone AS phone, ' .
+                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, ' .
+                    '(select c.first_name from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee,' .
+                    "(select 10 from user_reminder as ur inner join user as us on us.id = ur.user_id where ur.start_datetime <= '" . $dt . "' and ur.user_id=user.id and ur.is_completed = '0' limit 1) as strt_tm"
+            );
+            $this->db->join('contact', 'contact.id = user.billing_id');
+
+            if (isset($filter['search']) && $filter['search'] != '') {
+                $this->db->where('( concat(contact.first_name, " ", contact.last_name) like "%' . $filter['search'] . '%"', null);
+                $this->db->or_where('email like "%' . $filter['search'] . '%"');
+                $this->db->or_where('phone like "%' . $filter['search'] . '%" )');
+            }
+
+            if (isset($filter['user_type']) && $filter['user_type'] != '') {
+                $this->db->where('user.user_type = "' . $filter['user_type'] . '"');
+            }
+
+            if ($filter['custom'] == 'own') {
+                $this->db->where('user.created_by', $_SESSION['userRecord']['id']);
+            } else if ($filter['custom'] == 'web') {
+                $this->db->where('user.created_by IS NULL');
+            }
+
+            if ($limit > 0) {
+                $this->db->limit($limit, $offset);
+            }
+
+            $this->db->order_by("strt_tm DESC");
+
+            $this->db->group_by('user.id');
+            $records = $this->selectRecords('user', $where);
+
+            foreach ($records as &$record) {
+                $this->db->select('order.id AS order_id, order_status.status ');
+                $this->db->join('user', 'user.id = order.user_id');
+                $this->db->join('order_status', 'order_status.order_id = order.id');
+                $sts = array('declined', 'batch order', 'processing', 'back order', 'partially shipped', 'will_call', 'shipped/complete', 'returned', 'refunded', 'approved');
+                $this->db->where('order.user_id', $record['id']);
+                $this->db->where_in('order_status.status', $sts);
+                $this->db->order_by('order_status.datetime DESC');
+                //$this->db->group_by('order.id');
+                $ordr = $this->selectRecords('order');
+                $odr = array();
+                foreach ($ordr as $order) {
+                    $where = array('order_id' => $order['order_id']);
+                    $this->db->order_by('datetime DESC');
+                    $statusRec = $this->selectRecord('order_status', $where);
+                    $rcrd = $order;
+                    $rcrd['status'] = $statusRec['status'];
+                    if (empty($odr[$order['order_id']])) {
+                        $odr[$order['order_id']] = $rcrd;
+                    }
+                }
+
+                $this->db->where('user_id', $record['id']);
+                $this->db->where('is_completed', '0');
+                $this->db->where('start_datetime <=', $dt);
+                //$this->db->where('end_datetime >=', $dt);
+                $reminders = $this->selectRecord('user_reminder');
+
+                $record['reminder'] = $reminders;
+                $record['orders'] = count($odr);
+            }
+        } else {
+            $this->db->select('contact.first_name AS first_name, ' .
+                    'contact.last_name AS last_name, ' .
+                    'contact.street_address AS street_address, ' .
+                    'contact.address_2 AS address_2, ' .
+                    'contact.city AS city, ' .
+                    'contact.state AS state, ' .
+                    'contact.zip AS zip, ' .
+                    'contact.country AS country, ' .
+                    'contact.email AS email, ' .
+                    'contact.phone AS phone, ' .
+                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, ' .
+                    '(select c.first_name from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee'
+            );
+            $this->db->join('contact', 'contact.id = user.billing_id');
+
+            if (isset($filter['search']) && $filter['search'] != '') {
+                $this->db->where('( concat(contact.first_name, " ", contact.last_name) like "%' . $filter['search'] . '%"', null);
+                $this->db->or_where('email like "%' . $filter['search'] . '%"');
+                $this->db->or_where('phone like "%' . $filter['search'] . '%" )');
+            }
+
+            if (isset($filter['user_type']) && $filter['user_type'] != '') {
+                $this->db->where('user.user_type = "' . $filter['user_type'] . '"');
+            }
+
+            if ($filter['custom'] == 'own') {
+                $this->db->where('user.created_by', $_SESSION['userRecord']['id']);
+            } else if ($filter['custom'] == 'web') {
+                $this->db->where('user.created_by IS NULL');
+            }
+
+            if ($limit > 0) {
+                $this->db->limit($limit, $offset);
+            }
+
+            if ($filter['sort'] == 'first_name') {
+                $this->db->order_by('contact.first_name ' . $filter['sorter']);
+            }
+
+            $this->db->group_by('user.id');
+            $records = $this->selectRecords('user', $where);
+
+            foreach ($records as &$record) {
+                $this->db->select('order.id AS order_id, order_status.status ');
+                $this->db->join('user', 'user.id = order.user_id');
+                $this->db->join('order_status', 'order_status.order_id = order.id');
+                $sts = array('declined', 'batch order', 'processing', 'back order', 'partially shipped', 'will_call', 'shipped/complete', 'returned', 'refunded', 'approved');
+                $this->db->where('order.user_id', $record['id']);
+                $this->db->where_in('order_status.status', $sts);
+                $this->db->order_by('order_status.datetime DESC');
+                //$this->db->group_by('order.id');
+                $ordr = $this->selectRecords('order');
+                $odr = array();
+                foreach ($ordr as $order) {
+                    $where = array('order_id' => $order['order_id']);
+                    $this->db->order_by('datetime DESC');
+                    $statusRec = $this->selectRecord('order_status', $where);
+                    $rcrd = $order;
+                    $rcrd['status'] = $statusRec['status'];
+                    if (empty($odr[$order['order_id']])) {
+                        $odr[$order['order_id']] = $rcrd;
+                    }
+                }
+
+                $dt = date('Y-m-d H:i:s');
+                $this->db->where('user_id', $record['id']);
+                $this->db->where('is_completed', '0');
+                $this->db->where('start_datetime <=', $dt);
+                //$this->db->where('end_datetime >=', $dt);
+                $reminders = $this->selectRecord('user_reminder');
+
+                $record['reminder'] = $reminders;
+                $record['orders'] = count($odr);
+            }
+        }
+
+        // echo '<pre>';
+        // print_r($records);
+        // echo '</pre>';
+        return $records;
+    }
+
+    public function getAllCustomersCount($filter) {
+        $this->db->select('count(user.id) as cnt');
+        $this->db->join('contact', 'contact.id = user.billing_id');
+
+        if (isset($filter['search']) && $filter['search'] != '') {
+            $this->db->where('concat(contact.first_name, " ", contact.last_name) like "%' . $filter['search'] . '%"', null);
+            $this->db->or_where('email like "%' . $filter['search'] . '%"');
+            $this->db->or_where('phone like "%' . $filter['search'] . '%"');
+        }
+
+        if (isset($filter['user_type']) && $filter['user_type'] != '') {
+            $this->db->where('user.user_type = "' . $filter['user_type'] . '"');
+        }
+
+        $record = $this->selectRecord('user', $where);
+        return $record['cnt'];
+    }
+
+    public function getCustomerDetail($user_id = null, $emp = false) {
+        if ($user_id == null) {
+            return array();
+        }
+
+        $this->db->select('contact.first_name AS first_name, ' .
+                'contact.last_name AS last_name, ' .
+                'contact.street_address AS street_address, ' .
+                'contact.address_2 AS address_2, ' .
+                'contact.city AS city, ' .
+                'contact.state AS state, ' .
+                'contact.zip AS zip, ' .
+                'contact.country AS country, ' .
+                'contact.email AS email, ' .
+                'contact.phone AS phone, ' .
+                'contact.company AS company, user.id, user.status, user.admin, user.cc_permission, user.username, user.notes, user.user_type'
+        );
+        //$where = array("user.first_name != ''" => null);
+        $this->db->join('contact', 'contact.id = user.billing_id');
+
+        if ($user_id != '') {
+            $this->db->where('user.id = "' . $user_id . '"', null);
+        }
+
+        if (isset($filter['user_type']) && $filter['user_type'] != '') {
+            $this->db->where('user.user_type = "' . $filter['user_type'] . '"');
+        }
+
+        $this->db->order_by('contact.first_name ASC');
+        $record = $this->selectRecord('user', $where);
+
+        if ($emp) {
+            $this->db->where('user_id', $user_id);
+            $permissions = $this->selectRecords('userpermissions');
+            $userPerm = array();
+            foreach ($permissions as $permission) {
+                $userPerm[$permission['id']] = $permission['permission'];
+            }
+            $record['permissions'] = $userPerm;
+        } else {
+            //Get user orders
+            $this->db->select('order.id AS order_id, ' .
+                    'order.user_id AS user_id, ' .
+                    'order.contact_id AS contact_id, ' .
+                    'order.shipping_id AS shipping_id, ' .
+                    'order.sales_price AS sales_price, ' .
+                    'order.shipping AS shipping, ' .
+                    'order.weight AS weight, ' .
+                    'order.tax AS tax, ' .
+                    'order.Reveived_date AS processed_date, ' .
+                    'order.will_call AS will_call, ' .
+                    'order.process_date AS process_date, ' .
+                    'order.batch_number AS batch_number, ' .
+                    'order.special_instr AS special_instr, ' .
+                    'order.Reveived_date AS Reveived_date,' .
+                    'order.order_date AS order_date, order_status.status ');
+            $this->db->join('user', 'user.id = order.user_id');
+            $this->db->join('order_status', 'order_status.order_id = order.id');
+            $sts = array('declined', 'batch order', 'processing', 'back order', 'partially shipped', 'will_call', 'shipped/complete', 'returned', 'refunded', 'approved');
+            $this->db->where('order.user_id', $record['id']);
+            $this->db->where_in('order_status.status', $sts);
+            $this->db->order_by('order_status.datetime DESC');
+            //$this->db->group_by('order.id');
+            $ordr = $this->selectRecords('order');
+            $odr = array();
+            foreach ($ordr as $order) {
+                $where = array('order_id' => $order['order_id']);
+                $this->db->order_by('datetime DESC');
+                $statusRec = $this->selectRecord('order_status', $where);
+                $rcrd = $order;
+                $rcrd['status'] = $statusRec['status'];
+                if (empty($odr[$order['order_id']])) {
+                    $odr[$order['order_id']] = $rcrd;
+                }
+            }
+
+            $record['orders'] = $odr;
+        }
+        return $record;
+    }
+
+    public function getUserBillingId($user_id) {
+        $this->db->select('billing_id');
+        $this->db->where('id = "' . $user_id . '"');
+        $record = $this->selectRecord('user');
+        return $record['billing_id'];
+    }
+
+    public function updateCustomerInfo($data) {
+        $where = array('id' => $data['id']);
+        unset($data['id']);
+        $this->updateRecord('contact', $data, $where, FALSE);
+    }
+
+    public function createNewEmployee($data) {
+        $this->load->library('encrypt');
+        $contactData = array(
+            'email' => @$data['email'],
+            'first_name' => @$data['first_name'],
+            'last_name' => @$data['last_name'],
+            'street_address' => @$data['street_address'],
+            'address_2' => @$data['address_2'],
+            'city' => @$data['city'],
+            'state' => @$data['state'],
+            'zip' => @$data['zip'],
+            'country' => @$data['country'],
+            'phone' => @$data['phone'],
+        );
+        $billingId = $this->createRecord('contact', $contactData, FALSE);
+        $userData = array(
+            'username' => $data['username'],
+            'password' => $this->encrypt->encode($data['password']),
+            'lost_password_email' => $data['email'],
+            'billing_id' => @$billingId,
+            'user_type' => 'employee',
+            'cc_permission' => $data['cc_permission'] == 1 ? 1 : 0,
+            'admin' => $data['admin'] == 1 ? 1 : 0,
+            'status' => $data['status'] == 1 ? 1 : 0,
+        );
+        $userId = $this->createRecord('user', $userData, FALSE);
+        $permissions = $this->db->query("delete from userpermissions where user_id = '" . $userId . "'");
+
+        if ($data['prmsion'] != '') {
+            $data['permission'][$data['prmsion']] = $data['prmsion'];
+        }
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';exit;
+        foreach ($data['permission'] as $val) {
+            $dt = array('user_id' => $userId, 'permission' => $val);
+            $this->createRecord('userpermissions', $dt, FALSE);
+        }
+        return $userId;
+    }
+
+    public function updateEmployeeInfo($data) {
+        $userData = array();
+        if (@$data['password']) {
+            $this->load->library('encrypt');
+            $userData['password'] = $this->encrypt->encode($data['password']);
+        }
+        $userData['cc_permission'] = $data['cc_permission'] == 1 ? 1 : 0;
+        $userData['admin'] = $data['admin'] == 1 ? 1 : 0;
+        $userData['status'] = $data['status'] == 1 ? 1 : 0;
+        $where = array('id' => $data['id']);
+        $this->updateRecord('user', $userData, $where, FALSE);
+
+        $permissions = $this->db->query("delete from userpermissions where user_id = '" . $data['id'] . "'");
+
+        if ($data['prmsion'] != '') {
+            $data['permission'][$data['prmsion']] = $data['prmsion'];
+        }
+        foreach ($data['permission'] as $val) {
+            $dt = array('user_id' => $data['id'], 'permission' => $val);
+            $this->createRecord('userpermissions', $dt, FALSE);
+        }
+
+        $where = array('id' => $data['billing_id']);
+        unset($data['id']);
+        unset($data['billing_id']);
+        $return = $this->updateRecord('contact', $data, $where, FALSE);
+        return $return;
+    }
+
+    public function createNewCustomer($data) {
+        $this->load->library('encrypt');
+        $contactData = array(
+            'email' => @$data['email'],
+            'first_name' => @$data['first_name'],
+            'last_name' => @$data['last_name'],
+            'street_address' => @$data['street_address'],
+            'address_2' => @$data['address_2'],
+            'city' => @$data['city'],
+            'state' => @$data['state'],
+            'zip' => @$data['zip'],
+            'country' => @$data['country'],
+            'phone' => @$data['phone'],
+        );
+        $billingId = $this->createRecord('contact', $contactData, FALSE);
+        $userData = array(
+            'username' => $data['email'],
+            'password' => $this->encrypt->encode($data['password']),
+            'lost_password_email' => $data['email'],
+            'billing_id' => @$billingId,
+            'user_type' => 'normal',
+            'admin' => 0,
+            'created_by' => $data['created_by']
+        );
+        $userId = $this->createRecord('user', $userData, FALSE);
+        return $userId;
+    }
+
+    public function updateContact($post, $type = 'billing', $userId = NULL, $notes) {
+        $contactId = FALSE;
+        $typeId = 'billing_id';
+        if ($userId) { // Updating User Record
+            $where = array('id' => $userId);
+            $userRec = $this->selectRecord('user', $where);
+            if (empty($post['email']))
+                $post['email'] = $userRec['lost_password_email'];
+
+            $cwhere = array('id' => $userRec['billing_id']);
+            $contactId = $this->updateRecord('contact', $post, $cwhere, FALSE);
+            $post = array('notes' => $notes);
+            $this->updateRecord('user', $post, $where, FALSE);
+        }
+        else // Create Contact Record not associated with User Record
+            $contactId = $this->createRecord('contact', $post, FALSE);
+
+        return $contactId;
+    }
+
+    public function deleteEmployee($user_id = null) {
         $where = array('id' => $user_id);
         $this->deleteRecord('user', $where);
-	}
-	
-	
+    }
+
     public function getParentCategores($childid) {
         $where = array('category_id' => $childid);
         $cat = $this->selectRecord('category', $where);
@@ -2040,7 +2045,7 @@ class Admin_M extends Master_M {
         }
         return $returnArr;
     }
-	
+
     public function tag_creating($url) {
         $url = str_replace(array(' - ', ' '), '-', $url);
         $url = preg_replace('~[^\\pL0-9_-]+~u', '', $url);
@@ -2050,8 +2055,8 @@ class Admin_M extends Master_M {
         $url = preg_replace('~[^-a-z0-9_-]+~', '', $url);
         return $url;
     }
-	
-	function getSecondBreadCrumb($partId) {
+
+    function getSecondBreadCrumb($partId) {
 
         $this->db->select("*");
         $this->db->from("partcategory");
@@ -2173,140 +2178,141 @@ class Admin_M extends Master_M {
 
         return $breadCrumb;
     }
-	
-	public function saveCustomerReminder( $data ) {
-		$success = '';
-		if ($data['id'] == '' ) {
-			$success = $this->createRecord('user_reminder', $data, FALSE);
-		} else {
-			$where = array('id' => $data['id']);
-			unset($data['id']);
-			$success = $this->updateRecord('user_reminder', $data, $where, FALSE);
-		}
-		return $success;
-	}
-	
-	public function getMonthReminders( $month, $year, $user_id ) {
-		$this->db->where('YEAR(start_datetime)', $year);
-		$this->db->where('MONTH(start_datetime)', $month);
-		$this->db->where('user_id', $user_id);
+
+    public function saveCustomerReminder($data) {
+        $success = '';
+        if ($data['id'] == '') {
+            $success = $this->createRecord('user_reminder', $data, FALSE);
+        } else {
+            $where = array('id' => $data['id']);
+            unset($data['id']);
+            $success = $this->updateRecord('user_reminder', $data, $where, FALSE);
+        }
+        return $success;
+    }
+
+    public function getMonthReminders($month, $year, $user_id) {
+        $this->db->where('YEAR(start_datetime)', $year);
+        $this->db->where('MONTH(start_datetime)', $month);
+        $this->db->where('user_id', $user_id);
         $records = $this->selectRecords('user_reminder');
-		$reminders = array();
-		foreach( $records as $record ) {
-			 $dt = date('Y-m-d', strtotime($record['start_datetime']));
-			$reminders[$dt][] = $record;
-		}
-		return $reminders;
-	}
-	
-	public function getReminder( $id ) {
-		$this->db->where('id', $id);
+        $reminders = array();
+        foreach ($records as $record) {
+            $dt = date('Y-m-d', strtotime($record['start_datetime']));
+            $reminders[$dt][] = $record;
+        }
+        return $reminders;
+    }
+
+    public function getReminder($id) {
+        $this->db->where('id', $id);
         $record = $this->selectRecord('user_reminder');
-		return $record;
-	}
-	
-	public function deleteCustomerEvent( $id ) {
+        return $record;
+    }
+
+    public function deleteCustomerEvent($id) {
         $where = array('id' => $id);
         $this->deleteRecord('user_reminder', $where);
-	}
-	
-	public function getReminderRecurrences( $month, $year, $user_id ) {
-		$this->db->where('user_id', $user_id);
-		//$this->db->where('is_completed', '0');
-		$reminders = $this->selectRecords('user_reminder');
-		$events = array();
-		foreach( $reminders as $reminder ) {
-			//$events[date('d-m-Y', strtotime($reminder['start_datetime']))][] = json_decode($reminder['data']);
-			$events[date('Y-m-d', strtotime($reminder['start_datetime']))][] = $reminder;
-		}
-		return $events;
-	}
-	
-	public function completeEvent( $id ) {
-		$data = array('is_completed' => '1');
-		$where = array('id'=>$id);
-		$this->updateRecord('user_reminder', $data, $where, FALSE);
-	}
-	//completeRecurEvent
-	public function completeRecurEvent( $id, $rmvd ) {
-		// $data = array('is_completed' => '1');
-		// $where = array('id'=>$id);
-		// $this->updateRecord('user_reminder', $data, $where, FALSE);
-		$data = array('is_completed' => '1');
-		$where = array('parent' => $id);
-		$this->db->where('id > ', $rmvd);
-		$this->deleteRecord('user_reminder', $where);
-	}
-	
-    public function insertEventRecurrence($arr, $parent) {
-		$where = array('parent' => $parent);
-        $this->deleteRecord('user_reminder', $where);
-		$this->db->insert_batch('user_reminder', $arr);
     }
-	
+
+    public function getReminderRecurrences($month, $year, $user_id) {
+        $this->db->where('user_id', $user_id);
+        //$this->db->where('is_completed', '0');
+        $reminders = $this->selectRecords('user_reminder');
+        $events = array();
+        foreach ($reminders as $reminder) {
+            //$events[date('d-m-Y', strtotime($reminder['start_datetime']))][] = json_decode($reminder['data']);
+            $events[date('Y-m-d', strtotime($reminder['start_datetime']))][] = $reminder;
+        }
+        return $events;
+    }
+
+    public function completeEvent($id) {
+        $data = array('is_completed' => '1');
+        $where = array('id' => $id);
+        $this->updateRecord('user_reminder', $data, $where, FALSE);
+    }
+
+    //completeRecurEvent
+    public function completeRecurEvent($id, $rmvd) {
+        // $data = array('is_completed' => '1');
+        // $where = array('id'=>$id);
+        // $this->updateRecord('user_reminder', $data, $where, FALSE);
+        $data = array('is_completed' => '1');
+        $where = array('parent' => $id);
+        $this->db->where('id > ', $rmvd);
+        $this->deleteRecord('user_reminder', $where);
+    }
+
+    public function insertEventRecurrence($arr, $parent) {
+        $where = array('parent' => $parent);
+        $this->deleteRecord('user_reminder', $where);
+        $this->db->insert_batch('user_reminder', $arr);
+    }
+
     public function updateMotorcycle($id, $post) {
-        
-        if($post['craigslist_feed_status']) {
+
+        if ($post['craigslist_feed_status']) {
             $post['craigslist_feed_status'] == TRUE;
-        }  else {  
+        } else {
             $post['craigslist_feed_status'] == FALSE;
         }
-        if($post['cycletrader_feed_status']) {
+        if ($post['cycletrader_feed_status']) {
             $post['cycletrader_feed_status'] == TRUE;
-        }  else {  
+        } else {
             $post['cycletrader_feed_status'] == FALSE;
         }
-        
-		$cwhere = array('name' => $post['category']);
-		$category = $this->selectRecord('motorcycle_category', $cwhere);
-		
-		if(empty($category)) {
-			$cdata = array('name' => $post['category']);
-                        $this->db->insert('motorcycle_category', $cdata);
-			$cwhere = array('name' => $post['category']);
-			$category = $this->selectRecord('motorcycle_category', $cwhere);
-		}
+
+        $cwhere = array('name' => $post['category']);
+        $category = $this->selectRecord('motorcycle_category', $cwhere);
+
+        if (empty($category)) {
+            $cdata = array('name' => $post['category']);
+            $this->db->insert('motorcycle_category', $cdata);
+            $cwhere = array('name' => $post['category']);
+            $category = $this->selectRecord('motorcycle_category', $cwhere);
+        }
 
         $featured = ($post['featured'] == 1) ? 1 : 0;
         $post['category'] = $category['id'];
         $post['featured'] = $featured;
         $status = ($post['status'] == 1) ? 1 : 0;
         $post['status'] = $status;
-		$data = array('total_cost' => $post['total_cost'], 'unit_cost' => $post['unit_cost'], 'parts' => $post['parts'], 'service' => $post['service'], 'auction_fee' => $post['auction_fee'], 'misc' => $post['misc']);
-		$post['data'] = json_encode( $data );
+        $data = array('total_cost' => $post['total_cost'], 'unit_cost' => $post['unit_cost'], 'parts' => $post['parts'], 'service' => $post['service'], 'auction_fee' => $post['auction_fee'], 'misc' => $post['misc']);
+        $post['data'] = json_encode($data);
         unset($post['total_cost']);
         unset($post['unit_cost']);
         unset($post['parts']);
         unset($post['service']);
         unset($post['auction_fee']);
         unset($post['misc']);
-		if( $id != null ) {
-			$where = array('id' => $id);
-		}
-		// echo '<pre>';
-		// print_r($post);
-		// echo '</pre>';exit;
-		
+        if ($id != null) {
+            $where = array('id' => $id);
+        }
+        // echo '<pre>';
+        // print_r($post);
+        // echo '</pre>';exit;
+
         if (!empty($post)) {
-			if( $id == null ) {
-				$motorcycle_id = $this->createRecord('motorcycle', $post, FALSE);
-			} else {
-				$this->updateRecord('motorcycle', $post, $where, FALSE);
-				$motorcycle_id = $id;
-			}
-		}
-		return $motorcycle_id;
+            if ($id == null) {
+                $motorcycle_id = $this->createRecord('motorcycle', $post, FALSE);
+            } else {
+                $this->updateRecord('motorcycle', $post, $where, FALSE);
+                $motorcycle_id = $id;
+            }
+        }
+        return $motorcycle_id;
     }
-	
-	public function updateMotorcycleDesc($id, $post) {
-		// echo '<pre>';
-		// print_r(htmlentities($post['descr']));
-		// echo '</pre>';exit;
-		$data = array('description' => $post['descr']);
-		$where = array('id' => $id);
-		$this->updateRecord('motorcycle', $data, $where, FALSE);
-	}
-	
+
+    public function updateMotorcycleDesc($id, $post) {
+        // echo '<pre>';
+        // print_r(htmlentities($post['descr']));
+        // echo '</pre>';exit;
+        $data = array('description' => $post['descr']);
+        $where = array('id' => $id);
+        $this->updateRecord('motorcycle', $data, $where, FALSE);
+    }
+
     public function updateMotorcycleVideos($id, $arr) {
         $this->db->delete('motorcycle_video', array('part_id' => $id));
         if (!empty($arr)) {
@@ -2319,100 +2325,353 @@ class Admin_M extends Master_M {
         $record = $this->selectRecords('motorcycle_video', $where);
         return $record;
     }
-	
-	public function updateMotorcycleImage( $part_id, $arr ) {
-		$this->createRecord('motorcycleimage', $arr, FALSE);
-	}
-	
-	// public function deleteMotorcycleImage( $id, $motorcycle_id ) {
-        // $this->db->delete('motorcycle_video', array('id' => $id, 'motorcycle_id' => $motorcycle_id));
-	// }
-	
-	public function getMotorcycleImage( $id ) {
+
+    public function updateMotorcycleImage($part_id, $arr) {
+        $this->createRecord('motorcycleimage', $arr, FALSE);
+    }
+
+    // public function deleteMotorcycleImage( $id, $motorcycle_id ) {
+    // $this->db->delete('motorcycle_video', array('id' => $id, 'motorcycle_id' => $motorcycle_id));
+    // }
+
+    public function getMotorcycleImage($id) {
         $where = array('motorcycle_id' => $id);
         $orderBy = 'priority_number asc';
-		//$this->db->order_by('priority_number asc');
+        //$this->db->order_by('priority_number asc');
         $record = $this->selectRecords('motorcycleimage', $where, $orderBy);
         return $record;
-	}
-	
-	public function getMotorcycleCategory() {
-		$where = array();
+    }
+
+    public function getMotorcycleCategory() {
+        $where = array();
         $record = $this->selectRecords('motorcycle_category', $where);
         return $record;
-	}
-	
-	public function getMotorcycleVehicle() {
-		$where = array();
+    }
+
+    public function getMotorcycleVehicle() {
+        $where = array();
         $record = $this->selectRecords('motorcycle_type', $where);
         return $record;
-	}
-	
-	public function deleteMotorcycleImage( $id, $motorcycle_id ) {
-        $this->db->delete('motorcycleimage', array('id' => $id, 'motorcycle_id' => $motorcycle_id));
-	}
-	
-	public function updateMotorcycleImageDescription( $id, $pst ) {
-		//$data = array('description' => $post['descr']);
-		$where = array('id' => $id);
-		$this->updateRecord('motorcycleimage', $pst, $where, FALSE);
-	}
-	
-	public function updateImageOrder( $id, $ord ) {
-        $where = array('id' => $id);
-		$data = array('priority_number'=>$ord);
-		$this->updateRecord('motorcycleimage', $data, $where, FALSE);
-	}
-	
-	public function deleteMotorcycle( $prod_id ) {
-		$where = array('id' => $prod_id);
-        $this->db->delete('motorcycle', $where);
-		$cwhere = array('motorcycle_id' => $prod_id);
-        $this->db->delete('motorcycleimage', $cwhere);
-		$bwhere = array('part_id' => $prod_id);
-        $this->db->delete('motorcycle_video', $bwhere);
-	}
+    }
 
-	public function getAllRelatedCategories( $cats = array() ) {
-		$return = array();
-		if(!empty($cats)) {
-			foreach( $cats as $cat ) {
-				$where = array( 'category_id' => $cat );
-				$this->db->select('category_id, name');
-				$catName = $this->selectRecord('category', $where);
-				$return[] = $catName['category_id'];
-				
-				$cwhere = array( 'name' => $catName['name'] );
-				$this->db->select('category_id');
-				$cat1 = $this->selectRecords('category', $cwhere);
-				foreach( $cat1 as $cat2 ) {
-					$return[] = $cat2['category_id'];
-				}
-			}
-		}
-		$return = array_unique($return);
-		return $return;
-	}
-	
-	public function getCreditApplications() {
-		$this->db->order_by('application_date', 'DESC');
-		$records = $this->selectRecords('finance_applications');
-		return $records;
-	}
-	
-	public function getCreditApplication($id) {
-		$this->db->order_by('application_date', 'DESC');
-		$this->db->where('id', $id);
-		$records = $this->selectRecord('finance_applications');
-		return $records;
-	}
-	
-	public function update_finance( $id, $data ) {
-		$where = array('id' => $id);
-		$this->updateRecord('finance_applications', $data, $where, FALSE);
-	}
-	
-	public function delete_finance($id) {
+    public function deleteMotorcycleImage($id, $motorcycle_id) {
+        $this->db->delete('motorcycleimage', array('id' => $id, 'motorcycle_id' => $motorcycle_id));
+    }
+
+    public function updateMotorcycleImageDescription($id, $pst) {
+        //$data = array('description' => $post['descr']);
+        $where = array('id' => $id);
+        $this->updateRecord('motorcycleimage', $pst, $where, FALSE);
+    }
+
+    public function updateImageOrder($id, $ord) {
+        $where = array('id' => $id);
+        $data = array('priority_number' => $ord);
+        $this->updateRecord('motorcycleimage', $data, $where, FALSE);
+    }
+
+    public function deleteMotorcycle($prod_id) {
+        $where = array('id' => $prod_id);
+        $this->db->delete('motorcycle', $where);
+        $cwhere = array('motorcycle_id' => $prod_id);
+        $this->db->delete('motorcycleimage', $cwhere);
+        $bwhere = array('part_id' => $prod_id);
+        $this->db->delete('motorcycle_video', $bwhere);
+    }
+
+    public function getAllRelatedCategories($cats = array()) {
+        $return = array();
+        if (!empty($cats)) {
+            foreach ($cats as $cat) {
+                $where = array('category_id' => $cat);
+                $this->db->select('category_id, name');
+                $catName = $this->selectRecord('category', $where);
+                $return[] = $catName['category_id'];
+
+                $cwhere = array('name' => $catName['name']);
+                $this->db->select('category_id');
+                $cat1 = $this->selectRecords('category', $cwhere);
+                foreach ($cat1 as $cat2) {
+                    $return[] = $cat2['category_id'];
+                }
+            }
+        }
+        $return = array_unique($return);
+        return $return;
+    }
+
+    public function getCreditApplications() {
+        $this->db->order_by('application_date', 'DESC');
+        $records = $this->selectRecords('finance_applications');
+        return $records;
+    }
+
+    public function getCreditApplication($id) {
+        $this->db->order_by('application_date', 'DESC');
+        $this->db->where('id', $id);
+        $records = $this->selectRecord('finance_applications');
+        return $records;
+    }
+
+    public function update_finance($id, $data) {
+        $where = array('id' => $id);
+        $this->updateRecord('finance_applications', $data, $where, FALSE);
+    }
+
+    public function delete_finance($id) {
         $this->db->delete('finance_applications', array('id' => $id));
-	}
+    }
+
+    public function getCustomerByDetail($filter, $limit = 5, $offset = 0) {
+        $this->db->select('contact.first_name AS first_name, ' .
+                'contact.last_name AS last_name, ' .
+                'contact.street_address AS street_address, ' .
+                'contact.address_2 AS address_2, ' .
+                'contact.city AS city, ' .
+                'contact.state AS state, ' .
+                'contact.zip AS zip, ' .
+                'contact.country AS country, ' .
+                'contact.email AS email, ' .
+                'contact.phone AS phone, ' .
+                'contact.company AS company, user.username as uemail, user.id as userId, user.last_login, user.admin, user.status, '
+        );
+        $this->db->join('contact', 'contact.id = user.billing_id');
+
+        if (isset($filter['search']) && $filter['search'] != '') {
+            $this->db->where('( concat(contact.first_name, " ", contact.last_name) like "%' . $filter['search'] . '%"', null);
+            $this->db->or_where('email like "%' . $filter['search'] . '%"');
+            $this->db->or_where('street_address like "%' . $filter['search'] . '%"');
+            $this->db->or_where('address_2 like "%' . $filter['search'] . '%"');
+            $this->db->or_where('phone like "%' . $filter['search'] . '%" )');
+        }
+
+        if ($limit > 0) {
+            $this->db->limit($limit, $offset);
+        }
+
+        if ($filter['sort'] == 'first_name') {
+            $this->db->order_by('contact.first_name ' . $filter['sorter']);
+        }
+
+        $this->db->group_by('user.id');
+        $records = $this->selectRecords('user', $where);
+        return $records;
+    }
+
+    public function getAllCustomerAddresses($email) {
+        $addresses = array();
+        $this->db->where('contact.email', $email);
+        $this->db->join('user', 'user.billing_id=contact.id', 'INNER');
+        $this->db->select('contact.*, user.id as userId');
+        $records = $this->selectRecord('contact', array());
+        $addresses['billing'] = $records;
+
+        $this->db->where('contact.email', $email);
+        $this->db->join('user', 'user.shipping_id=contact.id', 'INNER');
+        $this->db->select('contact.*, user.id as userId');
+        $records1 = $this->selectRecord('contact', array());
+        if (!$records1) {
+            $addresses['shipping'] = $records;
+        } else {
+            $addresses['shipping'] = $records1;
+        }
+        return $addresses;
+    }
+
+    public function updateCustomerInOrder($orderId, $order) {
+        $where = array('id' => $orderId);
+        $this->updateRecord('order', $order, $where, FALSE);
+    }
+
+    public function updateOrderPaymentByAdmin($orderId, $order) {
+        $data = array('order_id' => $orderId, 'amount' => $order['sales_price'], 'braintree_transaction_id' => $order['braintree_transaction_id'], 'transaction_date' => time());
+        //$where = array('id' => $orderId);
+        $this->createRecord('order_transaction', $data, FALSE);
+    }
+
+    public function getZip($zip1) {
+        $where = array('zip' => $zip1);
+        $point1 = $this->selectRecord('zip_locations', $where);
+        $point2Arr = array(83716, 93706, 38118, 17022, 32219, 60490, 18434, 76177, 93291, 80011, 97024);
+        $radius = 3958;      // Earth's radius (miles)
+        $deg_per_rad = 57.29578;  // Number of degrees/radian (for conversion)
+        $longestDistance = 0;
+        foreach ($point2Arr as $zip2) {
+            $where = array('zip' => $zip2);
+            $point2 = $this->selectRecord('zip_locations', $where);
+            $distance = ($radius * pi() * sqrt(
+                            ($point1['lat'] - $point2['lat'])
+                            * ($point1['lat'] - $point2['lat'])
+                            + cos($point1['lat'] / $deg_per_rad)  // Convert these to
+                            * cos($point2['lat'] / $deg_per_rad)  // radians for cos()
+                            * ($point1['long'] - $point2['long'])
+                            * ($point1['long'] - $point2['long'])
+                    ) / 180);
+            if ($distance > $longestDistance) {
+                $longestDistance = $distance;
+                $returnZip = $zip2;
+            }
+        }
+        return $zip2;
+    }
+
+    public function calculateParcel($zip, $country, $gndValue = FALSE, $weight) {
+        $furthestZip = $this->getZip($zip);
+        $postal = array();
+        $where = array('active' => 1);
+        $this->db->order_by('order ASC');
+        $shipment_types = $this->selectRecords('shipping_type', $where);
+        $this->load->library('UpsShippingQuote');
+        $objUpsRate = new UpsShippingQuote();
+        $objUpsRate->setShipperZip($furthestZip);
+        $strDestinationZip = $zip;
+        $strPackageLength = '8';
+        $strPackageWidth = '8';
+        $strPackageHeight = '8';
+        $strPackageWeight = $weight;
+        if ($country == 'Canada')
+            $strPackageCountry = 'CA';
+        if ($country == 'USA')
+            $strPackageCountry = 'US';
+        $boolReturnPriceOnly = true;
+        if ($strPackageWeight == 0)
+            $strPackageWeight = 1;
+        if ($shipment_types) {
+            foreach ($shipment_types as $type) {
+
+                $postal['UPS'][$type['code']] = $objUpsRate->GetShippingRate(
+                        $strDestinationZip, $type['code'], $strPackageLength, $strPackageWidth, $strPackageHeight, $strPackageWeight, $boolReturnPriceOnly, $strPackageCountry
+                );
+                if (@$postal['UPS'][$type['code']]) {
+                    $postal['UPS'][$type['code']] = $this->objectsIntoArray($postal['UPS'][$type['code']]);
+
+                    $postal['UPS'][$type['code']]['RatedShipment']['TotalCharges']['MonetaryValue'] = $postal['UPS'][$type['code']]['RatedShipment']['TotalCharges']['MonetaryValue'];
+                    if (($type['code'] == 'GND') && ($gndValue !== FALSE))
+                        $postal['UPS'][$type['code']]['RatedShipment']['TotalCharges']['MonetaryValue'] = $gndValue;
+                } else {
+                    unset($postal['UPS'][$type['code']]);
+                    if ($gndValue === FALSE)
+                        $gndValue = 8;
+                    $postal['UPS']['GND']['RatedShipment']['TotalCharges']['MonetaryValue'] = $gndValue;
+                }
+            }
+        }
+        $_SESSION['postalOptionsAdmin'] = $postal;
+
+        return 'shipping_options';
+    }
+
+    private function objectsIntoArray($arrObjData, $arrSkipIndices = array()) {
+        $arrData = array();
+
+        if (is_object($arrObjData))
+            $arrObjData = get_object_vars($arrObjData);
+
+        if (is_array($arrObjData)) {
+            foreach ($arrObjData as $index => $value) {
+                if (is_object($value) || is_array($value))
+                    $value = $this->objectsIntoArray($value, $arrSkipIndices);
+
+                if (in_array($index, $arrSkipIndices))
+                    continue;
+
+                $arrData[$index] = $value;
+            }
+        }
+        return $arrData;
+    }
+
+    public function subdividePostalOptions($postalOptions) {
+        $ddArray = array();
+        $where = array('active' => 1);
+        $this->db->group_by('carrier');
+        $carriers = $this->selectRecords('shipping_type', $where);
+        if ($carriers) {
+            foreach ($carriers as $carrier) {
+                if (@$postalOptions[$carrier['carrier']]) {
+                    $where = array('active' => 1, 'carrier' => $carrier['carrier']);
+                    $shipment_types = $this->selectRecords('shipping_type', $where);
+                    foreach ($shipment_types as $type)
+                        $newType[$type['code']] = $type;
+                    $segments = explode(',', $carrier['xml_structure']);
+
+                    foreach (@$postalOptions[$carrier['carrier']] as $code => $opt) {
+                        $value = $opt;
+                        foreach ($segments as $seg)
+                            $value = $value[$seg];
+
+                        $valueArr = array('label' => $carrier['carrier'] . ' ' . $newType[$code]['description'] . ': $' . number_format($value, 2),
+                            'value' => $value);
+
+                        $ddArray[$code] = $valueArr;
+                        $_SESSION['postalOptionsAdmin'][$code] = $valueArr;
+                    }
+                }
+            }
+        }
+        if (@$_SESSION['postalOptionsAdmin']['COUPON'])
+            $ddArray['COUPON'] = $_SESSION['postalOptionsAdmin']['COUPON'];
+        return $ddArray;
+    }
+
+    public function shippingRules($productTotal, $countryId, $zip, $weight) {
+        $where = array('active' => 1);
+        $shippingValue = 'unprocessed';
+        $shippingRules = $this->selectRecords('shipping_rules', $where);
+        if (@$shippingRules) {
+            foreach ($shippingRules as $rule) {
+                $shippingValue = '';
+                if (is_numeric($rule['weight_low'])) {
+                    if ($weight < $rule['weight_low'])
+                        $shippingValue = $rule['value'];
+                    else
+                        $shippingValue = FALSE;
+                }
+                if (($shippingValue !== FALSE) && is_numeric($rule['weight_high'])) {
+                    if ($weight > $rule['weight_high'])
+                        $shippingValue = $rule['value'];
+                    else
+                        $shippingValue = FALSE;
+                }
+
+                if (($shippingValue !== FALSE) && is_numeric($rule['price_low'])) {
+                    if ($productTotal > $rule['price_low'])
+                        $shippingValue = $rule['value'];
+                    else
+                        $shippingValue = FALSE;
+                }
+                if (($shippingValue !== FALSE) && is_numeric($rule['price_high'])) {
+                    if ($productTotal < $rule['price_high'])
+                        $shippingValue = $rule['value'];
+                    else
+                        $shippingValue = FALSE;
+                }
+                if (($shippingValue !== FALSE) && ($rule['country'])) {
+                    $country = array('USA' => 'US', 'Canada' => 'CA');
+                    if ($rule['country'] == $country[$countryId])
+                        $shippingValue = $rule['value'];
+                    else
+                        $shippingValue = FALSE;
+                }
+                if (is_numeric($shippingValue))
+                    return $shippingValue;
+            }
+        }
+        return FALSE;
+    }
+    
+    public function addShippingToOrder( $data ) {
+        $where = array('id' => $data['orderId']);
+        $order = $this->selectRecord('order', $where);
+        $orderArr = array();
+        //$orderArr['sales_price'] = (($order['sales_price']-$order['shipping'])+$data['price']);
+        $orderArr['shipping'] = ($data['price']);
+        $orderArr['shipping_type'] = ($data['shiping']);
+        $this->updateRecord('order', $orderArr, $where, FALSE);
+    }
+    
+    public function addOrderTransaction( $transaction ) {
+        $this->createRecord('order_transaction', $transaction, FALSE);
+    }
+
 }
