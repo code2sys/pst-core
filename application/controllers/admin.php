@@ -443,33 +443,14 @@ class Admin extends Master_Controller {
         $chartOrdersDaily = $this->reporting_m->getOrderForDailyChart();
         $chartOrdersWeekly = $this->reporting_m->getOrderForWeeklyChart();
         $chartOrdersYearly = $this->reporting_m->getOrderForYearlyChart();
-        $this->_mainData['totalReviews'] = $this->reporting_m->getTotalReviews();
-        $this->_mainData['totalRevenue'] = $this->reporting_m->getTotalRevenue(date('Y-m-d'));
+        $this->_mainData['totalReviews'] = count($this->admin_m->getNewReviews()); // $this->reporting_m->getTotalReviews();
 
-        $days = array();
-        $cnt = 0;
-        $str = $str1 = $str2 = $str3 = array();
-        $days = $days1 = $days2 = $days3 = array();
-        foreach ($this->_mainData['chartOrders'] as $key => $order) {
-            $days[] = $key;
-            $str[] = $order;
-        }
-
-        foreach ($chartOrdersDaily as $key => $order) {
-            $days1[] = $key;
-            $str1[] = $order;
-        }
-
-        $days2 = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-        foreach ($chartOrdersWeekly as $key => $order) {
-            //$days2[] = $key;
-            $str2[] = $order;
-        }
-
-        $days3 = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
-        foreach ($chartOrdersYearly as $key => $order) {
-            $str3[] = $order;
-        }
+        $now = time();
+        $this->_mainData['ytdRevenueThisYear'] = $this->reporting_m->getRevenueWithinDateRange(date('Y-01-01 00:00:00', $now), date('Y-m-d H:i:s', $now));
+        $this->_mainData['ytdOrderCountThisYear'] = $this->reporting_m->getOrdersWithinDateRange(date('Y-01-01 00:00:00', $now), date('Y-m-d H:i:s', $now));
+        $last_year = strtotime("-1 year", $now);
+        $this->_mainData['ytdRevenueLastYear'] = $this->reporting_m->getRevenueWithinDateRange(date("Y-01-01 00:00:00", $last_year), date("Y-m-d H:i:s", $last_year));
+        $this->_mainData['ytdOrderCountLastYear'] = $this->reporting_m->getOrdersWithinDateRange(date("Y-01-01 00:00:00", $last_year), date("Y-m-d H:i:s", $last_year));
 
         $this->_mainData["todaysData"] = $this->reporting_m->getDashboardStatsByHour(date("Y-m-d 00:00:00"), date("Y-m-d 23:59:59"));
         $this->_mainData["sevenDaysData"] = $this->reporting_m->getDashboardStatsByDay(date("Y-m-d 00:00:00", strtotime("-7 days")), date("Y-m-d 23:59:59"));
