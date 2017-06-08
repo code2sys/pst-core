@@ -1,5 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+
 class Pages_M extends Master_M
 {
   	function __construct()
@@ -15,7 +16,7 @@ class Pages_M extends Master_M
 		{
 			$this->db->like('location', $location);
 			if($location == 'footer')
-				$this->db->limit(5);
+				$this->db->limit(FOOTER_PAGE_LIMIT);
 		}
 		$this->db->order_by("delete", "asc"); 
 		

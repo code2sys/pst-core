@@ -337,6 +337,107 @@ class Coupons_M extends Master_M
 		return TRUE;
 	}
 	
+        public function addCouponToOrder( $post, $order ) {
+		$cart = @$order['products'];
+		$coupon = $this->getCouponByCode($post['couponCode']);
+		$itemsForPercentAge = array();
+		$brand_to_do = array();
+		
+		if( !empty($cart) && !empty($coupon)){
+			
+			unset($cart['transAmount']);unset($cart['tax']);unset($cart['shipping']);unset($cart['qty']);
+			foreach($cart as $k=>$cartItem){
+			
+				if( !empty($coupon['brand_id']) && !empty($cartItem['part_id']) ){
+
+					$brand = $this->getBrandByPartId($cartItem['part_id'])->result_array();
+					$closeout = $this->checkCloseoutStockCodeByPartId($cartItem['part_id']);
+					$brand_id = ( isset($brand[0]) && !empty($brand[0]['brand_id'])) ? $brand[0]['brand_id'] : 1;
+					
+					$coupon2 = $this->getCouponByCodeNew($post['qty'], $brand_id, $closeout);
+
+					if( !empty($coupon2) ){
+						if( empty($coupon['value']) ){
+							$itemsForPercentAge[$k] = $k;
+						}
+						$brand_to_do['brand_id'] = $brand_id;
+						$brand_to_do['closeout'] = $closeout;
+					}else{
+						unset($cart[$k]);
+					}
+				}
+				
+			}
+			
+			if( !empty($coupon['google_promotion']) && !empty($brand_to_do['brand_id']) && isset($brand_to_do['closeout']) ){
+				/*$data = array(
+				   'promotion_id' => $coupon['couponCode']
+				);
+				$this->db->where('partnumber', $k);
+				$this->db->update('partnumber', $data);*/
+				
+				$data = array(
+				   'promotion_data' => $coupon['couponCode']."_*_*_".$brand_to_do['closeout']
+				);
+				$this->db->where('brand_id', $brand_to_do['brand_id']);
+				$this->db->update('brand', $data);
+			}
+			
+		}
+                
+		$coupon = $this->getCouponByCode($post['couponCode']);
+                
+		if( !$coupon || empty($cart) ){
+			return FALSE;
+		}
+                
+                $orderCoupon = array();
+                foreach( $order['products'] as $products ) {
+                    if( $products['product_sku'] == 'coupon_'.$coupon['couponCode'] ) {
+                        $orderCoupon = $products;
+                    }
+                }
+                
+		if(!@$orderCoupon) {
+			$coupon['qty'] = 1;
+			$coupon['display_name'] = 'Coupon '.$coupon['couponCode'];
+			$coupon['sku'] = 'coupon_'.$coupon['couponCode'];
+			if( empty($itemsForPercentAge) ){
+				$coupon = $this->processPercentageValue($coupon, FALSE);
+			}else{
+				$coupon = $this->processPercentageValueNew($itemsForPercentAge, $coupon, FALSE);
+			}
+			
+			if($coupon['couponSpecialConstraintsId'])
+			{
+				$couponConstraints = json_decode($coupon['couponSpecialConstraintsId'], TRUE);
+				$constraintList = $this->getSpecialConstraintsDD(TRUE);
+				foreach($couponConstraints as $const)
+				{
+					$coupon = $this->$constraintList[$const]($coupon);
+					if(is_null($coupon))
+					return FALSE;
+				}
+			}
+			
+			$coupon['price'] = $coupon['wholesale'];
+			$coupon['finalPrice'] = $coupon['wholesale'];
+                        
+                        $cpns = array('product_sku' => 'coupon_'.$coupon['couponCode'], 'qty' => 1, 'price' => $coupon['price'], 'order_id' => $order['order_id']);
+                        $this->createRecord('order_product', $cpns, FALSE);
+                        
+                        $where = array('id' => $order['order_id']);
+                        $orderRec = array('sales_price' => $order['sales_price']+$coupon['price']);
+                        $this->updateRecord('order', $orderRec, $where, FALSE);
+			//$_SESSION['cart']['coupon_'.$coupon['couponCode']] = $coupon;
+		}
+//                echo '<pre>';
+//                print_r($coupon);
+//                print_r($itemsForPercentAge);
+//                print_r($brand_to_do);
+//                echo '</pre>';exit;
+		return TRUE;
+        }
 		
 	public function calculateCoupon()
 	{

@@ -671,7 +671,15 @@ if ($garageNeeded):
                     if ($.isNumeric($('#qty').val()) && $('#qty').val() > 0)
                     {
         <?php if (@$_SESSION['userRecord']['admin'] && @$_SESSION['OrderProductSearch']): ?>
-                            window.location.replace(base_url + 'admin/order_edit/<?php echo $_SESSION['OrderProductSearch']; ?>/<?php echo $validMachines[0]['partnumber']; ?>');
+                //alert("<?php echo $validMachines[0]['partnumber']; ?>");
+                if (typeof $('.question').val() == 'undefined') {
+                     window.location.replace(base_url + 'admin/order_edit/<?php echo $_SESSION['OrderProductSearch']; ?>/<?php echo $validMachines[0]['partnumber']; ?>');
+                } else {
+                     window.location.replace(base_url + 'admin/order_edit/<?php echo $_SESSION['OrderProductSearch']; ?>/'+$('.question').val());
+                }
+                            //window.location.replace(base_url + 'admin/order_edit/<?php echo $_SESSION['OrderProductSearch']; ?>/<?php echo $validMachines[0]['partnumber']; ?>');
+                            //window.location.replace(base_url + 'admin/order_edit/<?php echo $_SESSION['OrderProductSearch']; ?>/'+$('.question').val());
+                            //$('.question').val()
         <?php else: ?>
                             $('#productDetailForm').append('<input type="hidden" name="partnumber" value="<?php echo $validMachines[0]['partnumber']; ?>" />');
                             $('#productDetailForm').append('<input type="hidden" name="price" value="' + $('#price').html() + '" />');
@@ -696,7 +704,24 @@ if ($garageNeeded):
                 if ($.isNumeric($('#qty').val()) && $('#qty').val() > 0)
                 {
     <?php if (@$_SESSION['userRecord']['admin'] && @$_SESSION['OrderProductSearch']): ?>
-                        window.location.replace(base_url + 'admin/order_edit/<?php echo $_SESSION['OrderProductSearch']; ?>/<?php echo @$product['partnumber']; ?>');
+            <?php if(@$partnumbercustom && $stock): ?>
+                    window.location.replace(base_url + 'admin/order_edit/<?php echo $_SESSION['OrderProductSearch']; ?>/<?php echo @$partnumbercustom; ?>');
+                    //window.location.replace(base_url + 'admin/order_edit/<?php echo $_SESSION['OrderProductSearch']; ?>/'+$('.question').val()+'/'+$('#qty').val());
+            <?php else: ?>
+                var data = [];
+                jQuery('.question').each(function() {
+                    data.push(jQuery("option:selected", this).val());
+                });
+                $.post(base_url + 'ajax/addProductToCartFromFE/', {'data': data, 'orderId': "<?php echo $_SESSION['OrderProductSearch']; ?>", 'qty' : $('#qty').val()},
+                    function (response)
+                    {
+                        //alert(response);
+                        //location.reload();
+                        window.location.replace(base_url + 'admin/order_edit/<?php echo $_SESSION['OrderProductSearch']; ?>/');
+                    });
+                //alert("<?php echo @$product['partnumber']; ?>");
+                    //window.location.replace(base_url + 'admin/order_edit/<?php echo $_SESSION['OrderProductSearch']; ?>/'+$('.question').val()+'/'+$('#qty').val());
+            <?php endif; ?>
     <?php else: ?>
                         //$('#productDetailForm').append('<input type="hidden" name="partnumber" value="<?php echo @$product['partnumber']; ?>" />');
                         $('#productDetailForm').append('<input type="hidden" name="price" value="' + $('#price').html() + '" />');

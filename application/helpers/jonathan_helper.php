@@ -90,3 +90,36 @@ if (!function_exists("sub_googleSalesXMLNew")) {
         $CI->admin_m->update_feed_log($data);
     }
 }
+
+// We need to print out the footer without always relying on the same code copied-and-pasted everywhere.
+function jprint_interactive_footer($pages) {
+
+    if (!isset($pages) || is_null($pages) || !is_array($pages)) {
+        // Well, if there is nothing here, then let's go get the real deal.
+        $CI =& get_instance();
+        $CI->load->model('pages_m');
+        $pages = $CI->pages_m->getPages(1, 'footer');
+    }
+
+    ?>
+<div class="one-fifth">
+    <?php
+    if (is_array($pages) && count($pages) > 0) {
+        ?>
+    <h3>quick links</h3>
+    <ul class="clear">
+
+        <?php
+        foreach ($pages as $p) {
+        ?>
+        <li><a href="<?php echo site_url('pages/index/' . $p['tag']); ?>"><?php echo $p['label']; ?></a></li>
+            <?php
+        }
+        ?>
+    </ul>
+        <?php
+    }
+    ?>
+</div>
+    <?php
+}

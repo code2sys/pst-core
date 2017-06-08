@@ -356,7 +356,8 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 		</div>
 		<div class="clear"></div>
 	</div>
-	
+
+	<?php if (!defined("MOTORCYCLE_SHOP_DISABLE") || !MOTORCYCLE_SHOP_DISABLE): ?>
 	<div class="sw bg">
 		<div class="modal-lg">
 			<?php if (MOTORCYCLE_SHOP_NEW): ?>
@@ -403,6 +404,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 			</div>
 		</div>	
 	</div>
+	<?php endif; ?>
 	<?php if(!empty($featuredCategories)){ ?>
 	<div class="sw brd">
 		<div class="container_b">
@@ -424,7 +426,6 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 		</div>
 	</div>
 	<?php } ?>
-	
 	<div class="sw brd">
 		<div class="container_b">
 			<div class="featured-listings">
@@ -995,3 +996,4 @@ echo $CI->load->view("master/tracking", array(
 	<script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
 
 	
+

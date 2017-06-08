@@ -53,13 +53,16 @@ class Order_M extends Master_M {
                 'cf_user_billing_info.ccnumber, ' .
                 'cf_user_billing_info.cvc, ' .
                 'order.sendPst, ' .
-                'order.sales_price '
+                'order.sales_price, ' .
+                'order.created_by, ' .
+                'order.shipping_type, order.product_cost, order.shipping_cost, ' .
+                'order.braintree_transaction_id AS braintree_transaction_id, '
         );
         $records = FALSE;
         $where = array('order.id' => $id);
 
-        $this->db->join('contact', 'contact.id = order.contact_id');
-        $this->db->join('contact shipping', 'shipping.id = order.shipping_id');
+        $this->db->join('contact', 'contact.id = order.contact_id', 'left');
+        $this->db->join('contact shipping', 'shipping.id = order.shipping_id', 'left');
         $this->db->join('(SELECT * FROM cf_user_billing_info ORDER BY id DESC) AS cf_user_billing_info', 'cf_user_billing_info.billingid = order.id', 'LEFT');
 
         $record = $this->selectRecord('order', $where);
@@ -73,21 +76,21 @@ class Order_M extends Master_M {
             $statusRec = $this->selectRecord('order_status', $where);
             $record['status'] = $statusRec['status'];
             $this->db->select('partnumber.partnumber_id, 
-											  part.name, 
-											  partnumberpartquestion.answer, 
-											  part.part_id, 
-											  partnumber.partnumber,
-											  partquestion.question,
-											  order_product.qty,
-											  order_product.fitment,
-											  order_product.distributor,
-											  partnumber.sale,
-											  order_product.price as sale,
-											  partvariation.stock_code,
-											  order_product.product_sku,
-											  order_product.dealer_qty,
-											  order_product.distributor_qty,
-											  order_product.status');
+                              part.name, 
+                              partnumberpartquestion.answer, 
+                              part.part_id, 
+                              partnumber.partnumber,
+                              partquestion.question,
+                              order_product.qty,
+                              order_product.fitment,
+                              order_product.distributor,
+                              partnumber.sale,
+                              order_product.price as sale,
+                              partvariation.stock_code,
+                              order_product.product_sku,
+                              order_product.dealer_qty,
+                              order_product.distributor_qty,
+                              order_product.status');
             $where = array('order_id' => $id, 'productquestion' => 0);
             $this->db->join('partnumber', 'partnumber.partnumber = order_product.product_sku', 'LEFT');
             $this->db->join('part', 'part.part_id = order_product.part_id', 'LEFT');
@@ -100,18 +103,18 @@ class Order_M extends Master_M {
             $record['products'] = $this->selectRecords('order_product', $where);
 
             $this->db->select('order_product_details.partnumber_id, 
-											  order_product_details.name, 
-											  order_product_details.answer, 
-											  order_product_details.part_id, 
-											  order_product_details.partnumber,
-											  order_product_details.question,
-											  order_product.qty,
-											  order_product.fitment,
-											  order_product.distributor,
-											  order_product_details.sale,
-											  order_product_details.stock_code,
-											  order_product.product_sku,
-											  order_product.status');
+                              order_product_details.name, 
+                              order_product_details.answer, 
+                              order_product_details.part_id, 
+                              order_product_details.partnumber,
+                              order_product_details.question,
+                              order_product.qty,
+                              order_product.fitment,
+                              order_product.distributor,
+                              order_product_details.sale,
+                              order_product_details.stock_code,
+                              order_product.product_sku,
+                              order_product.status');
             $where = array('order_product_details.order_id' => $id);
             $this->db->join('order_product', 'order_product.product_sku = order_product_details.partnumber');
             $this->db->group_by('order_product_details.partnumber');
@@ -186,11 +189,28 @@ class Order_M extends Master_M {
             if (!empty($user_type_res)) {
                 $record['user_type'] = $user_type_res->user_type;
             }
+
+            $where = array('order_id' => $record['order_id']);
+            $this->db->select('amount as sales_price, braintree_transaction_id, transaction_date as order_date');
+            //$this->db->limit(2);
+            $transaction = $this->selectRecords('order_transaction', $where);
+            $record['transaction'] = $transaction;
         }
-        // echo '<pre>';
-        // print_r($record);
-        // echo '</pre>';exit;
+//         echo '<pre>';
+//         print_r($record);
+//         echo '</pre>';exit;
         return $record;
+    }
+
+    public function getDealerAndDistributorRec($adminCart) {
+        foreach ($adminCart as $partnumber => $cart) {
+            // Get distributor id and partvariation.quantity_available
+            $where = array('partnumber_id' => $cart['partnumber_id']);
+            $_SESSION['admin_cart'][$partnumber]['distributorRecs'] = $this->selectRecords('partvariation', $where);
+
+            $where = array('partnumber_id' => $cart['partnumber_id']);
+            $_SESSION['admin_cart'][$partnumber]['dealerRecs'] = $this->selectRecords('partdealervariation', $where);
+        }
     }
 
     private function creditCardLast4($encryptedNumber) {
@@ -231,14 +251,78 @@ class Order_M extends Master_M {
         return $couponProducts;
     }
 
-    public function addProductToOrder($partNumber, $orderId, $qty) {
+    public function addProductToOrder($partNumber, $orderId, $qty, $part_id, $fitment = null) {
         $where = array('order_id' => $orderId, 'product_sku' => $partNumber);
-        if ($this->recordExists('order_product', $where)) {
+        if (!$this->recordExists('order_product', $where)) {
             $where = array('partnumber' => $partNumber);
             $partRec = $this->selectRecord('partnumber', $where);
-            $data = array('order_id' => $orderId, 'product_sku' => $partNumber, 'price' => $partRec['price'], 'qty' => $qty);
-            return $this->createRecord('order_product', $data, FALSE);
+            $data = array('order_id' => $orderId,
+                'product_sku' => $partNumber,
+                'price' => ($partRec['price'] * $qty),
+                'qty' => $qty,
+                'part_id' => $part_id,
+                'fitment' => $fitment);
+            $data['price'] = $partRec['dealer_sale'] > 0 ? ($partRec['dealer_sale'] * $qty) : ($partRec['sale'] * $qty);
+            
+            $this->db->select('partnumber.partnumber_id');
+            $disWhere = array('partnumber' => $partNumber);
+            $distributorcs = $this->selectRecord('partnumber', $disWhere);
+
+            $disWhere = array('partnumber_id' => $distributorcs['partnumber_id']);
+            $this->db->join('distributor', 'distributor.distributor_id=partvariation.distributor_id');
+            $distributorDtl = $this->selectRecord('partvariation', $disWhere);
+
+            // JLB 06-07-17
+            // Some real jackass used to have @$product['qty'] in there for qty, which caused it to go in null.
+            // Further, he (or she; could have been Jessie) knew it was wrong, so slapped an @ on there to
+            // hide the error message that $product exists NOWHERE in this function and was undefined.
+            //
+            // I changed this to $qty because, well, I can't imagine what else to put here, and null makes things bad.
+            $data['distributor'] = array('id' => $distributorDtl['distributor_id'], 'qty' => $qty, 'part_number' => $distributorDtl['part_number'], 'distributor_name' => $distributorDtl['name'], 'dis_cost' => $distributorDtl['cost']);
+            $data['distributor'] = json_encode($data['distributor']);
+            
+            $this->createRecord('order_product', $data, FALSE);
+
+            $order = $this->selectRecord('order', array('id' => $orderId));
+            $shippingAdd = $this->getOrder($orderId);
+            
+            $where1 = array('order_id' => $orderId);
+            $products = $this->selectRecords('order_product', $where1);
+
+            $grandTotal = 0;
+            foreach( $products as $productData ) {
+                if( $productData['status'] != 'Refunded' ) {
+                    $grandTotal += $productData['price'];
+                }
+            }
+            if( @$shippingAdd['shipping_state'] && $shippingAdd['shipping_state'] != '' ) {
+                $tax = $this->calculateTax($shippingAdd['shipping_state'], ($grandTotal));
+            } else {
+                $tax = 0;
+            }
+            //$tax = $this->calculateTax($shippingAdd['shipping_state'], ($order['sales_price'] + ($data['price'])));
+            
+            $this->updateRecord('order', array('sales_price' => $grandTotal, 'tax' => $tax), array('id' => $orderId), FALSE);
+
+            return true;
         }
+    }
+
+    public function getPartIdByPartNumber($partNumber) {
+        $where = array('partvariation.part_number' => $partNumber);
+        $this->db->join('partpartnumber', 'partpartnumber.partnumber_id=partnumber.partnumber_id');
+        $this->db->join('part', 'partpartnumber.part_id=part.part_id');
+        $this->db->join('partvariation', 'partvariation.partnumber_id=partpartnumber.partnumber_id');
+        $this->db->select('partpartnumber.part_id, part.name, partnumber.partnumber_id, partvariation.stock_code, partnumber.partnumber');
+        $part = $this->selectRecord('partnumber', $where);
+        return $part;
+    }
+
+    public function getPartVariationDetails($partnumber_id) {
+        $where = array('partnumber_id' => $partnumber_id);
+        $this->db->select('partvariation.stock_code');
+        $partvariation = $this->selectRecord('partvariation', $where);
+        return $partvariation['stock_code'];
     }
 
     public function getDistributors() {
@@ -264,7 +348,7 @@ class Order_M extends Master_M {
         }
         return $ddArr;
     }
-    
+
     public function updateOrderProductsByOrderId($orderId, $products) {
         if (is_array($products)) {
             foreach ($products as $product_sku => $product) {
@@ -319,6 +403,123 @@ class Order_M extends Master_M {
         $where = array('order_id' => $orderId, 'product_sku' => $productSKU);
         $product = array('status' => $status, 'notes' => $notes);
         $this->updateRecord('order_product', $product, $where, FALSE);
+    }
+
+    public function createNewOrderByAdmin() {
+        $order = array('sales_price' => '0.00', 'shipping' => '0.00', 'tax' => '0.00', 'order_date' => time(), 'user_id' => '0', 'created_by' => '1');
+        $orderId = $this->createRecord('order', $order, FALSE);
+        //$orderId = $this->db->insert_id();
+        $orderStatus = array('order_id' => $orderId, 'status' => 'Pending', 'datetime' => time(), 'userId' => 1, 'notes' => 'Admin Order');
+        $this->createRecord('order_status', $orderStatus, FALSE);
+        return $orderId;
+    }
+
+    public function removeProductFromOrder($orderId, $product, $status) {
+        $where = array('order_id' => $orderId, 'product_sku' => $product);
+        $data = $this->selectRecord('order_product', $where);
+        $order = $this->selectRecord('order', array('id' => $orderId));
+        
+        $where1 = array('order_id' => $orderId);
+        $products = $this->selectRecords('order_product', $where1);
+        
+        $grandTotal = 0;
+        foreach( $products as $productData ) {
+            if( $productData['status'] != 'Refunded' ) {
+                $grandTotal += $productData['price'];
+            }
+        }
+        
+        $shippingAdd = $this->getOrder($orderId);
+        if($data['status'] == 'Refunded') {
+            $data['price'] = 0;
+        }
+        if( @$shippingAdd['shipping_state'] && $shippingAdd['shipping_state'] != '' ) {
+            $tax = $this->calculateTax($shippingAdd['shipping_state'], ($grandTotal - ($data['price'])));
+        } else {
+            $tax = 0;
+        }
+        
+        $this->updateRecord('order', array('sales_price' => $grandTotal - $data['price'], 'tax' => $tax), array('id' => $orderId), FALSE);
+        $this->deleteRecord('order_product', $where);
+        $where1 = array('order_id' => $orderId, 'partnumber' => $product);
+        $this->deleteRecord('order_product_details', $where1);
+    }
+    
+    public function refundProductFromOrder($orderId, $product, $status) {
+        $where = array('order_id' => $orderId, 'product_sku' => $product);
+        $data = $this->selectRecord('order_product', $where);
+        $order = $this->selectRecord('order', array('id' => $orderId));
+        
+        $where1 = array('order_id' => $orderId, 'partnumber' => $product);
+        $this->updateRecord('order_product_details', array('stock_code' => 'Refunded'), $where1, FALSE);
+        
+        $where = array('order_id' => $orderId);
+        $products = $this->selectRecords('order_product', $where);
+        
+        $grandTotal = 0;
+        foreach( $products as $productData ) {
+            if( $productData['status'] != 'Refunded' ) {
+                $grandTotal += $productData['price'];
+            }
+        }
+        
+        $shippingAdd = $this->getOrder($orderId);
+        if($data['status'] == 'Refunded') {
+            $data['price'] = 0;
+        }
+        if( @$shippingAdd['shipping_state'] && $shippingAdd['shipping_state'] != '' ) {
+            $tax = $this->calculateTax($shippingAdd['shipping_state'], ($grandTotal - ($data['price'])));
+        } else {
+            $tax = 0;
+        }
+        
+        $this->updateRecord('order', array('sales_price' => $grandTotal - $data['price'], 'tax' => $tax), array('id' => $orderId), FALSE);
+        //$this->deleteRecord('order_product', $where);
+    }
+    
+
+    public function checkPartNumber($newPartNumber, $qty, $orderId) {
+        $where = array('partnumber.partnumber' => $newPartNumber);
+        $this->db->join('partpartnumber', 'partpartnumber.partnumber_id=partnumber.partnumber_id');
+        $partRec = $this->selectRecord('partnumber', $where);
+        if (@$partRec) {
+            $this->load->model('parts_m');
+            if ($this->parts_m->validMachines($partRec['part_id'])) {
+                $ftmnt = $_SESSION['activeMachine']['name'];
+            }
+            $this->addProductToOrder($newPartNumber, $orderId, $qty, $partRec['part_id'], $ftmnt);
+            return true;
+        }
+        return false;
+    }
+
+    public function getOrderTotal($orderId) {
+        $where = array('id' => $orderId);
+        $this->db->select('sales_price');
+        $total = $this->selectRecord('order', $where);
+        return $total['sales_price'];
+    }
+
+    public function calculateTax($stateId, $productTotal) {
+        $taxesArr = $this->account_m->getTaxes();
+        if ($taxesArr[$stateId]['percentage']) {
+            $tax = array('finalPrice' => (($productTotal * $taxesArr[$stateId]['tax_value']) / 100),
+                'price' => (($productTotal * $taxesArr[$stateId]['tax_value']) / 100),
+                'display_name' => 'Sales Tax');
+        } else {
+            $tax = array('finalPrice' => ($productTotal + $taxesArr[$stateId]['tax_value']),
+                'price' => ($productTotal + $taxesArr[$stateId]['tax_value']),
+                'display_name' => 'Sales Tax');
+        }
+        return $tax['finalPrice'];
+    }
+    
+    public function getPartDistributorAjax( $part ) {
+        $disWhere = array('partnumber.partnumber' => $part);
+        $this->db->join('distributor', 'distributor.distributor_id=partvariation.distributor_id');
+        $this->db->join('partnumber', 'partnumber.partnumber_id=partvariation.partnumber_id');
+        $distributorDtl = $this->selectRecord('partvariation', $disWhere);
+        return $distributorDtl;
     }
 
 }
