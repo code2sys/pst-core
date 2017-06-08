@@ -272,7 +272,13 @@ class Order_M extends Master_M {
             $this->db->join('distributor', 'distributor.distributor_id=partvariation.distributor_id');
             $distributorDtl = $this->selectRecord('partvariation', $disWhere);
 
-            $data['distributor'] = array('id' => $distributorDtl['distributor_id'], 'qty' => @$product['qty'], 'part_number' => $distributorDtl['part_number'], 'distributor_name' => $distributorDtl['name'], 'dis_cost' => $distributorDtl['cost']);
+            // JLB 06-07-17
+            // Some real jackass used to have @$product['qty'] in there for qty, which caused it to go in null.
+            // Further, he (or she; could have been Jessie) knew it was wrong, so slapped an @ on there to
+            // hide the error message that $product exists NOWHERE in this function and was undefined.
+            //
+            // I changed this to $qty because, well, I can't imagine what else to put here, and null makes things bad.
+            $data['distributor'] = array('id' => $distributorDtl['distributor_id'], 'qty' => $qty, 'part_number' => $distributorDtl['part_number'], 'distributor_name' => $distributorDtl['name'], 'dis_cost' => $distributorDtl['cost']);
             $data['distributor'] = json_encode($data['distributor']);
             
             $this->createRecord('order_product', $data, FALSE);
