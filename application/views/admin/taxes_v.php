@@ -48,9 +48,9 @@
 						<tr>
 							<td><?php echo $countries[$tax['country']]; echo form_hidden('id[]', $tax['id']); ?></td>
 							<td><?php echo $tax['state']; ?></td>
-							<td><?php echo form_checkbox('active[]', 1, $tax['active']); ?></td>
-							<td><?php echo form_checkbox('percentage[]', 1, $tax['percentage']); ?></td>
-							<td><input id="tax_value" name="tax_value[]" value="<?php echo @$tax['tax_value']; ?>" class="text large" /></td>
+							<td><?php echo form_checkbox('active[' . $tax['id'] . ']', 1, $tax['active']); ?></td>
+							<td><?php echo form_checkbox('percentage[' . $tax['id'] . ']', 1, $tax['percentage']); ?></td>
+							<td><input id="tax_value" name="tax_value[<?php echo $tax['id']; ?>]" value="<?php echo @$tax['tax_value']; ?>" class="text large" /></td>
 						</tr>
 					<?php endforeach; endif; ?>
 				</table>
