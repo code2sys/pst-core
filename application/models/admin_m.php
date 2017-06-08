@@ -1170,6 +1170,7 @@ class Admin_M extends Master_M {
                 'shipping.city AS shipping_city, ' .
                 'shipping.state AS shipping_state, ' .
                 'shipping.zip AS shipping_zip, ' .
+                '(SELECT SUM(amount) FROM order_transaction WHERE order_id=order.id) as sales_price, ' .
                 'shipping.company AS shipping_company');
         $records = FALSE;
 
