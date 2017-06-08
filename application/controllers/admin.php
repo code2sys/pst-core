@@ -68,6 +68,8 @@ class Admin extends Master_Controller {
     }
 
     protected function validateEditTaxes() {
+        return true; // This validator makes no sense anymore.
+        
         $this->load->library('form_validation');
         $taxes = $this->input->post('id');
         if (!empty($taxes)) {
