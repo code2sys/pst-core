@@ -318,6 +318,12 @@ class Admin_M extends Master_M {
         return $records;
     }
 
+	public function updateCategoryImage($post) {
+		$where = array('category_id' => $post['category_id']);
+        $data = array('image' => $post['image']);
+        $this->updateRecord('category', $data, $where, FALSE);
+	}
+	
     public function updateCategory($post) {
         $data = array();
         $data['active'] = @$post['active'] ? 1 : 0;

@@ -2745,7 +2745,7 @@ class Parts_M extends Master_M {
 
     public function getFeaturedCategories() {
         $where = array('featured' => 1);
-        $this->db->select('name, category_id, title');
+        $this->db->select('name, category_id, title, image');
         $records = $this->selectRecords('category', $where);
         return $records;
     }

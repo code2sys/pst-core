@@ -72,10 +72,26 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 		});
 	</script>
 	
+	<script>
+		var environment = '<?php echo ENVIRONMENT; ?>';
+		var base_url = '<?php echo base_url(); ?>';
+		var s_base_url = '<?php echo $s_baseURL; ?>';
+		shopping_cart_count = <?php echo @$_SESSION['cart']['qty'] ? $_SESSION['cart']['qty'] : 0; ?>;
+	</script>
+	
 	<?php echo @$header; ?>
 	<link rel="stylesheet" href="<?php echo jsite_url("/basebranding.css"); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url("/custom.css"); ?>" />
-
+	
+	<style>
+		#top-cat img{
+			min-height:135px;
+		}
+		#top-cat .ftrdb{
+			min-height:240px;
+		}
+	</style>
+	
 </head>
 
 <body>
@@ -387,6 +403,28 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 			</div>
 		</div>	
 	</div>
+	<?php if(!empty($featuredCategories)){ ?>
+	<div class="sw brd">
+		<div class="container_b">
+			<div class="featured-listings">
+				<h3> OUR TOP Categories </h3>
+				<!--<a class="rdrct-lnk" href="<?php echo site_url('Motorcycle_Gear_Brands');?>">Shop all brands </a>-->
+				<div class="panel-body">
+					<ul class="lstng" id="top-cat">
+					<?php foreach( $featuredCategories as $key => $val ) { ?>
+						<li class="ftrdb">
+							<a class="brnd-nm" href="javascript:void(0)" onclick="setMainSearch(event, 'category', '<?php echo $val['category_id']; ?>');" id="<?php echo $val['category_id'] ?>" >
+								<img src="<?php echo site_url('media/'.$val['image']);?>"><span class="bn"><?php echo $val['name'];?></span>
+							</a>
+						</li>
+						<?php } ?>
+					</ul>
+				</div>				
+			</div>
+		</div>
+	</div>
+	<?php } ?>
+	
 	<div class="sw brd">
 		<div class="container_b">
 			<div class="featured-listings">

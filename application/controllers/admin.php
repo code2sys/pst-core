@@ -722,6 +722,44 @@ class Admin extends Master_Controller {
         $this->renderMasterPage('admin/master_v', 'admin/category_v', $this->_mainData);
     }
 
+	
+    public function category_image($id = NULL) {
+		if(!$this->checkValidAccess('categories') && !@$_SESSION['userRecord']['admin']) {
+			redirect('');
+		}
+        if (is_null($id)) {
+            redirect('admin/category');
+        } else {
+
+            $categoryData = $this->admin_m->getCategory($id);
+            $this->_mainData['cate'] = array($categoryData);
+            $this->_mainData['id'] = $id;
+        }
+
+        if (@$_FILES['image']['name']) {
+            $config['allowed_types'] = 'jpg|jpeg|png|gif|tif';
+            $config['file_name'] = str_replace("'", '-', str_replace('%', '', str_replace(' ', '_', $categoryData['name'])));
+            $this->load->model('file_handling_m');
+            $data = $this->file_handling_m->add_new_file_category('image', $config);
+            if (@$data['error'])
+                $this->_mainData['errors'] = $data['the_errors'];
+            else {
+                $categoryData['image'] = $data['file_name'];
+                $this->admin_m->updateCategoryImage($categoryData);
+            }
+
+            // just get it again
+            $categoryData = $this->admin_m->getCategory($id);
+            $this->_mainData['cate'] = array($categoryData);
+            $this->_mainData['id'] = $id;
+        }
+
+
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/category_images_v', $this->_mainData);
+    }
+
+	
     public function category_delete($id) {
         if (is_numeric($id)) {
             $this->admin_m->deleteCategory($id);
