@@ -541,7 +541,7 @@
                                                     Qty.
                                                 </td>
                                                 <td style="width:60px">
-                                                    Cost
+                                                    Cost Ea.
                                                 </td>
                                             </tr>
                                             <?php
@@ -639,7 +639,7 @@
                                                             Qty.
                                                         </td>
                                                         <td style="width:60px">
-                                                            Cost
+                                                            Cost Ea.
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -709,7 +709,7 @@
                                                             Qty.
                                                         </td>
                                                         <td style="width:60px">
-                                                            Cost
+                                                            Cost Ea.
                                                         </td>
                                                     </tr>
                                                     <tr>
