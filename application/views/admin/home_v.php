@@ -118,6 +118,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                                     <th>Status</th>
                                     <th>Order Date</th>
                                     <th>Total</th>
+                                    <th>Paid</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -129,6 +130,7 @@ $revenuePer = ($totalRevenue[date('Y')] * 100) / $lastYearRevenue;
                                         <td><?php echo $order['status']; ?></td>
                                         <td><?php echo date('m/d/Y', $order['order_date']); ?></td>
                                         <td><?php echo $order['sales_price']; ?></td>
+                                        <td><?php echo $order['paid']; ?></td>
                                         <td><a class="btn btn-info" href="<?php echo site_url('admin/order_edit/' . $order['order_id']); ?>"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
                                     </tr>
                                 <?php } ?>
