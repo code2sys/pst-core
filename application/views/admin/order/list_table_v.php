@@ -23,7 +23,7 @@
 						<td><?php echo ($order['order_date']) ?  date('m/d/Y', $order['order_date']) : $order['processed_date']; ?></td>
 						<td><?php echo ($order['order_date']) ?  date('H:i:s', $order['order_date']) : ''; ?></td>
 						<td><?php echo $order['sales_price'] + $order['shipping'] + $order['tax']; ?></td>
-						<td><?php echo number_format($order['paid'], 2); ?></td>
+						<td><?php echo $order['paid']; ?></td>
 						<td>
 							<?php echo $order['status'] ? $order['status'] : 'Pending'; ?>
 							<?php //if($order['will_call'] > 1): Pickup ?> 
