@@ -74,7 +74,7 @@
 						<tr>
 							<td><?php echo $application['first_name']; ?></td>
 							<td><?php echo $application['last_name']; ?></td>
-							<td><?php echo $contact_info->wphone; ?></td>
+							<td><?php echo $contact_info->rphone; ?></td>
 							<td><?php echo $application['email']; ?></td>
 							<td><?php echo $application['application_status']; ?></td>
 							<td><?php echo date('Y-M-d H:i:s', strtotime($application['application_date']))?></td>
@@ -92,7 +92,7 @@
 						<tr>
 							<td><?php echo $application['first_name']; ?></td>
 							<td><?php echo $application['last_name']; ?></td>
-							<td><?php echo $contact_info->wphone; ?></td>
+							<td><?php echo $contact_info->rphone; ?></td>
 							<td><?php echo $application['email']; ?></td>
 							<td><?php echo $application['application_status']; ?></td>
 							<td><?php echo date('Y-M-d H:i:s', strtotime($application['application_date']))?></td>
