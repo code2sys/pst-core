@@ -1177,7 +1177,7 @@ class Admin_M extends Master_M {
                 'shipping.state AS shipping_state, ' .
                 'shipping.zip AS shipping_zip, ' .
                 'shipping.company AS shipping_company, ' .
-                ' group_concat(order_transaction.amount) as paid');
+                ' sum(IfNull(order_transaction.amount, 0)) as paid');
         $records = FALSE;
 
         if ($filter['limit']) {
