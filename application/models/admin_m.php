@@ -1176,7 +1176,8 @@ class Admin_M extends Master_M {
                 'shipping.city AS shipping_city, ' .
                 'shipping.state AS shipping_state, ' .
                 'shipping.zip AS shipping_zip, ' .
-                'shipping.company AS shipping_company');
+                'shipping.company AS shipping_company, ' .
+                ' group_concat(order_transaction.amount) as paid');
         $records = FALSE;
 
         if ($filter['limit']) {
@@ -1257,6 +1258,7 @@ class Admin_M extends Master_M {
         $this->db->order_by('order.id DESC');
         $this->db->join('contact', 'contact.id = order.contact_id', 'left');
         $this->db->join('contact shipping', 'shipping.id = order.contact_id', 'left');
+        $this->db->join('order_transaction', '`order`.id = order_transaction.order_id', 'left');
         //$this->db->join('order_status order_status', 'order_status.order_id = order.id', 'left');
 
         $this->db->group_by('order.id');

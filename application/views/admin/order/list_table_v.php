@@ -9,6 +9,7 @@
 						<td><b>Order Date</b></td>
 						<td><b>Order Time</b></td>
 						<td><b>Total</b></td>
+						<td><b>Paid</b></td>
 						<td><b>Status</b></td>
 						<td><b>Batch Order</b></td>
 						<td><b>Distributor</b></td>
@@ -22,6 +23,7 @@
 						<td><?php echo ($order['order_date']) ?  date('m/d/Y', $order['order_date']) : $order['processed_date']; ?></td>
 						<td><?php echo ($order['order_date']) ?  date('H:i:s', $order['order_date']) : ''; ?></td>
 						<td><?php echo $order['sales_price'] + $order['shipping'] + $order['tax']; ?></td>
+						<td><?php echo number_format($order['paid'], 2); ?></td>
 						<td>
 							<?php echo $order['status'] ? $order['status'] : 'Pending'; ?>
 							<?php //if($order['will_call'] > 1): Pickup ?> 
