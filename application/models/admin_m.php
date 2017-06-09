@@ -930,9 +930,9 @@ class Admin_M extends Master_M {
             foreach ($post['id'] as $key => $id) {
                 $where = array('id' => $id);
                 $data = array();
-                $data['active'] = @$post['active'][$key] ? 1 : 0;
-                $data['percentage'] = @$post['active'][$key] ? 1 : 0;
-                $data['tax_value'] = $post['tax_value'][$key];
+                $data['active'] = @$post['active'][$id] ? 1 : 0;
+                $data['percentage'] = @$post['active'][$id] ? 1 : 0;
+                $data['tax_value'] = $post['tax_value'][$id];
                 $success = $this->updateRecord('taxes', $data, $where, FALSE);
             }
         }
