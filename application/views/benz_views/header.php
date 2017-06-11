@@ -36,7 +36,7 @@
 	<script src="<?php echo $new_assets_url; ?>js/lightslider.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/jquery.fancybox.pack.js"></script>
 
-	
+
 	<script>
 	$(document).ready(function(){
 		$(".sidebar-menu").click(function(){

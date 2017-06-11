@@ -32,8 +32,8 @@ unset($motorcycle['videos'][0]);
 					<li><a href="<?php echo site_url('pages/index/contactus') ?>" class="last">CONTACT US</a></li>
 				</ul>
 			</div>
-			
-			<div class="col-md-8 col-xs-12 col-sm-7 pdig sect-sid">				   
+
+			<div class="col-md-8 col-xs-12 col-sm-7 pdig sect-sid">
 				<div class="clearfix" style="width:100%;">
 					<ul id="image-gallery" class="gallery list-unstyled cS-hidden">
 						<?php foreach( $motorcycle['images'] as $image ) { ?>
@@ -44,7 +44,7 @@ unset($motorcycle['videos'][0]);
 							</li>
 						<?php } ?>
 					</ul>
-				</div>	
+				</div>
 			</div>
 			<div class="col-md-4 col-sm-5 pull-right bx-rit pdig sect-wdt">
 				<h3><?php echo $motorcycle['title'];?></h3>
@@ -286,18 +286,18 @@ unset($motorcycle['videos'][0]);
 //			loop:true,
 //			keyPress:true
 //		});
-//		$('#image-gallery').lightSlider({
-//			gallery:true,
-//			item:1,
-//			thumbItem:9,
-//			slideMargin: 0,
-//			speed:500,
-//			auto:true,
-//			loop:true,
-//			onSliderLoad: function() {
-//				$('#image-gallery').removeClass('cS-hidden');
-//			}
-//		});
+		$('#image-gallery').lightSlider({
+			gallery:true,
+			item:1,
+			thumbItem:9,
+			slideMargin: 0,
+			speed:500,
+			auto:true,
+			loop:true,
+			onSliderLoad: function() {
+				$('#image-gallery').removeClass('cS-hidden');
+			}
+		});
 	});
     function showVideo(vidId, vidTit) {
         var mainVideo = $('#mainVideo').data('id');
