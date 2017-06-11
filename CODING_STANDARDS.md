@@ -1,3 +1,32 @@
+Update June 11, 2017
+====================
+
+On the Use of Meaningful Names and Encapsulation
+----------------------------------------------
+
+There is an excessive habit of using meaningless names for variables and functions, and for shoving new functionality in a higgledy-piggledy manner wherever it fits without making a spot for it. Examples of this include:
+
+- Just sticking things on the Welcome controller for front end functionality. The motorcycle code was a good example of this.
+- Just sticking things on the Admin controller. There are too many examples of this.
+- The page for listing motorcycles was called "benz_product". We don't need to have memorialized for all time that this was done by Benzaitens Group; it would have been great to indicate that it was the motorcycles, since there are other products, and they had nothing to do with this.
+- In the Point of Sale interface, there was a variable that clearly represented the quantity of parts to take from dealer inventory. Rather than something like $dealer_inv_qty, it was called $abcd1. It took forever to find a logic error based on this variable. 
+
+I think that so many errors that appear to arise out of obvious misunderstanding. For example, here was the logic error:
+
+<pre>
+ if ($distRec['quantity_available'] >= $product['qty']) {
+     $qtyLft = 0;
+     $abcd1 = $product['qty'];
+ } else {
+     $qtyLft = $qtyLft - $distRec['quantity_available'];
+     $abcd1 = $qtyLft - $distRec['quantity_available'];
+ }
+</pre>
+
+It took forever to realize that $abcd1 was mis-identified because it is *not obvious* from this usage what this is supposed to be.
+
+The project has a large number of errors that are minor logic errors like this. It clearly confuses both the original developer and any follow-on developers as to what is really gone when code isn't encapsulated and function and variable names do not have a meaningful value.
+
 
 Update June 4, 2017
 ===================

@@ -136,39 +136,39 @@ class Ajax extends Master_Controller {
     }
 
     // public function getPriceByPartNumber() {
-        // if ($this->validPartNumber() === TRUE) {
-            // $price = $this->account_m->getPriceByPartNumber($this->input->post('partnumber'));
-            // echo json_encode($price);
-        // }
+    // if ($this->validPartNumber() === TRUE) {
+    // $price = $this->account_m->getPriceByPartNumber($this->input->post('partnumber'));
+    // echo json_encode($price);
+    // }
     // }
 
     public function getPriceByPartNumber() {
         if ($this->validPartNumber() === TRUE) {
-			$partDealerNumberRec = $this->account_m->getDealerPriceByPartNumber($this->input->post('partnumber'));
+            $partDealerNumberRec = $this->account_m->getDealerPriceByPartNumber($this->input->post('partnumber'));
             //$price = $this->account_m->getPriceByPartNumber($this->input->post('partnumber'));
-			if( !empty($partDealerNumberRec) && $partDealerNumberRec['quantity_available'] > 0 ) {
-				echo json_encode($partDealerNumberRec);
-			} else {
-				$price = $this->account_m->getPriceByPartNumber($this->input->post('partnumber'));
-				//$partDealerNumberRec = $this->account_m->getDealerPriceByPartNumber($this->input->post('partnumber'));
-				echo json_encode($price);
-			}
+            if (!empty($partDealerNumberRec) && $partDealerNumberRec['quantity_available'] > 0) {
+                echo json_encode($partDealerNumberRec);
+            } else {
+                $price = $this->account_m->getPriceByPartNumber($this->input->post('partnumber'));
+                //$partDealerNumberRec = $this->account_m->getDealerPriceByPartNumber($this->input->post('partnumber'));
+                echo json_encode($price);
+            }
         }
     }
 
     public function getStockByPartId() {
         if ($this->validPartId() === TRUE) {
             $partNumberRec = $this->account_m->getStockByPartId($this->input->post('partId'));
-			if( $partNumberRec['quantity_available'] > 0 ) {
-				echo json_encode($partNumberRec);
-			} else {
-				$partDealerNumberRec = $this->account_m->getDealerStockByPartId($this->input->post('partId'));
-				if( !empty($partDealerNumberRec) || $partDealerNumberRec['quantity_available'] > 0 ) {
-					echo json_encode($partDealerNumberRec);
-				} else {
-					echo json_encode($partNumberRec);
-				}
-			}
+            if ($partNumberRec['quantity_available'] > 0) {
+                echo json_encode($partNumberRec);
+            } else {
+                $partDealerNumberRec = $this->account_m->getDealerStockByPartId($this->input->post('partId'));
+                if (!empty($partDealerNumberRec) || $partDealerNumberRec['quantity_available'] > 0) {
+                    echo json_encode($partDealerNumberRec);
+                } else {
+                    echo json_encode($partNumberRec);
+                }
+            }
         }
     }
 
@@ -286,7 +286,7 @@ class Ajax extends Master_Controller {
                         foreach ($productVideo as $k => $v) {
                             $onclk = "showVideo('" . $v['video_url'] . "');";
                             //echo $onclk;
-                            $block .= "<li><img class='ply' src='".$new_assets_url."images/play.png'><img src='http://img.youtube.com/vi/" . $v['video_url'] . "/default.jpg' class='active' onClick=" . $onclk . "><p>" . $v['title'] . "</p></li>";
+                            $block .= "<li><img class='ply' src='" . $new_assets_url . "images/play.png'><img src='http://img.youtube.com/vi/" . $v['video_url'] . "/default.jpg' class='active' onClick=" . $onclk . "><p>" . $v['title'] . "</p></li>";
                         }
                         $block .= "</ul></div></div>";
                     }
@@ -331,7 +331,7 @@ class Ajax extends Master_Controller {
                     foreach ($productVideo as $k => $v) {
                         $onclk = "showVideo('" . $v['video_url'] . "');";
                         //echo $onclk;
-                        $block .= "<li><img class='ply' src='".$new_assets_url."images/play.png'><img src='http://img.youtube.com/vi/" . $v['video_url'] . "/default.jpg' class='active' onClick=" . $onclk . "><p>" . $v['title'] . "</p></li>";
+                        $block .= "<li><img class='ply' src='" . $new_assets_url . "images/play.png'><img src='http://img.youtube.com/vi/" . $v['video_url'] . "/default.jpg' class='active' onClick=" . $onclk . "><p>" . $v['title'] . "</p></li>";
                     }
                     $block .= "</ul></div>";
                     //$block = "<iframe width='420' height='315' src='http://www.youtube.com/embed/".$block."'> </iframe>";
@@ -439,11 +439,33 @@ class Ajax extends Master_Controller {
             $contactInfo[1]['company'] = $post['company'][1];
             $order['special_instr'] = $post['special_instr'];
             $order['order_id'] = $post['order_id'];
+            if( $post['shipping_cost_lock'] == '1' ) {
+                $order['shipping_cost'] = $post['shipping_cost'];
+            } else {
+                $order['shipping_cost'] = 0.00;
+            }
+            if( $post['product_cost_lock'] == '1' ) {
+                $order['product_cost'] = $post['product_cost'];
+            } else {
+                $order['product_cost'] = 0.00;
+            }
             $order['billing_id'] = $this->account_m->updateContact($contactInfo[0], 'billing');
             $order['shipping_id'] = $this->account_m->updateContact($contactInfo[1], 'shipping');
+            
+            $this->load->model('order_m');
+            $total = $this->order_m->getOrderTotal($post['order_id']);
+            if( @$post['state'][1] && $post['state'][1] != '' ) {
+                $order['tax'] = $this->order_m->calculateTax($post['state'][1], $total);
+            } else {
+                $order['tax'] = 0;
+            }
+            
+            $customerArr = array('username' => $post['email'][0], 'billing_id' => $order['billing_id'], 'user_type' => 'guest', 'status' => '1');
+            $order['user_id'] = $this->account_m->createGuestCustomer($customerArr, $post['order_id']);
+            
             $orderId = $this->admin_m->recordOrderCreation($order);
             $products = $this->setupProducts($post, $subtotal);
-            $this->load->model('order_m');
+            //$this->load->model('order_m');
             $this->order_m->updateOrderProductsByOrderId($orderId, $products);
             echo $orderId;
         } else
@@ -454,7 +476,14 @@ class Ajax extends Master_Controller {
         $products = array();
         if (is_array($post['product_sku'])) {
             foreach ($post['product_sku'] as $part) {
-                $distributorArr = array('id' => $post['distributor_id'][$part], 'qty' => $post['distributor_qty'][$part], 'part_number' => $post['distributor_partnumber'][$part]);
+                
+                $this->load->model('order_m');
+                $distributorDtl = $this->order_m->getPartDistributorAjax($part);
+                
+                //$data['distributor'] = array('id' => $distributorDtl['distributor_id'], 'qty' => @$product['qty'], 'part_number' => $distributorDtl['part_number'], 'distributor_name' => $distributorDtl['name'], 'dis_cost' => $distributorDtl['cost']);
+                //$data['distributor'] = json_encode($data['distributor']);
+                
+                $distributorArr = array('id' => $post['distributor_id'][$part], 'qty' => $post['distributor_qty'][$part], 'part_number' => $post['distributor_partnumber'][$part], 'distributor_name' => $distributorDtl['name'], 'dis_cost' => $distributorDtl['cost']);
                 $distributorStr = json_encode($distributorArr);
                 $products[$part]['distributor'] = $distributorStr;
             }
@@ -469,138 +498,152 @@ class Ajax extends Master_Controller {
             $this->order_m->updateStatus($post['orderId'], $post['status'], 'Ajax Update');
         }
     }
-	
-	public function changeDealerQuantity() {
-		$this->load->model('order_m');
-		$post = $this->input->post();
-		$arr = array();
-		foreach( $post['dealer_qty'] as $key => $val ) {
-			if( $val > 0 ) {
-				$arr[] = array('partnumber' => $key, 'quantity' => $val );
-			}
-		}
-		if( count($arr) > 0 ) {
-			//$this->load->model('order_m');
-			$this->order_m->updateDealerInventory($arr);
-		}
-		$data = array();
-		foreach( $post['sale'] as $k => $v ) {
-			$post['dealer_id'][$k] = empty($post['dealer_id'][$k]) ? 0 : $post['dealer_id'][$k];
-			$data[$k] = array('distributor_qty' => $post['distributor_qty'][$k], 'dealer_qty' => $post['dealer_id'][$k]);
-		}
-		$this->order_m->updateStockOnOrder($post['order_id'], $data);
-	}
 
-	public function sendOrderToPST() {
+    public function changeDealerQuantity() {
+        $this->load->model('order_m');
+        $post = $this->input->post();
+        $arr = array();
+        foreach ($post['dealer_qty'] as $key => $val) {
+            if ($val > 0) {
+                $arr[] = array('partnumber' => $key, 'quantity' => $val);
+            }
+        }
+        if (count($arr) > 0) {
+            //$this->load->model('order_m');
+            $this->order_m->updateDealerInventory($arr);
+        }
+        $data = array();
+        foreach ($post['sale'] as $k => $v) {
+            $post['dealer_id'][$k] = empty($post['dealer_id'][$k]) ? 0 : $post['dealer_id'][$k];
+            $data[$k] = array('distributor_qty' => $post['distributor_qty'][$k], 'dealer_qty' => $post['dealer_id'][$k]);
+        }
+        $this->order_m->updateStockOnOrder($post['order_id'], $data);
+    }
+
+    public function sendOrderToPST() {
         $this->load->model('account_m');
         $this->load->model('order_m');
-		$post = $this->input->post();
-		$distributor_id = array();
-		$cnt = 0;
-		foreach( $post['distributor_qty'] as $key => $val ) {
-			if( $val > 0 ) {
-				$distributor_id[$key] = $cnt;
-				$cnt++;
-			}
-		}
-		
-		$orderDetails = $this->account_m->getOrderDistributorDetails($post['order_id'], $distributor_id);
-		
-                $distributors = $this->order_m->getDistributors();
-                $distributorDetails = $this->order_m->getDistributorsDetails();
-		$store_name = $this->admin_m->getAdminShippingProfile();
-		
-		$address = "Dealer Name:<br>";
-		$address .= $store_name['company']."<br>";
-		$address .= $post["first_name"][1]." ". $post["last_name"][1] ."<br>";
-		//$address .= $post["last_name"][1]."<br>";
-		$address .= $post["email"][1]."<br>";
-		$address .= $post["phone"][1]."<br>";
-		$address .= $post["street_address"][1]."<br>";
-		$address .= $post["address_2"][1]."<br>";
-		$address .= $post["city"][1].", ".$post["state"][1].", ".$post["zip"][1]."<br>";
-		$address .= $post["country"][1]."<br>";
-		
-		$products = "";
-		$products .= "<table style='border:1px solid black;'>";
-		$products .= "<thead>";
-		$products .= "<tr>";
-		$products .= "<td style='width:100px;'><b>Quantity</b></td>";
-		$products .= "<td style='width:500px;'><b>Description</b></td>";
-		$products .= "<td style='width:200px;'><b>Distributor</b></td>";
-		$products .= "<td style='width:100px;'><b>Distributor Part Number</b></td>";
-		$products .= "<td style='width:100px;'><b>Distributor Inv</b></td>";
-		$products .= "<td style='width:100px;'><b>Dealer Cost</b></td>";
-		$products .= "</tr>";
-		$products .= "</thead><tbody>";
-		$distributor = '';
-		$quantity_available = '';
-		$cost = '';
-		foreach( $orderDetails as $orderDetail ) {
-			foreach ($orderDetail['distributorRecs'] as $distRec): ?>
-				<?php $distributor = $distributors[$distRec['distributor_id']]; ?>
-				<?php $quantity_available = $distRec['quantity_available']; ?>
-				<?php $cost = $distRec['cost']; ?>
-				<?php $part_number = $distRec['part_number']; ?>
-				<?php
-			endforeach;
-			
-			$products .= "<tr>";
-			$products .= "<td>".strip_tags($post['distributor_qty'][$orderDetail['partnumber']])."</td>";
-			$products .= "<td>".strip_tags($orderDetail['name']).'<br>'.strip_tags($orderDetail['question']).' :: '.strip_tags($orderDetail['answer']);
-			if($orderDetail['fitment'] != '') {
-				$products .= "<br>Fitment :: " . strip_tags($orderDetail['fitment'])."";
-			}
-			$products .= "</td>";
-			$products .= "<td>&nbsp;".strip_tags($distributor)."</td>";
-			$products .= "<td>&nbsp;".strip_tags($part_number)."</td>";
-			$products .= "<td>&nbsp;".strip_tags($quantity_available)."</td>";
-			$products .= "<td>&nbsp;".strip_tags($cost)."</td>";
-			$products .= "</tr>";
-		}
-		$products .= "</tbody></table>";
-                
-                //$products .= "<tfoot>";
-		foreach( $orderDetails as $orderDetail ) {
-			foreach ($orderDetail['distributorRecs'] as $distRec): ?>
-				<?php $distributor = $distributors[$distRec['distributor_id']]; ?>
-				<?php $dealer_number = $distributorDetails[$distRec['distributor_id']]['dealer_number']; ?>
-				<?php $username = $distributorDetails[$distRec['distributor_id']]['username']; ?>
-				<?php $password = $distributorDetails[$distRec['distributor_id']]['password']; ?>
-				<?php
-			endforeach;
-			
-			$products .= " Distributor : ".strip_tags($distributor)."<br>";
-			$products .= " Dealer Number : ".strip_tags($dealer_number)."</br>";
-			$products .= " Username : ".strip_tags($username)."</br>";
-			$products .= " Password : ".strip_tags($password)."</br>";
-		}
-		
-		$headers  = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-		
-		$from = "bvojcek@powersporttechnologies.com";
-		$headers .= 'From: '.$from."\r\n".
-			'Reply-To: '.$from."\r\n" .
-			'X-Mailer: PHP/' . phpversion();
-		
-		//echo $products;
-		mail("bvojcek@powersporttechnologies.com", "Order Send to PST from MM", $address.$products, $headers);
-		//mail("pradeep.shekhawat@outlook.com", "Order Send to PST from MM", $address.$products, $headers);
-		$this->account_m->updateOrderPST($post['order_id']);
-	}
-	
+        $post = $this->input->post();
+        $distributor_id = array();
+        $cnt = 0;
+        foreach ($post['distributor_qty'] as $key => $val) {
+            if ($val > 0) {
+                $distributor_id[$key] = $cnt;
+                $cnt++;
+            }
+        }
+
+        $orderDetails = $this->account_m->getOrderDistributorDetails($post['order_id'], $distributor_id);
+
+        $distributors = $this->order_m->getDistributors();
+        $distributorDetails = $this->order_m->getDistributorsDetails();
+        $store_name = $this->admin_m->getAdminShippingProfile();
+
+        $address = "Dealer Name:<br>";
+        $address .= $store_name['company'] . "<br>";
+        $address .= $post["first_name"][1] . " " . $post["last_name"][1] . "<br>";
+        //$address .= $post["last_name"][1]."<br>";
+        $address .= $post["email"][1] . "<br>";
+        $address .= $post["phone"][1] . "<br>";
+        $address .= $post["street_address"][1] . "<br>";
+        $address .= $post["address_2"][1] . "<br>";
+        $address .= $post["city"][1] . ", " . $post["state"][1] . ", " . $post["zip"][1] . "<br>";
+        $address .= $post["country"][1] . "<br>";
+
+        $products = "";
+        $products .= "<table style='border:1px solid black;'>";
+        $products .= "<thead>";
+        $products .= "<tr>";
+        $products .= "<td style='width:100px;'><b>Quantity</b></td>";
+        $products .= "<td style='width:500px;'><b>Description</b></td>";
+        $products .= "<td style='width:200px;'><b>Distributor</b></td>";
+        $products .= "<td style='width:100px;'><b>Distributor Part Number</b></td>";
+        $products .= "<td style='width:100px;'><b>Distributor Inv</b></td>";
+        $products .= "<td style='width:100px;'><b>Dealer Cost</b></td>";
+        $products .= "</tr>";
+        $products .= "</thead><tbody>";
+        $distributor = '';
+        $quantity_available = '';
+        $cost = '';
+        foreach ($orderDetails as $orderDetail) {
+            foreach ($orderDetail['distributorRecs'] as $distRec):
+?>
+                <?php $distributor = $distributors[$distRec['distributor_id']]; ?>
+                <?php $quantity_available = $distRec['quantity_available']; ?>
+                <?php $cost = $distRec['cost']; ?>
+                <?php $part_number = $distRec['part_number']; ?>
+                <?php
+
+            endforeach;
+
+            $products .= "<tr>";
+            $products .= "<td>" . strip_tags($post['distributor_qty'][$orderDetail['partnumber']]) . "</td>";
+            $products .= "<td>" . strip_tags($orderDetail['name']) . '<br>' . strip_tags($orderDetail['question']) . ' :: ' . strip_tags($orderDetail['answer']);
+            if ($orderDetail['fitment'] != '') {
+                $products .= "<br>Fitment :: " . strip_tags($orderDetail['fitment']) . "";
+            }
+            $products .= "</td>";
+            $products .= "<td>&nbsp;" . strip_tags($distributor) . "</td>";
+            $products .= "<td>&nbsp;" . strip_tags($part_number) . "</td>";
+            $products .= "<td>&nbsp;" . strip_tags($quantity_available) . "</td>";
+            $products .= "<td>&nbsp;" . strip_tags($cost) . "</td>";
+            $products .= "</tr>";
+        }
+        $products .= "</tbody></table>";
+
+        //$products .= "<tfoot>";
+        foreach ($orderDetails as $orderDetail) {
+            foreach ($orderDetail['distributorRecs'] as $distRec):
+                ?>
+                <?php $distributor = $distributors[$distRec['distributor_id']]; ?>
+                <?php $dealer_number = $distributorDetails[$distRec['distributor_id']]['dealer_number']; ?>
+                <?php $username = $distributorDetails[$distRec['distributor_id']]['username']; ?>
+                <?php $password = $distributorDetails[$distRec['distributor_id']]['password']; ?>
+                <?php
+
+            endforeach;
+
+            $products .= " Distributor : " . strip_tags($distributor) . "<br>";
+            $products .= " Dealer Number : " . strip_tags($dealer_number) . "</br>";
+            $products .= " Username : " . strip_tags($username) . "</br>";
+            $products .= " Password : " . strip_tags($password) . "</br>";
+        }
+
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
+        $from = "bvojcek@powersporttechnologies.com";
+        $headers .= 'From: ' . $from . "\r\n" .
+                'Reply-To: ' . $from . "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
+
+        //echo $products;
+        mail("bvojcek@powersporttechnologies.com", "Order Send to PST from MM", $address . $products, $headers);
+        //mail("pradeep.shekhawat@outlook.com", "Order Send to PST from MM", $address.$products, $headers);
+        $this->account_m->updateOrderPST($post['order_id']);
+    }
+
     public function changeProductOrderStatus() {
         if ($this->validateProductOrderStatus() === TRUE) {
             $post = $this->input->post();
             $this->load->model('order_m');
-            foreach ($post['products'] as $product)
-                $this->order_m->updateProductStatus($post['orderId'], $product, $post['status'], 'Ajax Update');
+            foreach ($post['products'] as $product) {
+                if( $post['status'] == 'Delete' ) {
+                    $this->order_m->removeProductFromOrder($post['orderId'], $product, $post['status'], 'Ajax Update');
+                } else if( $post['status'] == 'Refunded' ) {
+                    $this->order_m->refundProductFromOrder($post['orderId'], $product, $post['status'], 'Ajax Update');
+                    $this->order_m->updateProductStatus($post['orderId'], $product, $post['status'], 'Ajax Update');
+                } else {
+                    $this->order_m->updateProductStatus($post['orderId'], $product, $post['status'], 'Ajax Update');
+                }
+            }
 
             $products = $this->order_m->getProductsByOrderId($post['orderId']);
             // Get status for all Products
             $orderStatus = $this->calculateOrderStatus($products);
-            $this->order_m->updateStatus($post['orderId'], $orderStatus, 'Ajax Update');
+            if( $orderStatus != '' ) {
+                $this->order_m->updateStatus($post['orderId'], $orderStatus, 'Ajax Update');
+            }
         }
     }
 
@@ -611,7 +654,8 @@ class Ajax extends Master_Controller {
                 $count--;
             }
         }
-        $orderStatus = 'Approved';
+        //$orderStatus = 'Approved';
+        $orderStatus = '';
         $rtpu = 0;
         $complete = 0;
         $returned = 0;
@@ -760,7 +804,7 @@ class Ajax extends Master_Controller {
         }
         echo $this->returnURL();
     }
-	
+
     public function setSearchCategory() {
         if ($this->validateSearch() === TRUE) {
             if ($this->input->post('section') == 'question')
@@ -889,5 +933,75 @@ class Ajax extends Master_Controller {
     public function getSeal() {
         echo '<script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=qc3WD7lClpbpLfFD7HDpLCx8bXBkOWSZP9ImCkgNS7VqSnVbHcLTJJrA6sG"></script>';
     }
-	
+
+    public function getCustomer() {
+        $filter = array();
+        $filter['search'] = $_GET['term'];
+        $customers = $this->admin_m->getCustomerByDetail($filter, 5, 0);
+
+        $customerArray = array();
+        foreach ($customers as $customer) {
+            $label = $customer['first_name'].' '.$customer['last_name'].' '.$customer['phone'].' '.$customer['email'].' '.$customer['street_address'].' '.$customer['address_2'];
+            $tempArr = array();
+            $tempArr["value"] = $label;
+            $tempArr["label"] = $label;
+            array_push($customerArray, $tempArr);
+        }
+        echo json_encode($customerArray);
+        //print $json;
+    }
+    
+    public function getCustomerPopulated() {
+        $customerData = explode(' ', $_POST['customer']);
+        $email;
+        foreach( $customerData as $customerDt ) {
+            if( strpos( $customerDt, '@' ) !== false && strpos( $customerDt, '.' ) !== false ) {
+                $email = $customerDt;
+                break;
+            }
+        }
+        
+        $customers = $this->admin_m->getAllCustomerAddresses($email);
+        $orderArr = array('user_id' => $customers['billing']['userId'], 'contact_id' => $customers['billing']['id'], 'shipping_id' => $customers['shipping']['id']);
+        $this->admin_m->updateCustomerInOrder($_POST['orderId'], $orderArr);
+//        $store_name = $this->admin_m->getAdminShippingProfile();
+//        $customers['store_name'] = $store_name;
+//        
+//        $str = $this->load->view('admin/order/customer_ajax', $customers, true);
+//        echo $str;
+        
+//        echo '<pre>';
+//        print_r($customers);
+//        echo $email;
+//        echo '</pre>';
+    }
+    
+    public function checkCouponCode() {
+        $post = $this->input->post();
+        $this->load->model('coupons_m');
+        $this->load->model('order_m');
+        $order = $this->order_m->getOrder($post['orderId']);
+        $success = $this->coupons_m->addCouponToOrder($post, $order);
+        return $success;
+    }
+    
+    public function addProductToCartFromFE() {
+        $post = $this->input->post();
+        $this->load->model('order_m');
+        foreach( $post['data'] as $part ) {
+            if(!$this->order_m->checkPartNumber($part, $post['qty'], $post['orderId'])) {
+                $this->session->set_flashdata('error','Product Not Found.');
+            }
+        }
+        return true;
+    }
+    
+    public function applyShippingToOrder() {
+        $post = $this->input->post();
+        if(@$post) {
+            $this->load->model('admin_m');
+            $this->admin_m->addShippingToOrder($post);
+        }
+    }
+
 }

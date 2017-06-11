@@ -75,12 +75,12 @@ class Reporting_M extends Master_M {
     }
 
     protected function sub_getDashboardStatsByInterval($start_date_time, $end_date_time, $selection_labels, $grouping_labels) {
-        $query = $this->db->query("select sum(sales_price) as total_sales_dollars, count(distinct `order`.id) as number_orders, count(distinct user_id) as distinct_customers, $selection_labels from `order` join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id  where order_date >= unix_timestamp(?) and order_date <= unix_timestamp(?) group by $grouping_labels order by $grouping_labels", array($start_date_time, $end_date_time));
+        $query = $this->db->query("select sum(order_transaction.amount) as total_sales_dollars, count(distinct `order`.id) as number_orders, count(distinct user_id) as distinct_customers, $selection_labels from `order` left join order_transaction on `order`.id = order_transaction.order_id join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id  where order_date >= unix_timestamp(?) and order_date <= unix_timestamp(?) group by $grouping_labels order by $grouping_labels", array($start_date_time, $end_date_time));
         return $query->result_array();
     }
 
     public function getRevenueWithinDateRange($start_date_time, $end_date_time) {
-        $query = $this->db->query("Select sum(sales_price) as cnt from `order` join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id where order_date >= unix_timestamp(?) and order_date <= unix_timestamp(?) ", array($start_date_time, $end_date_time));
+        $query = $this->db->query("Select sum(order_transaction.amount) as cnt from `order` join (select distinct order_id from order_status where status = 'Approved') order_status on `order`.id = order_status.order_id left join order_transaction on `order`.id = order_transaction.order_id where order_date >= unix_timestamp(?) and order_date <= unix_timestamp(?) ", array($start_date_time, $end_date_time));
         $cnt = 0;
         foreach ($query->result_array() as $row) {
             $cnt = $row['cnt'];

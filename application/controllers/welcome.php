@@ -299,9 +299,7 @@ class Welcome extends Master_Controller {
         $this->_mainData['featured'] = $this->motorcycle_m->getFeaturedMonster();
         $this->renderMasterPage('master/master_v_front', 'info/storefront_v', $this->_mainData);
 
-        // echo '<pre>';
-        // print_r($this->_mainData);
-        // echo '</pre>';
+        
     }
 
     public function benz() {

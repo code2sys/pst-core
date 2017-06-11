@@ -1525,7 +1525,7 @@ class Parts_M extends Master_M {
                 $this->db->join('category cat2', 'cat2.category_id = category.parent_category_id');
                 $where['(category.category_id = ' . $categoryId . ' OR category.parent_category_id = ' . $categoryId . ' OR cat2.category_id = ' . $categoryId . ') '] = NULL;
             }
-            $this->db->select('part.part_id, part.name as label, image');
+            $this->db->select('part.part_id, part.name as label, part.image');
             $where = array('part.part_id' => $id);
             $product = $this->selectRecord('part', $where);
 
@@ -2745,7 +2745,7 @@ class Parts_M extends Master_M {
 
     public function getFeaturedCategories() {
         $where = array('featured' => 1);
-        $this->db->select('name, category_id, title');
+        $this->db->select('name, category_id, title, image');
         $records = $this->selectRecords('category', $where);
         return $records;
     }
