@@ -44,7 +44,6 @@ unset($motorcycle['videos'][0]);
 							</li>
 						<?php } ?>
 					</ul>
-					<div class="lSAction"><a class="lSPrev"></a><a class="lSNext"></a></div>
 				</div>
 			</div>
 			<div class="col-md-4 col-sm-5 pull-right bx-rit pdig sect-wdt">
