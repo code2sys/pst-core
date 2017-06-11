@@ -19,8 +19,12 @@
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/owl.transitions.css" />	
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/font-awesome.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/lightslider.css" />
-	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>/css/responsive.css" type="text/css" />	
-	
+	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>/css/responsive.css" type="text/css" />
+	<link rel="stylesheet" href="<?php echo jsite_url('/basebranding.css'); ?>" />
+	<link rel="stylesheet" href="<?php echo jsite_url('/custom.css'); ?>" />
+	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/jquery.fancybox.css" />
+
+
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lucida+Sans:400,500,600,700,900,800,300" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica:400,500,600,700,900,800,300%22%20/%3E" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300%22%20/%3E">
@@ -29,8 +33,10 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/bootstrap.min.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/owl.carousel.js"></script>	
-	<script src="<?php echo $new_assets_url; ?>js/lightslider.js"></script>	
+	<script src="<?php echo $new_assets_url; ?>js/lightslider.js"></script>
+	<script src="<?php echo $new_assets_url; ?>js/jquery.fancybox.pack.js"></script>
 
+	
 	<script>
 	$(document).ready(function(){
 		$(".sidebar-menu").click(function(){
