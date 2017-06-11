@@ -8,7 +8,11 @@ unset($motorcycle['videos'][0]);
 	// print_r($media_url.$motorcycle['images'][0]['image_name']);
 	// echo "</pre>";
 ?>
-
+<style>
+	ul.lSPager.lSGallery {
+		right: 0px;
+	}
+</style>
 <div class="sw prod-ls">
 	<div class="container_b">
 		<div class="col-md-12 col-xs-12 pdig">
