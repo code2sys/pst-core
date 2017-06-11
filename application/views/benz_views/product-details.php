@@ -38,7 +38,9 @@ unset($motorcycle['videos'][0]);
 					<ul id="image-gallery" class="gallery list-unstyled cS-hidden">
 						<?php foreach( $motorcycle['images'] as $image ) { ?>
 							<li data-thumb="<?php echo $media_url.$image['image_name']; ?>">
-								<img src="<?php echo $media_url.$image['image_name']; ?>" />
+								<a class="fancybox" href="<?php echo $media_url.$image['image_name']; ?>" data-fancybox-group="gallery">
+									<img src="<?php echo $media_url.$image['image_name']; ?>" />
+								</a>
 							</li>
 						<?php } ?>
 					</ul>
@@ -264,7 +266,7 @@ unset($motorcycle['videos'][0]);
 					</div>
 						<input type="hidden" name="product_id" value="<?php echo $motorcycle['id'];?>">
 					<div class="col-md-12 text-center" style="float:none;">
-						<input type="submit" class="btn bttn">
+						<input type="submit" class="btn bttn" value="Submit">
 					</div>
 				</div>								
 			</form>					
@@ -280,22 +282,22 @@ unset($motorcycle['videos'][0]);
 </script>
 <script>
 	 $(document).ready(function() {
-		$("#content-slider").lightSlider({
-			loop:true,
-			keyPress:true
-		});
-		$('#image-gallery').lightSlider({
-			gallery:true,
-			item:1,
-			thumbItem:9,
-			slideMargin: 0,
-			speed:500,
-			auto:true,
-			loop:true,
-			onSliderLoad: function() {
-				$('#image-gallery').removeClass('cS-hidden');
-			}  
-		});
+//		$("#content-slider").lightSlider({
+//			loop:true,
+//			keyPress:true
+//		});
+//		$('#image-gallery').lightSlider({
+//			gallery:true,
+//			item:1,
+//			thumbItem:9,
+//			slideMargin: 0,
+//			speed:500,
+//			auto:true,
+//			loop:true,
+//			onSliderLoad: function() {
+//				$('#image-gallery').removeClass('cS-hidden');
+//			}
+//		});
 	});
     function showVideo(vidId, vidTit) {
         var mainVideo = $('#mainVideo').data('id');
@@ -309,6 +311,24 @@ unset($motorcycle['videos'][0]);
         //$("#mainVideo")[0].src = "https://www.youtube.com/embed/"+vidId+"?rel=0&autoplay=1";
     }
 </script>
-	
+
+<script>
+	$(document).ready(function() {
+		$(".fancybox").fancybox({
+			prevEffect	: 'none',
+			nextEffect	: 'none',
+			helpers	: {
+				title	: {
+					type: 'outside'
+				},
+				thumbs	: {
+					width	: 50,
+					height	: 50
+				}
+			}
+		});
+	});
+</script>
+
 <?php //include('footer.php'); ?>
 	
