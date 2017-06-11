@@ -8,7 +8,11 @@ unset($motorcycle['videos'][0]);
 	// print_r($media_url.$motorcycle['images'][0]['image_name']);
 	// echo "</pre>";
 ?>
-
+<style>
+	ul.lSPager.lSGallery {
+		right: 0px;
+	}
+</style>
 <div class="sw prod-ls">
 	<div class="container_b">
 		<div class="col-md-12 col-xs-12 pdig">
@@ -32,17 +36,19 @@ unset($motorcycle['videos'][0]);
 					<li><a href="<?php echo site_url('pages/index/contactus') ?>" class="last">CONTACT US</a></li>
 				</ul>
 			</div>
-			
-			<div class="col-md-8 col-xs-12 col-sm-7 pdig sect-sid">				   
+
+			<div class="col-md-8 col-xs-12 col-sm-7 pdig sect-sid">
 				<div class="clearfix" style="width:100%;">
 					<ul id="image-gallery" class="gallery list-unstyled cS-hidden">
 						<?php foreach( $motorcycle['images'] as $image ) { ?>
 							<li data-thumb="<?php echo $media_url.$image['image_name']; ?>">
-								<img src="<?php echo $media_url.$image['image_name']; ?>" />
+								<a class="fancybox" href="<?php echo $media_url.$image['image_name']; ?>" data-fancybox-group="gallery">
+									<img src="<?php echo $media_url.$image['image_name']; ?>" />
+								</a>
 							</li>
 						<?php } ?>
 					</ul>
-				</div>	
+				</div>
 			</div>
 			<div class="col-md-4 col-sm-5 pull-right bx-rit pdig sect-wdt">
 				<h3><?php echo $motorcycle['title'];?></h3>
@@ -264,7 +270,7 @@ unset($motorcycle['videos'][0]);
 					</div>
 						<input type="hidden" name="product_id" value="<?php echo $motorcycle['id'];?>">
 					<div class="col-md-12 text-center" style="float:none;">
-						<input type="submit" class="btn bttn">
+						<input type="submit" class="btn bttn" value="Submit">
 					</div>
 				</div>								
 			</form>					
@@ -280,10 +286,10 @@ unset($motorcycle['videos'][0]);
 </script>
 <script>
 	 $(document).ready(function() {
-		$("#content-slider").lightSlider({
-			loop:true,
-			keyPress:true
-		});
+//		$("#content-slider").lightSlider({
+//			loop:true,
+//			keyPress:true
+//		});
 		$('#image-gallery').lightSlider({
 			gallery:true,
 			item:1,
@@ -294,7 +300,7 @@ unset($motorcycle['videos'][0]);
 			loop:true,
 			onSliderLoad: function() {
 				$('#image-gallery').removeClass('cS-hidden');
-			}  
+			}
 		});
 	});
     function showVideo(vidId, vidTit) {
@@ -309,6 +315,24 @@ unset($motorcycle['videos'][0]);
         //$("#mainVideo")[0].src = "https://www.youtube.com/embed/"+vidId+"?rel=0&autoplay=1";
     }
 </script>
-	
+
+<script>
+	$(document).ready(function() {
+		$(".fancybox").fancybox({
+			prevEffect	: 'none',
+			nextEffect	: 'none',
+			helpers	: {
+				title	: {
+					type: 'outside'
+				},
+				thumbs	: {
+					width	: 50,
+					height	: 50
+				}
+			}
+		});
+	});
+</script>
+
 <?php //include('footer.php'); ?>
 	

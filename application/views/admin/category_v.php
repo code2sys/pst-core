@@ -148,11 +148,11 @@
 			<!-- TABS -->
 			<div class="tab">
 				<ul>
-					<li><a href="#" class="active"><i class="fa fa-bars"></i>&nbsp;General Options*</a></li>
-					<!--
-<li><a href="#"><i class="fa fa-image"></i>&nbsp;Images*</a></li>
-					<li><a href="#"><i class="fa fa-info-circle"></i>&nbsp;Vendor Info</a></li>
--->
+					<li><a href="<?php echo base_url('admin/category'); ?>" class="active"><i class="fa fa-bars"></i>&nbsp;General Options*</a></li>
+					
+					<li><a href="<?php echo base_url('admin/category_image'); ?>" class="image_link"><i class="fa fa-image"></i>&nbsp;Images*</a></li>
+					<!--<li><a href="#"><i class="fa fa-info-circle"></i>&nbsp;Vendor Info</a></li>-->
+
 					<div class="clear"></div>
 				</ul>
 			</div>
@@ -295,6 +295,13 @@
 				  else
 				  {
 			  		  console.log(responseData);
+					  $(".image_link").each(function () {
+                            //alert($(this).html());
+                            var href = $($(this)).attr("href");
+                            $($(this)).attr("href", href + '/' + responseData['category_id']);
+                            //alert($(this).text());
+                        });
+					  
 		       		  $('.edit').show();
 		       		  $('.new').hide();
 		       		  $('#category_id').val(responseData['category_id']);

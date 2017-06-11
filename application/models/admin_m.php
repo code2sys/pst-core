@@ -318,6 +318,12 @@ class Admin_M extends Master_M {
         return $records;
     }
 
+	public function updateCategoryImage($post) {
+		$where = array('category_id' => $post['category_id']);
+        $data = array('image' => $post['image']);
+        $this->updateRecord('category', $data, $where, FALSE);
+	}
+	
     public function updateCategory($post) {
         $data = array();
         $data['active'] = @$post['active'] ? 1 : 0;
@@ -924,9 +930,9 @@ class Admin_M extends Master_M {
             foreach ($post['id'] as $key => $id) {
                 $where = array('id' => $id);
                 $data = array();
-                $data['active'] = @$post['active'][$key] ? 1 : 0;
-                $data['percentage'] = @$post['active'][$key] ? 1 : 0;
-                $data['tax_value'] = $post['tax_value'][$key];
+                $data['active'] = @$post['active'][$id] ? 1 : 0;
+                $data['percentage'] = @$post['active'][$id] ? 1 : 0;
+                $data['tax_value'] = $post['tax_value'][$id];
                 $success = $this->updateRecord('taxes', $data, $where, FALSE);
             }
         }
@@ -1170,8 +1176,8 @@ class Admin_M extends Master_M {
                 'shipping.city AS shipping_city, ' .
                 'shipping.state AS shipping_state, ' .
                 'shipping.zip AS shipping_zip, ' .
-                '(SELECT SUM(amount) FROM order_transaction WHERE order_id=order.id) as sales_price, ' .
-                'shipping.company AS shipping_company');
+                'shipping.company AS shipping_company, ' .
+                ' sum(order_transaction.amount) as paid');
         $records = FALSE;
 
         if ($filter['limit']) {
@@ -1252,6 +1258,7 @@ class Admin_M extends Master_M {
         $this->db->order_by('order.id DESC');
         $this->db->join('contact', 'contact.id = order.contact_id', 'left');
         $this->db->join('contact shipping', 'shipping.id = order.contact_id', 'left');
+        $this->db->join('order_transaction', 'order.id = order_transaction.order_id', 'left');
         //$this->db->join('order_status order_status', 'order_status.order_id = order.id', 'left');
 
         $this->db->group_by('order.id');

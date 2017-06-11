@@ -485,6 +485,9 @@
                 ?>
             </div>
             <div class="clear"></div>
+            <!--
+            <?php print_r($order); ?>
+            -->
             <div class="tabular_data">
                 <table width="100%" cellpadding="8" id="product_table">
                     <tr>
@@ -507,7 +510,7 @@
                         foreach ($order['products'] as $key => $product):
                             $qtyComplete = FALSE;
                             $qtyLft = $product['qty'];
-                            $abcd1 = 0;
+                            $abcd1 = 0; // This ingenously named variable is the # of parts to take from dealer inventory.
                             ?>
                             <?php $partnumber = (@$product['distributorRecs'][0]['part_number']) ? $product['distributorRecs'][0]['part_number'] : $product['partnumber']; ?>
                             <tr>
@@ -556,7 +559,9 @@
                                                         $abcd1 = $product['qty'];
                                                     } else {
                                                         $qtyLft = $qtyLft - $distRec['quantity_available'];
-                                                        $abcd1 = $qtyLft - $distRec['quantity_available'];
+                                                        // JLB 06-11-17
+                                                        // They used to assign $qtyLfty and $abcd1 to the same thing, which I believe is wrong.
+                                                        $abcd1 = $distRec['quantity_available'];
                                                     }
                                                     if ($product['dealer_qty'] > 0) {
                                                         $abcd1 = $product['dealer_qty'];
