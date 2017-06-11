@@ -355,7 +355,7 @@
 
 .sw ul.lSPager.lSGallery {
 	position:relative;
-	margin-top:2px !important
+	margin-top:2px /* !important */
 }
 .sect-sid .clearfix{
 	background-color:transparent;
