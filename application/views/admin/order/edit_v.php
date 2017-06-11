@@ -486,7 +486,7 @@
             </div>
             <div class="clear"></div>
             <!--
-            print_r($order);
+            <?php print_r($order); ?>
             -->
             <div class="tabular_data">
                 <table width="100%" cellpadding="8" id="product_table">
