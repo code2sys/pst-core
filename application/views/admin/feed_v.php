@@ -45,7 +45,7 @@
                 </table>
             </form>
             <form action="<?php echo base_url('admin_content/ebay_feeds'); ?>" method="post" id="form_example" class="form_standard">
-                <table width="100%" cellpadding="6">
+<!--              <table width="100%" cellpadding="6">
                     <tr>
                         <th colspan="3"><h2>Ebay Product Data Feed:</h2></th>
                     </tr>
@@ -77,6 +77,19 @@
                         <td>Check Status: <a href="<?php echo base_url('admin_content/send_new_ebay/'); ?>">check status</a></td>
                     </tr>
                 </table>
+-->
+              <table width="100%" cellpadding="6">
+                    <tr>
+                        <th colspan="3"><h2>Ebay Product Data Feed:</h2></th>
+                    </tr>
+                    <tr>
+                        <td><input type="submit" name="getebay_feeds" value="Generate Ebay Product Feed"></td>
+<!--                        <td>Status : <?php echo isset($ebay_feeds['status']) && $ebay_feeds['status'] == 1 ? 'Completed' : 'Processing'; ?></td>
+                        <td>Last Run : <?php echo isset($ebay_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($ebay_feeds['run_at'])) : ''; ?></td> -->
+                        <td>Send to Ebay: <a href="<?php echo base_url('admin_content/send_new_ebay/'); ?>">send_new_ebay</a></td>
+                        <td>End all products on ebay: <a href="<?php echo site_url() . 'welcome/hit_ebay_end'; ?>">end_all_products</a></td>
+                    </tr>
+               </table>
             </form><br>
             <form action="<?php echo base_url('admin_content/paypal_email'); ?>" method="post" id="form_example" class="form_standard">
                 <table class="paypal_email" width="100" cellpadding="1">
