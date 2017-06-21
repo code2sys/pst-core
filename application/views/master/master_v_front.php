@@ -361,17 +361,28 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 	<?php if (!defined("MOTORCYCLE_SHOP_DISABLE") || !MOTORCYCLE_SHOP_DISABLE): ?>
 	<div class="sw bg">
 		<div class="modal-lg">
-			<?php if (MOTORCYCLE_SHOP_NEW): ?>
+			<?php if (MOTORCYCLE_SHOP_NEW && (!defined("MOTORCYCLE_SHOP_USED") || MOTORCYCLE_SHOP_USED)) { ?>
 			<div class="col-md-3 wrap-col">
 				<a href="<?php echo site_url("Motorcycle_List?fltr=new") ?>"><h2>shop new models</h2></a>				
 			</div>
-			<?php $moto_width = 3; ?>
-			<?php else: ?>
-			<?php $moto_width = 4; ?>
-			<?php endif; ?>
-			<div class="col-md-<?php echo $moto_width; ?> wrap-col">
+			<div class="col-md-3 wrap-col">
 				<a href="<?php echo site_url("Motorcycle_List?fltr=pre-owned") ?>"><h2>shop pre-owned</h2></a>
 			</div>
+
+				<?php $moto_width = 3; ?>
+			<?php } elseif (MOTORCYCLE_SHOP_NEW) { ?>
+				<div class="col-md-4 wrap-col">
+					<a href="<?php echo site_url("Motorcycle_List?fltr=new") ?>"><h2>shop new models</h2></a>
+				</div>
+				<?php $moto_width = 4; ?>
+			<?php } elseif (!defined("MOTORCYCLE_SHOP_USED") || MOTORCYCLE_SHOP_USED) { ?>
+				<div class="col-md-4 wrap-col">
+					<a href="<?php echo site_url("Motorcycle_List?fltr=pre-owned") ?>"><h2>shop pre-owned</h2></a>
+				</div>
+				<?php $moto_width = 4; ?>
+			<?php } else { ?>
+			<?php $moto_width = 6; ?>
+			<?php } ?>
 			<div class="col-md-<?php echo $moto_width; ?> wrap-col">
 				<a href="<?php echo site_url("pages/index/financerequest") ?>"><h2>apply for Financing</h2></a>				
 			</div>
