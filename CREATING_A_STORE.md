@@ -37,18 +37,18 @@ Add in the Symlinks
 --------------------
 
 <pre>
-ln -s ../core/adminer.php .
-ln -s ../core/application .
-ln -s ../core/Checkout/ .
-ln -s ../core/lib/ .
-ln -s ../core/qatesting_application/ .
-ln -s ../core/simpleimage.php  .
-ln -s ../core/system/ .
-ln -s ../core/vendor/ .
+ln -s ../../core/adminer.php .
+ln -s ../../core/application .
+ln -s ../../core/Checkout/ .
+ln -s ../../core/lib/ .
+ln -s ../../core/qatesting_application/ .
+ln -s ../../core/simpleimage.php  .
+ln -s ../../core/system/ .
+ln -s ../../core/vendor/ .
 cd html
-ln -s ../../core/html/assets/ .
-ln -s ../../core/html/basebranding.css  .
-ln -s ../../core/html/qatesting/ .
+ln -s ../../../core/html/assets/ .
+ln -s ../../../core/html/basebranding.css  .
+ln -s ../../../core/html/qatesting/ .
 </pre>
 
 

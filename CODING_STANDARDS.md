@@ -1,3 +1,16 @@
+Update June 13, 2017
+====================
+
+Don't do this:
+
+<pre>
+modified:   html/qatesting/bx_custom_assets/img/VAULT.png
+modified:   html/qatesting/bx_custom_assets/img/Vault.png
+</pre>
+
+You see, the small image and the big image had the same name, differing only by case. Windows and Mac OS have varying degrees of case-insensitive file systems. This is a bad approach.
+
+
 Update June 11, 2017
 ====================
 
