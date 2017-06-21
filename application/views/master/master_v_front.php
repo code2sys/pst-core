@@ -357,6 +357,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 		<div class="clear"></div>
 	</div>
 
+	<?php if (!defined("DISABLE_FRONT_MOTORCYCLE_NAV") || !DISABLE_FRONT_MOTORCYCLE_NAV): ?>
 	<?php if (!defined("MOTORCYCLE_SHOP_DISABLE") || !MOTORCYCLE_SHOP_DISABLE): ?>
 	<div class="sw bg">
 		<div class="modal-lg">
@@ -404,6 +405,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 			</div>
 		</div>	
 	</div>
+	<?php endif; ?>
 	<?php endif; ?>
 	<?php if(!empty($featuredCategories)){ ?>
 	<div class="sw brd">
