@@ -420,12 +420,15 @@ class Reporting_M extends Master_M {
         unlink($file_path);
         $dealer_info = $this->get_dealer_info();
         $dealer_name = $dealer_info['company'];
-        $dealer_phone_no = $dealer_info['phone'];
+        $dealer_phone_no = preg_replace("/[^0-9]/", "", $dealer_info['phone']);
+
         $dealer_location = $dealer_info['country'];
         $dealer_city = $dealer_info['city'];
         $dealer_state = $dealer_info['state'];
         $dealer_post_code = $dealer_info['zip'];
-        $dealer_area_code = 844;
+        // JLB 06-22-17 WTF man? WTF? You have $dealer_phone_no in your hand.
+        // $dealer_area_code = 844;
+        $dealer_area_code = substr($dealer_phone_no, 0, 3);
         file_put_contents($file_path, $header);
         
         foreach ($allmotorcycle as $key => $motorcycle) {
