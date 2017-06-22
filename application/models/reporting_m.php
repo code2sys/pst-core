@@ -387,7 +387,13 @@ class Reporting_M extends Master_M {
     }
 
     public function get_dealer_info() {
-        $sql = "SELECT contact.*  from contact where environment = 'sandbox' ";
+        /*
+         * JLB 06-22-17
+         * They used to check the paypal environment setting of all the stupid things.
+         * So, observe the magic: the company is always record 1.
+         */
+        $company_id = (defined('COMPANY_CONTACT_ID') ? COMPANY_CONTACT_ID : 1);
+        $sql = sprintf("SELECT contact.*  from contact where id = %d", $company_id);
         $query = $this->db->query($sql);
         $data = $query->result_array();
         return $data[0];
