@@ -740,6 +740,10 @@ class Welcome extends Master_Controller {
         exit;
     }
 
+    public function cycletraderSalesXML() {
+        $this->cycletraderSalesFile();
+    }
+
     public function cycletraderSalesFile() {
         $file_path = STORE_DIRECTORY . '/cycletraderFeed/cycle_trader_feed.txt';
         header('Content-Type: application/octet-stream');

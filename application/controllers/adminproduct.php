@@ -900,9 +900,10 @@ class Adminproduct extends Admin {
         $part_number = trim(array_key_exists("part_number", $_REQUEST) ? $_REQUEST["part_number"] : "");
         $fitments = array_key_exists("fitments", $_REQUEST) ? $_REQUEST["fitments"] : array();
 
-        if ($answer == "") {
-            $this->Statusmodel->setError('Sorry, no answer received. Please provide an answer.');
-        } else if ($distributor_id == 0) {
+//        if ($answer == "") {
+//            $this->Statusmodel->setError('Sorry, no answer received. Please provide an answer.');
+//        } else
+        if ($distributor_id == 0) {
             $this->Statusmodel->setError('Sorry, please specify a distributor.');
         } else if ($part_number == "") {
             $this->Statusmodel->setError('Sorry, please specify a part number.');
