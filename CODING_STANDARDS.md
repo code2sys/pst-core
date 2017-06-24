@@ -1,3 +1,16 @@
+Update June 24, 2017
+====================
+
+
+*Question*
+For email sending can i use the default mail function of PHP or i need to use any other api like sendgrid/mailchimp or you have any other sir?
+
+*Answer*
+
+You can use the built-in PHP mail function for sending email. If you need to send something with attachments, we can add Swift Mailer, please let me know. You should use the SMTP server on the local host - postfix is installed and configured. You should set a fully-qualified From: address; FROM_EMAIL_ADDRESS is a symbolic constant defined for all environments that you can use.
+
+[Note: We added Swift Mailer. Use that for HTML emails.]
+
 Update June 13, 2017
 ====================
 
