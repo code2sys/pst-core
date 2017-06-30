@@ -41,5 +41,5 @@ if (isset($store_name)) {
 
 
 <?php if (isset($google_site_verification) && $google_site_verification != ""): ?>
-<meta name="google-site-verification" content="<?php echo $google_site_verification; ?>-N9pQISI7QM" />
+<meta name="google-site-verification" content="<?php echo $google_site_verification; ?>" />
 <?php endif; ?>
