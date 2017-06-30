@@ -35,13 +35,11 @@ if (isset($store_name)) {
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300%22%20/%3E">
 
 
-// This is the Bing website tools validation
 <?php if (isset($bing_site_verification) && $bing_site_verification != ""): ?>
 <meta name="msvalidate.01" content="<?php echo $bing_site_verification; ?>" />
 <?php endif; ?>
 
 
-// This is the Google webmaster validation
 <?php if (isset($google_site_verification) && $google_site_verification != ""): ?>
 <meta name="google-site-verification" content="<?php echo $google_site_verification; ?>-N9pQISI7QM" />
 <?php endif; ?>
