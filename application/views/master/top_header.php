@@ -31,8 +31,8 @@ if (isset($store_name)) {
 <script src="https://js.braintreegateway.com/web/3.6.3/js/client.min.js"></script>
 <script src="https://js.braintreegateway.com/web/3.6.3/js/paypal.min.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lucida+Sans:400,500,600,700,900,800,300" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica:400,500,600,700,900,800,300%22%20/%3E" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300%22%20/%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica:400,500,600,700,900,800,300" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300" />
 
 
 <?php if (isset($bing_site_verification) && $bing_site_verification != ""): ?>
