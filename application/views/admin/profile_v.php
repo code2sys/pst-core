@@ -273,6 +273,20 @@ $google_trust = (array) json_decode($address['google_trust']);
 										  'class' => 'text large',
 										  'placeholder' => 'Google Analytics ID')); ?></td>
 									</tr>
+									<tr>
+										<td style="width:30%;"><b>Google Site Verification Code:</b></td>
+										<td><?php echo form_input(array('name' => 'google_site_verification',
+										  'value' => @$address['google_site_verification'],
+										  'class' => 'text large',
+										  'placeholder' => 'Google Site Verification Code')); ?></td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>Bing Webmaster Site Verification Code:</b></td>
+										<td><?php echo form_input(array('name' => 'bing_site_verification',
+										  'value' => @$address['bing_site_verification'],
+										  'class' => 'text large',
+										  'placeholder' => 'Bing Site Verification Code')); ?></td>
+									</tr>
 								</table>
 							</td>
 						</tr>

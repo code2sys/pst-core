@@ -33,23 +33,20 @@ if (isset($keywords) &&	$keywords != "") {
 <head>
 
 	<title><?php echo $page_title; ?></title>
-	<?php if (SEARCH_NOINDEX): ?>
-		<meta name="robots" content="noindex" />
-	<?php endif; ?>
-
 	<?php
 	$new_assets_url = jsite_url( "/qatesting/newassets/");
 	$new_assets_url1 = jsite_url( "/qatesting/benz_assets/");
 	?>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">	
-	<!--<link rel="icon" href="http://www.yoursite.com/favicon.ico?v=2" />-->
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
-	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-	<!--<meta name="viewport" content="user-scalable = yes">-->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="<?php print htmlentities($meta_description, ENT_QUOTES | ENT_COMPAT); ?>">
-<meta name="keywords" content="<?php echo htmlentities($meta_keywords, ENT_QUOTES | ENT_COMPAT);  ?>">
+	<?php
+	$CI =& get_instance();
+	echo $CI->load->view("master/top_header", array(
+		"meta_description" => $meta_description,
+		"meta_keywords" => $meta_keywords
+	));
+
+	?>
+
+
 	<?php echo @$metatag; ?>
 	
 	
@@ -73,35 +70,16 @@ if (isset($keywords) &&	$keywords != "") {
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/owl.transitions.css" />	
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/font-awesome.css" />	
 	
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lucida+Sans:400,500,600,700,900,800,300" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica:400,500,600,700,900,800,300%22%20/%3E" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300%22%20/%3E">
 
-	<meta name="msvalidate.01" content="EBE52F3C372A020CF12DD8D06A48F87C" />
-	<script src="<?php echo $new_assets_url;?>js/jquery.js"></script>
 	<?php /*?><script src="<?php echo $new_assets_url;?>js/skdslider.min.js"></script><?php */?>
 	<script src="<?php echo $assets; ?>/js/jquery.simplemodal.js"></script>
 	<script src="<?php echo $assets; ?>/js/custom.js"></script>	
 
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script src="<?php echo $new_assets_url1; ?>js/bootstrap.min.js"></script>
 	<script src="<?php echo $new_assets_url1; ?>js/owl.carousel.js"></script>
 
 	<script type="text/javascript" src="<?php echo $assets; ?>/js/rating.js"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>/css/rating.css" />
-
-<?php /*?><script type="text/javascript">
-		jQuery(document).ready(function(){
-			jQuery('#demo1').skdslider({'delay':5000, 'animationSpeed': 2000,'showNextPrev':true,'showPlayButton':true,'autoSlide':true,'animationType':'fading'});
-			jQuery('#demo2').skdslider({'delay':5000, 'animationSpeed': 1000,'showNextPrev':true,'showPlayButton':false,'autoSlide':true,'animationType':'sliding'});
-			jQuery('#demo3').skdslider({'delay':5000, 'animationSpeed': 2000,'showNextPrev':true,'showPlayButton':true,'autoSlide':true,'animationType':'fading'});
-			
-			jQuery('#responsive').change(function(){
-			  $('#responsive_wrapper').width(jQuery(this).val());
-			});
-			
-		});
-</script><?php */?>
 
 	<script>
 	$(document).ready(function(){
@@ -289,134 +267,13 @@ if (isset($keywords) &&	$keywords != "") {
 			<div class="clear"></div>
 		</div>
 	</div>
-	<!--<div class="header_b">
-		<div class="container_b">
-			<a href="<?php echo base_url();?>" class="logoCont fltL logo-tp_b">
-				<img src="/assets/images/power-sports-logo.png" width="200" height="50">
-			</a>
-			<div class="vehicleCategory">
-				<a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/streetBike.png">
-					</div>
-					<span id="stp">Shop Street Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('vtwin'); ?>" class="vtwin">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/vtwin.png">
-					</div>
-					<span id="svp">Shop VTwin Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('dirtbikeparts'); ?>" class="bike">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/bike.png">
-					</div>
-					<span id="sdp">Shop Dirt Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('atvparts'); ?>" class="atv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/atv.png">
-					</div>
-					<span id="sap">Shop ATV Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('utvparts'); ?>" class="utv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/utv.png">
-					</div>
-					<span id="sup">Shop UTV Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('Motorcycle_Gear_Brands'); ?>" class="last">
-					<div class="stre-bk_b" style="height:42px;">
-						<img src="<?php echo $new_assets_url1; ?>images/brand-tag.png">
-					</div>
-					<span id="sbb">Shop by Brand</span>
-				</a>
-			</div>		
-			<div class="side-hdr">
-				<div class="sidebar-menu">
-					<span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
-					<ul class="mb-drpdwn">
-						<li><a href="<?php echo base_url('streetbikeparts'); ?>">Shop Street</a></li>
-						<li><a href="<?php echo base_url('vtwin'); ?>">Shop VTwin</a></li>
-						<li><a href="<?php echo base_url('dirtbikeparts'); ?>">Shop Dirt</a></li>
-						<li><a href="<?php echo base_url('atvparts'); ?>">Shop ATV</a></li>				
-						<li><a href="<?php echo base_url('utvparts'); ?>">Shop UTV</a></li>
-						<li><a href=<?php echo base_url('Motorcycle_Gear_Brands'); ?>>Shop by Brand</a></li>				
-						<li><a href="<?php echo base_url('/shopping/wishlist'); ?>">Wish list</a></li>
-						<li><a href="<?php echo $s_baseURL.'checkout/account'; ?>">Account</a></li>
-						<li><a href="javascript:void(0);" onclick="openLogin();">Login/Signup</a></li>
-					</ul>
-				</div>		
-				<div class="cl"><a class="cel" href="tel:<?php echo CLEAN_PHONE_NUMBER; ?>">
-					<img class="cl-img" src="<?php echo $new_assets_url1; ?>images/cl.png"><br>Call</a>
-				</div>
-				<div class="crt">
-					<a class="cel" href="<?php echo base_url('shopping/cart'); ?>">
-					<img class="cl-img" src="<?php echo $new_assets_url1; ?>images/kart.png"><br>Cart</a>
-				</div>
-				<div class="shpbrnd-map">
-					<p class="creditCar_b loct">				
-						<a href="<?php echo site_url('pages/index/contactus') ?>"><i class="fa fa-map-marker" aria-hidden="true"></i> MAP & HOURS</a>				
-					</p>
-				</div>
-			</div>
-			<div class="mblacnt-log">
-				<a href="javascript:void(0);" onclick="openLogin();"> <i class="fa fa-user usr" aria-hidden="true"></i> Login/create account</a>
-			</div>		
-			<div class="searchHolder search-one">
-				<form action="<?php echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-					<input id="search" name="search" placeholder="Search Parts and Apparel" class="search-bx" style="float:left;" />
-					<a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-				</form>
-				<div class="clear"></div>
-			</div>
-			<div class="clear"></div>						
-		</div>
-	</div>-->
-        
+
         <div class="header_b">
 		<div class="container_b">
 			<a href="<?php echo base_url();?>" class="logoCont fltL logo-tp_b">
 				<img src="/logo.png" width="200" height="50">
 			</a>
-			<!--<div class="vehicleCategory">
-				<a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/streetBike.png">
-					</div>
-					<span id="stp">Shop Street Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('vtwin'); ?>" class="vtwin">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/vtwin.png">
-					</div>
-					<span id="svp">Shop VTwin Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('dirtbikeparts'); ?>" class="bike">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/bike.png">
-					</div>
-					<span id="sdp">Shop Dirt Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('atvparts'); ?>" class="atv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/atv.png">
-					</div>
-					<span id="sap">Shop ATV Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('utvparts'); ?>" class="utv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/utv.png">
-					</div>
-					<span id="sup">Shop UTV Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('Motorcycle_Gear_Brands'); ?>" class="last">
-					<div class="stre-bk_b" style="height:42px;">
-						<img src="<?php echo $new_assets_url1; ?>images/brand-tag.png">
-					</div>
-					<span id="sbb">Shop by Brand</span>
-				</a>
-			</div>-->
+
 			<div class="side-hdr">
 				<div class="sidebar-menu">
 					<span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
@@ -499,14 +356,6 @@ if (isset($keywords) &&	$keywords != "") {
 			<div class="clear"></div>
 		</div>
 	</div>
-	
-	<!--<div class="searchHolder search-two">
-		<form action="<?php// echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-			<input id="search" name="search" placeholder="Search Parts and Apparel" class="search-bx" style="float:left;" />
-			<a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-		</form>
-		<div class="clear"></div>
-	</div>-->
 
 <style>
 /* ======== BRAND SLIDER ======== */
@@ -535,7 +384,7 @@ if (isset($keywords) &&	$keywords != "") {
 		<?php echo @$footer; ?>	
 
 
-<script>		
+<script type="application/javascript">
 function showSubNav( from ){
 
 	/*if( $("#nav"+from).is(":visible") ){
@@ -589,8 +438,7 @@ $(document).ready(function() {
 	);
 	$(document).mouseup(function (e){
 		var container = $(".SubNavs");
-		if (!container.is(e.target) // if the target of the click isn't the container...
-			&& container.has(e.target).length === 0) // ... nor a descendant of the container
+		if (!container.is(e.target) && container.has(e.target).length === 0) // ... nor a descendant of the container
 		{
 			container.hide();
 		}
