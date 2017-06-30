@@ -38,6 +38,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 	<?php
 	$CI =& get_instance();
 	echo $CI->load->view("master/top_header", array(
+		"store_name" => $store_name,
 		"meta_description" => $meta_description,
 		"meta_keywords" => $meta_keywords
 	));

@@ -8,6 +8,10 @@
 
 // What about the website thing?
 $CI =& get_instance();
+if (isset($store_name)) {
+    $bing_site_verification = array_key_exists("bing_site_verification", $store_name) ? $store_name["bing_site_verification"] : "";
+    $google_site_verification = array_key_exists("google_site_verification", $store_name) ? $store_name["google_site_verification"] : "";
+}
 
 ?>
 <?php if (SEARCH_NOINDEX): ?>
