@@ -36,6 +36,7 @@ class Ebay_M extends Master_M {
     public function generateEbayFeed($products_count, $upload_to_ebay = false) {
 //        $products = $this->ebaylistings_no_variation(0, $products_count, 1);
         $products = $this->ebayListings(0, $products_count, 1);
+// DBM - I believe the rest of this function is never reached and could be deleted
         $ebay_format_data = $this->convertToEbayFormat($products);
 
         $this->db->select('part_number');
@@ -574,12 +575,14 @@ class Ebay_M extends Master_M {
 //        $this->pr($parts);
 //        die("die");
         $query->free_result();
+        $paypal_email = $this->get_paypalemail();
         if (is_array($parts)) {
             foreach ($parts as &$part) {
 
                 if (strpos($part['*Title'], 'COMBO') !== FALSE) {
                     continue;
                 }
+				$part["PayPalEmailAddress"] = $paypal_email;
                 $part_id = $part['part_id'];
                 unset($part['part_id']);
                 /*                 * ***********************************

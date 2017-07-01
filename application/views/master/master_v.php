@@ -30,9 +30,6 @@ if (isset($keywords) && $keywords != "") {
 <html lang="en">
     <head>
         <title><?php echo $page_title; ?></title>
-<?php if (SEARCH_NOINDEX): ?>
-            <meta name="robots" content="noindex" />
-        <?php endif; ?>
 
         <?php
         $new_assets_url = jsite_url("/qatesting/newassets/");
@@ -43,24 +40,15 @@ if (isset($keywords) && $keywords != "") {
         }
         ?>
 
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">	
-        <link rel="icon" href="http://www.yoursite.com/favicon.ico?v=2" />
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-        <!--<meta name="viewport" content="user-scalable = yes">-->
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <?php
+        $CI =& get_instance();
+        echo $CI->load->view("master/top_header", array(
+            "store_name" => $store_name,
+            "meta_description" => $meta_description,
+            "meta_keywords" => $meta_keywords
+        ));
 
-        <meta name="description" content="<?php print htmlentities($meta_description, ENT_QUOTES | ENT_COMPAT); ?>">
-        <meta name="keywords" content="<?php echo htmlentities($meta_keywords, ENT_QUOTES | ENT_COMPAT); ?>">
-
-        <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
-        <script src="https://js.braintreegateway.com/v2/braintree.js"></script>
-        <script src="https://js.braintreegateway.com/js/braintree-2.30.0.min.js"></script>
-
-
-        <script src="https://js.braintreegateway.com/web/3.6.3/js/client.min.js"></script>
-        <script src="https://js.braintreegateway.com/web/3.6.3/js/paypal.min.js"></script>
+        ?>
 
         <!-- CSS LINKS -->		
         <link rel="stylesheet" href="<?php echo $assets; ?>/css_front/media.css" type="text/css" />
@@ -75,7 +63,6 @@ if (isset($keywords) && $keywords != "") {
         <link rel="stylesheet" href="<?php echo $assets; ?>/css/expand.css" type="text/css">
         <link rel="stylesheet" href="<?php echo $assets; ?>/css/modal.css" type="text/css">
         <link rel="stylesheet" href="<?php echo $assets; ?>/font-awesome-4.1.0/css/font-awesome.min.css">
-        <meta name="msvalidate.01" content="EBE52F3C372A020CF12DD8D06A48F87C" />
 <?php echo @$css; ?>
         <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/style.css" />
         <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/bootstrap.min.css" />
@@ -84,13 +71,10 @@ if (isset($keywords) && $keywords != "") {
         <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/owl.transitions.css" />	
         <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/font-awesome.css" />
 
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300%22%20/%3E">
 
 
 
         <!-- END CSS LINKS --> 
-
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
         <script>
             $(document).ready(function() {
                 $("li").click(function(){
@@ -114,12 +98,11 @@ if (isset($keywords) && $keywords != "") {
                 });
             }
         </script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script src="<?php echo $new_assets_url1; ?>js/bootstrap.min.js"></script>
         <script src="<?php echo $new_assets_url1; ?>js/owl.carousel.js"></script>
         <!-- jQuery library -->
-        <script src="<?php echo $assets; ?>/js/jquery-1.7.2.js"></script>
-<?php echo $topscript; ?>
+
+        <?php echo $topscript; ?>
 
         <script>
             $(document).ready(function(){
@@ -145,9 +128,6 @@ if (isset($keywords) && $keywords != "") {
             shopping_cart_count = <?php echo @$_SESSION['cart']['qty'] ? $_SESSION['cart']['qty'] : 0; ?>;
         </script>
 
-        <!-- Magnific Popup core JS file 
-        <script src="<?php echo $assets; ?>/js/jquery.magnific-popup.js"></script>-->
-
         <!-- bxSlider Javascript file -->
         <script src="<?php echo $assets; ?>/js/jquery.bxslider.min.js"></script>
         <script>
@@ -159,10 +139,6 @@ if (isset($keywords) && $keywords != "") {
                 });
             });
         </script>
-
-
-        <!-- Flexisel JS 
-        <script type="text/javascript" src="<?php echo $assets; ?>/js/jquery.flexisel.js"></script>-->
 
         <!-- NAVIGATION JS -->
         <script>
@@ -255,49 +231,10 @@ if (isset($keywords) && $keywords != "") {
 
         <!-- WRAPPER ==============================================================================-->
         <div class="wrap">
-<?php if (!isset($new_header)) { ?>
+            <?php if (!isset($new_header)) { ?>
                 <!-- HEADER =============================================================================-->
-                <!--<div class="header_wrap">
-                        <div class="header_content">
-                <!-- LOGO -->
-                <!--<div class="logo">
-                        <a href="<?php echo base_url(); ?>"><img src="<?php echo $logo; ?>"></a>
-                </div>
-                <!-- END LOGO -->
-
-                <!-- NAVAGATION -->
-    <?php echo @$nav ?>
-                <!-- END NAVAGATION -->
-                <!--<div class="clear"></div> 
-        
-        </div>
-                <!-- MOTO MENU & SEARCH -->
-                <!--<div class="moto_menu_wrap">
-                        <div class="moto_menu">
-                                <h4>SHOP BY MACHINE</h4>	
-                                <div class="moto_links">
-                                        <a href="<?php echo base_url('streetbikeparts'); ?>"><img src="<?php echo $assets; ?>/images/icon_streetbike.png" border="0" width="55"><br>Shop Street</a>
-                                        <a href="<?php echo base_url('dirtbikeparts'); ?>"><img src="<?php echo $assets; ?>/images/icon_dirtbike.png" border="0" width="55"><br>Shop Dirt</a>
-                                        <a href="<?php echo base_url('atvparts'); ?>"><img src="<?php echo $assets; ?>/images/icon_atv.png" border="0" width="55"><br>Shop ATV</a>
-                                        <a href="<?php echo base_url('utvparts'); ?>"><img src="<?php echo $assets; ?>/images/icon_utv.png" border="0" width="55"><br>Shop UTV</a>
-                                </div>
-                                <div class="moto_search">
-                                        <form action="<?php echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-                                                <input id="search" name="search" placeholder="Search Apparel Parts & Accessories" class="text medium_search" value="<?php echo $_GET['search']; ?>"/>
-                                                <a href="javascript:void(0);" class="button" style="margin-top:6px;" onClick="setSearch($('#search').val());">Go!</a>
-                                        </form>
-                                </div>
-                                <div class="clear"></div>
-                        </div>
-                        <div class="clear"></div>
-                </div>-->
-
-                <!-- END MOTO MENU & SEARCH -->
-    <?php //echo @$rideSelector;  ?>
-    <?php //echo @$shippingBar;  ?>
-                <?php //echo @$brandSlider;  ?>
-                <!--</div>-->
-                <!-- END HEADER ===========================================================================-->	
+                <?php echo @$nav ?>
+                <!-- END HEADER ===========================================================================-->
             <?php } else { ?>
 
                 <link rel="stylesheet" href="<?php echo $new_assets_url; ?>stylesheet/style.css" />
@@ -334,133 +271,13 @@ if (isset($keywords) && $keywords != "") {
                         <div class="clear"></div>
                     </div>
                 </div>
-                <!--<div class="header_b">
-                        <div class="container_b">
-                                <a href="<?php echo base_url(); ?>" class="logoCont fltL logo-tp_b">
-                                        <img src="/assets/images/power-sports-logo.png" width="200" height="50">
-                                </a>
-                                <div class="vehicleCategory">
-                                        <a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">
-                                                <div class="stre-bk_b">
-                                                        <img src="<?php echo $new_assets_url1; ?>images/streetBike.png">
-                                                </div>
-                                                <span id="stp">Shop Street Parts & Accessories</span>
-                                        </a>
-                                        <a href="<?php echo base_url('vtwin'); ?>" class="vtwin">
-                                                <div class="stre-bk_b">
-                                                        <img src="<?php echo $new_assets_url1; ?>images/vtwin.png">
-                                                </div>
-                                                <span id="svp">Shop VTwin Parts & Accessories</span>
-                                        </a>				
-                                        <a href="<?php echo base_url('dirtbikeparts'); ?>" class="bike">
-                                                <div class="stre-bk_b">
-                                                        <img src="<?php echo $new_assets_url1; ?>images/bike.png">
-                                                </div>
-                                                <span id="sdp">Shop Dirt Parts & Accessories</span>
-                                        </a>
-                                        <a href="<?php echo base_url('atvparts'); ?>" class="atv">
-                                                <div class="stre-bk_b">
-                                                        <img src="<?php echo $new_assets_url1; ?>images/atv.png">
-                                                </div>
-                                                <span id="sap">Shop ATV Parts & Accessories</span>
-                                        </a>
-                                        <a href="<?php echo base_url('utvparts'); ?>" class="utv">
-                                                <div class="stre-bk_b">
-                                                        <img src="<?php echo $new_assets_url1; ?>images/utv.png">
-                                                </div>
-                                                <span id="sup">Shop UTV Parts & Accessories</span>
-                                        </a>				
-                                        <a href="<?php echo base_url('Motorcycle_Gear_Brands'); ?>" class="last" style="bottom:11px;">
-                                                <div class="stre-bk_b" style="height:50px;padding-top:5px;">
-                                                        <img src="<?php echo $new_assets_url1; ?>images/brand-tag.png">
-                                                </div>
-                                                <span id="sbb">Shop by Brand</span>
-                                        </a>
-                                </div>			
-                                <div class="side-hdr">
-                                        <div class="sidebar-menu">
-                                                <span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
-                                                <ul class="mb-drpdwn">
-                                                        <li><a href="<?php echo base_url('streetbikeparts'); ?>">Shop Street</a></li>
-                                                        <li><a href="<?php echo base_url('vtwin'); ?>">Shop VTwin</a></li>
-                                                        <li><a href="<?php echo base_url('dirtbikeparts'); ?>">Shop Dirt</a></li>
-                                                        <li><a href="<?php echo base_url('atvparts'); ?>">Shop ATV</a></li>				
-                                                        <li><a href="<?php echo base_url('utvparts'); ?>">Shop UTV</a></li>
-                                                        <li><a href=<?php echo base_url('Motorcycle_Gear_Brands'); ?>>Shop by Brand</a></li>				
-                                                        <li><a href="<?php echo base_url('/shopping/wishlist'); ?>">Wish list</a></li>
-                                                        <li><a href="<?php echo $s_baseURL . 'checkout/account'; ?>">Account</a></li>
-                                                        <li><a href="javascript:void(0);" onclick="openLogin();">Login/Signup</a></li>
-                                                </ul>
-                                        </div>		
-                                        <div class="cl"><a href="tel:<?php echo CLEAN_PHONE_NUMBER; ?>">
-                                                <img src="<?php echo $new_assets_url1; ?>images/cl.png"><br>Call</a>
-                                        </div>
-                                        <div class="crt">
-                                                <a href="<?php echo base_url('shopping/cart'); ?>">
-                                                <img src="<?php echo $new_assets_url1; ?>images/kart.png"><br>Cart</a>
-                                        </div>
-                                        <div class="shpbrnd-map">
-                                                <p class="creditCar_b loct">				
-                                                        <a href="<?php echo site_url('pages/index/contactus') ?>"><i class="fa fa-map-marker" aria-hidden="true"></i> MAP & HOURS</a>				
-                                                </p>
-                                        </div>
-                                </div>
-                                <div class="mblacnt-log">
-                                        <a href="javascript:void(0);" onclick="openLogin();"> <i class="fa fa-user usr" aria-hidden="true"></i> Login/create account</a>
-                                </div>			
-                                <div class="searchHolder search-one">
-                                        <form action="<?php echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-                                                <input id="search" name="search" placeholder="Search Parts and Apparel" class="search-bx" style="float:left;" />
-                                                <a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-                                        </form>
-                                        <div class="clear"></div>
-                                </div>
-                                <div class="clear"></div>						
-                        </div>
-                </div>-->
+
                 <div class="header_b">
                     <div class="container_b">
                         <a href="<?php echo base_url(); ?>" class="logoCont fltL logo-tp_b">
                             <img src="/logo.png" width="200" height="50">
                         </a>
-                        <!--<div class="vehicleCategory">
-                                <a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">
-                                        <div class="stre-bk_b">
-                                                <img src="<?php echo $new_assets_url1; ?>images/streetBike.png">
-                                        </div>
-                                        <span id="stp">Shop Street Parts & Accessories</span>
-                                </a>
-                                <a href="<?php echo base_url('vtwin'); ?>" class="vtwin">
-                                        <div class="stre-bk_b">
-                                                <img src="<?php echo $new_assets_url1; ?>images/vtwin.png">
-                                        </div>
-                                        <span id="svp">Shop VTwin Parts & Accessories</span>
-                                </a>				
-                                <a href="<?php echo base_url('dirtbikeparts'); ?>" class="bike">
-                                        <div class="stre-bk_b">
-                                                <img src="<?php echo $new_assets_url1; ?>images/bike.png">
-                                        </div>
-                                        <span id="sdp">Shop Dirt Parts & Accessories</span>
-                                </a>
-                                <a href="<?php echo base_url('atvparts'); ?>" class="atv">
-                                        <div class="stre-bk_b">
-                                                <img src="<?php echo $new_assets_url1; ?>images/atv.png">
-                                        </div>
-                                        <span id="sap">Shop ATV Parts & Accessories</span>
-                                </a>
-                                <a href="<?php echo base_url('utvparts'); ?>" class="utv">
-                                        <div class="stre-bk_b">
-                                                <img src="<?php echo $new_assets_url1; ?>images/utv.png">
-                                        </div>
-                                        <span id="sup">Shop UTV Parts & Accessories</span>
-                                </a>				
-                                <a href="<?php echo base_url('Motorcycle_Gear_Brands'); ?>" class="last">
-                                        <div class="stre-bk_b" style="height:42px;">
-                                                <img src="<?php echo $new_assets_url1; ?>images/brand-tag.png">
-                                        </div>
-                                        <span id="sbb">Shop by Brand</span>
-                                </a>
-                        </div>-->
+
                         <div class="side-hdr">
                             <div class="sidebar-menu">
                                 <span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
@@ -544,39 +361,10 @@ if (isset($keywords) && $keywords != "") {
                     </div>
                 </div>
 
-                <!--<div class="searchHolder search-two">
-                        <form action="<?php echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-                                <input id="search" name="search" placeholder="Search Parts and Apparel" class="search-bx" style="float:left;" />
-                                <a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-                        </form>
-                        <div class="clear"></div>
-                </div>-->
 
     <?php if (!isset($cat_header)) { ?>
-                    <!--<div class="imagesCont" style="display:flex;">
-                            <img src="<?php echo $new_assets_url; ?>images/homepage_slider/banner.jpg" width="100%" alt="" usemap="#Map" />
-                            <map name="Map" id="Map">
-                                    <area alt="UTV'S" title="UTV'S" href="<?php echo base_url('utvparts'); ?>" shape="poly" coords="1,2,421,2,298,299,0,299" style="text-decoration:none;" />
-                                    <area alt="ATV'S" title="ATV'S" href="<?php echo base_url('atvparts'); ?>" shape="poly" coords="422,2,823,2,668,297,301,299" style="text-decoration:none;" />
-                                    <area alt="Dirt Bikes" title="Dirt Bikes" href="<?php echo base_url('dirtbikeparts'); ?>" shape="poly" coords="826,1,1102,1,937,299,670,298" style="text-decoration:none;" />
-                                    <area alt="Street Bikes" title="Street Bikes" href="<?php echo base_url('streetbikeparts'); ?>" shape="poly" coords="1106,1,1365,1,1365,297,940,298" style="text-decoration:none;" />
-                            </map>
-                    </div>-->
                     <div class="clear"></div>
     <?php } else { ?>
-                    <!--<div class="sliderCont">
-                    <?php
-                    $catImage = "dirt_bike.jpg";
-                    if ($top_parent == 20409) {
-                        $catImage = "street_bike.jpg";
-                    } else if ($top_parent == 20419) {
-                        $catImage = "atv.jpg";
-                    } else if ($top_parent == 20422) {
-                        $catImage = "utv.jpg";
-                    }
-                    ?>
-                    <img src="<?php echo $new_assets_url; ?>images/category_banners/<?php echo $catImage; ?>" style="height:300px;" />
-                    </div>-->
                     <div class="clear"></div>
                     <div class="productNav" style="margin-top: 2px;">
                         <div class="productNavCont">
@@ -746,55 +534,6 @@ foreach ($title1 as $k => $v) {
         </script>
 
         <script type="text/javascript">
-
-            /*$(window).load(function() {
-            $("#flexiselDemo1").flexisel();
-            $("#flexiselDemo2").flexisel({
-                enableResponsiveBreakpoints: true,
-                responsiveBreakpoints: { 
-                    portrait: { 
-                        changePoint:480,
-                        visibleItems: 1
-                    }, 
-                    landscape: { 
-                        changePoint:640,
-                        visibleItems: 2
-                    },
-                    tablet: { 
-                        changePoint:768,
-                        visibleItems: 3
-                    }
-                }
-            });
-
-            $("#flexiselDemo3").flexisel({
-                visibleItems: 5,
-                animationSpeed: 1000,
-                autoPlay: true,
-                autoPlaySpeed: 3000,            
-                pauseOnHover: true,
-                enableResponsiveBreakpoints: true,
-                responsiveBreakpoints: { 
-                    portrait: { 
-                        changePoint:480,
-                        visibleItems: 3
-                    }, 
-                    landscape: { 
-                        changePoint:640,
-                        visibleItems: 4
-                    },
-                    tablet: { 
-                        changePoint:768,
-                        visibleItems: 5
-                    }
-                }
-            });
-
-            $("#flexiselDemo4").flexisel({
-                clone:false
-            });
-    
-        });*/
 
             /* Submit on Enter */
             $(document).ready(function(){
