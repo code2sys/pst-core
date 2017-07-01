@@ -506,6 +506,9 @@ class Admin extends Master_Controller {
         }
         if ($this->validateProfile() !== FALSE) { // Display Form
             $this->admin_m->updateAdminShippingProfile($this->input->post());
+
+            // We have to echo the image,if we get it....
+
             $this->_mainData['success'] = TRUE;
         }
         $this->_mainData['address'] = $this->admin_m->getAdminShippingProfile();

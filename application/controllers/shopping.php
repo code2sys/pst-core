@@ -1300,7 +1300,7 @@ class Shopping extends Master_Controller {
         $this->load->model('pages_m');
         $this->_mainData['pageRec'] = $this->pages_m->getPageRec(12);
         $this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
-        $this->setMasterPageVars('metatag', '<meta name="msvalidate.01" content="C333D4BD87F5B5DCE9BA429B1B324168" />');
+        $this->setMasterPageVars('metatag', ''); // JLB - I removed msvalidate.01 from here because I think the new topheader handles it.
         $this->setMasterPageVars('descr', $this->_mainData['pageRec']['metatags']);
         $this->setMasterPageVars('title', @$this->_mainData['pageRec']['title'] . ' - ' . WEBSITE_NAME);
         $this->_mainData['title1'] = $this->_mainData['pageRec']['title'];

@@ -32,23 +32,20 @@ if (isset($keywords) &&	$keywords != "") {
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title><?php echo $page_title; ?></title>
-	<?php if (SEARCH_NOINDEX): ?>
-		<meta name="robots" content="noindex" />
-	<?php endif; ?>
+	<?php
+	$CI =& get_instance();
+	echo $CI->load->view("master/top_header", array(
+		"store_name" => $store_name,
+		"meta_description" => $meta_description,
+		"meta_keywords" => $meta_keywords
+	));
+
+	?>
 	<?php
 	$new_assets_url = jsite_url("/qatesting/newassets/");
 	$new_assets_url1 = jsite_url("/qatesting/benz_assets/");
 	?>
 	
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">	
-	
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
-	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-	<!--<meta name="viewport" content="user-scalable = yes">-->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="<?php print htmlentities($meta_description, ENT_QUOTES | ENT_COMPAT); ?>">
-<meta name="keywords" content="<?php echo htmlentities($meta_keywords, ENT_QUOTES | ENT_COMPAT);  ?>">
 	<?php echo @$metatag; ?>
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>/css/responsive.css" type="text/css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/style.css" />
@@ -57,13 +54,7 @@ if (isset($keywords) &&	$keywords != "") {
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/owl.theme.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/owl.transitions.css" />	
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/font-awesome.css" />	
-	
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lucida+Sans:400,500,600,700,900,800,300" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica:400,500,600,700,900,800,300%22%20/%3E" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300%22%20/%3E">
-	
-	
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
 	<script src="<?php echo $new_assets_url1; ?>js/bootstrap.min.js"></script>
 	<script src="<?php echo $new_assets_url1; ?>js/owl.carousel.js"></script>	
 	
@@ -78,8 +69,7 @@ if (isset($keywords) &&	$keywords != "") {
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css/expand.css" type="text/css">
 	<link rel="stylesheet" href="<?php echo $assets; ?>/css/modal.css" type="text/css">
 	<link rel="stylesheet" href="<?php echo $assets; ?>/font-awesome-4.1.0/css/font-awesome.min.css">
-	<meta name="msvalidate.01" content="EBE52F3C372A020CF12DD8D06A48F87C" />
-	<script src="<?php echo $new_assets_url;?>js/jquery.js"></script>
+
 	<script src="<?php echo $assets; ?>/js/jquery.simplemodal.js"></script>
 	<script src="<?php echo $assets; ?>/js/custom.js"></script>	
 	<script type="text/javascript" src="<?php echo $assets; ?>/js/rating.js"></script>
@@ -274,44 +264,7 @@ if (isset($keywords) &&	$keywords != "") {
 			<a href="<?php echo base_url();?>" class="logoCont fltL logo-tp_b">
 				<img src="/logo.png" width="200" height="50">
 			</a>
-			<!--<div class="vehicleCategory">
-				<a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/streetBike.png">
-					</div>
-					<span id="stp">Shop Street Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('vtwin'); ?>" class="vtwin">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/vtwin.png">
-					</div>
-					<span id="svp">Shop VTwin Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('dirtbikeparts'); ?>" class="bike">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/bike.png">
-					</div>
-					<span id="sdp">Shop Dirt Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('atvparts'); ?>" class="atv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/atv.png">
-					</div>
-					<span id="sap">Shop ATV Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('utvparts'); ?>" class="utv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/utv.png">
-					</div>
-					<span id="sup">Shop UTV Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('Motorcycle_Gear_Brands'); ?>" class="last">
-					<div class="stre-bk_b" style="height:42px;">
-						<img src="<?php echo $new_assets_url1; ?>images/brand-tag.png">
-					</div>
-					<span id="sbb">Shop by Brand</span>
-				</a>
-			</div>-->
+
 			<div class="side-hdr">
 				<div class="sidebar-menu">
 					<span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
@@ -394,28 +347,8 @@ if (isset($keywords) &&	$keywords != "") {
 			<div class="clear"></div>
 		</div>
 	</div>
-		
-	<!--<div class="searchHolder search-two">
-		<form action="<?php //echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-			<input id="search" name="search" placeholder="Search Parts and Apparel" class="search-bx" style="float:left;" />
-			<a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-		</form>
-		<div class="clear"></div>
-	</div>-->
 
-<!--<div class="sliderCont">
-<?php 
-	$catImage = "dirt_bike.jpg";
-	if($top_parent==TOP_LEVEL_CAT_STREET_BIKES){
-		$catImage = "street_bike.jpg";
-	}else if($top_parent==TOP_LEVEL_CAT_ATV_PARTS){
-		$catImage = "atv.jpg";
-	}else if($top_parent==TOP_LEVEL_CAT_UTV_PARTS){
-		$catImage = "utv.jpg";
-	}
-?>
-<img src="<?php echo $new_assets_url;?>images/category_banners/<?php echo $catImage;?>" style="height:300px;" />
-</div>-->
+
 <div class="productNav">
   <div class="productNavCont">
     	<ul style="width: 100%; margin: 0 auto; padding: 0px;">
@@ -447,53 +380,6 @@ if (isset($keywords) &&	$keywords != "") {
         </ul>        
 	</div>
 </div>
-<!--<div class="filterBar" id="dtlpg">
-	<form action="<?php echo base_url('ajax/update_garage'); ?>" method="post" id="update_garage_form" class="form_standard">
-	<div class="filterBarCont containerOuter">
-		<style>
-			.button_no{
-				background: #EEE !important;
-				border: 1px #DDD solid !important;
-				color: #BBB !important;
-			}
-		</style>	
-		<div class="heading two">SHOP BY MACHINE</div>
-        <div id="toggle">
-			<ul>
-			 <li><div class="heading one">SHOP BY MACHINE</div></li>
-				<div class="tlg">
-					<select class="selectField" name="machine" id="machine" tabindex="1">
-						<option value="">-- Select Machine --</option>
-						<?php if(@$machines): foreach($machines as $id => $label): ?>
-							<option value="<?php echo $id; ?>"><?php echo $label; ?></option>
-						<?php endforeach; endif; ?>
-					<!-- <optgroup label="Motor Cycles"> -->
-					<!--</select>
-					<select name="make" id="make" tabindex="2" class="selectField">
-						<option>-Make-</option>
-					</select>
-					<select name="model" id="model" tabindex="3" class="selectField">
-						<option>-Model-</option>
-					</select>
-					<select name="year" id="year" tabindex="4" class="selectField">
-						<option>-Year-</option>
-					</select>
-					<a href="javascript:void(0);" onClick="updateGarage();" id="add" class="addToCat button_no" style="padding:6px 13px; text-decoration:none; margin:0px;text-shadow:none; font:inherit; font-size:14px; float: left;border-radius: 0px;">Add To Garage</a>
-				</div>
-			</ul>
-		</div>
-        <div class="clear"></div>
-    </div>
-	</form>
-</div>
-<div class="freeShippingBanner">
-	<div class="containerOuter">
-    	<div class="heading">FREE SHIPPING !!!</div>
-        <div class="moreInfoArrow">ON ALL ORDERS OVER $65 IN THE U.S.! <a href="<?php echo base_url();?>pages/index/shippingquestions"> CLICK FOR MORE INFO!</a></div>
-        <div class="greenMap"></div>
-        <div class="clear"></div>
-    </div>
-</div>-->
 
 
 <style>
@@ -525,7 +411,7 @@ if (isset($keywords) &&	$keywords != "") {
 		<?php echo @$footer; ?>	
 
 
-<script>		
+<script type="application/javascript">
 function showSubNav( from ){
 
 	/*if( $("#nav"+from).is(":visible") ){
