@@ -74,7 +74,7 @@
 						<td><?php echo $subsubCat['name']; ?></td>
 						<td>
 							<a href="javascript:void(0);" onclick="populateEdit('<?php echo $subsubCat['category_id']; ?>');"><i class="fa fa-edit"></i>&nbsp;<b>Edit</b></a></a>
-							<?php if(!@$subCat['mx']): ?>
+							<?php if(!@$subsubCat['mx']): ?>
 									| <a href="<?php echo base_url('admin/category_delete/'.$subsubCat['category_id']); ?>"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a>
 								<?php endif; ?>
 						</td>
@@ -90,7 +90,7 @@
 						<td><?php echo $subsubsubCat['name']; ?></td>
 						<td>
 							<a href="javascript:void(0);" onclick="populateEdit('<?php echo $subsubsubCat['category_id']; ?>');"><i class="fa fa-edit"></i>&nbsp;<b>Edit</b></a></a>
-							<?php if(!@$subCat['mx']): ?>
+							<?php if(!@$subsubsubCat['mx']): ?>
 									| <a href="<?php echo base_url('admin/category_delete/'.$subsubsubCat['category_id']); ?>"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a>
 								<?php endif; ?>
 						</td>
