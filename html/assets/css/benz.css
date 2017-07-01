@@ -16,7 +16,7 @@
 .brnds .bnr img{width:100%; height:250px;}
 
 .brnds .bnr h1.hdng{font-size:38px; margin:6px 0 2px 0;}
-.brnds .bnr h1.hdng:after{position:absolute; content:''; bottom:-2px; left:0; right:0; margin: 0 auto; width:550px; height:2px; background:#E03E25;}
+.brnds .bnr h1.hdng:after{position:absolute; content:''; bottom:-2px; left:0; right:0; margin: 0 auto; width:550px; height:2px; background: silver;}
  h2.hdng:before{position:absolute; content:''; bottom:-9px; left:0; right:0; margin: 0 auto; width:110px; background-position:center; height:14px; z-index:9999; background-color:#fff;}
 
 .brnds .bnr p.pr{font-size:16px; letter-spacing:0.5px; line-height:24px;}
@@ -39,7 +39,7 @@
 .brnds .brnd-list .ryt ul{width:100%; float:left; margin:0 0 7px 0; padding:0px;}
 .brnds .brnd-list .ryt ul li{float:left; margin:1% 1% 3px 1%; width:18%; min-height:28px;}
 .brnds .brnd-list .ryt ul li a{color:#535353;} 
-.brnds .brnd-list .ryt ul li a.ftrd-brnd{color:#f35607; font-weight:bold; font-size:15px; text-shadow:2px 2px 7px silver;}
+.brnds .brnd-list .ryt ul li a.ftrd-brnd{color:#0074d4; font-weight:bold; font-size:15px; text-shadow:2px 2px 7px silver;}
 /* BRANDS PAGE CSS ENDS HERE BY BENZAITENS GROUP */
 
 
