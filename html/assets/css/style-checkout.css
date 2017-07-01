@@ -1095,9 +1095,10 @@ a.button_full:active {
 
 	.input_button_purple { 
 	background:url(../images/button_bg.png) top left repeat-x #DDD;
-	background:-webkit-linear-gradient(#639 1%, #306 100%);
-	background:-moz-linear-gradient(#639 1%, #306 100%);
-	background:-ms-linear-gradient(#639 1%, #306 100%);
+		/* 06-30-17 Brandt wanted this blue not Purple. --JLB */
+		background:-webkit-linear-gradient(#003ca2 1%, #306 100%);
+		background:-moz-linear-gradient(#003ca2 1%, #306 100%);
+		background:-ms-linear-gradient(#003ca2 1%, #306 100%);
 	border:1px #AAA solid;
 	color: #FFF;
 	float:left;
