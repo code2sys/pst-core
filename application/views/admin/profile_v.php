@@ -152,7 +152,7 @@ $google_trust = (array) json_decode($address['google_trust']);
 								if (file_exists($file)) {
 									?>
 									<em>Existing Logo:</em> </br>
-									<a href="/logo.png" download="logo.png"><img src="/logo.png" /></a>
+									<a href="/logo.png?time=<?php echo time(); ?>" download="logo.png"><img src="/logo.png?time=<?php echo time(); ?>" /></a>
 									<br/>
 									<br/>
 									<em>Upload a New Logo:</em><br/>
@@ -170,7 +170,7 @@ $google_trust = (array) json_decode($address['google_trust']);
 									if (file_exists($file)) {
 										?>
 										<em>Existing Favicon:</em> </br>
-										<a href="/favicon.ico" download="favicon.ico"><img src="/favicon.ico" /></a>
+										<a href="/favicon.ico?time=<?php echo time(); ?>" download="favicon.ico"><img src="/favicon.ico?time=<?php echo time(); ?>" /></a>
 										<br/>
 										<br/>
 										<em>Upload a New Favicon:</em><br/>
