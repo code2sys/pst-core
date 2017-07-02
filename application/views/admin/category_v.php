@@ -32,10 +32,6 @@
 						<td><b>Actions</b></td>
 					</tr>
 
-					<!--
-					<?php print_r($categories); ?>
-					-->
-
 <?php
 
 function printCategoryRow($category_id, $categories) {
