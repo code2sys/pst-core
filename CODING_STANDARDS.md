@@ -1,3 +1,173 @@
+Update July 2, 2017
+===================
+
+Escape from Programming 101
+---------------------------
+
+I had to redo the admin category code. I found this horrible code in the category_v.php view as well as in the category function that:
+
+1. Presumed that there would only ever be 4 levels of categories.
+2. Made explict iteration over these.
+
+Can't we use a recursive function?
+
+The view iterated over the top level, then the next level, then the next level, in one giant foreach loop. I know that they tell you to avoid recursion, but sometimes it's the right tool. Here:
+
+<pre>
+function printCategoryRow($category_id, $categories, $depth = "") {
+	if (array_key_exists($category_id, $categories)) {
+		$null_cat = is_null($category_id);
+
+		foreach ($categories[$category_id] as $category) {
+		    //... Here we output the TR
+			printCategoryRow($category["category_id"], $categories, $depth . "&nbsp;&nbsp;&nbsp;&nbsp;");
+		}
+	}
+}
+
+printCategoryRow(NULL, $categories);
+
+</pre>
+
+This allowed us to slip in a visual cue to indent the category name so we could observe the structure. Further, it meant that we didn't have four different rows on the page, with subtle variations, which caused an error in the 3rd and 4th one since there was a typo.
+
+Here I used iteration instead of recursion to do the exact same thing.
+
+First, the horrible code:
+
+<pre>
+foreach ($categories[$postData['category_id']] as $subCat) {
+
+    $updateCategories[$counter]['parent_category_id'] = $subCat['parent_category_id'];
+...
+    $catArr[$subCat['category_id']] = $subCat['category_id'];
+
+    if (@$categories[$subCat['category_id']]) {
+        foreach ($categories[$subCat['category_id']] as $subsubCat) {
+
+            $secondCounter = count($updateCategories);
+            $updateCategories[$secondCounter]['parent_category_id'] = $subsubCat['parent_category_id'];
+...
+            $updateCategories[$secondCounter]['notice'] = $subsubCat['notice'];
+            $catArr[$subsubCat['category_id']] = $subsubCat['category_id'];
+
+            if (@$categories[$subsubCat['category_id']]) {
+                foreach ($categories[$subsubCat['category_id']] as $subsubsubCat) {
+
+                    $thirdCounter = count($updateCategories);
+                    $updateCategories[$thirdCounter]['parent_category_id'] = $subsubsubCat['parent_category_id'];
+...
+                    $updateCategories[$thirdCounter]['notice'] = $subsubsubCat['notice'];
+                    $catArr[$subsubsubCat['category_id']] = $subsubsubCat['category_id'];
+                }
+            }
+        }
+    }
+
+    $counter++;
+}
+</pre>
+
+
+The counters don't make sense; the code is almost exactly the same in each block with subtle differences - the exact same subtle differences that have caused problems throughout the code. cat, subCat, subsubCat, and subsubsubCat is a horrible naming convention.
+
+
+Here's how to rewrite this without all the craziness:
+
+<pre>
+
+$parents = array($postData['category_id']);
+
+while (count($parents) > 0) {
+    $current = $parents;
+    $parents = array();
+
+    foreach ($current as $c_id) {
+        if (array_key_exists($c_id, $categories)) {
+            $subcats = $categories[$c_id];
+            foreach ($subcats as $subcat) {
+                $parents[] = $subcat["category_id"];
+                $updateCategories[] = array(
+                    "parent_category_id" => $subcat["parent_category_id"],
+...
+                    "ebay_category_num" => $subcat["ebay_category_num"],
+                    "notice" => $subcat["notice"]
+                );
+            }
+        }
+    }
+}
+</pre>
+
+A Minor Gripe
+-------------
+
+I observed that the field was called "mark_up", but the input was called "mark-up", which meant that, again and again, the field "mark_up" and "mark-up" kept having to be swapped. That's just going to cause bugs in the future when you don't use the same names for database columns and form inputs.
+
+
+
+The Curse of @
+--------------
+
+In that same code, I found that, whenever there was a new category added, the system locked up. Why? Because of this:
+
+<pre>
+if (@$categories[$postData['category_id']]) {
+</pre>
+
+When you added a category, it treated it as the null case, hiding the warning about coersing an undefined value, and then it would reprocess every part in the system. 
+
+Here are two simple facts:
+
+   1. You don't have to reprocess parts for a new category since it *has no parts*.
+   2. You don't ever reprocess the whole set because the top level category, NULL, is not a category.
+   
+So, with this observation, the correct way to write this code to make it process only an existing category with a non-null category ID is:
+
+<pre>
+if ($postData['category_id'] > 0 && array_key_exists($postData['category_id'], $categories)) {
+</pre>
+
+
+
+Too Many Inserts
+----------------
+
+In that same code, there was a query that looked like this:
+
+a. Fetch all parts associated with a category from partcategory
+b. Loop over that list of parts
+c. Insert them one-by-one into queud_parts
+
+This is *a horrible idea*. It will create a single insert for every part. If you can't figure out the query for this, you should bring this to the attention of a senior developer on the project.
+
+Here's the horrible code:
+
+<pre>
+$this->db->select('part_id');
+$records = $this->selectRecords('partcategory', $where);
+if ($records) {
+    foreach ($records as $rec) {
+        $where = array('part_id' => $rec['part_id']);
+        if (!$this->recordExists('queued_parts', $where)) {
+            $data = array('part_id' => $rec['part_id'], 'recCreated' => time());
+            $this->createRecord('queued_parts', $data, FALSE);
+        }
+    }
+}
+</pre>
+
+Here's how I fixed it:
+
+<pre>
+$now = time(); // I don't want the query to somehow do multiples
+$this->db->query("Insert into queued_parts (part_id, recCreated) select distinct partcategory.part_id, $now from partcategory LEFT OUTER JOIN queued_parts on partcategory.part_id = queued_parts.part_id where queued_parts.part_id is null and partcategory.category_id = ?", array($category_id));
+</pre>
+
+
+I observed that the site no longer locked up for 10 minutes on demo when adding a category. It just worked, which is what's needed. Too many inserts can be the death of performance.
+
+
 Update June 24, 2017
 ====================
 

@@ -682,6 +682,8 @@ class Admin extends Master_Controller {
                     }
                 }
 
+// JLB 07-02-17
+// Please never write code like this. It looks like first semester, first year programming. Who told you things are only four deep?
 //                foreach ($categories[$postData['category_id']] as $subCat) {
 //
 //                    $updateCategories[$counter]['parent_category_id'] = $subCat['parent_category_id'];
