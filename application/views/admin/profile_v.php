@@ -31,7 +31,7 @@ $google_trust = (array) json_decode($address['google_trust']);
   		</div>
 		<!-- END SUCCESS MESSAGE -->
 		<?php endif; ?>
-		<?php echo form_open('admin/profile', array('class' => 'form_standard')); ?>		
+		<?php echo form_open('admin/profile', array('class' => 'form_standard', 'enctype' => 'multipart/form-data')); ?>
 			<!-- EDIT PROFILE -->
 			<div class="account_section">
 				<h1><i class="fa fa-pencil"></i> Store Information</h1>
