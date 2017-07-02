@@ -144,7 +144,43 @@ $google_trust = (array) json_decode($address['google_trust']);
                               'class' => 'text large',
                               'placeholder' => 'Finance Email')); ?></td>
 						</tr>
-						
+						<tr>
+							<td><strong>Logo:</strong><br/><em>The logo should usually be 200px wide. Please provide as GIF, JPG, or PNG format.</em></td>
+							<td>
+								<?php
+								$file = STORE_DIRECTORY . "/html/logo.png";
+								if (file_exists($file)) {
+									?>
+									<em>Existing Logo:</em> </br>
+									<a href="/logo.png" attachment="attachment"><img src="/logo.png" /></a>
+									<br/>
+									<br/>
+									<em>Upload a New Logo:</em><br/>
+									<?php
+								}
+								?>
+								<input type="file" accept="image/*" name="logo"/>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Favicon:</strong><br/><em>The favicon should be a square, e.g. 64x64 pixels. Please provide as GIF, JPG, PNG, or ICO format.</em></td>
+							<td>
+								<?php
+									$file = STORE_DIRECTORY . "/html/favicon.ico";
+									if (file_exists($file)) {
+										?>
+										<em>Existing Favicon:</em> </br>
+										<a href="/favicon.ico" attachment="attachment"><img src="/favicon.ico" /></a>
+										<br/>
+										<br/>
+										<em>Upload a New Favicon:</em><br/>
+										<?php
+									}
+								?>
+								<input type="file" accept="image/*" name="favicon"/>
+							</td>
+						</tr>
+
 						<tr>
 							<td colspan="2">
 								<table width="100%" style="background-color:white;">
