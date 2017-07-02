@@ -31,71 +31,47 @@
 						<td><b>Name</b></td>
 						<td><b>Actions</b></td>
 					</tr>
-						<?php if(@$categories[NULL]): foreach($categories[NULL] as $key => $category): ?>
-					<tr>
-						<td>
-							<?php if(@$categories[$category['category_id']]): ?>
-								<a href="javascript:void(0);" onclick="$('.<?php echo $category['category_id']; ?>').toggle();"><i class="fa fa-plus-square-o <?php echo $category['category_id']; ?>"></i></a><a href="javascript:void(0);" onclick="$('.<?php echo $category['category_id']; ?>').toggle(); $('.bottom').hide(); $('.plus').show(); $('.minus').hide();" class="hide <?php echo $category['category_id']; ?>"><i class="fa fa-minus-square-o"></i></a>
-							<?php endif; ?>
-						</td>
-						<td><?php echo $category['name']; ?></td>
-						<td>
-							<a href="javascript:void(0);" onclick="populateEdit('<?php echo $category['category_id']; ?>');"><i class="fa fa-edit"></i>&nbsp;<b>Edit</b></a></a>
-							<?php if(!@$category['mx']): ?>
-									| <a href="<?php echo base_url('admin/category_delete/'.$category['category_id']); ?>"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a>
-								<?php endif; ?>
-						</td>
-					</tr>
-					<?php if(@$categories[$category['category_id']]): foreach($categories[$category['category_id']] as $subCat): ?>
-					<tr class="hide <?php echo $category['category_id']; ?>">
-						<td>
-							 &nbsp; <a href="javascript:void(0);" onclick="$('.<?php echo $subCat['category_id']; ?>').toggle();">
-							 	<?php if(@$categories[$subCat['category_id']]): ?>
-							 		<i class="fa fa-plus-square-o <?php echo $subCat['category_id']; ?> plus"></i><span class="hide <?php echo $subCat['category_id']; ?>"><i class="fa fa-minus-square-o minus"></i></span>
-							 	<?php endif; ?>
-							 	</a>
-						 </td>
-						<td><?php echo $subCat['name']; ?></td>
-						<td>
-							<a href="javascript:void(0);" onclick="populateEdit('<?php echo $subCat['category_id']; ?>');"><i class="fa fa-edit"></i>&nbsp;<b>Edit</b></a></a>
-							<?php if(!@$subCat['mx']): ?>
-									| <a href="<?php echo base_url('admin/category_delete/'.$subCat['category_id']); ?>"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a>
-								<?php endif; ?>
-						</td>
-					</tr>
-					<?php if(@$categories[$subCat['category_id']]): foreach($categories[$subCat['category_id']] as $subsubCat): ?>
-					<tr class="hide <?php echo $subCat['category_id']; ?> bottom">
-						<td> &nbsp; &nbsp; <a href="javascript:void(0);" onclick="$('.<?php echo $subsubCat['category_id']; ?>').toggle();">
-						<?php if(@$categories[$subsubCat['category_id']]): ?>
-							<i class="fa fa-plus-square-o <?php echo $subsubCat['category_id']; ?> plus"></i><span class="hide <?php echo $subsubCat['category_id']; ?>"><i class="fa fa-minus-square-o minus"></i>
-							<?php endif; ?>
-							</a>
-						</td>
-						<td><?php echo $subsubCat['name']; ?></td>
-						<td>
-							<a href="javascript:void(0);" onclick="populateEdit('<?php echo $subsubCat['category_id']; ?>');"><i class="fa fa-edit"></i>&nbsp;<b>Edit</b></a></a>
-							<?php if(!@$subCat['mx']): ?>
-									| <a href="<?php echo base_url('admin/category_delete/'.$subsubCat['category_id']); ?>"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a>
-								<?php endif; ?>
-						</td>
-					</tr>
-					<?php if(@$categories[$subsubCat['category_id']]): foreach($categories[$subsubCat['category_id']] as $subsubsubCat): ?>
-					<tr class="hide <?php echo $subsubCat['category_id']; ?> bottom">
-						<td> &nbsp; &nbsp; <a href="javascript:void(0);" onclick="$('.<?php echo $subsubsubCat['category_id']; ?>').toggle();">
-						<?php if(@$categories[$subsubsubCat['category_id']]): ?>
-							<i class="fa fa-plus-square-o <?php echo $subsubsubCat['category_id']; ?>"></i><i class="fa fa-minus-square-o hide <?php echo $subsubsubCat['category_id']; ?>"></i>
-							<?php endif; ?>
-							</a>
-						</td>
-						<td><?php echo $subsubsubCat['name']; ?></td>
-						<td>
-							<a href="javascript:void(0);" onclick="populateEdit('<?php echo $subsubsubCat['category_id']; ?>');"><i class="fa fa-edit"></i>&nbsp;<b>Edit</b></a></a>
-							<?php if(!@$subCat['mx']): ?>
-									| <a href="<?php echo base_url('admin/category_delete/'.$subsubsubCat['category_id']); ?>"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a>
-								<?php endif; ?>
-						</td>
-					</tr>
-					<?php endforeach; endif; endforeach; endif; endforeach; endif; endforeach; endif; ?>
+
+<?php
+
+function printCategoryRow($category_id, $categories, $depth = "") {
+	if (array_key_exists($category_id, $categories)) {
+		$null_cat = is_null($category_id);
+
+		foreach ($categories[$category_id] as $category) {
+			?>
+			<tr <?php if (!$null_cat): ?>class="hide <?php echo $category_id; ?>"<?php endif; ?>>
+				<td>
+					<?php if (array_key_exists($category['category_id'], $categories)): ?>
+						<a href="javascript:void(0);" onclick="$('.<?php echo $category['category_id']; ?>').toggle();"><i
+								class="fa fa-plus-square-o <?php echo $category['category_id']; ?>"></i></a><a
+							href="javascript:void(0);"
+							onclick="$('.<?php echo $category['category_id']; ?>').toggle(); $('.bottom').hide(); $('.plus').show(); $('.minus').hide();"
+							class="hide <?php echo $category['category_id']; ?>"><i
+								class="fa fa-minus-square-o"></i></a>
+					<?php endif; ?>
+				</td>
+				<td><?php echo $depth; ?><?php echo $category['name']; ?></td>
+				<td>
+					<a href="javascript:void(0);" onclick="populateEdit('<?php echo $category['category_id']; ?>');"><i
+							class="fa fa-edit"></i>&nbsp;<b>Edit</b></a></a>
+					<?php if (!@$category['mx']): ?>
+						| <a href="<?php echo base_url('admin/category_delete/' . $category['category_id']); ?>"><i
+								class="fa fa-times"></i>&nbsp;<b>Delete</b></a>
+					<?php endif; ?>
+				</td>
+			</tr>
+			<?php
+
+			printCategoryRow($category["category_id"], $categories, $depth . "&nbsp;&nbsp;&nbsp;&nbsp;");
+		}
+	}
+}
+
+printCategoryRow(NULL, $categories);
+
+?>
+
 				</table>
 			</div>
 			<!-- END PRODUCT LIST -->

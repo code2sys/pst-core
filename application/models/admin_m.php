@@ -356,17 +356,21 @@ class Admin_M extends Master_M {
         $where = array('category_id' => $category_id);
         $data = array('mark_up' => $markup);
         $this->updateRecord('category', $data, $where, FALSE);
-        $this->db->select('part_id');
-        $records = $this->selectRecords('partcategory', $where);
-        if ($records) {
-            foreach ($records as $rec) {
-                $where = array('part_id' => $rec['part_id']);
-                if (!$this->recordExists('queued_parts', $where)) {
-                    $data = array('part_id' => $rec['part_id'], 'recCreated' => time());
-                    $this->createRecord('queued_parts', $data, FALSE);
-                }
-            }
-        }
+
+        $now = time(); // I don't want the query to somehow do multiples
+        $this->db->query("Insert into queued_parts (part_id, recCreated) select distinct partcategory.part_id, $now from partcategory LEFT OUTER JOIN queued_parts on partcategory.part_id = queued_parts.part_id where queued_parts.part_id is null and partcategory.category_id = ?", array($category_id));
+//
+//        $this->db->select('part_id');
+//        $records = $this->selectRecords('partcategory', $where);
+//        if ($records) {
+//            foreach ($records as $rec) {
+//                $where = array('part_id' => $rec['part_id']);
+//                if (!$this->recordExists('queued_parts', $where)) {
+//                    $data = array('part_id' => $rec['part_id'], 'recCreated' => time());
+//                    $this->createRecord('queued_parts', $data, FALSE);
+//                }
+//            }
+//        }
         $where = array('parent_category_id' => $category_id);
         $categories = $this->selectRecords('category', $where);
         if ($categories) {
