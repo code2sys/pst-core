@@ -353,6 +353,7 @@ class Admin_M extends Master_M {
     }
 
     public function updateCategoryMarkUp($category_id, $markup) {
+        print "Call to function updateCategoryMarkUp($category_id, $markup) <br/>";
         $where = array('category_id' => $category_id);
         $data = array('mark_up' => $markup);
         $this->updateRecord('category', $data, $where, FALSE);

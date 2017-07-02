@@ -719,6 +719,8 @@ class Admin extends Master_Controller {
             foreach ($updateCategories as $category) {
                 $this->admin_m->updateCategory($category);
             }
+
+            exit();
             redirect('admin/category');
         }
 
