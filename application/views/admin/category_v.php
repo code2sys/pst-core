@@ -70,13 +70,7 @@ function printCategoryRow($category_id, $categories, $depth = "") {
 
 printCategoryRow(NULL, $categories);
 
-// We could have run these together, but we don't.
-
 ?>
-
-					<!--
-					<?php print_r($parent_categories); ?>
-					-->
 
 				</table>
 			</div>
