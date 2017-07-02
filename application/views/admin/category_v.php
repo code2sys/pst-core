@@ -33,7 +33,7 @@
 					</tr>
 <?php
 
-function printCategoryRow($category_id) use ($categories) {
+function printCategoryRow($category_id, $categories) {
 	if (array_key_exists($category_id, $categories)) {
 		$null_cat = is_null($category_id);
 
@@ -65,7 +65,7 @@ function printCategoryRow($category_id) use ($categories) {
 	}
 }
 
-printCategoryRow(NULL);
+printCategoryRow(NULL, $categories);
 
 ?>
 
