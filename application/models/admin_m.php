@@ -358,7 +358,7 @@ class Admin_M extends Master_M {
         $data = array('mark_up' => $markup);
         $this->updateRecord('category', $data, $where, FALSE);
 
-        $this->db->query("Insert into queued_parts (part_id, recCreated) select part_id, now() from partcategory where category_id = ?", array($category_id));
+        $this->db->query("Insert into queued_parts (part_id, recCreated) select part_id, unix_timestamp() from partcategory where category_id = ?", array($category_id));
 //
 //        $this->db->select('part_id');
 //        $records = $this->selectRecords('partcategory', $where);
