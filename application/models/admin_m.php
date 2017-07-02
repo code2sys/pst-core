@@ -359,7 +359,7 @@ class Admin_M extends Master_M {
         $this->updateRecord('category', $data, $where, FALSE);
 
         $now = time(); // I don't want the query to somehow do multiples
-        $this->db->query("Insert into queued_parts (part_id, recCreated) select distinct part_id, $now from partcategory where category_id = ?", array($category_id));
+        $this->db->query("Insert into queued_parts (part_id, recCreated) select distinct part_id, $now from partcategory LEFT OUTER JOIN queued_parts on partcategory.part_id = queued_parts.part_id where queued_parts.part_id is null and category_id = ?", array($category_id));
 //
 //        $this->db->select('part_id');
 //        $records = $this->selectRecords('partcategory', $where);
