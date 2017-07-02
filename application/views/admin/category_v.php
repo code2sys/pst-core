@@ -61,6 +61,8 @@ function printCategoryRow($category_id, $categories) {
 				</td>
 			</tr>
 			<?php
+
+			printCategoryRow($category["category_id"], $categories);
 		}
 	}
 }
