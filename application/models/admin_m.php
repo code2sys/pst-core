@@ -358,7 +358,8 @@ class Admin_M extends Master_M {
         $data = array('mark_up' => $markup);
         $this->updateRecord('category', $data, $where, FALSE);
 
-        $this->db->query("Insert into queued_parts (part_id, recCreated) select part_id, unix_timestamp() from partcategory where category_id = ?", array($category_id));
+        $now = time(); // I don't want the query to somehow do multiples
+        $this->db->query("Insert into queued_parts (part_id, recCreated) select distinct part_id, $now from partcategory where category_id = ?", array($category_id));
 //
 //        $this->db->select('part_id');
 //        $records = $this->selectRecords('partcategory', $where);
@@ -375,6 +376,7 @@ class Admin_M extends Master_M {
         $categories = $this->selectRecords('category', $where);
         if ($categories) {
             foreach ($categories as $cat) {
+                print "About to call updateCategoryMarkUp from inside $category_id, $markup <br/>";
                 $this->updateCategoryMarkUp($cat['category_id'], $markup);
             }
         }
