@@ -44,7 +44,7 @@ function printCategoryRow($category_id, $categories) {
 
 		foreach ($categories[$category_id] as $category) {
 			?>
-			<tr <?php if (!$null_cat): ?>class="hide <?php echo $category['category_id']; ?>"<?php endif; ?>>
+			<tr <?php if (!$null_cat): ?>class="hide <?php echo $category_id; ?>"<?php endif; ?>>
 				<td>
 					<?php if (array_key_exists($category['category_id'], $categories)): ?>
 						<a href="javascript:void(0);" onclick="$('.<?php echo $category['category_id']; ?>').toggle();"><i
