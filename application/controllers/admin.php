@@ -648,67 +648,98 @@ class Admin extends Master_Controller {
             $updateCategories[0]['notice'] = $postData['notice'];
             $catArr[$postData['category_id']] = $postData['category_id'];
 
-            $counter = 1;
-            //!empty($postData['google_category_num']) && 
-            if (@$categories[$postData['category_id']]) {
-                foreach ($categories[$postData['category_id']] as $subCat) {
+            //!empty($postData['google_category_num']) &&
+            if ($postData['category_id'] > 0 && array_key_exists($postData['category_id'], $categories)) {
+                // JLB 07-02-17 This was written in the crappiest way possible. It assumed that there were only so many levels.
+                // Why can't they make a loop?
+                $parents = array($postData['category_id']);
 
-                    $updateCategories[$counter]['parent_category_id'] = $subCat['parent_category_id'];
-                    $updateCategories[$counter]['category_id'] = $subCat['category_id'];
-                    $updateCategories[$counter]['featured'] = $subCat['featured'] == 1 ? 1 : 0;
-                    $updateCategories[$counter]['active'] = $subCat['active'];
-                    $updateCategories[$counter]['name'] = $subCat['name'];
-                    $updateCategories[$counter]['title'] = $subCat['title'];
-                    $updateCategories[$counter]['meta_tag'] = $subCat['meta_tag'];
-                    $updateCategories[$counter]['keywords'] = $subCat['keywords'];
-                    $updateCategories[$counter]['mark-up'] = $subCat['mark_up'];
-                    $updateCategories[$counter]['google_category_num'] = $subCat['google_category_num'];
-                    $updateCategories[$counter]['ebay_category_num'] = $subCat['ebay_category_num'];
-                    $updateCategories[$counter]['notice'] = $subCat['notice'];
-                    $catArr[$subCat['category_id']] = $subCat['category_id'];
+                while (count($parents) > 0) {
+                    $current = $parents;
+                    $parents = array();
 
-                    if (@$categories[$subCat['category_id']]) {
-                        foreach ($categories[$subCat['category_id']] as $subsubCat) {
-
-                            $secondCounter = count($updateCategories);
-                            $updateCategories[$secondCounter]['parent_category_id'] = $subsubCat['parent_category_id'];
-                            $updateCategories[$secondCounter]['category_id'] = $subsubCat['category_id'];
-                            $updateCategories[$secondCounter]['featured'] = $subsubCat['featured'] == 1 ? 1 : 0;
-                            $updateCategories[$secondCounter]['active'] = $subsubCat['active'];
-                            $updateCategories[$secondCounter]['name'] = $subsubCat['name'];
-                            $updateCategories[$secondCounter]['title'] = $subsubCat['title'];
-                            $updateCategories[$secondCounter]['meta_tag'] = $subsubCat['meta_tag'];
-                            $updateCategories[$secondCounter]['keywords'] = $subsubCat['keywords'];
-                            $updateCategories[$secondCounter]['mark-up'] = $subsubCat['mark_up'];
-                            $updateCategories[$secondCounter]['google_category_num'] = $subsubCat['google_category_num'];
-                            $updateCategories[$secondCounter]['ebay_category_num'] = $subsubCat['ebay_category_num'];
-                            $updateCategories[$secondCounter]['notice'] = $subsubCat['notice'];
-                            $catArr[$subsubCat['category_id']] = $subsubCat['category_id'];
-
-                            if (@$categories[$subsubCat['category_id']]) {
-                                foreach ($categories[$subsubCat['category_id']] as $subsubsubCat) {
-
-                                    $thirdCounter = count($updateCategories);
-                                    $updateCategories[$thirdCounter]['parent_category_id'] = $subsubsubCat['parent_category_id'];
-                                    $updateCategories[$thirdCounter]['category_id'] = $subsubsubCat['category_id'];
-                                    $updateCategories[$thirdCounter]['featured'] = $subsubsubCat['featured'] == 1 ? 1 : 0;
-                                    $updateCategories[$thirdCounter]['active'] = $subsubsubCat['active'];
-                                    $updateCategories[$thirdCounter]['name'] = $subsubsubCat['name'];
-                                    $updateCategories[$thirdCounter]['title'] = $subsubsubCat['title'];
-                                    $updateCategories[$thirdCounter]['meta_tag'] = $subsubsubCat['meta_tag'];
-                                    $updateCategories[$thirdCounter]['keywords'] = $subsubsubCat['keywords'];
-                                    $updateCategories[$thirdCounter]['mark-up'] = $subsubsubCat['mark_up'];
-                                    $updateCategories[$thirdCounter]['google_category_num'] = $subsubsubCat['google_category_num'];
-                                    $updateCategories[$thirdCounter]['ebay_category_num'] = $subsubsubCat['ebay_category_num'];
-                                    $updateCategories[$thirdCounter]['notice'] = $subsubsubCat['notice'];
-                                    $catArr[$subsubsubCat['category_id']] = $subsubsubCat['category_id'];
-                                }
+                    foreach ($current as $c_id) {
+                        if (array_key_exists($c_id, $categories)) {
+                            $subcats = $categories[$c_id];
+                            foreach ($subcats as $subcat) {
+                                $parents[] = $subcat["category_id"];
+                                $updateCategories[] = array(
+                                    "parent_category_id" => $subcat["parent_category_id"],
+                                    "category_id" => $subcat["category_id"],
+                                    "featured" => $subcat["featured"] == 1 ? 1 : 0,
+                                    "active" => $subcat["active"],
+                                    "name" => $subcat["name"],
+                                    "title" => $subcat["title"],
+                                    "meta_tag" => $subcat["meta_tag"],
+                                    "keywords" => $subcat["keywords"],
+                                    "mark-up" => $subcat["mark_up"], // JLB - this sort of thing is just annoying. Why would you do this?
+                                    "google_category_num" => $subcat["google_category_num"],
+                                    "ebay_category_num" => $subcat["ebay_category_num"],
+                                    "notice" => $subcat["notice"]
+                                );
                             }
                         }
                     }
-
-                    $counter++;
                 }
+
+//                foreach ($categories[$postData['category_id']] as $subCat) {
+//
+//                    $updateCategories[$counter]['parent_category_id'] = $subCat['parent_category_id'];
+//                    $updateCategories[$counter]['category_id'] = $subCat['category_id'];
+//                    $updateCategories[$counter]['featured'] = $subCat['featured'] == 1 ? 1 : 0;
+//                    $updateCategories[$counter]['active'] = $subCat['active'];
+//                    $updateCategories[$counter]['name'] = $subCat['name'];
+//                    $updateCategories[$counter]['title'] = $subCat['title'];
+//                    $updateCategories[$counter]['meta_tag'] = $subCat['meta_tag'];
+//                    $updateCategories[$counter]['keywords'] = $subCat['keywords'];
+//                    $updateCategories[$counter]['mark-up'] = $subCat['mark_up'];
+//                    $updateCategories[$counter]['google_category_num'] = $subCat['google_category_num'];
+//                    $updateCategories[$counter]['ebay_category_num'] = $subCat['ebay_category_num'];
+//                    $updateCategories[$counter]['notice'] = $subCat['notice'];
+//                    $catArr[$subCat['category_id']] = $subCat['category_id'];
+//
+//                    if (@$categories[$subCat['category_id']]) {
+//                        foreach ($categories[$subCat['category_id']] as $subsubCat) {
+//
+//                            $secondCounter = count($updateCategories);
+//                            $updateCategories[$secondCounter]['parent_category_id'] = $subsubCat['parent_category_id'];
+//                            $updateCategories[$secondCounter]['category_id'] = $subsubCat['category_id'];
+//                            $updateCategories[$secondCounter]['featured'] = $subsubCat['featured'] == 1 ? 1 : 0;
+//                            $updateCategories[$secondCounter]['active'] = $subsubCat['active'];
+//                            $updateCategories[$secondCounter]['name'] = $subsubCat['name'];
+//                            $updateCategories[$secondCounter]['title'] = $subsubCat['title'];
+//                            $updateCategories[$secondCounter]['meta_tag'] = $subsubCat['meta_tag'];
+//                            $updateCategories[$secondCounter]['keywords'] = $subsubCat['keywords'];
+//                            $updateCategories[$secondCounter]['mark-up'] = $subsubCat['mark_up'];
+//                            $updateCategories[$secondCounter]['google_category_num'] = $subsubCat['google_category_num'];
+//                            $updateCategories[$secondCounter]['ebay_category_num'] = $subsubCat['ebay_category_num'];
+//                            $updateCategories[$secondCounter]['notice'] = $subsubCat['notice'];
+//                            $catArr[$subsubCat['category_id']] = $subsubCat['category_id'];
+//
+//                            if (@$categories[$subsubCat['category_id']]) {
+//                                foreach ($categories[$subsubCat['category_id']] as $subsubsubCat) {
+//
+//                                    $thirdCounter = count($updateCategories);
+//                                    $updateCategories[$thirdCounter]['parent_category_id'] = $subsubsubCat['parent_category_id'];
+//                                    $updateCategories[$thirdCounter]['category_id'] = $subsubsubCat['category_id'];
+//                                    $updateCategories[$thirdCounter]['featured'] = $subsubsubCat['featured'] == 1 ? 1 : 0;
+//                                    $updateCategories[$thirdCounter]['active'] = $subsubsubCat['active'];
+//                                    $updateCategories[$thirdCounter]['name'] = $subsubsubCat['name'];
+//                                    $updateCategories[$thirdCounter]['title'] = $subsubsubCat['title'];
+//                                    $updateCategories[$thirdCounter]['meta_tag'] = $subsubsubCat['meta_tag'];
+//                                    $updateCategories[$thirdCounter]['keywords'] = $subsubsubCat['keywords'];
+//                                    $updateCategories[$thirdCounter]['mark-up'] = $subsubsubCat['mark_up'];
+//                                    $updateCategories[$thirdCounter]['google_category_num'] = $subsubsubCat['google_category_num'];
+//                                    $updateCategories[$thirdCounter]['ebay_category_num'] = $subsubsubCat['ebay_category_num'];
+//                                    $updateCategories[$thirdCounter]['notice'] = $subsubsubCat['notice'];
+//                                    $catArr[$subsubsubCat['category_id']] = $subsubsubCat['category_id'];
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    $counter++;
+//                }
             }
 
             echo "<pre>";
