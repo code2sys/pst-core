@@ -711,10 +711,10 @@ class Admin extends Master_Controller {
                 }
             }
 
-//             echo "<pre>";
-//             print_r($catArr);
-//             print_r($updateCategories);
-//             echo "</pre>";
+            echo "<pre>";
+            print_r($catArr);
+            print_r($updateCategories);
+            echo "</pre>";
 //             exit;
             foreach ($updateCategories as $category) {
                 $this->admin_m->updateCategory($category);
