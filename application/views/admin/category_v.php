@@ -34,7 +34,7 @@
 
 <?php
 
-function printCategoryRow($category_id, $categories) {
+function printCategoryRow($category_id, $categories, $depth = "") {
 	if (array_key_exists($category_id, $categories)) {
 		$null_cat = is_null($category_id);
 
@@ -53,7 +53,7 @@ function printCategoryRow($category_id, $categories) {
 				</td>
 				<td><?php echo $category['name']; ?></td>
 				<td>
-					<a href="javascript:void(0);" onclick="populateEdit('<?php echo $category['category_id']; ?>');"><i
+					<?php echo $depth; ?><a href="javascript:void(0);" onclick="populateEdit('<?php echo $category['category_id']; ?>');"><i
 							class="fa fa-edit"></i>&nbsp;<b>Edit</b></a></a>
 					<?php if (!@$category['mx']): ?>
 						| <a href="<?php echo base_url('admin/category_delete/' . $category['category_id']); ?>"><i
@@ -63,7 +63,7 @@ function printCategoryRow($category_id, $categories) {
 			</tr>
 			<?php
 
-			printCategoryRow($category["category_id"], $categories);
+			printCategoryRow($category["category_id"], $categories, "&nbsp;&nbsp;&nbsp;&nbsp;");
 		}
 	}
 }
