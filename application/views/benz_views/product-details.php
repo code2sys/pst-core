@@ -165,9 +165,27 @@ unset($motorcycle['videos'][0]);
 				</a>
 				<hr class="hr-lne">
 				<div class="info">
-					<div class="vds">
-						<?php if( !empty($mainVideo) ) { ?>
-							<iframe width="560" height="400" src="https://www.youtube.com/embed/<?php echo $mainVideo['video_url'];?>" data-id="<?php echo $mainVideo['video_url']; ?>" id="mainVideo" frameborder="0" allowfullscreen=""></iframe>
+					<div class="vds rmv">
+                        <?php if (!empty($mainVideo)) { ?>
+                                            <div class="main-vdo">
+                                <iframe width="560" height="400" src="https://www.youtube.com/embed/<?php echo $mainVideo['video_url']; ?>" data-id="<?php echo $mainVideo['video_url']; ?>" id="mainVideo" frameborder="0" allowfullscreen=""></iframe>
+                                <ul class="mn-ul">
+                                    <li class="mn-frst"><strong>Share :</strong>
+                                        <div class="ggl" style="min-width:100px;">
+                                            <div class="fb-share-button" data-href="https://www.youtube.com/embed/<?php echo $mainVideo; ?>" data-layout="button_count"></div>
+                                        </div>
+                                        <div class="ggl ggl-pls">
+                                            <div class="g-plus fixwdth" data-action="share" data-href="https://www.youtube.com/embed/<?php echo $mainVideo; ?>" data-width="250"></div>
+                                        </div>
+                                    </li>
+                                    <li class="subs"><strong>Subscribe to us :</strong>
+                                        <?php
+                                        $link_array = explode('/', $SMSettings['sm_ytlink']);
+                                        ?>
+                                        <div class="g-ytsubscribe" data-channelid="<?php echo end($link_array); ?>" data-layout="default" data-count="default"></div>
+                                    </li>
+                                </ul>
+                                            </div>
 						<?php } ?>
 						<div class="ryt">
 							<ul class="rltdvdo">
@@ -186,6 +204,7 @@ unset($motorcycle['videos'][0]);
 							</ul>
 						</div>
 					</div>
+					<div class="clear mn-hght"></div>
 					<?php echo $motorcycle['description'];?>
 					<!--<h3>Integer tellus dui venenatis non:</h3>
 					<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,  content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover </p>

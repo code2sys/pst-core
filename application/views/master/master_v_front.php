@@ -285,10 +285,30 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 	</div>
 	<?php endif; ?>
 	<?php endif; ?>
-	<?php if(!empty($featuredCategories)){ ?>
+        
+        <?php if (@$topVideo) { ?>
 	<div class="sw brd">
 		<div class="container_b">
 			<div class="featured-listings">
+                        <h3> OUR TOP Videos </h3>
+                        <div class="panel-body">
+                            <ul class="lstng" id="top-video">
+                                <?php foreach ($topVideo as $key => $val) { ?>
+                                    <li class="ftrdb col-md-4" style="width: 32%;">
+                                        <iframe src="https://www.youtube.com/embed/<?php echo $val['video_url'];?>" frameborder="0" style="width: 90%;height:220px;" allowfullscreen></iframe>
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </div>				
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        
+        <?php if (!empty($featuredCategories)) { ?>
+            <div class="sw brd">
+                <div class="container_b">
+                    <div class="featured-listings">
 				<h3> OUR TOP Categories </h3>
 				<!--<a class="rdrct-lnk" href="<?php echo site_url('Motorcycle_Gear_Brands');?>">Shop all brands </a>-->
 				<div class="panel-body">
