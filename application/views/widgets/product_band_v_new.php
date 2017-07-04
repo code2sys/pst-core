@@ -41,7 +41,10 @@
 							</div>
 						</li>
 						<li class="subs"><strong>Subscribe to us :</strong>
-							<div class="g-ytsubscribe" data-channel="<?php echo YOUTUBE_CHANNEL; ?>" data-layout="default" data-count="default"></div>
+                                                    <?php
+                                                        $link_array = explode('/',$SMSettings['sm_ytlink']);
+                                                    ?>
+                                                    <div class="g-ytsubscribe" data-channelid="<?php echo end($link_array); ?>" data-layout="default" data-count="default"></div>
 						</li>
 					</ul>
 				</div>

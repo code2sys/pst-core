@@ -311,6 +311,30 @@ class Shopping extends Master_Controller {
 
         unset($this->_mainData['band']);
 
+		if( @$listParameters['category'] ) {
+			$videoParams = $listParameters['category'];
+			end($videoParams);
+			$endCategory = key($videoParams);
+			
+			$categoryVideo = $this->admin_m->getCategoryVideos($endCategory);
+			$mainVideo = $mainTitle = '';
+			foreach ($categoryVideo as $key => $val) {
+				if ($val['ordering'] == 1) {
+					$mainVideo = $val['video_url'];
+					$mainTitle = $val['title'];
+					unset($categoryVideo[$key]);
+					break;
+				}
+			}
+			if ($mainVideo == '') {
+				$mainVideo = $categoryVideo[0];
+				unset($categoryVideo[0]);
+			}
+			$this->_mainData['mainVideo'] = $mainVideo;
+			$this->_mainData['mainTitle'] = $mainTitle;
+			$this->_mainData['video'] = $categoryVideo;
+		}
+                
         // ACTUAL PRODUCT SEARCH IS DONE IN THIS MODEL FUNCTION
         $listParameters1 = $listParameters;
         unset($listParameters1['search']);

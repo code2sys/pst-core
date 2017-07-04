@@ -217,6 +217,15 @@ class Motorcycle_M extends Master_M {
         return $record;
     }
 
+    public function getMotorcycleCondition($filter = array()) {
+        $where = $this->buildWhere($filter);
+        $this->db->select('condition');
+        $this->db->group_by('condition');
+        $record = $this->selectRecords('motorcycle', $where);
+        //echo $this->db->last_query();
+        return $record;
+    }
+
     public function getMotorcycleVehicle($filter = array()) {
         $where = $this->buildWhere($filter, false, true);
         $this->db->join('motorcycle', 'motorcycle.vehicle_type = motorcycle_type.id');

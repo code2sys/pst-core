@@ -141,9 +141,19 @@ class Pages_M extends Master_M
 	public function widgetCreator($pageId, $pageRec)
 	{
 		$widgets = json_decode($pageRec['widgets'], TRUE);
+  		$allWidgets = $this->getWidgets();
 		$widgetBlock = '';
 		$slider = 0;
 		$textbox = 0;
+                $sortingArr = array(3,1,2);
+        
+                $result = array(); // result array
+                foreach($sortingArr as $val){ // loop
+                    if(array_search($val, $widgets)) {
+                        $result[array_search($val, $widgets)] = $val; // adding values
+                    }
+                }
+                $widgets = $result;
 		if(!empty($widgets))
 		{
 	
@@ -158,11 +168,11 @@ class Pages_M extends Master_M
 						{ 
 							foreach($bannerImages as $img)
 							{
-								if($img['order'] == $slider)
-								{
-									$data['sliderImages'][] = $img;
+								//if($img['order'] == $slider)
+								//{
+									$data['sliderImages'][$img['order']] = $img;
+								//} 
 								} 
-							}
 							if(@$data)
 							{
 								$widgetBlock .= $this->load->view('widgets/slider_v', $data, TRUE);
@@ -172,20 +182,41 @@ class Pages_M extends Master_M
 						break;
 					case '2' :
 						++$textbox;
-						//$textboxes = $this->pages_m->getTextBoxes($pageId);
+						$textboxes = $this->pages_m->getTextBoxes($pageId);
 						if(@$textboxes)
 						{
 							foreach($textboxes as $text)
 							{
-								if($text['order'] == $textbox)
-								{
-									$widgetBlock .= $text['text'];
-									$widgetBlock .='<br />';
+                                                                if ($text['order'] == $textbox && $text['text'] != '') {
+                                                                    $widgetBlock .= '<div class="content_section">';
+                                                                    $widgetBlock .= '<h3>'.$text['text'].'</h3>';
+                                                                    $widgetBlock .= '</div>';
+                                                                    //$widgetBlock .= '<br />';
 								}
 							}
 						}
 
 						break;
+                                                case '3' :
+                                                    $topVideo = $this->getTopVideos($pageId);
+                                                    $mainVideo = $mainTitle = '';
+                                                    foreach ($topVideo as $key => $val) {
+                                                        if ($val['ordering'] == 1) {
+                                                            $mainVideo = $val['video_url'];
+                                                            $mainTitle = $val['title'];
+                                                            unset($topVideo[$key]);
+                                                            break;
+                                                            }
+                                                    }
+                                                    if ($mainVideo == '') {
+                                                        $mainVideo = $categoryVideo[0];
+                                                        unset($topVideo[0]);
+                                                    }
+                                                    $data1['mainVideo'] = $mainVideo;
+                                                    $data1['mainTitle'] = $mainTitle;
+                                                    $data1['video'] = $topVideo;
+                                                    $widgetBlock .= $this->load->view('widgets/videos_v', $data1, TRUE);
+                                                break;
 				}
 			}
 		}
@@ -219,4 +250,16 @@ class Pages_M extends Master_M
 		return $record['finance_email'];
 	}
 
+        public function getTopVideos($pageId) {
+            $this->db->where('page_id', $pageId);
+            $records = $this->selectRecords('top_videos');
+            return $records;
+}
+
+    public function updateTopVideos($id, $arr) {
+        $this->db->delete('top_videos', array('page_id' => $id));
+        if (!empty($arr)) {
+            $this->db->insert_batch('top_videos', $arr);
+        }
+    }
 }

@@ -1048,8 +1048,56 @@ var google_remarketing_only = true;
 	//}
 	
 </script>
+<script>
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=1038872762878770";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
 	<link rel="stylesheet" href="<?php echo jsite_url('/basebranding.css'); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url('/custom.css'); ?>" />
+<style>
+.main-vdo {
+    width: 69%;
+    float: left;
+}
+.rmv .main-vdo ul {
+    width: 100%;
+    float: left;
+    margin: 0;
+    padding: 5px;
+    background: rgba(192, 192, 192, 0.48);
+}
+.rmv .main-vdo ul li {
+    float: left;
+    margin: 0 15px 0 0px;
+    list-style: none;
+}
+.rmv .main-vdo ul li .ggl {
+    max-width: 59px;
+    overflow: hidden;
+    float: left;
+}
+.rmv .main-vdo ul li strong {
+    float: left;
+    margin: 4px 7px 0 0;
+}
+.rmv .main-vdo ul .subs {
+    float: right;
+}
+.mn-ul .mn-frst {
+    width: 48%;
+}
+.ggl-pls {
+    padding-top: 3px;
+}
+.mn-hght {
+    min-height: 10px;
+}
+</style>
 
 </body>
 </html>	

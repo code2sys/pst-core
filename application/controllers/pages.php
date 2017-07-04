@@ -135,7 +135,7 @@ class Pages extends Master_Controller {
   	
   	public function index($pageTag = NULL)
   	{
-		$this->_mainData['showNotice'] = true;
+		$this->_mainData['showNotice'] = false;
 		$this->_mainData['ssl'] = false;
   		if($this->validateTag($pageTag))
   		{
@@ -166,7 +166,7 @@ class Pages extends Master_Controller {
 			$notice = $this->pages_m->getTextBoxes($this->_mainData['pageRec']['id']);
 			$this->_mainData['notice'] = $notice[0]['text'];
 			$this->_mainData['widgetBlock'] = $this->pages_m->widgetCreator($this->_mainData['pageRec']['id'], $this->_mainData['pageRec']);
-			$this->_mainData['pages'] = $this->pages_m->getPages(1, 'comp_info');
+			$this->_mainData['pages'] = $this->pages_m->getPages(1);
 			$this->loadSidebar('widgets/info_v');
 			
 			if($pageTag == 'shippingquestions')
@@ -425,6 +425,7 @@ class Pages extends Master_Controller {
   		}
   		if(is_numeric($pageId))
   		{
+                        $this->_mainData['bannerlibrary'] = 'bannerlibrary';
 	  		$this->_mainData['pageRec'] = $this->pages_m->getPageRec($pageId);
 	  		$this->setMasterPageVars('descr', $this->_mainData['pageRec']['metatags']);
 	  		$this->setMasterPageVars('title', $this->_mainData['pageRec']['title']);
@@ -433,6 +434,7 @@ class Pages extends Master_Controller {
 	  		$this->_mainData['pageRec']['widgets'] = json_decode($this->_mainData['pageRec']['widgets'], TRUE);
 	  		$this->_mainData['bannerImages'] = $this->admin_m->getSliderImages($pageId);
 	  		$this->_mainData['textboxes'] = $this->pages_m->getTextBoxes($pageId);
+            $this->_mainData['topVideo'] = $this->pages_m->getTopVideos($pageId);
   		}
   		if(is_array(@$_SESSION['errors']))
   		{
@@ -490,9 +492,37 @@ class Pages extends Master_Controller {
 					redirect('pages/edit/'.$this->input->post('page'));
 				}	
 	  		}
-		}
-		redirect('pages/edit/'.$this->input->post('page'));
-  	}
+                        if(@$_POST['banner_link'] && $_POST['submit'] == 'saveLink') {
+                            foreach( $_POST['banner_link'] as $key => $link ) {
+                                $this->admin_m->updateSliderLink($key, $link);
+                            }
+                            $arr = explode(",", $this->input->post('ordering'));
+                            foreach ($arr as $k => $v) {
+                                $rr[] = explode("=", $v);
+                            }
+                            foreach ($rr as $k => $v) {
+                                $img = $v[0];
+                                $ord = $v[1];
+                                $this->admin_m->updateSliderOrder($img, $ord);
+                            }
+                            redirect('pages/edit/' . $this->input->post('page'));
+                        }
+                        if(@$_POST['banner'] && $_POST['submit'] == 'addBanner') {
+                            foreach( $_POST['banner'] as $banner ) {
+                                $bnrExt = explode('.', $banner);
+                                $bannerName = time().'.'.end($bnrExt);
+                                copy(STORE_DIRECTORY . '/html/media/'.$banner, STORE_DIRECTORY . '/html/bannerlibrary/'.$bannerName);
+                                $uploadData = array();
+                                $uploadData['image'] = $bannerName;
+                                $uploadData['pageId'] = $this->input->post('page');
+                                $uploadData['order'] = $this->input->post('order');
+                                $this->admin_m->updateSlider($uploadData);
+                            }
+                            redirect('pages/edit/' . $this->input->post('page'));
+                        }
+        }
+        redirect('pages/edit/' . $this->input->post('page'));
+    }
   	
   	public function remove_image($id, $pageId)
 	{
@@ -503,4 +533,18 @@ class Pages extends Master_Controller {
 		}
 	}
 
- }
+    public function addTopVideos() {
+        $arr = array();
+        foreach ($this->input->post('video_url') as $k => $v) {
+            if ($v != '') {
+                $url = $v;
+                parse_str(parse_url($url, PHP_URL_QUERY), $my_array_of_vars);
+                //$my_array_of_vars['v'];
+                $arr[] = array('video_url' => $my_array_of_vars['v'], 'ordering' => $this->input->post('ordering')[$k], 'page_id' => $this->input->post('pageId'), 'title' => $this->input->post('title')[$k]);
+            }
+        }
+        $this->pages_m->updateTopVideos($this->input->post('pageId'), $arr);
+        redirect('pages/edit/' . $this->input->post('pageId'));
+    }
+
+}
