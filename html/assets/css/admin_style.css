@@ -1443,4 +1443,6 @@ ul.ui-autocomplete.ui-menu{
 }
 
 
-
+#sortableBanner tr {
+	cursor: move;
+}
