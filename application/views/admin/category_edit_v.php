@@ -105,9 +105,7 @@ $mainCats = array("20416", "20419", "20409", "20422", "69597");
                 <ul>
                     <li><a href="<?php echo base_url('admin/category'); ?>" class="active"><i class="fa fa-bars"></i>&nbsp;General Options*</a></li>
                     <li><a href="<?php echo base_url('admin/category_image/' . $id); ?>"><i class="fa fa-image"></i>&nbsp;Image*</a></li>
-                    <?php if(!in_array($id, $mainCats)) { ?>
-                        <li><a href="<?php echo base_url('admin/category_video'); ?>" class="image_link"><i class="fa fa-image"></i>&nbsp;Videos*</a></li>
-                    <?php } ?>
+                    <li><a href="<?php echo base_url('admin/category_video/' . $id); ?>" class="image_link"><i class="fa fa-image"></i>&nbsp;Videos*</a></li>
                     <div class="clear"></div>
                 </ul>
             </div>
