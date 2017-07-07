@@ -469,6 +469,17 @@ class Pages extends Master_Controller {
 	      redirect('pages/edit/'.$this->input->post('pageId'));
 	    }
   	}
+
+  	protected function fixSliderOrder($id, $page_id) {
+        $query = $this->db->query("select max(`order`) as max_order from slider where pageId = ? and id < ?", array($page_id, $id));
+        $ordinal = 0;
+        foreach ($query->result_array() as $row) {
+            $ordinal = $row["max_order"];
+        }
+        $ordinal++;
+        // now, update it.
+        $this->db->query("update slider set `order` = ? where id = ? limit 1", array($ordinal, $id));
+    }
   	
   	public function addImages()
   	{
@@ -488,52 +499,60 @@ class Pages extends Master_Controller {
 					$uploadData['image'] = $data['file_name'];
 					$uploadData['pageId'] = $this->input->post('page');
 					$uploadData['order'] = $this->input->post('order');
-					$this->admin_m->updateSlider($uploadData);
+					$slider_id = $this->admin_m->updateSlider($uploadData);
+                    // fix the slider ordinal...
+                    $this->fixSliderOrder($slider_id, $uploadData['pageId']);
 					redirect('pages/edit/'.$this->input->post('page'));
 				}	
 	  		}
-                        if(@$_POST['banner_link'] && $_POST['submit'] == 'saveLink') {
-                            foreach( $_POST['banner_link'] as $key => $link ) {
-                                $this->admin_m->updateSliderLink($key, $link);
-                            }
-                            $arr = explode(",", $this->input->post('ordering'));
-                            foreach ($arr as $k => $v) {
-                                $rr[] = explode("=", $v);
-                            }
-                            foreach ($rr as $k => $v) {
-                                $img = $v[0];
-                                $ord = $v[1];
-                                $this->admin_m->updateSliderOrder($img, $ord);
-                            }
-                            redirect('pages/edit/' . $this->input->post('page'));
-                        }
-                        /*
-                         * JLB 07-07-17
-                         * I think that this is completely backwards. This was coded and it appears to copy banners INTO the banner library.
-                         * That's the wrong direction completely. I think that's why the banners didn't show up correctly when you selected them.
-                         */
-                        if(@$_POST['banner'] && $_POST['submit'] == 'addBanner') {
-                            foreach( $_POST['banner'] as $banner ) {
-                                // Pardy's Original Code:
-                                //$bnrExt = explode('.', $banner);
-                                //$bannerName = time().'.'.end($bnrExt);
-                                //copy(STORE_DIRECTORY . '/html/media/'.$banner, STORE_DIRECTORY . '/html/bannerlibrary/'.$bannerName);
+            if(@$_POST['banner_link'] && $_POST['submit'] == 'saveLink') {
+                foreach( $_POST['banner_link'] as $key => $link ) {
+                    $this->admin_m->updateSliderLink($key, $link);
+                }
+                $arr = explode(",", $this->input->post('ordering'));
+                foreach ($arr as $k => $v) {
+                    $rr[] = explode("=", $v);
+                }
+                foreach ($rr as $k => $v) {
+                    $img = $v[0];
+                    $ord = $v[1];
+                    $this->admin_m->updateSliderOrder($img, $ord);
+                }
+                redirect('pages/edit/' . $this->input->post('page'));
+            }
+            /*
+             * JLB 07-07-17
+             * I think that this is completely backwards. This was coded and it appears to copy banners INTO the banner library.
+             * That's the wrong direction completely. I think that's why the banners didn't show up correctly when you selected them.
+             *
+             * I am puzzled beyond measure about the order as well. Why don't we just shove the banner at the end of the list?
+             * How is it getting an ordinal?
+             *
+             */
+            if(@$_POST['banner'] && $_POST['submit'] == 'addBanner') {
+                foreach( $_POST['banner'] as $banner ) {
+                    // Pardy's Original Code:
+                    //$bnrExt = explode('.', $banner);
+                    //$bannerName = time().'.'.end($bnrExt);
+                    //copy(STORE_DIRECTORY . '/html/media/'.$banner, STORE_DIRECTORY . '/html/bannerlibrary/'.$bannerName);
 
-                                // Let's just link them
-                                $full_filename = STORE_DIRECTORY . '/html/bannerlibrary/' . $banner;
-                                if (file_exists($full_filename)) {
-                                    $bannerName = "bannerlibrary_" . $banner; // just use this name, okay?
-                                    symlink($full_filename, STORE_DIRECTORY . "/html/media/" . $bannerName);
+                    // Let's just link them
+                    $full_filename = STORE_DIRECTORY . '/html/bannerlibrary/' . $banner;
+                    if (file_exists($full_filename)) {
+                        $bannerName = "bannerlibrary_" . $banner; // just use this name, okay?
+                        symlink($full_filename, STORE_DIRECTORY . "/html/media/" . $bannerName);
 
-                                    $uploadData = array();
-                                    $uploadData['image'] = $bannerName;
-                                    $uploadData['pageId'] = $this->input->post('page');
-                                    $uploadData['order'] = $this->input->post('order');
-                                    $this->admin_m->updateSlider($uploadData);
-                                }
-                            }
-                            redirect('pages/edit/' . $this->input->post('page'));
-                        }
+                        $uploadData = array();
+                        $uploadData['image'] = $bannerName;
+                        $uploadData['pageId'] = $this->input->post('page');
+                        $uploadData['order'] = $this->input->post('order');
+                        $slider_id = $this->admin_m->updateSlider($uploadData);
+                        // fix the slider ordinal...
+                        $this->fixSliderOrder($slider_id, $uploadData['pageId']);
+                    }
+                }
+                redirect('pages/edit/' . $this->input->post('page'));
+            }
         }
         redirect('pages/edit/' . $this->input->post('page'));
     }

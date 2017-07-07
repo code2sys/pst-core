@@ -25,6 +25,13 @@ class Admin_M extends Master_M {
         return $records;
     }
 
+    /*
+     * JLB 07-07-17
+     * WTF would anyone name this function "updateSlider" when they are calling the create function instead?
+     * This makes no sense. This is horrible for future coders. If you call something an update, and it's really an add....
+     * What would you call an update???
+     *
+     */
     public function updateSlider($uploadData) {
         $success = $this->createRecord('slider', $uploadData, FALSE);
         return $success;
