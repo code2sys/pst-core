@@ -583,12 +583,15 @@ class Pages extends Master_Controller {
         $arr = array();
 
         for ($i = 0; $i < min(count($video_url), count($title), count($ordering)); $i++) {
-            $arr[] = array(
-                "video_url" => $this->cleanYouTubeURL($video_url[$i]),
-                "ordering" => $ordering[$i],
-                "title" => $title[$i],
-                "page_id" => $_REQUEST["pageId"]
-            );
+            $url = $this->cleanYouTubeURL($video_url[$i]);
+            if (trim($url) != "") {
+                $arr[] = array(
+                    "video_url" => $url,
+                    "ordering" => $ordering[$i],
+                    "title" => $title[$i],
+                    "page_id" => $_REQUEST["pageId"]
+                );
+            }
         }
 
 
