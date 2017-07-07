@@ -566,6 +566,15 @@ class Pages extends Master_Controller {
 		}
 	}
 
+	protected function cleanYouTubeURL($url) {
+        $piece = "https://www.youtube.com/watch?v=";
+        if (FALSE !== ($pos = strrpos($url, $piece))) {
+            // well, we need the end of it..
+            $url = substr($url, $pos + strlen($piece));
+        }
+        return $url;
+    }
+
     public function addTopVideos() {
         $video_url = $_REQUEST["video_url"];
         $title = $_REQUEST["title"];
@@ -575,7 +584,7 @@ class Pages extends Master_Controller {
 
         for ($i = 0; $i < min(count($video_url), count($title), count($ordering)); $i++) {
             $arr[] = array(
-                "video_url" => $video_url[$i],
+                "video_url" => $this->cleanYouTubeURL($video_url[$i]),
                 "ordering" => $ordering[$i],
                 "title" => $title[$i],
                 "page_id" => $_REQUEST["pageId"]
