@@ -578,7 +578,7 @@ class Pages extends Master_Controller {
                 "video_url" => $video_url[$i],
                 "ordering" => $ordering[$i],
                 "title" => $title[$i],
-                "pageId" => $_REQUEST["pageId"]
+                "page_id" => $_REQUEST["pageId"]
             );
         }
 
