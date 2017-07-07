@@ -25,7 +25,7 @@ class Abstracttoplevelcategory extends Master_Controller {
 
     public function index()
     {
-        $this->_mainData['pageRec'] = $this->pages_m->getPageRecByTag($this->_pageId);
+        $this->_mainData['pageRec'] = $this->pages_m->getPageRec($this->_pageId);
         $this->setMasterPageVars('metatag', html_entity_decode($this->_mainData['pageRec']['metatags']));
         $this->setMasterPageVars('css', html_entity_decode($this->_mainData['pageRec']['css']));
         $this->setMasterPageVars('script', html_entity_decode($this->_mainData['pageRec']['javascript']));
@@ -44,7 +44,6 @@ class Abstracttoplevelcategory extends Master_Controller {
         $this->_mainData['brandImages'] = $this->parts_m->getBrandImages();
         $this->_mainData['brandSlider'] = $this->load->view('info/brand_slider_v', $this->_mainData, TRUE);
 
-        $this->_mainData['pageRec'] = $this->pages_m->getPageRec($this->_pageId);
         $notice = $this->pages_m->getTextBoxes($this->_pageId);
 
         $this->_mainData['notice'] = $notice[0]['text'];

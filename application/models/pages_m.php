@@ -140,11 +140,16 @@ class Pages_M extends Master_M
 	
 	public function widgetCreator($pageId, $pageRec)
 	{
-		$widgets = json_decode($pageRec['widgets'], TRUE);
+		$widgets = array_values(json_decode($pageRec['widgets'], TRUE));
   		$allWidgets = $this->getWidgets();
 		$widgetBlock = '';
 		$slider = 0;
 		$textbox = 0;
+
+        // JLB 07-07-17
+        // I am trying to make sense of this.
+
+        // So, this sorting part - this is sorting by Our Top Videos, Slider, and then Textbook.
                 $sortingArr = array(3,1,2);
         
                 $result = array(); // result array
