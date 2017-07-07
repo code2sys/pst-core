@@ -1,3 +1,63 @@
+Update July 7, 2017
+===================
+
+Please, NEVER EVER write code like this.
+
+<pre>
+        foreach ($this->input->post('video_url') as $k => $v) {
+            if ($v != '') {
+                $url = $v;
+                parse_str(parse_url($url, PHP_URL_QUERY), $my_array_of_vars);
+                //$my_array_of_vars['v'];
+                $arr[] = array('video_url' => $my_array_of_vars['v'], 'ordering' => $this->input->post('ordering')[$k], 'page_id' => $this->input->post('pageId'), 'title' => $this->input->post('title')[$k]);
+            }
+        }
+</pre>
+
+Somebody who left a steaming pile of code that was known as pages::addTopVideos created this thing - it appears to be doing its own parsing of URLs out of the raw input. It didn't work, and it just crashed.
+
+I understand there was some desire to pluck the variable out of the URL, but could you have used a more extremely general tool to replace a simple task if you tried? The URL wasn't some unknown quantity - the same page that adds videos makes the URL. The parameter you intended to pluck out of the video was right there at the end of the string. This was the most insane thing I'd ever seen.
+
+Here's my solution that I think is infinitely more understandable. Further, it just uses the URL *you put on the screen*.
+
+<pre>
+	protected function cleanYouTubeURL($url) {
+        $piece = "https://www.youtube.com/watch?v=";
+        if (FALSE !== ($pos = strrpos($url, $piece))) {
+            // well, we need the end of it..
+            $url = substr($url, $pos + strlen($piece));
+        }
+        return $url;
+    }
+
+    public function addTopVideos() {
+        $video_url = $_REQUEST["video_url"];
+        $title = $_REQUEST["title"];
+        $ordering = $_REQUEST["ordering"];
+
+        $arr = array();
+
+        for ($i = 0; $i < min(count($video_url), count($title), count($ordering)); $i++) {
+            $url = $this->cleanYouTubeURL($video_url[$i]);
+            if (trim($url) != "") {
+                $arr[] = array(
+                    "video_url" => $url,
+                    "ordering" => $ordering[$i],
+                    "title" => $title[$i],
+                    "page_id" => $_REQUEST["pageId"]
+                );
+            }
+        }
+</pre>
+
+See how the item is factored out into a function. See how it uses a function name that explains _what is going on_. See how I observed the string you were sticking on there and just plucked that off instead of trying to call upon some overkill URL parsing library. 
+
+This was some of the worst code I have ever encountered in this project. The Page Edit code was a complete trainwreck. It is still pretty bad, but I hope I have improved it some.
+
+My minor gripe is that I think it's insane to make a foreach loop interating over a counter variable that goes 0, 1, 2, ... N and pretend it's a complex key. That's the other weirdness in all of that original code - $k is just the index number. 
+
+
+
 Update July 2, 2017
 ===================
 
