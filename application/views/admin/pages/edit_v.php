@@ -240,7 +240,7 @@
                                         <?php case 3: ?>
                                         <div class="divider"></div>
                                                 <h2>Videos</h2>
-                                                    <?php echo form_open_multipart('admin/addTopVideos/', array('class' => 'form_standard', 'id' => 'admin_brand_form')); ?> 
+                                                    <?php echo form_open_multipart('pages/addTopVideos/', array('class' => 'form_standard', 'id' => 'admin_brand_form')); ?>
                                                             <?php echo form_hidden('pageId', $pageRec['id']); ?>
                                             <div class="tab_content">
                                                     <div class="hidden_table">
