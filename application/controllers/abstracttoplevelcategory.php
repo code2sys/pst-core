@@ -58,13 +58,19 @@ class Abstracttoplevelcategory extends Master_Controller {
         $this->_mainData['buttonPrice'] = TRUE;
 
         $this->_mainData['band'] = $this->parts_m->getFeaturedProducts($this->_categoryId, 4);
-        $this->_mainData['featureBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
+        if($this->_mainData['band']) {
+            $this->_mainData['featureBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
+        }
 
         $this->_mainData['band'] = $this->parts_m->getProductDeals($this->_categoryId, 4);
-        $this->_mainData['dealsBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
+        if($this->_mainData['band']) {
+            $this->_mainData['dealsBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
+        }
 
         $this->_mainData['band'] = $this->parts_m->getTopSellers($this->_categoryId, 4);
-        $this->_mainData['topSellersBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
+        if($this->_mainData['band']) {
+            $this->_mainData['topSellersBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
+        }
 
         $this->_mainData['band'] = $this->parts_m->getRecentlyViewed(0, @$_SESSION['recentlyViewed'], 4);
         if($this->_mainData['band']) {
