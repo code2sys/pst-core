@@ -171,9 +171,12 @@ class Pages_M extends Master_M
         $data = array();
         if(!is_null($bannerImages) && is_array($bannerImages) && count($bannerImages) > 0)
         {
+            // There was a significant problem with the ordinals.
+            $correct_ordinal = 0;
             foreach($bannerImages as $img)
             {
-                $data['sliderImages'][$img['order']] = $img;
+                $correct_ordinal++;
+                $data['sliderImages'][$correct_ordinal] = $img;
             }
             $widgetBlock .= $this->load->view('widgets/slider_v', $data, TRUE);
             $widgetBlock .='<br />';
