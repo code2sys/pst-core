@@ -218,14 +218,19 @@
 						<?php echo form_hidden('pageId', $pageRec['id']); ?>
 						<?php echo form_hidden('order', $textedit); ?>
 						
-						<?php if(@$textboxes): foreach($textboxes as $textbox): if($textbox['order'] == $textedit): 
-							$text = $textbox['text'];
-							echo form_hidden('id', $textbox['id']); 
-						else:
-							$text = '';
-						endif; endforeach; endif; 
+						<?php $text = ""; if(!is_null($textboxes) && is_array($textboxes) && count($textboxes) > 0) {
+							for ($i = 0; $i < count($textboxes); $i++) {
+								$textbox = $textboxes[$i];
+								if ($textbox['order'] == $textedit) {
+									$text = $textbox['text'];
+									echo form_hidden('id', $textbox['id']);
+								} else {
+									$text = '';
+								}
+							}
+						}
 						
-						echo form_textarea(array('name' => 'text', 'value' => set_value('text', @$text), 'id' => 'editor'.$textedit)); 
+						echo form_textarea(array('name' => 'text', 'value' => set_value('text', $text), 'id' => 'editor'.$textedit));
 						?>
 						<script type="text/javascript">
 			
