@@ -141,7 +141,7 @@ class Pages_M extends Master_M
 	public function widgetCreator($pageId, $pageRec)
 	{
 		$widgets = json_decode($pageRec['widgets'], TRUE);
-        print_r($widgets);
+
   		$allWidgets = $this->getWidgets();
 		$widgetBlock = '';
 		$slider = 0;
@@ -160,8 +160,6 @@ class Pages_M extends Master_M
                     }
                 }
                 $widgets = $result;
-
-        print_r($widgets);
 
 		if(!empty($widgets))
 		{
