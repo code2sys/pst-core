@@ -567,7 +567,25 @@ class Pages extends Master_Controller {
 	}
 
     public function addTopVideos() {
+        $video_url = $_REQUEST["video_url"];
+        $title = $_REQUEST["title"];
+        $ordering = $_REQUEST["ordering"];
+
         $arr = array();
+
+        for ($i = 0; $i < min(count($video_url), count($title), count($ordering)); $i++) {
+            $arr[] = array(
+                "videl_url" => $video_url[$i],
+                "ordering" => $ordering[$i],
+                "title" => $title[$i]
+            );
+        }
+
+
+        /*
+         * JLB 07-07-17
+         * I have never seen the need to do anything like this. WTF?
+         *
         foreach ($this->input->post('video_url') as $k => $v) {
             if ($v != '') {
                 $url = $v;
@@ -576,6 +594,7 @@ class Pages extends Master_Controller {
                 $arr[] = array('video_url' => $my_array_of_vars['v'], 'ordering' => $this->input->post('ordering')[$k], 'page_id' => $this->input->post('pageId'), 'title' => $this->input->post('title')[$k]);
             }
         }
+        */
         $this->pages_m->updateTopVideos($this->input->post('pageId'), $arr);
         redirect('pages/edit/' . $this->input->post('pageId'));
     }
