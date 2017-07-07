@@ -140,6 +140,63 @@ class Pages_M extends Master_M
 	
 	public function widgetCreator($pageId, $pageRec)
 	{
+        // JLB 07-07-17
+        // JLB - I am going to short-circuit this into a simpler thing to implement EXACTLY what Brandt said, as I think he said it,
+        // because, ultimately, this widgets array, seems pointless.
+
+        //
+        $widgetBlock = '';
+
+        // videos
+        $topVideo = $this->getTopVideos($pageId);
+        if (!is_null($topVideo) && is_array($topVideo) && count($topVideo) > 0) {
+            $mainVideo = $mainTitle = '';
+            foreach ($topVideo as $key => $val) {
+                if ($val['ordering'] == 1) {
+                    $mainVideo = $val['video_url'];
+                    $mainTitle = $val['title'];
+                    unset($topVideo[$key]);
+                    break;
+                }
+            }
+            // Note that below there is a category video that is, well, undefined.
+            $data1['mainVideo'] = $mainVideo;
+            $data1['mainTitle'] = $mainTitle;
+            $data1['video'] = $topVideo;
+            $widgetBlock .= $this->load->view('widgets/videos_v', $data1, TRUE);
+        }
+
+        // slider
+        $bannerImages = $this->admin_m->getSliderImages($pageId);
+        $data = array();
+        if(!is_null($bannerImages) && is_array($bannerImages) && count($bannerImages) > 0)
+        {
+            foreach($bannerImages as $img)
+            {
+                $data['sliderImages'][$img['order']] = $img;
+            }
+            $widgetBlock .= $this->load->view('widgets/slider_v', $data, TRUE);
+            $widgetBlock .='<br />';
+        }
+
+        // textblocks
+        $textboxes = $this->pages_m->getTextBoxes($pageId);
+        if(!is_null($textboxes) && is_array($textboxes) && count($textboxes) > 0)
+        {
+            usort($textboxes, function($a, $b) {
+               return ($a["order"] < $b["order"] ? -1 : ($a["order"] > $b["order"] ? 1 : 0));
+            });
+
+            foreach($textboxes as $text)
+            {
+                $widgetBlock .= '<div class="content_section">';
+                $widgetBlock .= '<h3>'.$text['text'].'</h3>';
+                $widgetBlock .= '</div>';
+            }
+        }
+
+        return $widgetBlock;
+
 		$widgets = json_decode($pageRec['widgets'], TRUE);
 
   		$allWidgets = $this->getWidgets();
@@ -150,7 +207,7 @@ class Pages_M extends Master_M
         // JLB 07-07-17
         // I am trying to make sense of this.
 
-        // So, this sorting part - this is sorting by Our Top Videos, Slider, and then Textbook.
+        // So, this sorting part - this is sorting by Our Top Videos, Slider, and then textblocks.
                 $sortingArr = array(3,1,2);
         
                 $result = array(); // result array
