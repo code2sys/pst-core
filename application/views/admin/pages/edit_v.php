@@ -214,7 +214,7 @@
 							You can use this like a word processor.  When you click submit, the data will be saved and rendered onto your webpage.
 						</p>
 								<!--
-								print_r($textboxes);
+								<?php print_r($textboxes); ?>
 								-->
 						<br>
 						<form action="<?php echo base_url('pages/addTextBox'); ?>" method="post" id="form_example" class="form_standard">
