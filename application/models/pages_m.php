@@ -159,6 +159,9 @@ class Pages_M extends Master_M
                     }
                 }
                 $widgets = $result;
+
+        print_r($widgets);
+
 		if(!empty($widgets))
 		{
 	
