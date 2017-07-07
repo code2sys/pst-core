@@ -227,8 +227,6 @@
 								if ($textbox['order'] == $textedit) {
 									$text = $textbox['text'];
 									echo form_hidden('id', $textbox['id']);
-								} else {
-									$text = '';
 								}
 							}
 						}
