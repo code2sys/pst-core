@@ -575,7 +575,7 @@ class Pages extends Master_Controller {
 
         for ($i = 0; $i < min(count($video_url), count($title), count($ordering)); $i++) {
             $arr[] = array(
-                "videl_url" => $video_url[$i],
+                "video_url" => $video_url[$i],
                 "ordering" => $ordering[$i],
                 "title" => $title[$i]
             );
