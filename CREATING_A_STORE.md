@@ -1,3 +1,11 @@
+Update July 6, 2017 JLB
+=======================
+
+Pardy added support for banners. The banners have a few sharp edges. 
+
+First, you need the banners, or at least you need a directory called html/bannerlibrary. This needs to reference 
+
+
 Update May 10, 2017 JLB
 =======================
 

@@ -136,7 +136,12 @@
                                                                                         <tr class="slider-banners" style="display: none;">
                                                                                             <td colspan="3">
                                                                                                 <?php
-                                                                                                $dir = STORE_BANNER_LIBRARY;
+																								// JLB 07-07-17
+																								// This is the only place that Pardy used the constant
+																								// STORE_BANNER_LIBRARY
+																								// It makes no sense to perpetuate it in one way in one spot,
+																								// and then to just assume it/s html/bannerlibrary elsewhere.
+                                                                                                $dir = STORE_DIRECTORY . '/html/bannerlibrary/';
                                                                                                 $file_display = array(
                                                                                                     'jpg',
                                                                                                     'jpeg',
@@ -154,7 +159,7 @@
 
                                                                                                         if ($file !== '.' && $file !== '..' && in_array($file_type, $file_display) == true) { ?>
                                                                                                             <div class="banner-container">
-                                                                                                                <img src='<?php echo base_url($bannerlibrary)."/".$file; ?>' width='200px' height="100px;"/>
+                                                                                                                <img src='<?php echo jsite_url("/bannerlibrary/".$file); ?>' width='200px' height="100px;"/>
                                                                                                                 <input type="checkbox" value="<?php echo $file; ?>" class="check-box" name="banner[]" id="check1" />
                                                                                                             </div>
                                                                                                         <?php }

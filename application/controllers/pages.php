@@ -507,16 +507,30 @@ class Pages extends Master_Controller {
                             }
                             redirect('pages/edit/' . $this->input->post('page'));
                         }
+                        /*
+                         * JLB 07-07-17
+                         * I think that this is completely backwards. This was coded and it appears to copy banners INTO the banner library.
+                         * That's the wrong direction completely. I think that's why the banners didn't show up correctly when you selected them.
+                         */
                         if(@$_POST['banner'] && $_POST['submit'] == 'addBanner') {
                             foreach( $_POST['banner'] as $banner ) {
-                                $bnrExt = explode('.', $banner);
-                                $bannerName = time().'.'.end($bnrExt);
-                                copy(STORE_DIRECTORY . '/html/media/'.$banner, STORE_DIRECTORY . '/html/bannerlibrary/'.$bannerName);
-                                $uploadData = array();
-                                $uploadData['image'] = $bannerName;
-                                $uploadData['pageId'] = $this->input->post('page');
-                                $uploadData['order'] = $this->input->post('order');
-                                $this->admin_m->updateSlider($uploadData);
+                                // Pardy's Original Code:
+                                //$bnrExt = explode('.', $banner);
+                                //$bannerName = time().'.'.end($bnrExt);
+                                //copy(STORE_DIRECTORY . '/html/media/'.$banner, STORE_DIRECTORY . '/html/bannerlibrary/'.$bannerName);
+
+                                // Let's just link them
+                                $full_filename = STORE_DIRECTORY . '/html/bannerlibrary/' . $banner;
+                                if (file_exists($full_filename)) {
+                                    $bannerName = "bannerlibrary_" . $banner; // just use this name, okay?
+                                    symlink($full_filename, STORE_DIRECTORY . "/html/media/" . $bannerName);
+
+                                    $uploadData = array();
+                                    $uploadData['image'] = $bannerName;
+                                    $uploadData['pageId'] = $this->input->post('page');
+                                    $uploadData['order'] = $this->input->post('order');
+                                    $this->admin_m->updateSlider($uploadData);
+                                }
                             }
                             redirect('pages/edit/' . $this->input->post('page'));
                         }
