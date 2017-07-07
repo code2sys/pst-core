@@ -77,7 +77,7 @@
 						</tr>
 						<tr>
 							<td colspan="2">
-							<p> Make changes to the number and order of the widgets below and then submit to edit the content in the sections below.
+							<p> Make changes to the number and order of the widgets below and then submit to edit the content in the sections below.</p>
 								<div class="dragcontainer">
 									<?php if(@$widgets): ?>
 									<ul id="draggable_list">
@@ -96,7 +96,8 @@
 											<?php endforeach; endif; ?>
 									</ul>
 								
-								</div></td>
+								</div>
+							</td>
 						</tr>
 						<?php endif; ?>
 						<?php if(@$pageRec['id'] == 12): ?>
@@ -195,8 +196,7 @@
                                                                                         </tr>
                                                                                         <tr>
                                                                                             <td>
-                                                                                                <input type="hidden" name="ordering" id="orderSort"></input>
-                                                                                                <button type="submit" id="button" name="submit" value="saveLink">Submit</button>
+                                                                                                <input type="hidden" name="ordering" id="orderSort"/>                                                                                                <button type="submit" id="button" name="submit" value="saveLink">Submit</button>
                                                                                             </td>
                                                                                         </tr>
 										</table>
