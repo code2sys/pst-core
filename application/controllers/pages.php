@@ -577,7 +577,8 @@ class Pages extends Master_Controller {
             $arr[] = array(
                 "video_url" => $video_url[$i],
                 "ordering" => $ordering[$i],
-                "title" => $title[$i]
+                "title" => $title[$i],
+                "pageId" => $_REQUEST["pageId"]
             );
         }
 
