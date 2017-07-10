@@ -987,7 +987,7 @@ class Admin extends Master_Controller {
         $this->_mainData['parent_brands'] = $this->admin_m->getBrands(TRUE);
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/brand/brand_v', $this->_mainData);
-        curl_request_async();
+//        curl_request_async();
     }
 
     public function brand_image($id = NULL) {
@@ -2260,7 +2260,7 @@ class Admin extends Master_Controller {
             $this->motorcycle_edit($id);
         }
 
-        curl_request_async();
+//        curl_request_async();
     }
 
     public function motorcycle_description($id = NULL) {
