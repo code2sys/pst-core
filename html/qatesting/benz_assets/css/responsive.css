@@ -384,7 +384,7 @@ span.glyphicon-filter {
         padding:8px 6px;
         box-shadow:1px 2px 10px silver;
     }
-    .featured-listings .panel-body u.lstngl#top-video li {
+    .featured-listings .panel-body ul.lstng#top-video li {
         width:100%;
     }
     .brnds .ftrd-brnds a .bx {
