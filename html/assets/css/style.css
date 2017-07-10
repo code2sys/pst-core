@@ -25,7 +25,7 @@ body {
 		
 /* ======== HEADINGS ======== */
 
-h1, h2, h3, h4, {
+h1, h2, h3, h4 {
 	font-family: 'Helvetica','Lucida Sans', Arial, sans-serif;
 	font-weight: 500;
 	line-height: 1.1;
@@ -1824,7 +1824,7 @@ a.button_full:active {
    ===================================================================================================================================== */
 
 @media only screen and (min-width : 150px) and (max-width : 850px) {
-	
+
 	/* ======== WRAPPER ======== 
 
 	.wrap {
@@ -1853,20 +1853,20 @@ a.button_full:active {
 	}
 
 	/* ======== HEADER ======== */
+	.header_wrap {
+		background: url(../images/head_bg.png) top left no-repeat #EEE;
+		height: auto;
+		width: 100%;
+	}
 
-.header_wrap {
-	background:url(../images/head_bg.png) top left no-repeat #EEE;
-	height:auto;
-	width:100%;
-}
-.header_content {
-	height:auto;
-	margin:0px auto;
-	padding:10px 0px 40px;
-	width:100%;
-	width:1000px;
-}
-	
+	.header_content {
+		height: auto;
+		margin: 0px auto;
+		padding: 10px 0px 40px;
+		width: 100%;
+		width: 1000px;
+	}
+
 	/* ======== MAIN LOGO ======== 
 
 	.logo {
@@ -2012,11 +2012,10 @@ a.button_full:active {
 
 	
 	/* ======== CONTENT AREA ======== */
-	
 	.content_wrap {
-		background:none;
-		height:auto;
-		width:1000px;
+		background: none;
+		height: auto;
+		width: 1000px;
 	}
 
 	/* ======== SLIDER ======== 
@@ -2286,49 +2285,54 @@ a.button_full:active {
 	}
 	
 	/* ======== FOOTER ======== */
-
 	.footer_wrap {
-		background:url(../images/footer_bg_m.png) top center repeat;
-		border-top:2px #393 solid;
-		height:auto;
-		position:relative;	
-		width:1000px;
+		background: url(../images/footer_bg_m.png) top center repeat;
+		border-top: 2px #393 solid;
+		height: auto;
+		position: relative;
+		width: 1000px;
 		margin-bottom: 50px;
 	}
-	
+
 	.footer_content {
-		background:none;
-		height:auto;
-		margin:0px auto;
-		padding-top:40px;
-		padding-bottom:40px;
-		width:90%;
-		max-width:1000px;
+		background: none;
+		height: auto;
+		margin: 0px auto;
+		padding-top: 40px;
+		padding-bottom: 40px;
+		width: 90%;
+		max-width: 1000px;
 	}
+
 	.footer_sect {
-		float:none;
-		height:auto;
-		margin-right:0;
-		margin:0 auto;
+		float: none;
+		height: auto;
+		margin-right: 0;
+		margin: 0 auto;
 		text-align: center;
-		width:100%;
+		width: 100%;
 		border-radius: 5px;
 		-moz-border-radius: 5px;
 		-webkit-border-radius: 5px;
 	}
+
 	.align-right {
 		text-align: center;
 	}
+
 	.footer_logo img {
-		width:80%;
+		width: 80%;
 	}
+
 	.footer_content p {
-		color:#BBB;
+		color: #BBB;
 		font-size: 14px;
-		margin:0px;
-		text-align:center;
+		margin: 0px;
+		text-align: center;
 		text-shadow: 0 1px 3px #000;
 	}
+
+}
 	
 
 
@@ -2654,3 +2658,4 @@ a.button_full:active {
 	width:30px;
 }
 */
+

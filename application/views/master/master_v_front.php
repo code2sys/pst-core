@@ -294,7 +294,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
                         <div class="panel-body">
                             <ul class="lstng" id="top-video">
                                 <?php foreach ($topVideo as $key => $val) { ?>
-                                    <li class="ftrdb col-md-4" style="width: 32%;">
+                                    <li class="ftrdb">
                                         <iframe src="https://www.youtube.com/embed/<?php echo $val['video_url'];?>" frameborder="0" style="width: 90%;height:220px;" allowfullscreen></iframe>
                                     </li>
                                 <?php } ?>
