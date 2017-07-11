@@ -36,22 +36,22 @@ if (!defined("YOUTUBE_CHANNEL")) {
             </li>
         </ul>
     </div>
-    <div class="ryt">
-        <ul <?php if (isset($rltdvdo_class)): ?>class="<?php echo $rltdvdo_class; ?>"<?php endif; ?>>
-            <li onClick="showVideo('<?php echo $mainVideo; ?>', '<?php echo $mainTitle; ?>');" id="<?php echo $mainVideo; ?>" style="display:none;">
+</div>
+<div class="<?php if (isset($rltdvdo_class)): ?>class="<?php echo $rltdvdo_class; ?>"<?php endif; ?>">
+    <ul >
+        <li onClick="showVideo('<?php echo $mainVideo; ?>', '<?php echo $mainTitle; ?>');" id="<?php echo $mainVideo; ?>" style="display:none;">
+            <img class="ply" src="/qatesting/newassets/images/play.png">
+            <img src="http://img.youtube.com/vi/<?php echo $mainVideo; ?>/default.jpg" class="active">
+            <p><?php echo $mainTitle; ?></p>
+        </li>
+        <?php foreach ($video as $k => $v) { ?>
+            <li onClick="showVideo('<?php echo $v['video_url']; ?>', '<?php echo $v['title']; ?>');" id="<?php echo $v['video_url']; ?>">
                 <img class="ply" src="/qatesting/newassets/images/play.png">
-                <img src="http://img.youtube.com/vi/<?php echo $mainVideo; ?>/default.jpg" class="active">
-                <p><?php echo $mainTitle; ?></p>
+                <img src="http://img.youtube.com/vi/<?php echo $v['video_url']; ?>/default.jpg" class="active">
+                <p><?php echo $v['title']; ?></p>
             </li>
-            <?php foreach ($video as $k => $v) { ?>
-                <li onClick="showVideo('<?php echo $v['video_url']; ?>', '<?php echo $v['title']; ?>');" id="<?php echo $v['video_url']; ?>">
-                    <img class="ply" src="/qatesting/newassets/images/play.png">
-                    <img src="http://img.youtube.com/vi/<?php echo $v['video_url']; ?>/default.jpg" class="active">
-                    <p><?php echo $v['title']; ?></p>
-                </li>
-            <?php } ?>
-        </ul>
-    </div>
+        <?php } ?>
+    </ul>
 </div>
 <?php if ($autoplay): ?>
 <script type="application/javascript">
