@@ -14,7 +14,8 @@ if (!defined("YOUTUBE_CHANNEL")) {
     $CI->load->model("admin_m");
     $smsettings = $CI->admin_m->getSMSettings();
     if (array_key_exists("sm_ytlink", $smsettings) && $smsettings["sm_ytlink"] != "") {
-        define('YOUTUBE_CHANNEL', basename($smsettings["sm_ytlink"]));
+        $link_array = explode('/', $smsettings['sm_ytlink']);
+        define('YOUTUBE_CHANNEL', end($link_array)); // ($smsettings["sm_ytlink"]));
     } else {
         define('YOUTUBE_CHANNEL', '');
     }
