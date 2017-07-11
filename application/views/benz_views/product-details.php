@@ -167,42 +167,19 @@ unset($motorcycle['videos'][0]);
 				<div class="info">
 					<div class="vds rmv">
                         <?php if (!empty($mainVideo)) { ?>
-                                            <div class="main-vdo">
-                                <iframe width="560" height="400" src="https://www.youtube.com/embed/<?php echo $mainVideo['video_url']; ?>" data-id="<?php echo $mainVideo['video_url']; ?>" id="mainVideo" frameborder="0" allowfullscreen=""></iframe>
-                                <ul class="mn-ul">
-                                    <li class="mn-frst"><strong>Share :</strong>
-                                        <div class="ggl" style="min-width:100px;">
-                                            <div class="fb-share-button" data-href="https://www.youtube.com/embed/<?php echo $mainVideo; ?>" data-layout="button_count"></div>
-                                        </div>
-                                        <div class="ggl ggl-pls">
-                                            <div class="g-plus fixwdth" data-action="share" data-href="https://www.youtube.com/embed/<?php echo $mainVideo; ?>" data-width="250"></div>
-                                        </div>
-                                    </li>
-                                    <li class="subs"><strong>Subscribe to us :</strong>
-                                        <?php
-                                        $link_array = explode('/', $SMSettings['sm_ytlink']);
-                                        ?>
-                                        <div class="g-ytsubscribe" data-channelid="<?php echo end($link_array); ?>" data-layout="default" data-count="default"></div>
-                                    </li>
-                                </ul>
-                                            </div>
+							<?php
+							$CI =& get_instance();
+							echo $CI->load->view("master/embedded_videos", array(
+								"class_name" => "main-vdo",
+								"mainVideo" => $mainVideo['video_url'],
+								"mainTitle" => $mainVideo['title'],
+								"video" => $video,
+								"rltdvdo_class" => "rltdvdo",
+								"autoplay" => false
+							), true);
+							?>
+
 						<?php } ?>
-						<div class="ryt">
-							<ul class="rltdvdo">
-								<li onClick="showVideo('<?php echo $mainVideo['video_url']; ?>', '<?php echo $mainVideo['title']; ?>');" id="<?php echo $mainVideo['video_url']; ?>" style="display:none;">
-									<img class="ply" src="<?php echo $new_assets_url;?>images/play.png">
-									<img src="http://img.youtube.com/vi/<?php echo $mainVideo['video_url']; ?>/default.jpg" class="active">
-									<p><?php echo $mainVideo['title']; ?></p>
-								</li>
-								<?php foreach ($motorcycle['videos'] as $v) { ?>
-									<li onClick="showVideo('<?php echo $v['video_url']; ?>', '<?php echo $v['title']; ?>');" id="<?php echo $v['video_url']; ?>">
-										<img class="ply" src="<?php echo $new_assets_url;?>images/play.png">
-										<img src="http://img.youtube.com/vi/<?php echo $v['video_url']; ?>/default.jpg" class="active">
-										<p><?php echo $v['title']; ?></p>
-									</li>
-								<?php } ?>
-							</ul>
-						</div>
 					</div>
 					<div class="clear mn-hght"></div>
 					<?php echo $motorcycle['description'];?>
