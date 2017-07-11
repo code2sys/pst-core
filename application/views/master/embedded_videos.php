@@ -22,6 +22,7 @@ if (!defined("YOUTUBE_CHANNEL")) {
 }
 
 ?>
+<script src="https://apis.google.com/js/platform.js"></script>
 <div class="<?php echo $class_name; ?>">
     <div class="lft">
         <iframe src="https://www.youtube.com/embed/<?php echo $mainVideo; ?>" data-id="<?php echo $mainVideo; ?>" id="mainVideo" frameborder="0" allowfullscreen=""></iframe>
