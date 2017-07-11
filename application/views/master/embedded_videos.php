@@ -9,6 +9,17 @@
  * echo end($link_array);
  */
 
+if (!defined("YOUTUBE_CHANNEL")) {
+    $CI =& get_instance();
+    $CI->load->model("admin_m");
+    $smsettings = $CI->admin_m->getSMSettings();
+    if (array_key_exists("sm_ytlink", $smsettings) && $smsettings["sm_ytlink"] != "") {
+        define('YOUTUBE_CHANNEL', basename($smsettings["sm_ytlink"]));
+    } else {
+        define('YOUTUBE_CHANNEL', '');
+    }
+}
+
 ?>
 <div class="<?php echo $class_name; ?>">
     <div class="lft">
