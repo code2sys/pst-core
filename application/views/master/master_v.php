@@ -910,5 +910,11 @@ echo $CI->load->view("master/tracking", array(
         </script>
         <script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
 
+        <?php
+        $CI =& get_instance();
+        echo $CI->load->view("master/bottom_footer", array(
+            "store_name" => $store_name
+        ));
+        ?>
     </body>
 </html>

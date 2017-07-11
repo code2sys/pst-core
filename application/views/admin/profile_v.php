@@ -323,6 +323,20 @@ $google_trust = (array) json_decode($address['google_trust']);
 										  'class' => 'text large',
 										  'placeholder' => 'Bing Site Verification Code')); ?></td>
 									</tr>
+									<tr>
+										<td style="width:30%;"><strong>Additional Header Code:</strong><br/><em>(Enter Full Script Tags)</em></td>
+										<td><?php echo form_textarea(array('name' => 'additional_tracking_code',
+										  'value' => @$address['additional_tracking_code'],
+										  'class' => 'text large',
+										  'placeholder' => '')); ?></td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><strong>Additional Footer Code:</strong><br/><em>(Enter Full Script Tags)</em></td>
+										<td><?php echo form_textarea(array('name' => 'additional_footer_code',
+										  'value' => @$address['additional_footer_code'],
+										  'class' => 'text large',
+										  'placeholder' => '')); ?></td>
+									</tr>
 								</table>
 							</td>
 						</tr>
