@@ -37,7 +37,7 @@ if (!defined("YOUTUBE_CHANNEL")) {
         </ul>
     </div>
 </div>
-<div class="<?php if (isset($rltdvdo_class)): ?>class="<?php echo $rltdvdo_class; ?>"<?php endif; ?>">
+<div class="<?php if (isset($rltdvdo_class)): ?><?php echo $rltdvdo_class; ?><?php endif; ?>">
     <ul >
         <li onClick="showVideo('<?php echo $mainVideo; ?>', '<?php echo $mainTitle; ?>');" id="<?php echo $mainVideo; ?>" style="display:none;">
             <img class="ply" src="/qatesting/newassets/images/play.png">
