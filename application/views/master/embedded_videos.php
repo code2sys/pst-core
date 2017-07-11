@@ -54,5 +54,17 @@ if (!defined("YOUTUBE_CHANNEL")) {
     </div>
 </div>
 <?php if ($autoplay): ?>
-<script type="text/javascript">gapi.plus.go();</script>
+<script type="application/javascript">
+    $(document).ready(function() {
+        try {
+            if(gapi) {
+                gapi.plus.go();
+            } else {
+                console.log("gapi not found");
+            }
+        } catch(err) {
+            console.log("Error with GAPI: " + err);
+        }
+    });
+</script>
 <?php endif; ?>
