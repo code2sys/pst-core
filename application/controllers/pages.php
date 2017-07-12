@@ -219,7 +219,7 @@ class Pages extends Master_Controller {
 				$this->_mainData['states'] = $this->load_states();
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/finance_request', $this->_mainData, TRUE);
 				$this->_mainData['ssl'] = true;
-				$this->_mainData['widgetBlock'] = "";
+				// $this->_mainData['widgetBlock'] .= $block;
 	  		}
 	  		
 	  		$this->setNav('master/navigation_v', 0);
