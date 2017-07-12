@@ -217,6 +217,7 @@ class Pages extends Master_Controller {
 				//$this->_mainData['widgetBlock'] .= $this->loadGoggleMaps();
 				$this->_mainData['showNotice'] = false;
 				$this->_mainData['states'] = $this->load_states();
+                $this->_mainData['widgetBlock'] = '<h1 style="color:#3f51b5">' . $this->_mainData['pageRec']['label'] .'</h1>' . $this->_mainData['widgetBlock'];
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/finance_request', $this->_mainData, TRUE);
 				$this->_mainData['ssl'] = true;
 				// $this->_mainData['widgetBlock'] .= $block;
