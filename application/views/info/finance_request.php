@@ -1,7 +1,5 @@
 
-		<p style="text-align: justify;">
-			<?php echo $notice;?>
-		</p>
+
   		<!-- VALIDATION ERROR -->
 			<?php if(validation_errors()): ?>
 			<div class="validation_error">
