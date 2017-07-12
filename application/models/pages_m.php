@@ -192,9 +192,11 @@ class Pages_M extends Master_M
 
             foreach($textboxes as $text)
             {
-                $widgetBlock .= '<div class="content_section">';
-                $widgetBlock .= '<h3>'.$text['text'].'</h3>';
-                $widgetBlock .= '</div>';
+                if (trim($text['text']) != "") {
+                    $widgetBlock .= '<div class="content_section">';
+                    $widgetBlock .= '<h3>' . $text['text'] . '</h3>';
+                    $widgetBlock .= '</div>';
+                }
             }
         }
 
