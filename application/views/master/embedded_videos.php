@@ -34,8 +34,7 @@ if (!defined("YOUTUBE_CHANNEL")) {
                 </div>
             </li>
             <li class="subs"><strong>Subscribe to us :</strong>
-                <div class="g-ytsubscribe" data-channelid="UC5dfhHkJR_nhE54g-qOfXxQ" data-layout="default" data-count="default"></div>
-                <div class="g-ytsubscribe" data-channel="<?php echo YOUTUBE_CHANNEL; ?>" data-layout="default" data-count="default"></div>
+                <div class="g-ytsubscribe" data-channelid="<?php echo YOUTUBE_CHANNEL; ?>" data-layout="default" data-count="default"></div>
             </li>
         </ul>
     </div>
