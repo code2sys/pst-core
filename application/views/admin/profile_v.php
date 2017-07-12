@@ -299,7 +299,7 @@ $google_trust = (array) json_decode($address['google_trust']);
 								<table width="100%" style="background-color:white;">
 									<tr>
 										<td colspan="2">
-											<img src="<?php echo base_url().'assets/benz_assets/analytics.png';?>" width="233px" border="0"/>
+											<h2>Analytics and Tracking Codes</h2>
 										</td>
 									</tr>
 									<tr>
