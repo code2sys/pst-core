@@ -171,20 +171,22 @@ class Pages extends Master_Controller {
 			
 			if($pageTag == 'shippingquestions')
 			{
-				$block = $this->_mainData['widgetBlock'];
+                // JLB 07-11-17
+                // I have no idea why they do this stupid stuff with $block
+				// $block = $this->_mainData['widgetBlock'];
 				//$this->_mainData['widgetBlock'] = '<img src="'.$this->_mainData['assets'].'/images/Truck_with_Logo.jpg"/>';
-				$this->_mainData['widgetBlock'] .= $block;
+				// $this->_mainData['widgetBlock'] .= $block;
 			}
 	  		
 			if($pageTag == 'contactus')
 	  		{
 	  			$this->processContactForm();
-		  		$block = $this->_mainData['widgetBlock'];
+		  		// $block = $this->_mainData['widgetBlock'];
 				$this->load->helper('easy_captcha_helper');
 				$this->_mainData['captcha'] = getCaptchaDisplayElements();
 				$this->_mainData['widgetBlock'] .= $this->loadGoggleMaps();
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/contact_v', $this->_mainData, TRUE);
-				$this->_mainData['widgetBlock'] .= $block;
+				// $this->_mainData['widgetBlock'] .= $block;
 	  		}
 			
 			if($pageTag == 'servicerequest')
@@ -193,14 +195,14 @@ class Pages extends Master_Controller {
 					redirect($this->_mainData['s_baseURL'] . 'pages/index/servicerequest');
 				}
 	  			$this->processServiceForm();
-		  		$block = $this->_mainData['widgetBlock'];
+		  		// $block = $this->_mainData['widgetBlock'];
 				//$this->load->helper('easy_captcha_helper');
 				//$this->_mainData['captcha'] = getCaptchaDisplayElements();
 				//$this->_mainData['widgetBlock'] .= $this->loadGoggleMaps();
 				$this->_mainData['showNotice'] = false;
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/service_request', $this->_mainData, TRUE);
 				$this->_mainData['ssl'] = true;
-				$this->_mainData['widgetBlock'] .= $block;
+				// $this->_mainData['widgetBlock'] .= $block;
 	  		}
 			
 			if($pageTag == 'financerequest')
@@ -209,7 +211,7 @@ class Pages extends Master_Controller {
 					redirect($this->_mainData['s_baseURL'] . 'pages/index/financerequest');
 				}
 	  			$this->processCreditForm();
-		  		$block = $this->_mainData['widgetBlock'];
+		  		// $block = $this->_mainData['widgetBlock'];
 				//$this->load->helper('easy_captcha_helper');
 				//$this->_mainData['captcha'] = getCaptchaDisplayElements();
 				//$this->_mainData['widgetBlock'] .= $this->loadGoggleMaps();
@@ -217,7 +219,7 @@ class Pages extends Master_Controller {
 				$this->_mainData['states'] = $this->load_states();
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/finance_request', $this->_mainData, TRUE);
 				$this->_mainData['ssl'] = true;
-				$this->_mainData['widgetBlock'] .= $block;
+				// $this->_mainData['widgetBlock'] .= $block;
 	  		}
 	  		
 	  		$this->setNav('master/navigation_v', 0);
