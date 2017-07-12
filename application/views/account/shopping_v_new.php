@@ -333,7 +333,6 @@ $detect = new Mobile_Detect;
                 <a style="padding:10px 10px 8px 10px;" href="javascript:void(0);" onclick="changeTabs('sizechart')" id="sizechart"><img style="vertical-align:middle; margin:0 6px 0 0;" src="<?php echo base_url('assets/images/measuring-tape.png'); ?>">&nbsp;Size Chart</a>
             <?php endif; ?>
         </div>
-        <script src="https://apis.google.com/js/platform.js"></script>
         <div class="desDetailTxt" id="tab_stuff">
             <?php if ($mainVideo != '') { ?>
                 <?php
