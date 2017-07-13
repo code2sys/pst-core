@@ -25,6 +25,13 @@ class Admin_M extends Master_M {
         return $records;
     }
 
+    /*
+     * JLB 07-07-17
+     * WTF would anyone name this function "updateSlider" when they are calling the create function instead?
+     * This makes no sense. This is horrible for future coders. If you call something an update, and it's really an add....
+     * What would you call an update???
+     *
+     */
     public function updateSlider($uploadData) {
         $success = $this->createRecord('slider', $uploadData, FALSE);
         return $success;
@@ -102,19 +109,56 @@ class Admin_M extends Master_M {
     }
 
     public function getMotorcycleProducts($cat = NULL, $filter = NULL, $orderBy = NULL, $limit = 20, $offset = 0) {
+//        if (!is_null($filter)) {
+//            if (is_array($filter)) {
+//                $custom_where = "(";
+//                $custom_where1 = "(";
+//                foreach ($filter as $search) {
+//                    //$custom_where .= 'MATCH(motorcycle.title) AGAINST("' . trim($search) . '")';
+//                    $custom_where .= 'title like "%' . trim($search) . '%"';
+//                    $custom_where1 .= 'sku like "%' . trim($search) . '%"';
+//                }
+//                $custom_where = rtrim($custom_where, 'OR') . ')';
+//                $custom_where1 = rtrim($custom_where1, 'OR') . ')';
+//                $this->db->where($custom_where);
+//                $this->db->or_where($custom_where1);
+//            } else {
+//                $this->db->like('motorcycle.title', $filter);
+//                $this->db->or_like('motorcycle.sku', $filter);
+//            }
+//        }        
         if (!is_null($filter)) {
             if (is_array($filter)) {
+                if( $filter['search'] != '' ) {
                 $custom_where = "(";
-                $custom_where1 = "(";
-                foreach ($filter as $search) {
-                    //$custom_where .= 'MATCH(motorcycle.title) AGAINST("' . trim($search) . '")';
-                    $custom_where .= 'title like "%' . trim($search) . '%"';
-                    $custom_where1 .= 'sku like "%' . trim($search) . '%"';
+                    $custom_where .= 'title like "%' . trim($filter['search']) . '%" OR '.'sku like "%' . trim($filter['search']) . '%" OR ';
+                    $custom_where = rtrim($custom_where, ' OR ') . ')';
+                    $this->db->where($custom_where);
                 }
-                $custom_where = rtrim($custom_where, 'OR') . ')';
-                $custom_where1 = rtrim($custom_where1, 'OR') . ')';
-                $this->db->where($custom_where);
-                $this->db->or_where($custom_where1);
+                //$custom_where .= "condition = '".$filter['condition']."' OR make = '".$filter['brand']."' OR year = '".$filter['year']."' OR category = '".$filter['category']."' OR vehicle = '".$filter['vehicle']."'";
+                
+                $custom_where1 = "";
+                if($filter['condition'] != '') {
+                    $this->db->where('condition', $filter['condition']);
+                }
+                if (@$filter['brand']) {
+                    $this->db->where_in('motorcycle.make', $filter['brand']);
+                }
+
+                if (@$filter['year']) {
+                    $this->db->where_in('motorcycle.year', $filter['year']);
+                }
+                if (@$filter['category']) {
+                    $this->db->where_in('motorcycle.category', $filter['category']);
+                }
+                if (@$filter['vehicle']) {
+                    $this->db->where_in('motorcycle.vehicle_type', $filter['vehicle']);
+                }
+                
+                if( $custom_where1 != '' ) {
+                    $custom_where1 = "(".rtrim($custom_where1, ' AND ') . ')';
+                    $this->db->where($custom_where1);
+                }
             } else {
                 $this->db->like('motorcycle.title', $filter);
                 $this->db->or_like('motorcycle.sku', $filter);
@@ -326,7 +370,6 @@ class Admin_M extends Master_M {
 	
     public function updateCategory($post) {
         $data = array();
-        $data['active'] = @$post['active'] ? 1 : 0;
         $data['title'] = $post['title'];
         $data['featured'] = $post['featured'];
         $data['name'] = $post['name'];
@@ -748,6 +791,18 @@ class Admin_M extends Master_M {
         return $list;
     }
 
+	public function getCategoryVideos( $id ) {
+        $where = array('category_id' => $id);
+        $records = $this->selectRecords('category_video', $where);
+        $list = array();
+        if (@$records) {
+            foreach ($records as &$record) {
+                $list[$record['id']] = $record;
+            }
+        }
+        return $list;
+	}
+
     public function getProductVideos($id) {
         $where = array('part_id' => $id);
         $records = $this->selectRecords('part_video', $where);
@@ -766,6 +821,13 @@ class Admin_M extends Master_M {
             $this->db->insert_batch('brand_video', $arr);
         }
     }
+
+	public function updateCategoryVideos( $id, $arr ) {
+        $this->db->delete('category_video', array('category_id' => $id));
+        if (!empty($arr)) {
+            $this->db->insert_batch('category_video', $arr);
+        }
+	}
 
     public function insertSizeChart($arr) {
         if (!empty($arr)) {
@@ -2382,6 +2444,12 @@ class Admin_M extends Master_M {
         $this->updateRecord('motorcycleimage', $data, $where, FALSE);
     }
 
+    public function updateSliderOrder($id, $ord) {
+        $where = array('id' => $id);
+        $data = array('order' => $ord);
+        $this->updateRecord('slider', $data, $where, FALSE);
+    }
+
     public function deleteMotorcycle($prod_id) {
         $where = array('id' => $prod_id);
         $this->db->delete('motorcycle', $where);
@@ -2684,6 +2752,11 @@ class Admin_M extends Master_M {
     
     public function addOrderTransaction( $transaction ) {
         $this->createRecord('order_transaction', $transaction, FALSE);
+    }
+    public function updateSliderLink( $id, $link ) {
+        $where = array('id' => $id);
+        $data = array('banner_link' => $link);
+        $this->updateRecord('slider', $data, $where, FALSE);
     }
 
 }

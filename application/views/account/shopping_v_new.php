@@ -333,41 +333,18 @@ $detect = new Mobile_Detect;
                 <a style="padding:10px 10px 8px 10px;" href="javascript:void(0);" onclick="changeTabs('sizechart')" id="sizechart"><img style="vertical-align:middle; margin:0 6px 0 0;" src="<?php echo base_url('assets/images/measuring-tape.png'); ?>">&nbsp;Size Chart</a>
             <?php endif; ?>
         </div>
-        <script src="https://apis.google.com/js/platform.js"></script>
         <div class="desDetailTxt" id="tab_stuff">
             <?php if ($mainVideo != '') { ?>
-                <div class="prodct_vdo">
-                    <div class="lft">
-                        <iframe src="https://www.youtube.com/embed/<?php echo $mainVideo; ?>" data-id="<?php echo $mainVideo; ?>" id="mainVideo" frameborder="0" allowfullscreen=""></iframe>
-                        <ul>
-                            <li><strong>Share :</strong>
-                                <div class="fb-share-button" data-href="https://www.youtube.com/embed/<?php echo $mainVideo; ?>" data-layout="button_count"></div>
-                                <div class="ggl">
-                                    <div class="g-plus fixwdth" data-action="share" data-href="https://www.youtube.com/embed/<?php echo $mainVideo; ?>" data-width="250"></div>
-                                </div>
-                            </li>
-                            <li class="subs"><strong>Subscribe to us :</strong>
-                                <div class="g-ytsubscribe" data-channel="<?php echo YOUTUBE_CHANNEL; ?>" data-layout="default" data-count="default"></div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="ryt">
-                        <ul>
-                            <li onClick="showVideo('<?php echo $mainVideo; ?>', '<?php echo $mainTitle; ?>');" id="<?php echo $mainVideo; ?>" style="display:none;">
-                                <img class="ply" src="/qatesting/newassets/images/play.png">
-                                <img src="http://img.youtube.com/vi/<?php echo $mainVideo; ?>/default.jpg" class="active">
-                                <p><?php echo $mainTitle; ?></p>
-                            </li>
-                            <?php foreach ($video as $k => $v) { ?>
-                                <li onClick="showVideo('<?php echo $v['video_url']; ?>', '<?php echo $v['title']; ?>');" id="<?php echo $v['video_url']; ?>">
-                                    <img class="ply" src="/qatesting/newassets/images/play.png">
-                                    <img src="http://img.youtube.com/vi/<?php echo $v['video_url']; ?>/default.jpg" class="active">
-                                    <p><?php echo $v['title']; ?></p>
-                                </li>
-                            <?php } ?>
-                        </ul>
-                    </div>
-                </div>
+                <?php
+                $CI =& get_instance();
+                echo $CI->load->view("master/embedded_videos", array(
+                    "class_name" => "prodct_vdo",
+                    "mainVideo" => $mainVideo,
+                    "mainTitle" => $mainTitle,
+                    "video" => $video,
+                    "autoplay" => false
+                ), true);
+                ?>
             <?php } ?>
             <?php echo @$product['description']; ?>
         </div>

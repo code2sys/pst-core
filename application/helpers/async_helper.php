@@ -1,9 +1,19 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/*
+ * JLB 07-09-17
+ * There are insufficient words to describe the degree of assholishness associated with this code.
+ *
+ * The true function has been disguised. They have pretended to use the name of a real PHP function.
+ * It turns around an generates some sort of Amazon document - because the original coder was just an
+ * absolutely horrible person.
+ */
+
 //$this->load->helper('async');
 if (!function_exists('curl_request_async')){
 
 	function curl_request_async(){
+        return; // JLB 07-09-17 NUKE IT FROM SPACE.
 		
 		$url = "http://" . WEBSITE_HOSTNAME . "/welcome/manual_appeagle_amazon_doc_generation?".time();
 		$params = array();

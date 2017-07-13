@@ -1,7 +1,5 @@
-		<h1 style="color:#3f51b5"><?php echo $pageRec['label'];?></h1>
-		<p style="text-align: justify;">
-			<?php echo $notice;?>
-		</p>
+
+
   		<!-- VALIDATION ERROR -->
 			<?php if(validation_errors()): ?>
 			<div class="validation_error">

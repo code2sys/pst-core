@@ -11,6 +11,7 @@ $CI =& get_instance();
 if (isset($store_name)) {
     $bing_site_verification = array_key_exists("bing_site_verification", $store_name) ? $store_name["bing_site_verification"] : "";
     $google_site_verification = array_key_exists("google_site_verification", $store_name) ? $store_name["google_site_verification"] : "";
+    $additional_tracking_code = array_key_exists("additional_tracking_code", $store_name) ? $store_name["additional_tracking_code"] : "";
 }
 
 ?>
@@ -43,3 +44,9 @@ if (isset($store_name)) {
 <?php if (isset($google_site_verification) && $google_site_verification != ""): ?>
 <meta name="google-site-verification" content="<?php echo $google_site_verification; ?>" />
 <?php endif; ?>
+
+
+<?php if (isset($additional_tracking_code) && $additional_tracking_code != ""): ?>
+    <?php echo $additional_tracking_code; ?>
+<?php endif; ?>
+

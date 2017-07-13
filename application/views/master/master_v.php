@@ -135,7 +135,7 @@ if (isset($keywords) && $keywords != "") {
                 $('.bxslider').bxSlider({
                     auto: true,
                     pause: 5000,
-                    randomStart: true
+                    randomStart: false
                 });
             });
         </script>
@@ -834,8 +834,15 @@ echo $CI->load->view("master/tracking", array(
 		
                                                                                     }
                                                                                     //showVideo
-                                                                                    function showVideo(vidId) {
+                                                                                    function showVideo(vidId, vidTit) {
+                                                                                            var mainVideo = $('#mainVideo').data('id');
+                                                                                            //var mainTitle = $('.vdottl').html();
+                                                                                            $('.vdottl').html(vidTit);
                                                                                         $("#mainVideo")[0].src = "https://www.youtube.com/embed/"+vidId+"?rel=0&autoplay=1";
+                                                                                            $('#mainVideo').data('id', vidId);
+                                                                                            //$('.shwVidHalf').show();
+                                                                                            $('#'+vidId).hide();
+                                                                                            $('#'+mainVideo).show();
                                                                                     }
                                                                                     //cntnr-ttl
                                                                                     //if( "<?php echo $this->router->fetch_method(); ?>" == "index" ) {
@@ -850,6 +857,15 @@ echo $CI->load->view("master/tracking", array(
                                                                                     //	$('.grghdng').removeClass('mrgn60');
                                                                                     //}
         </script>
+        <script>
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=1038872762878770";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
 
         <script>
             var url      = window.location.href;
@@ -894,5 +910,11 @@ echo $CI->load->view("master/tracking", array(
         </script>
         <script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
 
+        <?php
+        $CI =& get_instance();
+        echo $CI->load->view("master/bottom_footer", array(
+            "store_name" => $store_name
+        ));
+        ?>
     </body>
 </html>

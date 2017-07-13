@@ -273,6 +273,7 @@ class Welcome extends Master_Controller {
         $this->setMasterPageVars('css', html_entity_decode($this->_mainData['pageRec']['css']));
         $this->setMasterPageVars('script', html_entity_decode($this->_mainData['pageRec']['javascript']));
         $this->_mainData['widgetBlock'] = $this->pages_m->widgetCreator($this->_pageId, $this->_mainData['pageRec']);
+	$this->_mainData['topVideo'] = $this->pages_m->getTopVideos($this->_pageId);
 
         $this->load->model('parts_m');
         $this->_mainData['topRated'] = $this->parts_m->getTopRatedProducts(null, 12);

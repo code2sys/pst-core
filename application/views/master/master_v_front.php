@@ -216,7 +216,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 	<div class="sw slider">
 		<div id="owl-demo" class="owl-carousel owl-theme">
 			<?php foreach( $bannerImages as $image ) { ?>
-			  <div class="item"><img src="<?php echo base_url('media/'.$image['image']); ?>"></div> 
+                    <div class="item"><a href="<?php echo $image['banner_link'];?>"><img src="<?php echo base_url('media/'.$image['image']); ?>"></a></div> 
 			<?php } ?>
 		  <!--<div class="item"><img src="<?php echo $new_assets_url; ?>images/banner2.png"></div> 
 		  <div class="item"><img src="<?php echo $new_assets_url; ?>images/banner3.png"></div>-->
@@ -285,10 +285,30 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 	</div>
 	<?php endif; ?>
 	<?php endif; ?>
-	<?php if(!empty($featuredCategories)){ ?>
+        
+        <?php if (@$topVideo) { ?>
 	<div class="sw brd">
 		<div class="container_b">
 			<div class="featured-listings">
+                        <h3> OUR TOP Videos </h3>
+                        <div class="panel-body">
+                            <ul class="lstng" id="top-video">
+                                <?php foreach ($topVideo as $key => $val) { ?>
+                                    <li class="ftrdb">
+                                        <iframe src="https://www.youtube.com/embed/<?php echo $val['video_url'];?>" frameborder="0" style="width: 90%;height:220px;" allowfullscreen></iframe>
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </div>				
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        
+        <?php if (!empty($featuredCategories)) { ?>
+            <div class="sw brd">
+                <div class="container_b">
+                    <div class="featured-listings">
 				<h3> OUR TOP Categories </h3>
 				<!--<a class="rdrct-lnk" href="<?php echo site_url('Motorcycle_Gear_Brands');?>">Shop all brands </a>-->
 				<div class="panel-body">
@@ -875,5 +895,12 @@ echo $CI->load->view("master/tracking", array(
 </script>
 	<script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
 
-	
 
+	<?php
+	$CI =& get_instance();
+	echo $CI->load->view("master/bottom_footer", array(
+		"store_name" => $store_name
+	));
+	?>
+</body>
+</html>

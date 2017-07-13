@@ -1,3 +1,13 @@
+Update July 6, 2017 JLB
+=======================
+
+Pardy added support for banners. The banners have a few sharp edges. 
+
+First, you need the banners, or at least you need a directory called html/bannerlibrary. This should be a symlink.
+
+I simplified the rest so that's all you have to do for deployment.
+
+
 Update May 10, 2017 JLB
 =======================
 
