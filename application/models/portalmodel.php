@@ -24,8 +24,9 @@ class Portalmodel extends Master_M {
         unset($post['exclude_market_place']);
         unset($post['closeout_market_place']);
         $where = array('part_id' => $id);
-        if (!empty($post))
+        if (!empty($post)) {
             $this->updateRecord('part', $post, $where, FALSE);
+        }
 
         $where = array('partpartnumber.part_id' => $id);
         $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id ');

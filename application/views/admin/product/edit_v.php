@@ -57,6 +57,12 @@
                             <?php endif; ?>
                         </td>
                     </tr>
+                    <tr>
+                        <td><strong>Retail Price:</strong><br/><em>When selected, no discounting will be done for this product.</em></td>
+                        <td>
+                            <input type="checkbox" name="retail_price" value="1" <?php if (array_key_exists("retail_price", $product) && $product["retail_price"] > 0): ?>checked="checked"<?php endif; ?> />
+                        </td>
+                    </tr>
                     <?php if (count($product['partnumbers']) > 0): ?>
                     <tr>
                         <td><b>Markup:</b></td>
