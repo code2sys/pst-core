@@ -426,6 +426,7 @@ class Admin_M extends Master_M {
     public function processParts($limit = 4000) {
         $CI =& get_instance();
         $CI->load->model("parts_m");
+        $debug = true;
 
         $this->db->limit($limit);
         $this->db->order_by('recCreated ASC');
@@ -480,51 +481,101 @@ class Admin_M extends Master_M {
 
                 if ($partnumbers) {
                     foreach ($partnumbers as $rec) {
+                        if ($debug) {
+                            print "Distributor part: ";
+                            print_r($rec);
+                        }
+
                         if ($use_retail_price) {
                             $finalSalesPrice = $rec['price']; // JLB 07-15-17 New override.
+                            if ($debug) {
+                                print "Use retail: Final sales price: $finalSalesPrice \n";
+                            }
                         } else {
-
-
                             //echo $categoryMarkUp.' : '. $brandMarkUp.' : '.$brandMAPPercent.' : '.$productMarkUp;
                             $finalMarkUp = 0;
                             $productMarkUp = $rec['markup'];
 
                             if ($productMarkUp > 0) { // Product Markup Trumps everything
                                 $finalSalesPrice = ($rec['cost'] * $productMarkUp / 100) + $rec['cost'];
+                                if ($debug) {
+                                    print "Using product markup $productMarkUp to get sales price $finalSalesPrice \n";
+                                }
                             } else {
                                 // Calculate category and Brand Percent Mark up
 
                                 if ($brandMarkUp > 0) {
                                     $finalMarkUp = $brandMarkUp;
+                                    if ($debug) {
+                                        print "Using brand markup $brandMarkUp \n";
+                                    }
+
                                 } else if ($categoryMarkUp > 0) {
                                     $finalMarkUp = $categoryMarkUp;
-                                    if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp))
+                                    if ($debug) {
+                                        print "Using category markup $categoryMarkUp \n";
+                                    }
+                                    if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp)) {
                                         $finalMarkUp = $brandMarkUp;
+                                    }
+                                    if ($debug) {
+                                        print "Using final markup $finalMarkUp \n";
+                                    }
                                 }
                                 //else
                                 // Get Final Sales Price for Calculating vs MAP Pricing
 
-                                if ($finalMarkUp > 0)
+                                if ($finalMarkUp > 0) {
                                     $finalSalesPrice = ($rec['cost'] * $finalMarkUp / 100) + $rec['cost'];
+                                }
 
+                                if ($debug) {
+                                    print "Final sales price: $finalSalesPrice \n";
+                                }
                                 // Calculate MAP Pricing
 
                                 if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
+                                    if ($debug) {
+                                        print "Applying brand MAP percent $brandMAPPercent\n";
+                                    }
+
                                     $mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
-                                    if ($mapPrice > $finalSalesPrice)
+                                    if ($mapPrice > $finalSalesPrice) {
                                         $finalSalesPrice = $mapPrice;
+                                    }
+
+                                    if ($debug) {
+                                        print "Final sales price $finalSalesPrice\n";
+                                    }
                                 }
                             }
                         }
 
-                        if (!isset($finalSalesPrice))
+                        if (!isset($finalSalesPrice)) {
                             $finalSalesPrice = $rec['price'];
+                            if ($debug) {
+                                print "Final sales undefined using price $finalSalesPrice\n";
+                            }
+                        }
 
-                        if ($finalSalesPrice > $rec['price'])
+                        if ($finalSalesPrice > $rec['price']) {
                             $finalSalesPrice = $rec['price'];
+                            if ($debug) {
+                                print "Final sales price too big using price $finalSalesPrice\n";
+                            }
+                        }
 
-                        if ($finalSalesPrice < $rec['cost'])
+                        if ($finalSalesPrice < $rec['cost']) {
                             $finalSalesPrice = $rec['price'];
+                            if ($debug) {
+                                print "Final sales price too small using price $finalSalesPrice\n";
+                            }
+                        }
+
+                        if ($debug) {
+                            print "Final price $finalSalesPrice\n";
+                        }
+
 
                         $data = array('sale' => $finalSalesPrice,
                             'exclude_market_place' => $exclude,
@@ -537,10 +588,16 @@ class Admin_M extends Master_M {
                 //Dealer Inventory
                 if ($partdealernumbers) {
                     foreach ($partdealernumbers as $rec) {
-                        print_r($rec);
+                        if ($debug) {
+                            print "Dealer part: ";
+                            print_r($rec);
+                        }
+
                         if ($use_retail_price) {
                             $finalSalesPrice = $rec['price'];
-                            print "Using retail price \n";
+                            if ($debug) {
+                                print "Use retail: Final sales price: $finalSalesPrice \n";
+                            }
                         } else {
 
                             $finalMarkUp = 0;
@@ -548,51 +605,79 @@ class Admin_M extends Master_M {
 
                             if ($productMarkUp > 0) { // Product Markup Trumps everything
                                 $finalSalesPrice = ($rec['dealer_cost'] * $productMarkUp / 100) + $rec['dealer_cost'];
-                                print "Using product markup to get sale price $finalSalesPrice \n";
+                                if ($debug) {
+                                    print "Using product markup $productMarkUp to get sales price $finalSalesPrice \n";
+                                }
                             } else {
                                 // Calculate category and Brand Percent Mark up
                                 if ($brandMarkUp > 0) {
                                     $finalMarkUp = $brandMarkUp;
-                                    print "Using brand markup $brandMarkUp \n";
+                                    if ($debug) {
+                                        print "Using brand markup $brandMarkUp \n";
+                                    }
                                 } else if ($categoryMarkUp > 0) {
                                     $finalMarkUp = $categoryMarkUp;
+                                    if ($debug) {
+                                        print "Using category markup $categoryMarkUp \n";
+                                    }
                                     if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp)) {
                                         $finalMarkUp = $brandMarkUp;
                                     }
-                                    print "Using category markup $finalMarkUp \n";
+                                    if ($debug) {
+                                        print "Using final markup $finalMarkUp \n";
+                                    }
                                 }
                                 //else
                                 // Get Final Sales Price for Calculating vs MAP Pricing
 
                                 if ($finalMarkUp > 0) {
                                     $finalSalesPrice = ($rec['dealer_cost'] * $finalMarkUp / 100) + $rec['dealer_cost'];
-                                    print "Final markup $finalMarkUp gives price $finalSalesPrice \n";
+                                }
+                                if ($debug) {
+                                    print "Final sales price: $finalSalesPrice \n";
                                 }
 
                                 // Calculate MAP Pricing
                                 if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
+                                    if ($debug) {
+                                        print "Applying brand MAP percent $brandMAPPercent\n";
+                                    }
+
                                     $mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
                                     if ($mapPrice > $finalSalesPrice) {
                                         $finalSalesPrice = $mapPrice;
                                     }
-                                    print "Using mak pricing $finalSalesPrice \n";
+
+                                    if ($debug) {
+                                        print "Final sales price $finalSalesPrice\n";
+                                    }
                                 }
                             }
                         }
 
                         if (!isset($finalSalesPrice)) {
                             $finalSalesPrice = $rec['price'];
-                            print "Setting to price $finalSalesPrice \n";
+                            if ($debug) {
+                                print "Final sales undefined using price $finalSalesPrice\n";
+                            }
                         }
 
                         if ($finalSalesPrice > $rec['price']) {
                             $finalSalesPrice = $rec['price'];
-                            print "To big; setting to price \n";
+                            if ($debug) {
+                                print "Final sales price too big using price $finalSalesPrice\n";
+                            }
                         }
 
                         if ($finalSalesPrice < $rec['dealer_cost']) {
                             $finalSalesPrice = $rec['price'];
-                            print "Below cost; setting to price \n";
+                            if ($debug) {
+                                print "Final sales price too small using price $finalSalesPrice\n";
+                            }
+                        }
+
+                        if ($debug) {
+                            print "Final price $finalSalesPrice\n";
                         }
 
                         $data = array('dealer_sale' => $finalSalesPrice,
