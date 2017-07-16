@@ -61,6 +61,8 @@ ln -s ../../../core/html/basebranding.css  .
 ln -s ../../../core/html/qatesting/ .
 </pre>
 
+You also need to link the banner library to html/bannerlibrary.
+
 
 Virtual Host Configuration
 ---------------------------

@@ -5,8 +5,15 @@ if (!defined('BASEPATH'))
 
 class Parts_M extends Master_M {
 
+    protected $cache_partIsRetail;
+    protected $cache_partNumberIsRetail;
+    protected $cache_partVariationIsRetail;
+
     function __construct() {
         parent::__construct();
+        $this->cache_partIsRetail = array();
+        $this->cache_partNumberIsRetail = array();
+        $this->cache_partVariationIsRetail = array();
     }
 
     public function getProduct($id, $activeMachine = NULL) {
@@ -2756,6 +2763,55 @@ class Parts_M extends Master_M {
         return $record;
     }
 
+    public function partIsRetailOnly($part_id) {
+        if (array_key_exists($part_id, $this->cache_partIsRetail)) {
+            return $this->cache_partIsRetail[$part_id];
+        }
+
+        // Look it up
+        $query = $this->db->query("Select retail_price from part where part_id = ?", array($part_id));
+        $retail = false;
+        foreach ($query->result_array() as $row) {
+            $retail = $row["retail_price"] > 0;
+        }
+
+        $this->cache_partIsRetail[$part_id] = $retail;
+        return $retail;
+    }
+
+    public function partNumberIsRetailOnly($partnumber_id) {
+        if (array_key_exists($partnumber_id, $this->cache_partNumberIsRetail)) {
+            return $this->cache_partNumberIsRetail[$partnumber_id];
+        }
+
+        // Look it up
+        $query = $this->db->query("Select max(retail_price) as use_retail_price from part join partpartnumber using (part_id) where partnumber_id = ?", array($partnumber_id));
+        $retail = false;
+        foreach ($query->result_array() as $row) {
+            $retail = $row["use_retail_price"] > 0;
+        }
+
+        $this->cache_partNumberIsRetail[$partnumber_id] = $retail;
+        return $retail;
+    }
+
+    public function partVariationIsRetailOnly($partvariation_id) {
+        if (array_key_exists($partvariation_id, $this->cache_partVariationIsRetail)) {
+            return $this->cache_partVariationIsRetail[$partvariation_id];
+        }
+
+        // Look it up
+        $query = $this->db->query("Select max(retail_price) as use_retail_price from part join partpartnumber using (part_id) join partvariation using (partnumber_id) where partvariatoin_id = ?", array($partvariation_id));
+        $retail = false;
+        foreach ($query->result_array() as $row) {
+            $retail = $row["use_retail_price"] > 0;
+        }
+
+        $this->cache_partVariationIsRetail[$partvariation_id] = $retail;
+        return $retail;
+    }
+
+
     //Closeout Reprising Calculations
     public function closeoutReprisingSchedule() {
         $where = array('status > 0 ' => null);
@@ -2801,7 +2857,11 @@ class Parts_M extends Master_M {
                         $finalMarkUp = 0;
                         $productMarkUp = $rec['markup'];
 
-                        if ($productMarkUp > 0) {
+                        if ($this->partNumberIsRetailOnly($rec['partnumber_id'])) {
+                            // JLB 07-15-17
+                            // This overrides the price and forces it to be
+                            $finalSalesPrice = $rec["price"];
+                        } elseif ($productMarkUp > 0) {
                             // Product Markup Trumps everything
                             $finalSalesPrice = ($rec['cost'] * $productMarkUp / 100) + $rec['cost'];
                         } else {
