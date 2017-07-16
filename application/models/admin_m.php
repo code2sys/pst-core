@@ -424,6 +424,9 @@ class Admin_M extends Master_M {
     }
 
     public function processParts($limit = 4000) {
+        $CI =& get_instance();
+        $CI->load->model("parts_m");
+
         $this->db->limit($limit);
         $this->db->order_by('recCreated ASC');
         $records = $this->selectRecords('queued_parts');
@@ -432,6 +435,7 @@ class Admin_M extends Master_M {
         // echo '</pre>';
         if ($records) {
             for ($i = 0; $i < count($records); $i++) {
+                $use_retail_price = $CI->parts_m->partIsRetailOnly($records[$i]['part_id']);
                 $category = $this->getSecondBreadCrumb($records[$i]['part_id']);
                 $category_markup = array();
                 foreach ($category as $cat) {
@@ -476,44 +480,51 @@ class Admin_M extends Master_M {
 
                 if ($partnumbers) {
                     foreach ($partnumbers as $rec) {
-                        //echo $categoryMarkUp.' : '. $brandMarkUp.' : '.$brandMAPPercent.' : '.$productMarkUp;
-                        $finalMarkUp = 0;
-                        $productMarkUp = $rec['markup'];
-
-                        if ($productMarkUp > 0) { // Product Markup Trumps everything
-                            $finalSalesPrice = ($rec['cost'] * $productMarkUp / 100) + $rec['cost'];
+                        if ($use_retail_price) {
+                            $finalSalesPrice = $rec['price']; // JLB 07-15-17 New override.
                         } else {
-                            // Calculate category and Brand Percent Mark up
 
-                            if ($brandMarkUp > 0) {
-                                $finalMarkUp = $brandMarkUp;
-                            } else if ($categoryMarkUp > 0) {
-                                $finalMarkUp = $categoryMarkUp;
-                                if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp))
+
+                            //echo $categoryMarkUp.' : '. $brandMarkUp.' : '.$brandMAPPercent.' : '.$productMarkUp;
+                            $finalMarkUp = 0;
+                            $productMarkUp = $rec['markup'];
+
+                            if ($productMarkUp > 0) { // Product Markup Trumps everything
+                                $finalSalesPrice = ($rec['cost'] * $productMarkUp / 100) + $rec['cost'];
+                            } else {
+                                // Calculate category and Brand Percent Mark up
+
+                                if ($brandMarkUp > 0) {
                                     $finalMarkUp = $brandMarkUp;
+                                } else if ($categoryMarkUp > 0) {
+                                    $finalMarkUp = $categoryMarkUp;
+                                    if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp))
+                                        $finalMarkUp = $brandMarkUp;
+                                }
+                                //else
+                                // Get Final Sales Price for Calculating vs MAP Pricing
+
+                                if ($finalMarkUp > 0)
+                                    $finalSalesPrice = ($rec['cost'] * $finalMarkUp / 100) + $rec['cost'];
+
+                                // Calculate MAP Pricing
+
+                                if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
+                                    $mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
+                                    if ($mapPrice > $finalSalesPrice)
+                                        $finalSalesPrice = $mapPrice;
+                                }
                             }
-                            //else
-                            // Get Final Sales Price for Calculating vs MAP Pricing
+                            if (!isset($finalSalesPrice))
+                                $finalSalesPrice = $rec['price'];
 
-                            if ($finalMarkUp > 0)
-                                $finalSalesPrice = ($rec['cost'] * $finalMarkUp / 100) + $rec['cost'];
+                            if ($finalSalesPrice > $rec['price'])
+                                $finalSalesPrice = $rec['price'];
 
-                            // Calculate MAP Pricing
+                            if ($finalSalesPrice < $rec['cost'])
+                                $finalSalesPrice = $rec['price'];
 
-                            if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
-                                $mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
-                                if ($mapPrice > $finalSalesPrice)
-                                    $finalSalesPrice = $mapPrice;
-                            }
                         }
-                        if (!isset($finalSalesPrice))
-                            $finalSalesPrice = $rec['price'];
-
-                        if ($finalSalesPrice > $rec['price'])
-                            $finalSalesPrice = $rec['price'];
-
-                        if ($finalSalesPrice < $rec['cost'])
-                            $finalSalesPrice = $rec['price'];
                         $data = array('sale' => $finalSalesPrice,
                             'exclude_market_place' => $exclude,
                             'closeout_market_place' => $closeout);
@@ -525,48 +536,52 @@ class Admin_M extends Master_M {
                 //Dealer Inventory
                 if ($partdealernumbers) {
                     foreach ($partdealernumbers as $rec) {
-                        $finalMarkUp = 0;
-                        $productMarkUp = $rec['markup'];
-
-                        if ($productMarkUp > 0) { // Product Markup Trumps everything
-                            $finalSalesPrice = ($rec['dealer_cost'] * $productMarkUp / 100) + $rec['dealer_cost'];
+                        if ($use_retail_price) {
+                            $finalSalesPrice = $rec['price'];
                         } else {
-                            // Calculate category and Brand Percent Mark up
-                            if ($brandMarkUp > 0) {
-                                $finalMarkUp = $brandMarkUp;
-                            } else if ($categoryMarkUp > 0) {
-                                $finalMarkUp = $categoryMarkUp;
-                                if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp)) {
+
+                            $finalMarkUp = 0;
+                            $productMarkUp = $rec['markup'];
+
+                            if ($productMarkUp > 0) { // Product Markup Trumps everything
+                                $finalSalesPrice = ($rec['dealer_cost'] * $productMarkUp / 100) + $rec['dealer_cost'];
+                            } else {
+                                // Calculate category and Brand Percent Mark up
+                                if ($brandMarkUp > 0) {
                                     $finalMarkUp = $brandMarkUp;
+                                } else if ($categoryMarkUp > 0) {
+                                    $finalMarkUp = $categoryMarkUp;
+                                    if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp)) {
+                                        $finalMarkUp = $brandMarkUp;
+                                    }
+                                }
+                                //else
+                                // Get Final Sales Price for Calculating vs MAP Pricing
+
+                                if ($finalMarkUp > 0) {
+                                    $finalSalesPrice = ($rec['dealer_cost'] * $finalMarkUp / 100) + $rec['dealer_cost'];
+                                }
+
+                                // Calculate MAP Pricing
+                                if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
+                                    $mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
+                                    if ($mapPrice > $finalSalesPrice) {
+                                        $finalSalesPrice = $mapPrice;
+                                    }
                                 }
                             }
-                            //else
-                            // Get Final Sales Price for Calculating vs MAP Pricing
-
-                            if ($finalMarkUp > 0) {
-                                $finalSalesPrice = ($rec['dealer_cost'] * $finalMarkUp / 100) + $rec['dealer_cost'];
+                            if (!isset($finalSalesPrice)) {
+                                $finalSalesPrice = $rec['price'];
                             }
 
-                            // Calculate MAP Pricing
-                            if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
-                                $mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
-                                if ($mapPrice > $finalSalesPrice) {
-                                    $finalSalesPrice = $mapPrice;
-                                }
+                            if ($finalSalesPrice > $rec['price']) {
+                                $finalSalesPrice = $rec['price'];
+                            }
+
+                            if ($finalSalesPrice < $rec['dealer_cost']) {
+                                $finalSalesPrice = $rec['price'];
                             }
                         }
-                        if (!isset($finalSalesPrice)) {
-                            $finalSalesPrice = $rec['price'];
-                        }
-
-                        if ($finalSalesPrice > $rec['price']) {
-                            $finalSalesPrice = $rec['price'];
-                        }
-
-                        if ($finalSalesPrice < $rec['dealer_cost']) {
-                            $finalSalesPrice = $rec['price'];
-                        }
-
                         $data = array('dealer_sale' => $finalSalesPrice,
                             'exclude_market_place' => $exclude,
                             'closeout_market_place' => $closeout);
