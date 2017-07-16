@@ -6,10 +6,10 @@ class CronJobHourly extends AbstractCronJob
 {
 	public function runJob()
 	{
-		$this->documentGeneration();
         $this->fixNullManufacturers();
         $this->fixBrandSlugs();
         $this->fixBrandLongNames();
+		$this->documentGeneration();
 	}
 
 	public function fixBrandLongNames() {
