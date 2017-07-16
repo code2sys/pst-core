@@ -692,6 +692,12 @@ class Admin_M extends Master_M {
                 $this->deleteRecord('queued_parts', $where);
             }
         }
+
+        $CI =& get_instance();
+        $this->load->model('cron/cronjobhourly', 'TheCronJob');
+        $this->TheCronJob->fixNullManufacturers();
+        $this->TheCronJob->fixBrandSlugs();
+        $this->TheCronJob->fixBrandLongNames();
     }
 
     public function processPartsInventoryReceiving($limit = 10) {
