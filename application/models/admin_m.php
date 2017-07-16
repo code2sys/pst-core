@@ -537,8 +537,10 @@ class Admin_M extends Master_M {
                 //Dealer Inventory
                 if ($partdealernumbers) {
                     foreach ($partdealernumbers as $rec) {
+                        print_r($rec);
                         if ($use_retail_price) {
                             $finalSalesPrice = $rec['price'];
+                            print "Using retail price \n";
                         } else {
 
                             $finalMarkUp = 0;
@@ -546,21 +548,25 @@ class Admin_M extends Master_M {
 
                             if ($productMarkUp > 0) { // Product Markup Trumps everything
                                 $finalSalesPrice = ($rec['dealer_cost'] * $productMarkUp / 100) + $rec['dealer_cost'];
+                                print "Using product markup to get sale price $finalSalesPrice \n";
                             } else {
                                 // Calculate category and Brand Percent Mark up
                                 if ($brandMarkUp > 0) {
                                     $finalMarkUp = $brandMarkUp;
+                                    print "Using brand markup $brandMarkUp \n";
                                 } else if ($categoryMarkUp > 0) {
                                     $finalMarkUp = $categoryMarkUp;
                                     if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp)) {
                                         $finalMarkUp = $brandMarkUp;
                                     }
+                                    print "Using category markup $finalMarkUp \n";
                                 }
                                 //else
                                 // Get Final Sales Price for Calculating vs MAP Pricing
 
                                 if ($finalMarkUp > 0) {
                                     $finalSalesPrice = ($rec['dealer_cost'] * $finalMarkUp / 100) + $rec['dealer_cost'];
+                                    print "Final markup $finalMarkUp gives price $finalSalesPrice \n";
                                 }
 
                                 // Calculate MAP Pricing
@@ -569,20 +575,24 @@ class Admin_M extends Master_M {
                                     if ($mapPrice > $finalSalesPrice) {
                                         $finalSalesPrice = $mapPrice;
                                     }
+                                    print "Using mak pricing $finalSalesPrice \n";
                                 }
                             }
                         }
 
                         if (!isset($finalSalesPrice)) {
                             $finalSalesPrice = $rec['price'];
+                            print "Setting to price $finalSalesPrice \n";
                         }
 
                         if ($finalSalesPrice > $rec['price']) {
                             $finalSalesPrice = $rec['price'];
+                            print "To big; setting to price \n";
                         }
 
                         if ($finalSalesPrice < $rec['dealer_cost']) {
                             $finalSalesPrice = $rec['price'];
+                            print "Below cost; setting to price \n";
                         }
 
                         $data = array('dealer_sale' => $finalSalesPrice,
