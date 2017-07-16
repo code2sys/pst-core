@@ -466,7 +466,7 @@ class Admin_M extends Master_M {
                 $this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
                 $partnumbers = $this->selectRecords('partnumber', $where);
 
-                $this->db->select('partnumber.*, partdealervariation.cost as dealer_cost');
+                $this->db->select('partnumber.*, partdealervariation.stock_code, partdealervariation.cost as dealer_cost');
                 $where = array('partpartnumber.part_id' => $records[$i]['part_id'], 'partnumber.price > ' => 0);
                 $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id ');
                 $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
