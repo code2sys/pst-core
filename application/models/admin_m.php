@@ -465,7 +465,7 @@ class Admin_M extends Master_M {
                 $this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
                 $partnumbers = $this->selectRecords('partnumber', $where);
 
-                $this->db->select('partnumber.*, partdealervariation.cost as dealer_cost, partdealervariation.price as dealer_price');
+                $this->db->select('partnumber.*, partdealervariation.cost as dealer_cost');
                 $where = array('partpartnumber.part_id' => $records[$i]['part_id'], 'partnumber.price > ' => 0);
                 $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id ');
                 $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
@@ -537,7 +537,7 @@ class Admin_M extends Master_M {
                 if ($partdealernumbers) {
                     foreach ($partdealernumbers as $rec) {
                         if ($use_retail_price) {
-                            $finalSalesPrice = max($rec['price'], $rec["dealer_price"]);
+                            $finalSalesPrice = $rec['price'];
                         } else {
 
                             $finalMarkUp = 0;
@@ -1486,7 +1486,9 @@ class Admin_M extends Master_M {
             } else if (!empty($dealerInventory)) {
                 $data = array('quantity_available' => $v['quantity']);
                 if ($v['cost'] > 0) {
-                    $data['price'] = $v['cost'];
+                    // JLB 07-15-17
+                    // Brandt told me that Pardy should not have done this, that the price should never be assigned to the cost, and that this is crazy.
+//                    $data['price'] = $v['cost'];
                     $data['cost'] = $v['cost'];
                 }
                 $success = $this->updateRecord('partdealervariation', $data, $where, FALSE);
