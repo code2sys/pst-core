@@ -515,16 +515,17 @@ class Admin_M extends Master_M {
                                         $finalSalesPrice = $mapPrice;
                                 }
                             }
-                            if (!isset($finalSalesPrice))
-                                $finalSalesPrice = $rec['price'];
-
-                            if ($finalSalesPrice > $rec['price'])
-                                $finalSalesPrice = $rec['price'];
-
-                            if ($finalSalesPrice < $rec['cost'])
-                                $finalSalesPrice = $rec['price'];
-
                         }
+
+                        if (!isset($finalSalesPrice))
+                            $finalSalesPrice = $rec['price'];
+
+                        if ($finalSalesPrice > $rec['price'])
+                            $finalSalesPrice = $rec['price'];
+
+                        if ($finalSalesPrice < $rec['cost'])
+                            $finalSalesPrice = $rec['price'];
+
                         $data = array('sale' => $finalSalesPrice,
                             'exclude_market_place' => $exclude,
                             'closeout_market_place' => $closeout);
@@ -570,18 +571,20 @@ class Admin_M extends Master_M {
                                     }
                                 }
                             }
-                            if (!isset($finalSalesPrice)) {
-                                $finalSalesPrice = $rec['price'];
-                            }
-
-                            if ($finalSalesPrice > $rec['price']) {
-                                $finalSalesPrice = $rec['price'];
-                            }
-
-                            if ($finalSalesPrice < $rec['dealer_cost']) {
-                                $finalSalesPrice = $rec['price'];
-                            }
                         }
+
+                        if (!isset($finalSalesPrice)) {
+                            $finalSalesPrice = $rec['price'];
+                        }
+
+                        if ($finalSalesPrice > $rec['price']) {
+                            $finalSalesPrice = $rec['price'];
+                        }
+
+                        if ($finalSalesPrice < $rec['dealer_cost']) {
+                            $finalSalesPrice = $rec['price'];
+                        }
+
                         $data = array('dealer_sale' => $finalSalesPrice,
                             'exclude_market_place' => $exclude,
                             'closeout_market_place' => $closeout);
