@@ -1484,7 +1484,7 @@ class Admin_M extends Master_M {
 
                 $scs[$v['partnumber']] = $v;
             } else if (!empty($dealerInventory)) {
-                $data = array('quantity_available' => $v['quantity']);
+                $data = array('quantity_available' => $dealerInventory["quantity_available"] + $v['quantity']);
                 if ($v['cost'] > 0) {
                     // JLB 07-15-17
                     // Brandt told me that Pardy should not have done this, that the price should never be assigned to the cost, and that this is crazy.
