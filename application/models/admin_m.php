@@ -426,7 +426,7 @@ class Admin_M extends Master_M {
     public function processParts($limit = 4000) {
         $CI =& get_instance();
         $CI->load->model("parts_m");
-        $debug = true;
+        $debug = false;
 
         $this->db->limit($limit);
         $this->db->order_by('recCreated ASC');

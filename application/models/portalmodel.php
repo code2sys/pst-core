@@ -140,6 +140,10 @@ class Portalmodel extends Master_M {
         return $this->fetchByColumn("manufacturer", "manufacturer_id", "name", $manufacturer);
     }
 
+    public function makeBrandSlug($name) {
+        return str_replace(array(" ", ".", ",", "'", "&"), array("_", "", "", "", "_and_"), $name);
+    }
+
     public function getOrMakeManufacturer($manufacturer) {
         $manufacturer_id = $this->getManufacturer($manufacturer);
         if ($manufacturer_id == 0) {
@@ -147,7 +151,7 @@ class Portalmodel extends Master_M {
             $manufacturer_id = $this->db->insert_id();
 
             // you have to make a brand...
-            $this->db->query("Insert into brand (name, long_name, slug, title, active, mx, meta_tag) values (?, ?, ?, ?, 1, 0, ?)", array($manufacturer, $manufacturer, str_replace(array(" ", ".", ",", "'", "&"), array("_", "", "", "", "_and_"), $manufacturer), $manufacturer, $manufacturer));
+            $this->db->query("Insert into brand (name, long_name, slug, title, active, mx, meta_tag) values (?, ?, ?, ?, 1, 0, ?)", array($manufacturer, $manufacturer, $this->makeBrandSlug($manufacturer), $manufacturer, $manufacturer));
             $brand_id = $this->db->insert_id();
 
             $this->db->query("Update manufacturer set brand_id = ? where manufacturer_id = ?", array($brand_id, $manufacturer_id));
