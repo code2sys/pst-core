@@ -120,11 +120,6 @@ $detect = new Mobile_Detect;
             <?php endif; ?>
         </div>
         <div class="prodDetailSec">
-            <div class="blueTickSec">
-                <span>Guaranteed Low Price</span>
-                <span>No Hassle Returns</span>
-                <span>No Restock</span>
-            </div>
             <?php if (validation_errors()): ?>
                 <div class="error">
                     <h4><span style="color:#C90;"><i class="fa fa-warning"></i></span><!--&nbsp;Error--></h4>
