@@ -116,10 +116,10 @@ echo form_open('admin/brand', $attributes);
             <div class="tab_content">
                 <div class="hidden_table">
                     <table width="100%" cellpadding="6">
-                        <tr>
-                            <td><b>Active:</b></td>
-                            <td><?php echo form_checkbox('active', 1, '', 'id="active"'); ?></td>
-                        </tr>
+<!--                        <tr>-->
+<!--                            <td><b>Active:</b></td>-->
+<!--                            <td>--><?php //echo form_checkbox('active', 1, '', 'id="active"'); ?><!--</td>-->
+<!--                        </tr>-->
                         <tr>
                             <td><b>Featured:</b></td>
                             <td>
@@ -277,10 +277,10 @@ echo form_open('admin/brand', $attributes);
                         $('.new').hide();
 
                         $('#brand_id').val(responseData['brand_id']);
-                        if (responseData['active'] == 1)
-                            $('#active').prop('checked', true);
-                        if (responseData['active'] == 0)
-                            $('#active').prop('checked', false);
+//                        if (responseData['active'] == 1)
+//                            $('#active').prop('checked', true);
+//                        if (responseData['active'] == 0)
+//                            $('#active').prop('checked', false);
                         if (responseData['featured'] == 1)
                             $('#featured').prop('checked', true);
                         if (responseData['featured'] == 0)
