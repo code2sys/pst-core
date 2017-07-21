@@ -68,12 +68,6 @@ $cstdata = (array) json_decode($product['data']);
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:50px;"><b>Craigslist:</b></td>
-                        <td>
-                            <?php echo form_checkbox('craigslist_feed_status', 1, $product['craigslist_feed_status']); ?>
-                        </td>
-                    </tr>
-                    <tr>
                         <td style="width:50px;"><b>Cycle trader:</b></td>
                         <td>
                             <?php echo form_checkbox('cycletrader_feed_status', 1, $product['cycletrader_feed_status']); ?>
