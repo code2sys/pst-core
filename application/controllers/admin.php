@@ -45,7 +45,7 @@ class Admin extends Master_Controller {
     protected function validateEditBrand() {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('brand_id', 'Brand Id', 'xss_clean');
-        $this->form_validation->set_rules('active', 'Active', 'xss_clean');
+//        $this->form_validation->set_rules('active', 'Active', 'xss_clean');
         $this->form_validation->set_rules('featured', 'Featured', 'xss_clean');
         $this->form_validation->set_rules('exclude_market_place', 'exclude_market_place', 'xss_clean');
         $this->form_validation->set_rules('closeout_market_place', 'closeout_market_place', 'xss_clean');
