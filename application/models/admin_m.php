@@ -566,7 +566,7 @@ class Admin_M extends Master_M {
                         }
 
                         if ($finalSalesPrice < $rec['cost']) {
-                            $finalSalesPrice = $rec['price'];
+                            $finalSalesPrice = max($rec['price'], $rec['cost']);
                             if ($debug) {
                                 print "Final sales price too small using price $finalSalesPrice\n";
                             }
@@ -670,7 +670,7 @@ class Admin_M extends Master_M {
                         }
 
                         if ($finalSalesPrice < $rec['dealer_cost']) {
-                            $finalSalesPrice = $rec['price'];
+                            $finalSalesPrice = max($rec['price'], $rec['dealer_cost']);
                             if ($debug) {
                                 print "Final sales price too small using price $finalSalesPrice\n";
                             }
@@ -778,14 +778,23 @@ class Admin_M extends Master_M {
                                     $finalSalesPrice = $mapPrice;
                             }
                         }
-                        if (!isset($finalSalesPrice))
+                        /*
+                         * JLB  07-23-17
+                         * On this day, we discovered that Tucker Rocky will accidentally price a part wrong and put it below cost.
+                         * Therefore, we have to change this third check to be the max of price and cost so we never sell below cost.
+                         */
+                        if (!isset($finalSalesPrice)) {
                             $finalSalesPrice = $rec['price'];
+                        }
 
-                        if ($finalSalesPrice > $rec['price'])
+                        if ($finalSalesPrice > $rec['price']) {
                             $finalSalesPrice = $rec['price'];
+                        }
 
-                        if ($finalSalesPrice < $rec['cost'])
-                            $finalSalesPrice = $rec['price'];
+                        if ($finalSalesPrice < $rec['cost']) {
+                            $finalSalesPrice = max($rec['price'], $rec['cost']);
+                        }
+
                         $data = array('dealer_sale' => $finalSalesPrice);
                         $where = array('partnumber_id' => $rec['partnumber_id']);
                         $this->updateRecord('partnumber', $data, $where, FALSE);
