@@ -3,6 +3,11 @@
 <?php
 	$new_assets_url = jsite_url(  "/qatesting/benz_assets/" );
 	$media_url = jsite_url("/media/");
+$CI =& get_instance();
+$CI->load->model("admin_m");
+$store_name = $CI->admin_m->getAdminShippingProfile();
+$google_conversion_id = $store_name['google_conversion_id'];
+
 	?>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
@@ -819,7 +824,7 @@ $(window).load(function() {
   <?php if(@$product['partnumber']): ?>
   gts.push(["google_base_offer_id", "<?php echo $product['partnumber']; ?>"]);
   <?php endif; ?>
-  gts.push(["google_base_subaccount_id", "1108548223"]);
+  gts.push(["google_base_subaccount_id", "<?php echo $google_conversion_id; ?>"]);
   gts.push(["google_base_country", "US"]);
   gts.push(["google_base_language", "en_us"]);
 
