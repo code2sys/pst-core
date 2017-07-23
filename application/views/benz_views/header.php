@@ -845,7 +845,7 @@ Remarketing tags may not be associated with personally identifiable information 
 --------------------------------------------------->
 <script type="text/javascript">
 /* <![CDATA[ */
-var google_conversion_id = 1052220103;
+var google_conversion_id = <?php echo $google_conversion_id; ?>;
 var google_custom_params = window.google_tag_params;
 var google_remarketing_only = true;
 /* ]]> */
