@@ -91,6 +91,15 @@
                     </tr>
                </table>
             </form><br>
+            <form action="<?php echo base_url('admin_content/ebay_markup'); ?>" method="post" id="form_example" class="form_standard">
+                <table class="paypal_email" width="100" cellpadding="1">
+                    <tr>
+                        <td><h3>eBay Markup %:</h3></td>
+                        <td><input  name="ebay_markup" type="text" value="<?php echo $ebaymarkup[0]['value']; ?>"></td>
+                        <td><button type="submit" >Update</button></td>
+                    </tr>
+                </table>
+            </form><br>
             <form action="<?php echo base_url('admin_content/paypal_email'); ?>" method="post" id="form_example" class="form_standard">
                 <table class="paypal_email" width="100" cellpadding="1">
                     <tr>
@@ -104,7 +113,7 @@
                 <table class="paypal_email" width="100" cellpadding="1">
                     <tr>
                         <td><h3>Ebay Listing Quantity:</h3></td>
-                        <td><input type="number" name="quantity" value="<?php echo $paypalemail[0]['quantity']; ?>"></td>
+                        <td><input type="number" name="quantity" value="<?php echo $quantity[0]['value']; ?>"></td>
                         <td><input type="submit" value="add"></td>
                     </tr>
                 </table>
@@ -128,7 +137,7 @@
                             ?>
                             <tr>
                                 <td><input value ="<?php echo $single_setting['min_value']; ?>" name="data[<?php echo $i; ?>][min_value]" type="text"></td>
-                                <td><input value ="<?php echo $single_setting['max_value']; ?>" name="data[<?php echo $i; ?>][max_value]" type="text"></td>
+                                <td><input value ="<?php if($single_setting['max_value']!='0.0000') echo $single_setting['max_value']; ?>" name="data[<?php echo $i; ?>][max_value]" type="text"></td>
                                 <td><input value ="<?php echo $single_setting['shipping_cost']; ?>" name="data[<?php echo $i; ?>][shipping_cost]" type="text"></td>
                                 <td>
                                     <input value ="<?php echo $single_setting['id']; ?>" name="setting_id" type="hidden">

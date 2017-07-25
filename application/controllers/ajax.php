@@ -763,6 +763,15 @@ class Ajax extends Master_Controller {
         }
     }
 
+    public function email_tracking_ebay() {
+        $post = $this->input->post();		
+		error_reporting(E_ALL);
+        $this->load->model('ebay_m');
+		$csv = $this->ebay_m->updateEbayTracking($post['id'], $post['ship_tracking_code'], $post['carrier']);	
+
+	}
+	
+	
     public function remove_tracking() {
         if ($this->validateTrackingKey() == TRUE) {
             $this->admin_m->removeTrackingFromOrder($this->input->post());

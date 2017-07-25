@@ -301,6 +301,8 @@ class Admin_Content extends Master_Controller {
         $this->_mainData['ebaysettings'] = $this->Ebaysetting->getEbaySettings();
         $this->_mainData['ebayshippingsettings'] = $this->Ebaysetting->getEbayShippingSettings();
         $this->_mainData['paypalemail'] = $this->Ebaysetting->check_paypalemail();
+        $this->_mainData['quantity'] = $this->Ebaysetting->check_quantity();
+        $this->_mainData['ebaymarkup'] = $this->Ebaysetting->check_markup();
         $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);
     }
 
@@ -335,6 +337,8 @@ class Admin_Content extends Master_Controller {
         $this->_mainData['ebaysettings'] = $this->Ebaysetting->getEbaySettings();
         $this->_mainData['ebayshippingsettings'] = $this->Ebaysetting->getEbayShippingSettings();
         $this->_mainData['paypalemail'] = $this->Ebaysetting->check_paypalemail();
+        $this->_mainData['ebaymarkup'] = $this->Ebaysetting->check_markup();
+        $this->_mainData['quantity'] = $this->Ebaysetting->check_quantity();
         $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);
     }
 
@@ -354,7 +358,6 @@ class Admin_Content extends Master_Controller {
     }
 
     public function paypal_email() {
-//        echo $this->input->post('paypal_email');
         $formData = $this->input->post();
         if (!empty($formData)) {
 
@@ -363,4 +366,72 @@ class Admin_Content extends Master_Controller {
         }
     }
 
+    public function ebay_markup() {
+        $formData = $this->input->post();
+        if (!empty($formData)) {
+
+            $this->load->model('Ebaysetting');
+            $this->Ebaysetting->markup($formData);
+        }
+    }
+	
+    public function get_ebay_orders() {
+		ini_set('max_execution_time', 300);
+        $this->load->model('ebay_m');
+        $this->ebay_m->getOrders();
+    }
+	
+    public function ebay_quantity() {
+        $formData = $this->input->post();
+        if (!empty($formData)) {
+
+            $this->load->model('Ebaysetting');
+            $this->Ebaysetting->add_quantity($formData);
+        }
+    }
+
+    public function send_new_ebay() {
+		error_reporting(E_ALL);
+		ini_set('max_execution_time', 300);
+		ini_set('set_time_limit', 300);
+        $this->load->model('ebay_m');
+        $this->load->model('Ebaysetting');
+		$csv = $this->ebay_m->generateEbayFeed(1500, 1);	
+
+		
+    }
+	
+    public function set_ebay_notifications() {
+		error_reporting(E_ALL);
+        $this->load->model('ebay_m');
+        $this->load->model('Ebaysetting');
+		$this->ebay_m->setNotifications();	
+    }
+
+    public function get_ebay_notifications() {
+		error_reporting(E_ALL);
+        $this->load->model('ebay_m');
+        $this->load->model('Ebaysetting');
+		$this->ebay_m->getNotifications();	
+    }
+
+    public function ebay_notifications() {
+		error_reporting(E_ALL);
+        $this->load->model('ebay_m');
+        $this->load->model('Ebaysetting');
+		echo "test";
+		$this->ebay_m->receive_notifications();	
+    }
+	
+	
+    public function hit_ebay_end() {
+		error_reporting(E_ALL);
+		ini_set('max_execution_time', 300);
+        $this->load->model('ebay_m');
+        $this->load->model('Ebaysetting');
+		$csv = $this->ebay_m->endAll(0, 1);	
+		echo "this";
+    }
+	
+	
 }
