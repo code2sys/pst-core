@@ -155,11 +155,6 @@
         </div>
 		<div class="prodDetailSec">
 			<h1><?php echo $product['name']; ?></h1>
-            <div class="blueTickSec">
-            	<span>Guaranteed Low Price</span>
-                <span>No Hassle Returns</span>
-                <span>No Restock</span>
-            </div>
 			<?php if(validation_errors()): ?>
 			<div class="error">
 				<h4><span style="color:#C90;"><i class="fa fa-warning"></i></span><!--&nbsp;Error--></h4>

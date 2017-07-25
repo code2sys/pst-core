@@ -135,7 +135,7 @@ class Pages extends Master_Controller {
   	
   	public function index($pageTag = NULL)
   	{
-		$this->_mainData['showNotice'] = true;
+		$this->_mainData['showNotice'] = false;
 		$this->_mainData['ssl'] = false;
   		if($this->validateTag($pageTag))
   		{
@@ -171,20 +171,22 @@ class Pages extends Master_Controller {
 			
 			if($pageTag == 'shippingquestions')
 			{
-				$block = $this->_mainData['widgetBlock'];
+                // JLB 07-11-17
+                // I have no idea why they do this stupid stuff with $block
+				// $block = $this->_mainData['widgetBlock'];
 				//$this->_mainData['widgetBlock'] = '<img src="'.$this->_mainData['assets'].'/images/Truck_with_Logo.jpg"/>';
-				$this->_mainData['widgetBlock'] .= $block;
+				// $this->_mainData['widgetBlock'] .= $block;
 			}
 	  		
 			if($pageTag == 'contactus')
 	  		{
 	  			$this->processContactForm();
-		  		$block = $this->_mainData['widgetBlock'];
+		  		// $block = $this->_mainData['widgetBlock'];
 				$this->load->helper('easy_captcha_helper');
 				$this->_mainData['captcha'] = getCaptchaDisplayElements();
 				$this->_mainData['widgetBlock'] .= $this->loadGoggleMaps();
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/contact_v', $this->_mainData, TRUE);
-				$this->_mainData['widgetBlock'] .= $block;
+				// $this->_mainData['widgetBlock'] .= $block;
 	  		}
 			
 			if($pageTag == 'servicerequest')
@@ -193,14 +195,14 @@ class Pages extends Master_Controller {
 					redirect($this->_mainData['s_baseURL'] . 'pages/index/servicerequest');
 				}
 	  			$this->processServiceForm();
-		  		$block = $this->_mainData['widgetBlock'];
+		  		// $block = $this->_mainData['widgetBlock'];
 				//$this->load->helper('easy_captcha_helper');
 				//$this->_mainData['captcha'] = getCaptchaDisplayElements();
 				//$this->_mainData['widgetBlock'] .= $this->loadGoggleMaps();
 				$this->_mainData['showNotice'] = false;
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/service_request', $this->_mainData, TRUE);
 				$this->_mainData['ssl'] = true;
-				$this->_mainData['widgetBlock'] .= $block;
+				// $this->_mainData['widgetBlock'] .= $block;
 	  		}
 			
 			if($pageTag == 'financerequest')
@@ -209,15 +211,16 @@ class Pages extends Master_Controller {
 					redirect($this->_mainData['s_baseURL'] . 'pages/index/financerequest');
 				}
 	  			$this->processCreditForm();
-		  		$block = $this->_mainData['widgetBlock'];
+		  		// $block = $this->_mainData['widgetBlock'];
 				//$this->load->helper('easy_captcha_helper');
 				//$this->_mainData['captcha'] = getCaptchaDisplayElements();
 				//$this->_mainData['widgetBlock'] .= $this->loadGoggleMaps();
 				$this->_mainData['showNotice'] = false;
 				$this->_mainData['states'] = $this->load_states();
+                $this->_mainData['widgetBlock'] = '<h1 style="color:#3f51b5">' . $this->_mainData['pageRec']['label'] .'</h1>' . $this->_mainData['widgetBlock'];
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/finance_request', $this->_mainData, TRUE);
 				$this->_mainData['ssl'] = true;
-				$this->_mainData['widgetBlock'] .= $block;
+				// $this->_mainData['widgetBlock'] .= $block;
 	  		}
 	  		
 	  		$this->setNav('master/navigation_v', 0);
@@ -425,6 +428,7 @@ class Pages extends Master_Controller {
   		}
   		if(is_numeric($pageId))
   		{
+                        $this->_mainData['bannerlibrary'] = 'bannerlibrary';
 	  		$this->_mainData['pageRec'] = $this->pages_m->getPageRec($pageId);
 	  		$this->setMasterPageVars('descr', $this->_mainData['pageRec']['metatags']);
 	  		$this->setMasterPageVars('title', $this->_mainData['pageRec']['title']);
@@ -433,6 +437,7 @@ class Pages extends Master_Controller {
 	  		$this->_mainData['pageRec']['widgets'] = json_decode($this->_mainData['pageRec']['widgets'], TRUE);
 	  		$this->_mainData['bannerImages'] = $this->admin_m->getSliderImages($pageId);
 	  		$this->_mainData['textboxes'] = $this->pages_m->getTextBoxes($pageId);
+            $this->_mainData['topVideo'] = $this->pages_m->getTopVideos($pageId);
   		}
   		if(is_array(@$_SESSION['errors']))
   		{
@@ -467,6 +472,17 @@ class Pages extends Master_Controller {
 	      redirect('pages/edit/'.$this->input->post('pageId'));
 	    }
   	}
+
+  	protected function fixSliderOrder($id, $page_id) {
+        $query = $this->db->query("select max(`order`) as max_order from slider where pageId = ? and id < ?", array($page_id, $id));
+        $ordinal = 0;
+        foreach ($query->result_array() as $row) {
+            $ordinal = $row["max_order"];
+        }
+        $ordinal++;
+        // now, update it.
+        $this->db->query("update slider set `order` = ? where id = ? limit 1", array($ordinal, $id));
+    }
   	
   	public function addImages()
   	{
@@ -486,13 +502,63 @@ class Pages extends Master_Controller {
 					$uploadData['image'] = $data['file_name'];
 					$uploadData['pageId'] = $this->input->post('page');
 					$uploadData['order'] = $this->input->post('order');
-					$this->admin_m->updateSlider($uploadData);
+					$slider_id = $this->admin_m->updateSlider($uploadData);
+                    // fix the slider ordinal...
+                    $this->fixSliderOrder($slider_id, $uploadData['pageId']);
 					redirect('pages/edit/'.$this->input->post('page'));
 				}	
 	  		}
-		}
-		redirect('pages/edit/'.$this->input->post('page'));
-  	}
+            if(@$_POST['banner_link'] && $_POST['submit'] == 'saveLink') {
+                foreach( $_POST['banner_link'] as $key => $link ) {
+                    $this->admin_m->updateSliderLink($key, $link);
+                }
+                $arr = explode(",", $this->input->post('ordering'));
+                foreach ($arr as $k => $v) {
+                    $rr[] = explode("=", $v);
+                }
+                foreach ($rr as $k => $v) {
+                    $img = $v[0];
+                    $ord = $v[1];
+                    $this->admin_m->updateSliderOrder($img, $ord);
+                }
+                redirect('pages/edit/' . $this->input->post('page'));
+            }
+            /*
+             * JLB 07-07-17
+             * I think that this is completely backwards. This was coded and it appears to copy banners INTO the banner library.
+             * That's the wrong direction completely. I think that's why the banners didn't show up correctly when you selected them.
+             *
+             * I am puzzled beyond measure about the order as well. Why don't we just shove the banner at the end of the list?
+             * How is it getting an ordinal?
+             *
+             */
+            if(@$_POST['banner'] && $_POST['submit'] == 'addBanner') {
+                foreach( $_POST['banner'] as $banner ) {
+                    // Pardy's Original Code:
+                    //$bnrExt = explode('.', $banner);
+                    //$bannerName = time().'.'.end($bnrExt);
+                    //copy(STORE_DIRECTORY . '/html/media/'.$banner, STORE_DIRECTORY . '/html/bannerlibrary/'.$bannerName);
+
+                    // Let's just link them
+                    $full_filename = STORE_DIRECTORY . '/html/bannerlibrary/' . $banner;
+                    if (file_exists($full_filename)) {
+                        $bannerName = "bannerlibrary_" . $banner; // just use this name, okay?
+                        symlink($full_filename, STORE_DIRECTORY . "/html/media/" . $bannerName);
+
+                        $uploadData = array();
+                        $uploadData['image'] = $bannerName;
+                        $uploadData['pageId'] = $this->input->post('page');
+                        $uploadData['order'] = $this->input->post('order');
+                        $slider_id = $this->admin_m->updateSlider($uploadData);
+                        // fix the slider ordinal...
+                        $this->fixSliderOrder($slider_id, $uploadData['pageId']);
+                    }
+                }
+                redirect('pages/edit/' . $this->input->post('page'));
+            }
+        }
+        redirect('pages/edit/' . $this->input->post('page'));
+    }
   	
   	public function remove_image($id, $pageId)
 	{
@@ -503,4 +569,50 @@ class Pages extends Master_Controller {
 		}
 	}
 
- }
+	protected function cleanYouTubeURL($url) {
+        $piece = "https://www.youtube.com/watch?v=";
+        if (FALSE !== ($pos = strrpos($url, $piece))) {
+            // well, we need the end of it..
+            $url = substr($url, $pos + strlen($piece));
+        }
+        return $url;
+    }
+
+    public function addTopVideos() {
+        $video_url = $_REQUEST["video_url"];
+        $title = $_REQUEST["title"];
+        $ordering = $_REQUEST["ordering"];
+
+        $arr = array();
+
+        for ($i = 0; $i < min(count($video_url), count($title), count($ordering)); $i++) {
+            $url = $this->cleanYouTubeURL($video_url[$i]);
+            if (trim($url) != "") {
+                $arr[] = array(
+                    "video_url" => $url,
+                    "ordering" => $ordering[$i],
+                    "title" => $title[$i],
+                    "page_id" => $_REQUEST["pageId"]
+                );
+            }
+        }
+
+
+        /*
+         * JLB 07-07-17
+         * I have never seen the need to do anything like this. WTF?
+         *
+        foreach ($this->input->post('video_url') as $k => $v) {
+            if ($v != '') {
+                $url = $v;
+                parse_str(parse_url($url, PHP_URL_QUERY), $my_array_of_vars);
+                //$my_array_of_vars['v'];
+                $arr[] = array('video_url' => $my_array_of_vars['v'], 'ordering' => $this->input->post('ordering')[$k], 'page_id' => $this->input->post('pageId'), 'title' => $this->input->post('title')[$k]);
+            }
+        }
+        */
+        $this->pages_m->updateTopVideos($this->input->post('pageId'), $arr);
+        redirect('pages/edit/' . $this->input->post('pageId'));
+    }
+
+}

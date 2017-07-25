@@ -387,7 +387,13 @@ class Reporting_M extends Master_M {
     }
 
     public function get_dealer_info() {
-        $sql = "SELECT contact.*  from contact where environment = 'sandbox' ";
+        /*
+         * JLB 06-22-17
+         * They used to check the paypal environment setting of all the stupid things.
+         * So, observe the magic: the company is always record 1.
+         */
+        $company_id = (defined('COMPANY_CONTACT_ID') ? COMPANY_CONTACT_ID : 1);
+        $sql = sprintf("SELECT contact.*  from contact where id = %d", $company_id);
         $query = $this->db->query($sql);
         $data = $query->result_array();
         return $data[0];
@@ -414,12 +420,15 @@ class Reporting_M extends Master_M {
         unlink($file_path);
         $dealer_info = $this->get_dealer_info();
         $dealer_name = $dealer_info['company'];
-        $dealer_phone_no = $dealer_info['phone'];
+        $dealer_phone_no = preg_replace("/[^0-9]/", "", $dealer_info['phone']);
+
         $dealer_location = $dealer_info['country'];
         $dealer_city = $dealer_info['city'];
         $dealer_state = $dealer_info['state'];
         $dealer_post_code = $dealer_info['zip'];
-        $dealer_area_code = 844;
+        // JLB 06-22-17 WTF man? WTF? You have $dealer_phone_no in your hand.
+        // $dealer_area_code = 844;
+        $dealer_area_code = substr($dealer_phone_no, 0, 3);
         file_put_contents($file_path, $header);
         
         foreach ($allmotorcycle as $key => $motorcycle) {

@@ -165,27 +165,23 @@ unset($motorcycle['videos'][0]);
 				</a>
 				<hr class="hr-lne">
 				<div class="info">
-					<div class="vds">
-						<?php if( !empty($mainVideo) ) { ?>
-							<iframe width="560" height="400" src="https://www.youtube.com/embed/<?php echo $mainVideo['video_url'];?>" data-id="<?php echo $mainVideo['video_url']; ?>" id="mainVideo" frameborder="0" allowfullscreen=""></iframe>
+					<div class="vds rmv">
+                        <?php if (!empty($mainVideo)) { ?>
+							<?php
+							$CI =& get_instance();
+							echo $CI->load->view("master/embedded_videos", array(
+								"class_name" => "main-vdo",
+								"mainVideo" => $mainVideo['video_url'],
+								"mainTitle" => $mainVideo['title'],
+								"video" => $video,
+								"rltdvdo_class" => "rltdvdo",
+								"autoplay" => false
+							), true);
+							?>
+
 						<?php } ?>
-						<div class="ryt">
-							<ul class="rltdvdo">
-								<li onClick="showVideo('<?php echo $mainVideo['video_url']; ?>', '<?php echo $mainVideo['title']; ?>');" id="<?php echo $mainVideo['video_url']; ?>" style="display:none;">
-									<img class="ply" src="<?php echo $new_assets_url;?>images/play.png">
-									<img src="http://img.youtube.com/vi/<?php echo $mainVideo['video_url']; ?>/default.jpg" class="active">
-									<p><?php echo $mainVideo['title']; ?></p>
-								</li>
-								<?php foreach ($motorcycle['videos'] as $v) { ?>
-									<li onClick="showVideo('<?php echo $v['video_url']; ?>', '<?php echo $v['title']; ?>');" id="<?php echo $v['video_url']; ?>">
-										<img class="ply" src="<?php echo $new_assets_url;?>images/play.png">
-										<img src="http://img.youtube.com/vi/<?php echo $v['video_url']; ?>/default.jpg" class="active">
-										<p><?php echo $v['title']; ?></p>
-									</li>
-								<?php } ?>
-							</ul>
-						</div>
 					</div>
+					<div class="clear mn-hght"></div>
 					<?php echo $motorcycle['description'];?>
 					<!--<h3>Integer tellus dui venenatis non:</h3>
 					<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,  content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover </p>

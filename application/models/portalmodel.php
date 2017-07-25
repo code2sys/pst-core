@@ -24,8 +24,9 @@ class Portalmodel extends Master_M {
         unset($post['exclude_market_place']);
         unset($post['closeout_market_place']);
         $where = array('part_id' => $id);
-        if (!empty($post))
+        if (!empty($post)) {
             $this->updateRecord('part', $post, $where, FALSE);
+        }
 
         $where = array('partpartnumber.part_id' => $id);
         $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id ');
@@ -84,8 +85,8 @@ class Portalmodel extends Master_M {
 										  part.featured, 
 										  part.mx, 
 										  group_concat(distinct zpartvariation.partlabel order by partlabel separator ', ') as partnumber, 
-										  MIN(partnumber.sale) AS sale_min, 
-										  MAX(partnumber.sale) AS sale_max,
+										  MIN(If(partnumber.dealer_sale > 0, partnumber.dealer_sale, partnumber.sale)) AS sale_min, 
+										  MAX(If(partnumber.dealer_sale > 0, partnumber.dealer_sale, partnumber.sale)) AS sale_max,
 										  MIN(partnumber.price) AS price_min, 
 										  MAX(partnumber.price) AS price_max,
 										  MIN(partnumber.cost) AS cost_min, 
@@ -139,6 +140,10 @@ class Portalmodel extends Master_M {
         return $this->fetchByColumn("manufacturer", "manufacturer_id", "name", $manufacturer);
     }
 
+    public function makeBrandSlug($name) {
+        return str_replace(array(" ", ".", ",", "'", "&"), array("_", "", "", "", "_and_"), $name);
+    }
+
     public function getOrMakeManufacturer($manufacturer) {
         $manufacturer_id = $this->getManufacturer($manufacturer);
         if ($manufacturer_id == 0) {
@@ -146,7 +151,7 @@ class Portalmodel extends Master_M {
             $manufacturer_id = $this->db->insert_id();
 
             // you have to make a brand...
-            $this->db->query("Insert into brand (name, long_name, slug, title, active, mx, meta_tag) values (?, ?, ?, ?, 1, 0, ?)", array($manufacturer, $manufacturer, str_replace(array(" ", ".", ",", "'", "&"), array("_", "", "", "", "_and_"), $manufacturer), $manufacturer, $manufacturer));
+            $this->db->query("Insert into brand (name, long_name, slug, title, active, mx, meta_tag) values (?, ?, ?, ?, 1, 0, ?)", array($manufacturer, $manufacturer, $this->makeBrandSlug($manufacturer), $manufacturer, $manufacturer));
             $brand_id = $this->db->insert_id();
 
             $this->db->query("Update manufacturer set brand_id = ? where manufacturer_id = ?", array($brand_id, $manufacturer_id));

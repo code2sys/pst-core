@@ -94,8 +94,9 @@
 			<!-- TABS -->
 			<div class="tab">
 				<ul>
-					<li><a href="<?php echo base_url('admin/category'); ?>"><i class="fa fa-bars"></i>&nbsp;General Options*</a></li>
+					<li><a href="<?php echo base_url('admin/category_edit/'.$id); ?>"><i class="fa fa-bars"></i>&nbsp;General Options*</a></li>
 					<li><a href="<?php echo base_url('admin/category_image/'.$id); ?>" class="active"><i class="fa fa-image"></i>&nbsp;Image*</a></li>
+					<li><a href="<?php echo base_url('admin/category_video/'.$id); ?>"><i class="fa fa-bars"></i>&nbsp;Videos*</a></li>
 					<div class="clear"></div>
 				</ul>
 			</div>

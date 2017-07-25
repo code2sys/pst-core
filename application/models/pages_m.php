@@ -140,10 +140,89 @@ class Pages_M extends Master_M
 	
 	public function widgetCreator($pageId, $pageRec)
 	{
+        // JLB 07-07-17
+        // JLB - I am going to short-circuit this into a simpler thing to implement EXACTLY what Brandt said, as I think he said it,
+        // because, ultimately, this widgets array, seems pointless.
+
+        //
+        $widgetBlock = '';
+
+        // videos
+        $topVideo = $this->getTopVideos($pageId);
+        if (!is_null($topVideo) && is_array($topVideo) && count($topVideo) > 0) {
+            $mainVideo = $mainTitle = '';
+            foreach ($topVideo as $key => $val) {
+                if ($val['ordering'] == 1) {
+                    $mainVideo = $val['video_url'];
+                    $mainTitle = $val['title'];
+                    unset($topVideo[$key]);
+                    break;
+                }
+            }
+            // Note that below there is a category video that is, well, undefined.
+            $data1['mainVideo'] = $mainVideo;
+            $data1['mainTitle'] = $mainTitle;
+            $data1['video'] = $topVideo;
+            $widgetBlock .= $this->load->view('widgets/videos_v', $data1, TRUE);
+        }
+
+        // slider
+        $bannerImages = $this->admin_m->getSliderImages($pageId);
+        $data = array();
+        if(!is_null($bannerImages) && is_array($bannerImages) && count($bannerImages) > 0)
+        {
+            // There was a significant problem with the ordinals.
+            $correct_ordinal = 0;
+            foreach($bannerImages as $img)
+            {
+                $correct_ordinal++;
+                $data['sliderImages'][$correct_ordinal] = $img;
+            }
+            $widgetBlock .= $this->load->view('widgets/slider_v', $data, TRUE);
+            $widgetBlock .='<br />';
+        }
+
+        // textblocks
+        $textboxes = $this->pages_m->getTextBoxes($pageId);
+        if(!is_null($textboxes) && is_array($textboxes) && count($textboxes) > 0)
+        {
+            usort($textboxes, function($a, $b) {
+               return ($a["order"] < $b["order"] ? -1 : ($a["order"] > $b["order"] ? 1 : 0));
+            });
+
+            foreach($textboxes as $text)
+            {
+                if (trim($text['text']) != "") {
+                    $widgetBlock .= '<div class="content_section">';
+                    $widgetBlock .= '<h3>' . $text['text'] . '</h3>';
+                    $widgetBlock .= '</div>';
+                }
+            }
+        }
+
+        return $widgetBlock;
+
 		$widgets = json_decode($pageRec['widgets'], TRUE);
+
+  		$allWidgets = $this->getWidgets();
 		$widgetBlock = '';
 		$slider = 0;
 		$textbox = 0;
+
+        // JLB 07-07-17
+        // I am trying to make sense of this.
+
+        // So, this sorting part - this is sorting by Our Top Videos, Slider, and then textblocks.
+                $sortingArr = array(3,1,2);
+        
+                $result = array(); // result array
+                foreach($sortingArr as $val){ // loop
+                    if(array_search($val, $widgets)) {
+                        $result[array_search($val, $widgets)] = $val; // adding values
+                    }
+                }
+                $widgets = $result;
+
 		if(!empty($widgets))
 		{
 	
@@ -158,11 +237,11 @@ class Pages_M extends Master_M
 						{ 
 							foreach($bannerImages as $img)
 							{
-								if($img['order'] == $slider)
-								{
-									$data['sliderImages'][] = $img;
+								//if($img['order'] == $slider)
+								//{
+									$data['sliderImages'][$img['order']] = $img;
+								//} 
 								} 
-							}
 							if(@$data)
 							{
 								$widgetBlock .= $this->load->view('widgets/slider_v', $data, TRUE);
@@ -172,20 +251,41 @@ class Pages_M extends Master_M
 						break;
 					case '2' :
 						++$textbox;
-						//$textboxes = $this->pages_m->getTextBoxes($pageId);
+						$textboxes = $this->pages_m->getTextBoxes($pageId);
 						if(@$textboxes)
 						{
 							foreach($textboxes as $text)
 							{
-								if($text['order'] == $textbox)
-								{
-									$widgetBlock .= $text['text'];
-									$widgetBlock .='<br />';
+                                                                if ($text['order'] == $textbox && $text['text'] != '') {
+                                                                    $widgetBlock .= '<div class="content_section">';
+                                                                    $widgetBlock .= '<h3>'.$text['text'].'</h3>';
+                                                                    $widgetBlock .= '</div>';
+                                                                    //$widgetBlock .= '<br />';
 								}
 							}
 						}
 
 						break;
+                                                case '3' :
+                                                    $topVideo = $this->getTopVideos($pageId);
+                                                    $mainVideo = $mainTitle = '';
+                                                    foreach ($topVideo as $key => $val) {
+                                                        if ($val['ordering'] == 1) {
+                                                            $mainVideo = $val['video_url'];
+                                                            $mainTitle = $val['title'];
+                                                            unset($topVideo[$key]);
+                                                            break;
+                                                            }
+                                                    }
+                                                    if ($mainVideo == '') {
+                                                        $mainVideo = $categoryVideo[0];
+                                                        unset($topVideo[0]);
+                                                    }
+                                                    $data1['mainVideo'] = $mainVideo;
+                                                    $data1['mainTitle'] = $mainTitle;
+                                                    $data1['video'] = $topVideo;
+                                                    $widgetBlock .= $this->load->view('widgets/videos_v', $data1, TRUE);
+                                                break;
 				}
 			}
 		}
@@ -219,4 +319,16 @@ class Pages_M extends Master_M
 		return $record['finance_email'];
 	}
 
+        public function getTopVideos($pageId) {
+            $this->db->where('page_id', $pageId);
+            $records = $this->selectRecords('top_videos');
+            return $records;
+}
+
+    public function updateTopVideos($id, $arr) {
+        $this->db->delete('top_videos', array('page_id' => $id));
+        if (!empty($arr)) {
+            $this->db->insert_batch('top_videos', $arr);
+        }
+    }
 }

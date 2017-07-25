@@ -40,7 +40,10 @@
                         <td><input type="submit" name="getcycletrader_feeds" value="Generate Cycletrader Product Feed"></td>
                         <td>Status : <?php echo isset($cycletrader_feeds['status']) && $cycletrader_feeds['status'] == 1 ? 'Completed' : 'Processing'; ?></td>
                         <td>Last Run : <?php echo isset($cycletrader_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($cycletrader_feeds['run_at'])) : ''; ?></td>
-                        <td>Feed URL : <a href="<?php echo site_url() . 'welcome/cycletraderSalesFile'; ?>"><?php echo site_url() . 'welcome/cycletraderSalesXML'; ?></a></td>
+                        <?php
+                        $feed_url = site_url() . 'welcome/cycletraderSalesFile';
+                        ?>
+                        <td>Feed URL : <a href="<?php echo $feed_url; ?>"><?php echo $feed_url; ?></a></td>
                     </tr>
                 </table>
             </form>

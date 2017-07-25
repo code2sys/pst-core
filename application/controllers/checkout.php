@@ -427,7 +427,7 @@ class Checkout extends Master_Controller {
 											    <span class="gts-i-price">'.@$products['sale'].'</span>
 											    <span class="gts-i-quantity">'.@$products['qty'].'</span>
 											    <span class="gts-i-prodsearch-id">'.@$products['product_sku'].'</span>
-											    <span class="gts-i-prodsearch-store-id">1108548223</span>
+											    <span class="gts-i-prodsearch-store-id">' . $google_conversion_id . '</span>
 											    <span class="gts-i-prodsearch-country">US</span>
 											    <span class="gts-i-prodsearch-language">en</span>
 											  </span>';

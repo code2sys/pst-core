@@ -429,6 +429,9 @@ a.ftrimg1 {
     margin: 0 0 20px 12px;
     box-shadow: 0.3px 0.5px 5px silver;
 }
+.featured-listings .panel-body ul.lstng#top-video li {
+    width: 31%;
+}
 .featured-listings .panel-body ul.lstng li a.brnd-nm {
     font-size: 18px;
     color: #9c9c9c;

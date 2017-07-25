@@ -14,6 +14,9 @@ class CronJobDaily extends AbstractCronJob
 		$this->customProductSorting();
         $this->load->model("reporting_m");
         $this->reporting_m->getProductForcycletrader();
+        $this->load->model("admin_m");
+        $data = array('run_by' => 'cron', 'status' => '1');
+        $this->admin_m->update_cycletrader_feeds_log($data);
         // and generate that google feed!
         sub_googleSalesXMLNew();
 	}

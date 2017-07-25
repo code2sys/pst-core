@@ -32,15 +32,17 @@ if (isset($keywords) &&	$keywords != "") {
 <html lang="en">
 <head>
 	
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<title><?php echo $page_title; ?></title>
-	<?php if (SEARCH_NOINDEX): ?>
-		<meta name="robots" content="noindex" />
-	<?php endif; ?>
 
-<meta name="description" content="<?php print htmlentities($meta_description, ENT_QUOTES | ENT_COMPAT); ?>">
-<meta name="keywords" content="<?php echo htmlentities($meta_keywords, ENT_QUOTES | ENT_COMPAT);  ?>">	
+	<?php
+	$CI =& get_instance();
+	echo $CI->load->view("master/top_header", array(
+		"store_name" => $store_name,
+		"meta_description" => $meta_description,
+		"meta_keywords" => $meta_keywords
+	));
+
+	?>
 
 	<!-- CSS LINKS -->
 	<link rel="stylesheet" href="<?php echo $s_assets; ?>/css_front/media.css" type="text/css" />
@@ -52,10 +54,8 @@ if (isset($keywords) &&	$keywords != "") {
 
 	<!-- END CSS LINKS --> 
 	
-	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
-	
+
 	<!-- jQuery library -->
-	<script src="<?php echo $s_assets; ?>/js/jquery.min.js"></script>
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 
 	<script>
@@ -178,5 +178,11 @@ echo $CI->load->view("master/tracking", array(
 
 </body>
 <script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
+<?php
+$CI =& get_instance();
+echo $CI->load->view("master/bottom_footer", array(
+	"store_name" => $store_name
+));
+?>
 
 </html>

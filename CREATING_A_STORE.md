@@ -1,3 +1,13 @@
+Update July 6, 2017 JLB
+=======================
+
+Pardy added support for banners. The banners have a few sharp edges. 
+
+First, you need the banners, or at least you need a directory called html/bannerlibrary. This should be a symlink.
+
+I simplified the rest so that's all you have to do for deployment.
+
+
 Update May 10, 2017 JLB
 =======================
 
@@ -37,19 +47,21 @@ Add in the Symlinks
 --------------------
 
 <pre>
-ln -s ../core/adminer.php .
-ln -s ../core/application .
-ln -s ../core/Checkout/ .
-ln -s ../core/lib/ .
-ln -s ../core/qatesting_application/ .
-ln -s ../core/simpleimage.php  .
-ln -s ../core/system/ .
-ln -s ../core/vendor/ .
+ln -s ../../core/adminer.php .
+ln -s ../../core/application .
+ln -s ../../core/Checkout/ .
+ln -s ../../core/lib/ .
+ln -s ../../core/qatesting_application/ .
+ln -s ../../core/simpleimage.php  .
+ln -s ../../core/system/ .
+ln -s ../../core/vendor/ .
 cd html
-ln -s ../../core/html/assets/ .
-ln -s ../../core/html/basebranding.css  .
-ln -s ../../core/html/qatesting/ .
+ln -s ../../../core/html/assets/ .
+ln -s ../../../core/html/basebranding.css  .
+ln -s ../../../core/html/qatesting/ .
 </pre>
+
+You also need to link the banner library to html/bannerlibrary.
 
 
 Virtual Host Configuration

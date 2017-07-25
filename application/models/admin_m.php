@@ -25,6 +25,13 @@ class Admin_M extends Master_M {
         return $records;
     }
 
+    /*
+     * JLB 07-07-17
+     * WTF would anyone name this function "updateSlider" when they are calling the create function instead?
+     * This makes no sense. This is horrible for future coders. If you call something an update, and it's really an add....
+     * What would you call an update???
+     *
+     */
     public function updateSlider($uploadData) {
         $success = $this->createRecord('slider', $uploadData, FALSE);
         return $success;
@@ -102,19 +109,56 @@ class Admin_M extends Master_M {
     }
 
     public function getMotorcycleProducts($cat = NULL, $filter = NULL, $orderBy = NULL, $limit = 20, $offset = 0) {
+//        if (!is_null($filter)) {
+//            if (is_array($filter)) {
+//                $custom_where = "(";
+//                $custom_where1 = "(";
+//                foreach ($filter as $search) {
+//                    //$custom_where .= 'MATCH(motorcycle.title) AGAINST("' . trim($search) . '")';
+//                    $custom_where .= 'title like "%' . trim($search) . '%"';
+//                    $custom_where1 .= 'sku like "%' . trim($search) . '%"';
+//                }
+//                $custom_where = rtrim($custom_where, 'OR') . ')';
+//                $custom_where1 = rtrim($custom_where1, 'OR') . ')';
+//                $this->db->where($custom_where);
+//                $this->db->or_where($custom_where1);
+//            } else {
+//                $this->db->like('motorcycle.title', $filter);
+//                $this->db->or_like('motorcycle.sku', $filter);
+//            }
+//        }        
         if (!is_null($filter)) {
             if (is_array($filter)) {
+                if( $filter['search'] != '' ) {
                 $custom_where = "(";
-                $custom_where1 = "(";
-                foreach ($filter as $search) {
-                    //$custom_where .= 'MATCH(motorcycle.title) AGAINST("' . trim($search) . '")';
-                    $custom_where .= 'title like "%' . trim($search) . '%"';
-                    $custom_where1 .= 'sku like "%' . trim($search) . '%"';
+                    $custom_where .= 'title like "%' . trim($filter['search']) . '%" OR '.'sku like "%' . trim($filter['search']) . '%" OR ';
+                    $custom_where = rtrim($custom_where, ' OR ') . ')';
+                    $this->db->where($custom_where);
                 }
-                $custom_where = rtrim($custom_where, 'OR') . ')';
-                $custom_where1 = rtrim($custom_where1, 'OR') . ')';
-                $this->db->where($custom_where);
-                $this->db->or_where($custom_where1);
+                //$custom_where .= "condition = '".$filter['condition']."' OR make = '".$filter['brand']."' OR year = '".$filter['year']."' OR category = '".$filter['category']."' OR vehicle = '".$filter['vehicle']."'";
+                
+                $custom_where1 = "";
+                if($filter['condition'] != '') {
+                    $this->db->where('condition', $filter['condition']);
+                }
+                if (@$filter['brand']) {
+                    $this->db->where_in('motorcycle.make', $filter['brand']);
+                }
+
+                if (@$filter['year']) {
+                    $this->db->where_in('motorcycle.year', $filter['year']);
+                }
+                if (@$filter['category']) {
+                    $this->db->where_in('motorcycle.category', $filter['category']);
+                }
+                if (@$filter['vehicle']) {
+                    $this->db->where_in('motorcycle.vehicle_type', $filter['vehicle']);
+                }
+                
+                if( $custom_where1 != '' ) {
+                    $custom_where1 = "(".rtrim($custom_where1, ' AND ') . ')';
+                    $this->db->where($custom_where1);
+                }
             } else {
                 $this->db->like('motorcycle.title', $filter);
                 $this->db->or_like('motorcycle.sku', $filter);
@@ -326,7 +370,6 @@ class Admin_M extends Master_M {
 	
     public function updateCategory($post) {
         $data = array();
-        $data['active'] = @$post['active'] ? 1 : 0;
         $data['title'] = $post['title'];
         $data['featured'] = $post['featured'];
         $data['name'] = $post['name'];
@@ -356,17 +399,21 @@ class Admin_M extends Master_M {
         $where = array('category_id' => $category_id);
         $data = array('mark_up' => $markup);
         $this->updateRecord('category', $data, $where, FALSE);
-        $this->db->select('part_id');
-        $records = $this->selectRecords('partcategory', $where);
-        if ($records) {
-            foreach ($records as $rec) {
-                $where = array('part_id' => $rec['part_id']);
-                if (!$this->recordExists('queued_parts', $where)) {
-                    $data = array('part_id' => $rec['part_id'], 'recCreated' => time());
-                    $this->createRecord('queued_parts', $data, FALSE);
-                }
-            }
-        }
+
+        $now = time(); // I don't want the query to somehow do multiples
+        $this->db->query("Insert into queued_parts (part_id, recCreated) select distinct partcategory.part_id, $now from partcategory LEFT OUTER JOIN queued_parts on partcategory.part_id = queued_parts.part_id where queued_parts.part_id is null and partcategory.category_id = ?", array($category_id));
+//
+//        $this->db->select('part_id');
+//        $records = $this->selectRecords('partcategory', $where);
+//        if ($records) {
+//            foreach ($records as $rec) {
+//                $where = array('part_id' => $rec['part_id']);
+//                if (!$this->recordExists('queued_parts', $where)) {
+//                    $data = array('part_id' => $rec['part_id'], 'recCreated' => time());
+//                    $this->createRecord('queued_parts', $data, FALSE);
+//                }
+//            }
+//        }
         $where = array('parent_category_id' => $category_id);
         $categories = $this->selectRecords('category', $where);
         if ($categories) {
@@ -377,6 +424,10 @@ class Admin_M extends Master_M {
     }
 
     public function processParts($limit = 4000) {
+        $CI =& get_instance();
+        $CI->load->model("parts_m");
+        $debug = false;
+
         $this->db->limit($limit);
         $this->db->order_by('recCreated ASC');
         $records = $this->selectRecords('queued_parts');
@@ -385,6 +436,7 @@ class Admin_M extends Master_M {
         // echo '</pre>';
         if ($records) {
             for ($i = 0; $i < count($records); $i++) {
+                $use_retail_price = $CI->parts_m->partIsRetailOnly($records[$i]['part_id']);
                 $category = $this->getSecondBreadCrumb($records[$i]['part_id']);
                 $category_markup = array();
                 foreach ($category as $cat) {
@@ -414,7 +466,7 @@ class Admin_M extends Master_M {
                 $this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
                 $partnumbers = $this->selectRecords('partnumber', $where);
 
-                $this->db->select('partnumber.*, partdealervariation.cost as dealer_cost');
+                $this->db->select('partnumber.*, partdealervariation.stock_code, partdealervariation.cost as dealer_cost');
                 $where = array('partpartnumber.part_id' => $records[$i]['part_id'], 'partnumber.price > ' => 0);
                 $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id ');
                 $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
@@ -429,44 +481,102 @@ class Admin_M extends Master_M {
 
                 if ($partnumbers) {
                     foreach ($partnumbers as $rec) {
-                        //echo $categoryMarkUp.' : '. $brandMarkUp.' : '.$brandMAPPercent.' : '.$productMarkUp;
-                        $finalMarkUp = 0;
-                        $productMarkUp = $rec['markup'];
+                        if ($debug) {
+                            print "Distributor part: ";
+                            print_r($rec);
+                        }
 
-                        if ($productMarkUp > 0) { // Product Markup Trumps everything
-                            $finalSalesPrice = ($rec['cost'] * $productMarkUp / 100) + $rec['cost'];
-                        } else {
-                            // Calculate category and Brand Percent Mark up
-
-                            if ($brandMarkUp > 0) {
-                                $finalMarkUp = $brandMarkUp;
-                            } else if ($categoryMarkUp > 0) {
-                                $finalMarkUp = $categoryMarkUp;
-                                if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp))
-                                    $finalMarkUp = $brandMarkUp;
+                        if ($use_retail_price) {
+                            $finalSalesPrice = $rec['price']; // JLB 07-15-17 New override.
+                            if ($debug) {
+                                print "Use retail: Final sales price: $finalSalesPrice \n";
                             }
-                            //else
-                            // Get Final Sales Price for Calculating vs MAP Pricing
+                        } else {
+                            //echo $categoryMarkUp.' : '. $brandMarkUp.' : '.$brandMAPPercent.' : '.$productMarkUp;
+                            $finalMarkUp = 0;
+                            $productMarkUp = $rec['markup'];
 
-                            if ($finalMarkUp > 0)
-                                $finalSalesPrice = ($rec['cost'] * $finalMarkUp / 100) + $rec['cost'];
+                            if ($productMarkUp > 0) { // Product Markup Trumps everything
+                                $finalSalesPrice = ($rec['cost'] * $productMarkUp / 100) + $rec['cost'];
+                                if ($debug) {
+                                    print "Using product markup $productMarkUp to get sales price $finalSalesPrice \n";
+                                }
+                            } else {
+                                // Calculate category and Brand Percent Mark up
 
-                            // Calculate MAP Pricing
+                                if ($brandMarkUp > 0) {
+                                    $finalMarkUp = $brandMarkUp;
+                                    if ($debug) {
+                                        print "Using brand markup $brandMarkUp \n";
+                                    }
 
-                            if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
-                                $mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
-                                if ($mapPrice > $finalSalesPrice)
-                                    $finalSalesPrice = $mapPrice;
+                                } else if ($categoryMarkUp > 0) {
+                                    $finalMarkUp = $categoryMarkUp;
+                                    if ($debug) {
+                                        print "Using category markup $categoryMarkUp \n";
+                                    }
+                                    if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp)) {
+                                        $finalMarkUp = $brandMarkUp;
+                                    }
+                                    if ($debug) {
+                                        print "Using final markup $finalMarkUp \n";
+                                    }
+                                }
+                                //else
+                                // Get Final Sales Price for Calculating vs MAP Pricing
+
+                                if ($finalMarkUp > 0) {
+                                    $finalSalesPrice = ($rec['cost'] * $finalMarkUp / 100) + $rec['cost'];
+                                }
+
+                                if ($debug) {
+                                    print "Final sales price: $finalSalesPrice \n";
+                                }
+                                // Calculate MAP Pricing
+
+                                if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
+                                    if ($debug) {
+                                        print "Applying brand MAP percent $brandMAPPercent\n";
+                                    }
+
+                                    $mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
+                                    if ($mapPrice > $finalSalesPrice) {
+                                        $finalSalesPrice = $mapPrice;
+                                    }
+
+                                    if ($debug) {
+                                        print "Final sales price $finalSalesPrice\n";
+                                    }
+                                }
                             }
                         }
-                        if (!isset($finalSalesPrice))
-                            $finalSalesPrice = $rec['price'];
 
-                        if ($finalSalesPrice > $rec['price'])
+                        if (!isset($finalSalesPrice)) {
                             $finalSalesPrice = $rec['price'];
+                            if ($debug) {
+                                print "Final sales undefined using price $finalSalesPrice\n";
+                            }
+                        }
 
-                        if ($finalSalesPrice < $rec['cost'])
+                        if ($finalSalesPrice > $rec['price']) {
                             $finalSalesPrice = $rec['price'];
+                            if ($debug) {
+                                print "Final sales price too big using price $finalSalesPrice\n";
+                            }
+                        }
+
+                        if ($finalSalesPrice < $rec['cost']) {
+                            $finalSalesPrice = max($rec['price'], $rec['cost']);
+                            if ($debug) {
+                                print "Final sales price too small using price $finalSalesPrice\n";
+                            }
+                        }
+
+                        if ($debug) {
+                            print "Final price $finalSalesPrice\n";
+                        }
+
+
                         $data = array('sale' => $finalSalesPrice,
                             'exclude_market_place' => $exclude,
                             'closeout_market_place' => $closeout);
@@ -478,46 +588,96 @@ class Admin_M extends Master_M {
                 //Dealer Inventory
                 if ($partdealernumbers) {
                     foreach ($partdealernumbers as $rec) {
-                        $finalMarkUp = 0;
-                        $productMarkUp = $rec['markup'];
+                        if ($debug) {
+                            print "Dealer part: ";
+                            print_r($rec);
+                        }
 
-                        if ($productMarkUp > 0) { // Product Markup Trumps everything
-                            $finalSalesPrice = ($rec['dealer_cost'] * $productMarkUp / 100) + $rec['dealer_cost'];
+                        if ($use_retail_price) {
+                            $finalSalesPrice = $rec['price'];
+                            if ($debug) {
+                                print "Use retail: Final sales price: $finalSalesPrice \n";
+                            }
                         } else {
-                            // Calculate category and Brand Percent Mark up
-                            if ($brandMarkUp > 0) {
-                                $finalMarkUp = $brandMarkUp;
-                            } else if ($categoryMarkUp > 0) {
-                                $finalMarkUp = $categoryMarkUp;
-                                if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp)) {
-                                    $finalMarkUp = $brandMarkUp;
+
+                            $finalMarkUp = 0;
+                            $productMarkUp = $rec['markup'];
+
+                            if ($productMarkUp > 0) { // Product Markup Trumps everything
+                                $finalSalesPrice = ($rec['dealer_cost'] * $productMarkUp / 100) + $rec['dealer_cost'];
+                                if ($debug) {
+                                    print "Using product markup $productMarkUp to get sales price $finalSalesPrice \n";
                                 }
-                            }
-                            //else
-                            // Get Final Sales Price for Calculating vs MAP Pricing
+                            } else {
+                                // Calculate category and Brand Percent Mark up
+                                if ($brandMarkUp > 0) {
+                                    $finalMarkUp = $brandMarkUp;
+                                    if ($debug) {
+                                        print "Using brand markup $brandMarkUp \n";
+                                    }
+                                } else if ($categoryMarkUp > 0) {
+                                    $finalMarkUp = $categoryMarkUp;
+                                    if ($debug) {
+                                        print "Using category markup $categoryMarkUp \n";
+                                    }
+                                    if (($brandMarkUp > 0) && ($brandMarkUp < $finalMarkUp)) {
+                                        $finalMarkUp = $brandMarkUp;
+                                    }
+                                    if ($debug) {
+                                        print "Using final markup $finalMarkUp \n";
+                                    }
+                                }
+                                //else
+                                // Get Final Sales Price for Calculating vs MAP Pricing
 
-                            if ($finalMarkUp > 0) {
-                                $finalSalesPrice = ($rec['dealer_cost'] * $finalMarkUp / 100) + $rec['dealer_cost'];
-                            }
+                                if ($finalMarkUp > 0) {
+                                    $finalSalesPrice = ($rec['dealer_cost'] * $finalMarkUp / 100) + $rec['dealer_cost'];
+                                }
+                                if ($debug) {
+                                    print "Final sales price: $finalSalesPrice \n";
+                                }
 
-                            // Calculate MAP Pricing
-                            if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
-                                $mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
-                                if ($mapPrice > $finalSalesPrice) {
-                                    $finalSalesPrice = $mapPrice;
+                                // Calculate MAP Pricing
+                                if ((!is_null($brandMAPPercent)) && (isset($finalSalesPrice)) && ($rec['stock_code'] != 'Closeout')) {
+                                    if ($debug) {
+                                        print "Applying brand MAP percent $brandMAPPercent\n";
+                                    }
+
+                                    $mapPrice = (((100 - $brandMAPPercent) / 100) * $rec['price']);
+                                    if ($mapPrice > $finalSalesPrice) {
+                                        $finalSalesPrice = $mapPrice;
+                                    }
+
+                                    if ($debug) {
+                                        print "Final sales price $finalSalesPrice\n";
+                                    }
                                 }
                             }
                         }
+
                         if (!isset($finalSalesPrice)) {
                             $finalSalesPrice = $rec['price'];
+                            if ($debug) {
+                                print "Final sales undefined using price $finalSalesPrice\n";
+                            }
                         }
 
                         if ($finalSalesPrice > $rec['price']) {
                             $finalSalesPrice = $rec['price'];
+                            if ($debug) {
+                                print "Final sales price too big using price $finalSalesPrice\n";
+                            }
                         }
 
                         if ($finalSalesPrice < $rec['dealer_cost']) {
-                            $finalSalesPrice = $rec['price'];
+                            $finalSalesPrice = max($rec['price'], $rec['dealer_cost']);
+                            if ($debug) {
+                                print "Final sales price too small using price $finalSalesPrice\n";
+                            }
+                        }
+
+                        if ($debug) {
+                            print "Final price $finalSalesPrice\n";
                         }
 
                         $data = array('dealer_sale' => $finalSalesPrice,
@@ -532,6 +692,12 @@ class Admin_M extends Master_M {
                 $this->deleteRecord('queued_parts', $where);
             }
         }
+
+        $CI =& get_instance();
+        $this->load->model('cron/cronjobhourly', 'TheCronJob');
+        $this->TheCronJob->fixNullManufacturers();
+        $this->TheCronJob->fixBrandSlugs();
+        $this->TheCronJob->fixBrandLongNames();
     }
 
     public function processPartsInventoryReceiving($limit = 10) {
@@ -612,14 +778,23 @@ class Admin_M extends Master_M {
                                     $finalSalesPrice = $mapPrice;
                             }
                         }
-                        if (!isset($finalSalesPrice))
+                        /*
+                         * JLB  07-23-17
+                         * On this day, we discovered that Tucker Rocky will accidentally price a part wrong and put it below cost.
+                         * Therefore, we have to change this third check to be the max of price and cost so we never sell below cost.
+                         */
+                        if (!isset($finalSalesPrice)) {
                             $finalSalesPrice = $rec['price'];
+                        }
 
-                        if ($finalSalesPrice > $rec['price'])
+                        if ($finalSalesPrice > $rec['price']) {
                             $finalSalesPrice = $rec['price'];
+                        }
 
-                        if ($finalSalesPrice < $rec['cost'])
-                            $finalSalesPrice = $rec['price'];
+                        if ($finalSalesPrice < $rec['cost']) {
+                            $finalSalesPrice = max($rec['price'], $rec['cost']);
+                        }
+
                         $data = array('dealer_sale' => $finalSalesPrice);
                         $where = array('partnumber_id' => $rec['partnumber_id']);
                         $this->updateRecord('partnumber', $data, $where, FALSE);
@@ -744,6 +919,18 @@ class Admin_M extends Master_M {
         return $list;
     }
 
+	public function getCategoryVideos( $id ) {
+        $where = array('category_id' => $id);
+        $records = $this->selectRecords('category_video', $where);
+        $list = array();
+        if (@$records) {
+            foreach ($records as &$record) {
+                $list[$record['id']] = $record;
+            }
+        }
+        return $list;
+	}
+
     public function getProductVideos($id) {
         $where = array('part_id' => $id);
         $records = $this->selectRecords('part_video', $where);
@@ -762,6 +949,13 @@ class Admin_M extends Master_M {
             $this->db->insert_batch('brand_video', $arr);
         }
     }
+
+	public function updateCategoryVideos( $id, $arr ) {
+        $this->db->delete('category_video', array('category_id' => $id));
+        if (!empty($arr)) {
+            $this->db->insert_batch('category_video', $arr);
+        }
+	}
 
     public function insertSizeChart($arr) {
         if (!empty($arr)) {
@@ -1403,9 +1597,11 @@ class Admin_M extends Master_M {
 
                 $scs[$v['partnumber']] = $v;
             } else if (!empty($dealerInventory)) {
-                $data = array('quantity_available' => $v['quantity']);
+                $data = array('quantity_available' => $dealerInventory["quantity_available"] + $v['quantity']);
                 if ($v['cost'] > 0) {
-                    $data['price'] = $v['cost'];
+                    // JLB 07-15-17
+                    // Brandt told me that Pardy should not have done this, that the price should never be assigned to the cost, and that this is crazy.
+//                    $data['price'] = $v['cost'];
                     $data['cost'] = $v['cost'];
                 }
                 $success = $this->updateRecord('partdealervariation', $data, $where, FALSE);
@@ -2378,6 +2574,12 @@ class Admin_M extends Master_M {
         $this->updateRecord('motorcycleimage', $data, $where, FALSE);
     }
 
+    public function updateSliderOrder($id, $ord) {
+        $where = array('id' => $id);
+        $data = array('order' => $ord);
+        $this->updateRecord('slider', $data, $where, FALSE);
+    }
+
     public function deleteMotorcycle($prod_id) {
         $where = array('id' => $prod_id);
         $this->db->delete('motorcycle', $where);
@@ -2680,6 +2882,11 @@ class Admin_M extends Master_M {
     
     public function addOrderTransaction( $transaction ) {
         $this->createRecord('order_transaction', $transaction, FALSE);
+    }
+    public function updateSliderLink( $id, $link ) {
+        $where = array('id' => $id);
+        $data = array('banner_link' => $link);
+        $this->updateRecord('slider', $data, $where, FALSE);
     }
 
 }

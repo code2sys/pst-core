@@ -221,7 +221,7 @@ class Welcome extends Master_Controller {
         $this->load->model('pages_m');
         $this->_mainData['pageRec'] = $this->pages_m->getPageRec($this->_pageId);
         $this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
-        $this->setMasterPageVars('metatag', '<meta name="msvalidate.01" content="C333D4BD87F5B5DCE9BA429B1B324168" />');
+        $this->setMasterPageVars('metatag', ''); // JLB - I removed msvalidate.01 from here because I think the new topheader handles it.
         $this->setMasterPageVars('descr', $this->_mainData['pageRec']['metatags']);
         $this->setMasterPageVars('title', @$this->_mainData['pageRec']['title']);
         $this->setMasterPageVars('css', html_entity_decode($this->_mainData['pageRec']['css']));
@@ -267,12 +267,13 @@ class Welcome extends Master_Controller {
         $this->_mainData['pageRec'] = $this->pages_m->getPageRec($this->_pageId);
         $this->_mainData['bannerImages'] = $this->pages_m->getSliderImagesForFront($this->_pageId);
         $this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
-        $this->setMasterPageVars('metatag', '<meta name="msvalidate.01" content="C333D4BD87F5B5DCE9BA429B1B324168" />');
+        $this->setMasterPageVars('metatag', ''); // JLB - I removed msvalidate.01 from here because I think the new topheader handles it.
         $this->setMasterPageVars('descr', $this->_mainData['pageRec']['metatags']);
         $this->setMasterPageVars('title', @$this->_mainData['pageRec']['title']);
         $this->setMasterPageVars('css', html_entity_decode($this->_mainData['pageRec']['css']));
         $this->setMasterPageVars('script', html_entity_decode($this->_mainData['pageRec']['javascript']));
         $this->_mainData['widgetBlock'] = $this->pages_m->widgetCreator($this->_pageId, $this->_mainData['pageRec']);
+	$this->_mainData['topVideo'] = $this->pages_m->getTopVideos($this->_pageId);
 
         $this->load->model('parts_m');
         $this->_mainData['topRated'] = $this->parts_m->getTopRatedProducts(null, 12);
@@ -738,6 +739,10 @@ class Welcome extends Master_Controller {
         fwrite($fp, $data);
         fclose($fp);
         exit;
+    }
+
+    public function cycletraderSalesXML() {
+        $this->cycletraderSalesFile();
     }
 
     public function cycletraderSalesFile() {

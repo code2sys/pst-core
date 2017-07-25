@@ -45,7 +45,7 @@ class Admin extends Master_Controller {
     protected function validateEditBrand() {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('brand_id', 'Brand Id', 'xss_clean');
-        $this->form_validation->set_rules('active', 'Active', 'xss_clean');
+//        $this->form_validation->set_rules('active', 'Active', 'xss_clean');
         $this->form_validation->set_rules('featured', 'Featured', 'xss_clean');
         $this->form_validation->set_rules('exclude_market_place', 'exclude_market_place', 'xss_clean');
         $this->form_validation->set_rules('closeout_market_place', 'closeout_market_place', 'xss_clean');
@@ -507,6 +507,22 @@ class Admin extends Master_Controller {
         if ($this->validateProfile() !== FALSE) { // Display Form
             $this->admin_m->updateAdminShippingProfile($this->input->post());
             $this->_mainData['success'] = TRUE;
+
+
+            // We have to echo the image,if we get it....
+            if (array_key_exists("favicon", $_FILES)) {
+                // verify the mime type
+
+                // generate a icon using the guidelines from here
+                // https://stackoverflow.com/questions/35365867/limit-the-allowed-file-size-for-input-type-file-in-pure-html-no-js
+            }
+
+            if (array_key_exists("logo", $_FILES)) {
+                // verify the mime type
+
+                // generate a PNG
+
+            }
         }
         $this->_mainData['address'] = $this->admin_m->getAdminShippingProfile();
         $this->_mainData['dealPercentage'] = $this->admin_m->getDealPercentage();
@@ -634,7 +650,153 @@ class Admin extends Master_Controller {
             $updateCategories[0]['parent_category_id'] = $postData['parent_category_id'];
             $updateCategories[0]['category_id'] = $postData['category_id'];
             $updateCategories[0]['featured'] = $postData['featured'] == 1 ? 1 : 0;
-            $updateCategories[0]['active'] = $postData['active'];
+            $updateCategories[0]['name'] = $postData['name'];
+            $updateCategories[0]['title'] = $postData['title'];
+            $updateCategories[0]['meta_tag'] = $postData['meta_tag'];
+            $updateCategories[0]['keywords'] = $postData['keywords'];
+            $updateCategories[0]['mark-up'] = $postData['mark-up'];
+            $updateCategories[0]['google_category_num'] = $postData['google_category_num'];
+            $updateCategories[0]['ebay_category_num'] = $postData['ebay_category_num'];
+            $updateCategories[0]['notice'] = $postData['notice'];
+            $catArr[$postData['category_id']] = $postData['category_id'];
+
+            //!empty($postData['google_category_num']) &&
+            if ($postData['category_id'] > 0 && array_key_exists($postData['category_id'], $categories)) {
+                // JLB 07-02-17 This was written in the crappiest way possible. It assumed that there were only so many levels.
+                // Why can't they make a loop?
+                $parents = array($postData['category_id']);
+
+                while (count($parents) > 0) {
+                    $current = $parents;
+                    $parents = array();
+
+                    foreach ($current as $c_id) {
+                        if (array_key_exists($c_id, $categories)) {
+                            $subcats = $categories[$c_id];
+                            foreach ($subcats as $subcat) {
+                                $parents[] = $subcat["category_id"];
+                                $updateCategories[] = array(
+                                    "parent_category_id" => $subcat["parent_category_id"],
+                                    "category_id" => $subcat["category_id"],
+                                    "featured" => $subcat["featured"] == 1 ? 1 : 0,
+                                    "active" => $subcat["active"],
+                                    "name" => $subcat["name"],
+                                    "title" => $subcat["title"],
+                                    "meta_tag" => $subcat["meta_tag"],
+                                    "keywords" => $subcat["keywords"],
+                                    "mark-up" => $subcat["mark_up"], // JLB - this sort of thing is just annoying. Why would you do this?
+                                    "google_category_num" => $subcat["google_category_num"],
+                                    "ebay_category_num" => $subcat["ebay_category_num"],
+                                    "notice" => $subcat["notice"]
+                                );
+                            }
+                        }
+                    }
+                }
+
+// JLB 07-02-17
+// Please never write code like this. It looks like first semester, first year programming. Who told you things are only four deep?
+//                foreach ($categories[$postData['category_id']] as $subCat) {
+//
+//                    $updateCategories[$counter]['parent_category_id'] = $subCat['parent_category_id'];
+//                    $updateCategories[$counter]['category_id'] = $subCat['category_id'];
+//                    $updateCategories[$counter]['featured'] = $subCat['featured'] == 1 ? 1 : 0;
+//                    $updateCategories[$counter]['active'] = $subCat['active'];
+//                    $updateCategories[$counter]['name'] = $subCat['name'];
+//                    $updateCategories[$counter]['title'] = $subCat['title'];
+//                    $updateCategories[$counter]['meta_tag'] = $subCat['meta_tag'];
+//                    $updateCategories[$counter]['keywords'] = $subCat['keywords'];
+//                    $updateCategories[$counter]['mark-up'] = $subCat['mark_up'];
+//                    $updateCategories[$counter]['google_category_num'] = $subCat['google_category_num'];
+//                    $updateCategories[$counter]['ebay_category_num'] = $subCat['ebay_category_num'];
+//                    $updateCategories[$counter]['notice'] = $subCat['notice'];
+//                    $catArr[$subCat['category_id']] = $subCat['category_id'];
+//
+//                    if (@$categories[$subCat['category_id']]) {
+//                        foreach ($categories[$subCat['category_id']] as $subsubCat) {
+//
+//                            $secondCounter = count($updateCategories);
+//                            $updateCategories[$secondCounter]['parent_category_id'] = $subsubCat['parent_category_id'];
+//                            $updateCategories[$secondCounter]['category_id'] = $subsubCat['category_id'];
+//                            $updateCategories[$secondCounter]['featured'] = $subsubCat['featured'] == 1 ? 1 : 0;
+//                            $updateCategories[$secondCounter]['active'] = $subsubCat['active'];
+//                            $updateCategories[$secondCounter]['name'] = $subsubCat['name'];
+//                            $updateCategories[$secondCounter]['title'] = $subsubCat['title'];
+//                            $updateCategories[$secondCounter]['meta_tag'] = $subsubCat['meta_tag'];
+//                            $updateCategories[$secondCounter]['keywords'] = $subsubCat['keywords'];
+//                            $updateCategories[$secondCounter]['mark-up'] = $subsubCat['mark_up'];
+//                            $updateCategories[$secondCounter]['google_category_num'] = $subsubCat['google_category_num'];
+//                            $updateCategories[$secondCounter]['ebay_category_num'] = $subsubCat['ebay_category_num'];
+//                            $updateCategories[$secondCounter]['notice'] = $subsubCat['notice'];
+//                            $catArr[$subsubCat['category_id']] = $subsubCat['category_id'];
+//
+//                            if (@$categories[$subsubCat['category_id']]) {
+//                                foreach ($categories[$subsubCat['category_id']] as $subsubsubCat) {
+//
+//                                    $thirdCounter = count($updateCategories);
+//                                    $updateCategories[$thirdCounter]['parent_category_id'] = $subsubsubCat['parent_category_id'];
+//                                    $updateCategories[$thirdCounter]['category_id'] = $subsubsubCat['category_id'];
+//                                    $updateCategories[$thirdCounter]['featured'] = $subsubsubCat['featured'] == 1 ? 1 : 0;
+//                                    $updateCategories[$thirdCounter]['active'] = $subsubsubCat['active'];
+//                                    $updateCategories[$thirdCounter]['name'] = $subsubsubCat['name'];
+//                                    $updateCategories[$thirdCounter]['title'] = $subsubsubCat['title'];
+//                                    $updateCategories[$thirdCounter]['meta_tag'] = $subsubsubCat['meta_tag'];
+//                                    $updateCategories[$thirdCounter]['keywords'] = $subsubsubCat['keywords'];
+//                                    $updateCategories[$thirdCounter]['mark-up'] = $subsubsubCat['mark_up'];
+//                                    $updateCategories[$thirdCounter]['google_category_num'] = $subsubsubCat['google_category_num'];
+//                                    $updateCategories[$thirdCounter]['ebay_category_num'] = $subsubsubCat['ebay_category_num'];
+//                                    $updateCategories[$thirdCounter]['notice'] = $subsubsubCat['notice'];
+//                                    $catArr[$subsubsubCat['category_id']] = $subsubsubCat['category_id'];
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    $counter++;
+//                }
+            }
+
+//            echo "<pre>";
+//            print_r($catArr);
+//            print_r($updateCategories);
+//            echo "</pre>";
+//             exit;
+            foreach ($updateCategories as $category) {
+                $this->admin_m->updateCategory($category);
+            }
+
+            redirect('admin/category');
+        }
+
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/category_v', $this->_mainData);
+    }
+
+    public function category_edit($id = NULL) {
+        if (!$this->checkValidAccess('categories') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($id)) {
+            redirect('admin/category');
+        } else {
+            $categoryData = $this->admin_m->getCategory($id);
+            $this->_mainData['cate'] = array($categoryData);
+            $this->_mainData['id'] = $id;
+        }
+	
+        $this->_mainData['parent_categories'] = $this->admin_m->getCategories(TRUE);
+
+
+
+        if ($this->validateEditCategory() !== FALSE && !empty($_POST)) { // Display Form
+            $catArr = array();
+            $categories = $this->_mainData['categories'];
+            $postData = $this->input->post();
+
+            $updateCategories = array();
+            $updateCategories[0]['parent_category_id'] = $postData['parent_category_id'];
+            $updateCategories[0]['category_id'] = $postData['category_id'];
+            $updateCategories[0]['featured'] = $postData['featured'] == 1 ? 1 : 0;
             $updateCategories[0]['name'] = $postData['name'];
             $updateCategories[0]['title'] = $postData['title'];
             $updateCategories[0]['meta_tag'] = $postData['meta_tag'];
@@ -653,7 +815,6 @@ class Admin extends Master_Controller {
                     $updateCategories[$counter]['parent_category_id'] = $subCat['parent_category_id'];
                     $updateCategories[$counter]['category_id'] = $subCat['category_id'];
                     $updateCategories[$counter]['featured'] = $subCat['featured'] == 1 ? 1 : 0;
-                    $updateCategories[$counter]['active'] = $subCat['active'];
                     $updateCategories[$counter]['name'] = $subCat['name'];
                     $updateCategories[$counter]['title'] = $subCat['title'];
                     $updateCategories[$counter]['meta_tag'] = $subCat['meta_tag'];
@@ -671,7 +832,6 @@ class Admin extends Master_Controller {
                             $updateCategories[$secondCounter]['parent_category_id'] = $subsubCat['parent_category_id'];
                             $updateCategories[$secondCounter]['category_id'] = $subsubCat['category_id'];
                             $updateCategories[$secondCounter]['featured'] = $subsubCat['featured'] == 1 ? 1 : 0;
-                            $updateCategories[$secondCounter]['active'] = $subsubCat['active'];
                             $updateCategories[$secondCounter]['name'] = $subsubCat['name'];
                             $updateCategories[$secondCounter]['title'] = $subsubCat['title'];
                             $updateCategories[$secondCounter]['meta_tag'] = $subsubCat['meta_tag'];
@@ -689,7 +849,6 @@ class Admin extends Master_Controller {
                                     $updateCategories[$thirdCounter]['parent_category_id'] = $subsubsubCat['parent_category_id'];
                                     $updateCategories[$thirdCounter]['category_id'] = $subsubsubCat['category_id'];
                                     $updateCategories[$thirdCounter]['featured'] = $subsubsubCat['featured'] == 1 ? 1 : 0;
-                                    $updateCategories[$thirdCounter]['active'] = $subsubsubCat['active'];
                                     $updateCategories[$thirdCounter]['name'] = $subsubsubCat['name'];
                                     $updateCategories[$thirdCounter]['title'] = $subsubsubCat['title'];
                                     $updateCategories[$thirdCounter]['meta_tag'] = $subsubsubCat['meta_tag'];
@@ -718,10 +877,10 @@ class Admin extends Master_Controller {
             }
             redirect('admin/category');
         }
-
         $this->setNav('admin/nav_v', 2);
-        $this->renderMasterPage('admin/master_v', 'admin/category_v', $this->_mainData);
+        $this->renderMasterPage('admin/master_v', 'admin/category_edit_v', $this->_mainData);
     }
+
 
 	
     public function category_image($id = NULL) {
@@ -760,6 +919,37 @@ class Admin extends Master_Controller {
         $this->renderMasterPage('admin/master_v', 'admin/category_images_v', $this->_mainData);
     }
 
+    public function category_video($id = NULL) {
+        if (!$this->checkValidAccess('categories') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($id)) {
+            redirect('admin/category');
+        } else {
+            $categoryData = $this->admin_m->getCategory($id);
+            $this->_mainData['cate'] = array($categoryData);
+            $this->_mainData['id'] = $id;
+            $categoryVideo = $this->admin_m->getCategoryVideos($id);
+            $this->_mainData['category_video'] = $categoryVideo;
+        }
+	
+        if ($this->input->post()) {
+            $arr = array();
+            foreach ($this->input->post('video_url') as $k => $v) {
+                if ($v != '') {
+                    $url = $v;
+                    parse_str(parse_url($url, PHP_URL_QUERY), $my_array_of_vars);
+                    //$my_array_of_vars['v'];
+                    $arr[] = array('video_url' => $my_array_of_vars['v'], 'ordering' => $this->input->post('ordering')[$k], 'category_id' => $this->input->post('category_id'), 'title' => $this->input->post('title')[$k]);
+                }
+            }
+            $this->admin_m->updateCategoryVideos($this->input->post('category_id'), $arr);
+            redirect('admin/category_video/' . $this->input->post('category_id'));
+        }
+
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/category_videos_v', $this->_mainData);
+    }
 	
     public function category_delete($id) {
         if (is_numeric($id)) {
@@ -797,7 +987,7 @@ class Admin extends Master_Controller {
         $this->_mainData['parent_brands'] = $this->admin_m->getBrands(TRUE);
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/brand/brand_v', $this->_mainData);
-        curl_request_async();
+//        curl_request_async();
     }
 
     public function brand_image($id = NULL) {
@@ -1970,12 +2160,35 @@ class Admin extends Master_Controller {
         //$this->load->helper('singularize');
         //$this->load->model('parts_m');
         $filter = null;
-        if (isset($_POST) && !empty($_POST)) {
-            $filter[] = $this->input->post('name');
+        if (isset($_GET) && !empty($_GET)) {
+            $filter['search'] = $this->input->get('name');
+            $_GET['years'] = array_filter($_GET['years']);
+            $_GET['brands'] = array_filter($_GET['brands']);
+            $_GET['categories'] = array_filter($_GET['categories']);
+            $_GET['vehicles'] = array_filter($_GET['vehicles']);
+            //$_GET['condition'] = array_filter($_GET['condition']);
+            if($_GET['years'] != '') {
+                $filter['year'] = $this->input->get('years');
         }
-        //echo '<pre>';
-        //print_r($filter);
-        //echo '</pre>';
+            if($_GET['brands'] != '') {
+                $filter['brand'] = $this->input->get('brands');
+            }
+            if($_GET['categories'] != '') {
+                $filter['category'] = $this->input->get('categories');
+            }
+            if($_GET['vehicles'] != '') {
+                $filter['vehicle'] = $this->input->get('vehicles');
+            }
+            if($_GET['condition'] != '') {
+                //$filter['condition'] = $this->input->get('condition');
+                if ($_GET['condition'] == 'new'){
+                    $filter['condition'] = '1';
+                } else{
+                    $filter['condition'] = '2';
+                }
+            }
+            $this->_mainData['filter'] = $_GET;
+        }
         //$filter[] = rtrim($this->input->post('name'),'s');
         //$arr = explode(' ', $this->input->post('name'));
         //foreach($arr as $k => $v) {
@@ -1983,6 +2196,21 @@ class Admin extends Master_Controller {
         //	$filter[] = rtrim($v,'s');
         //}
         $this->_mainData['productListTable'] = $this->generateAdPdtListTableMotorcycle('category.display_page', 'ASC', 1, $filter, $cat);
+
+        $this->load->model('motorcycle_m');
+
+        $filter1 = $this->motorcycle_m->assembleFilterFromRequest();
+        
+        if($_GET['condition'] == '') {
+            unset($filter1['condition']);
+        }
+	//$filter = array();
+
+        $this->_mainData['vehicles'] = $this->motorcycle_m->getMotorcycleVehicle($filter1);
+        $this->_mainData['brands'] = $this->motorcycle_m->getMotorcycleMake($filter1);
+        $this->_mainData['years'] = $this->motorcycle_m->getMotorcycleYear($filter1);
+        $this->_mainData['categories'] = $this->motorcycle_m->getMotorcycleCategory($filter1);
+        $this->_mainData['condition'] = $this->motorcycle_m->getMotorcycleCondition($filter1);
 
         // Pagination
         // $this->_mainData['pages'] = $this->generateAdPdtListTableMotorcycle($this->admin_m->getProductCount());
@@ -2032,7 +2260,7 @@ class Admin extends Master_Controller {
             $this->motorcycle_edit($id);
         }
 
-        curl_request_async();
+//        curl_request_async();
     }
 
     public function motorcycle_description($id = NULL) {

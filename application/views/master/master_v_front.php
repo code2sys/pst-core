@@ -34,17 +34,17 @@ if (isset($keywords) &&	$keywords != "") {
 $new_assets_url = jsite_url("/qatesting/benz_assets/");
 ?>
 <head>
-
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">		
 	<title><?php echo $page_title; ?></title>
-	<?php if (SEARCH_NOINDEX): ?>
-		<meta name="robots" content="noindex" />
-	<?php endif; ?>
+	<?php
+	$CI =& get_instance();
+	echo $CI->load->view("master/top_header", array(
+		"store_name" => $store_name,
+		"meta_description" => $meta_description,
+		"meta_keywords" => $meta_keywords
+	));
 
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="description" content="<?php print htmlentities($meta_description, ENT_QUOTES | ENT_COMPAT); ?>">
-<meta name="keywords" content="<?php echo htmlentities($meta_keywords, ENT_QUOTES | ENT_COMPAT);  ?>">
+	?>
+
 	<?php echo @$metatag; ?>
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/style.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/bootstrap.min.css" />
@@ -54,13 +54,8 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/font-awesome.css" />	
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/responsive.css" />	
 	
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lucida+Sans:400,500,600,700,900,800,300" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica:400,500,600,700,900,800,300%22%20/%3E" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300%22%20/%3E">
-	
-	
+
 	<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>-->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/bootstrap.min.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/owl.carousel.js"></script>		
 
@@ -127,134 +122,13 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 			<div class="clear"></div>
 		</div>
 	</div>	
-	<!--<div class="header_b">
-		<div class="container_b">
-			<a href="<?php echo base_url();?>" class="logoCont fltL logo-tp_b">
-				<img src="/assets/images/power-sports-logo.png" width="200" height="50">
-			</a>
-			<div class="vehicleCategory">
-				<a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url; ?>images/streetBike.png">
-					</div>
-					<span>Shop Street Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('vtwin'); ?>" class="vtwin">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url; ?>images/vtwin.png">
-					</div>
-					<span id="svp">Shop VTwin Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('dirtbikeparts'); ?>" class="bike">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url; ?>images/bike.png">
-					</div>
-					<span>Shop Dirt Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('atvparts'); ?>" class="atv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url; ?>images/atv.png">
-					</div>
-					<span>Shop ATV Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('utvparts'); ?>" class="utv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url; ?>images/utv.png">
-					</div>
-					<span>Shop UTV Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('Motorcycle_Gear_Brands'); ?>" class="last">
-					<div class="stre-bk_b" style="height:42px;">
-						<img src="<?php echo $new_assets_url; ?>images/brand-tag.png">
-					</div>
-					<span id="sbb">Shop by Brand</span>
-				</a>
-			</div>
-			<div class="side-hdr">
-				<div class="sidebar-menu">
-					<span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
-					<ul class="mb-drpdwn">
-						<li><a href="<?php echo base_url('streetbikeparts'); ?>">Shop Street</a></li>
-						<li><a href="<?php echo base_url('vtwin'); ?>">Shop VTwin</a></li>
-						<li><a href="<?php echo base_url('dirtbikeparts'); ?>">Shop Dirt</a></li>
-						<li><a href="<?php echo base_url('atvparts'); ?>">Shop ATV</a></li>				
-						<li><a href="<?php echo base_url('utvparts'); ?>">Shop UTV</a></li>
-						<li><a href=<?php echo base_url('Motorcycle_Gear_Brands'); ?>>Shop by Brand</a></li>				
-						<li><a href="<?php echo base_url('/shopping/wishlist'); ?>">Wish list</a></li>
-						<li><a href="<?php echo $s_baseURL.'checkout/account'; ?>">Account</a></li>
-						<li><a href="javascript:void(0);" onclick="openLogin();">Login/Signup</a></li>
-					</ul>
-				</div>		
-				<div class="cl"><a href="tel:<?php echo CLEAN_PHONE_NUMBER; ?>">
-					<img src="<?php echo $new_assets_url; ?>images/cl.png"><br>Call</a>
-				</div>
-				<div class="crt">
-					<a href="<?php echo base_url('shopping/cart'); ?>">
-					<img src="<?php echo $new_assets_url; ?>images/kart.png"><br>Cart</a>
-				</div>
-				<div class="shpbrnd-map">
-					<p class="creditCar_b loct">				
-						<a href="<?php echo site_url('pages/index/contactus') ?>"><i class="fa fa-map-marker" aria-hidden="true"></i> MAP & HOURS</a>				
-					</p>
-				</div>
-			</div>
-			<div class="mblacnt-log">
-				<a href="javascript:void(0);" onclick="openLogin();"> <i class="fa fa-user usr" aria-hidden="true"></i> Login/create account</a>
-			</div>
-			<div class="searchHolder search-one">
-				<form action="<?php echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-					<input id="search" name="search" placeholder="Search Parts and Apparel" class="search-bx" style="float:left;" />
-					<a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-				</form>
-				<div class="clear"></div>
-			</div>
-			<div class="clear"></div>						
-		</div>
-	</div>-->
-        
+
         <div class="header_b">
 		<div class="container_b">
 			<a href="<?php echo base_url();?>" class="logoCont fltL logo-tp_b">
 				<img src="/logo.png" width="200" height="50">
 			</a>
-			<!--<div class="vehicleCategory">
-				<a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/streetBike.png">
-					</div>
-					<span id="stp">Shop Street Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('vtwin'); ?>" class="vtwin">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/vtwin.png">
-					</div>
-					<span id="svp">Shop VTwin Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('dirtbikeparts'); ?>" class="bike">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/bike.png">
-					</div>
-					<span id="sdp">Shop Dirt Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('atvparts'); ?>" class="atv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/atv.png">
-					</div>
-					<span id="sap">Shop ATV Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('utvparts'); ?>" class="utv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/utv.png">
-					</div>
-					<span id="sup">Shop UTV Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('Motorcycle_Gear_Brands'); ?>" class="last">
-					<div class="stre-bk_b" style="height:42px;">
-						<img src="<?php echo $new_assets_url1; ?>images/brand-tag.png">
-					</div>
-					<span id="sbb">Shop by Brand</span>
-				</a>
-			</div>-->
+
 			<div class="side-hdr">
 				<div class="sidebar-menu">
 					<span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
@@ -338,18 +212,11 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 		</div>
 	</div>
         
-	<!--<div class="searchHolder search-two">
-		<form action="<?php //echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-			<input id="search" name="search" placeholder="Search Parts and Apparel" class="search-bx" style="float:left;" />
-			<a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-		</form>
-		<div class="clear"></div>
-	</div>-->
-	
+
 	<div class="sw slider">
 		<div id="owl-demo" class="owl-carousel owl-theme">
 			<?php foreach( $bannerImages as $image ) { ?>
-			  <div class="item"><img src="<?php echo base_url('media/'.$image['image']); ?>"></div> 
+                    <div class="item"><a href="<?php echo $image['banner_link'];?>"><img src="<?php echo base_url('media/'.$image['image']); ?>"></a></div> 
 			<?php } ?>
 		  <!--<div class="item"><img src="<?php echo $new_assets_url; ?>images/banner2.png"></div> 
 		  <div class="item"><img src="<?php echo $new_assets_url; ?>images/banner3.png"></div>-->
@@ -357,20 +224,32 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 		<div class="clear"></div>
 	</div>
 
+	<?php if (!defined("DISABLE_FRONT_MOTORCYCLE_NAV") || !DISABLE_FRONT_MOTORCYCLE_NAV): ?>
 	<?php if (!defined("MOTORCYCLE_SHOP_DISABLE") || !MOTORCYCLE_SHOP_DISABLE): ?>
 	<div class="sw bg">
 		<div class="modal-lg">
-			<?php if (MOTORCYCLE_SHOP_NEW): ?>
+			<?php if (MOTORCYCLE_SHOP_NEW && (!defined("MOTORCYCLE_SHOP_USED") || MOTORCYCLE_SHOP_USED)) { ?>
 			<div class="col-md-3 wrap-col">
 				<a href="<?php echo site_url("Motorcycle_List?fltr=new") ?>"><h2>shop new models</h2></a>				
 			</div>
-			<?php $moto_width = 3; ?>
-			<?php else: ?>
-			<?php $moto_width = 4; ?>
-			<?php endif; ?>
-			<div class="col-md-<?php echo $moto_width; ?> wrap-col">
+			<div class="col-md-3 wrap-col">
 				<a href="<?php echo site_url("Motorcycle_List?fltr=pre-owned") ?>"><h2>shop pre-owned</h2></a>
 			</div>
+
+				<?php $moto_width = 3; ?>
+			<?php } elseif (MOTORCYCLE_SHOP_NEW) { ?>
+				<div class="col-md-4 wrap-col">
+					<a href="<?php echo site_url("Motorcycle_List?fltr=new") ?>"><h2>shop new models</h2></a>
+				</div>
+				<?php $moto_width = 4; ?>
+			<?php } elseif (!defined("MOTORCYCLE_SHOP_USED") || MOTORCYCLE_SHOP_USED) { ?>
+				<div class="col-md-4 wrap-col">
+					<a href="<?php echo site_url("Motorcycle_List?fltr=pre-owned") ?>"><h2>shop pre-owned</h2></a>
+				</div>
+				<?php $moto_width = 4; ?>
+			<?php } else { ?>
+			<?php $moto_width = 6; ?>
+			<?php } ?>
 			<div class="col-md-<?php echo $moto_width; ?> wrap-col">
 				<a href="<?php echo site_url("pages/index/financerequest") ?>"><h2>apply for Financing</h2></a>				
 			</div>
@@ -405,10 +284,31 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 		</div>	
 	</div>
 	<?php endif; ?>
-	<?php if(!empty($featuredCategories)){ ?>
+	<?php endif; ?>
+        
+        <?php if (@$topVideo) { ?>
 	<div class="sw brd">
 		<div class="container_b">
 			<div class="featured-listings">
+                        <h3> OUR TOP Videos </h3>
+                        <div class="panel-body">
+                            <ul class="lstng" id="top-video">
+                                <?php foreach ($topVideo as $key => $val) { ?>
+                                    <li class="ftrdb">
+                                        <iframe src="https://www.youtube.com/embed/<?php echo $val['video_url'];?>" frameborder="0" style="width: 90%;height:220px;" allowfullscreen></iframe>
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </div>				
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        
+        <?php if (!empty($featuredCategories)) { ?>
+            <div class="sw brd">
+                <div class="container_b">
+                    <div class="featured-listings">
 				<h3> OUR TOP Categories </h3>
 				<!--<a class="rdrct-lnk" href="<?php echo site_url('Motorcycle_Gear_Brands');?>">Shop all brands </a>-->
 				<div class="panel-body">
@@ -995,5 +895,12 @@ echo $CI->load->view("master/tracking", array(
 </script>
 	<script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
 
-	
 
+	<?php
+	$CI =& get_instance();
+	echo $CI->load->view("master/bottom_footer", array(
+		"store_name" => $store_name
+	));
+	?>
+</body>
+</html>

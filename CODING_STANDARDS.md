@@ -1,3 +1,259 @@
+Update July 7, 2017
+===================
+
+Please, NEVER EVER write code like this.
+
+<pre>
+        foreach ($this->input->post('video_url') as $k => $v) {
+            if ($v != '') {
+                $url = $v;
+                parse_str(parse_url($url, PHP_URL_QUERY), $my_array_of_vars);
+                //$my_array_of_vars['v'];
+                $arr[] = array('video_url' => $my_array_of_vars['v'], 'ordering' => $this->input->post('ordering')[$k], 'page_id' => $this->input->post('pageId'), 'title' => $this->input->post('title')[$k]);
+            }
+        }
+</pre>
+
+Somebody who left a steaming pile of code that was known as pages::addTopVideos created this thing - it appears to be doing its own parsing of URLs out of the raw input. It didn't work, and it just crashed.
+
+I understand there was some desire to pluck the variable out of the URL, but could you have used a more extremely general tool to replace a simple task if you tried? The URL wasn't some unknown quantity - the same page that adds videos makes the URL. The parameter you intended to pluck out of the video was right there at the end of the string. This was the most insane thing I'd ever seen.
+
+Here's my solution that I think is infinitely more understandable. Further, it just uses the URL *you put on the screen*.
+
+<pre>
+	protected function cleanYouTubeURL($url) {
+        $piece = "https://www.youtube.com/watch?v=";
+        if (FALSE !== ($pos = strrpos($url, $piece))) {
+            // well, we need the end of it..
+            $url = substr($url, $pos + strlen($piece));
+        }
+        return $url;
+    }
+
+    public function addTopVideos() {
+        $video_url = $_REQUEST["video_url"];
+        $title = $_REQUEST["title"];
+        $ordering = $_REQUEST["ordering"];
+
+        $arr = array();
+
+        for ($i = 0; $i < min(count($video_url), count($title), count($ordering)); $i++) {
+            $url = $this->cleanYouTubeURL($video_url[$i]);
+            if (trim($url) != "") {
+                $arr[] = array(
+                    "video_url" => $url,
+                    "ordering" => $ordering[$i],
+                    "title" => $title[$i],
+                    "page_id" => $_REQUEST["pageId"]
+                );
+            }
+        }
+</pre>
+
+See how the item is factored out into a function. See how it uses a function name that explains _what is going on_. See how I observed the string you were sticking on there and just plucked that off instead of trying to call upon some overkill URL parsing library. 
+
+This was some of the worst code I have ever encountered in this project. The Page Edit code was a complete trainwreck. It is still pretty bad, but I hope I have improved it some.
+
+My minor gripe is that I think it's insane to make a foreach loop interating over a counter variable that goes 0, 1, 2, ... N and pretend it's a complex key. That's the other weirdness in all of that original code - $k is just the index number. 
+
+
+
+Update July 2, 2017
+===================
+
+Escape from Programming 101
+---------------------------
+
+I had to redo the admin category code. I found this horrible code in the category_v.php view as well as in the category function that:
+
+1. Presumed that there would only ever be 4 levels of categories.
+2. Made explict iteration over these.
+
+Can't we use a recursive function?
+
+The view iterated over the top level, then the next level, then the next level, in one giant foreach loop. I know that they tell you to avoid recursion, but sometimes it's the right tool. Here:
+
+<pre>
+function printCategoryRow($category_id, $categories, $depth = "") {
+	if (array_key_exists($category_id, $categories)) {
+		$null_cat = is_null($category_id);
+
+		foreach ($categories[$category_id] as $category) {
+		    //... Here we output the TR
+			printCategoryRow($category["category_id"], $categories, $depth . "&nbsp;&nbsp;&nbsp;&nbsp;");
+		}
+	}
+}
+
+printCategoryRow(NULL, $categories);
+
+</pre>
+
+This allowed us to slip in a visual cue to indent the category name so we could observe the structure. Further, it meant that we didn't have four different rows on the page, with subtle variations, which caused an error in the 3rd and 4th one since there was a typo.
+
+Here I used iteration instead of recursion to do the exact same thing.
+
+First, the horrible code:
+
+<pre>
+foreach ($categories[$postData['category_id']] as $subCat) {
+
+    $updateCategories[$counter]['parent_category_id'] = $subCat['parent_category_id'];
+...
+    $catArr[$subCat['category_id']] = $subCat['category_id'];
+
+    if (@$categories[$subCat['category_id']]) {
+        foreach ($categories[$subCat['category_id']] as $subsubCat) {
+
+            $secondCounter = count($updateCategories);
+            $updateCategories[$secondCounter]['parent_category_id'] = $subsubCat['parent_category_id'];
+...
+            $updateCategories[$secondCounter]['notice'] = $subsubCat['notice'];
+            $catArr[$subsubCat['category_id']] = $subsubCat['category_id'];
+
+            if (@$categories[$subsubCat['category_id']]) {
+                foreach ($categories[$subsubCat['category_id']] as $subsubsubCat) {
+
+                    $thirdCounter = count($updateCategories);
+                    $updateCategories[$thirdCounter]['parent_category_id'] = $subsubsubCat['parent_category_id'];
+...
+                    $updateCategories[$thirdCounter]['notice'] = $subsubsubCat['notice'];
+                    $catArr[$subsubsubCat['category_id']] = $subsubsubCat['category_id'];
+                }
+            }
+        }
+    }
+
+    $counter++;
+}
+</pre>
+
+
+The counters don't make sense; the code is almost exactly the same in each block with subtle differences - the exact same subtle differences that have caused problems throughout the code. cat, subCat, subsubCat, and subsubsubCat is a horrible naming convention.
+
+
+Here's how to rewrite this without all the craziness:
+
+<pre>
+
+$parents = array($postData['category_id']);
+
+while (count($parents) > 0) {
+    $current = $parents;
+    $parents = array();
+
+    foreach ($current as $c_id) {
+        if (array_key_exists($c_id, $categories)) {
+            $subcats = $categories[$c_id];
+            foreach ($subcats as $subcat) {
+                $parents[] = $subcat["category_id"];
+                $updateCategories[] = array(
+                    "parent_category_id" => $subcat["parent_category_id"],
+...
+                    "ebay_category_num" => $subcat["ebay_category_num"],
+                    "notice" => $subcat["notice"]
+                );
+            }
+        }
+    }
+}
+</pre>
+
+A Minor Gripe
+-------------
+
+I observed that the field was called "mark_up", but the input was called "mark-up", which meant that, again and again, the field "mark_up" and "mark-up" kept having to be swapped. That's just going to cause bugs in the future when you don't use the same names for database columns and form inputs.
+
+
+
+The Curse of @
+--------------
+
+In that same code, I found that, whenever there was a new category added, the system locked up. Why? Because of this:
+
+<pre>
+if (@$categories[$postData['category_id']]) {
+</pre>
+
+When you added a category, it treated it as the null case, hiding the warning about coersing an undefined value, and then it would reprocess every part in the system. 
+
+Here are two simple facts:
+
+   1. You don't have to reprocess parts for a new category since it *has no parts*.
+   2. You don't ever reprocess the whole set because the top level category, NULL, is not a category.
+   
+So, with this observation, the correct way to write this code to make it process only an existing category with a non-null category ID is:
+
+<pre>
+if ($postData['category_id'] > 0 && array_key_exists($postData['category_id'], $categories)) {
+</pre>
+
+
+
+Too Many Inserts
+----------------
+
+In that same code, there was a query that looked like this:
+
+a. Fetch all parts associated with a category from partcategory
+b. Loop over that list of parts
+c. Insert them one-by-one into queud_parts
+
+This is *a horrible idea*. It will create a single insert for every part. If you can't figure out the query for this, you should bring this to the attention of a senior developer on the project.
+
+Here's the horrible code:
+
+<pre>
+$this->db->select('part_id');
+$records = $this->selectRecords('partcategory', $where);
+if ($records) {
+    foreach ($records as $rec) {
+        $where = array('part_id' => $rec['part_id']);
+        if (!$this->recordExists('queued_parts', $where)) {
+            $data = array('part_id' => $rec['part_id'], 'recCreated' => time());
+            $this->createRecord('queued_parts', $data, FALSE);
+        }
+    }
+}
+</pre>
+
+Here's how I fixed it:
+
+<pre>
+$now = time(); // I don't want the query to somehow do multiples
+$this->db->query("Insert into queued_parts (part_id, recCreated) select distinct partcategory.part_id, $now from partcategory LEFT OUTER JOIN queued_parts on partcategory.part_id = queued_parts.part_id where queued_parts.part_id is null and partcategory.category_id = ?", array($category_id));
+</pre>
+
+
+I observed that the site no longer locked up for 10 minutes on demo when adding a category. It just worked, which is what's needed. Too many inserts can be the death of performance.
+
+
+Update June 24, 2017
+====================
+
+
+*Question*
+For email sending can i use the default mail function of PHP or i need to use any other api like sendgrid/mailchimp or you have any other sir?
+
+*Answer*
+
+You can use the built-in PHP mail function for sending email. If you need to send something with attachments, we can add Swift Mailer, please let me know. You should use the SMTP server on the local host - postfix is installed and configured. You should set a fully-qualified From: address; FROM_EMAIL_ADDRESS is a symbolic constant defined for all environments that you can use.
+
+[Note: We added Swift Mailer. Use that for HTML emails.]
+
+Update June 13, 2017
+====================
+
+Don't do this:
+
+<pre>
+modified:   html/qatesting/bx_custom_assets/img/VAULT.png
+modified:   html/qatesting/bx_custom_assets/img/Vault.png
+</pre>
+
+You see, the small image and the big image had the same name, differing only by case. Windows and Mac OS have varying degrees of case-insensitive file systems. This is a bad approach.
+
+
 Update June 11, 2017
 ====================
 

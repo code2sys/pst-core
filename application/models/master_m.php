@@ -103,6 +103,12 @@ class Master_M extends CI_Model
 	 *                            rule set in form validation
 	 * @return boolean
 	 */
+	/*
+	 * JLB 07-07-17
+	 * I have no words for how insane this function is.
+	 * You mean we are going to dynamically go interrogate the information_schema to decide what to do?
+	 * There's no end of describing how insane that is.
+	 */
 	public function createRecord($table, $data, $formSafe=TRUE)
 	{
 		$ret = FALSE;

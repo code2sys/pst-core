@@ -3,6 +3,11 @@
 <?php
 	$new_assets_url = jsite_url(  "/qatesting/benz_assets/" );
 	$media_url = jsite_url("/media/");
+$CI =& get_instance();
+$CI->load->model("admin_m");
+$store_name = $CI->admin_m->getAdminShippingProfile();
+$google_conversion_id = $store_name['google_conversion_id'];
+
 	?>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
@@ -819,7 +824,7 @@ $(window).load(function() {
   <?php if(@$product['partnumber']): ?>
   gts.push(["google_base_offer_id", "<?php echo $product['partnumber']; ?>"]);
   <?php endif; ?>
-  gts.push(["google_base_subaccount_id", "1108548223"]);
+  gts.push(["google_base_subaccount_id", "<?php echo $google_conversion_id; ?>"]);
   gts.push(["google_base_country", "US"]);
   gts.push(["google_base_language", "en_us"]);
 
@@ -840,7 +845,7 @@ Remarketing tags may not be associated with personally identifiable information 
 --------------------------------------------------->
 <script type="text/javascript">
 /* <![CDATA[ */
-var google_conversion_id = 1052220103;
+var google_conversion_id = <?php echo $google_conversion_id; ?>;
 var google_custom_params = window.google_tag_params;
 var google_remarketing_only = true;
 /* ]]> */
@@ -1048,8 +1053,56 @@ var google_remarketing_only = true;
 	//}
 	
 </script>
+<script>
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=1038872762878770";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
 	<link rel="stylesheet" href="<?php echo jsite_url('/basebranding.css'); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url('/custom.css'); ?>" />
+<style>
+.main-vdo {
+    width: 69%;
+    float: left;
+}
+.rmv .main-vdo ul {
+    width: 100%;
+    float: left;
+    margin: 0;
+    padding: 5px;
+    background: rgba(192, 192, 192, 0.48);
+}
+.rmv .main-vdo ul li {
+    float: left;
+    margin: 0 15px 0 0px;
+    list-style: none;
+}
+.rmv .main-vdo ul li .ggl {
+    max-width: 59px;
+    overflow: hidden;
+    float: left;
+}
+.rmv .main-vdo ul li strong {
+    float: left;
+    margin: 4px 7px 0 0;
+}
+.rmv .main-vdo ul .subs {
+    float: right;
+}
+.mn-ul .mn-frst {
+    width: 48%;
+}
+.ggl-pls {
+    padding-top: 3px;
+}
+.mn-hght {
+    min-height: 10px;
+}
+</style>
 
 </body>
 </html>	

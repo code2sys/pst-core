@@ -30,26 +30,26 @@ if (isset($keywords) &&	$keywords != "") {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>	
+<head>
 
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<title><?php echo $page_title; ?></title>
+	<?php
+	$CI =& get_instance();
+	echo $CI->load->view("master/top_header", array(
+		"store_name" => $store_name,
+		"meta_description" => $meta_description,
+		"meta_keywords" => $meta_keywords
+	));
+
+	?>
+
+
     <?php
 	$new_assets_url = jsite_url("/qatesting/newassets/");
 	$new_assets_url1 = jsite_url("/qatesting/benz_assets/");
 	?>
-	<?php if (SEARCH_NOINDEX): ?>
-		<meta name="robots" content="noindex" />
-	<?php endif; ?>
 
 
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-	<!--<meta name="viewport" content="user-scalable = yes">-->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<meta name="description" content="<?php print htmlentities($meta_description, ENT_QUOTES | ENT_COMPAT); ?>">
-	<meta name="keywords" content="<?php echo htmlentities($meta_keywords, ENT_QUOTES | ENT_COMPAT);  ?>">
 	<?php echo @$metatag; ?>
 	
 	
@@ -69,7 +69,6 @@ if (isset($keywords) &&	$keywords != "") {
 	<link rel="stylesheet" href="<?php echo $s_assets; ?>/font-awesome-4.1.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>/css/responsive.css" type="text/css" />
 	
-	<meta name="msvalidate.01" content="EBE52F3C372A020CF12DD8D06A48F87C" />
 	<?php echo @$css; ?>
 	
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/style.css" />
@@ -79,19 +78,13 @@ if (isset($keywords) &&	$keywords != "") {
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/owl.transitions.css" />	
 	<link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/font-awesome.css" />	
 	
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lucida+Sans:400,500,600,700,900,800,300" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica:400,500,600,700,900,800,300%22%20/%3E" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300%22%20/%3E">
-	
-	<!-- END CSS LINKS --> 
+	<!-- END CSS LINKS -->
 	
 	<!-- jQuery library -->
 	
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script src="<?php echo $new_assets_url1; ?>js/bootstrap.min.js"></script>
 	<script src="<?php echo $new_assets_url1; ?>js/owl.carousel.js"></script>
 	
-	<script src="<?php echo $s_assets; ?>/js/jquery-1.7.2.js"></script>
 <script>
 	$(document).ready(function(){
 		$(".sidebar-menu").click(function(){
@@ -314,134 +307,14 @@ if (isset($keywords) &&	$keywords != "") {
 			<div class="clear"></div>
 		</div>
 	</div>
-	<!--<div class="header_b">
-		<div class="container_b">
-			<a href="<?php echo base_url();?>" class="logoCont fltL logo-tp_b">
-				<img src="/logo.png" width="200" height="50">
-			</a>
-			<div class="vehicleCategory">
-				<a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/streetBike.png">
-					</div>
-					<span>Shop Street Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('vtwin'); ?>" class="vtwin">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url; ?>images/vtwin.png">
-					</div>
-					<span id="svp">Shop VTwin Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('dirtbikeparts'); ?>" class="bike">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/bike.png">
-					</div>
-					<span>Shop Dirt Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('atvparts'); ?>" class="atv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/atv.png">
-					</div>
-					<span>Shop ATV Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('utvparts'); ?>" class="utv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url; ?>images/utv.png">
-					</div>
-					<span>Shop UTV Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('Motorcycle_Gear_Brands'); ?>" class="last">
-					<div class="stre-bk_b" style="height:42px;">
-						<img src="<?php echo $new_assets_url1; ?>images/brand-tag.png">
-					</div>
-					<span>Shop by Brand</span>
-				</a>
-			</div>			
-			<div class="side-hdr">
-				<div class="sidebar-menu">
-					<span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
-					<ul class="mb-drpdwn">
-						<li><a href="<?php echo base_url('streetbikeparts'); ?>">Shop Street</a></li>
-						<li><a href="<?php echo base_url('vtwin'); ?>">Shop VTwin</a></li>
-						<li><a href="<?php echo base_url('dirtbikeparts'); ?>">Shop Dirt</a></li>
-						<li><a href="<?php echo base_url('atvparts'); ?>">Shop ATV</a></li>				
-						<li><a href="<?php echo base_url('utvparts'); ?>">Shop UTV</a></li>
-						<li><a href=<?php echo base_url('Motorcycle_Gear_Brands'); ?>>Shop by Brand</a></li>				
-						<li><a href="<?php echo base_url('/shopping/wishlist'); ?>">Wish list</a></li>
-						<li><a href="<?php echo $s_baseURL.'checkout/account'; ?>">Account</a></li>
-						<li><a href="#">Login/Signup</a></li>
-					</ul>
-				</div>		
-				<div class="cl"><a href="tel:<?php echo CLEAN_PHONE_NUMBER; ?>">
-					<img src="<?php echo $new_assets_url1; ?>images/cl.png"><br>Call</a>
-				</div>
-				<div class="crt">
-					<a href="<?php echo base_url('shopping/cart'); ?>">
-					<img src="<?php echo $new_assets_url1; ?>images/kart.png"><br>Cart</a>
-				</div>
-				<div class="shpbrnd-map">
-					<p class="creditCar_b loct">				
-						<a href="<?php echo site_url('pages/index/contactus') ?>"><i class="fa fa-map-marker" aria-hidden="true"></i> MAP & HOURS</a>				
-					</p>
-				</div>
-			</div>
-			<div class="mblacnt-log">
-				<a href="#"> <i class="fa fa-user usr" aria-hidden="true"></i> Login/create account</a>
-			</div>
-			<div class="searchHolder search-one">
-				<form action="<?php echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-					<input id="search" name="search" placeholder="Search Parts and Apparel" class="search-bx" style="float:left;" />
-					<a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-				</form>
-				<div class="clear"></div>
-			</div>
-			<div class="clear"></div>						
-		</div>
-	</div>-->
+
         
         <div class="header_b">
 		<div class="container_b">
 			<a href="<?php echo base_url();?>" class="logoCont fltL logo-tp_b">
 				<img src="/logo.png" width="200" height="50">
 			</a>
-			<!--<div class="vehicleCategory">
-				<a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/streetBike.png">
-					</div>
-					<span id="stp">Shop Street Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('vtwin'); ?>" class="vtwin">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/vtwin.png">
-					</div>
-					<span id="svp">Shop VTwin Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('dirtbikeparts'); ?>" class="bike">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/bike.png">
-					</div>
-					<span id="sdp">Shop Dirt Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('atvparts'); ?>" class="atv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/atv.png">
-					</div>
-					<span id="sap">Shop ATV Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('utvparts'); ?>" class="utv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/utv.png">
-					</div>
-					<span id="sup">Shop UTV Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('Motorcycle_Gear_Brands'); ?>" class="last">
-					<div class="stre-bk_b" style="height:42px;">
-						<img src="<?php echo $new_assets_url1; ?>images/brand-tag.png">
-					</div>
-					<span id="sbb">Shop by Brand</span>
-				</a>
-			</div>-->
+
 			<div class="side-hdr">
 				<div class="sidebar-menu">
 					<span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
@@ -525,126 +398,9 @@ if (isset($keywords) &&	$keywords != "") {
 		</div>
 	</div>
 	
-	<!--<div class="searchHolder search-two">
-		<form action="<?php //echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-			<input id="search" name="search" placeholder="Search Parts and Apparel" class="search-bx" style="float:left;" />
-			<a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-		</form>
-		<div class="clear"></div>
-	</div>-->
-	
-		<!--<div class="imagesCont" style="display:flex;">
 
-			<img src="<?php echo $new_assets_url;?>images/homepage_slider/banner.jpg" width="100%" alt="" usemap="#Map" />
-			<map name="Map" id="Map">
-				<area alt="UTV'S" title="UTV'S" href="<?php echo base_url('utvparts'); ?>" shape="poly" coords="1,2,421,2,298,299,0,299" style="text-decoration:none;" />
-				<area alt="ATV'S" title="ATV'S" href="<?php echo base_url('atvparts'); ?>" shape="poly" coords="422,2,823,2,668,297,301,299" style="text-decoration:none;" />
-				<area alt="Dirt Bikes" title="Dirt Bikes" href="<?php echo base_url('dirtbikeparts'); ?>" shape="poly" coords="826,1,1102,1,937,299,670,298" style="text-decoration:none;" />
-				<area alt="Street Bikes" title="Street Bikes" href="<?php echo base_url('streetbikeparts'); ?>" shape="poly" coords="1106,1,1365,1,1365,297,940,298" style="text-decoration:none;" />
-			</map>
-			
-			
-			
-        </div>-->
 		<div class="clear"></div>
-		
-		<!--<div class="productNav">
-	        	<div class="productNavCont">
-    	<ul>        	
-        	<li><a class="topNavAnchors" href="javascript:;" onclick="showSubNav(1);">Dirt Bike Parts</a><span>|</span>
-            	<ul id="nav1" class="active SubNavs" style="display:none;">
-					<span class="toolTip"></span>
-					<li><a href="javascript:;">Sub Category 1</a></li>
-					<li><a href="javascript:;">Sub Category 2</a></li>
-					<li><a href="javascript:;">Sub Category 3</a></li>
-					<li><a href="javascript:;">Sub Category 4</a></li>
-            	</ul>
-            </li>
-            <li><a class="topNavAnchors" href="javascript:;" onclick="showSubNav(2);">Chemicals & Oils</a><span>|</span>
-				<ul id="nav2" class="active SubNavs" style="display:none;">
-					<span class="toolTip"></span>
-					<li><a href="javascript:;">Sub Category 1</a></li>
-					<li><a href="javascript:;">Sub Category 2</a></li>
-					<li><a href="javascript:;">Sub Category 3</a></li>
-					<li><a href="javascript:;">Sub Category 4</a></li>
-            	</ul>
-            </li>
-            <li><a class="topNavAnchors" href="javascript:;" onclick="showSubNav(3);">Casual Apparel</a><span>|</span>
-            	<ul id="nav3" class="active SubNavs" style="display:none;">
-					<span class="toolTip"></span>
-					<li><a href="javascript:;">Sub Category 1</a></li>
-					<li><a href="javascript:;">Sub Category 2</a></li>
-					<li><a href="javascript:;">Sub Category 3</a></li>
-					<li><a href="javascript:;">Sub Category 4</a></li>
-            	</ul>
-			</li>
-            <li><a class="topNavAnchors" href="javascript:;" onclick="showSubNav(4);">Helmets & Accessories</a><span>|</span>
-            	<ul id="nav4" class="active SubNavs" style="display:none;">
-					<span class="toolTip"></span>
-					<li><a href="javascript:;">Sub Category 1</a></li>
-					<li><a href="javascript:;">Sub Category 2</a></li>
-					<li><a href="javascript:;">Sub Category 3</a></li>
-					<li><a href="javascript:;">Sub Category 4</a></li>
-            	</ul>
-            </li>
-            <li style="display:inline-block">
-				<a class="topNavAnchors" href="javascript:;" onclick="showSubNav(5);">Riding Gear</a><span>|</span>
-            	<ul id="nav5" class="active SubNavs" style="display:none;">
-					<span class="toolTip"></span>
-					<li><a href="javascript:;">Sub Category 1</a></li>
-					<li><a href="javascript:;">Sub Category 2</a></li>
-					<li><a href="javascript:;">Sub Category 3</a></li>
-					<li><a href="javascript:;">Sub Category 4</a></li>
-            	</ul>
-			</li>
-            <li style="display:inline-block">
-				<a class="topNavAnchors" href="javascript:;" onclick="showSubNav(6);">Tools Trailers & Stands</a>
-				<ul id="nav6" class="active SubNavs" style="display:none;">
-					<span class="toolTip"></span>
-					<li><a href="javascript:;">Sub Category 1</a></li>
-					<li><a href="javascript:;">Sub Category 2</a></li>
-					<li><a href="javascript:;">Sub Category 3</a></li>
-					<li><a href="javascript:;">Sub Category 4</a></li>
-            	</ul>
-			</li>
-        </ul>        
-	</div>
-		</div>-->
-		<!--<div class="filterBar shphd">
-			<div class="filterBarCont containerOuter">
-				<h1>SHOP BY MACHINE</h1>
-				<form action="<?php echo $s_baseURL; ?>ajax/update_garage" method="post" id="update_garage_form" class="form_standard">
-                    <select class="selectField" name="machine" id="machine" tabindex="1">
-                        <option value="">-- Select Machine --</option>
-                        <?php if(@$machines): foreach($machines as $id => $label): ?>
-                            <option value="<?php echo $id; ?>"><?php echo $label; ?></option>
-                        <?php endforeach; endif; ?>
-                    <!-- <optgroup label="Motor Cycles"> -->
-                    <!--</select>
-                    <select name="make" id="make" tabindex="2" class="selectField">
-                        <option>-Make-</option>
-                    </select>
-                    <select name="model" id="model" tabindex="3" class="selectField">
-                        <option>-Model-</option>
-                    </select>
-                    <select name="year" id="year" tabindex="4" class="selectField">
-                        <option>-Year-</option>
-                    </select>
-					<a href="javascript:void(0);" onClick="updateGarage();" id="add" class="addToCat" style="padding:6px 13px;">Add To Garage</a>
-                    </form>
-				<div class="clear"></div>
-			</div>
-		</div>
-		<div class="freeShippingBanner">
-			<div class="containerOuter">
-				<h1>FREE SHIPPING !!!</h1>
-				<div class="moreInfoArrow">ON ALL ORDERS OVER $65 IN THE U.S.! <a href="<?php echo base_url();?>pages/index/shippingquestions"> CLICK FOR MORE INFO!</a></div>
-				<div class="greenMap"></div>
-				<div class="clear"></div>
-			</div>
-		</div>-->
-		
-		<?php //echo str_replace("qatesting/index.php?/media/", "media/", @$brandSlider); ?>
+
 
 	<?php }?>
     
@@ -1059,5 +815,12 @@ echo $CI->load->view("master/tracking", array(
 	}
 </script>
 <script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
+<?php
+$CI =& get_instance();
+echo $CI->load->view("master/bottom_footer", array(
+	"store_name" => $store_name
+));
+?>
+
 </body>
 </html>

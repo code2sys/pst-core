@@ -311,6 +311,30 @@ class Shopping extends Master_Controller {
 
         unset($this->_mainData['band']);
 
+		if( @$listParameters['category'] ) {
+			$videoParams = $listParameters['category'];
+			end($videoParams);
+			$endCategory = key($videoParams);
+			
+			$categoryVideo = $this->admin_m->getCategoryVideos($endCategory);
+			$mainVideo = $mainTitle = '';
+			foreach ($categoryVideo as $key => $val) {
+				if ($val['ordering'] == 1) {
+					$mainVideo = $val['video_url'];
+					$mainTitle = $val['title'];
+					unset($categoryVideo[$key]);
+					break;
+				}
+			}
+			if ($mainVideo == '') {
+				$mainVideo = $categoryVideo[0];
+				unset($categoryVideo[0]);
+			}
+			$this->_mainData['mainVideo'] = $mainVideo;
+			$this->_mainData['mainTitle'] = $mainTitle;
+			$this->_mainData['video'] = $categoryVideo;
+		}
+                
         // ACTUAL PRODUCT SEARCH IS DONE IN THIS MODEL FUNCTION
         $listParameters1 = $listParameters;
         unset($listParameters1['search']);
@@ -1300,7 +1324,7 @@ class Shopping extends Master_Controller {
         $this->load->model('pages_m');
         $this->_mainData['pageRec'] = $this->pages_m->getPageRec(12);
         $this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
-        $this->setMasterPageVars('metatag', '<meta name="msvalidate.01" content="C333D4BD87F5B5DCE9BA429B1B324168" />');
+        $this->setMasterPageVars('metatag', ''); // JLB - I removed msvalidate.01 from here because I think the new topheader handles it.
         $this->setMasterPageVars('descr', $this->_mainData['pageRec']['metatags']);
         $this->setMasterPageVars('title', @$this->_mainData['pageRec']['title'] . ' - ' . WEBSITE_NAME);
         $this->_mainData['title1'] = $this->_mainData['pageRec']['title'];

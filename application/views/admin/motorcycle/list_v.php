@@ -35,15 +35,71 @@
 
         <div class="admin_search_left">
             <div class="clear"></div>
-            <form action="<?php echo base_url('admin/mInventory'); ?>/" method="post" class="form_standard">
+            <form action="<?php echo base_url('admin/mInventory'); ?>/" method="get" class="form_standard">
                 <div class="hidden_table">
                     <b>Show Only: </b>
-                    <table>
+                    <table style="width: 100%;">
                         <tr>
                             <td>Product</td>
-                            <td><input id="name" name="name" placeholder="Name" class="text mini" style="height:20px;width:200px;" /></td>
-                            <td></td>
-                            <td><input type="submit" value="Go!" class="button" style="margin-top:6px;"></td>
+                            <td><input id="name" name="name" placeholder="Name" class="text mini" style="height:20px;width:200px;" value="<?php echo $filter['name'];?>" /></td>
+                            <td>Condition</td>
+                            <td>
+                                <select name="condition" onchange="jQuery('.form_standard').submit();">
+                                    <option value="">Select Condition</option>
+                                    <?php if(@$condition) { ?>
+                                    <?php $cndtn = array('1' => 'New', '2' => 'Pre-Owned'); ?>
+                                        <?php foreach($condition as $cndn) { ?>
+                                            <option value="<?php echo strtolower($cndtn[$cndn['condition']]);?>" <?php echo $_GET['condition'] == strtolower($cndtn[$cndn['condition']]) ? 'selected':'';?>><?php echo $cndtn[$cndn['condition']];?></option>
+                                        <?php } ?>
+                                    <?php } else { ?>
+                                        <option value="new" <?php echo $filter['condition'] == 'new' ? 'selected':'';?>>New</option>
+                                        <option value="pre-owned" <?php echo $filter['condition'] == 'pre-owned' ? 'selected':'';?>>Pre-Owned</option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Year</td>
+                            <td>
+                                <select name="years[]" onchange="jQuery('.form_standard').submit();">
+                                    <option value="">Select Year</option>
+                                    <?php foreach ($years as $year) { ?>
+                                        <option value="<?php echo $year['year']; ?>" <?php echo in_array($year['year'],$filter['years']) ? 'selected':'';?>><?php echo $year['year']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                            <td>Brand</td>
+                            <td>
+                                <select name="brands[]" onchange="jQuery('.form_standard').submit();">
+                                    <option value="">Select Brand</option>
+                                    <?php foreach ($brands as $brand) { ?>
+                                        <option value="<?php echo $brand['make']; ?>" <?php echo in_array($brand['make'], $filter['brands']) ? 'selected':'';?>><?php echo $brand['make']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Category</td>
+                            <td>
+                                <select name="categories[]" onchange="jQuery('.form_standard').submit();">
+                                    <option value="">Select Category</option>
+                                    <?php foreach ($categories as $category) { ?>
+                                        <option value="<?php echo $category['id']; ?>" <?php echo in_array($category['id'], $filter['categories']) ? 'selected':'';?>><?php echo $category['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                            <td>Vehicle</td>
+                            <td>
+                                <select name="vehicles[]" onchange="jQuery('.form_standard').submit();">
+                                    <option value="">Select Vehicle</option>
+                                    <?php foreach ($vehicles as $vehicle) { ?>
+                                        <option value="<?php echo $vehicle['id']; ?>" <?php echo in_array($vehicle['id'],$filter['vehicles']) ? 'selected':'';?>><?php echo $vehicle['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><input type="submit" value="Go!" class="button" style="margin-top:6px;"></td>
                         </tr>
                     </table>
                 </div>

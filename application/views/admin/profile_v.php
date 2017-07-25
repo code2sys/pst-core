@@ -31,7 +31,7 @@ $google_trust = (array) json_decode($address['google_trust']);
   		</div>
 		<!-- END SUCCESS MESSAGE -->
 		<?php endif; ?>
-		<?php echo form_open('admin/profile', array('class' => 'form_standard')); ?>		
+		<?php echo form_open('admin/profile', array('class' => 'form_standard', 'enctype' => 'multipart/form-data')); ?>
 			<!-- EDIT PROFILE -->
 			<div class="account_section">
 				<h1><i class="fa fa-pencil"></i> Store Information</h1>
@@ -144,7 +144,43 @@ $google_trust = (array) json_decode($address['google_trust']);
                               'class' => 'text large',
                               'placeholder' => 'Finance Email')); ?></td>
 						</tr>
-						
+<!--						<tr>-->
+<!--							<td><strong>Logo:</strong><br/><em>The logo should usually be 200px wide. Please provide as GIF, JPG, or PNG format.</em></td>-->
+<!--							<td>-->
+<!--								--><?php
+//								$file = STORE_DIRECTORY . "/html/logo.png";
+//								if (file_exists($file)) {
+//									?>
+<!--									<em>Existing Logo:</em> </br>-->
+<!--									<a href="/logo.png?time=--><?php //echo time(); ?><!--" download="logo.png"><img src="/logo.png?time=--><?php //echo time(); ?><!--" /></a>-->
+<!--									<br/>-->
+<!--									<br/>-->
+<!--									<em>Upload a New Logo:</em><br/>-->
+<!--									--><?php
+//								}
+//								?>
+<!--								<input type="file" accept="image/*" name="logo"/>-->
+<!--							</td>-->
+<!--						</tr>-->
+<!--						<tr>-->
+<!--							<td><strong>Favicon:</strong><br/><em>The favicon should be a square, e.g. 64x64 pixels. Please provide as GIF, JPG, PNG, or ICO format.</em></td>-->
+<!--							<td>-->
+<!--								--><?php
+//									$file = STORE_DIRECTORY . "/html/favicon.ico";
+//									if (file_exists($file)) {
+//										?>
+<!--										<em>Existing Favicon:</em> </br>-->
+<!--										<a href="/favicon.ico?time=--><?php //echo time(); ?><!--" download="favicon.ico"><img src="/favicon.ico?time=--><?php //echo time(); ?><!--" /></a>-->
+<!--										<br/>-->
+<!--										<br/>-->
+<!--										<em>Upload a New Favicon:</em><br/>-->
+<!--										--><?php
+//									}
+//								?>
+<!--								<input type="file" accept="image/*" name="favicon"/>-->
+<!--							</td>-->
+<!--						</tr>-->
+
 						<tr>
 							<td colspan="2">
 								<table width="100%" style="background-color:white;">
@@ -263,7 +299,7 @@ $google_trust = (array) json_decode($address['google_trust']);
 								<table width="100%" style="background-color:white;">
 									<tr>
 										<td colspan="2">
-											<img src="<?php echo base_url().'assets/benz_assets/analytics.png';?>" width="233px" border="0"/>
+											<h2>Analytics and Tracking Codes</h2>
 										</td>
 									</tr>
 									<tr>
@@ -272,6 +308,34 @@ $google_trust = (array) json_decode($address['google_trust']);
 										  'value' => @$address['analytics_id'], 
 										  'class' => 'text large',
 										  'placeholder' => 'Google Analytics ID')); ?></td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>Google Site Verification Code:</b></td>
+										<td><?php echo form_input(array('name' => 'google_site_verification',
+										  'value' => @$address['google_site_verification'],
+										  'class' => 'text large',
+										  'placeholder' => 'Google Site Verification Code')); ?></td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>Bing Webmaster Site Verification Code:</b></td>
+										<td><?php echo form_input(array('name' => 'bing_site_verification',
+										  'value' => @$address['bing_site_verification'],
+										  'class' => 'text large',
+										  'placeholder' => 'Bing Site Verification Code')); ?></td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><strong>Additional Header Code:</strong><br/><em>(Enter Full Script Tags)</em></td>
+										<td><?php echo form_textarea(array('name' => 'additional_tracking_code',
+										  'value' => @$address['additional_tracking_code'],
+										  'class' => 'text large',
+										  'placeholder' => '')); ?></td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><strong>Additional Footer Code:</strong><br/><em>(Enter Full Script Tags)</em></td>
+										<td><?php echo form_textarea(array('name' => 'additional_footer_code',
+										  'value' => @$address['additional_footer_code'],
+										  'class' => 'text large',
+										  'placeholder' => '')); ?></td>
 									</tr>
 								</table>
 							</td>

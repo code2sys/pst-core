@@ -340,7 +340,12 @@ class Adminproduct extends Admin {
         }
 
         if ($error == "") {
-            $this->Portalmodel->classicUpdatePart($id, $this->input->post());
+            $data = $this->input->post();
+            if (!array_key_exists("retail_price", $data)) {
+                // Well, then clear it explicitly...
+                $data["retail_price"] = 0;
+            }
+            $this->Portalmodel->classicUpdatePart($id, $data);
             $_SESSION["product_edit_success"] = "Product updated successfully.";
         } else {
             $_SESSION["product_edit_error"] = $error;
@@ -900,9 +905,10 @@ class Adminproduct extends Admin {
         $part_number = trim(array_key_exists("part_number", $_REQUEST) ? $_REQUEST["part_number"] : "");
         $fitments = array_key_exists("fitments", $_REQUEST) ? $_REQUEST["fitments"] : array();
 
-        if ($answer == "") {
-            $this->Statusmodel->setError('Sorry, no answer received. Please provide an answer.');
-        } else if ($distributor_id == 0) {
+//        if ($answer == "") {
+//            $this->Statusmodel->setError('Sorry, no answer received. Please provide an answer.');
+//        } else
+        if ($distributor_id == 0) {
             $this->Statusmodel->setError('Sorry, please specify a distributor.');
         } else if ($part_number == "") {
             $this->Statusmodel->setError('Sorry, please specify a part number.');
