@@ -397,3 +397,4 @@ $config['proxy_ips'] = '';
 
 $config['wording_error_no_machine_selected'] = 'You currently do not have a machine selected. Please add a machine by using the shop by machine feature or selecting a machine from the fitment tab.';
 $config['wording_error_machine_does_not_match'] = 'Your machine does not match this item.  Please change your active machine above to add this item to cart.';
+$config['composer_autoload'] = TRUE;  
