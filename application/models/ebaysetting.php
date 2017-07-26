@@ -47,15 +47,32 @@ class Ebaysetting extends Master_M {
         return $query->result_array();
     }
 
+    function check_markup() {
+        $this->db->select("*");
+        $this->db->from("ebay_settings");
+        $this->db->where("key", "ebay_markup");
+        $query = $this->db->get();
+        return $query->result_array();
+    }	
+	
     function check_paypalemail() {
         $this->db->select("*");
         $this->db->from("ebay_settings");
+        $this->db->where("key", "paypal_email");
         $query = $this->db->get();
         return $query->result_array();
     }
 
+    function check_quantity() {
+        $this->db->select("*");
+        $this->db->from("ebay_settings");
+        $this->db->where("key", "quantity");
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+	
+	
     public function add_paypal_email($post) {
-//        echo $this->input->post('paypal_email');
 
         if (!empty($post)) {
             $data = array(
@@ -63,12 +80,42 @@ class Ebaysetting extends Master_M {
                 'value' => $post['paypal_email']
             );
             $email = $this->check_paypalemail();
-//            echo '<pre>';
-//            print_r($email);
-//            print_r($email[0]['value']);
-//            die;
             if (!empty($email[0]['value'])) {
                 $this->db->where('value', $email[0]['value']);
+                $this->db->update('ebay_settings', $data);
+            } else {
+                $this->db->insert('ebay_settings', $data);
+            }
+            return redirect('admin_content/feeds');
+        }
+    }
+    public function markup($post) {
+        if (!empty($post)) {
+            $data = array(
+                'key' => 'ebay_markup',
+                'value' => $post['ebay_markup']
+            );
+            $markup = $this->check_markup();
+            if (!empty($markup[0]['value'])) {
+                $this->db->where('value', $markup[0]['value']);
+                $this->db->update('ebay_settings', $data);
+            } else {
+                $this->db->insert('ebay_settings', $data);
+            }
+            return redirect('admin_content/feeds');
+        }
+    }
+
+    public function add_quantity($post) {
+
+        if (!empty($post)) {
+            $data = array(
+                'key' => 'quantity',
+                'value' => $post['quantity']
+            );
+            $quantity = $this->check_quantity();
+            if (!empty($quantity[0]['value'])) {
+                $this->db->where('value', $quantity[0]['value']);
                 $this->db->update('ebay_settings', $data);
             } else {
                 $this->db->insert('ebay_settings', $data);

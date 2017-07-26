@@ -8,6 +8,7 @@
 						<td><b>Customer</b></td>
 						<td><b>Order Date</b></td>
 						<td><b>Order Time</b></td>
+						<td><b>Source</b></td>
 						<td><b>Total</b></td>
 						<td><b>Paid</b></td>
 						<td><b>Status</b></td>
@@ -22,6 +23,7 @@
 						<td><?php echo $order['first_name'] . ' ' . $order['last_name']; ?></td>
 						<td><?php echo ($order['order_date']) ?  date('m/d/Y', $order['order_date']) : $order['processed_date']; ?></td>
 						<td><?php echo ($order['order_date']) ?  date('H:i:s', $order['order_date']) : ''; ?></td>
+						<td><img src="<?php echo $assets; ?>/images/<?php echo ($order['source']=="eBay"?"ebay_logo.png":"admin_logo.png"); ?>" height="30px" border="0"></td>
 						<td><?php echo $order['sales_price'] + $order['shipping'] + $order['tax']; ?></td>
 						<td><?php echo $order['paid']; ?></td>
 						<td>

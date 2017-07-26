@@ -28,13 +28,16 @@
                 <input type="button" name="Go" value="Go" onclick="populateCustomer();"/>
             </div>
         <?php } ?>
-            <div class="wdth-25" style="width:15%;padding-top:14px;float:right;">
+            <div class="wdth-25" style="width:21%;padding-top:14px;float:right;">
+                Source <img src="<?php echo $assets; ?>/images/<?php echo ($order['source']=="eBay"?"ebay_logo.png":"admin_logo.png"); ?>" style="vertical-align:middle" height="30px" border="0">
+			<br>
                 Customer IP Address <b> <?php echo $order['customer_ip']; ?> </b>
             </div>
         <?php
         echo form_open('', array('class' => 'form_standard', 'id' => 'order_info'));
         echo form_hidden('order_id', $order['order_id']);
         ?>
+		<input type="hidden" name="ebay_id" value="<?php echo $order['ebay_order_id']; ?>" />
         <div class="tabular_data">
             <table width="100%" cellpadding="8">
                 <tr>
@@ -357,7 +360,8 @@
                         UPS: <?php echo form_radio('carrier', 'UPS'); ?>
                         USPS: <?php echo form_radio('carrier', 'USPS'); ?>
                         OnTrac: <?php echo form_radio('carrier', 'OnTrac'); ?><br /><br />
-                        <a href="javascript:void(0);" onclick="sendTrackingEmail();" id="button">Send Tracking Conf Email</a>
+                        <a href="javascript:void(0);" onclick="sendTrackingEmail();" id="button">
+								<?php if($order['source']=="eBay") { ?>Send Tracking to eBay<?php } else { ?>Send Tracking Conf Email<?php } ?></a>
                         <?php
                         if ($order['ship_tracking_code']): $codes = json_decode($order['ship_tracking_code']);
                             foreach ($codes as $key => $code):
@@ -1113,7 +1117,29 @@ $grandTotal += @$order['tax'];
 
     function sendTrackingEmail()
     {
-
+		<?php if($order['source']=="eBay") { ?>
+		alert($('input[name=ebay_id]').attr('value'));
+		
+        $.post(base_url + 'ajax/email_tracking_ebay/',
+        {
+            'ship_tracking_code': $('#ship_tracking_code').val(),
+            'id': $('input[name=ebay_id]').attr('value'),
+            'carrier': $('input[name=carrier]:checked').val()
+        },
+        function (response)
+        {
+            if (response == 'success')
+            {
+                $('.success').show();
+                $('.success').fadeOut(3000);
+            } else
+            {
+                $('#tracking_validation_error').html(response);
+                $('.validation_error').show();
+                $('.validation_error').fadeOut(4000);
+            }
+        });
+		<?php } else { ?>
         $.post(base_url + 'ajax/email_tracking/',
         {
             'ship_tracking_code': $('#ship_tracking_code').val(),
@@ -1133,6 +1159,7 @@ $grandTotal += @$order['tax'];
                 $('.validation_error').fadeOut(4000);
             }
         });
+		<?php } ?>
     }
 
     function removeTrackingCode(key)
