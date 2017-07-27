@@ -18,7 +18,7 @@
 			</div>
 			<?php
 			jprint_interactive_footer($pages); ?>
-			
+
 
 			<div class="one-fifth map">
 				<h3>Contact Us</h3>

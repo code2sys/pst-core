@@ -35,7 +35,7 @@ $google_conversion_id = $store_name['google_conversion_id'];
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300%22%20/%3E">
 	
 	
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="<?php echo $CI->config->item("base_scheme"); ?>://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/bootstrap.min.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/owl.carousel.js"></script>	
 	<script src="<?php echo $new_assets_url; ?>js/lightslider.js"></script>
