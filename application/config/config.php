@@ -24,13 +24,13 @@ if (defined('ENVIRONMENT'))
             break;
 	}
 }
-
-$config['base_url']	= 'http://' . WEBSITE_HOSTNAME . '/';
+$simple_prefix = (array_key_exists("REQUEST_SCHEME", $_SERVER) && $_SERVER["REQUEST_SCHEME"] != "") ? $_SERVER["REQUEST_SCHEME"] : "http";
+$config['base_url']	= $simple_prefix . '://' . WEBSITE_HOSTNAME . '/';
 $config['s_base_url'] = 'https://' . WEBSITE_HOSTNAME . '/';
-$config['assets']	= 'http://' . WEBSITE_HOSTNAME . '/assets';
-$config['benz_assets']	= 'http://' . WEBSITE_HOSTNAME . '/html/qatesting/benz_assets';
+$config['assets']	= $simple_prefix . '://' . WEBSITE_HOSTNAME . '/assets';
+$config['benz_assets']	= $simple_prefix . '://' . WEBSITE_HOSTNAME . '/html/qatesting/benz_assets';
 $config['s_assets']	= 'https://' . WEBSITE_HOSTNAME . '/assets';
-$config['s_cloverfield'] = 'http://' . WEBSITE_HOSTNAME . '/';
+$config['s_cloverfield'] = $simple_prefix . '://' . WEBSITE_HOSTNAME . '/';
 $config['upload_path'] = STORE_DIRECTORY . '/html/media';
 $config['media'] = 'media';
 $config['attachments'] = STORE_DIRECTORY . '/attachments/';
