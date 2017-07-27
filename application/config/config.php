@@ -25,6 +25,7 @@ if (defined('ENVIRONMENT'))
 	}
 }
 $simple_prefix = (array_key_exists("REQUEST_SCHEME", $_SERVER) && $_SERVER["REQUEST_SCHEME"] != "") ? $_SERVER["REQUEST_SCHEME"] : "http";
+$config["base_scheme"] = $simple_prefix;
 $config['base_url']	= $simple_prefix . '://' . WEBSITE_HOSTNAME . '/';
 $config['s_base_url'] = 'https://' . WEBSITE_HOSTNAME . '/';
 $config['assets']	= $simple_prefix . '://' . WEBSITE_HOSTNAME . '/assets';
