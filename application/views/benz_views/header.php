@@ -325,7 +325,7 @@ $google_conversion_id = $store_name['google_conversion_id'];
 			</div>
 			<?php
 			jprint_interactive_footer($pages); ?>
-			?>
+
 
 			<div class="one-fifth map">
 				<h3>Contact Us</h3>
