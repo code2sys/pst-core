@@ -598,7 +598,28 @@ class Portalmodel extends Master_M {
     }
 
     public function removeVariation($partquestionanswer_id, $partvariation_id) {
-        $this->db->query("Delete from partquestionanswerpartvariation where partquestionanswer_id = ? and partvariation_id = ? limit 1", array($partquestionanswer_id, $partvariation_id));
+        // get the part question answer
+        $query = $this->db->query("Select * from partquestionanswer where partquestionanswer_id = ?", array($partquestionanswer_id));
+        $partquestionanswer = $query->result_array();
+
+        if (count($partquestionanswer) == 0) {
+            return;
+        } else {
+            $partquestionanswer = $partquestionanswer[0];
+        }
+
+        // Now, you better get the part question...
+        $query = $this->db->query("Select * from partquestion where partquestion_id = ?", array($partquestionanswer["partquestion_id"]));
+        $partquestion = $query->result_array();
+
+        if (count($partquestion) == 0) {
+            return;
+        } else {
+            $partquestion = $partquestion[0];
+        }
+
+        // OK, we have to delete it
+        $this->db->query("Delete from partnumberpartquestion where partquestion_id = ? and answer = ? and partnumber_id in (select partnumber_id from partvariation where partvariation_id = ?)", array($partquestion["partquestion_id"], $partquestionanswer["answer"], $partvariation_id));
 
         // now, if there aren't any, remove it.
         $this->db->query("Delete from partquestionanswer where partquestionanswer_id = ? and partquestionanswer_id not in (Select partquestionanswer_id from partquestionanswerpartvariation) limit 1", array($partquestionanswer_id));

@@ -121,17 +121,34 @@ class Motorcycle_M extends Master_M {
             $this->db->where_in('motorcycle.vehicle_type', $filter['vehicles']);
         }
     }
+//
+//    public function getMotorcycles( $filter = array() , $limit = 6, $offset = 0) {
+//        $where = $this->buildWhere($filter);
+//        $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id', 'left');
+//        $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
+//        $this->db->group_by('motorcycle.id');
+//        $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name as type', FALSE);
+//        $this->db->limit($limit, $offset);
+//        $records = $this->selectRecords('motorcycle', $where);
+//        return $records;
+//    }
 
     public function getMotorcycles( $filter = array() , $limit = 6, $offset = 0) {
         $where = $this->buildWhere($filter);
-        $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id', 'left');
+        $this->db->_protect_identifiers=false;
+        $this->db->join(' (select min(priority_number) as priority_number, motorcycle_id from motorcycleimage group by motorcycle_id) motorcycleimageA', 'motorcycleimageA.motorcycle_id = motorcycle.id', 'left');
+        $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number ', 'left');
         $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
         $this->db->group_by('motorcycle.id');
         $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name as type', FALSE);
         $this->db->limit($limit, $offset);
         $records = $this->selectRecords('motorcycle', $where);
+        $this->db->_protect_identifiers=true;
         return $records;
     }
+
+
+
 
     public function getMotorcycle( $id ){
         $where = array('motorcycle.id' => $id );
