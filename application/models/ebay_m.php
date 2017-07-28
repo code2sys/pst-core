@@ -1587,8 +1587,6 @@ class Ebay_M extends Master_M {
         }
 		
 		$this->pr($uploadXML);
-		echo "***STOP***<br>";
-		die();
 		$this->sendBulkXML($uploadXML, "AddFixedPriceItem");		
 		
 	}
