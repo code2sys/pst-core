@@ -2,7 +2,6 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-error_reporting(E_ALL);
 /* NOTE!!!  Need to make sure to turn on if checkbox is there and off it is not */
 
 use \DTS\eBaySDK\Sdk;
@@ -179,6 +178,7 @@ class Ebay_M extends Master_M {
     }
 
     public function get_ebay_feed_log() {
+		
         $sql = "SELECT * FROM ebay_feed_log order by run_at desc limit 1";
         $query = $this->db->query($sql);
         $results = $query->result_array();
@@ -610,7 +610,6 @@ class Ebay_M extends Master_M {
 						$query = $this->db->query($sql);
         $parts = $query->result_array();
 		
-		echo "Initial query: " . count($parts);
 		
         $query->free_result();
         $paypal_email = $this->get_paypalemail();
@@ -656,10 +655,8 @@ class Ebay_M extends Master_M {
                 // If no category, don't list the product
                 if (empty($endCategoryName)) {
 					$nocat++;
-					echo "<br>NOCAT".$part_id;
                     continue;
 				} else {
-					echo "<br>CAT".$part_id;
 					
 					$catg++;
 				}
@@ -740,20 +737,15 @@ class Ebay_M extends Master_M {
                                 $rides = $query->result_array();
 								
 
-				echo "1";
                 if (is_array($partnumbers)) {
 					
-					var_dump($partnumbers);
-					//die("HEREWEARE");
 					
                     $categoryRec = array();
                     $fitmentArr = array();
                     $basicPrice = 0;
                     $samePrice = TRUE;
                     if (count($partnumbers) > 0) {
-				echo "2";
                         foreach ($partnumbers as $pn) {
-				echo "3";
 
                             if ($pn['*Quantity'] > 0) {
                                 //Calculate MAP Price
@@ -762,11 +754,9 @@ class Ebay_M extends Master_M {
                                 $this->db->join('partbrand', 'partbrand.brand_id = brand.brand_id');
                                 $brand_map_percent = $this->selectRecord('brand', $where);
 								
-								//var_dump($brand_map_percent);
 
                                 $brandMAPPercent = is_numeric(@$brand_map_percent['map_percent']) ? $brand_map_percent['map_percent'] : 0;
 
-								echo "here";
                                 $pn['*StartPrice'] = $pn['price'];
                                 if (($brand_map_percent['map_percent'] !== NULL) && ($pn['stock_code'] != 'Closeout')) {
 									
@@ -775,16 +765,10 @@ class Ebay_M extends Master_M {
 // per Brandt, 7/24/17              $pn['MIN_PRICE'] = $mapPrice;
 									if(!($pn['price'] < $pn['customprice']))
 										$pn['*StartPrice'] = $mapPrice;
-									echo "HERE";
-									echo "customprice: " .$pn['customprice'];
-									echo "MAP: ".$brand_map_percent['map_percent']. " and price: " . $pn['*StartPrice'];
-									echo $pn['stock_code'];
                                 } 
 								if($brand_map_percent['map_percent'] === NULL || ($pn['stock_code'] == 'Closeout'))	{						
 									$markup = 1 + ($this->get_markup()/100);
 									$pn['*StartPrice'] = $pn['*StartPrice']*$markup;
-									echo "THERE";
-									echo $pn['stock_code'];
 								}
 
 
@@ -808,7 +792,6 @@ class Ebay_M extends Master_M {
                                 unset($pn['MAX_PRICE']);
                                 unset($pn['price']);
 
-				echo "4";
 
                                 // Fitment compatability
                                 $sql = "SELECT CONCAT ('Make=', make.name, '|Model=',  model.name, '|Year=', partnumbermodel.year) AS fitment 
@@ -847,13 +830,7 @@ class Ebay_M extends Master_M {
                         $part['*StartPrice'] = $partnumbers[0]['price'];
                         $finalArray[] = $part;
                     }
-					
-                //$this->pr($finalArray);
-                //$this->pr("******************************************");
-                //die("*!*!*");
-
-				echo "5";
-					
+										
                     if (($samePrice) && (@$categoryRec)) {
                         $part['*Quantity'] = '';
                         $part['*StartPrice'] = $basicPrice;
@@ -864,10 +841,8 @@ class Ebay_M extends Master_M {
                             $rb['*StartPrice'] = $basicPrice;
                             $finalArray[] = $rb;
                         }
-				echo "6";
                     } elseif (!empty($categoryRec)) {
                         $variations = array();
-                        //$this->pr($categoryRec);
                         $combopartIds = $this->checkForComboReporting($part_id);
                         if (is_array($combopartIds)) {
                             $PriceArr = array();
@@ -897,10 +872,7 @@ class Ebay_M extends Master_M {
                                 $finalPriceArr['dealer_sale_max'] += $pa['dealer_sale_max'];
                             }
                             $combo_price = $this->calculateMarkupReporting($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup'], $finalPriceArr['dealer_sale_min'], $finalPriceArr['dealer_sale_max'], $finalPriceArr['cnt'])['sale_min'];
-////                            $this->pr($combo_price);
-////                            die("*");
                         }
-				echo "7";
                         foreach ($categoryRec as $rb) {
                             $newArray = $part;
                             $newArray['*Quantity'] = $rb['*Quantity'];
@@ -914,7 +886,6 @@ class Ebay_M extends Master_M {
                             $combo_variations[] = $newArray;
                         }
                         $product_options = $this->getProductQuestions($part_id);
-////                        $this->pr($product_options);die("test");
                         $options_vailable = array();
                         foreach ($product_options as $otions_array) {
                             $options_vailable[$otions_array['question']][] = $otions_array['answer'];
@@ -925,15 +896,12 @@ class Ebay_M extends Master_M {
                         $part['product_variation'] = $combo_variations;
                         $finalArray[] = $part;
                     } 
-				echo "8";
 					if (!empty($fitmentArr)) {
-				echo "W";
                         $part['*StartPrice'] = $rb['*StartPrice'];
                         $compatibility_array = array();
                         $item = array();
 						$quantity = $this->get_quantity();
                         foreach ($fitmentArr as $key => $single_fitment) {
-				echo "H";
                             $change = $part;
 
                             $data_explode = explode('|', $single_fitment['RelationshipDetails']);
@@ -942,20 +910,15 @@ class Ebay_M extends Master_M {
                             $year_explode = explode('=', $data_explode[2]);
 							
                             $title = $part['*Title'] . ' For ' . $make_explode[1] . ' ' . $model_explode[1];
-				echo ".";
 							if($single_fitment["saleprice"]!=NULL) {
-								echo "!";
 								$single_fitment['*StartPrice'] = $single_fitment["saleprice"];
 							} else {
-								echo "?";
 								$single_fitment['*StartPrice'] = $single_fitment["*StartPrice"];									
 							}
-				echo ",";
 							if($brand_map_percent['map_percent'] === NULL)	{						
 								$markup = 1 + ($this->get_markup()/100);
 								$single_fitment['*StartPrice'] = $single_fitment['*StartPrice']*$markup;
 							}
-				echo "A";
                             if (key_exists($title, $item)) {
 
                                 $item[$title][] = $single_fitment;
@@ -972,25 +935,16 @@ class Ebay_M extends Master_M {
 
                             $finalArray = array_merge($finalArray, $single_array);
                         }
-				echo "T";
                     }
-					echo "9";
                 }
                 if (empty($part['saleprice'])&&isset($part['customprice'])) {
                     $part['*StartPrice'] = $part['customprice'];
                 } else {
                     $part['*StartPrice'] = $part['saleprice'];
 				}
-				echo "<br>DONE".$part_id;
 				
             }
         }
-		//echo "Array: " . count($finalArray);
-		//echo "<br>No category: ".$nocat . "/" .$catg;
-		//die();
-	//var_dump($finalArray);
-		//echo "BOOOM";
-		//die();
 		if(!$send_to_ebay) {
 		} else {
 
@@ -1240,12 +1194,8 @@ class Ebay_M extends Master_M {
         $uploadXML .= '</Header>';
 		//$products = array_reverse($products);
         foreach ($products as $product) {
-            //$this->pr($products);
-            //die("*");
 //            $string = utf8_encode($product['product']['*Description']);
 
-            error_reporting(E_ALL);
-            ini_set('display_errors', 1);
             $string = $this->xmlEscape($product['product']['*Description']);
 			$quantity = $this->get_quantity();
 			//die();
@@ -1555,22 +1505,15 @@ class Ebay_M extends Master_M {
 
 
         $uploadXML .= '</BulkDataExchangeRequests>';
-		/*
-		$uploadXML = '<?xml version="1.0" encoding="utf-8"?><BulkDataExchangeRequests><Header><SiteID>100</SiteID><Version>987</Version></Header><AddFixedPriceItemRequest xmlns = "urn:ebay:apis:eBLBaseComponents"><ErrorLanguage>en_US</ErrorLanguage><WarningLevel>High</WarningLevel><Version>987</Version><MessageID>2171900145</MessageID><Item><SKU>2171900145</SKU><CategoryMappingAllowed>true</CategoryMappingAllowed><Country>US</Country><location>US</location><Currency>USD</Currency><ConditionID>1000</ConditionID><Description>ACERBIS DIRT BIKE STANDARD PLASTIC KITS&lt;br /&gt;&lt;br /&gt;&amp;bull; Full kit includes front number plate and universal fork covers&lt;br /&gt;&amp;bull; Standard kit includes front and rear fender side panels and radiator scoops&lt;br /&gt;&amp;bull; All kits have the original factory shape of the according model&lt;br /&gt;&amp;bull; Colors marked &amp;ldquo;Original&amp;rdquo; correspond with the original factory colors of the model and year</Description><DispatchTimeMax>2</DispatchTimeMax><ListingDuration>GTC</ListingDuration><ListingType>FixedPriceItem</ListingType><PaymentMethods>PayPal</PaymentMethods><PayPalEmailAddress>dbmathewes@gmail.com</PayPalEmailAddress><PictureDetails><PictureURL>http://dbmathewes.powersporttechnologies.com/productimages/63694-ACERBIS-DIRT-BIKE-STANDARD-PLASTIC-KITS.png</PictureURL></PictureDetails><PostalCode>28217</PostalCode><PrimaryCategory><CategoryID>35560</CategoryID></PrimaryCategory><ReturnPolicy><ReturnsAcceptedOption>ReturnsAccepted</ReturnsAcceptedOption><RefundOption>MoneyBack</RefundOption><ReturnsWithinOption>Days_30</ReturnsWithinOption><Description></Description><ShippingCostPaidByOption>Buyer</ShippingCostPaidByOption></ReturnPolicy><Variations><VariationSpecificsSet><NameValueList><Name>COLOR</Name><Value>BLACK</Value><Value>BLUE</Value><Value>BLUE ORIGINAL `13</Value><Value>BLUE ‘14-15</Value><Value>ORIGINAL ‘05</Value><Value>ORIGINAL ‘08</Value><Value>ORIGINAL ‘09</Value><Value>ORIGINAL ‘10</Value><Value>ORIGINAL ‘11</Value><Value>ORIGINAL ‘11/’12</Value><Value>ORIGINAL ‘12</Value><Value>ORIGINAL ‘13</Value><Value>ORIGINAL ‘14</Value><Value>ORIGINAL ‘14/15</Value><Value>ORIGINAL ‘15</Value><Value>WHITE</Value><Value>WHITE ‘14-15</Value><Value>YZ BLUE</Value></NameValueList></VariationSpecificsSet><Variation><StartPrice>111.573</StartPrice><Quantity>1</Quantity><VariationSpecifics><NameValueList><Name>COLOR</Name><Value>BLACK</Value><Value>BLUE</Value><Value>BLUE ORIGINAL `13</Value><Value>BLUE ‘14-15</Value><Value>ORIGINAL ‘05</Value><Value>ORIGINAL ‘08</Value><Value>ORIGINAL ‘09</Value><Value>ORIGINAL ‘10</Value><Value>ORIGINAL ‘11</Value><Value>ORIGINAL ‘11/’12</Value><Value>ORIGINAL ‘12</Value><Value>ORIGINAL ‘13</Value><Value>ORIGINAL ‘14</Value><Value>ORIGINAL ‘14/15</Value><Value>ORIGINAL ‘15</Value><Value>WHITE</Value><Value>WHITE ‘14-15</Value><Value>YZ BLUE</Value></NameValueList></VariationSpecifics></Variation></Variations><Quantity>1</Quantity><StartPrice currencyID="USD">111.573</StartPrice><ShippingDetails><ShippingType>Flat</ShippingType><ShippingServiceOptions><ShippingServicePriority>1</ShippingServicePriority><ShippingService>UPSGround</ShippingService><ShippingServiceCost>0</ShippingServiceCost><ShippingServiceAdditionalCost>0.00</ShippingServiceAdditionalCost></ShippingServiceOptions></ShippingDetails><Title>ACERBIS DIRT BIKE STANDARD PLASTIC KITS</Title></Item></AddFixedPriceItemRequest></BulkDataExchangeRequests>';
-*/
 
 		$unicode = ["\x01", "\x00", "\x02"];
 		$uploadXML = str_replace($unicode, "", str_replace("&B", "&amp;B", str_replace("&G", "&amp;G", $uploadXML)));
-		//$uploadXML = str_replace($unicode, "", $uploadXML);
-
   
         if ($store_feed == true) {
             $file_path = STORE_DIRECTORY . '/ebayFeeds/ebayfeed_un.xml';
             if (file_exists($file_path)) {
                 unlink($file_path);
             }
-//               print_r($doc);
-//            die('-------');
 //            $myfile = fopen($file_path, "w");
             file_put_contents($file_path, $uploadXML, LOCK_EX);
             $xml = file_get_contents($file_path, LOCK_EX);
@@ -1586,7 +1529,7 @@ class Ebay_M extends Master_M {
             $doc->save($file);
         }
 		
-		$this->pr($uploadXML);
+		//$this->pr($uploadXML);
 		$this->sendBulkXML($uploadXML, "AddFixedPriceItem");		
 		
 	}
@@ -1910,7 +1853,6 @@ class Ebay_M extends Master_M {
 
 		$store_url = base_url();
         $this->_setHeader("CompleteSale", FALSE);
-			error_reporting(E_ALL);
 		$xml = '<?xml version="1.0" encoding="utf-8"?>
 <CompleteSaleRequest xmlns="urn:ebay:apis:eBLBaseComponents">
 		  <RequesterCredentials>
@@ -1940,7 +1882,6 @@ class Ebay_M extends Master_M {
 		$store_url = base_url();
         $this->_setHeader("GetOrders", FALSE);
 		
-			error_reporting(E_ALL);
 			$xml='<?xml version="1.0" encoding="utf-8"?>
 				<GetOrdersRequest xmlns="urn:ebay:apis:eBLBaseComponents">
 				  <RequesterCredentials>
@@ -2057,7 +1998,6 @@ class Ebay_M extends Master_M {
 		$store_url = base_url();
         $this->_setHeader("SetNotificationPreferences", FALSE);
 		
-			error_reporting(E_ALL);
 			$xml='<?xml version="1.0" encoding="utf-8"?>
 		<SetNotificationPreferencesRequest xmlns="urn:ebay:apis:eBLBaseComponents">
 		  <RequesterCredentials>
@@ -2098,7 +2038,6 @@ class Ebay_M extends Master_M {
 		$store_url = base_url();
         $this->_setHeader("GetNotificationPreferences", FALSE);
 		
-			error_reporting(E_ALL);
 			$xml='<?xml version="1.0" encoding="utf-8"?>
 			<GetNotificationPreferencesRequest xmlns="urn:ebay:apis:eBLBaseComponents">
 		  <RequesterCredentials>
@@ -2509,7 +2448,7 @@ class Ebay_M extends Master_M {
 		$this->cred['Setting']['sandbox'] = true;
 
 
-		$sql = "SELECT ebay_app_id, ebay_cert_id, ebay_dev_id, ebay_user_token  
+		$sql = "SELECT ebay_app_id, ebay_cert_id, ebay_dev_id, ebay_user_token, ebay_environment  
 				FROM contact 
 				WHERE id = 1";
 		$query = $this->db->query($sql);
@@ -2528,7 +2467,9 @@ class Ebay_M extends Master_M {
 		$this->cred['Setting']['credentials']['certId'] = $this->cred['Setting']['cert_id'];
 		$this->cred['Setting']['credentials']['devId'] = $this->cred['Setting']['dev_id'];
 		$this->cred['Setting']['authToken'] = $this->cred['Setting']['user_token'];
-		
+		if($cred[0]['ebay_environment']=="Sandbox") {
+			$this->cred['Setting']['sandbox'] = true;
+		}
 	}
 
     /**
@@ -2772,17 +2713,14 @@ class Ebay_M extends Master_M {
     }
 
     public function get_paypalemail() {
-        $this->db->select("*");
-        $this->db->from("ebay_settings");
-        $this->db->where("key", "paypal_email");		
+        $this->db->select("ebay_paypal_email");
+        $this->db->from("contact");
+        $this->db->where("id", "1");		
         $query = $this->db->get();
-        if (is_array($query->result_array())) {
-            foreach ($query->result_array() as $paypal_value_check) {
-                if (key_exists('value', $paypal_value_check) && $paypal_value_check['value'] != '') {
-                    return $paypal_value_check['value'];
-                }
-            }
-        }
+		$result = $query->result_array();
+		
+		return $result[0]['ebay_paypal_email'];
+
         exit('Enter paypal email address in admin.');
     }
 

@@ -257,6 +257,19 @@ $google_trust = (array) json_decode($address['google_trust']);
 										  'class' => 'text large',
 										  'placeholder' => 'User Token')); ?></td>
 									</tr>
+									<tr>
+										<td style="width:30%;"><b>Environment:</b></td>
+										<td>Sandbox <input type="radio" name='ebay_environment' value="Sandbox" <?php if($address['ebay_environment']=="Sandbox") echo 'checked="checked"'; ?> /> 
+										Live <input type="radio" name='ebay_environment' value="Live" <?php if($address['ebay_environment']=="Live") echo 'checked="checked"'; ?> /> 
+</td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>Paypal Email:</b></td>
+										<td><?php echo form_input(array('name' => 'ebay_paypal_email', 
+										  'value' => @$address['ebay_paypal_email'], 
+										  'class' => 'text large',
+										  'placeholder' => 'Paypal Email')); ?></td>
+									</tr>
 								</table>
 							</td>
 						</tr>
