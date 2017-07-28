@@ -103,15 +103,6 @@
                     </tr>
                 </table>
             </form><br>
-            <form action="<?php echo base_url('admin_content/paypal_email'); ?>" method="post" id="form_example" class="form_standard">
-                <table class="paypal_email" width="100" cellpadding="1">
-                    <tr>
-                        <td><h3>PayPal Email Address:</h3></td>
-                        <td><input  name="paypal_email" type="text" value="<?php echo $paypalemail[0]['value']; ?>"></td>
-                        <td><button type="submit" name="paypal">Update</button></td>
-                    </tr>
-                </table>
-            </form><br>
             <form action="<?php echo base_url('admin_content/ebay_quantity'); ?>" method="post" id="form_example" class="form_standard">
                 <table class="paypal_email" width="100" cellpadding="1">
                     <tr>
