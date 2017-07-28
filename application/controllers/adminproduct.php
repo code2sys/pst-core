@@ -346,6 +346,14 @@ class Adminproduct extends Admin {
                 $data["retail_price"] = 0;
             }
             $this->Portalmodel->classicUpdatePart($id, $data);
+
+            // Specifically queue and process this part.
+            $this->db->query("Insert into queued_parts (part_id) values (?)", array($id));
+
+            // now, process, just a couple
+            $this->load->model("admin_m");
+            $this->admin_m->processParts(1); // hopefully, that's you.
+
             $_SESSION["product_edit_success"] = "Product updated successfully.";
         } else {
             $_SESSION["product_edit_error"] = $error;
