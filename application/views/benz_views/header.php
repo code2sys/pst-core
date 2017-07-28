@@ -24,6 +24,7 @@ $google_conversion_id = $store_name['google_conversion_id'];
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/owl.transitions.css" />	
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/font-awesome.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/lightslider.css" />
+	<link rel="stylesheet" href="/qatesting/newassets/stylesheet/custom.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>/css/responsive.css" type="text/css" />
 	<link rel="stylesheet" href="<?php echo jsite_url('/basebranding.css'); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url('/custom.css'); ?>" />
