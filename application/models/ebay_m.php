@@ -2508,6 +2508,28 @@ class Ebay_M extends Master_M {
 		$this->cred['Setting']['credentials']['devId'] = $this->cred['Setting']['dev_id'];
 		$this->cred['Setting']['authToken'] = $this->cred['Setting']['user_token'];
 		$this->cred['Setting']['sandbox'] = true;
+
+
+		$sql = "SELECT ebay_app_id, ebay_cert_id, ebay_dev_id, ebay_user_token  
+				FROM contact 
+				WHERE id = 1";
+		$query = $this->db->query($sql);
+		$cred = $query->result_array();		
+
+		if($cred[0]['ebay_dev_id'] == "" || $cred[0]['ebay_app_id'] == "" || $cred[0]['ebay_cert_id'] == "" || $cred[0]['ebay_user_token'] == "") {
+			die("Missing eBay developer credentials!");
+		}
+        $this->cred['Setting'] = array(
+            'dev_id' => $cred[0]['ebay_dev_id'],
+            'app_id' => $cred[0]['ebay_app_id'],
+            'cert_id' => $cred[0]['ebay_cert_id'],
+            'user_token' => $cred[0]['ebay_user_token']
+        );
+		$this->cred['Setting']['credentials']['appId']  = $this->cred['Setting']['app_id'];
+		$this->cred['Setting']['credentials']['certId'] = $this->cred['Setting']['cert_id'];
+		$this->cred['Setting']['credentials']['devId'] = $this->cred['Setting']['dev_id'];
+		$this->cred['Setting']['authToken'] = $this->cred['Setting']['user_token'];
+		
 	}
 
     /**

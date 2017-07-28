@@ -220,6 +220,46 @@ $google_trust = (array) json_decode($address['google_trust']);
 								</table>
 							</td>
 						</tr>
+
+						<tr>
+							<td colspan="2">
+								<table width="100%" style="background-color:white;">
+									<tr>
+										<td colspan="2">
+											<img src="<?php echo $assets; ?>/images/ebay_logo.png" width="230px" border="0">
+										</td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>App ID:</b></td>
+										<td><?php echo form_input(array('name' => 'ebay_app_id', 
+										  'value' => @$address['ebay_app_id'], 
+										  'class' => 'text large',
+										  'placeholder' => 'App ID')); ?></td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>Dev ID:</b></td>
+										<td><?php echo form_input(array('name' => 'ebay_dev_id', 
+										  'value' => @$address['ebay_dev_id'], 
+										  'class' => 'text large',
+										  'placeholder' => 'Dev ID')); ?></td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>Cert ID:</b></td>
+										<td><?php echo form_input(array('name' => 'ebay_cert_id', 
+										  'value' => @$address['ebay_cert_id'], 
+										  'class' => 'text large',
+										  'placeholder' => 'Cert ID')); ?></td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>User Token:</b></td>
+										<td><?php echo form_input(array('name' => 'ebay_user_token', 
+										  'value' => @$address['ebay_user_token'], 
+										  'class' => 'text large',
+										  'placeholder' => 'User Token')); ?></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
 						
 						<tr>
 							<td colspan="2">
