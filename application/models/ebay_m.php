@@ -605,6 +605,7 @@ class Ebay_M extends Master_M {
 						AND partnumber.closeout_market_place != 1
 						AND brand.closeout_market_place != 1
 						AND brand.exclude_market_place != 1
+						AND partnumber.sale > 1
 						GROUP BY part.part_id $limit_query";
 						$query = $this->db->query($sql);
         $parts = $query->result_array();
@@ -1587,7 +1588,7 @@ class Ebay_M extends Master_M {
 		
 		$this->pr($uploadXML);
 		echo "***STOP***<br>";
-		//die();
+		die();
 		$this->sendBulkXML($uploadXML, "AddFixedPriceItem");		
 		
 	}
