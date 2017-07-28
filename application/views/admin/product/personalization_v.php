@@ -397,10 +397,10 @@
                     <input type="submit" class="updatebutton" value="Update Question" />
                     <input type="submit" class="deletebutton" value="Delete Question" />
                 </form><br/>
-                <form>
-                <label><input type="radio" name="productquestion" value="0" <% if (!(parseInt(obj.productquestion, 10) > 0)) { %>checked='checked'<% } %> /> Required Question</label>
-                <label><input type="radio" name="productquestion" value="1" <% if (parseInt(obj.productquestion, 10) > 0) { %>checked='checked'<% } %> /> Filter Question</label>
-                </form>
+<!--                <form>-->
+<!--                <label><input type="radio" name="productquestion" value="0" <% if (!(parseInt(obj.productquestion, 10) > 0)) { %>checked='checked'<% } %> /> Required Question</label>-->
+<!--                <label><input type="radio" name="productquestion" value="1" <% if (parseInt(obj.productquestion, 10) > 0) { %>checked='checked'<% } %> /> Filter Question</label>-->
+<!--                </form>-->
                 <% } %>
                 <div class="answerdiv">
 
