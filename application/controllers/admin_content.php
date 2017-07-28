@@ -334,6 +334,8 @@ class Admin_Content extends Master_Controller {
 //        $this->_mainData['craglist_feeds'] = $this->admin_m->get_craglist_feed_log();
         $this->_mainData['feed'] = $this->admin_m->get_feed_log();
         $this->load->model('Ebaysetting');
+        $this->load->model('ebay_m');
+        $this->_mainData['ebay_feeds'] = $this->ebay_m->get_ebay_feed_log();
         $this->_mainData['ebaysettings'] = $this->Ebaysetting->getEbaySettings();
         $this->_mainData['ebayshippingsettings'] = $this->Ebaysetting->getEbayShippingSettings();
         $this->_mainData['paypalemail'] = $this->Ebaysetting->check_paypalemail();
@@ -391,14 +393,24 @@ class Admin_Content extends Master_Controller {
     }
 
     public function send_new_ebay() {
-		error_reporting(E_ALL);
+		error_reporting(0);
 		ini_set('max_execution_time', 300);
 		ini_set('set_time_limit', 300);
         $this->load->model('ebay_m');
         $this->load->model('Ebaysetting');
 		$csv = $this->ebay_m->generateEbayFeed(1500, 1);	
-
-		
+        $data = array('run_by' => 'admin', 'status' => '1');
+        $this->ebay_m->update_ebay_feeds_log($data);
+        $this->_mainData['cycletrader_feeds'] = $this->admin_m->get_cycletrader_feed_log();
+//        $this->_mainData['craglist_feeds'] = $this->admin_m->get_craglist_feed_log();
+        $this->_mainData['feed'] = $this->admin_m->get_feed_log();
+        $this->_mainData['ebay_feeds'] = $this->ebay_m->get_ebay_feed_log();
+        $this->_mainData['ebaysettings'] = $this->Ebaysetting->getEbaySettings();
+        $this->_mainData['ebayshippingsettings'] = $this->Ebaysetting->getEbayShippingSettings();
+        $this->_mainData['paypalemail'] = $this->Ebaysetting->check_paypalemail();
+        $this->_mainData['quantity'] = $this->Ebaysetting->check_quantity();
+        $this->_mainData['ebaymarkup'] = $this->Ebaysetting->check_markup();
+        $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);		
     }
 	
     public function set_ebay_notifications() {

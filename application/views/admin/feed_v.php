@@ -83,12 +83,12 @@
 -->
               <table width="100%" cellpadding="6">
                     <tr>
-                        <th colspan="3"><h2>Ebay Product Data Feed:</h2></th>
+                        <th colspan="5"><h2>Ebay Product Data Feed:</h2></th>
                     </tr>
                     <tr>
                         <td><input type="submit" name="getebay_feeds" value="Generate Ebay Product Feed"></td>
-<!--                        <td>Status : <?php echo isset($ebay_feeds['status']) && $ebay_feeds['status'] == 1 ? 'Completed' : 'Processing'; ?></td>
-                        <td>Last Run : <?php echo isset($ebay_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($ebay_feeds['run_at'])) : ''; ?></td> -->
+                        <td>Status : <?php echo isset($ebay_feeds['status']) && $ebay_feeds['status'] == 1 ? 'Completed' : 'Processing'; ?></td>
+                        <td>Last Run : <?php echo isset($ebay_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($ebay_feeds['run_at'])) : ''; ?></td> 
                         <td>Send to Ebay: <a href="<?php echo base_url('admin_content/send_new_ebay/'); ?>">send_new_ebay</a></td>
                         <td>End all products on ebay: <a href="<?php echo site_url() . 'welcome/hit_ebay_end'; ?>">end_all_products</a></td>
                     </tr>
