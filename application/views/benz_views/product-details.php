@@ -173,7 +173,7 @@ unset($motorcycle['videos'][0]);
 								"class_name" => "main-vdo",
 								"mainVideo" => $mainVideo['video_url'],
 								"mainTitle" => $mainVideo['title'],
-								"video" => $video,
+								"video" => $motorcycle['videos'],
 								"rltdvdo_class" => "rltv-vdo",
 								"autoplay" => false
 							), true);
