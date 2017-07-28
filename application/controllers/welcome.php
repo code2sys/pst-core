@@ -265,7 +265,7 @@ class Welcome extends Master_Controller {
         // Create Customizable elements on the page
         $this->load->model('pages_m');
         $this->_mainData['pageRec'] = $this->pages_m->getPageRec($this->_pageId);
-        $this->_mainData['bannerImages'] = $this->pages_m->getSliderImagesForFront($this->_pageId);
+            $this->_mainData['bannerImages'] = $this->pages_m->getSliderImagesForFront($this->_pageId);
         $this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
         $this->setMasterPageVars('metatag', ''); // JLB - I removed msvalidate.01 from here because I think the new topheader handles it.
         $this->setMasterPageVars('descr', $this->_mainData['pageRec']['metatags']);
