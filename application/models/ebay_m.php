@@ -2257,15 +2257,15 @@ class Ebay_M extends Master_M {
 
         $response = json_decode(json_encode((array) simplexml_load_string($this->call($xml))), 1);
 		//echo $xml;
-		print_r($response);
-		echo "<br><br><br>****************<br><br>";
+//		print_r($response);
+//		echo "<br><br><br>****************<br><br>";
 		foreach($response['OrderArray']['Order'] as $ebayOrder) {
 						
             $where = array('ebay_order_id' => $ebayOrder['OrderID']);
 			$results = $this->selectRecords('order', $where);
 			if($results) {
 				// to do: update ordersc
-				echo "Order" . $results[0]['id'] . " updated.<br/>";				
+				// echo "Order" . $results[0]['id'] . " updated.<br/>";
 			} else {
 
 				$name = explode(" ", $ebayOrder['ShippingAddress']['Name']);
@@ -2278,7 +2278,7 @@ class Ebay_M extends Master_M {
 				'zip' => $ebayOrder['ShippingAddress']['PostalCode'], 
 				'country' => $ebayOrder['ShippingAddress']['Country']);
 				$contactId = $this->createRecord('contact', $contact_array, FALSE);
-				echo "<br>Contact " . $contactId . " created.<br/>";
+				// echo "<br>Contact " . $contactId . " created.<br/>";
 
 				$order = array('sales_price' => $ebayOrder['Subtotal'], 
 							'contact_id' => $contactId.'',
@@ -2291,18 +2291,18 @@ class Ebay_M extends Master_M {
 							'source' => 'eBay', 
 							'ebay_order_id' => $ebayOrder['OrderID']);
 				$orderId = $this->createRecord('order', $order, FALSE);
-				echo "<br>Order" . $orderId . " created.<br/>";
+				// echo "<br>Order" . $orderId . " created.<br/>";
 				$transaction_array = array('order_id' => $orderId, 
 							'amount' => $ebayOrder['AmountPaid'],
 							'transaction_date' => strtotime($ebayOrder['CreatedTime']));
 				$this->createRecord('order_transaction', $transaction_array, FALSE);
-				echo "<br>Order transaction for " . $orderId . " created.<br/>";
+				//echo "<br>Order transaction for " . $orderId . " created.<br/>";
 				$status_array = array('order_id' => $orderId, 
 							'status' => 'Processing',
 							'datetime' => time($ebayOrder['CreatedTime']));
 				//			'status' => $ebayOrder['OrderStatus'],
 				$this->createRecord('order_status', $status_array, FALSE);
-				echo "<br>Order status for " . $orderId . " created.<br/>";
+				//echo "<br>Order status for " . $orderId . " created.<br/>";
 				
 				if(isset($ebayOrder['TransactionArray']['Transaction']['Item']))
 					$transactions = [0 => $ebayOrder['TransactionArray']['Transaction']];
@@ -2320,7 +2320,7 @@ class Ebay_M extends Master_M {
 					if($SKUresults) {
 						$part_id = $SKUresults[0]['part_id'];
 						$real_SKU = $SKUresults[0]['SKU'];
-						echo "SKU: ".$real_SKU;
+						//echo "SKU: ".$real_SKU;
 						//die();
 
 						// Check whether this order_product already exists (eBay allows duplicates but our system does not) 
@@ -2330,7 +2330,7 @@ class Ebay_M extends Master_M {
 						if($order_product_exists) {
 							$update_array = ['qty' => $order_product_exists[0]['qty']+$product['QuantityPurchased']];
 							$this->updateRecord('order_product', $update_array, $where, FALSE);						
-							echo "<br>Order product updated: $orderId - $real_SKU";
+							//echo "<br>Order product updated: $orderId - $real_SKU";
 						} else {
 							$product_array = array('order_id' => $orderId, 
 										'product_sku' => $real_SKU, 
@@ -2338,12 +2338,14 @@ class Ebay_M extends Master_M {
 										'qty' => $product['QuantityPurchased'],
 										'part_id' => $part_id);
 							$this->createRecord('order_product', $product_array, FALSE);
-							echo "<br>Order product added: $orderId - $real_SKU";
+							//echo "<br>Order product added: $orderId - $real_SKU";
 						}
 						
 
 						
-					} else { echo "<br>Product not found for ".$product['Item']['SKU']; }
+					} else {
+                        echo "<br>Product not found for ".$product['Item']['SKU'];
+					}
 				}
 				
 			}
