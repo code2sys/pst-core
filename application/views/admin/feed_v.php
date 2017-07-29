@@ -47,7 +47,7 @@
                     </tr>
                 </table>
             </form>
-            <form action="<?php echo base_url('admin_content/ebay_feeds'); ?>" method="post" id="form_example" class="form_standard">
+            <form action="<?php echo base_url('admin_content/send_new_ebay'); ?>" method="post" id="form_example" class="form_standard">
 <!--              <table width="100%" cellpadding="6">
                     <tr>
                         <th colspan="3"><h2>Ebay Product Data Feed:</h2></th>
@@ -86,7 +86,7 @@
                         <th colspan="5"><h2>Ebay Product Data Feed:</h2></th>
                     </tr>
                     <tr>
-                        <td><input type="submit" name="getebay_feeds" value="Generate Ebay Product Feed"></td>
+                        <td><button type="button" name="getebay_feeds" value="Generate & Send Ebay Product Feed" onClick="window.location.href = '<?php echo base_url('admin_content/send_new_ebay/'); ?>'; return false;"></td>
                         <td>Status : <?php echo isset($ebay_feeds['status']) && $ebay_feeds['status'] == 1 ? 'Completed' : 'Processing'; ?></td>
                         <td>Last Run : <?php echo isset($ebay_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($ebay_feeds['run_at'])) : ''; ?></td> 
                         <td>Send to Ebay: <a href="<?php echo base_url('admin_content/send_new_ebay/'); ?>">send_new_ebay</a></td>
