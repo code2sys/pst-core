@@ -262,21 +262,16 @@ class Admin_Content extends Master_Controller {
         $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);
     }
 
+    public function google_feeds() {
+        $data = array('run_by' => 'admin', 'status' => '0');
+        $this->admin_m->update_feed_log($data);
+        header("Location: /admin_content/feeds");
+    }
+
     public function cycletrader_feeds() {
-        if (!$this->checkValidAccess('data_feeds') && !@$_SESSION['userRecord']['admin']) {
-            redirect('');
-        }
-        $uploadData = $this->input->post();
-        if (!empty($uploadData)) {
-            $this->load->model('reporting_m');
-            $csv = $this->reporting_m->getProductForcycletrader();
-            $data = array('run_by' => 'admin', 'status' => '1');
-            $this->admin_m->update_cycletrader_feeds_log($data);
-        }
-        $this->_mainData['cycletrader_feeds'] = $this->admin_m->get_cycletrader_feed_log();
-        $this->_mainData['craglist_feeds'] = $this->admin_m->get_craglist_feed_log();
-        $this->_mainData['feed'] = $this->admin_m->get_feed_log();
-        $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);
+        $data = array('run_by' => 'admin', 'status' => '0');
+        $this->admin_m->update_cycletrader_feeds_log($data);
+        header("Location: /admin_content/feeds");
     }
 
     public function ebay_feeds() {
@@ -312,24 +307,24 @@ class Admin_Content extends Master_Controller {
         if (!$this->checkValidAccess('data_feeds') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
-
-        $uploadData = $this->input->post();
-        if (!empty($uploadData)) {
-
-            $file = STORE_DIRECTORY . '/googleFeed/csvfile.csv';
-//            echo dirname(__DIR__);exit;
-            $this->load->model('reporting_m');
-            $csv = $this->reporting_m->getProductsForGoogle();
-            $csv_handler = fopen($file, 'w');
-            // JLB 10-07-16
-            fwrite($csv_handler, $csv);
-            foreach ($csv as $c) {
-                fputcsv($csv_handler, $c);
-            }
-            fclose($csv_handler);
-            $data = array('run_by' => 'admin', 'status' => '1');
-            $this->admin_m->update_feed_log($data);
-        }
+//
+//        $uploadData = $this->input->post();
+//        if (!empty($uploadData)) {
+//
+//            $file = STORE_DIRECTORY . '/googleFeed/csvfile.csv';
+////            echo dirname(__DIR__);exit;
+//            $this->load->model('reporting_m');
+//            $csv = $this->reporting_m->getProductsForGoogle();
+//            $csv_handler = fopen($file, 'w');
+//            // JLB 10-07-16
+//            fwrite($csv_handler, $csv);
+//            foreach ($csv as $c) {
+//                fputcsv($csv_handler, $c);
+//            }
+//            fclose($csv_handler);
+//            $data = array('run_by' => 'admin', 'status' => '1');
+//            $this->admin_m->update_feed_log($data);
+//        }
         $this->_mainData['cycletrader_feeds'] = $this->admin_m->get_cycletrader_feed_log();
 //        $this->_mainData['craglist_feeds'] = $this->admin_m->get_craglist_feed_log();
         $this->_mainData['feed'] = $this->admin_m->get_feed_log();
@@ -401,16 +396,20 @@ class Admin_Content extends Master_Controller {
 //		$csv = $this->ebay_m->generateEbayFeed(1500, 1);
         $data = array('run_by' => 'admin', 'status' => '0');
         $this->ebay_m->update_ebay_feeds_log($data);
-        $this->_mainData['cycletrader_feeds'] = $this->admin_m->get_cycletrader_feed_log();
-//        $this->_mainData['craglist_feeds'] = $this->admin_m->get_craglist_feed_log();
-        $this->_mainData['feed'] = $this->admin_m->get_feed_log();
-        $this->_mainData['ebay_feeds'] = $this->ebay_m->get_ebay_feed_log();
-        $this->_mainData['ebaysettings'] = $this->Ebaysetting->getEbaySettings();
-        $this->_mainData['ebayshippingsettings'] = $this->Ebaysetting->getEbayShippingSettings();
-        $this->_mainData['paypalemail'] = $this->Ebaysetting->check_paypalemail();
-        $this->_mainData['quantity'] = $this->Ebaysetting->check_quantity();
-        $this->_mainData['ebaymarkup'] = $this->Ebaysetting->check_markup();
-        $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);		
+
+        // redirect it...
+        header("Location: /admin_content/feeds");
+//
+//        $this->_mainData['cycletrader_feeds'] = $this->admin_m->get_cycletrader_feed_log();
+////        $this->_mainData['craglist_feeds'] = $this->admin_m->get_craglist_feed_log();
+//        $this->_mainData['feed'] = $this->admin_m->get_feed_log();
+//        $this->_mainData['ebay_feeds'] = $this->ebay_m->get_ebay_feed_log();
+//        $this->_mainData['ebaysettings'] = $this->Ebaysetting->getEbaySettings();
+//        $this->_mainData['ebayshippingsettings'] = $this->Ebaysetting->getEbayShippingSettings();
+//        $this->_mainData['paypalemail'] = $this->Ebaysetting->check_paypalemail();
+//        $this->_mainData['quantity'] = $this->Ebaysetting->check_quantity();
+//        $this->_mainData['ebaymarkup'] = $this->Ebaysetting->check_markup();
+//        $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);
     }
 	
     public function set_ebay_notifications() {

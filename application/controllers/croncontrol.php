@@ -28,6 +28,10 @@ class CronControl extends Master_Controller {
 		// Not Yet
 	}
 
+	public function feeds() {
+        $this->_runJob('feeds');
+    }
+
 	public function emails() {
         $this->_runJob('mail');
     }
