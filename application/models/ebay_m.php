@@ -62,6 +62,7 @@ class Ebay_M extends Master_M {
             }
 
             $offset += count($products);
+            print "Current offset: $offset \n";
         } while(count($products) > 0);
 
         $this->closeXML($handle);
