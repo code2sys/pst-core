@@ -22,7 +22,7 @@ class CronJobDaily extends AbstractCronJob
         // And now, generate the eBay feed
         $this->load->model("ebay_m");
         $csv = $this->ebay_m->generateEbayFeed(0, 1);
-        $data = array('run_by' => 'admin', 'status' => '1');
+        $data = array('run_by' => 'cron', 'status' => '1');
         $this->ebay_m->update_ebay_feeds_log($data);
 	}
 	
