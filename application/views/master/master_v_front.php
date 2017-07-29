@@ -216,7 +216,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 	<div class="sw slider">
 		<div id="owl-demo" class="owl-carousel owl-theme">
 			<?php foreach( $bannerImages as $image ) { ?>
-                    <div class="item"><a href="<?php echo $image['banner_link'];?>"><img src="<?php echo base_url('media/'.$image['image']); ?>"></a></div> 
+                    <div class="item"><a href="<?php echo $image['banner_link'];?>"><img src="/media/<?php echo $image['image']; ?>"></a></div>
 			<?php } ?>
 		  <!--<div class="item"><img src="<?php echo $new_assets_url; ?>images/banner2.png"></div> 
 		  <div class="item"><img src="<?php echo $new_assets_url; ?>images/banner3.png"></div>-->

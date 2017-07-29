@@ -55,6 +55,8 @@ class Order_M extends Master_M {
                 'order.sendPst, ' .
                 'order.sales_price, ' .
                 'order.created_by, ' .
+                'order.ebay_order_id, ' .
+                'order.source, ' .
                 'order.shipping_type, order.product_cost, order.shipping_cost, ' .
                 'order.braintree_transaction_id AS braintree_transaction_id, '
         );

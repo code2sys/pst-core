@@ -1,15 +1,15 @@
 <!-- Gritter -->
 <link rel="stylesheet"
-      href="http://portal.powersporttechnologies.com/smashing/theme/scripts/Gritter/css/jquery.gritter.css" />
+      href="https://portal.powersporttechnologies.com/smashing/theme/scripts/Gritter/css/jquery.gritter.css" />
 <!--<link rel="stylesheet" href="/assets/newjs/jquery-ui.structure.min.css" />-->
 <link rel="stylesheet" href="/assets/newjs/jquery-ui.min.css" />
 
 <script type="text/javascript"
-        src="http://portal.powersporttechnologies.com/smashing/theme/scripts/Gritter/js/jquery.gritter.min.js"></script>
+        src="https://portal.powersporttechnologies.com/smashing/theme/scripts/Gritter/js/jquery.gritter.min.js"></script>
 
-<script type="application/javascript" src="http://portal.powersporttechnologies.com/thirdparty/underscore/underscore-min.js" ></script>
-<script type="application/javascript" src="http://portal.powersporttechnologies.com/thirdparty/backbone/backbone-min.js" ></script>
-<script type="application/javascript" src="http://portal.powersporttechnologies.com/thirdparty/dropzone/dropzone.js" ></script>
+<script type="application/javascript" src="https://portal.powersporttechnologies.com/thirdparty/underscore/underscore-min.js" ></script>
+<script type="application/javascript" src="https://portal.powersporttechnologies.com/thirdparty/backbone/backbone-min.js" ></script>
+<script type="application/javascript" src="https://portal.powersporttechnologies.com/thirdparty/dropzone/dropzone.js" ></script>
 <script type="application/javascript" src="/assets/newjs/jquery-ui.min.js" ></script>
 <style>
     .widget {
@@ -397,10 +397,10 @@
                     <input type="submit" class="updatebutton" value="Update Question" />
                     <input type="submit" class="deletebutton" value="Delete Question" />
                 </form><br/>
-                <form>
-                <label><input type="radio" name="productquestion" value="0" <% if (!(parseInt(obj.productquestion, 10) > 0)) { %>checked='checked'<% } %> /> Required Question</label>
-                <label><input type="radio" name="productquestion" value="1" <% if (parseInt(obj.productquestion, 10) > 0) { %>checked='checked'<% } %> /> Filter Question</label>
-                </form>
+<!--                <form>-->
+<!--                <label><input type="radio" name="productquestion" value="0" <% if (!(parseInt(obj.productquestion, 10) > 0)) { %>checked='checked'<% } %> /> Required Question</label>-->
+<!--                <label><input type="radio" name="productquestion" value="1" <% if (parseInt(obj.productquestion, 10) > 0) { %>checked='checked'<% } %> /> Filter Question</label>-->
+<!--                </form>-->
                 <% } %>
                 <div class="answerdiv">
 

@@ -18,7 +18,12 @@ class CronJobDaily extends AbstractCronJob
         $data = array('run_by' => 'cron', 'status' => '1');
         $this->admin_m->update_cycletrader_feeds_log($data);
         // and generate that google feed!
-        sub_googleSalesXMLNew();
+//        sub_googleSalesXMLNew();
+        // And now, generate the eBay feed
+        $this->load->model("ebay_m");
+        $csv = $this->ebay_m->generateEbayFeed(0, 1);
+        $data = array('run_by' => 'cron', 'status' => '1');
+        $this->ebay_m->update_ebay_feeds_log($data);
 	}
 	
 	private function priceToSaleCleanUp()

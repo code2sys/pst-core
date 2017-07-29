@@ -24,13 +24,14 @@ if (defined('ENVIRONMENT'))
             break;
 	}
 }
-
-$config['base_url']	= 'http://' . WEBSITE_HOSTNAME . '/';
+$simple_prefix = (array_key_exists("REQUEST_SCHEME", $_SERVER) && $_SERVER["REQUEST_SCHEME"] != "") ? $_SERVER["REQUEST_SCHEME"] : "http";
+$config["base_scheme"] = $simple_prefix;
+$config['base_url']	= $simple_prefix . '://' . WEBSITE_HOSTNAME . '/';
 $config['s_base_url'] = 'https://' . WEBSITE_HOSTNAME . '/';
-$config['assets']	= 'http://' . WEBSITE_HOSTNAME . '/assets';
-$config['benz_assets']	= 'http://' . WEBSITE_HOSTNAME . '/html/qatesting/benz_assets';
+$config['assets']	= $simple_prefix . '://' . WEBSITE_HOSTNAME . '/assets';
+$config['benz_assets']	= $simple_prefix . '://' . WEBSITE_HOSTNAME . '/html/qatesting/benz_assets';
 $config['s_assets']	= 'https://' . WEBSITE_HOSTNAME . '/assets';
-$config['s_cloverfield'] = 'http://' . WEBSITE_HOSTNAME . '/';
+$config['s_cloverfield'] = $simple_prefix . '://' . WEBSITE_HOSTNAME . '/';
 $config['upload_path'] = STORE_DIRECTORY . '/html/media';
 $config['media'] = 'media';
 $config['attachments'] = STORE_DIRECTORY . '/attachments/';
@@ -397,3 +398,4 @@ $config['proxy_ips'] = '';
 
 $config['wording_error_no_machine_selected'] = 'You currently do not have a machine selected. Please add a machine by using the shop by machine feature or selecting a machine from the fitment tab.';
 $config['wording_error_machine_does_not_match'] = 'Your machine does not match this item.  Please change your active machine above to add this item to cart.';
+$config['composer_autoload'] = TRUE;  

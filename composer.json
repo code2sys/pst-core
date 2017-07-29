@@ -11,6 +11,7 @@
     "require": {
         "swiftmailer/swiftmailer": "@stable",
         "php": ">=5.3.9",
-        "dts/ebay-sdk": "~0.1"
+	"dts/ebay-sdk": "~0.1",
+        "dts/ebay-sdk-php": "@stable"
     }
 }

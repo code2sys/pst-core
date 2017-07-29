@@ -9,8 +9,26 @@ class CronJobHourly extends AbstractCronJob
         $this->fixNullManufacturers();
         $this->fixBrandSlugs();
         $this->fixBrandLongNames();
+
+        $this->fixPendingEBay();
+
 		$this->documentGeneration();
 	}
+
+
+	public function fixPendingEBay() {
+        $query = $this->db->query("select * from ebay_feed_log where run_by = 'admin' and status = 0");
+        $results = $query->result_array();
+
+        if (count($results) > 0) {
+            // do the eBay thing...
+            $this->load->model("ebay_m");
+            $this->ebay_m->generateEbayFeed(0, 1);
+            foreach ($results as $row) {
+                $this->db->query("Update ebay_feed_log set status = 1 where id = ?", $row["id"]);
+            }
+        }
+    }
 
 	public function fixBrandLongNames() {
         $this->db->query("Update brand set long_name = name where (long_name = '' or long_name is null) and (name != '' and name is not null)");

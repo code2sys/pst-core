@@ -165,23 +165,23 @@ unset($motorcycle['videos'][0]);
 				</a>
 				<hr class="hr-lne">
 				<div class="info">
-					<div class="vds rmv">
                         <?php if (!empty($mainVideo)) { ?>
+					<div class="vds rmv">
 							<?php
 							$CI =& get_instance();
 							echo $CI->load->view("master/embedded_videos", array(
 								"class_name" => "main-vdo",
 								"mainVideo" => $mainVideo['video_url'],
 								"mainTitle" => $mainVideo['title'],
-								"video" => $video,
-								"rltdvdo_class" => "rltdvdo",
+								"video" => $motorcycle['videos'],
+								"rltdvdo_class" => "rltv-vdo",
 								"autoplay" => false
 							), true);
 							?>
 
-						<?php } ?>
 					</div>
-					<div class="clear mn-hght"></div>
+							<div class="clear mn-hght"></div>
+						<?php } ?>
 					<?php echo $motorcycle['description'];?>
 					<!--<h3>Integer tellus dui venenatis non:</h3>
 					<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,  content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover </p>
