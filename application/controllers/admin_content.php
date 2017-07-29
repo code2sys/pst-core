@@ -270,7 +270,7 @@ class Admin_Content extends Master_Controller {
 
     public function cycletrader_feeds() {
         $data = array('run_by' => 'admin', 'status' => '0');
-        $this->ebayadmin_m_m->update_cycletrader_feeds_log($data);
+        $this->admin_m->update_cycletrader_feeds_log($data);
         header("Location: /admin_content/feeds");
     }
 
