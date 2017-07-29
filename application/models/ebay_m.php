@@ -59,14 +59,15 @@ class Ebay_M extends Master_M {
                 $ebay_format_data = $this->convertToEbayFormat($products);
                 $ebay_format_data_new = $ebay_format_data;
                 $this->addIncrementalParts($handle, $ebay_format_data_new);
+                $offset += $limit;
+                print "Current offset: $offset Limit $limit \n";
             }
 
-            $offset += count($products);
-            print "Current offset: $offset \n";
         } while(count($products) > 0);
 
         $this->closeXML($handle);
         $this->cleanXML($temp_file, 1);
+        unlink($temp_file);
 
 		//var_dump($ebay_format_data);
 //        $this->db->select('part_number');
