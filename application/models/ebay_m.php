@@ -29,10 +29,11 @@ class Ebay_M extends Master_M {
     public $item_id;
     public $current_product_id;
     private $product_data = array();
-
+    protected $_dieSilentlyIfBad;
 	
     public function __construct() {
         parent::__construct();
+        $this->_dieSilentlyIfBad = false;
     }
 
     function pr($d) {
@@ -2243,6 +2244,7 @@ class Ebay_M extends Master_M {
 
 	public function getOrders() {
 
+
 		$store_url = base_url();
         $this->_setHeader("GetOrders", FALSE);
 		
@@ -2779,6 +2781,10 @@ class Ebay_M extends Master_M {
         );
     }
 
+    public function dieSilentlyOnBadCredentials($value = true) {
+        $this->_dieSilentlyIfBad = $value;
+    }
+
     /**
      * Function to get all ebay auth setting from db
      * @access private
@@ -2821,7 +2827,11 @@ class Ebay_M extends Master_M {
 		$cred = $query->result_array();		
 
 		if($cred[0]['ebay_dev_id'] == "" || $cred[0]['ebay_app_id'] == "" || $cred[0]['ebay_cert_id'] == "" || $cred[0]['ebay_user_token'] == "") {
-			die("Missing eBay developer credentials!");
+            if ($this->_dieSilentlyIfBad) {
+                exit();
+            } else {
+                die("Missing eBay developer credentials!");
+            }
 		}
         $this->cred['Setting'] = array(
             'dev_id' => $cred[0]['ebay_dev_id'],

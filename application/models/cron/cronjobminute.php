@@ -16,6 +16,7 @@ class CronJobMinute extends AbstractCronJob
 		$this->load->model('mail_queue_m');
 		$this->mail_queue_m->processMailQueue($limit);
         $this->load->model("ebay_m");
+        $this->ebay_m->dieSilentlyOnBadCredentials(true);
         $this->ebay_m->getOrders();
 	}
 
