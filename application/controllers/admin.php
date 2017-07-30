@@ -229,6 +229,9 @@ class Admin extends Master_Controller {
         $this->form_validation->set_rules('zip', 'Zip', 'required|xss_clean');
         $this->form_validation->set_rules('country', 'Country', 'required|xss_clean');
         $this->form_validation->set_rules('company', 'Company', 'xss_clean');
+        $this->form_validation->set_rules('merchant_id', 'Merchant ID', 'null_min_length[16]|max_length[16]');
+        $this->form_validation->set_rules('public_key', 'Public Key', 'null_min_length[16]|max_length[16]');
+        $this->form_validation->set_rules('private_key', 'Private Key', 'null_min_length[32]|max_length[32]');
         return $this->form_validation->run();
     }
 
