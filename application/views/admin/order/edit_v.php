@@ -1,12 +1,6 @@
 <?php
-//if($order['created_by'] == 1) {
-    require_once(STORE_DIRECTORY.'/lib/Braintree.php');
-    Braintree_Configuration::environment($store_name['environment']);
-    Braintree_Configuration::merchantId($store_name['merchant_id']);
-    Braintree_Configuration::publicKey($store_name['public_key']);
-    Braintree_Configuration::privateKey($store_name['private_key']);
-    $clientToken = Braintree_ClientToken::generate();
-//}
+//require_once( echo site_url()  . 'lib/Braintree.php');
+require(__DIR__ . "/../braintree_clienttoken.php");
 ?>
 <div class="content_wrap">
     <div class="content">

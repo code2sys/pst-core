@@ -1,11 +1,6 @@
 <?php
 //require_once( echo site_url()  . 'lib/Braintree.php');
-	include('lib/Braintree.php');
-	Braintree_Configuration::environment($store_name['environment']);
-	Braintree_Configuration::merchantId($store_name['merchant_id']);
-	Braintree_Configuration::publicKey($store_name['public_key']);
-	Braintree_Configuration::privateKey($store_name['private_key']);
-    $clientToken = Braintree_ClientToken::generate();
+require(__DIR__ . "/../braintree_clienttoken.php");
 ?>
 <!-- CONTENT WRAP =========================================================================-->
 	<div class="content_wrap">
