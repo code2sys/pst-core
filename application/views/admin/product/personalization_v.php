@@ -379,7 +379,7 @@
         <input type="text" name="qty_available" placeholder="Qty Available..." />
         <input type="text" name="cost" placeholder="Cost..." />
         <a href="#" class="fitmentpopup">Edit Fitment</a>
-        <label style="inline-block"><input type="checkbox" value="Closeout" name="stock_code" /> Closeout</label>
+        <label style="display: inline-block"><input type="checkbox" value="Closeout" name="stock_code" /> Closeout</label>
         <input type="text" name="weight" placeholder="Weight..." />
         <input type="submit" class="addanswer" value="Add Answer" />
         <div class="fitments">
@@ -1485,7 +1485,9 @@
                             }, this),
                             "cost" : this.$("input[name=cost]").val(),
                             "qty_available" : this.$("input[name=qty_available]").val(),
-                            "price" : this.$("input[name=price]").val()
+                            "price" : this.$("input[name=price]").val(),
+                            "weight" : this.$("input[name=weight]").val(),
+                            "stock_code" : this.$("input[name=stock_code][value='Closeout']:checked").length > 0 ? "Closeout" : "Normal"
                         },
                         "success" : _.bind(function(data) {
                             if (data.success) {
