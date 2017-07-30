@@ -280,9 +280,9 @@ class Adminproduct extends Admin {
 
             if (count($matches) > 0) {
                 // OK, update it
-                $this->db->query("Update partdealervariation set quantity_available = ?, quantity_ten_plus = ?, quantity_last_updated = now(), cost = ?, price = ? where partnumber_id = ?", array($_REQUEST["qty_available"], $_REQUEST["qty_available"] > 9 ? 1 : 0, $_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["partnumber_id"]));
-                $this->db->query("Update partvariation set cost = ?, price = ? where partnumber_id = ?", array($_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["partnumber_id"]));
-                $this->db->query("Update partnumber set cost = ?, price = ?, dealer_sale = ? where partnumber_id = ?", array($_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["price"], $_REQUEST["partnumber_id"]));
+                $this->db->query("Update partdealervariation set quantity_available = ?, quantity_ten_plus = ?, quantity_last_updated = now(), cost = ?, price = ?, weight = ? where partnumber_id = ?", array($_REQUEST["qty_available"], $_REQUEST["qty_available"] > 9 ? 1 : 0, $_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["weight"], $_REQUEST["partnumber_id"]));
+                $this->db->query("Update partvariation set cost = ?, price = ?, weight = ? where partnumber_id = ?", array($_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["weight"], $_REQUEST["partnumber_id"]));
+                $this->db->query("Update partnumber set cost = ?, price = ?, dealer_sale = ?, weight = ? where partnumber_id = ?", array($_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["price"], $_REQUEST["weight"], $_REQUEST["partnumber_id"]));
                 $this->db->query("insert into queued_parts (part_id) values (?)", array($part_id));
                 print json_encode(array("success" => 1));
             } else {

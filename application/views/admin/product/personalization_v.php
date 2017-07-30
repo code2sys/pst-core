@@ -379,7 +379,7 @@
         <input type="text" name="qty_available" placeholder="Qty Available..." />
         <input type="text" name="cost" placeholder="Cost..." />
         <a href="#" class="fitmentpopup">Edit Fitment</a>
-        <label><input type="checkbox" value="Closeout" name="stock_code" /> Closeout</label>
+        <label style="inline-block"><input type="checkbox" value="Closeout" name="stock_code" /> Closeout</label>
         <input type="text" name="weight" placeholder="Weight..." />
         <input type="submit" class="addanswer" value="Add Answer" />
         <div class="fitments">
@@ -674,12 +674,14 @@
                     "change input[name=stock_code]" : "stock_code",
                     "change input[name=price]" : "update_local_settings",
                     "change input[name=qty_available]" : "update_local_settings",
-                    "change input[name=cost]" : "update_local_settings"
+                    "change input[name=cost]" : "update_local_settings",
+                    "change input[name=weight]" : "update_local_settings"
                 },
                 update_local_settings : function(e) {
                     var price = this.$("input[name=price]").val();
                     var qty_available = this.$("input[name=qty_available]").val();
                     var cost = this.$("input[name=cost]").val();
+                    var weight = this.$("input[name=weight]").val();
 
                     // Now, phone home
                     $.ajax({
@@ -691,7 +693,8 @@
                             "partnumber_id" : this.model.get('partnumber_id'),
                             price: price,
                             qty_available: qty_available,
-                            cost: cost
+                            cost: cost,
+                            weight: weight
                         },
                         "success" : _.bind(function(data) {
                             if (data.success) {
