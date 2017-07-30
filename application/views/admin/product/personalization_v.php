@@ -353,6 +353,7 @@
             <th class="center">Qty Available</th>
             <th class="center">Cost</th>
             <th class="center">Closeout?</th>
+            <th class="center">Shipping Weight</th>
             <th class="center" ></th>
 
         </tr>
@@ -378,6 +379,8 @@
         <input type="text" name="qty_available" placeholder="Qty Available..." />
         <input type="text" name="cost" placeholder="Cost..." />
         <a href="#" class="fitmentpopup">Edit Fitment</a>
+        <label><input type="checkbox" value="Closeout" name="stock_code" /> Closeout</label>
+        <input type="text" name="weight" placeholder="Weight..." />
         <input type="submit" class="addanswer" value="Add Answer" />
         <div class="fitments">
 
@@ -458,6 +461,7 @@
     <td ><input type="text" name="qty_available" value="<%= obj.qty_available %>" /></td>
     <td ><input type="text" name="cost" value="<%= obj.cost %>" /></td>
     <td align="center"><input type="checkbox" name="stock_code" value="Closeout" <% if (obj.stock_code == 'Closeout') { %>checked='checked'<% } %> /> </td>
+    <td ><input type="text" name="weight" value="<%= obj.weight %>" /></td>
     <td ><a href="#" class="removelink">Delete</a></td>
  </script>
 <script type="text/template" id="EditPopoverView">
