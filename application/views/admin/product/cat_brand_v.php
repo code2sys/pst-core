@@ -68,14 +68,14 @@ $not_is_new = !isset($new) || !$new;
                                     'placeholder' => 'New Brand')); ?></td>
                         </tr>
                         <tr>
-                            <td><b>Product Categories:</b><br/>Please sepcify categories, one per line, using the complete category name, e.g. "Cat > Sub-Cat > Sub-Sub-Cat".</td>
+                            <td><b>Product Categories:</b><br/>Please sepcify categories, one per line, using the complete category name, e.g. "Cat > Sub-Cat > Sub-Sub-Cat". <strong>Use a new line or a semicolon to separate multiple categories.</strong></td>
                             <td><?php echo form_textarea(array('name' => 'categories',
                                     'value' => implode("\n", array_map(function($x) {
                                         return $x["long_name"];
                                     }, $product_categories)),
                                     'cols' => 80,
                                     'rows' => 10,
-                                    'placeholder' => 'Product Categories')); ?></td>
+                                    'placeholder' => 'Product Categories'), '', " style='width: auto;' "); ?></td>
                         </tr>
                     </table>
                 </div>

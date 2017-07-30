@@ -280,9 +280,9 @@ class Adminproduct extends Admin {
 
             if (count($matches) > 0) {
                 // OK, update it
-                $this->db->query("Update partdealervariation set quantity_available = ?, quantity_ten_plus = ?, quantity_last_updated = now(), cost = ?, price = ? where partnumber_id = ?", array($_REQUEST["qty_available"], $_REQUEST["qty_available"] > 9 ? 1 : 0, $_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["partnumber_id"]));
-                $this->db->query("Update partvariation set cost = ?, price = ? where partnumber_id = ?", array($_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["partnumber_id"]));
-                $this->db->query("Update partnumber set cost = ?, price = ?, dealer_sale = ? where partnumber_id = ?", array($_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["price"], $_REQUEST["partnumber_id"]));
+                $this->db->query("Update partdealervariation set quantity_available = ?, quantity_ten_plus = ?, quantity_last_updated = now(), cost = ?, price = ?, weight = ? where partnumber_id = ?", array($_REQUEST["qty_available"], $_REQUEST["qty_available"] > 9 ? 1 : 0, $_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["weight"], $_REQUEST["partnumber_id"]));
+                $this->db->query("Update partvariation set cost = ?, price = ?, weight = ? where partnumber_id = ?", array($_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["weight"], $_REQUEST["partnumber_id"]));
+                $this->db->query("Update partnumber set cost = ?, price = ?, dealer_sale = ?, weight = ? where partnumber_id = ?", array($_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["price"], $_REQUEST["weight"], $_REQUEST["partnumber_id"]));
                 $this->db->query("insert into queued_parts (part_id) values (?)", array($part_id));
                 print json_encode(array("success" => 1));
             } else {
@@ -389,20 +389,15 @@ class Adminproduct extends Admin {
             redirect('');
         }
 
-        print "A";
         $product = $this->admin_m->getAdminProduct($id);
-        print "B";
         // Check that this exists and it really has an mx = 0
         if (is_array($product) && array_key_exists("mx", $product) && $product["mx"] == 0) {
-            print "C";
             $manufacturer = trim(array_key_exists("manufacturer", $_REQUEST) ? $_REQUEST["manufacturer"] : "");
             if ($manufacturer == "") {
                 $manufacturer = trim(array_key_exists("new_manufacturer", $_REQUEST) ? $_REQUEST["new_manufacturer"] : "");
             }
-            print "D";
 
             if ($manufacturer == "") {
-                print "E";
                 $_SESSION["product_category_brand_error"] = "Please provide a brand (manufacturer).";
             } else {
                 $manufacturer_id = $this->Portalmodel->getOrMakeManufacturer($manufacturer);
@@ -415,7 +410,7 @@ class Adminproduct extends Admin {
 
                 $seen = array();
 
-                $categories = preg_split("/\r\n|\n|\r/", array_key_exists("categories", $_REQUEST) ? $_REQUEST["categories"] : "");
+                $categories = preg_split("/;|\r\n|\n|\r/", array_key_exists("categories", $_REQUEST) ? $_REQUEST["categories"] : "");
                 print_r($categories);
                 foreach ($categories as $c) {
                     $c = trim($c);

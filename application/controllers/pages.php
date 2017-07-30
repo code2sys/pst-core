@@ -574,7 +574,13 @@ class Pages extends Master_Controller {
         if (FALSE !== ($pos = strrpos($url, $piece))) {
             // well, we need the end of it..
             $url = substr($url, $pos + strlen($piece));
+
+            // If the segment containts an &, that means they've given us something more. You should kill that.
+            if (FALSE !== ($pos = strrpos($url, "&"))){
+                $url = substr($url, 0, $pos);
+            }
         }
+
         return $url;
     }
 
