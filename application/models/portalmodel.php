@@ -688,15 +688,15 @@ class Portalmodel extends Master_M {
         }
 
         // Just mark them.
-        $this->update("partnumber", "partnumber_id", $partnumber_id, array("protect" => 1, "price" => $_REQUEST["price"], "cost" => $_REQUEST["cost"], "sale" => $_REQUEST["price"], "dealer_sale" => $_REQUEST["price"]));
-        $this->update("partvariation", "partvariation_id", $partvariation_id, array("protect" => 1, "price" => $_REQUEST["price"], "cost" => $_REQUEST["cost"]));
+        $this->update("partnumber", "partnumber_id", $partnumber_id, array("protect" => 1, "price" => $_REQUEST["price"], "cost" => $_REQUEST["cost"], "sale" => $_REQUEST["price"], "dealer_sale" => $_REQUEST["price"], "weight" => $_REQUEST["weight"]));
+        $this->update("partvariation", "partvariation_id", $partvariation_id, array("protect" => 1, "price" => $_REQUEST["price"], "cost" => $_REQUEST["cost"], "stock_code" => $_REQUEST["stock_code"], "weight" => $_REQUEST["weight"]));
 
         // Fix the label, if required...
         $this->db->query("Update partnumber join partvariation using (partnumber_id) join distributor using (distributor_id) set partnumber = concat(distributor.name, '-', partvariation.part_number) where partnumber.partnumber_id = ? and partvariation.partvariation_id = ?", array($partnumber_id, $partvariation_id));
 
 
         // Insert into partdealervariation, if quired
-        $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, revisionset_id, manufacturer_part_number) select partvariation_id, part_number, partnumber_id, distributor_id, ?, ?, stock_code, now(), ?, ?, clean_part_number, revisionset_id, manufacturer_part_number from partvariation where partvariation_id = ? on duplicate key update quantity_available = values(quantity_available), quantity_ten_plus = values(quantity_ten_plus), quantity_last_updated = now(), cost = values(cost), price = values(price)", array($_REQUEST["qty_available"], $_REQUEST["qty_available"] > 9 ? 1 : 0, $_REQUEST["cost"], $_REQUEST["price"], $partvariation_id));
+        $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, revisionset_id, manufacturer_part_number, weight, stock_code) select partvariation_id, part_number, partnumber_id, distributor_id, ?, ?, stock_code, now(), ?, ?, clean_part_number, revisionset_id, manufacturer_part_number, ?, ? from partvariation where partvariation_id = ? on duplicate key update quantity_available = values(quantity_available), quantity_ten_plus = values(quantity_ten_plus), quantity_last_updated = now(), cost = values(cost), price = values(price), weight = values(weight), stock_code = values(stock_code)", array($_REQUEST["qty_available"], $_REQUEST["qty_available"] > 9 ? 1 : 0, $_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["weight"], $_REQUEST["stock_code"], $partvariation_id));
 
         // Insert into partpartnumber...
         $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?) on duplicate key update partpartnumber_id = last_insert_id(partpartnumber_id)", array($revisionset_id, $partnumber_id));
