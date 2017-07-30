@@ -6,7 +6,7 @@
  * Time: 9:28 PM
  */
 
-include(__DIR__ . '/../../lib/Braintree.php');
+include('lib/Braintree.php');
 
 try {
     Braintree_Configuration::environment($store_name['environment']);
