@@ -61,7 +61,7 @@
                                 'value' => @$categories,
                                 'cols' => 80,
                                 'rows' => 10,
-                                'placeholder' => 'Product Categories')); ?></td>
+                                'placeholder' => 'Product Categories'), "", " style='width: auto;' "); ?></td>
                     </tr>
                     <tr>
                         <td></td>

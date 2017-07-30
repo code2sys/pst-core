@@ -75,7 +75,7 @@ $not_is_new = !isset($new) || !$new;
                                     }, $product_categories)),
                                     'cols' => 80,
                                     'rows' => 10,
-                                    'placeholder' => 'Product Categories')); ?></td>
+                                    'placeholder' => 'Product Categories'), '', " style='width: auto;' "); ?></td>
                         </tr>
                     </table>
                 </div>
