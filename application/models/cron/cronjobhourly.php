@@ -6,6 +6,7 @@ class CronJobHourly extends AbstractCronJob
 {
 	public function runJob()
 	{
+        $this->fixVideos();
         $this->fixNullManufacturers();
         $this->fixBrandSlugs();
         $this->fixBrandLongNames();
@@ -15,6 +16,21 @@ class CronJobHourly extends AbstractCronJob
 		$this->documentGeneration();
 	}
 
+
+	public function fixVideos() {
+        $tables = array("brand_video","category_video", "motorcycle_video", "part_video", "top_videos");
+        foreach ($tables as $table) {
+            $query = $this->db->query("select * from $table where video_url like '%&%'");
+            foreach ($query->result_array() as $row) {
+                $url = $row["video_url"];
+                $id = $row["id"];
+                if (FALSE !== ($pos = strrpos($url, "&"))){
+                    $url = substr($url, 0, $pos);
+                }
+                $this->db->query("Update $table set video_url = ? where id = ? limit 1", array($url, $id));
+            }
+        }
+    }
 
 	public function fixPendingEBay() {
         $query = $this->db->query("select * from ebay_feed_log where run_by = 'admin' and status = 0");
