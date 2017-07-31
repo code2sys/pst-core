@@ -9,7 +9,7 @@
  *
  */
 
-include('lib/Braintree.php');
+require_once(STORE_DIRECTORY.'/lib/Braintree.php');
 
 try {
     Braintree_Configuration::environment($store_name['environment']);
