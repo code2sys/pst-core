@@ -22,7 +22,12 @@ class Braintree_lib{
 		}
 
     function create_client_token(){
-    	$clientToken = Braintree_ClientToken::generate();
-    	return $clientToken;
+        try {
+            $clientToken = Braintree_ClientToken::generate();
+            return $clientToken;
+        } catch(Exception $e) {
+            error_log("Error in Braintree Library: " . $e->getMessage());
+            return "";
+        }
     }
 }

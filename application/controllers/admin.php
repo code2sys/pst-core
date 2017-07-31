@@ -1251,13 +1251,8 @@ class Admin extends Master_Controller {
         
         $store_name = $this->admin_m->getAdminShippingProfile();
         if( $this->input->post()) {
-            require_once(STORE_DIRECTORY.'/lib/Braintree.php');
-            Braintree_Configuration::environment($store_name['environment']);
-            Braintree_Configuration::merchantId($store_name['merchant_id']);
-            Braintree_Configuration::publicKey($store_name['public_key']);
-            Braintree_Configuration::privateKey($store_name['private_key']);
-            $clientToken = Braintree_ClientToken::generate();
-            
+            $clientToken = $this->braintree_lib->create_client_token();
+
             $post = $this->input->post();
             if(@$post['transaction_id'] && $post['refund_amount'] > 0) {
                 $result = Braintree_Transaction::refund($post['transaction_id'], $post['refund_amount']);

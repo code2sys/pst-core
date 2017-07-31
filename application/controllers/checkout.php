@@ -840,7 +840,7 @@ var sa_products = { '.$rating.' };
 			
 			$total = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'],2);
 			$total = str_replace(',','', $total);
-			require_once('lib/Braintree.php');
+
 			$this->load->model('admin_m');
 			$store_name = $this->admin_m->getAdminShippingProfile();
 			Braintree_Configuration::environment($store_name['environment']);
@@ -947,7 +947,6 @@ var sa_products = { '.$rating.' };
 			$total = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'], 2);
 			$this->load->model('admin_m');
 			$store_name = $this->admin_m->getAdminShippingProfile();
-			require_once('lib/Braintree.php');
 			Braintree_Configuration::environment($store_name['environment']);
 			Braintree_Configuration::merchantId($store_name['merchant_id']);
 			Braintree_Configuration::publicKey($store_name['public_key']);
