@@ -1,6 +1,6 @@
 <?php
 //require_once( echo site_url()  . 'lib/Braintree.php');
-require(__DIR__ . "/../braintree_clienttoken.php");
+require(__DIR__ . "/../../braintree_clienttoken.php");
 ?>
 <div class="content_wrap">
     <div class="content">
