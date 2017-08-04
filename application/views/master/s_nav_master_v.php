@@ -206,6 +206,7 @@ if (isset($keywords) &&	$keywords != "") {
 	<link rel="stylesheet" href="<?php echo jsite_url("/basebranding.css"); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url("/custom.css"); ?>" />
 
+	<?php echo @$script; ?>
 </head>
 
 <body class="body" <?php if(isset($new_header)){?>style="width:100%;margin:0 auto;"<?php }?>>
@@ -605,7 +606,7 @@ $(window).load(function() {
 
 
 
-<?php echo @$script; ?>
+
 
 <!-- BEGIN: Google Trusted Stores -->
 <?php
