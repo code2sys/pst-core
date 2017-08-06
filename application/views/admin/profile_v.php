@@ -418,7 +418,7 @@ $google_trust = (array) json_decode($address['google_trust']);
 								<table width="100%" style="background-color:white;">
 									<tr>
 										<td colspan="2">
-											<img src="/assets/pem_parts.png" width="233px" border="0"/> HLSM OEM Parts
+											<img src="/assets/oem_parts.png" width="233px" border="0"/> HLSM OEM Parts
 										</td>
 									</tr>
 									<tr>
