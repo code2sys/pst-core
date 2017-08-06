@@ -2627,6 +2627,9 @@ span.glyphicon-filter {
         padding:12px 0 0;
         margin:0 !important
     }
+    .container_b .vehicleCategory a.sevenacross {
+        width:123px !important;
+    }
     .actv {
         box-shadow:none !important;
     }
@@ -3309,6 +3312,10 @@ span.glyphicon-filter {
         width:155px !important;
         padding:0;
         margin:0 !important
+    }
+
+    .container_b .vehicleCategory a.navacrossseven {
+        width:132px !important;
     }
     .actv {
         box-shadow:none !important;
