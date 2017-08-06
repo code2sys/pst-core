@@ -412,6 +412,25 @@ $google_trust = (array) json_decode($address['google_trust']);
 								</table>
 							</td>
 						</tr>
+
+						<tr>
+							<td colspan="2">
+								<table width="100%" style="background-color:white;">
+									<tr>
+										<td colspan="2">
+											<img src="/assets/pem_parts.png" width="233px" border="0"/> HLSM OEM Parts
+										</td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>HLSM OEM Parts URL:</b></td>
+										<td><?php echo form_input(array('name' => 'partsfinder_link',
+										  'value' => @$address['partsfinder_link'],
+										  'class' => 'text large',
+										  'placeholder' => 'Enter complete onlinemicrofiche.com URL here...')); ?></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
 						
 						<tr>
 							<td></td>
