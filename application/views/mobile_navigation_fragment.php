@@ -15,7 +15,7 @@ if (!isset($partsfinder_link)) {
 <li><a href="<?php echo base_url('utvparts'); ?>">Shop UTV</a></li>
 <li><a href=<?php echo base_url('Motorcycle_Gear_Brands'); ?>>Shop by Brand</a></li>
 <?php if ($partsfinder_link != ""): ?>
-    <li><a href=<?php echo $partsfinder_link; ?> >Shop OEM Parts</a></li
+    <li><a href="<?php echo $partsfinder_link; ?>" target="_blank" >Shop OEM Parts</a></li
 <?php endif; ?>
 <li><a href="<?php echo base_url('/shopping/wishlist'); ?>">Wish list</a></li>
 <li><a href="<?php echo $s_baseURL.'checkout/account'; ?>">Account</a></li>
