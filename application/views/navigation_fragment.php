@@ -45,7 +45,7 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
     <span id="sbb">Shop by Brand</span>
 </a>
 <?php if ($partsfinder_link != ""): ?>
-    <a href="<?php echo $partsfinder_link; ?>" class="oemparts navacross<?php echo $number_across;?>" target="_blank">
+    <a href="<?php echo $partsfinder_link; ?>" class="last oemparts navacross<?php echo $number_across;?>" target="_blank">
         <div class="stre-bk_b" style="height:45px;">
             <img src="/assets/oem_parts.png" alt="OEM Parts" />
         </div>
