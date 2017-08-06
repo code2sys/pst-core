@@ -279,15 +279,7 @@ if (isset($keywords) &&	$keywords != "") {
 				<div class="sidebar-menu">
 					<span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
 					<ul class="mb-drpdwn">
-						<li><a href="<?php echo base_url('streetbikeparts'); ?>">Shop Street</a></li>
-						<li><a href="<?php echo base_url('vtwin'); ?>">Shop VTwin</a></li>
-						<li><a href="<?php echo base_url('dirtbikeparts'); ?>">Shop Dirt</a></li>
-						<li><a href="<?php echo base_url('atvparts'); ?>">Shop ATV</a></li>				
-						<li><a href="<?php echo base_url('utvparts'); ?>">Shop UTV</a></li>
-						<li><a href=<?php echo base_url('Motorcycle_Gear_Brands'); ?>>Shop by Brand</a></li>				
-						<li><a href="<?php echo base_url('/shopping/wishlist'); ?>">Wish list</a></li>
-						<li><a href="<?php echo $s_baseURL.'checkout/account'; ?>">Account</a></li>
-						<li><a href="javascript:void(0);" onclick="openLogin();">Login/Signup</a></li>
+						<?php require(__DIR__ . "/../mobile_navigation_fragment.php"); ?>
 					</ul>
 				</div>		
 				<div class="cl"><a class="cel" href="tel:<?php echo CLEAN_PHONE_NUMBER; ?>">
@@ -317,42 +309,8 @@ if (isset($keywords) &&	$keywords != "") {
 		</div>
             <div class="container_b">
 			<div class="vehicleCategory">
-				<a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/streetBike.png">
-					</div>
-					<span id="stp">Shop Street Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('vtwin'); ?>" class="vtwin">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/vtwin.png">
-					</div>
-					<span id="svp">Shop VTwin Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('dirtbikeparts'); ?>" class="bike">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/bike.png">
-					</div>
-					<span id="sdp">Shop Dirt Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('atvparts'); ?>" class="atv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/atv.png">
-					</div>
-					<span id="sap">Shop ATV Parts & Accessories</span>
-				</a>
-				<a href="<?php echo base_url('utvparts'); ?>" class="utv">
-					<div class="stre-bk_b">
-						<img src="<?php echo $new_assets_url1; ?>images/utv.png">
-					</div>
-					<span id="sup">Shop UTV Parts & Accessories</span>
-				</a>				
-				<a href="<?php echo base_url('Motorcycle_Gear_Brands'); ?>" class="last">
-					<div class="stre-bk_b" style="height:45px;">
-						<img src="<?php echo $new_assets_url1; ?>images/brand-tag.png">
-					</div>
-					<span id="sbb">Shop by Brand</span>
-				</a>
+				<?php require(__DIR__ . "/../navigation_fragment.php"); ?>
+
 			</div>	
 			<div class="clear"></div>
 		</div>
