@@ -1,5 +1,8 @@
 <?php
 $google_trust = (array) json_decode($address['google_trust']);
+if (!defined("ENABLE_OEMPARTS_BUTTON")) {
+	define("ENABLE_OEMPARTS_BUTTON", false);
+}
 ?>
 	<!-- CONTENT WRAP =========================================================================-->
 	<div class="content_wrap">
@@ -412,7 +415,7 @@ $google_trust = (array) json_decode($address['google_trust']);
 								</table>
 							</td>
 						</tr>
-
+<?php if (ENABLE_OEMPARTS_BUTTON): ?>
 						<tr>
 							<td colspan="2">
 								<table width="100%" style="background-color:white;">
@@ -431,7 +434,8 @@ $google_trust = (array) json_decode($address['google_trust']);
 								</table>
 							</td>
 						</tr>
-						
+<?php endif; ?>
+
 						<tr>
 							<td></td>
 							<td>

@@ -1,5 +1,9 @@
 <?php
 
+if (!defined("ENABLE_OEMPARTS_BUTTON")) {
+    define("ENABLE_OEMPARTS_BUTTON", false);
+}
+
 if (!isset($partsfinder_link)) {
     $CI =& get_instance();
     $CI->load->model("admin_m");
@@ -14,7 +18,7 @@ if (!isset($partsfinder_link)) {
 <li><a href="<?php echo base_url('atvparts'); ?>">Shop ATV</a></li>
 <li><a href="<?php echo base_url('utvparts'); ?>">Shop UTV</a></li>
 <li><a href=<?php echo base_url('Motorcycle_Gear_Brands'); ?>>Shop by Brand</a></li>
-<?php if ($partsfinder_link != ""): ?>
+<?php if (ENABLE_OEMPARTS_BUTTON && ($partsfinder_link != "")): ?>
     <li><a href="<?php echo $partsfinder_link; ?>" target="_blank" >Shop OEM Parts</a></li>
 <?php endif; ?>
 <li><a href="<?php echo base_url('/shopping/wishlist'); ?>">Wish list</a></li>
