@@ -1,5 +1,8 @@
 <?php
 $google_trust = (array) json_decode($address['google_trust']);
+if (!defined("ENABLE_OEMPARTS_BUTTON")) {
+	define("ENABLE_OEMPARTS_BUTTON", false);
+}
 ?>
 	<!-- CONTENT WRAP =========================================================================-->
 	<div class="content_wrap">
@@ -412,7 +415,27 @@ $google_trust = (array) json_decode($address['google_trust']);
 								</table>
 							</td>
 						</tr>
-						
+<?php if (ENABLE_OEMPARTS_BUTTON): ?>
+						<tr>
+							<td colspan="2">
+								<table width="100%" style="background-color:white;">
+									<tr>
+										<td colspan="2">
+											<img src="/assets/oem_parts.png"  border="0"/> HLSM OEM Parts
+										</td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>HLSM OEM Parts URL:</b></td>
+										<td><?php echo form_input(array('name' => 'partsfinder_link',
+										  'value' => @$address['partsfinder_link'],
+										  'class' => 'text large',
+										  'placeholder' => 'Enter complete onlinemicrofiche.com URL here...')); ?></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+<?php endif; ?>
+
 						<tr>
 							<td></td>
 							<td>

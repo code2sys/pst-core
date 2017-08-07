@@ -1316,6 +1316,10 @@ img.powerlogo-a {
     font-family: sans-serif;
 }
 
+.vehicleCategory a.navacrossseven {
+    width: 158px;
+}
+
 .vehicleCategory a:hover {
 	color: #003ca2 !important;
 }
