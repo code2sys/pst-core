@@ -6,11 +6,13 @@ if (!isset($partsfinder_link)) {
     $partsfinder_link = $store_name["partsfinder_link"];
 }
 
-if (!defined("ENABLE_OEMPARTS_BUTTON")) {
+if (!defined("ENABLE_OEMPARTS_BUTTON") || !ENABLE_OEMPARTS_BUTTON) {
     define("ENABLE_OEMPARTS_BUTTON", false);
+    $number_across = "six";
+} else {
+    $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 }
 
-$number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 ?>
 <a href="<?php echo base_url('streetbikeparts'); ?>" class="streetBike stre-bk_b navacross<?php echo $number_across;?>">
     <div class="stre-bk_b">
