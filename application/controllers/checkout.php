@@ -840,7 +840,7 @@ var sa_products = { '.$rating.' };
 			
 			$total = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'],2);
 			$total = str_replace(',','', $total);
-
+			// include('lib/Braintree.php');
 			$this->load->model('admin_m');
 			$store_name = $this->admin_m->getAdminShippingProfile();
 			Braintree_Configuration::environment($store_name['environment']);
@@ -947,6 +947,7 @@ var sa_products = { '.$rating.' };
 			$total = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'], 2);
 			$this->load->model('admin_m');
 			$store_name = $this->admin_m->getAdminShippingProfile();
+			//include('lib/Braintree.php');
 			Braintree_Configuration::environment($store_name['environment']);
 			Braintree_Configuration::merchantId($store_name['merchant_id']);
 			Braintree_Configuration::publicKey($store_name['public_key']);
@@ -963,6 +964,11 @@ var sa_products = { '.$rating.' };
 				$this->load->model('order_m');
 				$this->order_m->updateStatus($_SESSION['newOrderNum'], 'Declined', 'Zero Balance at Payment Submit!');
 			} elseif( @$result->success ) {
+                $transaction = $result->transaction;
+				$this->load->model('admin_m');
+				$transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction->id, 'transaction_date' => time());
+				$transaction['amount'] = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'],2);
+                $this->admin_m->addOrderTransaction($transaction);
 				$this->completeOrder(@$user_id);
 			} else {
 				// echo '<pre>';
