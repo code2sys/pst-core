@@ -82,7 +82,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', '<?php echo $store_name['analytics_id']; ?>', 'auto');
 ga('send', 'pageview');
 <?php if ($ga_ecommerce): ?>
-ga('require', 'ecommerce')
+ga('require', 'ecommerce');
   <?php endif; ?>
 </script>
 <?php endif; ?>
