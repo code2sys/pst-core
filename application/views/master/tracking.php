@@ -30,7 +30,7 @@ $google_trust = (array) json_decode($store_name['google_trust']);
 <!-- END: Google Trusted Stores -->
 <?php endif; ?>
 
-<?php if (false && ($store_name['google_conversion_id'] != '')): ?>
+<?php if ($store_name['google_conversion_id'] != ''): ?>
 <!-- Google Code for Remarketing Tag -->
 <!--------------------------------------------------
 Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. See more information and instructions on how to setup the tag on: http://google.com/ad$
