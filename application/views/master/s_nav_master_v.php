@@ -206,7 +206,6 @@ if (isset($keywords) &&	$keywords != "") {
 	<link rel="stylesheet" href="<?php echo jsite_url("/basebranding.css"); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url("/custom.css"); ?>" />
 
-	<?php echo @$script; ?>
 </head>
 
 <body class="body" <?php if(isset($new_header)){?>style="width:100%;margin:0 auto;"<?php }?>>
@@ -577,6 +576,10 @@ echo $CI->load->view("master/tracking", array(
 	"show_ga_conversion" => true
 
 ), true);
+
+if (isset($script) && $script != "") {
+	echo $script;
+}
 
 ?>
 <script>
