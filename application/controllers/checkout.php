@@ -375,30 +375,7 @@ class Checkout extends Master_Controller {
 									window._fbq.push([\'track\', \'PixelInitialized\', {}]);
 									</script>
 									<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=' . $fb_remarketing_pixel . '&amp;ev=PixelInitialized" /></noscript>
-																
-									<script type="text/javascript">
-									/* <![CDATA[ */
-									var google_conversion_id = ' . $google_conversion_id . ';
-									var google_conversion_language = "en";
-									var google_conversion_format = "3";
-									var google_conversion_color = "ffffff";
-									var google_conversion_label = "' . $google_conversion_label . '";
-									if('.@$totalRevenue.')
-									{
-										var google_conversion_value = '.@$totalRevenue.';
-									}
-									var google_conversion_currency = "USD";
-									var google_remarketing_only = false;
-									/* ]]> */
-									</script>
-									<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
-									</script>
-									<noscript>
-									<div style="display:inline;">
-									<img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/' . $google_conversion_id . '/?value='.@$totalRevenue.'&amp;currency_code=USD&amp;label=' . $google_conversion_label . '&amp;guid=ON&amp;script=0"/>
-									</div>
-									</noscript>
-															
+																													
 									<script>
 										ga(\'require\', \'ecommerce\');
 										ga(\'ecommerce:addTransaction\', {
