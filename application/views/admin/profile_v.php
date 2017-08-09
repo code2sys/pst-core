@@ -332,20 +332,6 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 											<img src="<?php echo base_url().'assets/benz_assets/remarketing.jpg';?>" width="233px" border="0"/>
 										</td>
 									</tr>
-									<tr>
-										<td style="width:30%;"><b>Google Conversion ID :</b></td>
-										<td><?php echo form_input(array('name' => 'google_conversion_id', 
-										  'value' => @$address['google_conversion_id'], 
-										  'class' => 'text large',
-										  'placeholder' => 'ID')); ?></td>
-									</tr>
-									<tr>
-										<td style="width:30%;"><b>Google Conversion Label :</b></td>
-										<td><?php echo form_input(array('name' => 'google_conversion_label',
-										  'value' => @$address['google_conversion_label'],
-										  'class' => 'text large',
-										  'placeholder' => 'Label')); ?></td>
-									</tr>
 								</table>
 							</td>
 						</tr>
