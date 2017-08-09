@@ -660,44 +660,8 @@ $(window).load(function() {
 
 
 <?php echo @$script; ?>
-<!-- BEGIN: Google Trusted Stores -->
-<script type="text/javascript">
-  var gts = gts || [];
 
-  gts.push(["id", "479602"]);
-  gts.push(["badge_position", "BOTTOM_RIGHT"]);
-  gts.push(["locale", "en_us"]);
-  <?php if(@$product['partnumber']): ?>
-  gts.push(["google_base_offer_id", "<?php echo $product['partnumber']; ?>"]);
-  <?php endif; ?>
-  gts.push(["google_base_subaccount_id", "<?php echo $google_conversion_id; ?>"]);
-  gts.push(["google_base_country", "US"]);
-  gts.push(["google_base_language", "en_us"]);
 
-  (function() {
-    var gts = document.createElement("script");
-    gts.type = "text/javascript";
-    gts.async = true;
-    gts.src = "https://www.googlecommerce.com/trustedstores/api/js";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(gts, s);
-  })();
-</script>
-<!-- END: Google Trusted Stores -->
-
-<!-- Google Code for Remarketing Tag -->
-<!--------------------------------------------------
-Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. See more information and instructions on how to setup the tag on: http://google.com/ads/remarketingsetup
---------------------------------------------------->
-<script type="text/javascript">
-/* <![CDATA[ */
-var google_conversion_id = <?php echo $google_conversion_id; ?>;
-var google_custom_params = window.google_tag_params;
-var google_remarketing_only = true;
-/* ]]> */
-</script>
-<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
-</script>
 
 <script>
 	executeMachine();
