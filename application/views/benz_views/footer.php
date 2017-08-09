@@ -413,8 +413,6 @@ $(window).load(function() {
 
 <?php echo @$script; ?>
 
-<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
-</script>
 
 <script>
 	executeMachine();
