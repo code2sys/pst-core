@@ -35,20 +35,73 @@ $google_trust = (array) json_decode($store_name['google_trust']);
 <!--------------------------------------------------
 Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. See more information and instructions on how to setup the tag on: http://google.com/ad$
 --------------------------------------------------->
-<script type="text/javascript">
-/* <![CDATA[ */
-var google_conversion_id = <?php echo $store_name['google_conversion_id']?>;
-var google_custom_params = window.google_tag_params;
-var google_remarketing_only = true;
-/* ]]> */
-</script>
-<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
-</script>
-  <?php if ($show_ga_conversion): ?>
-<div style="display:inline;">
-  <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/<?php echo $store_name['google_conversion_id']?>/?value=0&amp;guid=ON&amp;script=0"/>
-  </div>
-    <?php endif; ?>
+  <script>
+    if(window.location.pathname == "/"){
+      var google_tag_params = {
+        ecomm_pagetype: 'home',
+        ecomm_totalvalue: 0
+      };
+    }
+    else if (window.location.pathname.indexOf('shopping/productlist') >= 0){
+      var google_tag_params = {
+        ecomm_pagetype: 'category',
+      };
+    }
+    else if (window.location.pathname.indexOf('shopping/item') >= 0){
+
+      var pid = [];
+      for(i=1 ;i<jQuery('select[name="question[]"] option').length ;i++){
+        pid.push(jQuery('select[name="question[]"] option')[i].value)
+      }
+      var google_tag_params = {
+        ecomm_prodid: pid,
+        ecomm_pagetype: 'product',
+        ecomm_totalvalue: parseFloat(jQuery('.prodPrice').text().replace('$',''))
+      };
+    }
+    else if (window.location.pathname == "/shopping/cart"){
+
+      var pid = [];
+      jQuery('input[placeholder="Add Quanity"]').each(function(){
+        pid.push(jQuery(this).attr('id'))
+      })
+
+      var google_tag_params = {
+        ecomm_prodid:  pid,
+        ecomm_pagetype: 'cart',
+        ecomm_totalvalue: parseFloat(jQuery('.cart_total h3').text().split('$')[1])
+      };
+    }
+    else if (window.location.href.indexOf('confirm') > 0 ){
+      var google_tag_params = {
+        ecomm_pagetype: 'purchase'
+      };
+    }
+    else{
+      var google_tag_params = {
+        ecomm_pagetype: 'other',
+        ecomm_totalvalue: 0
+      };
+    }
+  </script>
+  <!-- Google Code for Remarketing Tag -->
+  <!--------------------------------------------------
+  Remarketing tags may not be associated with personally identifiable information or placed on pages related to sensitive categories. See more information and instructions on how to setup the tag on: http://google.com/ads/remarketingsetup
+  --------------------------------------------------->
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = <?php echo $store_name['google_conversion_id']?>;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    /* ]]> */
+  </script>
+  <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+  </script>
+  <noscript>
+    <div style="display:inline;">
+      <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/<?php echo $store_name['google_conversion_id']?>/?guid=ON&amp;script=0"/>
+    </div>
+  </noscript>
 <?php endif; ?>
 
 <?php if (false && $store_name['fb_remarketing_pixel'] != ''): ?>
