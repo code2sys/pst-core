@@ -69,5 +69,5 @@ Pointers and Pitfalls
 Examples
 ---------
 
-
+navigation_fragment.html: Observe how we're going to use the same naming convention. There were some old uses of base_url - what's the point, really? We roll out the stores the exact same way, and never in a directory.
 
