@@ -1,0 +1,61 @@
+<?php
+
+if (!isset($partsfinder_link)) {
+    $CI =& get_instance();
+    $CI->load->model("admin_m");
+$store_name = $CI->admin_m->getAdminShippingProfile();
+$partsfinder_link = $store_name["partsfinder_link"];
+}
+
+if (!defined("ENABLE_OEMPARTS_BUTTON") || !ENABLE_OEMPARTS_BUTTON) {
+define("ENABLE_OEMPARTS_BUTTON", false);
+$number_across = "six";
+} else {
+$number_across = trim($partsfinder_link) == "" ? "six" : "seven";
+}
+
+?>
+<a href="/streetbikeparts" class="streetBike stre-bk_b navacross{{number_across}}">
+    <div class="stre-bk_b">
+        <img src="/qatesting/benz_assets/images/streetBike.png">
+    </div>
+    <span id="stp">Shop Street Parts & Accessories</span>
+</a>
+<a href="/vtwin" class="vtwin navacross{{number_across}}">
+    <div class="stre-bk_b">
+        <img src="/qatesting/benz_assets/images/vtwin.png">
+    </div>
+    <span id="svp">Shop VTwin Parts & Accessories</span>
+</a>
+<a href="/dirtbikeparts" class="bike navacross{{number_across}}">
+    <div class="stre-bk_b">
+        <img src="/qatesting/benz_assets/images/bike.png">
+    </div>
+    <span id="sdp">Shop Dirt Parts & Accessories</span>
+</a>
+<a href="/atvparts" class="atv navacross{{number_across}}">
+    <div class="stre-bk_b">
+        <img src="/qatesting/benz_assets/images/atv.png">
+    </div>
+    <span id="sap">Shop ATV Parts & Accessories</span>
+</a>
+<a href="/utvparts" class="utv navacross{{number_across}}">
+    <div class="stre-bk_b">
+        <img src="/qatesting/benz_assets/images/utv.png">
+    </div>
+    <span id="sup">Shop UTV Parts & Accessories</span>
+</a>
+<a href="/Motorcycle_Gear_Brands" class="last navacross{{number_across}}">
+    <div class="stre-bk_b" style="height:45px;">
+        <img src="/qatesting/benz_assets/images/brand-tag.png">
+    </div>
+    <span id="sbb">Shop by Brand</span>
+</a>
+{{#partsfinder_link}}
+<a href="{{partsfinder_link}}" class="last oemparts navacross{{number_across}}" target="_blank">
+    <div class="stre-bk_b" style="height:45px;">
+        <img src="/assets/oem_parts.png" alt="OEM Parts" />
+    </div>
+    <span id="sob">Shop OEM Parts</span>
+</a>
+{{/partsfinder_link}}
