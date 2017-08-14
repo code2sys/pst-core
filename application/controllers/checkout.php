@@ -946,6 +946,7 @@ var sa_products = { '.$rating.' };
 				$transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction->id, 'transaction_date' => time());
 				// JLB 08-13-17 WTF? Why would you format this thing into a number_format to shove it into a database decimal column unless you were wanting it to break above $999.
 				//$transaction['amount'] = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'],2);
+				$transaction['amount'] = $_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'];
                 $this->admin_m->addOrderTransaction($transaction);
 				$this->completeOrder(@$user_id);
 			} else {
