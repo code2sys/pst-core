@@ -12,7 +12,6 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 if (!function_exists("jonathan_extract_float_value")) {
     function jonathan_extract_float_value($string) {
-        error_log("jonathan_extract with string $string");
         $multiplier = 1;
         if ($string[0] == "-" || $string[0] == "(") {
             $multiplier = -1;
