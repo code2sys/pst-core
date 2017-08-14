@@ -11,6 +11,7 @@ span.glyphicon-filter {
     }
     .container .contentSec .prodSec img.clsout{
         width: 110px !important;
+        height: auto !important;
     }
     .container .contentSec .prodSec img{
         width:auto;

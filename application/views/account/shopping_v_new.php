@@ -85,9 +85,6 @@ $detect = new Mobile_Detect;
         <!-- CONTENT -->
         <div class="clear"></div>
         <div class="prodSec">
-			<?php if( @$product['stock_code'] && $product['stock_code'] == 'Closeout' ) { ?>
-				<img class="clsout" src="/qatesting/newassets/images/clst.png" alt="Closeout" />
-			<?php } ?>
             <?php if (@$product['images']): ?>
                 <img itemprop="image" src="<?php echo jsite_url("/productimages/"); ?><?php echo $product['images'][0]['path']; ?>" id="base_image" style="  margin: 0 auto; display: table;  max-width: 318px!important;  max-height: 335px!important;">
                 <?php /* ?>  DISPLAYING THE CHECK MARK, IF PRODUCT PART MATCHES WITH GARAGE <?php */ ?>
@@ -98,6 +95,9 @@ $detect = new Mobile_Detect;
                 <?php /* ?>  DISPLAYING THE CHECK MARK, IF PRODUCT PART MATCHES WITH GARAGE <?php */ ?>
                 <?php if (@$imgg): ?><img src="<?php echo $assets; ?>/images/<?php echo $imgg; ?>" height="42" width="42" style=" position: relative; margin-top: -42px; float: right; margin-right: 28px;" ><?php endif; ?>	
             <?php endif; ?>
+            <?php if( @$product['stock_code'] && $product['stock_code'] == 'Closeout' ) { ?>
+                <img class="clsout" src="/qatesting/newassets/images/clst.png" alt="Closeout" />
+            <?php } ?>
 
             <?php if (@$product['images']): ?>
                 <div class="prodGallery">
