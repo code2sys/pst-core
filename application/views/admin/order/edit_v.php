@@ -801,7 +801,7 @@ $grandTotal += @$order['tax'];
                         <?php
                         $total_paid = 0.00;
                         foreach($order['transaction'] as $transaction) {
-                            $total_paid += $transaction['sales_price'];
+                            $total_paid += jonathan_extract_float_value($transaction['sales_price']);
                         } ?>
                         <td>Paid:</td>
                         <td>$<?php echo $total_paid;?></td>

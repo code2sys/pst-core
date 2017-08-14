@@ -9,6 +9,18 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * Time: 10:01 AM
  */
 
+
+if (!function_exists("jonathan_extract_float_value")) {
+    function jonathan_extract_float_value($string) {
+        $multiplier = 1;
+        if ($string[0] == "-" || $string[0] == "(") {
+            $multiplier = -1;
+        }
+        $string = preg_replace("/[^0-9\.]/", "", $string);
+        return $multiplier * floatVal($string);
+    }
+}
+
 /*
  * we need a function to escape things for likes.
  */
