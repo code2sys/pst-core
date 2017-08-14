@@ -135,3 +135,6 @@ function jprint_interactive_footer($pages) {
 </div>
     <?php
 }
+
+
+

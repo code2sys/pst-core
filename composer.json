@@ -1,17 +1,22 @@
 {
     "name": "pst/core",
     "license": "Proprietary",
-    "description" : "This was originally developed by Jessica @ Cloverfield with developers from Benzaitens Group.",
+    "description" : "This was originally developed by Jessica @ Cloverfield with developers from Benzaitens Group. David Mathewes has been focusing on integrations - things like eBay and Lightspeed.",
     "authors": [
         {
             "name": "Jonathan L Brown",
             "email": "jonathan@orbro.com"
+        },
+        {
+            "name" : "David Mathewes",
+            "email" : "dbmathewes@gmail.com"
         }
     ],
     "require": {
+        "mustache/mustache" : "~2.5",
         "swiftmailer/swiftmailer": "@stable",
         "php": ">=5.3.9",
-	"dts/ebay-sdk": "~0.1",
+    	"dts/ebay-sdk": "~0.1",
         "dts/ebay-sdk-php": "@stable"
     }
 }
