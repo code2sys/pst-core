@@ -54,6 +54,8 @@ ln -s ../../core/lib/ .
 ln -s ../../core/qatesting_application/ .
 ln -s ../../core/simpleimage.php  .
 ln -s ../../core/system/ .
+ln -s ../../core/mcache/ .
+ln -s ../../core/mtemplates/ .
 ln -s ../../core/vendor/ .
 cd html
 ln -s ../../../core/html/assets/ .
