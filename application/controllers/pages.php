@@ -32,6 +32,7 @@ class Pages extends Master_Controller {
                     return true;
                 } else {
                     $_SESSION["admin_pages_tag_error"] = true;
+                    $_SESSION["admin_pages_tag_requested"] = $_REQUEST["tag"];
                     return false;
                 }
             }
