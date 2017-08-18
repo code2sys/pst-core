@@ -28,11 +28,11 @@ class Pages extends Master_Controller {
                 return true;
             } else {
                 if ($this->pages_m->tagIsAvailable($_REQUEST["tag"], $_REQUEST["id"])) {
-                    $_SESSION["admin_pages_tag_error"] = true;
-                    return false;
-                } else {
                     $_SESSION["admin_pages_tag_error"] = false;
                     return true;
+                } else {
+                    $_SESSION["admin_pages_tag_error"] = true;
+                    return false;
                 }
             }
         } else {
