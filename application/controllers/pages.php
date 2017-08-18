@@ -393,7 +393,10 @@ class Pages extends Master_Controller {
   	
   	public function edit($pageId = NULL)
   	{
-  		$this->_mainData['widgets'] = $this->pages_m->getWidgets();
+        $this->enforceAdmin("pages");
+
+
+        $this->_mainData['widgets'] = $this->pages_m->getWidgets();
   		if(!empty($_POST))
   		{
 	  		$_POST['css'] = htmlentities(@$_POST['css']);
@@ -457,7 +460,9 @@ class Pages extends Master_Controller {
   	
   	public function delete($pageId = NULL)
   	{
-	 	if(is_numeric($pageId))
+        $this->enforceAdmin("pages");
+
+        if(is_numeric($pageId))
 	 	{
 		 	$this->pages_m->deletePage($pageId);
 	 	}
@@ -466,11 +471,13 @@ class Pages extends Master_Controller {
   	
   	public function addTextBox()
   	{
-	  	if($this->validateTextBox() === TRUE)
+        $this->enforceAdmin("pages");
+
+        if($this->validateTextBox() === TRUE)
 	    {
 	      $this->pages_m->updateTextBox($this->input->post());
-	      redirect('pages/edit/'.$this->input->post('pageId'));
 	    }
+        redirect('pages/edit/'.$this->input->post('pageId'));
   	}
 
   	protected function fixSliderOrder($id, $page_id) {
@@ -486,7 +493,10 @@ class Pages extends Master_Controller {
   	
   	public function addImages()
   	{
-	  	 if($this->validateSliderImageSettingsForm() === TRUE)
+        $this->enforceAdmin("pages");
+
+
+        if($this->validateSliderImageSettingsForm() === TRUE)
   		{
 		  	if(@$_FILES['image']['name'])
 			{
@@ -562,11 +572,13 @@ class Pages extends Master_Controller {
   	
   	public function remove_image($id, $pageId)
 	{
-		if(is_numeric($id))
+        $this->enforceAdmin("pages");
+
+        if(is_numeric($id))
 		{
 			$this->admin_m->removeImage($id, $this->config->item('upload_path'));  
-			redirect('pages/edit/'.$pageId);
 		}
+        redirect('pages/edit/'.$pageId);
 	}
 
 	protected function cleanYouTubeURL($url) {
@@ -585,6 +597,8 @@ class Pages extends Master_Controller {
     }
 
     public function addTopVideos() {
+	    $this->enforceAdmin("pages");
+
         $video_url = $_REQUEST["video_url"];
         $title = $_REQUEST["title"];
         $ordering = $_REQUEST["ordering"];
