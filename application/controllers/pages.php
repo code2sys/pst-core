@@ -21,7 +21,13 @@ class Pages extends Master_Controller {
 	  	$this->form_validation->set_rules('widget', 'Widgets', 'xss_clean');
 	  	$this->form_validation->set_rules('icon', 'Icon', 'xss_clean');
 	  	$this->form_validation->set_rules('location', 'location', 'xss_clean');
-		return $this->form_validation->run();
+		if ($this->form_validation->run()) {
+            // OK, did they request a tag?
+            $this->load->model("pages_m");
+            return !array_key_exists("tag", $_REQUEST) || $_REQUEST["tag"] == "" || !array_key_exists("id", $_REQUEST) || $_REQUEST["id"] == 0 || $this->pages_m->tagIsAvailable($_REQUEST["tag"], $_REQUEST["id"]);
+        } else {
+		    return false;
+        }
 	}
 	
 	private function validateTextBox()
