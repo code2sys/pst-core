@@ -917,20 +917,20 @@ class Ebay_M extends Master_M {
 
     public function ebayListings($offset = 0, $limit = 1000, $return_csv = FALSE, $send_to_ebay = FALSE) {
         // Filter quantity of 0, Price in 1 row only
-		$nocat=0;
-		$catg=0;
+        $nocat=0;
+        $catg=0;
         $finalArray = array();
         if ($limit == 0) {
             $limit_query = '';
         } else {
             $limit_query = "LIMIT " . $offset . ", " . $limit;
         }
-		//$where_part_id = " AND part.part_id = " . 6912593;  //  maxxis tire (combo?)
-		//$where_part_id = " AND part.part_id = " . 4661025; //  honda shirt (variations, no compatibility)
-		//$where_part_id = " AND part.part_id = " . 6131964;  //  acerbis kit (combo and compatibility)
-		//$where_part_id = " AND part.part_id = " . 4661029;  //  honda long sleeve shirt, variations, no MAP
-		//$where_part_id = " AND part.part_id = " . 4661416;  //  Firstgear jacket, variations, MAP
-		//$where_part_id = " AND part.part_id = " . 6506255;
+        //$where_part_id = " AND part.part_id = " . 6912593;  //  maxxis tire (combo?)
+        //$where_part_id = " AND part.part_id = " . 4661025; //  honda shirt (variations, no compatibility)
+        //$where_part_id = " AND part.part_id = " . 6131964;  //  acerbis kit (combo and compatibility)
+        //$where_part_id = " AND part.part_id = " . 4661029;  //  honda long sleeve shirt, variations, no MAP
+        //$where_part_id = " AND part.part_id = " . 4661416;  //  Firstgear jacket, variations, MAP
+        //$where_part_id = " AND part.part_id = " . 6506255;
 
         $sql = "SELECT 
 						part.part_id,
@@ -972,10 +972,10 @@ class Ebay_M extends Master_M {
 						AND brand.exclude_market_place != 1
 						AND partnumber.sale > 1
 						GROUP BY part.part_id $limit_query";
-						$query = $this->db->query($sql);
+        $query = $this->db->query($sql);
         $parts = $query->result_array();
-		
-		
+
+
         $query->free_result();
         $paypal_email = $this->get_paypalemail();
         $quantity = $this->get_quantity();
@@ -984,18 +984,14 @@ class Ebay_M extends Master_M {
                 if (strpos($part['*Title'], 'COMBO') !== FALSE) {
                     continue;
                 }
-				$part["PayPalEmailAddress"] = $paypal_email;
-				$part["*Quantity"] = min($part["*Quantity"], $quantity);
+                $part["PayPalEmailAddress"] = $paypal_email;
+                $part["*Quantity"] = min($part["*Quantity"], $quantity);
                 $part_id = $part['part_id'];
                 unset($part['part_id']);
                 /*                 * ***********************************
                   Get Categories with longest string count
                  * ************************************ */
-                $sql = "SELECT category.long_name,category.ebay_category_num
-				FROM category
-				JOIN partcategory ON partcategory.category_id = category.category_id
-				WHERE partcategory.part_id = " . $part_id .
-                        ' AND long_name NOT LIKE \'%UTV%\'';
+                $sql = "SELECT category.long_name,category.ebay_category_num FROM category JOIN partcategory ON partcategory.category_id = category.category_id	WHERE partcategory.part_id = " . $part_id . ' AND long_name NOT LIKE \'%UTV%\'';
                 $query = $this->db->query($sql);
                 $categories = $query->result_array();
 //                $this->pr($categories);
@@ -1019,12 +1015,12 @@ class Ebay_M extends Master_M {
 //                die("category");
                 // If no category, don't list the product
                 if (empty($endCategoryName)) {
-					$nocat++;
+                    $nocat++;
                     continue;
-				} else {
-					
-					$catg++;
-				}
+                } else {
+
+                    $catg++;
+                }
 //                $this->pr($all_categories);
 //                die("*");
 //                $part['*Category'] = $all_categories;
@@ -1039,72 +1035,58 @@ class Ebay_M extends Master_M {
 
                 // Get rest of records
                 $sql = "SELECT
-						'' AS '*Action(SiteID=eBayMotors|Country=US|Currency=USD|Version=745|CC=UTF-8)',
-						
-						'' AS '*Title',
-						'' AS '*Description',
-						'' AS '*ConditionID',
-						'' AS PicURL,
-						'' AS 'PayPalAccepted',
-						'' AS 'PayPalEmailAddress',
-						'' AS '*Format',
-						'' AS '*Duration',
-						'' AS 'DispatchTimeMax*', 
-						'' AS 'ReturnsAcceptedOption*',
-						'' AS 'ReturnsWithinOption',
-						'' AS 'ShippingCostPaidByOption',
-						'' AS 'C:Brand',
-						'' AS 'C:Manufacturer Part Number',
-						'' AS 'PostalCode',
-						'' AS 'ShippingService-1:Option',
-						'' AS 'ShippingService-1:FreeShipping',
-						partnumber.partnumber_id as CustomLabel,
-						partnumber.price as customprice,
-						partnumber.sale as saleprice,
-						partnumberpartquestion.answer AS 'answer',
-						partquestion.question,
-						partvariation.quantity_available AS '*Quantity',
-						'' AS '*StartPrice',
-						(partnumber.cost * 1.15) + 15 AS 'MIN_PRICE',
-						CASE WHEN partnumber.price < 100 THEN partnumber.price + 13 ELSE partnumber.price END AS 'MAX_PRICE',
-						partnumber.sale as price,
-						partvariation.stock_code,
-						'' AS 'Relationship',
-						'' AS 'RelationshipDetails',
-						'' AS '*Category',
-						'' AS 'StoreCategory'
-					FROM partnumber
-					JOIN partnumberpartquestion ON partnumberpartquestion.partnumber_id = partnumber.partnumber_id
-					JOIN partquestion ON partquestion.partquestion_id = partnumberpartquestion.partquestion_id
-					JOIN partpartnumber ON partpartnumber.partnumber_id = partnumber.partnumber_id
-					JOIN partimage ON partimage.part_id = partpartnumber.part_id
-					JOIN partvariation ON partvariation.partnumber_id = partnumber.partnumber_id
-					JOIN part ON part.part_id = partpartnumber.part_id
-					WHERE part.part_id = " . $part_id . " 
-					AND partnumber.exclude_market_place != 1
-					AND partnumber.closeout_market_place != 1
-					AND partquestion.productquestion = 0
-					GROUP BY partnumber.partnumber";
+                        '' AS '*Action(SiteID=eBayMotors|Country=US|Currency=USD|Version=745|CC=UTF-8)',
+                        
+                        '' AS '*Title',
+                        '' AS '*Description',
+                        '' AS '*ConditionID',
+                        '' AS PicURL,
+                        '' AS 'PayPalAccepted',
+                        '' AS 'PayPalEmailAddress',
+                        '' AS '*Format',
+                        '' AS '*Duration',
+                        '' AS 'DispatchTimeMax*', 
+                        '' AS 'ReturnsAcceptedOption*',
+                        '' AS 'ReturnsWithinOption',
+                        '' AS 'ShippingCostPaidByOption',
+                        '' AS 'C:Brand',
+                        '' AS 'C:Manufacturer Part Number',
+                        '' AS 'PostalCode',
+                        '' AS 'ShippingService-1:Option',
+                        '' AS 'ShippingService-1:FreeShipping',
+                        partnumber.partnumber_id as CustomLabel,
+                        partnumber.price as customprice,
+                        partnumber.sale as saleprice,
+                        partnumberpartquestion.answer AS 'answer',
+                        partquestion.question,
+                        partvariation.quantity_available AS '*Quantity',
+                        '' AS '*StartPrice',
+                        (partnumber.cost * 1.15) + 15 AS 'MIN_PRICE',
+                        CASE WHEN partnumber.price < 100 THEN partnumber.price + 13 ELSE partnumber.price END AS 'MAX_PRICE',
+                        partnumber.sale as price,
+                        partvariation.stock_code,
+                        '' AS 'Relationship',
+                        '' AS 'RelationshipDetails',
+                        '' AS '*Category',
+                        '' AS 'StoreCategory'
+                    FROM partnumber
+                    JOIN partnumberpartquestion ON partnumberpartquestion.partnumber_id = partnumber.partnumber_id
+                    JOIN partquestion ON partquestion.partquestion_id = partnumberpartquestion.partquestion_id
+                    JOIN partpartnumber ON partpartnumber.partnumber_id = partnumber.partnumber_id
+                    JOIN partimage ON partimage.part_id = partpartnumber.part_id
+                    JOIN partvariation ON partvariation.partnumber_id = partnumber.partnumber_id
+                    JOIN part ON part.part_id = partpartnumber.part_id
+                    WHERE part.part_id = " . $part_id . " 
+                    AND partnumber.exclude_market_place != 1
+                    AND partnumber.closeout_market_place != 1
+                    AND partquestion.productquestion = 0
+                    GROUP BY partnumber.partnumber";
                 //					AND partvariation.quantity_available > 3
                 $query = $this->db->query($sql);
                 $partnumbers = $query->result_array();
                 $query->free_result();
 
-
-                                // Fitment compatability
-                                $sql = "SELECT CONCAT ('Make=', make.name, '|Model=',  model.name, '|Year=', partnumbermodel.year) AS fitment 
-									FROM (`partnumbermodel`) 
-									JOIN `model` ON `model`.`model_id` = `partnumbermodel`.`model_id` 
-									JOIN `make` ON `make`.`make_id` = `model`.`make_id` 
-									WHERE `partnumbermodel`.`partnumber_id` =  '" . $partnumbers[0]['CustomLabel'] . "'
-									AND make.machinetype_id != 43954;";
-                                $query = $this->db->query($sql);
-                                $rides = $query->result_array();
-								
-
                 if (is_array($partnumbers)) {
-					
-					
                     $categoryRec = array();
                     $fitmentArr = array();
                     $basicPrice = 0;
@@ -1118,23 +1100,23 @@ class Ebay_M extends Master_M {
                                 $where = array('partbrand.part_id' => $part_id);
                                 $this->db->join('partbrand', 'partbrand.brand_id = brand.brand_id');
                                 $brand_map_percent = $this->selectRecord('brand', $where);
-								
+
 
                                 $brandMAPPercent = is_numeric(@$brand_map_percent['map_percent']) ? $brand_map_percent['map_percent'] : 0;
 
                                 $pn['*StartPrice'] = $pn['price'];
                                 if (($brand_map_percent['map_percent'] !== NULL) && ($pn['stock_code'] != 'Closeout')) {
-									
+
                                     $mapPrice = (((100 - $brandMAPPercent) / 100) * $pn['customprice']);
 // no longer using MIN_PRICE        if ($mapPrice > $pn['MIN_PRICE'])
 // per Brandt, 7/24/17              $pn['MIN_PRICE'] = $mapPrice;
-									if(!($pn['price'] < $pn['customprice']))
-										$pn['*StartPrice'] = $mapPrice;
-                                } 
-								if($brand_map_percent['map_percent'] === NULL || ($pn['stock_code'] == 'Closeout'))	{						
-									$markup = 1 + ($this->get_markup()/100);
-									$pn['*StartPrice'] = $pn['*StartPrice']*$markup;
-								}
+                                    if(!($pn['price'] < $pn['customprice']))
+                                        $pn['*StartPrice'] = $mapPrice;
+                                }
+                                if($brand_map_percent['map_percent'] === NULL || ($pn['stock_code'] == 'Closeout'))	{
+                                    $markup = 1 + ($this->get_markup()/100);
+                                    $pn['*StartPrice'] = $pn['*StartPrice']*$markup;
+                                }
 
 
                                 if ($basicPrice == 0)
@@ -1142,14 +1124,14 @@ class Ebay_M extends Master_M {
                                 if (($samePrice) && ($pn['*StartPrice'] != $basicPrice))
                                     $samePrice = FALSE;
 
-								$quantity = $this->get_quantity();
+                                $quantity = $this->get_quantity();
 
                                 // Record Prep
                                 $part['Relationship'] = '';
                                 $part['RelationshipDetails'] = '';
                                 $part['CustomLabel'] = $pn['CustomLabel'];
-								$part["*Quantity"] = min($pn["*Quantity"], $quantity);
-								
+                                $part["*Quantity"] = min($pn["*Quantity"], $quantity);
+
                                 $part['*Description'] = preg_replace("/\r\n|\r|\n/", '', $part['*Description']);
 
                                 unset($pn['stock_code']);
@@ -1167,8 +1149,8 @@ class Ebay_M extends Master_M {
 									AND make.machinetype_id != 43954;";
                                 $query = $this->db->query($sql);
                                 $rides = $query->result_array();
-								
-							
+
+
                                 $query->free_result();
                                 $pn['CustomLabel'] = '';
                                 if (!empty($rides)) { // Save Record for Fitment
@@ -1180,8 +1162,8 @@ class Ebay_M extends Master_M {
                                         $pn['RelationshipDetails'] = $ride['fitment'];
                                         $fitmentArr[] = $pn;
                                     }
-                                } 
-								if (!empty($pn['question'])) { // Save record for Variations
+                                }
+                                if (!empty($pn['question'])) { // Save record for Variations
                                     $pn['Relationship'] = 'Variation';
                                     $pn['RelationshipDetails'] = str_replace(' ', '', $pn['question'] . '=' . $pn['answer']);
                                     unset($pn['answer']);
@@ -1191,11 +1173,11 @@ class Ebay_M extends Master_M {
                             }
                         }
                     } else {
-						$part["*Quantity"] = min($partnumbers[0]["*Quantity"], $quantity);
+                        $part["*Quantity"] = min($partnumbers[0]["*Quantity"], $quantity);
                         $part['*StartPrice'] = $partnumbers[0]['price'];
                         $finalArray[] = $part;
                     }
-										
+
                     if (($samePrice) && (@$categoryRec)) {
                         $part['*Quantity'] = '';
                         $part['*StartPrice'] = $basicPrice;
@@ -1241,8 +1223,8 @@ class Ebay_M extends Master_M {
                         foreach ($categoryRec as $rb) {
                             $newArray = $part;
                             $newArray['*Quantity'] = $rb['*Quantity'];
-							if(isset($combo_price))
-								$newArray['*StartPrice'] = $combo_price;
+                            if(isset($combo_price))
+                                $newArray['*StartPrice'] = $combo_price;
                             $newArray['*Description'] = '';
                             $newArray['Relationship'] = 'Combo';
 
@@ -1255,17 +1237,17 @@ class Ebay_M extends Master_M {
                         foreach ($product_options as $otions_array) {
                             $options_vailable[$otions_array['question']][] = $otions_array['answer'];
                         }
-						if(isset($combo_price))
-							$part['*StartPrice'] = $combo_price;
+                        if(isset($combo_price))
+                            $part['*StartPrice'] = $combo_price;
                         $part['product_options'] = $options_vailable;
                         $part['product_variation'] = $combo_variations;
                         $finalArray[] = $part;
-                    } 
-					if (!empty($fitmentArr)) {
+                    }
+                    if (!empty($fitmentArr)) {
                         $part['*StartPrice'] = $rb['*StartPrice'];
                         $compatibility_array = array();
                         $item = array();
-						$quantity = $this->get_quantity();
+                        $quantity = $this->get_quantity();
                         foreach ($fitmentArr as $key => $single_fitment) {
                             $change = $part;
 
@@ -1273,25 +1255,25 @@ class Ebay_M extends Master_M {
                             $make_explode = explode('=', $data_explode[0]);
                             $model_explode = explode('=', $data_explode[1]);
                             $year_explode = explode('=', $data_explode[2]);
-							
+
                             $title = $part['*Title'] . ' For ' . $make_explode[1] . ' ' . $model_explode[1];
-							if($single_fitment["saleprice"]!=NULL) {
-								$single_fitment['*StartPrice'] = $single_fitment["saleprice"];
-							} else {
-								$single_fitment['*StartPrice'] = $single_fitment["*StartPrice"];									
-							}
-							if($brand_map_percent['map_percent'] === NULL)	{						
-								$markup = 1 + ($this->get_markup()/100);
-								$single_fitment['*StartPrice'] = $single_fitment['*StartPrice']*$markup;
-							}
+                            if($single_fitment["saleprice"]!=NULL) {
+                                $single_fitment['*StartPrice'] = $single_fitment["saleprice"];
+                            } else {
+                                $single_fitment['*StartPrice'] = $single_fitment["*StartPrice"];
+                            }
+                            if($brand_map_percent['map_percent'] === NULL)	{
+                                $markup = 1 + ($this->get_markup()/100);
+                                $single_fitment['*StartPrice'] = $single_fitment['*StartPrice']*$markup;
+                            }
                             if (key_exists($title, $item)) {
 
                                 $item[$title][] = $single_fitment;
                             } else {
                                 $change['*Title'] = $title;
-								$change['*StartPrice'] = $single_fitment["*StartPrice"];									
-								
-								$change['*Quantity'] = min($single_fitment["*Quantity"], $quantity);
+                                $change['*StartPrice'] = $single_fitment["*StartPrice"];
+
+                                $change['*Quantity'] = min($single_fitment["*Quantity"], $quantity);
                                 $item[$title][] = $change;
                                 $item[$title][] = $single_fitment;
                             }
@@ -1306,20 +1288,20 @@ class Ebay_M extends Master_M {
                     $part['*StartPrice'] = $part['customprice'];
                 } else {
                     $part['*StartPrice'] = $part['saleprice'];
-				}
-				
+                }
+
             }
         }
-		if(!$send_to_ebay) {
-		} else {
+        if(!$send_to_ebay) {
+        } else {
 
-			if ($return_csv) {
-				return $finalArray;
-			}
-			$csv = $this->array2csv($finalArray);
-			return $csv;
-		}
-	}
+            if ($return_csv) {
+                return $finalArray;
+            }
+            $csv = $this->array2csv($finalArray);
+            return $csv;
+        }
+    }
 
     private function eBayCategoryName($categoryName) {
         /*
