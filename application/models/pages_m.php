@@ -104,7 +104,7 @@ class Pages_M extends Master_M
 	{
 		if($post['id'] == 12) {
             $post['tag'] = 'Motorcycle_Gear_Brands';
-        } else if (array_key_exists("tag", $post) && $this->tagIsAvailable($post["tag"], $post['id'])) {
+        } else if (array_key_exists("tag", $post) && $post["tag"] != "" && $this->tagIsAvailable($post["tag"], $post['id'])) {
 		    $post['tag'] = $post['tag']; // do nothing...
 		} else {
 			$post['tag'] = $this->tag_creating($post['label']);
