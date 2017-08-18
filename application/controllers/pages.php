@@ -21,7 +21,24 @@ class Pages extends Master_Controller {
 	  	$this->form_validation->set_rules('widget', 'Widgets', 'xss_clean');
 	  	$this->form_validation->set_rules('icon', 'Icon', 'xss_clean');
 	  	$this->form_validation->set_rules('location', 'location', 'xss_clean');
-		return $this->form_validation->run();
+		if ($this->form_validation->run()) {
+            // OK, did they request a tag?
+            $this->load->model("pages_m");
+            if (!array_key_exists("tag", $_REQUEST) || $_REQUEST["tag"] == "" || !array_key_exists("id", $_REQUEST) || $_REQUEST["id"] == 0) {
+                return true;
+            } else {
+                if ($this->pages_m->tagIsAvailable($_REQUEST["tag"], $_REQUEST["id"])) {
+                    $_SESSION["admin_pages_tag_error"] = false;
+                    return true;
+                } else {
+                    $_SESSION["admin_pages_tag_error"] = true;
+                    $_SESSION["admin_pages_tag_requested"] = $_REQUEST["tag"];
+                    return false;
+                }
+            }
+        } else {
+		    return false;
+        }
 	}
 	
 	private function validateTextBox()
@@ -393,7 +410,10 @@ class Pages extends Master_Controller {
   	
   	public function edit($pageId = NULL)
   	{
-  		$this->_mainData['widgets'] = $this->pages_m->getWidgets();
+        $this->enforceAdmin("pages");
+
+
+        $this->_mainData['widgets'] = $this->pages_m->getWidgets();
   		if(!empty($_POST))
   		{
 	  		$_POST['css'] = htmlentities(@$_POST['css']);
@@ -457,7 +477,9 @@ class Pages extends Master_Controller {
   	
   	public function delete($pageId = NULL)
   	{
-	 	if(is_numeric($pageId))
+        $this->enforceAdmin("pages");
+
+        if(is_numeric($pageId))
 	 	{
 		 	$this->pages_m->deletePage($pageId);
 	 	}
@@ -466,11 +488,13 @@ class Pages extends Master_Controller {
   	
   	public function addTextBox()
   	{
-	  	if($this->validateTextBox() === TRUE)
+        $this->enforceAdmin("pages");
+
+        if($this->validateTextBox() === TRUE)
 	    {
 	      $this->pages_m->updateTextBox($this->input->post());
-	      redirect('pages/edit/'.$this->input->post('pageId'));
 	    }
+        redirect('pages/edit/'.$this->input->post('pageId'));
   	}
 
   	protected function fixSliderOrder($id, $page_id) {
@@ -486,7 +510,10 @@ class Pages extends Master_Controller {
   	
   	public function addImages()
   	{
-	  	 if($this->validateSliderImageSettingsForm() === TRUE)
+        $this->enforceAdmin("pages");
+
+
+        if($this->validateSliderImageSettingsForm() === TRUE)
   		{
 		  	if(@$_FILES['image']['name'])
 			{
@@ -562,11 +589,13 @@ class Pages extends Master_Controller {
   	
   	public function remove_image($id, $pageId)
 	{
-		if(is_numeric($id))
+        $this->enforceAdmin("pages");
+
+        if(is_numeric($id))
 		{
 			$this->admin_m->removeImage($id, $this->config->item('upload_path'));  
-			redirect('pages/edit/'.$pageId);
 		}
+        redirect('pages/edit/'.$pageId);
 	}
 
 	protected function cleanYouTubeURL($url) {
@@ -585,6 +614,8 @@ class Pages extends Master_Controller {
     }
 
     public function addTopVideos() {
+	    $this->enforceAdmin("pages");
+
         $video_url = $_REQUEST["video_url"];
         $title = $_REQUEST["title"];
         $ordering = $_REQUEST["ordering"];

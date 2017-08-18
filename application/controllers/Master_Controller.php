@@ -227,5 +227,11 @@ class Master_Controller extends CI_Controller {
 		return $this->account_m->validAccess( $action );
 	}
 
+    protected function enforceAdmin($action = "") {
+        if(!$this->checkValidAccess($action) && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+            exit();
+        }
+    }
 
 }
