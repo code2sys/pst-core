@@ -90,11 +90,22 @@ class Pages_M extends Master_M
 	   $url = preg_replace('~[^-a-z0-9_]+~', '', $url);
 	   return $url;
 	}
-	
+
+	public function tagIsAvailable($tag, $page_id = 0) {
+  	    $query = $this->db->query("Select count(*) as cnt from pages where id != ? and tag = ?", array($page_id, $tag));
+  	    $count = 0;
+  	    foreach ($query->result_array() as $row) {
+  	        $count = $row['cnt'];
+        }
+        return $count == 0;
+    }
+
 	public function editPage($post)
 	{
 		if($post['id'] == 12) {
-			$post['tag'] = 'Motorcycle_Gear_Brands';
+            $post['tag'] = 'Motorcycle_Gear_Brands';
+        } else if (array_key_exists("tag", $post) && $this->tagIsAvailable($post["tag"], $post['id'])) {
+		    $post['tag'] = $post['tag']; // do nothing...
 		} else {
 			$post['tag'] = $this->tag_creating($post['label']);
 		}
