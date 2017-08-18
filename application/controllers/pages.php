@@ -24,7 +24,17 @@ class Pages extends Master_Controller {
 		if ($this->form_validation->run()) {
             // OK, did they request a tag?
             $this->load->model("pages_m");
-            return !array_key_exists("tag", $_REQUEST) || $_REQUEST["tag"] == "" || !array_key_exists("id", $_REQUEST) || $_REQUEST["id"] == 0 || $this->pages_m->tagIsAvailable($_REQUEST["tag"], $_REQUEST["id"]);
+            if (!array_key_exists("tag", $_REQUEST) || $_REQUEST["tag"] == "" || !array_key_exists("id", $_REQUEST) || $_REQUEST["id"] == 0) {
+                return true;
+            } else {
+                if ($this->pages_m->tagIsAvailable($_REQUEST["tag"], $_REQUEST["id"])) {
+                    $_SESSION["admin_pages_tag_error"] = true;
+                    return false;
+                } else {
+                    $_SESSION["admin_pages_tag_error"] = false;
+                    return true;
+                }
+            }
         } else {
 		    return false;
         }

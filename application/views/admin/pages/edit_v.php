@@ -32,8 +32,8 @@
 				<div class="hidden_table">	
 					<table width="100%" cellpadding="6">
 						<?php if (@$pageRec['tag']): ?>
-						<tr>
-							<td>Page URL</td><td><?php echo base_url("pages/index"); ?>/<input type="text" name="tag" value="<?php echo $pageRec['tag']; ?>" /> <a href="<?php echo base_url("pages/index/" . $pageRec['tag']); ?>" target="_blank" style="font-size: 85%">[ View ]</a></td>
+						<tr <?php if (array_key_exists("admin_pages_tag_error", $_SESSION) && $_SESSION["admin_pages_tag_error"]): ?>class="error"<?php endif; ?>>
+							<td>Page URL</td><td><?php echo base_url("pages/index"); ?>/<input type="text" name="tag" value="<?php echo $pageRec['tag']; ?>" /> <a href="<?php echo base_url("pages/index/" . $pageRec['tag']); ?>" target="_blank" style="font-size: 85%">[ View ]</a> <?php if (array_key_exists("admin_pages_tag_error", $_SESSION) && $_SESSION["admin_pages_tag_error"]): ?><em>Sorry, that is already in use.</em><?php endif; ?></td>
 						</tr>
 						<?php endif; ?>
 						<tr>
