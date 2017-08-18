@@ -33,7 +33,7 @@
 					<table width="100%" cellpadding="6">
 						<?php if (@$pageRec['tag']): ?>
 						<tr>
-							<td>Page URL</td><td><?php echo base_url("pages/index/" . $pageRec['tag']); ?></td>
+							<td>Page URL</td><td><?php echo base_url("pages/index"); ?>/<input type="text" name="tag" value="<?php echo $pageRec['tag']; ?>" /> <a href="<?php echo base_url("pages/index/" . $pageRec['tag']); ?>" target="_blank" style="font-size: 85%">[ View ]</a></td>
 						</tr>
 						<?php endif; ?>
 						<tr>
