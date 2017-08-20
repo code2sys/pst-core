@@ -187,7 +187,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 
     echo $CI->load->view("master/widgets/motorcycles", array(
         "featured" => $featured
-    ), true); 
+    ), true);
 
     ?>
         
