@@ -1,0 +1,58 @@
+{{^DISABLE_FRONT_MOTORCYCLE_NAV}}
+{{^MOTORCYCLE_SHOP_DISABLE}}
+<div class="sw bg">
+    <div class="modal-lg">
+        {{#MOTORCYCLE_OPTION_1}}
+        <div class="col-md-3 wrap-col">
+            <a href="/Motorcycle_List?fltr=new"><h2>shop new models</h2></a>
+        </div>
+        <div class="col-md-3 wrap-col">
+            <a href="/Motorcycle_List?fltr=pre-owned"><h2>shop pre-owned</h2></a>
+        </div>
+        {{/MOTORCYCLE_OPTION_1}}
+        {{#MOTORCYCLE_OPTION_2}}
+        <div class="col-md-4 wrap-col">
+            <a href="/Motorcycle_List?fltr=new"><h2>shop new models</h2></a>
+        </div>
+        {{/MOTORCYCLE_OPTION_2}}
+        {{#MOTORCYCLE_OPTION_3}}
+        <div class="col-md-4 wrap-col">
+            <a href="/Motorcycle_List?fltr=pre-owned"><h2>shop pre-owned</h2></a>
+        </div>
+        {{/MOTORCYCLE_OPTION_3}}
+        <div class="col-md-{{moto_width}} wrap-col">
+            <a href="/pages/index/financerequest"><h2>apply for Financing</h2></a>
+        </div>
+        <div class="col-md-{{moto_width}} wrap-col">
+            <a href="/pages/index/servicerequest"><h2>schedule service</h2></a>
+        </div>
+    </div>
+</div>
+
+{{#ShowFeaturedModels}}
+<div class="sw filterBar">
+    <div class="container_b">
+        <h1 class="head-txt"> featured models: <span> <a href="/Motorcycle_List">shop more</a> </span></h1>
+        <div id="hotels-flats" class="owl-carousel">
+            {{#FeaturedModels}}
+            <a href="{{link}}">
+                <div class="item">
+                    <div class="item-box">
+                        <img class="lazyOwl" data-src="/media/{{image_name}}" alt="Motorcycle Image">
+                        <p>{{original_title}}</p>
+                        {{#call_on_price}}
+                        <h2 class="cfp">Call For Price</h2>
+                        {{/call_on_price}}
+                        {{^call_on_price}}
+                        <h2>Sale Price: &nbsp;${{sale_price}}</h2>
+                        {{/call_on_price}}
+                    </div>
+                </div>
+            </a>
+            {{/FeaturedModels}}
+        </div>
+    </div>
+</div>
+{{/ShowFeaturedModels}}
+{{/MOTORCYCLE_SHOP_DISABLE}}
+{{/DISABLE_FRONT_MOTORCYCLE_NAV}}
