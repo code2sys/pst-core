@@ -3,7 +3,6 @@
 <div class="sw bg">
     <div class="modal-lg">
         {{#MOTORCYCLE_OPTION_1}}
-        <?php if () { ?>
         <div class="col-md-3 wrap-col">
             <a href="/Motorcycle_List?fltr=new"><h2>shop new models</h2></a>
         </div>
@@ -33,25 +32,24 @@
 {{#ShowFeaturedModels}}
 <div class="sw filterBar">
     <div class="container_b">
-        <h1 class="head-txt"> featured models: <span> <a href="<?php echo base_url('Motorcycle_List');?>">shop more</a> </span></h1>
+        <h1 class="head-txt"> featured models: <span> <a href="/Motorcycle_List">shop more</a> </span></h1>
         <div id="hotels-flats" class="owl-carousel">
-            <?php foreach($featured as $feature) { ?>
-            <?php $title = str_replace(' ', '_', trim($feature['title']));?>
-            <a href="<?php echo base_url(strtolower($feature['type']).'/'.$title.'/'.$feature['sku']);?>">
+            {{#FeaturedModels}}
+            <a href="{{link}}">
                 <div class="item">
                     <div class="item-box">
-                        <img class="lazyOwl" data-src="<?php echo base_url().'media/'.$feature['image_name']; ?>" alt="Motorcycle Image">
-                        <p> <?php echo $feature['title'];?></p>
-                        <?php if( $feature['call_on_price'] == '1' ) { ?>
+                        <img class="lazyOwl" data-src="/media/{{image_name}}" alt="Motorcycle Image">
+                        <p>{{original_title}}</p>
+                        {{#call_on_price}}
                         <h2 class="cfp">Call For Price</h2>
-                        <?php } else { ?>
-                        <h2>Sale Price: &nbsp;$<?php echo $feature['sale_price'];?></h2>
-                        <?php } ?>
-                        <!--<h2>CALL FOR PRICE</h2>-->
+                        {{/call_on_price}}
+                        {{^call_on_price}}
+                        <h2>Sale Price: &nbsp;${{sale_price}}</h2>
+                        {{/call_on_price}}
                     </div>
                 </div>
             </a>
-            <?php } ?>
+            {{/FeaturedModels}}
         </div>
     </div>
 </div>
