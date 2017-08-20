@@ -29,8 +29,7 @@ if (count($featured) > 0) {
     foreach ($featured as $feature) {
         mustache_tmpl_iterate($template, "FeaturedModels");
         mustache_tmpl_set($template, "FeaturedModels", array(
-            "title" => ($title = str_replace(' ', '_', trim($feature['title']))),
-            "link" => strtolower($feature['type']).'/'.$title.'/'.$feature['sku'],
+            "link" => strtolower($feature['type']).'/'.str_replace(' ', '_', trim($feature['title'])).'/'.$feature['sku'],
             "image_name" => $feature["image_name"],
             "original_title" => $feature["title"],
             "call_on_price" => $feature["call_on_price"] == 1,
