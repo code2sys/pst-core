@@ -84,7 +84,7 @@ class Adminvault extends Admin
                     $prt++;
                 }
             }
-            redirect('admin/vault_images/updated');
+            redirect('adminvault/vault_images/updated');
         }
 
         $this->_mainData['image'] = $this->vault_m->getVaultImages();
