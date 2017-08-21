@@ -13,6 +13,7 @@ class Vault extends Master_Controller {
     {
         parent::__construct();
         $this->load->model('pages_m');
+        $this->load->model("vault_m");
         $this->_mainData['pages'] = $this->pages_m->getPages(1, 'footer');
         $title = STYLED_HOSTNAME . " Vault Gallery";
         $this->setMasterPageVars('title', $title);
@@ -43,7 +44,7 @@ class Vault extends Master_Controller {
         $this->_mainData['pages'] = $this->pages_m->getPages(1, 'footer');
 
         $this->_mainData['new_header']  = 1;
-        $this->_mainData['image']  = $this->pages_m->getVaultImages();
+        $this->_mainData['image']  = $this->vault_m->getVaultImages();
 
         $this->_mainData['pages'] = $this->pages_m->getPages(1, 'footer');
 
