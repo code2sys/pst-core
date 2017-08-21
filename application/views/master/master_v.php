@@ -70,6 +70,7 @@ if (isset($keywords) && $keywords != "") {
         <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/owl.theme.css" />
         <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/owl.transitions.css" />	
         <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/font-awesome.css" />
+        <link rel="stylesheet" href="/qatesting/benz_assets/css/jquery.fancybox.css" />
 
 
 
@@ -213,6 +214,8 @@ if (isset($keywords) && $keywords != "") {
 
             });
         </script>
+
+        <script src="/qatesting/benz_assets/js/jquery.fancybox.pack.js" ></script>
 
         <!-- 	POPUP JS 
         <script src="<?php echo $assets; ?>/js/jquery.simplemodal.js"></script>
