@@ -23,6 +23,8 @@ class Adminvault extends Admin
             redirect("");
             exit();
         }
+
+        $this->load->model("vault_m");
     }
 
     public function index() {
@@ -42,7 +44,7 @@ class Adminvault extends Admin
                     $arr['description'] = $description;
                     $id = $k;
                 }
-                $this->admin_m->updateVaultImageDescription($id, $arr);
+                $this->vault_m->updateVaultImageDescription($id, $arr);
             }elseif(isset($_POST['orderSubmit'])){
                 $arr = explode(",",$this->input->post('order'));
                 foreach($arr as $k=>$v)
@@ -52,14 +54,14 @@ class Adminvault extends Admin
                 foreach($rr as $k=>$v){
                     $img = $v[0];
                     $ord = $v[1];
-                    $this->admin_m->updateVaultImageOrder($img, $ord);
+                    $this->vault_m->updateVaultImageOrder($img, $ord);
                 }
                 // echo "<pre>";
                 // print_r($rr);
                 // echo "</pre>";
                 // exit;
             } else {
-                $res['img'] = $this->admin_m->getVaultImages();
+                $res['img'] = $this->vault_m->getVaultImages();
                 $ord = end($res['img']);
                 $prt = $ord['priority_number'];
                 // echo "<pre>";
@@ -78,14 +80,14 @@ class Adminvault extends Admin
                     $arr['description'] = $_POST['description'];
                     $arr['image_name'] = $img;
                     $arr['priority_number'] = $prt;
-                    $this->admin_m->updateVaultImage($arr);
+                    $this->vault_m->updateVaultImage($arr);
                     $prt++;
                 }
             }
             redirect('admin/vault_images/updated');
         }
 
-        $this->_mainData['image'] = $this->admin_m->getVaultImages();
+        $this->_mainData['image'] = $this->vault_m->getVaultImages();
 
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/vault/vault_images', $this->_mainData);
@@ -93,7 +95,7 @@ class Adminvault extends Admin
 
     public function deleteVaultImage( $id = null ) {
         if( $id != null ) {
-            $this->admin_m->deleteVaultImage($id);
+            $this->vault_m->deleteVaultImage($id);
         }
         redirect('adminvault/vault_images/');
     }
