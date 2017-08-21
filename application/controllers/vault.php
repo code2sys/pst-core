@@ -22,9 +22,6 @@ class Vault extends Master_Controller {
 
     public function index()
     {
-        print "A\n";
-        exit();
-
         $this->_mainData['pageRec'] = $this->pages_m->getPageRecByTag($this->_pageId);
         $this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
         $this->setMasterPageVars('metatag', html_entity_decode($this->_mainData['pageRec']['metatags']));
