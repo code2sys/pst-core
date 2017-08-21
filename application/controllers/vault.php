@@ -30,8 +30,6 @@ class Vault extends Master_Controller {
 
         $_SESSION['url'] = 'vault/';
 
-
-
         $this->_mainData['pageRec'] = $this->pages_m->getPageRec($this->_pageId);
         $notice = $this->pages_m->getTextBoxes($this->_pageId);
 
@@ -48,10 +46,6 @@ class Vault extends Master_Controller {
         $this->_mainData['image']  = $this->pages_m->getVaultImages();
 
         $this->_mainData['pages'] = $this->pages_m->getPages(1, 'footer');
-
-
-        print "Here";
-        exit();
 
         $this->setFooterView('master/footer_v.php');
         $this->setNav('master/navigation_v', 0);
