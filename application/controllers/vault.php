@@ -50,6 +50,9 @@ class Vault extends Master_Controller {
         $this->_mainData['pages'] = $this->pages_m->getPages(1, 'footer');
 
 
+        print "Here";
+        exit();
+
         $this->setFooterView('master/footer_v.php');
         $this->setNav('master/navigation_v', 0);
         $this->renderMasterPage('master/master_v', 'vault/vault_gallery', $this->_mainData);
