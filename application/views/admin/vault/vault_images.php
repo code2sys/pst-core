@@ -88,6 +88,7 @@
         <!-- TAB CONTENT -->
         <div class="tab_content">
             <div class="hidden_table box-table-content">
+                <?php if (isset($image) && is_array($image) && count($image) > 0): ?>
                 <ul id="sortable">
                     <?php foreach( $image as $k => $v ) { ?>
                         <li style="padding:20px;" id="<?php echo $v['id'] ?>" class="ui-state-default">
@@ -106,6 +107,7 @@
                     <input type="hidden" name="order" id="order"></input>
                     <input type="submit" name="orderSubmit" value="Change Order"></input>
                 </form>
+                <?php endif; ?>
                 <table width="auto" cellpadding="12">
                     <tr>
                         <td valign="top"><b>Add Image:</b></td>
