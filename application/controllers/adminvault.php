@@ -8,7 +8,7 @@
 
 require_once("admin.php");
 
-class Adminproduct extends Admin
+class Adminvault extends Admin
 {
 
     public function __construct()

@@ -72,7 +72,7 @@ if (!is_null($pageIndex) && $pageIndex < 9)
                     if (defined('ENABLE_VAULT') && ENABLE_VAULT):
                     ?>
                     <?php if(in_array('vault', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
-                        <li><a href="<?php echo base_url('/admin/vault_images'); ?>" ><i class="fa fa-motorcycle"></i>&nbsp;Vault Gallery</a></li>
+                        <li><a href="<?php echo base_url('/adminvault/vault_images'); ?>" ><i class="fa fa-motorcycle"></i>&nbsp;Vault Gallery</a></li>
                     <?php } ?>
                     <?php endif; ?>
 
