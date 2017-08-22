@@ -366,9 +366,9 @@ class Pages extends Master_Controller {
   	{
 		//echo $this->config->item('googleLocation');
 		//$googleLocation = $this->_mainData['store_name']['company'].','.$this->_mainData['store_name']['city'].'+'.$this->_mainData['store_name']['state'];
-		$googleLocation = $this->_mainData['store_name']['company'].','.$this->_mainData['store_name']['city'].'+'.$this->_mainData['store_name']['state'];
+		$googleLocation = $this->_mainData['store_name']['company'].','.$this->_mainData['store_name']['street_address'] . ($this->_mainData['store_name']['address_2'] != ""? ', ' . $this->_mainData['store_name']['address_2'] : ""). ',' .$this->_mainData['store_name']['city'].', '.$this->_mainData['store_name']['state'] . " " . $this->_mainData['store_name']['zip'];
   		$str = '<iframe width="600" height="450" frameborder="0" style="border:0" 
-  								src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDUJ3ePr2rnfcvky1_M8Vc2pQ7k1JGIKcI&q='.$googleLocation.'">
+  								src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDUJ3ePr2rnfcvky1_M8Vc2pQ7k1JGIKcI&q='.urlencode($googleLocation).'">
 		</iframe>';
 		return $str;
   	}

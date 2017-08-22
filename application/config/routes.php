@@ -60,6 +60,8 @@ $route['watercraft/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['snowmobile/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['utility/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 
+$route['vault'] = 'vault/index';
+
 $route['([a-zA-z0-9_-]+)'] = "shopping/brand/$1/$2";
 //$route['atvparts'] = 'atvparts/index';
 //$route['streetbikeparts'] = 'streetbikeparts/index';
