@@ -40,12 +40,12 @@ $config['paymentTesting'] = TRUE;
 
 $config['server_root'] = $_SERVER['DOCUMENT_ROOT'];
 //$config['contactToEmail'] = "bdvojcek@yahoo.com";
-$config['contactToEmail'] = CONTACT_EMAIL;
-$config['googleLocation'] = GOOGLE_LOCATION;
+//$config['contactToEmail'] = CONTACT_EMAIL;
+//$config['googleLocation'] = GOOGLE_LOCATION;
 
 // Standard automated email addresses
 $config['fromEmailAddress'] = FROM_EMAIL_ADDRESS;
-$config['fromName'] = WEBSITE_NAME . " Automated Email";
+$config['fromName'] = STYLED_HOSTNAME . " Automated Email";
 $config['replyToEmailAddress'] = REPLY_TO_EMAIL;
 $config['replyToName'] = REPLY_TO_NAME;
 
