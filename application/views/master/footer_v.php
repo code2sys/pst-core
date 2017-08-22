@@ -28,7 +28,7 @@ $new_assets_url1 = jsite_url( "/qatesting/benz_assets/");
 			<div class="one-fifth map">
 				<h3>Contact Us</h3>
 				<ul class="clear">
-					<li>Address: <?php echo $store_name['street_address'].' '.$store_name['city'].' '.$store_name['state'];?></li>
+					<li>Address: <?php echo $store_name['street_address'].', ' . ($store_name['address_2'] != "" ? $store_name['address_2'] . ", " : "") . $store_name['city'].', '.$store_name['state'] . ' ' . $store_name['zip'];?></li>
 					<li><img src="<?php echo $new_assets_url; ?>images/mobile.png"> <?php echo $store_name['phone'];?></li>
 					<li><img src="<?php echo $new_assets_url; ?>images/footer-email.png"> <?php echo $store_name['email'];?> </li>
 				</ul>
