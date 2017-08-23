@@ -1348,6 +1348,7 @@ class Admin_M extends Master_M {
                 'order.shipping AS shipping, ' .
                 'order.weight AS weight, ' .
                 'order.tax AS tax, ' .
+                'order.source AS source, ' .
                 'order.Reveived_date AS processed_date, ' .
                 'order.will_call AS will_call, ' .
                 'order.process_date AS process_date, ' .
