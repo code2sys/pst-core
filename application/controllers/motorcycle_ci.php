@@ -71,11 +71,20 @@ class Motorcycle_CI extends Welcome {
     /*
      * This is for the drill down on a motorcycle.
      */
-    public function benzDetails($title = null) {
+    public function benzDetails($title = null, $stock_code = null) {
         $this->load->model('pages_m');
         $this->load->model('motorcycle_m');
-        $title1 = str_replace('_', ' ', urldecode($title));
-        $id = $this->motorcycle_m->getMotorcycleIdByTitle($title1);
+
+        // JLB 08-23-17
+        // This used to just use the title. Let's try the stock code first.
+        $id = $this->motorcycle_m->getMotorcycleIdBySKU($stock_code);
+
+        if ($id == null) {
+            // This used to be the only thing...
+            $title1 = str_replace('_', ' ', urldecode($title));
+            $id = $this->motorcycle_m->getMotorcycleIdByTitle($title1);
+        }
+
         // echo urldecode($title);
         // echo $id.'<br>';
         // echo $title;exit;
