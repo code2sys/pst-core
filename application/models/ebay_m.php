@@ -30,6 +30,8 @@ class Ebay_M extends Master_M {
     public $current_product_id;
     private $product_data = array();
     protected $_dieSilentlyIfBad;
+    protected $store_zip_code;
+    protected $store_name;
 	
     public function __construct() {
         parent::__construct();
@@ -37,14 +39,19 @@ class Ebay_M extends Master_M {
 
 
 	/*
+	 * JLB 08-23-17
 		We have to go get the environment name
 		And we have to set the serveRUrl look right.
 	 */
-	$environment = "production";
+        $CI =& get_instance();
+        $CI->load->model("admin_m");
+        $store_name = $CI->admin_m->getAdminShippingProfile();
+        $this->store_name = $store_name;
+        $this->store_zip_code = $store_name["zip"];
+        $environment = $store_name["environment"];
 
-	
 
-	$this->serverUrl = ($environment == "production") ? 'https://api.ebay.com/ws/api.dll' : 'https://api.sandbox.ebay.com/ws/api.dll';
+        $this->serverUrl = ($environment == "production") ? 'https://api.ebay.com/ws/api.dll' : 'https://api.sandbox.ebay.com/ws/api.dll';
     }
 
     function pr($d) {
@@ -626,11 +633,17 @@ class Ebay_M extends Master_M {
                 /*                 * ***********************************
                   Get Categories with longest string count
                  * ************************************ */
+                // JLB 08-23-17
+                // I can't understand why this has to be done with a loop instead of a single query, BUT
+                // my real beef is in how they exclude UTV out of hand. There's this thing called
+                // ebay_category_num. Right now, only dirt bike and street bike has a number, so only they go
+                // So this is pointless.
                 $sql = "SELECT category.long_name,category.ebay_category_num
 				FROM category
 				JOIN partcategory ON partcategory.category_id = category.category_id
-				WHERE partcategory.part_id = " . $part_id .
-                        ' AND long_name NOT LIKE \'%UTV%\'';
+				WHERE partcategory.part_id = " . $part_id;
+                // JLB 08-23-17 PRUNED
+                // ' AND long_name NOT LIKE \'%UTV%\'';
                 $query = $this->db->query($sql);
                 $categories = $query->result_array();
 //                print_r($categories);
@@ -769,8 +782,11 @@ class Ebay_M extends Master_M {
 									FROM (`partnumbermodel`) 
 									JOIN `model` ON `model`.`model_id` = `partnumbermodel`.`model_id` 
 									JOIN `make` ON `make`.`make_id` = `model`.`make_id` 
-									WHERE `partnumbermodel`.`partnumber_id` =  '" . $pn['CustomLabel'] . "'
-									AND make.machinetype_id != 43954;";
+									WHERE `partnumbermodel`.`partnumber_id` =  '" . $pn['CustomLabel'] . "'";
+									// JLB 08-23-17
+                            // I cannot find the justification for this, so I have chosen to hide it.
+                            // After a conversation with Brandt, he was not sure that we should, out-of-hand, hide these.
+									// AND make.machinetype_id != 43954;";
                             $query = $this->db->query($sql);
                             $rides = $query->result_array();
 							
@@ -962,7 +978,7 @@ class Ebay_M extends Master_M {
 						partnumber.price as customprice,
 						partnumber.sale as saleprice,
 						partvariation.manufacturer_part_number AS 'C:Manufacturer Part Number',
-						'28217' AS 'PostalCode',
+						'" . $this->store_zip_code . "' AS 'PostalCode',
 						'UPSGround' AS 'ShippingService-1:Option',
 						'1' AS 'ShippingService-1:FreeShipping',
 						'' as 'CustomLabel',
@@ -1002,7 +1018,14 @@ class Ebay_M extends Master_M {
                 /*                 * ***********************************
                   Get Categories with longest string count
                  * ************************************ */
-                $sql = "SELECT category.long_name,category.ebay_category_num FROM category JOIN partcategory ON partcategory.category_id = category.category_id	WHERE partcategory.part_id = " . $part_id . ' AND long_name NOT LIKE \'%UTV%\'';
+                /*
+                 * JLB 08-23-17
+                 * See the note above; I don't get this stupidity, but, let's let it ride. This could be rewritten
+                 * as a regular old query. But, I rise today to vindicate the honor of UTV. No longer will UTV be
+                 * treated as a stepchild; if it has a number, it goes.
+                 */
+                $sql = "SELECT category.long_name,category.ebay_category_num FROM category JOIN partcategory ON partcategory.category_id = category.category_id	WHERE partcategory.part_id = " . $part_id ;
+                // ' AND long_name NOT LIKE \'%UTV%\'';
                 $query = $this->db->query($sql);
                 $categories = $query->result_array();
 //                $this->pr($categories);
