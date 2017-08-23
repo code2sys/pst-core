@@ -341,4 +341,11 @@ class Motorcycle_M extends Master_M {
         $record = $this->selectRecord('motorcycle', $where);
         return $record['id'];
     }
+
+    public function getMotorcycleIdBySKU( $sku ) {
+        $where = array('sku' => trim($sku));
+        $this->db->select('id');
+        $record = $this->selectRecord('motorcycle', $where);
+        return $record['id'];
+    }
 }
