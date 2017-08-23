@@ -16,7 +16,7 @@ class Ebay_M extends Master_M {
 
     public $headers = array();
     public $cred = array();
-    public $serverUrl = 'https://api.sandbox.ebay.com/ws/api.dll';
+    public $serverUrl = 'https://api.ebay.com/ws/api.dll';
     private $compatibility_level = 849;
     private $call;
     private $siteID = 0;
@@ -34,6 +34,17 @@ class Ebay_M extends Master_M {
     public function __construct() {
         parent::__construct();
         $this->_dieSilentlyIfBad = false;
+
+
+	/*
+		We have to go get the environment name
+		And we have to set the serveRUrl look right.
+	 */
+	$environment = "production";
+
+	
+
+	$this->serverUrl = ($environment == "production") ? 'https://api.ebay.com/ws/api.dll' : 'https://api.sandbox.ebay.com/ws/api.dll';
     }
 
     function pr($d) {
@@ -2226,7 +2237,6 @@ class Ebay_M extends Master_M {
 
 	public function getOrders() {
 
-
 		$store_url = base_url();
         $this->_setHeader("GetOrders", FALSE);
 		
@@ -2240,6 +2250,7 @@ class Ebay_M extends Master_M {
 				
 
         $response = json_decode(json_encode((array) simplexml_load_string($this->call($xml))), 1);
+
 		//echo $xml;
 //		print_r($response);
 //		echo "<br><br><br>****************<br><br>";
@@ -2373,7 +2384,6 @@ class Ebay_M extends Master_M {
 		</SetNotificationPreferencesRequest>';	
 
         $response = json_decode(json_encode((array) simplexml_load_string($this->call($xml))), 1);
-		print_r($response);
 
 		
 	}
@@ -2393,8 +2403,6 @@ class Ebay_M extends Master_M {
 
         $response = json_decode(json_encode((array) simplexml_load_string($this->call($xml))), 1);
 		
-		print_r($response);
-
 		
 	}
 
@@ -2713,13 +2721,11 @@ class Ebay_M extends Master_M {
 
 //set the headers using the array of headers
         curl_setopt($connection, CURLOPT_HTTPHEADER, $this->headers);
-
 //set method as POST
         curl_setopt($connection, CURLOPT_POST, 1);
 
 //set the XML body of the request
         curl_setopt($connection, CURLOPT_POSTFIELDS, $xml);
-
 //set it to return the transfer as a string from curl_exec
         curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
 
