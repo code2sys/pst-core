@@ -2333,11 +2333,6 @@ class Ebay_M extends Master_M {
 				}
 				
 			}
-			//$orderId = $this->db->insert_id();
-			//$orderStatus = array('order_id' => $orderId, 'status' => 'Pending', 'datetime' => time(), 'userId' => 1, 'notes' => 'Admin Order');
-			//$this->createRecord('order_status', $orderStatus, FALSE);
-			//return $orderId;
-			
 
 		}
 		
