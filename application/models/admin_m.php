@@ -1287,6 +1287,7 @@ class Admin_M extends Master_M {
         if ($record['ship_tracking_code']) {
             $trackingCodes = json_decode($record['ship_tracking_code'], TRUE);
             unset($trackingCodes[$post['key']]);
+            $trackingCodes = array_values($trackingCodes);
             if (!empty($trackingCodes))
                 $encoded = json_encode($trackingCodes);
             else
