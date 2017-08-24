@@ -2257,12 +2257,14 @@ class Ebay_M extends Master_M {
         // But, it's only looking for the word "success" - literaly...
 		if($response['Ack']=="Success") {
 		    echo "success";
+		    return true;
         } else {
 		    if (array_key_exists("Errors", $response) && array_key_exists("ShortMessage", $response["Errors"])) {
 		        print $response["Errors"]["ShortMessage"];
             } else {
                 echo "An unexpected error occurred.";
             }
+            return false;
         }
 
 		

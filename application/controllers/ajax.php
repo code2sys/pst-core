@@ -765,13 +765,14 @@ class Ajax extends Master_Controller {
 
     public function email_tracking_ebay() {
         $post = $this->input->post();		
-		// JLB 08-24-17 - we need to record the tracking number...
-        if (!empty($post['ship_tracking_code'])) {
-            $this->admin_m->updateOrderTrackingNumber($post);
-        }
         $this->load->model('ebay_m');
         // JLB 08-24-17 - this model generates output....eewwwwwww
-		$csv = $this->ebay_m->updateEbayTracking($post['ebay_id'], $post['ship_tracking_code'], $post['carrier']);
+		if ($this->ebay_m->updateEbayTracking($post['ebay_id'], $post['ship_tracking_code'], $post['carrier'])) {
+            // JLB 08-24-17 - we need to record the tracking number...
+            if (!empty($post['ship_tracking_code'])) {
+                $this->admin_m->updateOrderTrackingNumber($post);
+            }
+        }
 	}
 	
 	
