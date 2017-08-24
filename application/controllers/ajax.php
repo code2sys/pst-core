@@ -784,6 +784,7 @@ class Ajax extends Master_Controller {
         );
         if ($this->validateTrackingKey() == TRUE) {
             $results["currentCodes"] = $this->admin_m->removeTrackingFromOrder($this->input->post());
+            $results["success"] = true;
         }
         print json_encode($results);
     }
