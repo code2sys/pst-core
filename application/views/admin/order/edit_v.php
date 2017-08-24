@@ -355,29 +355,16 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                         USPS: <?php echo form_radio('carrier', 'USPS'); ?>
                         OnTrac: <?php echo form_radio('carrier', 'OnTrac'); ?><br /><br />
                         <a href="javascript:void(0);" onclick="sendTrackingEmail();" id="button">
-								<?php if($order['source']=="eBay") { ?>Send Tracking to eBay<?php } else { ?>Send Tracking Conf Email<?php } ?></a>
-                        <?php
-                        if ($order['ship_tracking_code']): $codes = json_decode($order['ship_tracking_code']);
-                        ?>
-                    <div id="past_ship_tracking_codes">
-                        <strong>Past Tracking Codes:</strong>
-                        <ul>
+                        <?php if($order['source']=="eBay") { ?>Send Tracking to eBay<?php } else { ?>Send Tracking Conf Email<?php } ?></a>
 
-                        </ul>
-                    </div>
-                        <?php
-                            else:
-                            ?>
-                                <div id="past_ship_tracking_codes" style="display: none">
-                                    <strong>Past Tracking Codes:</strong>
+                        <div id="past_ship_tracking_codes" style="display: none">
+                            <strong>Past Tracking Codes:</strong>
 
-                                    <ul>
+                            <ul>
 
-                                    </ul>
-                                </div>
-                                <?php
-                        endif;
-                        ?>
+                            </ul>
+                        </div>
+
                     </td>
                     <td>
                         <div class="payment_edit <?php echo ($order['created_by'] == '1') ? '' : 'hide1'; ?>">
