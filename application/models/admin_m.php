@@ -1277,6 +1277,7 @@ class Admin_M extends Master_M {
         $encoded = json_encode($trackingCodes);
         $orderRec = array('ship_tracking_code' => $encoded);
         $this->updateRecord('order', $orderRec, $where, FALSE);
+        return $trackingCodes; // JLB 08-24-17 Send It Back!
     }
 
     public function removeTrackingFromOrder($post) {
@@ -1292,6 +1293,9 @@ class Admin_M extends Master_M {
                 $encoded = NULL;
             $orderRec = array('ship_tracking_code' => $encoded);
             $this->updateRecord('order', $orderRec, $where, FALSE);
+            return $trackingCodes;
+        }  else {
+            return NULL;
         }
     }
 

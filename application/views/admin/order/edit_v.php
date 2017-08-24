@@ -298,7 +298,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                         </div>
 
                     </td>
-                    <td>
+                    <>
                         <!-- SUCCESS MESSAGE -->
                         <div class="success hide">
                             <img src="<?php echo $assets; ?>/images/success.png" style="float:left;margin-right:10px;">
@@ -358,12 +358,24 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
 								<?php if($order['source']=="eBay") { ?>Send Tracking to eBay<?php } else { ?>Send Tracking Conf Email<?php } ?></a>
                         <?php
                         if ($order['ship_tracking_code']): $codes = json_decode($order['ship_tracking_code']);
-                            foreach ($codes as $key => $code):
-                                ?>
-                                <?php echo $code[0]; ?> : <?php echo $code[1]; ?>&nbsp;
-                                <a href="javascript:void(0);" onclick="removeTrackingCode('<?php echo $key; ?>')"><span style="color:red; vertical-align: super;">x</span></a><br />
+                        ?>
+                    <div id="past_ship_tracking_codes">
+                        <strong>Past Tracking Codes:</strong>
+                        <ul>
+
+                        </ul>
+                    </div>
+                        <?php
+                            else:
+                            ?>
+                                <div id="past_ship_tracking_codes" style="display: none">
+                                    <strong>Past Tracking Codes:</strong>
+
+                                    <ul>
+
+                                    </ul>
+                                </div>
                                 <?php
-                            endforeach;
                         endif;
                         ?>
                     </td>
@@ -1109,32 +1121,75 @@ $grandTotal += @$order['tax'];
         });
     }
 
+    var currentCodes = <?php echo isset($codes) && is_array($codes) ? json_encode($codes) : "[]"; ?>;
+
+    $(document).on("click", ".remove_tracking_code", function(e) {
+        if (e) {
+            e.preventDefault();
+        }
+        var target = $(e.target);
+        removeTrackingCode(target.attr("data-index"));
+    });
+
+    function processTrackingCodes(codes) {
+        if (codes && isArray(codes) && codes.length > 0) {
+            var $ul = $("#past_ship_tracking_codes ul");
+            $ul.html("");
+            for (var i = 0; i < codes.length; i++) {
+                var carrier = codes[i][0];
+                var number = codes[i][1];
+                $ul.append("<li>" + carrier + ": " + number + " <a class='remove_tracking_code' data-index='" + i + "'/><span style=\"color:red; vertical-align: super;\">x</span></a></li>");
+            }
+            $("#past_ship_tracking_codes").show();
+        } else {
+            // hide it...
+            $("#past_ship_tracking_codes").hide();
+        }
+
+    }
+
     function sendTrackingEmail()
     {
 		<?php if($order['source']=="eBay") { ?>
 //		alert($('input[name=ebay_id]').attr('value'));
 		
-        $.post(base_url + 'ajax/email_tracking_ebay/',
-        {
-            'ship_tracking_code': $('#ship_tracking_code').val(),
-            // JLB 08-24-17 - If you don't send up our internal ID, it's hard to save to our DB.
-            'id': $('input[name="order_id"]').attr('value'),
-            'ebay_id': $('input[name=ebay_id]').attr('value'),
-            'carrier': $('input[name=carrier]:checked').val()
-        },
-        function (response)
-        {
-            if (response == 'success')
+        $.post(
+            // URL
+            base_url + 'ajax/email_tracking_ebay/',
+            // Data
             {
-                $('.success').show();
-                $('.success').fadeOut(3000);
-            } else
+                'ship_tracking_code': $('#ship_tracking_code').val(),
+                // JLB 08-24-17 - If you don't send up our internal ID, it's hard to save to our DB.
+                'id': $('input[name="order_id"]').attr('value'),
+                'ebay_id': $('input[name=ebay_id]').attr('value'),
+                'carrier': $('input[name=carrier]:checked').val()
+            },
+            // Success Handler
+            function (response)
             {
-                $('#tracking_validation_error').html(response);
-                $('.validation_error').show();
-                $('.validation_error').fadeOut(4000);
-            }
-        });
+                if (response.success)
+                {
+                    $('.success').show();
+                    $('.success').fadeOut(3000);
+
+                    if (response.ship_tracking_code && isArray(response.ship_tracking_code) && response.ship_tracking_code.length > 0) {
+
+
+                        $("#past_ship_tracking_codes").show();
+                    } else {
+                        // hide it...
+                        $("#past_ship_tracking_codes").hide();
+                    }
+                } else
+                {
+                    $('#tracking_validation_error').html(response.error_message);
+                    $('.validation_error').show();
+                    $('.validation_error').fadeOut(4000);
+                }
+            },
+            // Data type
+            "json"
+        );
 		<?php } else { ?>
         $.post(base_url + 'ajax/email_tracking/',
         {
@@ -1167,8 +1222,15 @@ $grandTotal += @$order['tax'];
         },
         function (response)
         {
-            location.reload();
-        });
+            if (response.success) {
+                currentCodes = response.currentCodes;
+                processTrackingCodes(currentCodes);
+            } else {
+                // Some error..just reload it...
+                location.reload();
+            }
+        },
+        "json");
     }
 
     $(document).ready(function () {

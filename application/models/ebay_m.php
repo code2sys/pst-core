@@ -2230,7 +2230,7 @@ class Ebay_M extends Master_M {
 	}
 	
 	
-	public function updateEbayTracking($order_id, $ship, $carrier) {
+	public function updateEbayTracking($order_id, $ship, $carrier, &$error) {
 
 		$store_url = base_url();
         $this->_setHeader("CompleteSale", FALSE);
@@ -2256,18 +2256,15 @@ class Ebay_M extends Master_M {
         // Tracking info successfully sent to eBay.
         // But, it's only looking for the word "success" - literaly...
 		if($response['Ack']=="Success") {
-		    echo "success";
 		    return true;
         } else {
 		    if (array_key_exists("Errors", $response) && array_key_exists("ShortMessage", $response["Errors"])) {
-		        print $response["Errors"]["ShortMessage"];
+                $error = $response["Errors"]["ShortMessage"];
             } else {
-                echo "An unexpected error occurred.";
+                $error = "An unidentified error occurred. Please confirm your eBay authentication settings are valid in the store profile.";
             }
             return false;
         }
-
-		
 	}
 	
 
