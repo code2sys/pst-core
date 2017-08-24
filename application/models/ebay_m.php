@@ -2256,8 +2256,6 @@ class Ebay_M extends Master_M {
         // Tracking info successfully sent to eBay.
         // But, it's only looking for the word "success" - literaly...
 
-        error_log(print_r($response, true));
-
 		if($response['Ack']=="Success") {
 		    return true;
         } else {
