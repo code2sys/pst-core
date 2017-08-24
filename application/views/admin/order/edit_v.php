@@ -357,13 +357,13 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                         <a href="javascript:void(0);" onclick="sendTrackingEmail();" id="button">
                         <?php if($order['source']=="eBay") { ?>Send Tracking to eBay<?php } else { ?>Send Tracking Conf Email<?php } ?></a>
 
-                        <div id="past_ship_tracking_codes" style="display: none">
+                        <span id="past_ship_tracking_codes" style="display: none">
                             <strong>Past Tracking Codes:</strong>
 
                             <ul>
 
                             </ul>
-                        </div>
+                        </span>
 
                     </td>
                     <td>
