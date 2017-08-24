@@ -1112,7 +1112,7 @@ $grandTotal += @$order['tax'];
     function sendTrackingEmail()
     {
 		<?php if($order['source']=="eBay") { ?>
-		alert($('input[name=ebay_id]').attr('value'));
+//		alert($('input[name=ebay_id]').attr('value'));
 		
         $.post(base_url + 'ajax/email_tracking_ebay/',
         {
