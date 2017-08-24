@@ -1123,7 +1123,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
     });
 
     function processTrackingCodes(codes) {
-        if (codes && Array.isArray(codes) && codes.length > 0) {
+        if (codes) {
             var $ul = $("#past_ship_tracking_codes ul");
             $ul.html("");
             for (var i in codes) {
@@ -1166,15 +1166,8 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                 {
                     $('.success').show();
                     $('.success').fadeOut(3000);
-
-                    if (response.ship_tracking_code && Array.isArray(response.ship_tracking_code) && response.ship_tracking_code.length > 0) {
-
-
-                        $("#past_ship_tracking_codes").show();
-                    } else {
-                        // hide it...
-                        $("#past_ship_tracking_codes").hide();
-                    }
+                    currentCodes = response.ship_tracking_code;
+                    processTrackingCodes(currentCodes);
                 } else
                 {
                     $('#tracking_validation_error').html(response.error_message);
