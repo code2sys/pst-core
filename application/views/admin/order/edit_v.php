@@ -1115,6 +1115,9 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
             e.preventDefault();
         }
         var target = $(e.target);
+        console.log(target);
+        console.log(e.target);
+        console.log(e.target.data);
         removeTrackingCode(target.attr("data-index"));
     });
 
