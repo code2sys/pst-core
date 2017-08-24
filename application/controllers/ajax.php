@@ -771,7 +771,7 @@ class Ajax extends Master_Controller {
         }
         $this->load->model('ebay_m');
         // JLB 08-24-17 - this model generates output....eewwwwwww
-		$csv = $this->ebay_m->updateEbayTracking($post['id'], $post['ship_tracking_code'], $post['carrier']);	
+		$csv = $this->ebay_m->updateEbayTracking($post['ebay_id'], $post['ship_tracking_code'], $post['carrier']);
 	}
 	
 	

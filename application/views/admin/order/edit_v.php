@@ -1117,7 +1117,9 @@ $grandTotal += @$order['tax'];
         $.post(base_url + 'ajax/email_tracking_ebay/',
         {
             'ship_tracking_code': $('#ship_tracking_code').val(),
-            'id': $('input[name=ebay_id]').attr('value'),
+            // JLB 08-24-17 - If you don't send up our internal ID, it's hard to save to our DB.
+            'id': $('input[name="order_id"]').attr('value'),
+            'ebay_id': $('input[name=ebay_id]').attr('value'),
             'carrier': $('input[name=carrier]:checked').val()
         },
         function (response)
