@@ -1126,7 +1126,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
         if (codes && Array.isArray(codes) && codes.length > 0) {
             var $ul = $("#past_ship_tracking_codes ul");
             $ul.html("");
-            for (var i = 0; i < codes.length; i++) {
+            for (var i in codes) {
                 var carrier = codes[i][0];
                 var number = codes[i][1];
                 $ul.append("<li>" + carrier + ": " + number + " <a href='#' class='remove_tracking_code' data-index='" + i + "' ><span style=\"color:red; vertical-align: super;\">x</span></a></li>");
