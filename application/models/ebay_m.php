@@ -2263,6 +2263,8 @@ class Ebay_M extends Master_M {
             } else {
                 $error = "An unidentified error occurred. Please confirm your eBay authentication settings are valid in the store profile.";
             }
+
+            error_log(print_r($response, true));
             return false;
         }
 	}
