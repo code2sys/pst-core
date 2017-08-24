@@ -1108,7 +1108,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
             });
     }
 
-    var currentCodes = <?php echo isset($codes) && is_array($codes) ? json_encode($codes) : "[]"; ?>;
+    var currentCodes = <?php echo isset($codes) ? json_encode($codes) : "[]"; ?>;
 
     $(document).on("click", ".remove_tracking_code", function(e) {
         if (e) {
