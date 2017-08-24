@@ -2255,7 +2255,12 @@ class Ebay_M extends Master_M {
         // JLB 08-24-17 The Ajax handler is so incredibly primitive. David used to write a note
         // Tracking info successfully sent to eBay.
         // But, it's only looking for the word "success" - literaly...
-		if($response['Ack']=="Success") echo "success"; else echo "An unexpected error occurred.";
+		if($response['Ack']=="Success") {
+		    echo "success";
+        } else {
+		    print_r($response);
+		    echo "An unexpected error occurred.";
+        }
 
 		
 	}
