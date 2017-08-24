@@ -768,6 +768,7 @@ class Ajax extends Master_Controller {
         $this->load->model('ebay_m');
         $result = array("success" => false, "error_message" => "");
 		if ($this->ebay_m->updateEbayTracking($post['ebay_id'], $post['ship_tracking_code'], $post['carrier'], $result["error_message"])) {
+		    $result["success"] = true;
             // JLB 08-24-17 - we need to record the tracking number...
             if (!empty($post['ship_tracking_code'])) {
                 $results["ship_tracking_code"] = $this->admin_m->updateOrderTrackingNumber($post);
