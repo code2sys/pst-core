@@ -1123,7 +1123,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
     });
 
     function processTrackingCodes(codes) {
-        if (codes) {
+        if (codes && codes.length > 0) {
             var $ul = $("#past_ship_tracking_codes ul");
             $ul.html("");
             for (var i in codes) {
