@@ -2252,7 +2252,10 @@ class Ebay_M extends Master_M {
 </CompleteSaleRequest>';
 		//echo $xml;
         $response = json_decode(json_encode((array) simplexml_load_string($this->call($xml))), 1);
-		if($response['Ack']=="Success") echo "Tracking info successfully sent to eBay."; else echo "An unexpected error occurred.";
+        // JLB 08-24-17 The Ajax handler is so incredibly primitive. David used to write a note
+        // Tracking info successfully sent to eBay.
+        // But, it's only looking for the word "success" - literaly...
+		if($response['Ack']=="Success") echo "success"; else echo "An unexpected error occurred.";
 
 		
 	}
