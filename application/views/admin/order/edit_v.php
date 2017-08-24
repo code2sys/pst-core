@@ -1135,6 +1135,10 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
 
     }
 
+    $(document).ready(function() {
+        processTrackingCodes(currentCodes);
+    });
+
     function sendTrackingEmail()
     {
         <?php if($order['source']=="eBay") { ?>
