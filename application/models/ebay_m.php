@@ -2255,6 +2255,9 @@ class Ebay_M extends Master_M {
         // JLB 08-24-17 The Ajax handler is so incredibly primitive. David used to write a note
         // Tracking info successfully sent to eBay.
         // But, it's only looking for the word "success" - literaly...
+
+        error_log(print_r($response, true));
+
 		if($response['Ack']=="Success") {
 		    return true;
         } else {
@@ -2263,8 +2266,6 @@ class Ebay_M extends Master_M {
             } else {
                 $error = "An unidentified error occurred. Please confirm your eBay authentication settings are valid in the store profile.";
             }
-
-            error_log(print_r($response, true));
             return false;
         }
 	}
