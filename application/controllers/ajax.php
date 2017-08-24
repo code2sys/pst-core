@@ -770,9 +770,7 @@ class Ajax extends Master_Controller {
 		if ($this->ebay_m->updateEbayTracking($post['ebay_id'], $post['ship_tracking_code'], $post['carrier'], $result["error_message"])) {
 		    $result["success"] = true;
             // JLB 08-24-17 - we need to record the tracking number...
-            if (!empty($post['ship_tracking_code'])) {
-                $results["ship_tracking_code"] = $this->admin_m->updateOrderTrackingNumber($post);
-            }
+            $results["ship_tracking_code"] = $this->admin_m->updateOrderTrackingNumber($post);
         }
         print json_encode($result);
 	}
