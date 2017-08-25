@@ -411,7 +411,11 @@ class Welcome extends Master_Controller {
             // Send email
             $this->config->load('sitesettings');
 
-            $mailData = array('toEmailAddress' => $this->config->item('contactToEmail'),
+            $this->load->model("admin_m");
+            $store_name = $this->admin_m->getAdminShippingProfile();
+
+            $mailData = array('toEmailAddress' => $store_name["email"],
+
                 'subject' => $this->input->post('subject'),
                 'fromEmailAddress' => $this->input->post('email'),
                 'fromName' => $this->input->post('name'),
