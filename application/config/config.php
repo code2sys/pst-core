@@ -40,7 +40,13 @@ $config['paymentTesting'] = TRUE;
 
 $config['server_root'] = $_SERVER['DOCUMENT_ROOT'];
 //$config['contactToEmail'] = "bdvojcek@yahoo.com";
-//$config['contactToEmail'] = CONTACT_EMAIL;
+if (defined('CONTACT_EMAIL') && CONTACT_EMAIL != "") {
+    $config['contactToEmail'] = CONTACT_EMAIL;
+} else if (FALSE !== strpos(WEBSITE_HOSTNAME, "powersporttechnologies.com")) {
+    $config['contactToEmail'] = "info@powersporttechnologies.com";
+} else {
+    $config['contactToEmail'] = "info@" . preg_replace("/^www\./", "", WEBSITE_HOSTNAME);
+}
 //$config['googleLocation'] = GOOGLE_LOCATION;
 
 // Standard automated email addresses
