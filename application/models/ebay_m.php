@@ -86,7 +86,7 @@ class Ebay_M extends Master_M {
 
         $this->closeXML($handle);
         $this->cleanXML($temp_file, 1);
-        unlink($temp_file);
+        // unlink($temp_file);
 
 		//var_dump($ebay_format_data);
 //        $this->db->select('part_number');
