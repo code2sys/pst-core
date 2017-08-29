@@ -1093,12 +1093,12 @@ class Ebay_M extends Master_M {
                         partnumber.sale as saleprice,
                         partnumberpartquestion.answer AS 'answer',
                         partquestion.question,
-                        partvariation.quantity_available AS '*Quantity',
+                        IfNull(partvariation.quantity_available, 0) + IfNull(partdealervariation.quantity_available, 0) AS '*Quantity',
                         '' AS '*StartPrice',
                         (partnumber.cost * 1.15) + 15 AS 'MIN_PRICE',
                         CASE WHEN partnumber.price < 100 THEN partnumber.price + 13 ELSE partnumber.price END AS 'MAX_PRICE',
                         partnumber.sale as price,
-                        partvariation.stock_code,
+                        IfNull(partvariation.stock_code, partdealervariation.stock_code),
                         '' AS 'Relationship',
                         '' AS 'RelationshipDetails',
                         '' AS '*Category',
@@ -1108,12 +1108,14 @@ class Ebay_M extends Master_M {
                     JOIN partquestion ON partquestion.partquestion_id = partnumberpartquestion.partquestion_id
                     JOIN partpartnumber ON partpartnumber.partnumber_id = partnumber.partnumber_id
                     JOIN partimage ON partimage.part_id = partpartnumber.part_id
-                    JOIN partvariation ON partvariation.partnumber_id = partnumber.partnumber_id
                     JOIN part ON part.part_id = partpartnumber.part_id
+                    LEFT JOIN partvariation ON partnumber.partnumber_id = partvariation.partnumber_id 
+                    LEFT JOIN partdealervariation on partnumber.partnumber_id = partdealervariation.partnumber_id
                     WHERE part.part_id = " . $part_id . " 
                     AND partnumber.exclude_market_place != 1
                     AND partnumber.closeout_market_place != 1
                     AND partquestion.productquestion = 0
+                    AND (partvariation.partvariation_id > 0 OR partdealervariation.partvariation_id > 0)
                     GROUP BY partnumber.partnumber";
                 //					AND partvariation.quantity_available > 3
                 $query = $this->db->query($sql);
