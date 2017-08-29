@@ -1008,6 +1008,8 @@ class Ebay_M extends Master_M {
         $quantity = $this->get_quantity();
         if (is_array($parts)) {
             foreach ($parts as &$part) {
+                print "/*********** START *************/\n\n";
+
                 if (strpos($part['*Title'], 'COMBO') !== FALSE) {
                     continue;
                 }
@@ -1070,7 +1072,6 @@ class Ebay_M extends Master_M {
                 // Get rest of records
                 $sql = "SELECT
                         '' AS '*Action(SiteID=eBayMotors|Country=US|Currency=USD|Version=745|CC=UTF-8)',
-                        
                         '' AS '*Title',
                         '' AS '*Description',
                         '' AS '*ConditionID',
@@ -1122,6 +1123,8 @@ class Ebay_M extends Master_M {
                 $partnumbers = $query->result_array();
                 $query->free_result();
 
+                print_r($part);
+
                 if (is_array($partnumbers)) {
                     $categoryRec = array();
                     $fitmentArr = array();
@@ -1141,24 +1144,38 @@ class Ebay_M extends Master_M {
                                 $brandMAPPercent = is_numeric(@$brand_map_percent['map_percent']) ? $brand_map_percent['map_percent'] : 0;
 
                                 $pn['*StartPrice'] = $pn['price'];
+                                print "Start price A: "  .$pn['*StartPrice']. "\n";
                                 if (($brand_map_percent['map_percent'] !== NULL) && ($pn['stock_code'] != 'Closeout')) {
 
                                     $mapPrice = (((100 - $brandMAPPercent) / 100) * $pn['customprice']);
 // no longer using MIN_PRICE        if ($mapPrice > $pn['MIN_PRICE'])
 // per Brandt, 7/24/17              $pn['MIN_PRICE'] = $mapPrice;
+                                    // JLB 08-29-17 Of all the bassackwardness...is that >=???
                                     if(!($pn['price'] < $pn['customprice']))
                                         $pn['*StartPrice'] = $mapPrice;
+
+                                    print "Start price B: "  .$pn['*StartPrice']. "\n";
+
                                 }
+                                // JLB 08-29-17 - What is the significance of this and why isn't it an ELSE?
                                 if($brand_map_percent['map_percent'] === NULL || ($pn['stock_code'] == 'Closeout'))	{
                                     $markup = 1 + ($this->get_markup()/100);
                                     $pn['*StartPrice'] = $pn['*StartPrice']*$markup;
+
+                                    print "Start price C: "  .$pn['*StartPrice']. "\n";
+
                                 }
 
 
-                                if ($basicPrice == 0)
+                                if ($basicPrice == 0) {
                                     $basicPrice = $pn['*StartPrice'];
-                                if (($samePrice) && ($pn['*StartPrice'] != $basicPrice))
+                                    print "Start price D: "  .$pn['*StartPrice']. "\n";
+
+                                }
+                                if (($samePrice) && ($pn['*StartPrice'] != $basicPrice)) {
                                     $samePrice = FALSE;
+                                    print "Start price E: "  .$pn['*StartPrice']. "\n";
+                                }
 
                                 $quantity = $this->get_quantity();
 
@@ -1169,6 +1186,8 @@ class Ebay_M extends Master_M {
                                 $part["*Quantity"] = min($pn["*Quantity"], $quantity);
 
                                 $part['*Description'] = preg_replace("/\r\n|\r|\n/", '', $part['*Description']);
+
+                                print_r($part);
 
                                 unset($pn['stock_code']);
                                 unset($pn['MIN_PRICE']);
@@ -1211,12 +1230,15 @@ class Ebay_M extends Master_M {
                     } else {
                         $part["*Quantity"] = min($partnumbers[0]["*Quantity"], $quantity);
                         $part['*StartPrice'] = $partnumbers[0]['price'];
+                        print "Start price F: "  . $part['*StartPrice'] . "\n";
+
                         $finalArray[] = $part;
                     }
 
                     if (($samePrice) && (@$categoryRec)) {
                         $part['*Quantity'] = '';
                         $part['*StartPrice'] = $basicPrice;
+                        print "Start price G: "  .$part['*StartPrice']. "\n";
                         $part['item_id'] = $part_id;
                         $finalArray[] = $part;
 
@@ -1273,14 +1295,18 @@ class Ebay_M extends Master_M {
                         foreach ($product_options as $otions_array) {
                             $options_vailable[$otions_array['question']][] = $otions_array['answer'];
                         }
-                        if(isset($combo_price))
+                        if(isset($combo_price)) {
                             $part['*StartPrice'] = $combo_price;
+                            print "Start price H: "  .$part['*StartPrice']. "\n";
+                        }
                         $part['product_options'] = $options_vailable;
                         $part['product_variation'] = $combo_variations;
                         $finalArray[] = $part;
                     }
                     if (!empty($fitmentArr)) {
                         $part['*StartPrice'] = $rb['*StartPrice'];
+                        print "Start price I: "  .$part['*StartPrice']. "\n";
+
                         $compatibility_array = array();
                         $item = array();
                         $quantity = $this->get_quantity();
@@ -1322,10 +1348,16 @@ class Ebay_M extends Master_M {
                 }
                 if (empty($part['saleprice'])&&isset($part['customprice'])) {
                     $part['*StartPrice'] = $part['customprice'];
+                    print "Start price J: "  .$part['*StartPrice']. "\n";
+
                 } else {
                     $part['*StartPrice'] = $part['saleprice'];
+                    print "Start price K: "  .$part['*StartPrice']. "\n";
                 }
 
+
+                print_r($part);
+                print "/*********** END *************/\n\n";
             }
         }
         if(!$send_to_ebay) {
