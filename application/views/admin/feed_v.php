@@ -40,13 +40,18 @@
                     <tr>
                         <td><button type="button" name="getebay_feeds" value="" onClick="window.location.href = '<?php echo base_url('admin_content/send_new_ebay/'); ?>'; return false;">Generate & Send Ebay Product Feed</button></td>
                         <td>Status : <?php echo isset($ebay_feeds['status']) && $ebay_feeds['status'] == 1 ? 'Completed' : 'Processing'; ?></td>
-                        <td>Last Run : <?php echo isset($ebay_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($ebay_feeds['run_at'])) : ''; ?></td> 
-                        <td>Send to Ebay: <a href="<?php echo base_url('admin_content/send_new_ebay/'); ?>">send_new_ebay</a></td>
+                        <td>Last Run : <?php echo isset($ebay_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($ebay_feeds['run_at'])) : ''; ?></td>
+                        <?php $ebay_feed_file = STORE_DIRECTORY . "/ebay_feed.xml"; ?>
+                        <?php if (file_exists($ebay_feed_file) && is_file($ebay_feed_file)): ?>
+                        <td><a href="<?php echo jsite_url('admin_content/download_ebay_xml/', true); ?>">Download eBay XML</a></td>
+                        <?php endif; ?>
                         <td>End all products on ebay: <a href="<?php echo site_url() . 'welcome/hit_ebay_end'; ?>">end_all_products</a></td>
                     </tr>
                </table>
             <br>
             <form action="<?php echo base_url('admin_content/ebay_markup'); ?>" method="post" id="form_example" class="form_standard">
+
+
                 <table class="paypal_email" width="100" cellpadding="1">
                     <tr>
                         <td><h3>eBay Markup %:</h3></td>
