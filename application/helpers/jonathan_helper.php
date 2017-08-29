@@ -63,6 +63,9 @@ function secure_site_url($url) {
 
 if (!function_exists("jsite_url")) {
     function jsite_url($segment, $force_secure = false) {
+        if ($segment != "" && $segment[0] != "/") {
+            $segment = "/" . $segment;
+        }
         if ($force_secure) {
             return "https://" . WEBSITE_HOSTNAME . $segment;
         } else {

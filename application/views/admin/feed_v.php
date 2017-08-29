@@ -43,7 +43,7 @@
                         <td>Last Run : <?php echo isset($ebay_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($ebay_feeds['run_at'])) : ''; ?></td>
                         <?php $ebay_feed_file = STORE_DIRECTORY . "/ebay_feed.xml"; ?>
                         <?php if (file_exists($ebay_feed_file) && is_file($ebay_feed_file)): ?>
-                        <td><a href="<?php echo jsite_url('admin_content/download_ebay_xml/', true); ?>">Download eBay XML</a></td>
+                        <td><a href="<?php echo jsite_url('/admin_content/download_ebay_xml/', true); ?>">Download eBay XML</a></td>
                         <?php endif; ?>
                         <td>End all products on ebay: <a href="<?php echo site_url() . 'welcome/hit_ebay_end'; ?>">end_all_products</a></td>
                     </tr>
