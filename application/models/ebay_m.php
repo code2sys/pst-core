@@ -2156,19 +2156,30 @@ class Ebay_M extends Master_M {
 	}
 	
 	private function clear_jobs() {
-		
-		echo "clearing jobs...";
-		
-		$service = new Services\BulkDataExchangeService($this->cred['Setting']);
+				
+		try {
+			$service = new Services\BulkDataExchangeService($this->cred['Setting']);
+		} catch (\Exception $e) {
+			print "Error creating connection with credentials: ";
+			print $e->getMessage() . "\n";
+			return;
+		}
 
 		/**
 		 * Create the request object.
 		 */
 		$request = new Types\GetJobsRequest();
+
 		/**
 		 * Send the request.
 		 */
-		$response = $service->getJobs($request);
+		try {
+			$response = $service->getJobs($request);
+		} catch (\Exception $e) {
+			print "Error getting jobs: " . $e->getMessage() . "\n";
+			return;
+		}
+
 		/**
 		 * Output the result of calling the service operation.
 		 */
