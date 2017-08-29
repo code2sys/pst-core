@@ -443,6 +443,16 @@ class Admin_Content extends Master_Controller {
 		$csv = $this->ebay_m->endAll(0, 1);	
 		echo "this";
     }
-	
+
+    public function download_ebay_xml() {
+        $ebay_feed_file = STORE_DIRECTORY . "/ebay_feed.xml";
+        if (file_exists($ebay_feed_file) && is_file($ebay_feed_file)) {
+            header('Content-Type: text/xml');
+            header('Content-Disposition: attachment; filename="ebay_feed.xml"');
+            readfile($ebay_feed_file);
+        } else {
+            print "Sorry, that file has disappeared.\n";
+        }
+    }
 	
 }

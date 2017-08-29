@@ -62,7 +62,7 @@ class Ebay_M extends Master_M {
 
     public function generateEbayFeed($products_count, $upload_to_ebay = false, $store_) {
         //$products = $this->ebaylistings_no_variation(0, $products_count, 1);
-        $temp_file = tempnam("/tmp", "ebay_");
+        $temp_file = STORE_DIRECTORY . "/ebay_feed.xml"; // tempnam("/tmp", "ebay_");
         $handle = fopen($temp_file, "w");
         $this->startXML($handle);
 
