@@ -104,7 +104,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><b>Default state for Market Places:</b></td>
+                        <td><b>Active State for Market Places:</b></td>
                         <td>
                             <input type="radio" name="market_places" value="default"<?php if ($market_places == 'default') { ?> checked="checked"<?php } ?>>
                         </td>

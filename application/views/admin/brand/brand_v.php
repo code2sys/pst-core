@@ -141,7 +141,7 @@ echo form_open('admin/brand', $attributes);
                             </td>
                         </tr>
                         <tr>
-                            <td><b>Default state for Market Places:</b></td>
+                            <td><b>Active State for Market Places:</b></td>
                             <td>
                                 <input id="default_market_place" type="radio" name="market_places" value="default">
                             </td>
