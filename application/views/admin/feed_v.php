@@ -76,26 +76,25 @@
             <form action="<?php echo base_url('admin_content/ebay_markup'); ?>" method="post" id="form_example" class="form_standard">
 
 
-                <table class="paypal_email" width="100" cellpadding="1">
+                <table class="paypal_email" cellpadding="1">
                     <tr>
                         <td><h3>eBay Markup %:</h3></td>
                         <td><input  name="ebay_markup" type="text" value="<?php echo $ebaymarkup[0]['value']; ?>"></td>
-                        <td><button type="submit" >Update</button></td>
+                        <td><button type="submit" >Set</button></td>
                     </tr>
                 </table>
             </form><br>
             <form action="<?php echo base_url('admin_content/ebay_quantity'); ?>" method="post" id="form_example" class="form_standard">
-                <table class="paypal_email" width="100" cellpadding="1">
+                <table class="paypal_email" cellpadding="1">
                     <tr>
                         <td><h3>eBay Listing Quantity:</h3></td>
                         <td><input type="number" name="quantity" value="<?php echo $quantity[0]['value']; ?>"></td>
-                        <td><input type="submit" value="add"></td>
+                        <td><button type="submit" >Set</button></td>
                     </tr>
                 </table>
             </form><br>
             <form action="<?php echo base_url('admin_content/ebay_settings'); ?>" method="post" id="form_example" class="form_standard">
-                <table class="ebay_setting" width="100">
-
+                <table class="ebay_setting" >
 
                     <h2 style="color: #444;">ebay shipping rules:</h2>
 
