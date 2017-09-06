@@ -32,11 +32,12 @@ class Ebay_M extends Master_M {
     protected $_dieSilentlyIfBad;
     protected $store_zip_code;
     protected $store_name;
+    protected $debug;
 	
     public function __construct() {
         parent::__construct();
         $this->_dieSilentlyIfBad = false;
-
+        $debug = false;
 
 	/*
 	 * JLB 08-23-17
@@ -95,6 +96,15 @@ class Ebay_M extends Master_M {
     protected function markError($error_message) {
         $this->db->query("Update ebay_feed_item set error = 1, error_string = ? where ordinal = ? limit 1", array($error_message, $this->current_run_ordinal));
         $this->current_run_ordinal++;
+    }
+
+    protected function recordError($CorrelationID, $ShortMessage, $LongMessage) {
+        if ($ShortMessage == "Listing violates the Duplicate Listing policy.") {
+            $this->db->query("Update ebay_feed_item set duplicate = 1 where sku = ?", array($CorrelationID));
+        } else {
+            // it is an error...
+            $this->db->query("Update ebay_feed_item set error = 1, error_string = ?, long_error_string = ? where sku = ?", array($ShortMessage, $LongMessage, $CorrelationID));
+        }
     }
 
     /*********END*********/
@@ -2036,9 +2046,14 @@ class Ebay_M extends Master_M {
 			/**
 			 * Send the request.
 			 */
-			print('Requesting job Id from eBay...');
+			if ($this->debug) {
+                print('Requesting job Id from eBay...');
+            }
 			$createUploadJobResponse = $exchangeService->createUploadJob($createUploadJobRequest);
-			print("Done\n");
+			if ($this->debug) {
+                print("Done\n");
+            }
+
 			/**
 			 * Output the result of calling the service operation.
 			 */
@@ -2051,15 +2066,16 @@ class Ebay_M extends Master_M {
 					);
 				}
 			}
-			print_r($createUploadJobResponse);
-			print_r($createUploadJobResponse->errorMessage);
 
 			if ($createUploadJobResponse->ack !== 'Failure') {
-				printf(
-					"JobId [%s] FileReferenceId [%s]\n",
-					$createUploadJobResponse->jobId,
-					$createUploadJobResponse->fileReferenceId
-				);
+			    if ($this->debug) {
+                    printf(
+                        "JobId [%s] FileReferenceId [%s]\n",
+                        $createUploadJobResponse->jobId,
+                        $createUploadJobResponse->fileReferenceId
+                    );
+
+                }
 				$job['jobId'] = $createUploadJobResponse->jobId;
 				$job['fileReferenceId'] = $createUploadJobResponse->fileReferenceId;
 			}
@@ -2084,9 +2100,15 @@ class Ebay_M extends Master_M {
 			/**
 			 * Now upload the file.
 			 */
-			print('Uploading fixed price item requests...');
+			if ($this->debug) {
+                print('Uploading fixed price item requests...');
+            }
+
 			$uploadFileResponse = $transferService->uploadFile($uploadFileRequest);
-			print("Done\n");
+			if ($this->debug) {
+                print("Done\n");
+            }
+
 			if (isset($uploadFileResponse->errorMessage)) {
 				foreach ($uploadFileResponse->errorMessage->error as $error) {
 					printf(
@@ -2097,18 +2119,20 @@ class Ebay_M extends Master_M {
 				}
 			}
 
-            print_r($uploadFileResponse);
-            print_r($uploadFileResponse->errorMessage);
-
             if ($uploadFileResponse->ack !== 'Failure') {
 				/**
 				 * Once the file has uploaded we can tell eBay to start processing it.
 				 */
 				$startUploadJobRequest = new BulkDataExchange\Types\StartUploadJobRequest();
 				$startUploadJobRequest->jobId = $job['jobId'];
-				print('Request processing of fixed price items...');
+				if ($this->debug) {
+                    print('Request processing of fixed price items...');
+                }
 				$startUploadJobResponse = $exchangeService->startUploadJob($startUploadJobRequest);
-				print("Done\n");
+				if ($this->debug) {
+                    print("Done\n");
+                }
+
 				if (isset($startUploadJobResponse->errorMessage)) {
 					foreach ($startUploadJobResponse->errorMessage->error as $error) {
 						printf(
@@ -2159,12 +2183,15 @@ class Ebay_M extends Master_M {
 						$downloadFileRequest = new FileTransfer\Types\DownloadFileRequest();
 						$downloadFileRequest->fileReferenceId = $downloadFileReferenceId;
 						$downloadFileRequest->taskReferenceId = $job['jobId'];
-						print('Downloading fixed price item responses...');
+						if ($this->debug) {
+                            print('Downloading fixed price item responses...');
+                        }
 						$downloadFileResponse = $transferService->downloadFile($downloadFileRequest);
-						print("Done\n");
+						if ($this->debug) {
+                            print("Done\n");
+                        }
 						if (isset($downloadFileResponse->errorMessage)) {
 							foreach ($downloadFileResponse->errorMessage->error as $error) {
-							    print_r($error);
 								printf(
 									"2169 %s: %s\n\n",
 									$error->severity === FileTransfer\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
@@ -2172,7 +2199,7 @@ class Ebay_M extends Master_M {
 								);
 							}
 						}
-                        print_r($downloadFileResponse);
+
 						if ($downloadFileResponse->ack !== 'Failure') {
 							/**
 							 * Check that the response has an attachment.
@@ -2187,23 +2214,30 @@ class Ebay_M extends Master_M {
 									$xml = $this->unZipArchive($filename);
 									if ($xml !== false) {
 										$responses = $merchantData->addFixedPriceItem($xml);
-										print_r($responses);
-										foreach ($responses as $response) {
+
+                                            foreach ($responses as $response) {
 											if (isset($response->Errors)) {
 												foreach ($response->Errors as $error) {
-													printf(
-														"2195 %s: %s\n%s\n\n",
-														$error->SeverityCode === MerchantData\Enums\SeverityCodeType::C_ERROR ? 'Error' : 'Warning',
-														$error->ShortMessage,
-														$error->LongMessage
-													);
+												    if ($this->debug) {
+                                                        printf(
+                                                            "2195 %s: %s\n%s\n\n",
+                                                            $error->SeverityCode === MerchantData\Enums\SeverityCodeType::C_ERROR ? 'Error' : 'Warning',
+                                                            $error->ShortMessage,
+                                                            $error->LongMessage
+                                                        );
+                                                    }
+													if ($error->SeverityCode === MerchantData\Enums\SeverityCodeType::C_ERROR) {
+                                                        $this->recordError($response->CorrelationID, $error->ShortMessage, $error->LongMessage);
+                                                    }
 												}
 											}
 											if ($response->Ack !== 'Failure') {
-												printf(
-													"The item was listed to eBay with the Item number %s\n",
-													$response->ItemID
-												);
+											    if ($this->debug) {
+                                                    printf(
+                                                        "The item was listed to eBay with the Item number %s\n",
+                                                        $response->ItemID
+                                                    );
+                                                }
 											}
 										}
 									}
@@ -2529,19 +2563,6 @@ class Ebay_M extends Master_M {
         $uploadXML .= '<Version>663</Version>';
         $uploadXML .= '</Header>';
 
-
-
-//        if (!$update) {
-//            $uploadXML .= '<AddFixedPriceItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
-//        } else {
-//        $uploadXML .= '<ReviseFixedPriceItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
-//        }
-//        $uploadXML .= '<ErrorLanguage>en_US</ErrorLanguage>';
-//        $uploadXML .= '<WarningLevel>High</WarningLevel>';
-//        $uploadXML .= '<RequesterCredentials>';
-//        $uploadXML .= '<eBayAuthToken>' . $this->cred['Setting']['user_token'] . '</eBayAuthToken>';
-//        $uploadXML .= '</RequesterCredentials>';
-
         foreach ($products as $product) {
 //            $this->pr($product);
 //            die("*");
@@ -2777,29 +2798,14 @@ class Ebay_M extends Master_M {
         }
 
         $uploadXML .= '</BulkDataExchangeRequests>';
-//        preg_match('/<meta.*?charset=(|\")(.*?)("|\")/i', $uploadXML, $matches);
-//        $charset = $matches[2];
-//
-//        if ($charset)
-//            $XML = mb_convert_encoding($uploadXML, 'UTF-8', $charset);
-//        else
-//            $XML = $uploadXML;
-//        print_r($uploadXML);
-//        $XML = iconv(mb_detect_encoding($uploadXML, mb_detect_order(), true), "UTF-8", $uploadXML);
-//        $this->pr($uploadXML);
-//        die("1234");
         if ($store_feed == true) {
             $file_path = STORE_DIRECTORY . '/ebayFeeds/ebayfeed_update_un.xml';
             if (file_exists($file_path)) {
                 unlink($file_path);
             }
-//               print_r($doc);
-//            die('-------');
-//            $myfile = fopen($file_path, "w");
             file_put_contents($file_path, $uploadXML, LOCK_EX);
             $xml = file_get_contents($file_path, LOCK_EX);
             $doc = new DOMDocument();
-//            $doc->preserveWhiteSpace = FALSE;
             $doc->loadXML($xml);
             $doc->formatOutput = TRUE;
 //Save XML as a file
@@ -2809,8 +2815,6 @@ class Ebay_M extends Master_M {
             }
             $doc->save($file);
         }
-
-//        $response = json_decode(json_encode((array) simplexml_load_string($this->call($uploadXML))), 1);
     }
 
     /**
@@ -3317,7 +3321,9 @@ class Ebay_M extends Master_M {
 	}
 	private function unzipArchive($filename)
 	{
-		printf("Unzipping %s...", $filename);
+	    if ($this->debug) {
+            printf("Unzipping %s...", $filename);
+        }
 		$zip = new ZipArchive();
 		if ($zip->open($filename)) {
 			/**
@@ -3325,7 +3331,9 @@ class Ebay_M extends Master_M {
 			 */
 			$xml = $zip->getFromIndex(0);
 			if ($xml !== false) {
-				print("Done\n");
+			    if ($this->debug) {
+                    print("Done\n");
+                }
 				return $xml;
 			} else {
 				printf("Failed. No XML found in %s\n", $filename);
