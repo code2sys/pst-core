@@ -136,34 +136,6 @@ class Ebay_M extends Master_M {
 
         $this->closeXML($handle);
         $this->cleanXML($temp_file, 1);
-        // unlink($temp_file);
-
-		//var_dump($ebay_format_data);
-//        $this->db->select('part_number');
-//        $this->db->from('ebay_ids');
-//        $query = $this->db->get();
-//        foreach ($query->result_array() as $single) {
-//            $newArray[] = $single['part_number'];
-//        }
-		/*
-		echo "TESTING12345";
-		var_dump($ebay_format_data);
-        foreach ($ebay_format_data as $title_key => $item) {
-            if (in_array($item['product']['C:Manufacturer Part Number'], $newArray)) {
-                $ebay_format_data_revised[$title_key] = $item;
-            } else {
-                $ebay_format_data_new[$title_key] = $item;
-            }
-        }
-		*/
-		//echo "TESTING54321";
-		//var_dump($products);
-		//die();
-		//echo "RAWR";
-        //create/NEW products XML
-        // $this->buildXmlAndHitEbay($ebay_format_data_new, 0, 1, 0);
-        //updating products XML
-//        $this->buildUpateXmlAndHitEbay($ebay_format_data_revised, 0, 1, 0);
     }
 
 
@@ -244,7 +216,12 @@ class Ebay_M extends Master_M {
 
 
             $uploadXML .= '<ConditionID>' . $product['product']['*ConditionID'] . '</ConditionID>';
-            $uploadXML .= '<Description>' . $string . '</Description>';
+            if ($string != "") {
+                $late_description = false;
+                $uploadXML .= '<Description>' . $string . '</Description>';
+            } else {
+                $late_description = true;
+            }
             $uploadXML .= '<DispatchTimeMax>' . $product['product']['*DispatchTimeMax'] . '</DispatchTimeMax>';
             $uploadXML .= '<ListingDuration>' . $product['product']['*Duration'] . '</ListingDuration>';
             $uploadXML .= '<ListingType>FixedPriceItem</ListingType>';
@@ -498,13 +475,18 @@ class Ebay_M extends Master_M {
                 $start_year = min($years);
                 $end_year = max($years);
                 if ($start_year != $end_year) {
-                    $uploadXML .= '<Title>' . substr(strip_tags($title . ' ' . $start_year . '-' . $end_year), 0, 78) . '</Title>';
+                    $uploadXML .= '<Title>' . ($part_title = substr(strip_tags($title . ' ' . $start_year . '-' . $end_year), 0, 78)) . '</Title>';
                 } else {
-                    $uploadXML .= '<Title>' . substr(strip_tags($title . ' ' . $start_year), 0, 78) . '</Title>';
+                    $uploadXML .= '<Title>' . ($part_title = substr(strip_tags($title . ' ' . $start_year), 0, 78)) . '</Title>';
                 }
             } else {
-                $uploadXML .= '<Title>' . substr(strip_tags($title), 0, 78) . '</Title>';
+                $uploadXML .= '<Title>' . ($part_title = substr(strip_tags($title), 0, 78)) . '</Title>';
             }
+
+            if ($late_description) {
+                $uploadXML .= "<Description>" . $part_title . "</Description>";
+            }
+
             $uploadXML .= '</Item>';
             $uploadXML .= '</AddFixedPriceItemRequest>
 ';
@@ -2568,272 +2550,6 @@ class Ebay_M extends Master_M {
 		
 	}
 
-	
-    private function buildUpateXmlAndHitEbay($products, $update = false, $store_feed = false) {
-
-        $count = 1;
-        $store_url = base_url();
-        $this->_setHeader("ReviseItems", FALSE);
-        $uploadXML = '<?xml version="1.0" encoding="utf-8"?>';
-        $uploadXML .= '<BulkDataExchangeRequests>';
-        $uploadXML .= '<Header>';
-        $uploadXML .= '<SiteID>100</SiteID>';
-        $uploadXML .= '<Version>663</Version>';
-        $uploadXML .= '</Header>';
-
-        foreach ($products as $product) {
-//            $this->pr($product);
-//            die("*");
-            $part_number = $product['product']['C:Manufacturer Part Number'];
-//            $this->pr($part_number);
-            $sql = 'SELECT ebay_id FROM ebay_ids WHERE part_number =' . "'$part_number'";
-            $query = $this->db->query($sql);
-            $results = $query->result_array();
-//            $this->pr($results);die("*");
-            $string = utf8_encode($product['product']['*Description']);
-            $string = $this->xmlEscape($product['product']['*Description']);
-
-            $string = substr($string, 0, 500000);
-            $UUID = md5(uniqid(rand(), true));
-
-            $uploadXML .= '<ReviseFixedPriceItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
-            $uploadXML .= '<ErrorLanguage>en_US</ErrorLanguage>';
-            $uploadXML .= '<WarningLevel>High</WarningLevel>';
-            $uploadXML .= '<Version>663</Version>';
-            $uploadXML .= '<MessageID>' . $product['product']['C:Manufacturer Part Number'] . '</MessageID>';
-            $uploadXML .= '<Item>';
-            $uploadXML .= '<ItemID>' . $results[0]['ebay_id'] . '</ItemID>';
-            $uploadXML .= '<SKU>' . $product['product']['C:Manufacturer Part Number'] . '</SKU>';
-            $uploadXML .= '<CategoryMappingAllowed>true</CategoryMappingAllowed>';
-            $uploadXML .= '<Country>US</Country>';
-            $uploadXML .= '<location>US</location>';
-            $uploadXML .= '<Currency>USD</Currency>';
-
-
-            $uploadXML .= '<ConditionID>' . $product['product']['*ConditionID'] . '</ConditionID>';
-            $uploadXML .= '<Description>' . $string . '</Description>';
-            $uploadXML .= '<DispatchTimeMax>' . $product['product']['*DispatchTimeMax'] . '</DispatchTimeMax>';
-            $uploadXML .= '<ListingDuration>' . $product['product']['*Duration'] . '</ListingDuration>';
-            $uploadXML .= '<ListingType>FixedPriceItem</ListingType>';
-            $uploadXML .= '<PaymentMethods>PayPal</PaymentMethods>';
-            $uploadXML .= '<PayPalEmailAddress>pushpender.techmarbles@gmail.com</PayPalEmailAddress>';
-
-            $uploadXML .= '<PictureDetails>';
-
-            $uploadXML .= '<PictureURL>' . $product['product']['PicURL'] . '</PictureURL>';
-            $uploadXML .= '</PictureDetails>';
-
-            $uploadXML .= '<PostalCode>' . $product['product']['PostalCode'] . '</PostalCode>';
-            $uploadXML .= '<PrimaryCategory>';
-
-            $uploadXML .= '<CategoryID>' . $product['product']['EbayCategory'] . '</CategoryID>';
-            $uploadXML .= '</PrimaryCategory>';
-            $uploadXML .= '<ReturnPolicy>';
-            $uploadXML .= '<ReturnsAcceptedOption>' . $product['product']['*ReturnsAcceptedOption'] . '</ReturnsAcceptedOption>';
-            $uploadXML .= '<RefundOption>MoneyBack</RefundOption>';
-            $uploadXML .= '<ReturnsWithinOption>' . $product['product']['ReturnsWithinOption'] . '</ReturnsWithinOption>';
-            $uploadXML .= '<Description>TEST</Description>';
-            $uploadXML .= '<ShippingCostPaidByOption>' . $product['product']['ShippingCostPaidByOption'] . '</ShippingCostPaidByOption>';
-            $uploadXML .= '</ReturnPolicy>';
-//            $shipping_first_key = $product['product']['shipping_options'];
-            $uploadXML .= '<ShippingDetails>';
-            $uploadXML .= '<ShippingType>';
-            $uploadXML .= 'Flat';
-            $uploadXML .= '</ShippingType>';
-
-            $uploadXML .= '<ShippingServiceOptions>';
-            $uploadXML .= '<ShippingServicePriority>1</ShippingServicePriority>';
-            $uploadXML .= '<ShippingService>UPSGround</ShippingService>';
-            $uploadXML .= '<ShippingServiceCost>14.50</ShippingServiceCost>';
-            $uploadXML .= '<ShippingServiceAdditionalCost>5.00</ShippingServiceAdditionalCost>';
-            $uploadXML .= '</ShippingServiceOptions>';
-            $uploadXML .= '</ShippingDetails>';
-            $check_compatibility = FALSE;
-            if ($product['product_variation']) {
-                $product['product_variation'] = array_unique($product['product_variation'], SORT_REGULAR);
-//                $this->pr($product['product_variation']);
-                $check_combo = FALSE;
-                $check_combo_again = FALSE;
-                $check_compatibility = FALSE;
-                $variation_XML = '';
-                $compatibility_XML = '';
-                $variation_XML .= '<Variations>';
-                $variation_XML .= '<VariationSpecificsSet>';
-//                $variation_XML .= '<NameValueList>';
-                $compatibility_XML .= '<ItemCompatibilityList>';
-
-                $done = 0;
-                $years = array();
-                foreach ($product['product_variation'] as $combination) {
-//                    $combination = array_unique($combination);
-//                    $this->pr($variation_key);
-                    if (trim(strtolower($combination['Relationship'])) == 'variation') {
-                        $variation = explode("=", $combination['RelationshipDetails']);
-                        if ($done < 1) {
-                            $variation_XML .= '<NameValueList>';
-                            $variation_XML .= '<Name>';
-                            $variation_XML .= $variation['0'];
-                            $variation_XML .= '</Name>';
-                        }
-                        $variation_XML .= '<Value>';
-                        $variation_XML .= $variation['1'];
-                        $variation_XML .= '</Value>';
-                        $done++;
-                    } elseif (trim(strtolower($combination['Relationship'])) == 'compatibility') {
-                        $check_compatibility = TRUE;
-//                        $this->pr($combination['RelationshipDetails']);
-//                        die("*");
-                        $compatibilities = explode('|', $combination['RelationshipDetails']);
-                        $compatibility_XML .= '<Compatibility>';
-                        foreach ($compatibilities as $compatibility_key => $compatibility) {
-                            $name_values = explode('=', $compatibility);
-                            $product['product']['*StartPrice'] = $combination['*StartPrice'];
-                            if (trim(strtolower($name_values[0])) == 'year') {
-                                $years[] = $name_values[1];
-                            }
-                            $compatibility_XML .= "<NameValueList>";
-                            $compatibility_XML .= "<Name>$name_values[0]</Name>";
-                            $compatibility_XML .= "<Value>$name_values[1]</Value>";
-                            $compatibility_XML .= "</NameValueList>";
-                        }
-                        $compatibility_XML .= '</Compatibility>';
-                    } else {
-//                        $this->pr($product['product_options']);
-//                        die("1234");
-                        if (!$check_combo) {
-                            foreach ($product['product_options'] as $option_type => $option_value_array) {
-                                $variation_XML .= '<NameValueList>';
-                                $variation_XML .= '<Name>';
-                                $variation_XML .= $option_type;
-                                $variation_XML .= '</Name>';
-                                foreach ($option_value_array as $option_value) {
-                                    $variation_XML .= '<Value>';
-                                    $variation_XML .= $option_value;
-                                    $variation_XML .= '</Value>';
-                                }
-                                $variation_XML .= '</NameValueList>';
-                            }
-                            $check_combo = TRUE;
-//                        $this->pr($variation_XML);
-//                        die("testing xml");
-                        }
-                    }
-                }
-                if (!$check_combo) {
-                    $variation_XML .= '</NameValueList>';
-                }
-                $variation_XML .= '</VariationSpecificsSet>';
-
-                foreach ($product['product_variation'] as $combination) {
-                    if (trim(strtolower($combination['Relationship'])) == 'variation') {
-                        $variations = explode("=", $combination['RelationshipDetails']);
-                        $variation_XML .= '<Variation>';
-
-                        $variation_XML .='<StartPrice>' . $combination['*StartPrice'] . '</StartPrice>';
-
-                        $variation_XML .='<Quantity>' . $combination['*Quantity'] . '</Quantity>';
-
-                        $variation_XML .= '<VariationSpecifics>';
-                        $variation_XML .= '<NameValueList>';
-
-                        if (trim(strtolower($combination['Relationship'])) == 'variation') {
-                            $variation_XML .= '<Name>' . $variations['0'] . '</Name>';
-                            $variation_XML .= '<Value>' . $variations['1'] . '</Value>';
-                        }
-
-                        $variation_XML .= '</NameValueList>';
-                        $variation_XML .= '</VariationSpecifics>';
-                        $variation_XML .= '</Variation>';
-                    } elseif (trim(strtolower($combination['Relationship'])) == 'combo') {
-                        //$this->pr($product['product_options']);
-//                        die('test');
-                        if (!$check_combo_again) {
-                            $variation_XML .= '<Variation>';
-                            $variation_XML .='<StartPrice>' . $product['product']['*StartPrice'] . '</StartPrice>';
-                            $variation_XML .='<Quantity>' . $product['product']['*Quantity'] . '</Quantity>';
-                            $variation_XML .= '<VariationSpecifics>';
-                            $variation_XML .= '<NameValueList>';
-                            $variation_XML .= '<Name>GLOVE</Name>';
-
-                            foreach ($product['product_options']['GLOVE'] as $option_value_glove_array) {
-                                $variation_XML .= '<Value>' . $option_value_glove_array . '</Value>';
-                            }
-
-                            $variation_XML .= '</NameValueList>';
-                            $variation_XML .= '<NameValueList>';
-                            $variation_XML .= '<Name>JERSEY</Name>';
-                            foreach ($product['product_options']['JERSEY'] as $option_value_jersey_array) {
-                                $variation_XML .= '<Value>' . $option_value_jersey_array . '</Value>';
-                            }
-                            $variation_XML .= '</NameValueList>';
-                            $variation_XML .= '<NameValueList>';
-                            $variation_XML .= '<Name>PANT</Name>';
-                            foreach ($product['product_options']['PANT'] as $option_value_pant_array) {
-                                $variation_XML .= '<Value>' . $option_value_pant_array . '</Value>';
-                            }
-                            $variation_XML .= '</NameValueList>';
-                            $variation_XML .= '</VariationSpecifics>';
-                            $variation_XML .= '</Variation>';
-                            $check_combo_again = TRUE;
-                        }
-                    }
-                }
-                $compatibility_XML .= '</ItemCompatibilityList>';
-                $variation_XML .= '</Variations>';
-                if ($check_compatibility) {
-                    $uploadXML .= $compatibility_XML;
-                    $uploadXML .= '<Quantity>' . $product['product']['*Quantity'] . '</Quantity>';
-                    $uploadXML .= '<StartPrice currencyID="USD">' . $product['product']['*StartPrice'] . '</StartPrice>';
-                } else {
-                    $uploadXML .= $variation_XML;
-                }
-            } else {
-                $uploadXML .= '<Quantity>' . $product['product']['*Quantity'] . '</Quantity>';
-                $uploadXML .= '<StartPrice currencyID="USD">' . $product['product']['*StartPrice'] . '</StartPrice>';
-            }
-			
-
-//            $title = utf8_encode($product['product']['*Title']);
-            $title = $this->xmlEscape($product['product']['*Title']);
-            if ($check_compatibility) {
-//                $this->pr($start_year);die("1234");
-                $start_year = min($years);
-                $end_year = max($years);
-                if ($start_year != $end_year) {
-                    $uploadXML .= '<Title>' . substr(strip_tags($title . ' ' . $start_year . '-' . $end_year), 0, 78) . '</Title>';
-                } else {
-                    $uploadXML .= '<Title>' . substr(strip_tags($title . ' ' . $start_year), 0, 78) . '</Title>';
-                }
-            } else {
-                $uploadXML .= '<Title>' . substr(strip_tags($title), 0, 78) . '</Title>';
-            }
-            $uploadXML .= '</Item>';
-            $uploadXML .= '</ReviseFixedPriceItemRequest>';
-
-            $count++;
-//            if ($count > 2)
-//                break;
-        }
-
-        $uploadXML .= '</BulkDataExchangeRequests>';
-        if ($store_feed == true) {
-            $file_path = STORE_DIRECTORY . '/ebayFeeds/ebayfeed_update_un.xml';
-            if (file_exists($file_path)) {
-                unlink($file_path);
-            }
-            file_put_contents($file_path, $uploadXML, LOCK_EX);
-            $xml = file_get_contents($file_path, LOCK_EX);
-            $doc = new DOMDocument();
-            $doc->loadXML($xml);
-            $doc->formatOutput = TRUE;
-//Save XML as a file
-            $file = STORE_DIRECTORY . '/ebayFeeds/ebayfeed_update.xml';
-            if (file_exists($file)) {
-                unlink($file);
-            }
-            $doc->save($file);
-        }
-    }
 
     /**
      * Function to call ebay API using the xml passed to it.
