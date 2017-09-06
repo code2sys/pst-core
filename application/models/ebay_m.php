@@ -2172,6 +2172,7 @@ class Ebay_M extends Master_M {
 								);
 							}
 						}
+                        print_r($downloadFileResponse);
 						if ($downloadFileResponse->ack !== 'Failure') {
 							/**
 							 * Check that the response has an attachment.
