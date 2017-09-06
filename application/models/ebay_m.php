@@ -1666,7 +1666,14 @@ class Ebay_M extends Master_M {
 
 
             $uploadXML .= '<ConditionID>' . $product['product']['*ConditionID'] . '</ConditionID>';
-            $uploadXML .= '<Description>' . $string . '</Description>';
+            // JLB 09-06-17 I hope this doesn't require alphabetical order
+            if ($string != "") {
+                $late_description = false;
+                $uploadXML .= '<Description>' . $string . '</Description>';
+            } else {
+                $late_description = true;
+            }
+
             $uploadXML .= '<DispatchTimeMax>' . $product['product']['*DispatchTimeMax'] . '</DispatchTimeMax>';
             $uploadXML .= '<ListingDuration>' . $product['product']['*Duration'] . '</ListingDuration>';
             $uploadXML .= '<ListingType>FixedPriceItem</ListingType>';
@@ -1936,13 +1943,17 @@ class Ebay_M extends Master_M {
                 $start_year = min($years);
                 $end_year = max($years);
                 if ($start_year != $end_year) {
-                    $uploadXML .= '<Title>' . substr(strip_tags($title . ' ' . $start_year . '-' . $end_year), 0, 78) . '</Title>';
+                    $uploadXML .= '<Title>' . ($part_title = substr(strip_tags($title . ' ' . $start_year . '-' . $end_year), 0, 78)) . '</Title>';
                 } else {
-                    $uploadXML .= '<Title>' . substr(strip_tags($title . ' ' . $start_year), 0, 78) . '</Title>';
+                    $uploadXML .= '<Title>' . ($part_title = substr(strip_tags($title . ' ' . $start_year), 0, 78)) . '</Title>';
                 }
             } else {
-                $uploadXML .= '<Title>' . substr(strip_tags($title), 0, 78) . '</Title>';
+                $uploadXML .= '<Title>' . ($part_title = substr(strip_tags($title), 0, 78)) . '</Title>';
             }
+            if ($late_description) {
+                $uploadXML .= '<Description>' . $part_title . '</Description>';
+            }
+
             $uploadXML .= '</Item>';
             $uploadXML .= '</AddFixedPriceItemRequest>
 ';
