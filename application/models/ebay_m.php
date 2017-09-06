@@ -2187,6 +2187,7 @@ class Ebay_M extends Master_M {
 									$xml = $this->unZipArchive($filename);
 									if ($xml !== false) {
 										$responses = $merchantData->addFixedPriceItem($xml);
+										print_r($responses);
 										foreach ($responses as $response) {
 											if (isset($response->Errors)) {
 												foreach ($response->Errors as $error) {
@@ -2200,7 +2201,7 @@ class Ebay_M extends Master_M {
 											}
 											if ($response->Ack !== 'Failure') {
 												printf(
-													"The item was listed to the eBay Sandbox with the Item number %s\n",
+													"The item was listed to eBay with the Item number %s\n",
 													$response->ItemID
 												);
 											}
