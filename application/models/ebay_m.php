@@ -3174,8 +3174,9 @@ class Ebay_M extends Master_M {
                 }
             }
         }
-        exit('Enter paypal email address in admin.');
-    }
+        // You should never get here now.
+        throw new Exception("eBay Request without markup.");
+   }
 	
 	
     public function get_quantity() {
@@ -3190,7 +3191,8 @@ class Ebay_M extends Master_M {
                 }
             }
         }
-        exit('Enter quantity in admin.');
+        // You should never get here.
+        throw new Exception("eBay Request without quantity.");
     }
 	
 	
