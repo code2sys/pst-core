@@ -2051,6 +2051,9 @@ class Ebay_M extends Master_M {
 					);
 				}
 			}
+			print_r($createUploadJobResponse);
+			print_r($createUploadJobResponse->errorMessage);
+
 			if ($createUploadJobResponse->ack !== 'Failure') {
 				printf(
 					"JobId [%s] FileReferenceId [%s]\n",
@@ -2093,7 +2096,11 @@ class Ebay_M extends Master_M {
 					);
 				}
 			}
-			if ($uploadFileResponse->ack !== 'Failure') {
+
+            print_r($uploadFileResponse);
+            print_r($uploadFileResponse->errorMessage);
+
+            if ($uploadFileResponse->ack !== 'Failure') {
 				/**
 				 * Once the file has uploaded we can tell eBay to start processing it.
 				 */
