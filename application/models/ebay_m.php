@@ -2045,7 +2045,7 @@ class Ebay_M extends Master_M {
 			if (isset($createUploadJobResponse->errorMessage)) {
 				foreach ($createUploadJobResponse->errorMessage->error as $error) {
 					printf(
-						"%s: %s\n\n",
+						"2048 %s: %s\n\n",
 						$error->severity === BulkDataExchange\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 						$error->message
 					);
@@ -2090,7 +2090,7 @@ class Ebay_M extends Master_M {
 			if (isset($uploadFileResponse->errorMessage)) {
 				foreach ($uploadFileResponse->errorMessage->error as $error) {
 					printf(
-						"%s: %s\n\n",
+						"2093 %s: %s\n\n",
 						$error->severity === FileTransfer\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 						$error->message
 					);
@@ -2112,7 +2112,7 @@ class Ebay_M extends Master_M {
 				if (isset($startUploadJobResponse->errorMessage)) {
 					foreach ($startUploadJobResponse->errorMessage->error as $error) {
 						printf(
-							"%s: %s\n\n",
+							"2115 %s: %s\n\n",
 							$error->severity === BulkDataExchange\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 							$error->message
 						);
@@ -2130,7 +2130,7 @@ class Ebay_M extends Master_M {
 						if (isset($getJobStatusResponse->errorMessage)) {
 							foreach ($getJobStatusResponse->errorMessage->error as $error) {
 								printf(
-									"%s: %s\n\n",
+									"2133 %s: %s\n\n",
 									$error->severity === BulkDataExchange\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 									$error->message
 								);
@@ -2166,7 +2166,7 @@ class Ebay_M extends Master_M {
 							foreach ($downloadFileResponse->errorMessage->error as $error) {
 							    print_r($error);
 								printf(
-									"%s: %s\n\n",
+									"2169 %s: %s\n\n",
 									$error->severity === FileTransfer\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 									$error->message
 								);
@@ -2192,7 +2192,7 @@ class Ebay_M extends Master_M {
 											if (isset($response->Errors)) {
 												foreach ($response->Errors as $error) {
 													printf(
-														"%s: %s\n%s\n\n",
+														"2195 %s: %s\n%s\n\n",
 														$error->SeverityCode === MerchantData\Enums\SeverityCodeType::C_ERROR ? 'Error' : 'Warning',
 														$error->ShortMessage,
 														$error->LongMessage
@@ -2252,7 +2252,7 @@ class Ebay_M extends Master_M {
 		if (isset($response->errorMessage)) {
 			foreach ($response->errorMessage->error as $error) {
 				printf(
-					"%s: %s\n\n",
+					"2255 %s: %s\n\n",
 					$error->severity === BulkDataExchange\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 					$error->message
 				);
@@ -2288,7 +2288,7 @@ class Ebay_M extends Master_M {
 						if (isset($response->errorMessage)) {
 							foreach ($response->errorMessage->error as $error) {
 								printf(
-									"%s: %s\n\n",
+									"2291 %s: %s\n\n",
 									$error->severity === BulkDataExchange\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 									$error->message
 								);
