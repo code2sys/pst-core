@@ -256,7 +256,10 @@ class Ebay_M extends Master_M {
 
 
             if(isset($product['product']['item_id'])) {
-                $pic_sql = "SELECT * from partimage where partimage.part_id = " . $product['product']['item_id'];
+                // JLB 09-06-17
+                // https://forums.developer.ebay.com/questions/8387/why-appears-ebay-error-10115-you-entered-more-pict.html
+                // There is a limit of 12 pictures.
+                $pic_sql = "SELECT * from partimage where partimage.part_id = " . $product['product']['item_id'] . " LIMIT 12";
                 $query = $this->db->query($pic_sql);
                 $pics = $query->result_array();
                 if (is_array($pics)) {
@@ -2161,7 +2164,9 @@ class Ebay_M extends Master_M {
 							}
 						}
 						if ($getJobStatusResponse->ack !== 'Failure') {
-							printf("Status is %s\n", $getJobStatusResponse->jobProfile[0]->jobStatus);
+						    if ($this->debug) {
+                                printf("Status is %s\n", $getJobStatusResponse->jobProfile[0]->jobStatus);
+                            }
 							switch ($getJobStatusResponse->jobProfile[0]->jobStatus) {
 								case BulkDataExchange\Enums\JobStatus::C_COMPLETED:
 									$downloadFileReferenceId = $getJobStatusResponse->jobProfile[0]->fileReferenceId;
@@ -2299,18 +2304,20 @@ class Ebay_M extends Master_M {
 			$upTo = min(count($response->jobProfile), 3);
 			$upTo = 0;
 			if(isset($response->jobProfile)) {
-				foreach($response->jobProfile as $job) {		
-					printf(
-						"ID: %s\nType: %s\nStatus: %s\nInput File Reference ID: %s\nFile Reference ID: %s\nPercent Complete: %s\nCreated: %s\nCompleted: %s\n\n",
-						$job->jobId,
-						$job->jobType,
-						$job->jobStatus,
-						$job->inputFileReferenceId,
-						$job->fileReferenceId,
-						$job->percentComplete,
-						$job->creationTime->format('H:i (\G\M\T) \o\n l jS F Y'),
-						isset($job->completionTime) ? $job->completionTime->format('H:i (\G\M\T) \o\n l jS F Y') : ''
-					);
+				foreach($response->jobProfile as $job) {
+				    if ($this->debug) {
+                        printf(
+                            "ID: %s\nType: %s\nStatus: %s\nInput File Reference ID: %s\nFile Reference ID: %s\nPercent Complete: %s\nCreated: %s\nCompleted: %s\n\n",
+                            $job->jobId,
+                            $job->jobType,
+                            $job->jobStatus,
+                            $job->inputFileReferenceId,
+                            $job->fileReferenceId,
+                            $job->percentComplete,
+                            $job->creationTime->format('H:i (\G\M\T) \o\n l jS F Y'),
+                            isset($job->completionTime) ? $job->completionTime->format('H:i (\G\M\T) \o\n l jS F Y') : ''
+                        );
+                    }
 					if($job->jobStatus!="Aborted"&&$job->jobStatus!="Completed"&&$job->jobStatus!="Failed") {
 						
 						$request = new Types\AbortJobRequest();
