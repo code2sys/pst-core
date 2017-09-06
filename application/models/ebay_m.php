@@ -2867,7 +2867,7 @@ class Ebay_M extends Master_M {
 		$this->cred['Setting']['credentials']['certId'] = $this->cred['Setting']['cert_id'];
 		$this->cred['Setting']['credentials']['devId'] = $this->cred['Setting']['dev_id'];
 		$this->cred['Setting']['authToken'] = $this->cred['Setting']['user_token'];
-*/
+
 
         $this->cred['Setting'] = array(
             'dev_id' => "b75ef97a-a42e-4373-ae99-019f78f9abdb",
@@ -2880,7 +2880,7 @@ class Ebay_M extends Master_M {
 		$this->cred['Setting']['credentials']['devId'] = $this->cred['Setting']['dev_id'];
 		$this->cred['Setting']['authToken'] = $this->cred['Setting']['user_token'];
 		$this->cred['Setting']['sandbox'] = true;
-
+*/
 
 		$sql = "SELECT ebay_app_id, ebay_cert_id, ebay_dev_id, ebay_user_token, ebay_environment  
 				FROM contact 
@@ -3232,6 +3232,7 @@ class Ebay_M extends Master_M {
    }
 
    public function get_user_token() {
+       $this->getEbayAuthSettingsFromDb();
        if ($this->cred['Setting']['user_token'] != "") {
            return $this->cred['Setting']['user_token'];
        }
