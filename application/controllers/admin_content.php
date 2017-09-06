@@ -330,6 +330,9 @@ class Admin_Content extends Master_Controller {
         $this->_mainData['feed'] = $this->admin_m->get_feed_log();
         $this->load->model('Ebaysetting');
         $this->load->model('ebay_m');
+        $this->_mainData["ebay_error"] = $this->ebay_m->checkForFatalErrors($this->_mainData["ebay_error_string"]);
+        $this->_mainData["ebay_warning"] = $this->ebay_m->checkForWarnings($this->_mainData["ebay_warning_string"]);
+
         $this->_mainData['ebay_feeds'] = $this->ebay_m->get_ebay_feed_log();
         $this->_mainData['ebaysettings'] = $this->Ebaysetting->getEbaySettings();
         $this->_mainData['ebayshippingsettings'] = $this->Ebaysetting->getEbayShippingSettings();

@@ -3150,16 +3150,15 @@ class Ebay_M extends Master_M {
         return $shipping_cost;
     }
 
-    public function get_paypalemail() {
+    public function get_paypalemail()
+    {
         $this->db->select("ebay_paypal_email");
         $this->db->from("contact");
-        $this->db->where("id", "1");		
+        $this->db->where("id", "1");
         $query = $this->db->get();
-		$result = $query->result_array();
-		
-		return $result[0]['ebay_paypal_email'];
+        $result = $query->result_array();
 
-        exit('Enter paypal email address in admin.');
+        return $result[0]['ebay_paypal_email'];
     }
 
     public function get_markup() {
@@ -3177,8 +3176,69 @@ class Ebay_M extends Master_M {
         // You should never get here now.
         throw new Exception("eBay Request without markup.");
    }
-	
-	
+
+   /*
+    * JLB 09-06-17
+    * So, we can't run it if there are any fatal errors. We shouldn't allow them to even make a request.
+    */
+
+   /*
+    * Fatal error conditions: no markup, no quantity, no environment, no user token.
+    */
+   public function checkForFatalErrors(&$error_message) {
+       $success = true;
+       $error_message = "";
+
+       // I just want to respect the structure.
+       try {
+           $markup = $this->get_markup();
+       } catch(Exception $e) {
+           $success = false;
+           $error_message .= "eBay Markup % is not defined. ";
+       }
+
+       try {
+           $quantity = $this->get_quantity();
+       } catch(Exception $e) {
+           $success = false;
+           $error_message .= "eBay Listing Quantity is not defined. ";
+       }
+
+       // now, do you have the token?
+       try {
+           $quantity = $this->get_user_token();
+       } catch(Exception $e) {
+           $success = false;
+           $error_message .= "eBay User Token is not defined. ";
+       }
+
+       return $success;
+   }
+
+   /*
+    * Warning conditions: No PayPal email address...
+    */
+   public function checkForWarnings(&$error_message) {
+       $success = true;
+        $error_message = "";
+
+        $paypal_email = $this->get_paypalemail();
+        if (is_null($paypal_email) || trim($paypal_email) === "") {
+            $success = false;
+            $error_message = "PayPal email address is missing. ";
+        }
+
+       return $success;
+   }
+
+   public function get_user_token() {
+       if ($this->cred['Setting']['user_token'] != "") {
+           return $this->cred['Setting']['user_token'];
+       }
+
+       throw new Exception("Missing eBay user token.");
+   }
+
     public function get_quantity() {
         $this->db->select("*");
         $this->db->from("ebay_settings");

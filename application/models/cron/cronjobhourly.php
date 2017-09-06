@@ -10,12 +10,9 @@ class CronJobHourly extends AbstractCronJob
         $this->fixNullManufacturers();
         $this->fixBrandSlugs();
         $this->fixBrandLongNames();
-
         $this->fixPendingEBay();
-
 		$this->documentGeneration();
 	}
-
 
 	public function fixVideos() {
         $tables = array("brand_video","category_video", "motorcycle_video", "part_video", "top_videos");
@@ -33,15 +30,21 @@ class CronJobHourly extends AbstractCronJob
     }
 
 	public function fixPendingEBay() {
-        $query = $this->db->query("select * from ebay_feed_log where run_by = 'admin' and status = 0");
-        $results = $query->result_array();
+        $this->load->model("ebay_m");
 
-        if (count($results) > 0) {
-            // do the eBay thing...
-            $this->load->model("ebay_m");
-            $this->ebay_m->generateEbayFeed(0, 1);
-            foreach ($results as $row) {
-                $this->db->query("Update ebay_feed_log set status = 1 where id = ?", $row["id"]);
+        $error_message = "";
+        if ($this->ebay_m->checkForFatalErrors($error_message)) {
+            // JLB 09-06-17 Only do this if there aren't any immediate fatal errors to address. Otherwise, this is stupid.
+
+            $query = $this->db->query("select * from ebay_feed_log where run_by = 'admin' and status = 0");
+            $results = $query->result_array();
+
+            if (count($results) > 0) {
+                // do the eBay thing...
+                $this->ebay_m->generateEbayFeed(0, 1);
+                foreach ($results as $row) {
+                    $this->db->query("Update ebay_feed_log set status = 1 where id = ?", $row["id"]);
+                }
             }
         }
     }
