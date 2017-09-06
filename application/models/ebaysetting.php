@@ -30,6 +30,7 @@ class Ebaysetting extends Master_M {
         $this->db->from("ebay_shipping_rates");
         $where = array('min_value' => $minvalue, 'max_value' => $maxvalue, 'shipping_cost' => $shippingcost);
         $this->db->where($where);
+        $query = $this->db->get();
         return $query->result_array();
     }
 
@@ -91,37 +92,40 @@ class Ebaysetting extends Master_M {
     }
     public function markup($post) {
         if (!empty($post)) {
-            $data = array(
-                'key' => 'ebay_markup',
-                'value' => $post['ebay_markup']
-            );
-            $markup = $this->check_markup();
-            if (!empty($markup[0]['value'])) {
-                $this->db->where('value', $markup[0]['value']);
-                $this->db->update('ebay_settings', $data);
-            } else {
-                $this->db->insert('ebay_settings', $data);
-            }
-            return redirect('admin_content/feeds');
+            // JLB 09-06-17 - I found it really odd that you could just keep adding these ...
+            $this->db->query(sprintf("Insert into ebay_settings (key, value) values ('ebay_markup', %.02f) on duplicate key update value = values(value);", $post['ebay_markup']));
+//            $data = array(
+//                'key' => 'ebay_markup',
+//                'value' => $post['ebay_markup']
+//            );
+//            $markup = $this->check_markup();
+//            if (!empty($markup[0]['value'])) {
+//                $this->db->where('value', $markup[0]['value']);
+//                $this->db->update('ebay_settings', $data);
+//            } else {
+//                $this->db->insert('ebay_settings', $data);
+//            }
         }
+        return redirect('admin_content/feeds');
     }
 
     public function add_quantity($post) {
 
         if (!empty($post)) {
-            $data = array(
-                'key' => 'quantity',
-                'value' => $post['quantity']
-            );
-            $quantity = $this->check_quantity();
-            if (!empty($quantity[0]['value'])) {
-                $this->db->where('value', $quantity[0]['value']);
-                $this->db->update('ebay_settings', $data);
-            } else {
-                $this->db->insert('ebay_settings', $data);
-            }
-            return redirect('admin_content/feeds');
+            $this->db->query(sprintf("Insert into ebay_settings (key, value) values ('quantity', %d) on duplicate key update value = values(value);", $post['quantity']));
+//            $data = array(
+//                'key' => 'quantity',
+//                'value' => $post['quantity']
+//            );
+//            $quantity = $this->check_quantity();
+//            if (!empty($quantity[0]['value'])) {
+//                $this->db->where('value', $quantity[0]['value']);
+//                $this->db->update('ebay_settings', $data);
+//            } else {
+//                $this->db->insert('ebay_settings', $data);
+//            }
         }
+        return redirect('admin_content/feeds');
     }
 
 }

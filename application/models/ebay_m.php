@@ -60,6 +60,45 @@ class Ebay_M extends Master_M {
         echo "</pre>";
     }
 
+    /**************************************\
+     *
+     * These functions have to do with the ebay feed item table. This is a table for keeping track of a run.
+     *
+     * ************************************/
+
+    protected $current_run_ordinal;
+
+    protected function beginRun() {
+        $this->current_run_ordinal = 0;
+        $this->db->query("Delete from ebay_feed_item");
+    }
+
+    protected function addRow($sku, $title, $fragment) {
+        $this->db->query("Insert into ebay_feed_item (sku, title, ordinal, fragment) values (?, ?, ?, ?)", array($sku, $title, $this->current_run_ordinal, $fragment));
+        $this->current_run_ordinal++;
+    }
+
+    protected function beginResults() {
+        $this->current_run_ordinal = 0;
+    }
+
+    protected function markDuplicate()
+    {
+        $this->db->query("Update ebay_feed_item set duplicate = 1 where ordinal = ? limit 1", array($this->current_run_ordinal));
+        $this->current_run_ordinal++;
+    }
+
+    protected function markOK() {
+        $this->current_run_ordinal++;
+    }
+
+    protected function markError($error_message) {
+        $this->db->query("Update ebay_feed_item set error = 1, error_string = ? where ordinal = ? limit 1", array($error_message, $this->current_run_ordinal));
+        $this->current_run_ordinal++;
+    }
+
+    /*********END*********/
+
     public function generateEbayFeed($products_count, $upload_to_ebay = false, $store_) {
         //$products = $this->ebaylistings_no_variation(0, $products_count, 1);
         $temp_file = STORE_DIRECTORY . "/ebay_feed.xml"; // tempnam("/tmp", "ebay_");
@@ -70,6 +109,8 @@ class Ebay_M extends Master_M {
 		$newArray = [];
 		$offset = 0;
         $limit = $products_count == 0 ? 1500 : $products_count;
+
+        $this->beginRun();
 
         do {
             $products = $this->ebayListings($offset, $limit, 1, $upload_to_ebay);
@@ -170,6 +211,7 @@ class Ebay_M extends Master_M {
         $store_url = base_url();
         $uploadXML = "";
         foreach ($products as $product) {
+            $uploadXML_start_length = strlen($uploadXML);
 //            $string = utf8_encode($product['product']['*Description']);
 
             $string = $this->xmlEscape($product['product']['*Description']);
@@ -454,6 +496,7 @@ class Ebay_M extends Master_M {
             $uploadXML .= '</Item>';
             $uploadXML .= '</AddFixedPriceItemRequest>
 ';
+            $this->addRow($product['product']['C:Manufacturer Part Number'], $title, substr($uploadXML, $uploadXML_start_length));
         }
 
         fputs($handle, $uploadXML);
@@ -1808,7 +1851,7 @@ class Ebay_M extends Master_M {
                         //die('test');
                         if (!$check_combo_again) {
 							
-							echo "MARKUP: " . $markup;
+//							echo "MARKUP: " . $markup;
 
 /*							if($product['product_options']['COLOR']) {
 
@@ -2136,6 +2179,7 @@ class Ebay_M extends Master_M {
 						print("Done\n");
 						if (isset($downloadFileResponse->errorMessage)) {
 							foreach ($downloadFileResponse->errorMessage->error as $error) {
+							    print_r($error);
 								printf(
 									"%s: %s\n\n",
 									$error->severity === FileTransfer\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
