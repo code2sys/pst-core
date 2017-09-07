@@ -902,7 +902,6 @@ class Ebay_M extends Master_M {
                                 $finalArray[] = $rb;
                             }
                         } else {
-                            $part['*Quantity'] = $categoryRec[0]['*Quantity'];
                             $part['*StartPrice'] = $basicPrice;
                             $part['item_id'] = $part_id;
                             $finalArray[] = $part;
