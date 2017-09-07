@@ -499,11 +499,16 @@ class Ebay_M extends Master_M {
     }
 
 
+    /*
+     * This transforms a list of products into an array $final.
+     * $final is mapped by part title.
+     */
     private function convertToEbayFormat($data) {
         //$this->pr($data);
         //echo("convertToEbayFormat");
         $final = array();
         foreach ($data as $key => $value) {
+
             if (strpos($value['*Title'], 'COMBO') !== FALSE || isset($value['product_options'])) {
                 $product_variation = $value['product_variation'];
                 $different_variations = $value['product_options'];
@@ -516,26 +521,27 @@ class Ebay_M extends Master_M {
                 );
                 //$this->pr($different_variations);
                 //die("aisi hoti hai");
-            } 
-			// else {
-                if (trim($value['*Title']) != "") {
-                    $product_data[$value['*Title']] = $value;
-                    $title = $value['*Title'];
-                    $variations = [];
+            }
+
+            // JLB 09-07-17 I think they incorrectly did compatibility and variation as the same thing...
+            if (trim($value['*Title']) != "") {
+                $title = $value['*Title'];
+                $final[$title]['product'] = $value;
+                if (trim(strtolower($value['Relationship'])) == "compatibility") {
+                    if (!array_key_exists("product_variation", $final[$title])) {
+                        $final[$title]["product_variation"] = array();
+                    }
+                    $final[$title]["product_variation"][] = $value;
                 }
+            }
 
-                if (trim(strtolower($value['Relationship'])) == "variation" || trim(strtolower($value['Relationship'])) == "compatibility") {
-                    $variations[] = $value;
-                }
+            // JLB 09-07-17
+            // I think this is again done wrong on the variation type.
+//            if (trim(strtolower($value['Relationship'])) == "variation" || trim(strtolower($value['Relationship'])) == "compatibility") {
+//                $variations[] = $value;
+//            }
 
-                $final[$title]['product'] = $product_data[$title];
-                $final[$title]['product_variation'] = $variations;
 
-//				$final[$title] = array(
- //                   'product' => $product_data[$title],
- //                   'product_variation' => $variations
- //               );
-            // }
 
 		 }
         //echo "************************************";
