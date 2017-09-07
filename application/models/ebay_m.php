@@ -787,12 +787,13 @@ class Ebay_M extends Master_M {
                 $partnumbers = $query->result_array();
                 $query->free_result();
 
-                if (is_array($partnumbers)) {
+                // JLB 09-07-17 This used to be the craziest thing.
+                if (is_array($partnumbers) && count($partnumbers) > 0) {
                     $categoryRec = array();
                     $fitmentArr = array();
                     $basicPrice = 0;
                     $samePrice = TRUE;
-                    if (count($partnumbers) > 0) {
+//                    if (count($partnumbers) > 0) {
                         foreach ($partnumbers as $pn) {
 
                             if ($pn['*Quantity'] > 0) {
@@ -878,13 +879,18 @@ class Ebay_M extends Master_M {
                                 }
                             }
                         }
-                    } else {
-                        $part["*Quantity"] = min($partnumbers[0]["*Quantity"], $quantity);
-                        $part['*StartPrice'] = $partnumbers[0]['price'];
-                        $finalArray[] = $part;
-                    }
+//                    } else {
+//                        // JLB 09-07-17 I don't think this else clause is EVER reached...
+//                        $part["*Quantity"] = min($partnumbers[0]["*Quantity"], $quantity);
+//                        $part['*StartPrice'] = $partnumbers[0]['price'];
+//                        $finalArray[] = $part;
+//                    }
 
-                    if (($samePrice) && (@$categoryRec)) {
+                    // JLB 09-07-17
+                    // First, it's either the same price or it's not.
+                    // Second, it's got to have a price. Otherwise, what are we doing? It gets a price by having a quantity.
+                    // if (($samePrice) && count($categoryRec) > 0) {
+                    if (($samePrice) && $basicPrice > 0) {
                         $part['*Quantity'] = '';
                         $part['*StartPrice'] = $basicPrice;
                         $part['item_id'] = $part_id;
@@ -894,7 +900,7 @@ class Ebay_M extends Master_M {
                             $rb['*StartPrice'] = $basicPrice;
                             $finalArray[] = $rb;
                         }
-                    } elseif (!empty($categoryRec)) {
+                    } elseif (count($categoryRec) > 0) {
                         $variations = array();
                         $combopartIds = $this->checkForComboReporting($part_id);
                         if (is_array($combopartIds)) {
@@ -949,6 +955,9 @@ class Ebay_M extends Master_M {
                         $part['product_options'] = $options_vailable;
                         $part['product_variation'] = $combo_variations;
                         $finalArray[] = $part;
+                    } else {
+                        print "Should be unreachable line 959:";
+                        print_r($part);
                     }
 
                     if (!empty($fitmentArr)) {
@@ -993,6 +1002,7 @@ class Ebay_M extends Master_M {
                         }
                     }
                 }
+                // JLB 09-07-17 - This appears to go nowhere...why does it exist?
                 if (empty($part['saleprice'])&&isset($part['customprice'])) {
                     $part['*StartPrice'] = $part['customprice'];
 
