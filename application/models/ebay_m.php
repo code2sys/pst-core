@@ -389,10 +389,11 @@ class Ebay_M extends Master_M {
                         $variation_XML .= '<VariationSpecifics>';
                         $variation_XML .= '<NameValueList>';
 
-                        if (trim(strtolower($combination['Relationship'])) == 'variation') {
-                            $variation_XML .= '<Name>' . $variations['0'] . '</Name>';
-                            $variation_XML .= '<Value>' . $variations['1'] . '</Value>';
-                        }
+                        // JLB - why does this check the exact same condition? Does it mutate?
+//                        if (trim(strtolower($combination['Relationship'])) == 'variation') {
+                        $variation_XML .= '<Name>' . $variations['0'] . '</Name>';
+                        $variation_XML .= '<Value>' . $variations['1'] . '</Value>';
+//                        }
 
                         $variation_XML .= '</NameValueList>';
                         $variation_XML .= '</VariationSpecifics>';
@@ -436,6 +437,25 @@ class Ebay_M extends Master_M {
                             }
                             $check_combo_again = TRUE;
                         }
+                    } else {
+                        // JLB 09-07-17
+                        // We're going to stamp things out here to match the other one, or else we might have no price.
+                        $variations = explode("=", $combination['RelationshipDetails']);
+                        $variation_XML .= '<Variation>';
+                        $product_price = $combination['*StartPrice'];
+                        $variation_XML .='<StartPrice>' . $combination['*StartPrice'] . '</StartPrice>';
+
+                        $variation_XML .='<Quantity>' . min($combination['*Quantity'], $quantity) . '</Quantity>';
+
+                        $variation_XML .= '<VariationSpecifics>';
+                        $variation_XML .= '<NameValueList>';
+
+                        $variation_XML .= '<Name>' . $variations['0'] . '</Name>';
+                        $variation_XML .= '<Value>' . $variations['1'] . '</Value>';
+
+                        $variation_XML .= '</NameValueList>';
+                        $variation_XML .= '</VariationSpecifics>';
+                        $variation_XML .= '</Variation>';
                     }
                 }
                 $compatibility_XML .= '</ItemCompatibilityList>';
