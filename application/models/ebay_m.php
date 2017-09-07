@@ -918,22 +918,23 @@ class Ebay_M extends Master_M {
                     // First, it's either the same price or it's not.
                     // Second, it's got to have a price. Otherwise, what are we doing? It gets a price by having a quantity.
                     // if (($samePrice) && count($categoryRec) > 0) {
-                    if (($samePrice) && $basicPrice > 0) {
-                        if (count($categoryRec) > 1) {
-                            $part['*Quantity'] = '';
+                    // if (($samePrice) && $basicPrice > 0) {
+                    if (count($categoryRec) == 1) {
+//                        if (count($categoryRec) > 1) {
+//                            $part['*Quantity'] = '';
+//                            $part['*StartPrice'] = $basicPrice;
+//                            $part['item_id'] = $part_id;
+//                            $finalArray[] = $part;
+//
+//                            foreach ($categoryRec as $rb) {
+//                                $rb['*StartPrice'] = $basicPrice;
+//                                $finalArray[] = $rb;
+//                            }
+//                        } else {
                             $part['*StartPrice'] = $basicPrice;
                             $part['item_id'] = $part_id;
                             $finalArray[] = $part;
-
-                            foreach ($categoryRec as $rb) {
-                                $rb['*StartPrice'] = $basicPrice;
-                                $finalArray[] = $rb;
-                            }
-                        } else {
-                            $part['*StartPrice'] = $basicPrice;
-                            $part['item_id'] = $part_id;
-                            $finalArray[] = $part;
-                        }
+//                        }
                     } elseif (count($categoryRec) > 0) { // JLB 09-07-17: This has to mean that there are at least two.
                         // $variations = array();
 //                        $combopartIds = $this->checkForComboReporting($part_id);
@@ -2244,7 +2245,7 @@ class Ebay_M extends Master_M {
         if (is_array($query->result_array())) {
             foreach ($query->result_array() as $paypal_value_check) {
                 if (key_exists('value', $paypal_value_check) && $paypal_value_check['value'] != '') {
-                    return $paypal_value_check['value'];
+                    return floatVal($paypal_value_check['value']);
                 }
             }
         }
