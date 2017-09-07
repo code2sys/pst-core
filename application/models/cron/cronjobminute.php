@@ -50,9 +50,13 @@ class CronJobMinute extends AbstractCronJob
         $this->fixPendingGoogle();
 
         $this->load->model("ebay_m");
-        // PLEASE NOTE: That is going to die if it doesn't have credentials, so it MUST BE LAST.
-        $this->ebay_m->dieSilentlyOnBadCredentials(true);
-        $this->ebay_m->getOrders();
+        $error_message = "";
+        if ($this->ebay_m->checkForFatalErrors($error_message)) {
+            // JLB 09-06-17 Only do this if there aren't any immediate fatal errors to address. Otherwise, this is stupid.
+            // PLEASE NOTE: That is going to die if it doesn't have credentials, so it MUST BE LAST.
+            $this->ebay_m->dieSilentlyOnBadCredentials(true);
+            $this->ebay_m->getOrders();
+        }
     }
 
 	protected function procmail($limit = 50)

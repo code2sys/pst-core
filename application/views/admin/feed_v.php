@@ -37,7 +37,30 @@
                     <tr>
                         <th colspan="5"><h2>Ebay Product Data Feed:</h2></th>
                     </tr>
-                    <tr>
+                  <?php if ($ebay_error): ?>
+                        <tr>
+                            <td colspan="5">
+                                <div style="border: 5px solid red; background: #fee; padding: 1em;">
+                                    <div style="text-align: center"><strong>eBay Configuration Error</strong></div>
+                                    <p>Your store has the following eBay configuration errors preventing sending parts to eBay:</p>
+                                    <p><?php echo $ebay_error_string; ?></p>
+                                </div>
+                            </td>
+                        </tr>
+                  <?php else: ?>
+                      <?php if ($ebay_warning): ?>
+                      <tr>
+                          <td colspan="5">
+                              <div style="border: 5px solid yellow; background: #ffe; padding: 1em;">
+                                  <div style="text-align: center"><strong>eBay Configuration Warning</strong></div>
+                                  <p><?php echo $ebay_warning_string; ?></p>
+                              </div>
+                          </td>
+                      </tr>
+
+                      <?php endif; ?>
+
+                      <tr>
                         <td><button type="button" name="getebay_feeds" value="" onClick="window.location.href = '<?php echo base_url('admin_content/send_new_ebay/'); ?>'; return false;">Generate & Send Ebay Product Feed</button></td>
                         <td>Status : <?php echo isset($ebay_feeds['status']) && $ebay_feeds['status'] == 1 ? 'Completed' : 'Processing'; ?></td>
                         <td>Last Run : <?php echo isset($ebay_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($ebay_feeds['run_at'])) : ''; ?></td>
@@ -47,31 +70,31 @@
                         <?php endif; ?>
                         <td>End all products on ebay: <a href="<?php echo site_url() . 'welcome/hit_ebay_end'; ?>">end_all_products</a></td>
                     </tr>
+                  <?php endif; ?>
                </table>
             <br>
             <form action="<?php echo base_url('admin_content/ebay_markup'); ?>" method="post" id="form_example" class="form_standard">
 
 
-                <table class="paypal_email" width="100" cellpadding="1">
+                <table class="paypal_email" cellpadding="1">
                     <tr>
                         <td><h3>eBay Markup %:</h3></td>
                         <td><input  name="ebay_markup" type="text" value="<?php echo $ebaymarkup[0]['value']; ?>"></td>
-                        <td><button type="submit" >Update</button></td>
+                        <td><button type="submit" >Set</button></td>
                     </tr>
                 </table>
             </form><br>
             <form action="<?php echo base_url('admin_content/ebay_quantity'); ?>" method="post" id="form_example" class="form_standard">
-                <table class="paypal_email" width="100" cellpadding="1">
+                <table class="paypal_email" cellpadding="1">
                     <tr>
-                        <td><h3>Ebay Listing Quantity:</h3></td>
+                        <td><h3>eBay Listing Quantity:</h3></td>
                         <td><input type="number" name="quantity" value="<?php echo $quantity[0]['value']; ?>"></td>
-                        <td><input type="submit" value="add"></td>
+                        <td><button type="submit" >Set</button></td>
                     </tr>
                 </table>
             </form><br>
             <form action="<?php echo base_url('admin_content/ebay_settings'); ?>" method="post" id="form_example" class="form_standard">
-                <table class="ebay_setting" width="100">
-
+                <table class="ebay_setting" >
 
                     <h2 style="color: #444;">ebay shipping rules:</h2>
 

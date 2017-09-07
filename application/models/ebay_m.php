@@ -32,11 +32,12 @@ class Ebay_M extends Master_M {
     protected $_dieSilentlyIfBad;
     protected $store_zip_code;
     protected $store_name;
+    protected $debug;
 	
     public function __construct() {
         parent::__construct();
         $this->_dieSilentlyIfBad = false;
-
+        $debug = false;
 
 	/*
 	 * JLB 08-23-17
@@ -60,6 +61,54 @@ class Ebay_M extends Master_M {
         echo "</pre>";
     }
 
+    /**************************************\
+     *
+     * These functions have to do with the ebay feed item table. This is a table for keeping track of a run.
+     *
+     * ************************************/
+
+    protected $current_run_ordinal;
+
+    protected function beginRun() {
+        $this->current_run_ordinal = 0;
+        $this->db->query("Delete from ebay_feed_item");
+    }
+
+    protected function addRow($sku, $title, $fragment) {
+        $this->db->query("Insert into ebay_feed_item (sku, title, ordinal, fragment) values (?, ?, ?, ?)", array($sku, $title, $this->current_run_ordinal, $fragment));
+        $this->current_run_ordinal++;
+    }
+
+    protected function beginResults() {
+        $this->current_run_ordinal = 0;
+    }
+
+    protected function markDuplicate()
+    {
+        $this->db->query("Update ebay_feed_item set duplicate = 1 where ordinal = ? limit 1", array($this->current_run_ordinal));
+        $this->current_run_ordinal++;
+    }
+
+    protected function markOK() {
+        $this->current_run_ordinal++;
+    }
+
+    protected function markError($error_message) {
+        $this->db->query("Update ebay_feed_item set error = 1, error_string = ? where ordinal = ? limit 1", array($error_message, $this->current_run_ordinal));
+        $this->current_run_ordinal++;
+    }
+
+    protected function recordError($CorrelationID, $ShortMessage, $LongMessage) {
+        if ($ShortMessage == "Listing violates the Duplicate Listing policy.") {
+            $this->db->query("Update ebay_feed_item set duplicate = 1 where sku = ?", array($CorrelationID));
+        } else {
+            // it is an error...
+            $this->db->query("Update ebay_feed_item set error = 1, error_string = ?, long_error_string = ? where sku = ?", array($ShortMessage, $LongMessage, $CorrelationID));
+        }
+    }
+
+    /*********END*********/
+
     public function generateEbayFeed($products_count, $upload_to_ebay = false, $store_) {
         //$products = $this->ebaylistings_no_variation(0, $products_count, 1);
         $temp_file = STORE_DIRECTORY . "/ebay_feed.xml"; // tempnam("/tmp", "ebay_");
@@ -71,6 +120,8 @@ class Ebay_M extends Master_M {
 		$offset = 0;
         $limit = $products_count == 0 ? 1500 : $products_count;
 
+        $this->beginRun();
+
         do {
             $products = $this->ebayListings($offset, $limit, 1, $upload_to_ebay);
 
@@ -79,41 +130,12 @@ class Ebay_M extends Master_M {
                 $ebay_format_data_new = $ebay_format_data;
                 $this->addIncrementalParts($handle, $ebay_format_data_new);
                 $offset += $limit;
-                print "Current offset: $offset Limit $limit \n";
             }
 
         } while(count($products) > 0);
 
         $this->closeXML($handle);
         $this->cleanXML($temp_file, 1);
-        // unlink($temp_file);
-
-		//var_dump($ebay_format_data);
-//        $this->db->select('part_number');
-//        $this->db->from('ebay_ids');
-//        $query = $this->db->get();
-//        foreach ($query->result_array() as $single) {
-//            $newArray[] = $single['part_number'];
-//        }
-		/*
-		echo "TESTING12345";
-		var_dump($ebay_format_data);
-        foreach ($ebay_format_data as $title_key => $item) {
-            if (in_array($item['product']['C:Manufacturer Part Number'], $newArray)) {
-                $ebay_format_data_revised[$title_key] = $item;
-            } else {
-                $ebay_format_data_new[$title_key] = $item;
-            }
-        }
-		*/
-		//echo "TESTING54321";
-		//var_dump($products);
-		//die();
-		//echo "RAWR";
-        //create/NEW products XML
-        // $this->buildXmlAndHitEbay($ebay_format_data_new, 0, 1, 0);
-        //updating products XML
-//        $this->buildUpateXmlAndHitEbay($ebay_format_data_revised, 0, 1, 0);
     }
 
 
@@ -170,6 +192,7 @@ class Ebay_M extends Master_M {
         $store_url = base_url();
         $uploadXML = "";
         foreach ($products as $product) {
+            $uploadXML_start_length = strlen($uploadXML);
 //            $string = utf8_encode($product['product']['*Description']);
 
             $string = $this->xmlEscape($product['product']['*Description']);
@@ -193,7 +216,12 @@ class Ebay_M extends Master_M {
 
 
             $uploadXML .= '<ConditionID>' . $product['product']['*ConditionID'] . '</ConditionID>';
-            $uploadXML .= '<Description>' . $string . '</Description>';
+            if ($string != "") {
+                $late_description = false;
+                $uploadXML .= '<Description>' . $string . '</Description>';
+            } else {
+                $late_description = true;
+            }
             $uploadXML .= '<DispatchTimeMax>' . $product['product']['*DispatchTimeMax'] . '</DispatchTimeMax>';
             $uploadXML .= '<ListingDuration>' . $product['product']['*Duration'] . '</ListingDuration>';
             $uploadXML .= '<ListingType>FixedPriceItem</ListingType>';
@@ -205,7 +233,10 @@ class Ebay_M extends Master_M {
 
 
             if(isset($product['product']['item_id'])) {
-                $pic_sql = "SELECT * from partimage where partimage.part_id = " . $product['product']['item_id'];
+                // JLB 09-06-17
+                // https://forums.developer.ebay.com/questions/8387/why-appears-ebay-error-10115-you-entered-more-pict.html
+                // There is a limit of 12 pictures.
+                $pic_sql = "SELECT * from partimage where partimage.part_id = " . $product['product']['item_id'] . " LIMIT 12";
                 $query = $this->db->query($pic_sql);
                 $pics = $query->result_array();
                 if (is_array($pics)) {
@@ -444,16 +475,22 @@ class Ebay_M extends Master_M {
                 $start_year = min($years);
                 $end_year = max($years);
                 if ($start_year != $end_year) {
-                    $uploadXML .= '<Title>' . substr(strip_tags($title . ' ' . $start_year . '-' . $end_year), 0, 78) . '</Title>';
+                    $uploadXML .= '<Title>' . ($part_title = substr(strip_tags($title . ' ' . $start_year . '-' . $end_year), 0, 78)) . '</Title>';
                 } else {
-                    $uploadXML .= '<Title>' . substr(strip_tags($title . ' ' . $start_year), 0, 78) . '</Title>';
+                    $uploadXML .= '<Title>' . ($part_title = substr(strip_tags($title . ' ' . $start_year), 0, 78)) . '</Title>';
                 }
             } else {
-                $uploadXML .= '<Title>' . substr(strip_tags($title), 0, 78) . '</Title>';
+                $uploadXML .= '<Title>' . ($part_title = substr(strip_tags($title), 0, 78)) . '</Title>';
             }
+
+            if ($late_description) {
+                $uploadXML .= "<Description>" . $part_title . "</Description>";
+            }
+
             $uploadXML .= '</Item>';
             $uploadXML .= '</AddFixedPriceItemRequest>
 ';
+            $this->addRow($product['product']['C:Manufacturer Part Number'], $title, substr($uploadXML, $uploadXML_start_length));
         }
 
         fputs($handle, $uploadXML);
@@ -572,376 +609,6 @@ class Ebay_M extends Master_M {
         }
     }
 
-    public function ebaylistings_no_variation($offset = 0, $limit = 1000, $return_csv = FALSE) {
-        $finalArray = array();
-        if ($limit == 0) {
-            $limit_query = '';
-        } else {
-            $limit_query = "LIMIT " . $offset . ", " . $limit;
-        }
-        $sql = "SELECT 
-						part.part_id,
-						'Add' AS '*Action(SiteID=eBayMotors|Country=US|Currency=USD|Version=745|CC=UTF-8)',	
-						part.name AS '*Title',
-						part.description AS '*Description',
-						1000 AS '*ConditionID',
-						CONCAT ('http://" . WEBSITE_HOSTNAME . "/productimages/', partimage.path) AS PicURL,
-						'1' AS 'PayPalAccepted',
-						'bvojcek@motomonster.com' AS 'PayPalEmailAddress',
-						'FixedPrice' AS '*Format',
-						'GTC' AS '*Duration',
-						2 AS '*DispatchTimeMax', 
-						'ReturnsAccepted' AS '*ReturnsAcceptedOption',
-						'Days_30' AS 'ReturnsWithinOption',
-						'Buyer' AS 'ShippingCostPaidByOption',
-						brand.name AS 'C:Brand',
-						partvariation.manufacturer_part_number AS 'C:Manufacturer Part Number',
-						'28217' AS 'PostalCode',
-						'UPSGround' AS 'ShippingService-1:Option',
-						'1' AS 'ShippingService-1:FreeShipping',
-						'' as 'CustomLabel',
-						'' AS '*Quantity',
-						'' AS '*StartPrice',
-						'' AS 'Relationship',
-						'' AS 'RelationshipDetails'
-					FROM part
-						JOIN partpartnumber ON partpartnumber.part_id = part.part_id
-						JOIN partimage ON partimage.part_id = partpartnumber.part_id
-						JOIN partnumber ON partnumber.partnumber_id = partpartnumber.partnumber_id
-						JOIN partbrand ON partbrand.part_id = partpartnumber.part_id
-						JOIN brand ON brand.brand_id = partbrand.brand_id
-						JOIN partvariation ON partvariation.partnumber_id = partnumber.partnumber_id
-						WHERE part.part_id IN (747613, 6754685) GROUP BY part.part_id $limit_query";
-
-        $query = $this->db->query($sql);
-        $parts = $query->result_array();
-
-        //$this->pr($parts);
-
-        $query->free_result();
-        if (is_array($parts)) {
-            foreach ($parts as &$part) {
-
-                if (strpos($part['*Title'], 'COMBO') !== FALSE) {
-//                    $this->pr($part);
-//                    echo "***********************************************************";
-//                    $this->pr($parts);
-//                    continue;
-                }
-                $part_id = $part['part_id'];
-                unset($part['part_id']);
-                /*                 * ***********************************
-                  Get Categories with longest string count
-                 * ************************************ */
-                // JLB 08-23-17
-                // I can't understand why this has to be done with a loop instead of a single query, BUT
-                // my real beef is in how they exclude UTV out of hand. There's this thing called
-                // ebay_category_num. Right now, only dirt bike and street bike has a number, so only they go
-                // So this is pointless.
-                $sql = "SELECT category.long_name,category.ebay_category_num
-				FROM category
-				JOIN partcategory ON partcategory.category_id = category.category_id
-				WHERE partcategory.part_id = " . $part_id;
-                // JLB 08-23-17 PRUNED
-                // ' AND long_name NOT LIKE \'%UTV%\'';
-                $query = $this->db->query($sql);
-                $categories = $query->result_array();
-//                print_r($categories);
-//                die("category");
-                $query->free_result();
-                // Create Category Name;
-                $endCategoryName = '';
-
-                $all_categories = array();
-                if ($categories) {
-                    foreach ($categories as $cat) {
-                        if ($cat['ebay_category_num'] != NULL) {
-                            $all_categories[$cat['ebay_category_num']] = $cat['long_name'];
-                            if (strlen($cat['long_name']) > $endCategoryName)
-                                $endCategoryName = $cat['long_name'];
-                        }
-                    }
-                }
-
-//                $this->pr($endCategoryName);
-//                die("category");
-                // If no category, don't list the product
-                if (empty($endCategoryName))
-                    break;
-
-
-//                $this->pr($all_categories);
-//                die("*");
-//                $part['*Category'] = $all_categories;
-//                $part['*Category'] = $this->findTopPrority($all_categories);
-                $part['EbayCategory'] = $this->findTopPrority($all_categories);
-
-                $part['StoreCategory'] = $this->eBayStoreCategoryName($endCategoryName);
-
-                /*                 * ************************
-                  End Category Name.
-                 * ************************* */
-
-                // Get rest of records
-                $sql = "SELECT
-						'' AS '*Action(SiteID=eBayMotors|Country=US|Currency=USD|Version=745|CC=UTF-8)',
-						
-						'' AS '*Title',
-						'' AS '*Description',
-						'' AS '*ConditionID',
-						'' AS PicURL,
-						'' AS 'PayPalAccepted',
-						'' AS 'PayPalEmailAddress',
-						'' AS '*Format',
-						'' AS '*Duration',
-						'' AS 'DispatchTimeMax*', 
-						'' AS 'ReturnsAcceptedOption*',
-						'' AS 'ReturnsWithinOption',
-						'' AS 'ShippingCostPaidByOption',
-						'' AS 'C:Brand',
-						'' AS 'C:Manufacturer Part Number',
-						'' AS 'PostalCode',
-						'' AS 'ShippingService-1:Option',
-						'' AS 'ShippingService-1:FreeShipping',
-						partnumber.partnumber_id as CustomLabel,
-						partnumberpartquestion.answer AS 'answer',
-						partquestion.question,
-						partvariation.quantity_available AS '*Quantity',
-						'' AS '*StartPrice',
-						(partnumber.cost * 1.15) + 15 AS 'MIN_PRICE',
-						CASE WHEN partnumber.price < 100 THEN partnumber.price + 13 ELSE partnumber.price END AS 'MAX_PRICE',
-						partnumber.price,
-						partvariation.stock_code,
-						'' AS 'Relationship',
-						'' AS 'RelationshipDetails',
-						'' AS '*Category',
-						'' AS 'StoreCategory'
-					FROM partnumber
-					JOIN partnumberpartquestion ON partnumberpartquestion.partnumber_id = partnumber.partnumber_id
-					JOIN partquestion ON partquestion.partquestion_id = partnumberpartquestion.partquestion_id
-					JOIN partpartnumber ON partpartnumber.partnumber_id = partnumber.partnumber_id
-					JOIN partimage ON partimage.part_id = partpartnumber.part_id
-					JOIN partvariation ON partvariation.partnumber_id = partnumber.partnumber_id
-					JOIN part ON part.part_id = partpartnumber.part_id
-					WHERE part.part_id = " . $part_id . "
-                                        AND partvariation.quantity_available > 0
-					GROUP BY partnumber.partnumber";
-
-                $query = $this->db->query($sql);
-                $partnumbers = $query->result_array();
-//                print_r($partnumbers);
-//                die('-------');
-                $query->free_result();
-                if (is_array($partnumbers)) {
-                    $categoryRec = array();
-                    $fitmentArr = array();
-                    $basicPrice = 0;
-                    $samePrice = TRUE;
-//                    $this->pr($partnumbers);
-//                    die("test");
-                    foreach ($partnumbers as $pn) {
-                        if ($pn['*Quantity'] > 0) {
-                            //Calculate MAP Price
-                            $this->db->select('MIN(brand.map_percent) as map_percent');
-                            $where = array('partbrand.part_id' => $part_id, 'brand.map_percent > ' => 0);
-                            $this->db->join('partbrand', 'partbrand.brand_id = brand.brand_id');
-                            $brand_map_percent = $this->selectRecord('brand', $where);
-
-                            $brandMAPPercent = is_numeric(@$brand_map_percent['map_percent']) ? $brand_map_percent['map_percent'] : 0;
-
-
-                            if (($brandMAPPercent > 0) && ($pn['stock_code'] != 'Closeout')) {
-
-                                $mapPrice = (((100 - $brandMAPPercent) / 100) * $pn['price']);
-                                if ($mapPrice > $pn['MIN_PRICE'])
-                                    $pn['MIN_PRICE'] = $mapPrice;
-                            }
-                            $pn['*StartPrice'] = $pn['MIN_PRICE'];
-
-                            if ($basicPrice == 0)
-                                $basicPrice = $pn['*StartPrice'];
-                            if (($samePrice) && ($pn['*StartPrice'] != $basicPrice))
-                                $samePrice = FALSE;
-
-
-                            // Record Prep
-                            $part['Relationship'] = '';
-                            $part['RelationshipDetails'] = '';
-                            $part['CustomLabel'] = $pn['CustomLabel'];
-                            $part['*Quantity'] = $pn['*Quantity'];
-                            $part['*Description'] = preg_replace("/\r\n|\r|\n/", '', $part['*Description']);
-
-                            unset($pn['stock_code']);
-                            unset($pn['MIN_PRICE']);
-                            unset($pn['MAX_PRICE']);
-                            unset($pn['price']);
-
-
-                            // Fitment compatability
-                            $sql = "SELECT CONCAT ('Make=', make.name, '|Model=',  model.name, '|Year=', partnumbermodel.year) AS fitment 
-									FROM (`partnumbermodel`) 
-									JOIN `model` ON `model`.`model_id` = `partnumbermodel`.`model_id` 
-									JOIN `make` ON `make`.`make_id` = `model`.`make_id` 
-									WHERE `partnumbermodel`.`partnumber_id` =  '" . $pn['CustomLabel'] . "'";
-									// JLB 08-23-17
-                            // I cannot find the justification for this, so I have chosen to hide it.
-                            // After a conversation with Brandt, he was not sure that we should, out-of-hand, hide these.
-									// AND make.machinetype_id != 43954;";
-                            $query = $this->db->query($sql);
-                            $rides = $query->result_array();
-							
-							//echo "FITMENT";
-							//var_dump($rides);
-
-                            $query->free_result();
-                            $pn['CustomLabel'] = '';
-                            if (!empty($rides)) { // Save Record for Fitment
-                                unset($pn['answer']);
-                                unset($pn['question']);
-                                $samePrice = FALSE;
-                                foreach ($rides as $ride) {
-                                    $pn['Relationship'] = 'Compatibility';
-                                    $pn['RelationshipDetails'] = $ride['fitment'];
-                                    $fitmentArr[] = $pn;
-                                }
-                            } elseif (!empty($pn['question'])) { // Save record for Variations
-                                $pn['Relationship'] = 'Variation';
-                                $pn['RelationshipDetails'] = str_replace(' ', '', $pn['question'] . '=' . $pn['answer']);
-                                unset($pn['answer']);
-//                                unset($pn['question']);
-                                $categoryRec[] = $pn;
-                            }
-                        }
-                    }
-                    if (($samePrice) && (@$categoryRec)) {
-//                        $this->pr($categoryRec);
-//                        echo '*************************************';
-//                        die("trsut");
-                        $part['*Quantity'] = '';
-                        $part['*StartPrice'] = $basicPrice;
-                        $part['item_id'] = $part_id;
-                        $finalArray[] = $part;
-
-                        foreach ($categoryRec as $rb) {
-                            $rb['*StartPrice'] = $basicPrice;
-                            $finalArray[] = $rb;
-                        }
-                    } elseif (!empty($categoryRec)) {
-                        $variations = array();
-//                        $this->pr($categoryRec);
-//                        echo '*************************************';
-//                        die("trsut");
-//                        $this->pr($part);
-//                        echo "*************************************";
-//                        $this->pr($categoryRec);
-//                        echo '*************************************';
-                        $combopartIds = $this->checkForComboReporting($part_id);
-//                        $this->pr($combopartIds);die("123");
-                        if (is_array($combopartIds)) {
-                            $PriceArr = array();
-                            $finalPriceArr = array('retail_min' => 0, 'retail_max' => 0, 'sale_min' => 0, 'sale_max' => 0);
-                            foreach ($combopartIds as $id) {
-                                $PriceArr[] = $this->getPriceRangeReporting($id, FALSE, FALSE);
-                                $where = array('partpartnumber.part_id' => $id);
-                                $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
-                                $this->db->where('partnumber.price > 0');
-                                $this->db->where('partdealervariation.quantity_available > 0');
-                                $this->db->select('partnumber, MIN(partnumber.dealer_sale) AS dealer_sale_min, MAX(partnumber.dealer_sale) AS dealer_sale_max', FALSE);
-                                $this->db->group_by('part_id');
-                                $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
-                                $partDealerRec = $this->selectRecord('partnumber', $where);
-
-                                if (empty($partDealerRec)) {
-                                    $PriceArr['dealer_sale_min'] = 0;
-                                    $PriceArr['dealer_sale_max'] = 0;
-                                }
-                            }
-                            foreach ($PriceArr as $pa) {
-                                $finalPriceArr['retail_min'] += $pa['retail_min'];
-                                $finalPriceArr['retail_max'] += $pa['retail_max'];
-                                $finalPriceArr['sale_min'] += $pa['sale_min'];
-                                $finalPriceArr['sale_max'] += $pa['sale_max'];
-                                $finalPriceArr['dealer_sale_min'] += $pa['dealer_sale_min'];
-                                $finalPriceArr['dealer_sale_max'] += $pa['dealer_sale_max'];
-                            }
-                            $combo_price = $this->calculateMarkupReporting($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup'], $finalPriceArr['dealer_sale_min'], $finalPriceArr['dealer_sale_max'], $finalPriceArr['cnt'])['sale_min'];
-//                            $this->pr($combo_price);
-//                            die("*");
-                        }
-                        foreach ($categoryRec as $rb) {
-                            $newArray = $part;
-                            $newArray['*Quantity'] = $rb['*Quantity'];
-                            $newArray['*StartPrice'] = $combo_price;
-                            $newArray['*Description'] = '';
-                            $newArray['Relationship'] = 'Combo';
-
-                            $newArray['RelationshipDetails'] = $rb['RelationshipDetails'];
-                            $newArray['*Title'] = '';
-                            $combo_variations[] = $newArray;
-                        }
-                        $product_options = $this->getProductQuestions($part_id);
-//                        $this->pr($product_options);die("test");
-                        $options_vailable = array();
-                        foreach ($product_options as $otions_array) {
-                            $options_vailable[$otions_array['question']][] = $otions_array['answer'];
-                        }
-//                        $this->pr($options_vailable);die("test");
-                        $part['*StartPrice'] = $combo_price;
-                        $part['product_options'] = $options_vailable;
-                        $part['product_variation'] = $combo_variations;
-                        $finalArray[] = $part;
-                    } elseif (!empty($fitmentArr)) {
-//                        echo "*****************************************************";
-//                        $this->pr($fitmentArr);
-                        $part['*StartPrice'] = $rb['*StartPrice'];
-//                        $this->pr($part);
-//                        echo "*****************************************************";
-                        $compatibility_array = array();
-                        $item = array();
-//                        foreach ($fitmentArr as $key => $single_fitment) {
-//                            $data_explode = explode('|', $single_fitment['RelationshipDetails']);
-//                            $compatibility_array[$data_explode[0]][$data_explode[1]][] = $data_explode[2];
-//                        }
-                        foreach ($fitmentArr as $key => $single_fitment) {
-                            $change = $part;
-//                            $this->pr($single_fitment);
-//                            die("123");
-
-                            $data_explode = explode('|', $single_fitment['RelationshipDetails']);
-                            $make_explode = explode('=', $data_explode[0]);
-                            $model_explode = explode('=', $data_explode[1]);
-                            $year_explode = explode('=', $data_explode[2]);
-                            $title = $part['*Title'] . ' For ' . $make_explode[1] . ' ' . $model_explode[1];
-                            if (key_exists($title, $item)) {
-                                $item[$title][] = $single_fitment;
-                            } else {
-                                $change['*Title'] = $title;
-                                $item[$title][] = $change;
-                            }
-                        }
-//                        $this->pr($item);
-//                        die("8");
-                        foreach ($item as $key => $single_array) {
-                            $finalArray = array_merge($finalArray, $single_array);
-                        }
-
-//                        $finalArray[] = $part;
-//                        foreach ($fitmentArr as $rb)
-//                            $finalArray[] = $rb;
-                    }
-                }
-            }
-        }
-        //$this->pr($finalArray);
-        //echo "*****************************************";
-        //die;
-        if ($return_csv) {
-            return $finalArray;
-        }
-        $csv = $this->array2csv($finalArray);
-        return $csv;
-    }
-
     public function ebayListings($offset = 0, $limit = 1000, $return_csv = FALSE, $send_to_ebay = FALSE) {
         // Filter quantity of 0, Price in 1 row only
         $nocat=0;
@@ -1008,7 +675,6 @@ class Ebay_M extends Master_M {
         $quantity = $this->get_quantity();
         if (is_array($parts)) {
             foreach ($parts as &$part) {
-                print "/*********** START *************/\n\n";
 
                 if (strpos($part['*Title'], 'COMBO') !== FALSE) {
                     continue;
@@ -1096,8 +762,6 @@ class Ebay_M extends Master_M {
                         partquestion.question,
                         IfNull(partvariation.quantity_available, 0) + IfNull(partdealervariation.quantity_available, 0) AS '*Quantity',
                         '' AS '*StartPrice',
-                        (partnumber.cost * 1.15) + 15 AS 'MIN_PRICE',
-                        CASE WHEN partnumber.price < 100 THEN partnumber.price + 13 ELSE partnumber.price END AS 'MAX_PRICE',
                         partnumber.sale as price,
                         IfNull(partvariation.stock_code, partdealervariation.stock_code),
                         '' AS 'Relationship',
@@ -1123,8 +787,6 @@ class Ebay_M extends Master_M {
                 $partnumbers = $query->result_array();
                 $query->free_result();
 
-                print_r($part);
-
                 if (is_array($partnumbers)) {
                     $categoryRec = array();
                     $fitmentArr = array();
@@ -1144,17 +806,13 @@ class Ebay_M extends Master_M {
                                 $brandMAPPercent = is_numeric(@$brand_map_percent['map_percent']) ? $brand_map_percent['map_percent'] : 0;
 
                                 $pn['*StartPrice'] = $pn['price'];
-                                print "Start price A: "  .$pn['*StartPrice']. "\n";
                                 if (($brand_map_percent['map_percent'] !== NULL) && ($pn['stock_code'] != 'Closeout')) {
 
                                     $mapPrice = (((100 - $brandMAPPercent) / 100) * $pn['customprice']);
-// no longer using MIN_PRICE        if ($mapPrice > $pn['MIN_PRICE'])
-// per Brandt, 7/24/17              $pn['MIN_PRICE'] = $mapPrice;
                                     // JLB 08-29-17 Of all the bassackwardness...is that >=???
                                     if(!($pn['price'] < $pn['customprice']))
                                         $pn['*StartPrice'] = $mapPrice;
 
-                                    print "Start price B: "  .$pn['*StartPrice']. "\n";
 
                                 }
                                 // JLB 08-29-17 - What is the significance of this and why isn't it an ELSE?
@@ -1162,19 +820,16 @@ class Ebay_M extends Master_M {
                                     $markup = 1 + ($this->get_markup()/100);
                                     $pn['*StartPrice'] = $pn['*StartPrice']*$markup;
 
-                                    print "Start price C: "  .$pn['*StartPrice']. "\n";
 
                                 }
 
 
                                 if ($basicPrice == 0) {
                                     $basicPrice = $pn['*StartPrice'];
-                                    print "Start price D: "  .$pn['*StartPrice']. "\n";
 
                                 }
                                 if (($samePrice) && ($pn['*StartPrice'] != $basicPrice)) {
                                     $samePrice = FALSE;
-                                    print "Start price E: "  .$pn['*StartPrice']. "\n";
                                 }
 
                                 $quantity = $this->get_quantity();
@@ -1187,11 +842,7 @@ class Ebay_M extends Master_M {
 
                                 $part['*Description'] = preg_replace("/\r\n|\r|\n/", '', $part['*Description']);
 
-                                print_r($part);
-
                                 unset($pn['stock_code']);
-                                unset($pn['MIN_PRICE']);
-                                unset($pn['MAX_PRICE']);
                                 unset($pn['price']);
 
 
@@ -1230,15 +881,12 @@ class Ebay_M extends Master_M {
                     } else {
                         $part["*Quantity"] = min($partnumbers[0]["*Quantity"], $quantity);
                         $part['*StartPrice'] = $partnumbers[0]['price'];
-                        print "Start price F: "  . $part['*StartPrice'] . "\n";
-
                         $finalArray[] = $part;
                     }
 
                     if (($samePrice) && (@$categoryRec)) {
                         $part['*Quantity'] = '';
                         $part['*StartPrice'] = $basicPrice;
-                        print "Start price G: "  .$part['*StartPrice']. "\n";
                         $part['item_id'] = $part_id;
                         $finalArray[] = $part;
 
@@ -1297,15 +945,14 @@ class Ebay_M extends Master_M {
                         }
                         if(isset($combo_price)) {
                             $part['*StartPrice'] = $combo_price;
-                            print "Start price H: "  .$part['*StartPrice']. "\n";
                         }
                         $part['product_options'] = $options_vailable;
                         $part['product_variation'] = $combo_variations;
                         $finalArray[] = $part;
                     }
+
                     if (!empty($fitmentArr)) {
                         $part['*StartPrice'] = $rb['*StartPrice'];
-                        print "Start price I: "  .$part['*StartPrice']. "\n";
 
                         $compatibility_array = array();
                         $item = array();
@@ -1348,16 +995,10 @@ class Ebay_M extends Master_M {
                 }
                 if (empty($part['saleprice'])&&isset($part['customprice'])) {
                     $part['*StartPrice'] = $part['customprice'];
-                    print "Start price J: "  .$part['*StartPrice']. "\n";
 
                 } else {
                     $part['*StartPrice'] = $part['saleprice'];
-                    print "Start price K: "  .$part['*StartPrice']. "\n";
                 }
-
-
-                print_r($part);
-                print "/*********** END *************/\n\n";
             }
         }
         if(!$send_to_ebay) {
@@ -1586,368 +1227,6 @@ class Ebay_M extends Master_M {
      * @return (array) (final) this is the output of the function
      */
 
-    /**
-     * Function to build xml for adding new product to ebay or to revise the
-     * existing product on eBay
-     * @param type $product_data
-     * @return type
-     * @access public
-     * @author Manish
-     */
-    private function buildXmlAndHitEbay($products, $update = false, $store_feed = false) {
-		
-        $count = 1;
-        $store_url = base_url();
-        $this->_setHeader("AddItems", FALSE);
-        $uploadXML = '<?xml version="1.0" encoding="utf-8"?>';
-//		$uploadXML .= '<BulkDataExchangeRequests xmlns="urn:ebay:apis:eBLBaseComponents">';
-
-       $uploadXML .= '<BulkDataExchangeRequests>';
-        $uploadXML .= '<Header>';
-        $uploadXML .= '<SiteID>100</SiteID>';
-        $uploadXML .= '<Version>987</Version>';
-        $uploadXML .= '</Header>';
-		//$products = array_reverse($products);
-        foreach ($products as $product) {
-//            $string = utf8_encode($product['product']['*Description']);
-
-            $string = $this->xmlEscape($product['product']['*Description']);
-			$quantity = $this->get_quantity();
-			//die();
-            $string = substr($string, 0, 500000);
-            $UUID = md5(uniqid(rand(), true));
-
-            $uploadXML .= '<AddFixedPriceItemRequest xmlns = "urn:ebay:apis:eBLBaseComponents">';
-            $uploadXML .= '<ErrorLanguage>en_US</ErrorLanguage>';
-            $uploadXML .= '<WarningLevel>High</WarningLevel>';
-            $uploadXML .= '<Version>987</Version>';
-            $uploadXML .= '<MessageID>' . $product['product']['C:Manufacturer Part Number'] . '</MessageID>';
-            $uploadXML .= '<Item>';
-
-            $uploadXML .= '<SKU>' . $product['product']['C:Manufacturer Part Number'] . '</SKU>';
-            $uploadXML .= '<CategoryMappingAllowed>true</CategoryMappingAllowed>';
-            $uploadXML .= '<Country>US</Country>';
-            $uploadXML .= '<location>US</location>';
-            $uploadXML .= '<Currency>USD</Currency>';
-
-
-            $uploadXML .= '<ConditionID>' . $product['product']['*ConditionID'] . '</ConditionID>';
-            $uploadXML .= '<Description>' . $string . '</Description>';
-            $uploadXML .= '<DispatchTimeMax>' . $product['product']['*DispatchTimeMax'] . '</DispatchTimeMax>';
-            $uploadXML .= '<ListingDuration>' . $product['product']['*Duration'] . '</ListingDuration>';
-            $uploadXML .= '<ListingType>FixedPriceItem</ListingType>';
-            $uploadXML .= '<PaymentMethods>PayPal</PaymentMethods>';
-            $paypal_email = $this->get_paypalemail();
-            $uploadXML .= '<PayPalEmailAddress>' . $paypal_email . '</PayPalEmailAddress>';
-
-            $uploadXML .= '<PictureDetails>';
-
-			
-			if(isset($product['product']['item_id'])) {
-				$pic_sql = "SELECT * from partimage where partimage.part_id = " . $product['product']['item_id'];
-				$query = $this->db->query($pic_sql);
-				$pics = $query->result_array();
-				if (is_array($pics)) {
-					foreach($pics as $pic) {
-
-						$uploadXML .= '<PictureURL>http://' . WEBSITE_HOSTNAME . '/productimages/' . $this->xmlEscape($pic['path']) . '</PictureURL>';
-					}
-
-				}
-			} else if(isset($product['product']['PicURL'])) {
-				$uploadXML .= '<PictureURL>' . $this->xmlEscape($product['product']['PicURL']) . '</PictureURL>';				
-			}
-
-			$uploadXML .= '</PictureDetails>';
-
-            $uploadXML .= '<PostalCode>' . $product['product']['PostalCode'] . '</PostalCode>';
-            $uploadXML .= '<PrimaryCategory>';
-
-            $uploadXML .= '<CategoryID>' . $product['product']['EbayCategory'] . '</CategoryID>';
-            //$uploadXML .= '<CategoryID>63850</CategoryID>';
-
-            $uploadXML .= '</PrimaryCategory>';
-            $uploadXML .= '<ReturnPolicy>';
-            $uploadXML .= '<ReturnsAcceptedOption>' . $this->xmlEscape($product['product']['*ReturnsAcceptedOption']) . '</ReturnsAcceptedOption>';
-            $uploadXML .= '<RefundOption>MoneyBack</RefundOption>';
-            $uploadXML .= '<ReturnsWithinOption>' . $this->xmlEscape($product['product']['ReturnsWithinOption']) . '</ReturnsWithinOption>';
-            $uploadXML .= '<Description></Description>';
-            $uploadXML .= '<ShippingCostPaidByOption>' . $this->xmlEscape($product['product']['ShippingCostPaidByOption']) . '</ShippingCostPaidByOption>';
-            $uploadXML .= '</ReturnPolicy>';
-//            $shipping_first_key = $product['product']['shipping_options'];
-//            $uploadXML .= '<ShippingDetails>';
-//            $uploadXML .= '<ShippingType>';
-//            $uploadXML .= 'Flat';
-//            $uploadXML .= '</ShippingType>';
-//
-//            $uploadXML .= '<ShippingServiceOptions>';
-//            $uploadXML .= '<ShippingServicePriority>1</ShippingServicePriority>';
-//            $uploadXML .= '<ShippingService>UPSGround</ShippingService>';
-//            $shipping_cost = $this->get_shipping_cost();
-//            $uploadXML .= '<ShippingServiceCost>12.50</ShippingServiceCost>';
-//            $uploadXML .= '<ShippingServiceAdditionalCost>0.00</ShippingServiceAdditionalCost>';
-//            $uploadXML .= '</ShippingServiceOptions>';
-//            $uploadXML .= '</ShippingDetails>';
-            $check_compatibility = FALSE;
-			$itemspecifics_XML = "<ItemSpecifics>";
-			$itemspecifics_XML .= "<NameValueList>";
-			$itemspecifics_XML .= "<Name>Brand</Name>";
-			$itemspecifics_XML .= "<Value>".$product['product']['C:Brand']."</Value>";		
-			$itemspecifics_XML .= "</NameValueList>";
-
-			
-            if ($product['product_variation']) {
-                $product['product_variation'] = array_unique($product['product_variation'], SORT_REGULAR);
-//                $this->pr($product['product_variation']);
-                $check_combo = FALSE;
-                $check_combo_again = FALSE;
-                $check_compatibility = FALSE;
-                $variation_XML = '';
-                $compatibility_XML = '';
-                $variation_XML .= '<Variations>';
-                $variation_XML .= '<VariationSpecificsSet>';
-                $compatibility_XML .= '<ItemCompatibilityList>';
-
-                $done = 0;
-                $years = array();
-                foreach ($product['product_variation'] as $combination) {
-//                    $combination = array_unique($combination);
-//                    $this->pr($variation_key);
-                    if (trim(strtolower($combination['Relationship'])) == 'variation') {
-                        $variation = explode("=", $combination['RelationshipDetails']);
-                        if ($done < 1) {
-                            $variation_XML .= '<NameValueList>';
-                            $variation_XML .= '<Name>';
-                            $variation_XML .= $variation['0'];
-                            $variation_XML .= '</Name>';
-                        }
-                        $variation_XML .= '<Value>';
-                        $variation_XML .= $variation['1'];
-                        $variation_XML .= '</Value>';
-                        $done++;
-                    } elseif (trim(strtolower($combination['Relationship'])) == 'compatibility') {
-                        $check_compatibility = TRUE;
-//                        $this->pr($combination['RelationshipDetails']);
-//                        die("*");
-                        $compatibilities = explode('|', $combination['RelationshipDetails']);
-                        $compatibility_XML .= '<Compatibility>';
-                        foreach ($compatibilities as $compatibility_key => $compatibility) {
-                            $name_values = explode('=', $compatibility);
-                            $product['product']['*StartPrice'] = $combination['*StartPrice'];
-                            if (trim(strtolower($name_values[0])) == 'year') {
-                                $years[] = $name_values[1];
-                            }
-                            $compatibility_XML .= "<NameValueList>";
-                            $compatibility_XML .= "<Name>$name_values[0]</Name>";
-                            $compatibility_XML .= "<Value>$name_values[1]</Value>";
-                            $compatibility_XML .= "</NameValueList>";
-                        }
-                        $compatibility_XML .= '</Compatibility>';
-
-						if(isset($combination['question'])&&isset($combination['answer'])) {
-							
-							$itemspecifics_XML .= "<NameValueList>";
-                            $itemspecifics_XML .= "<Name>".$combination['question']."</Name>";
-                            $itemspecifics_XML .= "<Value>".$combination['answer']."</Value>";		
-							$itemspecifics_XML .= "</NameValueList>";
-							
-						}
-
-						
-                    } else {
-//                        $this->pr($product['product_options']);
-//                        die("1234");
-
-
-                        if (!$check_combo) {
-                            foreach ($product['product_options'] as $option_type => $option_value_array) {
-                                $variation_XML .= '<NameValueList>';
-                                $variation_XML .= '<Name>';
-                                $variation_XML .= $option_type;
-                                $variation_XML .= '</Name>';
-                                foreach ($option_value_array as $option_value) {
-                                    $variation_XML .= '<Value>';
-                                    $variation_XML .= $option_value;
-                                    $variation_XML .= '</Value>';
-                                }
-                                $variation_XML .= '</NameValueList>';
-                            }
-                            $check_combo = TRUE;
-//                        $this->pr($variation_XML);
-//                        die("testing xml");
-                        }
-                    }
-                }
-                if (!$check_combo) {
-                    $variation_XML .= '</NameValueList>';
-                }
-                $variation_XML .= '</VariationSpecificsSet>';
-
-                foreach ($product['product_variation'] as $combination) {
-                    if (trim(strtolower($combination['Relationship'])) == 'variation') {
-                        $variations = explode("=", $combination['RelationshipDetails']);
-                        $variation_XML .= '<Variation>';
-                        $product_price = $combination['*StartPrice'];
-                        $variation_XML .='<StartPrice>' . $combination['*StartPrice'] . '</StartPrice>';
-
-                        $variation_XML .='<Quantity>' . min($combination['*Quantity'], $quantity) . '</Quantity>';
-
-                        $variation_XML .= '<VariationSpecifics>';
-                        $variation_XML .= '<NameValueList>';
-
-                        if (trim(strtolower($combination['Relationship'])) == 'variation') {
-                            $variation_XML .= '<Name>' . $variations['0'] . '</Name>';
-                            $variation_XML .= '<Value>' . $variations['1'] . '</Value>';
-                        }
-
-                        $variation_XML .= '</NameValueList>';
-                        $variation_XML .= '</VariationSpecifics>';
-                        $variation_XML .= '</Variation>';
-                    } elseif (trim(strtolower($combination['Relationship'])) == 'combo') {
-                        //$this->pr($product['product_options']);
-                        //die('test');
-                        if (!$check_combo_again) {
-							
-							echo "MARKUP: " . $markup;
-
-/*							if($product['product_options']['COLOR']) {
-
-								foreach ($product['product_options']['COLOR'] as $option_value_glove_array) {
-									$variation_XML .= '<Variation>';
-									$variation_XML .='<StartPrice>' . $product['product']['*StartPrice'] . '</StartPrice>';
-									$variation_XML .='<Quantity>' . min($combination['*Quantity'], $quantity) . '</Quantity>';
-									$variation_XML .= '<VariationSpecifics>';
-									$variation_XML .= '<NameValueList>';
-									$variation_XML .= '<Name>COLOR</Name>';
-									$variation_XML .= '<Value>' . $option_value_glove_array . '</Value>';
-									$variation_XML .= '</NameValueList>';
-									$variation_XML .= '</VariationSpecifics>';
-									$variation_XML .= '</Variation>';
-								}
-
-							}
-*/
-							if($product['product_options']['GLOVE']) {
-							
-								$variation_XML .= '<NameValueList>';
-								$variation_XML .= '<Name>GLOVE</Name>';
-
-								foreach ($product['product_options']['GLOVE'] as $option_value_glove_array) {
-									$variation_XML .= '<Value>' . $option_value_glove_array . '</Value>';
-								}
-
-								$variation_XML .= '</NameValueList>';
-
-							}
-
-							if($product['product_options']['JERSEY']) {
-
-								$variation_XML .= '<NameValueList>';
-								$variation_XML .= '<Name>JERSEY</Name>';
-								foreach ($product['product_options']['JERSEY'] as $option_value_jersey_array) {
-									$variation_XML .= '<Value>' . $option_value_jersey_array . '</Value>';
-								}
-								$variation_XML .= '</NameValueList>';
-							}
-
-							if($product['product_options']['PANT']) {
-
-								$variation_XML .= '<NameValueList>';
-								$variation_XML .= '<Name>PANT</Name>';
-								foreach ($product['product_options']['PANT'] as $option_value_pant_array) {
-									$variation_XML .= '<Value>' . $option_value_pant_array . '</Value>';
-								}
-								$variation_XML .= '</NameValueList>';
-                            }
-                            $check_combo_again = TRUE;
-                        }
-                    }
-                }
-                $compatibility_XML .= '</ItemCompatibilityList>';
-                $variation_XML .= '</Variations>';
-				//echo($check_compatibility);
-				//die("STUFF");
-                if ($check_compatibility) {
-                    $uploadXML .= $compatibility_XML;
-                    $uploadXML .= '<Quantity>' . min($product['product']['*Quantity'], $quantity) . '</Quantity>';
-                    $product_price = $product['product']['*StartPrice'];
-                    $uploadXML .= '<StartPrice currencyID="USD">' . $product['product']['*StartPrice'] . '</StartPrice>';
-                } else {
-                    $uploadXML .= $variation_XML;
-                }
-            } else {
-                $uploadXML .= '<Quantity>' . min($product['product']['*Quantity'], $quantity) . '</Quantity>';
-                $product_price = $product['product']['*StartPrice'];
-                $uploadXML .= '<StartPrice currencyID="USD">' . $product['product']['*StartPrice'] . '</StartPrice>';
-            }
-
-			$itemspecifics_XML .= "</ItemSpecifics>";
-			$uploadXML .= $itemspecifics_XML;
-
-            $uploadXML .= '<ShippingDetails>';
-            $uploadXML .= '<ShippingType>';
-            $uploadXML .= 'Flat';
-            $uploadXML .= '</ShippingType>';
-
-            $uploadXML .= '<ShippingServiceOptions>';
-            $uploadXML .= '<ShippingServicePriority>1</ShippingServicePriority>';
-            $uploadXML .= '<ShippingService>UPSGround</ShippingService>';
-            $shipping_cost = $this->get_shipping_cost($product_price);
-            $uploadXML .= '<ShippingServiceCost>' . $shipping_cost . '</ShippingServiceCost>';
-            $uploadXML .= '<ShippingServiceAdditionalCost>0.00</ShippingServiceAdditionalCost>';
-            $uploadXML .= '</ShippingServiceOptions>';
-            $uploadXML .= '</ShippingDetails>';
-            $title = $this->xmlEscape($product['product']['*Title']);
-            if ($check_compatibility) {
-                $start_year = min($years);
-                $end_year = max($years);
-                if ($start_year != $end_year) {
-                    $uploadXML .= '<Title>' . substr(strip_tags($title . ' ' . $start_year . '-' . $end_year), 0, 78) . '</Title>';
-                } else {
-                    $uploadXML .= '<Title>' . substr(strip_tags($title . ' ' . $start_year), 0, 78) . '</Title>';
-                }
-            } else {
-                $uploadXML .= '<Title>' . substr(strip_tags($title), 0, 78) . '</Title>';
-            }
-            $uploadXML .= '</Item>';
-            $uploadXML .= '</AddFixedPriceItemRequest>
-';
-
-            $count++;
-            //if ($count > 30)
-                //break;
-        }
-
-
-        $uploadXML .= '</BulkDataExchangeRequests>';
-
-		$unicode = ["\x01", "\x00", "\x02"];
-		$uploadXML = str_replace($unicode, "", str_replace("&B", "&amp;B", str_replace("&G", "&amp;G", $uploadXML)));
-  
-        if ($store_feed == true) {
-            $file_path = STORE_DIRECTORY . '/ebayFeeds/ebayfeed_un.xml';
-            if (file_exists($file_path)) {
-                unlink($file_path);
-            }
-//            $myfile = fopen($file_path, "w");
-            file_put_contents($file_path, $uploadXML, LOCK_EX);
-            $xml = file_get_contents($file_path, LOCK_EX);
-            $doc = new DOMDocument();
-            $doc->preserveWhiteSpace = FALSE;
-            $doc->loadXML($xml);
-            $doc->formatOutput = TRUE;
-//Save XML as a file
-            $file = STORE_DIRECTORY . '/ebayFeeds/ebayfeed.xml';
-            if (file_exists($file)) {
-                unlink($file);
-            }
-            $doc->save($file);
-        }
-		
-		//$this->pr($uploadXML);
-		$this->sendBulkXML($uploadXML, "AddFixedPriceItem");		
-		
-	}
 	
 	
 	public function endAll($x, $y) {
@@ -2015,27 +1294,36 @@ class Ebay_M extends Master_M {
 			/**
 			 * Send the request.
 			 */
-			print('Requesting job Id from eBay...');
+			if ($this->debug) {
+                print('Requesting job Id from eBay...');
+            }
 			$createUploadJobResponse = $exchangeService->createUploadJob($createUploadJobRequest);
-			print("Done\n");
+			if ($this->debug) {
+                print("Done\n");
+            }
+
 			/**
 			 * Output the result of calling the service operation.
 			 */
 			if (isset($createUploadJobResponse->errorMessage)) {
 				foreach ($createUploadJobResponse->errorMessage->error as $error) {
 					printf(
-						"%s: %s\n\n",
+						"2048 %s: %s\n\n",
 						$error->severity === BulkDataExchange\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 						$error->message
 					);
 				}
 			}
+
 			if ($createUploadJobResponse->ack !== 'Failure') {
-				printf(
-					"JobId [%s] FileReferenceId [%s]\n",
-					$createUploadJobResponse->jobId,
-					$createUploadJobResponse->fileReferenceId
-				);
+			    if ($this->debug) {
+                    printf(
+                        "JobId [%s] FileReferenceId [%s]\n",
+                        $createUploadJobResponse->jobId,
+                        $createUploadJobResponse->fileReferenceId
+                    );
+
+                }
 				$job['jobId'] = $createUploadJobResponse->jobId;
 				$job['fileReferenceId'] = $createUploadJobResponse->fileReferenceId;
 			}
@@ -2060,31 +1348,43 @@ class Ebay_M extends Master_M {
 			/**
 			 * Now upload the file.
 			 */
-			print('Uploading fixed price item requests...');
+			if ($this->debug) {
+                print('Uploading fixed price item requests...');
+            }
+
 			$uploadFileResponse = $transferService->uploadFile($uploadFileRequest);
-			print("Done\n");
+			if ($this->debug) {
+                print("Done\n");
+            }
+
 			if (isset($uploadFileResponse->errorMessage)) {
 				foreach ($uploadFileResponse->errorMessage->error as $error) {
 					printf(
-						"%s: %s\n\n",
+						"2093 %s: %s\n\n",
 						$error->severity === FileTransfer\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 						$error->message
 					);
 				}
 			}
-			if ($uploadFileResponse->ack !== 'Failure') {
+
+            if ($uploadFileResponse->ack !== 'Failure') {
 				/**
 				 * Once the file has uploaded we can tell eBay to start processing it.
 				 */
 				$startUploadJobRequest = new BulkDataExchange\Types\StartUploadJobRequest();
 				$startUploadJobRequest->jobId = $job['jobId'];
-				print('Request processing of fixed price items...');
+				if ($this->debug) {
+                    print('Request processing of fixed price items...');
+                }
 				$startUploadJobResponse = $exchangeService->startUploadJob($startUploadJobRequest);
-				print("Done\n");
+				if ($this->debug) {
+                    print("Done\n");
+                }
+
 				if (isset($startUploadJobResponse->errorMessage)) {
 					foreach ($startUploadJobResponse->errorMessage->error as $error) {
 						printf(
-							"%s: %s\n\n",
+							"2115 %s: %s\n\n",
 							$error->severity === BulkDataExchange\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 							$error->message
 						);
@@ -2102,14 +1402,16 @@ class Ebay_M extends Master_M {
 						if (isset($getJobStatusResponse->errorMessage)) {
 							foreach ($getJobStatusResponse->errorMessage->error as $error) {
 								printf(
-									"%s: %s\n\n",
+									"2133 %s: %s\n\n",
 									$error->severity === BulkDataExchange\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 									$error->message
 								);
 							}
 						}
 						if ($getJobStatusResponse->ack !== 'Failure') {
-							printf("Status is %s\n", $getJobStatusResponse->jobProfile[0]->jobStatus);
+						    if ($this->debug) {
+                                printf("Status is %s\n", $getJobStatusResponse->jobProfile[0]->jobStatus);
+                            }
 							switch ($getJobStatusResponse->jobProfile[0]->jobStatus) {
 								case BulkDataExchange\Enums\JobStatus::C_COMPLETED:
 									$downloadFileReferenceId = $getJobStatusResponse->jobProfile[0]->fileReferenceId;
@@ -2131,18 +1433,23 @@ class Ebay_M extends Master_M {
 						$downloadFileRequest = new FileTransfer\Types\DownloadFileRequest();
 						$downloadFileRequest->fileReferenceId = $downloadFileReferenceId;
 						$downloadFileRequest->taskReferenceId = $job['jobId'];
-						print('Downloading fixed price item responses...');
+						if ($this->debug) {
+                            print('Downloading fixed price item responses...');
+                        }
 						$downloadFileResponse = $transferService->downloadFile($downloadFileRequest);
-						print("Done\n");
+						if ($this->debug) {
+                            print("Done\n");
+                        }
 						if (isset($downloadFileResponse->errorMessage)) {
 							foreach ($downloadFileResponse->errorMessage->error as $error) {
 								printf(
-									"%s: %s\n\n",
+									"2169 %s: %s\n\n",
 									$error->severity === FileTransfer\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 									$error->message
 								);
 							}
 						}
+
 						if ($downloadFileResponse->ack !== 'Failure') {
 							/**
 							 * Check that the response has an attachment.
@@ -2157,22 +1464,30 @@ class Ebay_M extends Master_M {
 									$xml = $this->unZipArchive($filename);
 									if ($xml !== false) {
 										$responses = $merchantData->addFixedPriceItem($xml);
-										foreach ($responses as $response) {
+
+                                            foreach ($responses as $response) {
 											if (isset($response->Errors)) {
 												foreach ($response->Errors as $error) {
-													printf(
-														"%s: %s\n%s\n\n",
-														$error->SeverityCode === MerchantData\Enums\SeverityCodeType::C_ERROR ? 'Error' : 'Warning',
-														$error->ShortMessage,
-														$error->LongMessage
-													);
+												    if ($this->debug) {
+                                                        printf(
+                                                            "2195 %s: %s\n%s\n\n",
+                                                            $error->SeverityCode === MerchantData\Enums\SeverityCodeType::C_ERROR ? 'Error' : 'Warning',
+                                                            $error->ShortMessage,
+                                                            $error->LongMessage
+                                                        );
+                                                    }
+													if ($error->SeverityCode === MerchantData\Enums\SeverityCodeType::C_ERROR) {
+                                                        $this->recordError($response->CorrelationID, $error->ShortMessage, $error->LongMessage);
+                                                    }
 												}
 											}
 											if ($response->Ack !== 'Failure') {
-												printf(
-													"The item was listed to the eBay Sandbox with the Item number %s\n",
-													$response->ItemID
-												);
+											    if ($this->debug) {
+                                                    printf(
+                                                        "The item was listed to eBay with the Item number %s\n",
+                                                        $response->ItemID
+                                                    );
+                                                }
 											}
 										}
 									}
@@ -2221,7 +1536,7 @@ class Ebay_M extends Master_M {
 		if (isset($response->errorMessage)) {
 			foreach ($response->errorMessage->error as $error) {
 				printf(
-					"%s: %s\n\n",
+					"2255 %s: %s\n\n",
 					$error->severity === BulkDataExchange\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 					$error->message
 				);
@@ -2234,18 +1549,20 @@ class Ebay_M extends Master_M {
 			$upTo = min(count($response->jobProfile), 3);
 			$upTo = 0;
 			if(isset($response->jobProfile)) {
-				foreach($response->jobProfile as $job) {		
-					printf(
-						"ID: %s\nType: %s\nStatus: %s\nInput File Reference ID: %s\nFile Reference ID: %s\nPercent Complete: %s\nCreated: %s\nCompleted: %s\n\n",
-						$job->jobId,
-						$job->jobType,
-						$job->jobStatus,
-						$job->inputFileReferenceId,
-						$job->fileReferenceId,
-						$job->percentComplete,
-						$job->creationTime->format('H:i (\G\M\T) \o\n l jS F Y'),
-						isset($job->completionTime) ? $job->completionTime->format('H:i (\G\M\T) \o\n l jS F Y') : ''
-					);
+				foreach($response->jobProfile as $job) {
+				    if ($this->debug) {
+                        printf(
+                            "ID: %s\nType: %s\nStatus: %s\nInput File Reference ID: %s\nFile Reference ID: %s\nPercent Complete: %s\nCreated: %s\nCompleted: %s\n\n",
+                            $job->jobId,
+                            $job->jobType,
+                            $job->jobStatus,
+                            $job->inputFileReferenceId,
+                            $job->fileReferenceId,
+                            $job->percentComplete,
+                            $job->creationTime->format('H:i (\G\M\T) \o\n l jS F Y'),
+                            isset($job->completionTime) ? $job->completionTime->format('H:i (\G\M\T) \o\n l jS F Y') : ''
+                        );
+                    }
 					if($job->jobStatus!="Aborted"&&$job->jobStatus!="Completed"&&$job->jobStatus!="Failed") {
 						
 						$request = new Types\AbortJobRequest();
@@ -2257,7 +1574,7 @@ class Ebay_M extends Master_M {
 						if (isset($response->errorMessage)) {
 							foreach ($response->errorMessage->error as $error) {
 								printf(
-									"%s: %s\n\n",
+									"2291 %s: %s\n\n",
 									$error->severity === BulkDataExchange\Enums\ErrorSeverity::C_ERROR ? 'Error' : 'Warning',
 									$error->message
 								);
@@ -2485,302 +1802,6 @@ class Ebay_M extends Master_M {
 		
 	}
 
-	
-    private function buildUpateXmlAndHitEbay($products, $update = false, $store_feed = false) {
-
-        $count = 1;
-        $store_url = base_url();
-        $this->_setHeader("ReviseItems", FALSE);
-        $uploadXML = '<?xml version="1.0" encoding="utf-8"?>';
-        $uploadXML .= '<BulkDataExchangeRequests>';
-        $uploadXML .= '<Header>';
-        $uploadXML .= '<SiteID>100</SiteID>';
-        $uploadXML .= '<Version>663</Version>';
-        $uploadXML .= '</Header>';
-
-
-
-//        if (!$update) {
-//            $uploadXML .= '<AddFixedPriceItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
-//        } else {
-//        $uploadXML .= '<ReviseFixedPriceItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
-//        }
-//        $uploadXML .= '<ErrorLanguage>en_US</ErrorLanguage>';
-//        $uploadXML .= '<WarningLevel>High</WarningLevel>';
-//        $uploadXML .= '<RequesterCredentials>';
-//        $uploadXML .= '<eBayAuthToken>' . $this->cred['Setting']['user_token'] . '</eBayAuthToken>';
-//        $uploadXML .= '</RequesterCredentials>';
-
-        foreach ($products as $product) {
-//            $this->pr($product);
-//            die("*");
-            $part_number = $product['product']['C:Manufacturer Part Number'];
-//            $this->pr($part_number);
-            $sql = 'SELECT ebay_id FROM ebay_ids WHERE part_number =' . "'$part_number'";
-            $query = $this->db->query($sql);
-            $results = $query->result_array();
-//            $this->pr($results);die("*");
-            $string = utf8_encode($product['product']['*Description']);
-            $string = $this->xmlEscape($product['product']['*Description']);
-
-            $string = substr($string, 0, 500000);
-            $UUID = md5(uniqid(rand(), true));
-
-            $uploadXML .= '<ReviseFixedPriceItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
-            $uploadXML .= '<ErrorLanguage>en_US</ErrorLanguage>';
-            $uploadXML .= '<WarningLevel>High</WarningLevel>';
-            $uploadXML .= '<Version>663</Version>';
-            $uploadXML .= '<MessageID>' . $product['product']['C:Manufacturer Part Number'] . '</MessageID>';
-            $uploadXML .= '<Item>';
-            $uploadXML .= '<ItemID>' . $results[0]['ebay_id'] . '</ItemID>';
-            $uploadXML .= '<SKU>' . $product['product']['C:Manufacturer Part Number'] . '</SKU>';
-            $uploadXML .= '<CategoryMappingAllowed>true</CategoryMappingAllowed>';
-            $uploadXML .= '<Country>US</Country>';
-            $uploadXML .= '<location>US</location>';
-            $uploadXML .= '<Currency>USD</Currency>';
-
-
-            $uploadXML .= '<ConditionID>' . $product['product']['*ConditionID'] . '</ConditionID>';
-            $uploadXML .= '<Description>' . $string . '</Description>';
-            $uploadXML .= '<DispatchTimeMax>' . $product['product']['*DispatchTimeMax'] . '</DispatchTimeMax>';
-            $uploadXML .= '<ListingDuration>' . $product['product']['*Duration'] . '</ListingDuration>';
-            $uploadXML .= '<ListingType>FixedPriceItem</ListingType>';
-            $uploadXML .= '<PaymentMethods>PayPal</PaymentMethods>';
-            $uploadXML .= '<PayPalEmailAddress>pushpender.techmarbles@gmail.com</PayPalEmailAddress>';
-
-            $uploadXML .= '<PictureDetails>';
-
-            $uploadXML .= '<PictureURL>' . $product['product']['PicURL'] . '</PictureURL>';
-            $uploadXML .= '</PictureDetails>';
-
-            $uploadXML .= '<PostalCode>' . $product['product']['PostalCode'] . '</PostalCode>';
-            $uploadXML .= '<PrimaryCategory>';
-
-            $uploadXML .= '<CategoryID>' . $product['product']['EbayCategory'] . '</CategoryID>';
-            $uploadXML .= '</PrimaryCategory>';
-            $uploadXML .= '<ReturnPolicy>';
-            $uploadXML .= '<ReturnsAcceptedOption>' . $product['product']['*ReturnsAcceptedOption'] . '</ReturnsAcceptedOption>';
-            $uploadXML .= '<RefundOption>MoneyBack</RefundOption>';
-            $uploadXML .= '<ReturnsWithinOption>' . $product['product']['ReturnsWithinOption'] . '</ReturnsWithinOption>';
-            $uploadXML .= '<Description>TEST</Description>';
-            $uploadXML .= '<ShippingCostPaidByOption>' . $product['product']['ShippingCostPaidByOption'] . '</ShippingCostPaidByOption>';
-            $uploadXML .= '</ReturnPolicy>';
-//            $shipping_first_key = $product['product']['shipping_options'];
-            $uploadXML .= '<ShippingDetails>';
-            $uploadXML .= '<ShippingType>';
-            $uploadXML .= 'Flat';
-            $uploadXML .= '</ShippingType>';
-
-            $uploadXML .= '<ShippingServiceOptions>';
-            $uploadXML .= '<ShippingServicePriority>1</ShippingServicePriority>';
-            $uploadXML .= '<ShippingService>UPSGround</ShippingService>';
-            $uploadXML .= '<ShippingServiceCost>14.50</ShippingServiceCost>';
-            $uploadXML .= '<ShippingServiceAdditionalCost>5.00</ShippingServiceAdditionalCost>';
-            $uploadXML .= '</ShippingServiceOptions>';
-            $uploadXML .= '</ShippingDetails>';
-            $check_compatibility = FALSE;
-            if ($product['product_variation']) {
-                $product['product_variation'] = array_unique($product['product_variation'], SORT_REGULAR);
-//                $this->pr($product['product_variation']);
-                $check_combo = FALSE;
-                $check_combo_again = FALSE;
-                $check_compatibility = FALSE;
-                $variation_XML = '';
-                $compatibility_XML = '';
-                $variation_XML .= '<Variations>';
-                $variation_XML .= '<VariationSpecificsSet>';
-//                $variation_XML .= '<NameValueList>';
-                $compatibility_XML .= '<ItemCompatibilityList>';
-
-                $done = 0;
-                $years = array();
-                foreach ($product['product_variation'] as $combination) {
-//                    $combination = array_unique($combination);
-//                    $this->pr($variation_key);
-                    if (trim(strtolower($combination['Relationship'])) == 'variation') {
-                        $variation = explode("=", $combination['RelationshipDetails']);
-                        if ($done < 1) {
-                            $variation_XML .= '<NameValueList>';
-                            $variation_XML .= '<Name>';
-                            $variation_XML .= $variation['0'];
-                            $variation_XML .= '</Name>';
-                        }
-                        $variation_XML .= '<Value>';
-                        $variation_XML .= $variation['1'];
-                        $variation_XML .= '</Value>';
-                        $done++;
-                    } elseif (trim(strtolower($combination['Relationship'])) == 'compatibility') {
-                        $check_compatibility = TRUE;
-//                        $this->pr($combination['RelationshipDetails']);
-//                        die("*");
-                        $compatibilities = explode('|', $combination['RelationshipDetails']);
-                        $compatibility_XML .= '<Compatibility>';
-                        foreach ($compatibilities as $compatibility_key => $compatibility) {
-                            $name_values = explode('=', $compatibility);
-                            $product['product']['*StartPrice'] = $combination['*StartPrice'];
-                            if (trim(strtolower($name_values[0])) == 'year') {
-                                $years[] = $name_values[1];
-                            }
-                            $compatibility_XML .= "<NameValueList>";
-                            $compatibility_XML .= "<Name>$name_values[0]</Name>";
-                            $compatibility_XML .= "<Value>$name_values[1]</Value>";
-                            $compatibility_XML .= "</NameValueList>";
-                        }
-                        $compatibility_XML .= '</Compatibility>';
-                    } else {
-//                        $this->pr($product['product_options']);
-//                        die("1234");
-                        if (!$check_combo) {
-                            foreach ($product['product_options'] as $option_type => $option_value_array) {
-                                $variation_XML .= '<NameValueList>';
-                                $variation_XML .= '<Name>';
-                                $variation_XML .= $option_type;
-                                $variation_XML .= '</Name>';
-                                foreach ($option_value_array as $option_value) {
-                                    $variation_XML .= '<Value>';
-                                    $variation_XML .= $option_value;
-                                    $variation_XML .= '</Value>';
-                                }
-                                $variation_XML .= '</NameValueList>';
-                            }
-                            $check_combo = TRUE;
-//                        $this->pr($variation_XML);
-//                        die("testing xml");
-                        }
-                    }
-                }
-                if (!$check_combo) {
-                    $variation_XML .= '</NameValueList>';
-                }
-                $variation_XML .= '</VariationSpecificsSet>';
-
-                foreach ($product['product_variation'] as $combination) {
-                    if (trim(strtolower($combination['Relationship'])) == 'variation') {
-                        $variations = explode("=", $combination['RelationshipDetails']);
-                        $variation_XML .= '<Variation>';
-
-                        $variation_XML .='<StartPrice>' . $combination['*StartPrice'] . '</StartPrice>';
-
-                        $variation_XML .='<Quantity>' . $combination['*Quantity'] . '</Quantity>';
-
-                        $variation_XML .= '<VariationSpecifics>';
-                        $variation_XML .= '<NameValueList>';
-
-                        if (trim(strtolower($combination['Relationship'])) == 'variation') {
-                            $variation_XML .= '<Name>' . $variations['0'] . '</Name>';
-                            $variation_XML .= '<Value>' . $variations['1'] . '</Value>';
-                        }
-
-                        $variation_XML .= '</NameValueList>';
-                        $variation_XML .= '</VariationSpecifics>';
-                        $variation_XML .= '</Variation>';
-                    } elseif (trim(strtolower($combination['Relationship'])) == 'combo') {
-                        //$this->pr($product['product_options']);
-//                        die('test');
-                        if (!$check_combo_again) {
-                            $variation_XML .= '<Variation>';
-                            $variation_XML .='<StartPrice>' . $product['product']['*StartPrice'] . '</StartPrice>';
-                            $variation_XML .='<Quantity>' . $product['product']['*Quantity'] . '</Quantity>';
-                            $variation_XML .= '<VariationSpecifics>';
-                            $variation_XML .= '<NameValueList>';
-                            $variation_XML .= '<Name>GLOVE</Name>';
-
-                            foreach ($product['product_options']['GLOVE'] as $option_value_glove_array) {
-                                $variation_XML .= '<Value>' . $option_value_glove_array . '</Value>';
-                            }
-
-                            $variation_XML .= '</NameValueList>';
-                            $variation_XML .= '<NameValueList>';
-                            $variation_XML .= '<Name>JERSEY</Name>';
-                            foreach ($product['product_options']['JERSEY'] as $option_value_jersey_array) {
-                                $variation_XML .= '<Value>' . $option_value_jersey_array . '</Value>';
-                            }
-                            $variation_XML .= '</NameValueList>';
-                            $variation_XML .= '<NameValueList>';
-                            $variation_XML .= '<Name>PANT</Name>';
-                            foreach ($product['product_options']['PANT'] as $option_value_pant_array) {
-                                $variation_XML .= '<Value>' . $option_value_pant_array . '</Value>';
-                            }
-                            $variation_XML .= '</NameValueList>';
-                            $variation_XML .= '</VariationSpecifics>';
-                            $variation_XML .= '</Variation>';
-                            $check_combo_again = TRUE;
-                        }
-                    }
-                }
-                $compatibility_XML .= '</ItemCompatibilityList>';
-                $variation_XML .= '</Variations>';
-                if ($check_compatibility) {
-                    $uploadXML .= $compatibility_XML;
-                    $uploadXML .= '<Quantity>' . $product['product']['*Quantity'] . '</Quantity>';
-                    $uploadXML .= '<StartPrice currencyID="USD">' . $product['product']['*StartPrice'] . '</StartPrice>';
-                } else {
-                    $uploadXML .= $variation_XML;
-                }
-            } else {
-                $uploadXML .= '<Quantity>' . $product['product']['*Quantity'] . '</Quantity>';
-                $uploadXML .= '<StartPrice currencyID="USD">' . $product['product']['*StartPrice'] . '</StartPrice>';
-            }
-			
-
-//            $title = utf8_encode($product['product']['*Title']);
-            $title = $this->xmlEscape($product['product']['*Title']);
-            if ($check_compatibility) {
-//                $this->pr($start_year);die("1234");
-                $start_year = min($years);
-                $end_year = max($years);
-                if ($start_year != $end_year) {
-                    $uploadXML .= '<Title>' . substr(strip_tags($title . ' ' . $start_year . '-' . $end_year), 0, 78) . '</Title>';
-                } else {
-                    $uploadXML .= '<Title>' . substr(strip_tags($title . ' ' . $start_year), 0, 78) . '</Title>';
-                }
-            } else {
-                $uploadXML .= '<Title>' . substr(strip_tags($title), 0, 78) . '</Title>';
-            }
-            $uploadXML .= '</Item>';
-            $uploadXML .= '</ReviseFixedPriceItemRequest>';
-
-            $count++;
-//            if ($count > 2)
-//                break;
-        }
-
-        $uploadXML .= '</BulkDataExchangeRequests>';
-//        preg_match('/<meta.*?charset=(|\")(.*?)("|\")/i', $uploadXML, $matches);
-//        $charset = $matches[2];
-//
-//        if ($charset)
-//            $XML = mb_convert_encoding($uploadXML, 'UTF-8', $charset);
-//        else
-//            $XML = $uploadXML;
-//        print_r($uploadXML);
-//        $XML = iconv(mb_detect_encoding($uploadXML, mb_detect_order(), true), "UTF-8", $uploadXML);
-//        $this->pr($uploadXML);
-//        die("1234");
-        if ($store_feed == true) {
-            $file_path = STORE_DIRECTORY . '/ebayFeeds/ebayfeed_update_un.xml';
-            if (file_exists($file_path)) {
-                unlink($file_path);
-            }
-//               print_r($doc);
-//            die('-------');
-//            $myfile = fopen($file_path, "w");
-            file_put_contents($file_path, $uploadXML, LOCK_EX);
-            $xml = file_get_contents($file_path, LOCK_EX);
-            $doc = new DOMDocument();
-//            $doc->preserveWhiteSpace = FALSE;
-            $doc->loadXML($xml);
-            $doc->formatOutput = TRUE;
-//Save XML as a file
-            $file = STORE_DIRECTORY . '/ebayFeeds/ebayfeed_update.xml';
-            if (file_exists($file)) {
-                unlink($file);
-            }
-            $doc->save($file);
-        }
-
-//        $response = json_decode(json_encode((array) simplexml_load_string($this->call($uploadXML))), 1);
-    }
 
     /**
      * Function to call ebay API using the xml passed to it.
@@ -2867,7 +1888,7 @@ class Ebay_M extends Master_M {
 		$this->cred['Setting']['credentials']['certId'] = $this->cred['Setting']['cert_id'];
 		$this->cred['Setting']['credentials']['devId'] = $this->cred['Setting']['dev_id'];
 		$this->cred['Setting']['authToken'] = $this->cred['Setting']['user_token'];
-*/
+
 
         $this->cred['Setting'] = array(
             'dev_id' => "b75ef97a-a42e-4373-ae99-019f78f9abdb",
@@ -2880,7 +1901,7 @@ class Ebay_M extends Master_M {
 		$this->cred['Setting']['credentials']['devId'] = $this->cred['Setting']['dev_id'];
 		$this->cred['Setting']['authToken'] = $this->cred['Setting']['user_token'];
 		$this->cred['Setting']['sandbox'] = true;
-
+*/
 
 		$sql = "SELECT ebay_app_id, ebay_cert_id, ebay_dev_id, ebay_user_token, ebay_environment  
 				FROM contact 
@@ -3150,16 +2171,15 @@ class Ebay_M extends Master_M {
         return $shipping_cost;
     }
 
-    public function get_paypalemail() {
+    public function get_paypalemail()
+    {
         $this->db->select("ebay_paypal_email");
         $this->db->from("contact");
-        $this->db->where("id", "1");		
+        $this->db->where("id", "1");
         $query = $this->db->get();
-		$result = $query->result_array();
-		
-		return $result[0]['ebay_paypal_email'];
+        $result = $query->result_array();
 
-        exit('Enter paypal email address in admin.');
+        return $result[0]['ebay_paypal_email'];
     }
 
     public function get_markup() {
@@ -3177,8 +2197,70 @@ class Ebay_M extends Master_M {
         // You should never get here now.
         throw new Exception("eBay Request without markup.");
    }
-	
-	
+
+   /*
+    * JLB 09-06-17
+    * So, we can't run it if there are any fatal errors. We shouldn't allow them to even make a request.
+    */
+
+   /*
+    * Fatal error conditions: no markup, no quantity, no environment, no user token.
+    */
+   public function checkForFatalErrors(&$error_message) {
+       $success = true;
+       $error_message = "";
+
+       // I just want to respect the structure.
+       try {
+           $markup = $this->get_markup();
+       } catch(Exception $e) {
+           $success = false;
+           $error_message .= "eBay Markup % is not defined. ";
+       }
+
+       try {
+           $quantity = $this->get_quantity();
+       } catch(Exception $e) {
+           $success = false;
+           $error_message .= "eBay Listing Quantity is not defined. ";
+       }
+
+       // now, do you have the token?
+       try {
+           $quantity = $this->get_user_token();
+       } catch(Exception $e) {
+           $success = false;
+           $error_message .= "eBay User Token is not defined. ";
+       }
+
+       return $success;
+   }
+
+   /*
+    * Warning conditions: No PayPal email address...
+    */
+   public function checkForWarnings(&$error_message) {
+       $success = true;
+        $error_message = "";
+
+        $paypal_email = $this->get_paypalemail();
+        if (is_null($paypal_email) || trim($paypal_email) === "") {
+            $success = false;
+            $error_message = "PayPal email address is missing. ";
+        }
+
+       return $success;
+   }
+
+   public function get_user_token() {
+       $this->getEbayAuthSettingsFromDb();
+       if ($this->cred['Setting']['user_token'] != "") {
+           return $this->cred['Setting']['user_token'];
+       }
+
+       throw new Exception("Missing eBay user token.");
+   }
+
     public function get_quantity() {
         $this->db->select("*");
         $this->db->from("ebay_settings");
@@ -3225,7 +2307,9 @@ class Ebay_M extends Master_M {
 	}
 	private function unzipArchive($filename)
 	{
-		printf("Unzipping %s...", $filename);
+	    if ($this->debug) {
+            printf("Unzipping %s...", $filename);
+        }
 		$zip = new ZipArchive();
 		if ($zip->open($filename)) {
 			/**
@@ -3233,7 +2317,9 @@ class Ebay_M extends Master_M {
 			 */
 			$xml = $zip->getFromIndex(0);
 			if ($xml !== false) {
-				print("Done\n");
+			    if ($this->debug) {
+                    print("Done\n");
+                }
 				return $xml;
 			} else {
 				printf("Failed. No XML found in %s\n", $filename);
