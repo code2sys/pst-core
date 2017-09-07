@@ -288,7 +288,7 @@ class Ebay_M extends Master_M {
             $itemspecifics_XML .= "</NameValueList>";
 
 
-            if ($product['product_variation']) {
+            if (array_key_exists("product_variation", $product) && is_array($product["product_variation"]) && count($product['product_variation']) > 0) {
                 $product['product_variation'] = array_unique($product['product_variation'], SORT_REGULAR);
 //                $this->pr($product['product_variation']);
                 $check_combo = FALSE;
@@ -307,6 +307,8 @@ class Ebay_M extends Master_M {
 //                    $this->pr($variation_key);
                     if (trim(strtolower($combination['Relationship'])) == 'variation') {
                         $variation = explode("=", $combination['RelationshipDetails']);
+                        // JLB 09-07-17
+                        // This code utterly baffles me. Why only one question?
                         if ($done < 1) {
                             $variation_XML .= '<NameValueList>';
                             $variation_XML .= '<Name>';
@@ -444,14 +446,14 @@ class Ebay_M extends Master_M {
                     $uploadXML .= $compatibility_XML;
                     $uploadXML .= '<Quantity>' . min($product['product']['*Quantity'], $quantity) . '</Quantity>';
                     $product_price = $product['product']['*StartPrice'];
-                    $uploadXML .= '<StartPrice currencyID="USD">' . $product['product']['*StartPrice'] . '</StartPrice>';
+                    $uploadXML .= '<StartPrice currencyID="USD" alt="Jon1">' . $product['product']['*StartPrice'] . '</StartPrice>';
                 } else {
                     $uploadXML .= $variation_XML;
                 }
             } else {
                 $uploadXML .= '<Quantity>' . min($product['product']['*Quantity'], $quantity) . '</Quantity>';
                 $product_price = $product['product']['*StartPrice'];
-                $uploadXML .= '<StartPrice currencyID="USD">' . $product['product']['*StartPrice'] . '</StartPrice>';
+                $uploadXML .= '<StartPrice currencyID="USD" alt="Jon2">' . $product['product']['*StartPrice'] . '</StartPrice>';
             }
 
             $itemspecifics_XML .= "</ItemSpecifics>";
