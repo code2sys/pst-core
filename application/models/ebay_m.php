@@ -973,11 +973,11 @@ class Ebay_M extends Master_M {
                         foreach ($categoryRec as $rb) {
                             $newArray = $part;
                             $newArray['*Quantity'] = $rb['*Quantity'];
+                            $newArray['*StartPrice'] = $rb['*StartPrice'];
 //                            if(isset($combo_price))
 //                                $newArray['*StartPrice'] = $combo_price;
                             $newArray['*Description'] = '';
-//                            $newArray['Relationship'] = 'Combo';
-
+                            $newArray['Relationship'] = $rb['Relationship'];
                             $newArray['RelationshipDetails'] = $rb['RelationshipDetails'];
                             $newArray['*Title'] = '';
                             $combo_variations[] = $newArray;
