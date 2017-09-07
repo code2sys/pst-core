@@ -906,8 +906,8 @@ class Ebay_M extends Master_M {
                             $part['item_id'] = $part_id;
                             $finalArray[] = $part;
                         }
-//                    } elseif (count($categoryRec) > 0) {
-//                        $variations = array();
+                    } elseif (count($categoryRec) > 0) { // JLB 09-07-17: This has to mean that there are at least two.
+                        // $variations = array();
 //                        $combopartIds = $this->checkForComboReporting($part_id);
 //                        if (is_array($combopartIds)) {
 //                            $PriceArr = array();
@@ -938,29 +938,33 @@ class Ebay_M extends Master_M {
 //                            }
 //                            $combo_price = $this->calculateMarkupReporting($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup'], $finalPriceArr['dealer_sale_min'], $finalPriceArr['dealer_sale_max'], $finalPriceArr['cnt'])['sale_min'];
 //                        }
-//                        foreach ($categoryRec as $rb) {
-//                            $newArray = $part;
-//                            $newArray['*Quantity'] = $rb['*Quantity'];
+                        /*
+                         * JLB - So, it's declaring all variations to be combo parts, so it never looks at this?
+                         */
+                        $combo_variations = array();
+                        foreach ($categoryRec as $rb) {
+                            $newArray = $part;
+                            $newArray['*Quantity'] = $rb['*Quantity'];
 //                            if(isset($combo_price))
 //                                $newArray['*StartPrice'] = $combo_price;
-//                            $newArray['*Description'] = '';
+                            $newArray['*Description'] = '';
 //                            $newArray['Relationship'] = 'Combo';
-//
-//                            $newArray['RelationshipDetails'] = $rb['RelationshipDetails'];
-//                            $newArray['*Title'] = '';
-//                            $combo_variations[] = $newArray;
-//                        }
-//                        $product_options = $this->getProductQuestions($part_id);
-//                        $options_vailable = array();
-//                        foreach ($product_options as $otions_array) {
-//                            $options_vailable[$otions_array['question']][] = $otions_array['answer'];
-//                        }
+
+                            $newArray['RelationshipDetails'] = $rb['RelationshipDetails'];
+                            $newArray['*Title'] = '';
+                            $combo_variations[] = $newArray;
+                        }
+                        $product_options = $this->getProductQuestions($part_id);
+                        $options_vailable = array();
+                        foreach ($product_options as $otions_array) {
+                            $options_vailable[$otions_array['question']][] = $otions_array['answer'];
+                        }
 //                        if(isset($combo_price)) {
 //                            $part['*StartPrice'] = $combo_price;
 //                        }
-//                        $part['product_options'] = $options_vailable;
-//                        $part['product_variation'] = $combo_variations;
-//                        $finalArray[] = $part;
+                        $part['product_options'] = $options_vailable;
+                        $part['product_variation'] = $combo_variations;
+                        $finalArray[] = $part;
                     } else {
                             /*
                              * JLB 09-07-17 Intentionally Left Blank.
