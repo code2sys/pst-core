@@ -1873,6 +1873,15 @@ class Ebay_M extends Master_M {
      * @access private
      * @author Anik Goel
      */
+    private function sub_getEbayAuthSettingsFromDb() {
+        $sql = "SELECT ebay_app_id, ebay_cert_id, ebay_dev_id, ebay_user_token, ebay_environment  
+				FROM contact 
+				WHERE id = 1";
+        $query = $this->db->query($sql);
+        $cred = $query->result_array();
+        return $cred;
+    }
+
     private function getEbayAuthSettingsFromDb() {
 
 
@@ -1902,12 +1911,7 @@ class Ebay_M extends Master_M {
 		$this->cred['Setting']['authToken'] = $this->cred['Setting']['user_token'];
 		$this->cred['Setting']['sandbox'] = true;
 */
-
-		$sql = "SELECT ebay_app_id, ebay_cert_id, ebay_dev_id, ebay_user_token, ebay_environment  
-				FROM contact 
-				WHERE id = 1";
-		$query = $this->db->query($sql);
-		$cred = $query->result_array();		
+        $cred = $this->sub_getEbayAuthSettingsFromDb();
 
 		if($cred[0]['ebay_dev_id'] == "" || $cred[0]['ebay_app_id'] == "" || $cred[0]['ebay_cert_id'] == "" || $cred[0]['ebay_user_token'] == "") {
             if ($this->_dieSilentlyIfBad) {
@@ -2253,9 +2257,9 @@ class Ebay_M extends Master_M {
    }
 
    public function get_user_token() {
-       $this->getEbayAuthSettingsFromDb();
-       if ($this->cred['Setting']['user_token'] != "") {
-           return $this->cred['Setting']['user_token'];
+       $cred = $this->sub_getEbayAuthSettingsFromDb();
+       if ($cred[0]['ebay_user_token'] != "") {
+           return $cred[0]['ebay_user_token'];
        }
 
        throw new Exception("Missing eBay user token.");
