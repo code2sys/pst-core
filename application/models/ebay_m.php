@@ -891,14 +891,21 @@ class Ebay_M extends Master_M {
                     // Second, it's got to have a price. Otherwise, what are we doing? It gets a price by having a quantity.
                     // if (($samePrice) && count($categoryRec) > 0) {
                     if (($samePrice) && $basicPrice > 0) {
-                        $part['*Quantity'] = '';
-                        $part['*StartPrice'] = $basicPrice;
-                        $part['item_id'] = $part_id;
-                        $finalArray[] = $part;
+                        if (count($categoryRec) > 1) {
+                            $part['*Quantity'] = '';
+                            $part['*StartPrice'] = $basicPrice;
+                            $part['item_id'] = $part_id;
+                            $finalArray[] = $part;
 
-                        foreach ($categoryRec as $rb) {
-                            $rb['*StartPrice'] = $basicPrice;
-                            $finalArray[] = $rb;
+                            foreach ($categoryRec as $rb) {
+                                $rb['*StartPrice'] = $basicPrice;
+                                $finalArray[] = $rb;
+                            }
+                        } else {
+                            $part['*Quantity'] = $categoryRec[0]['*Quantity'];
+                            $part['*StartPrice'] = $basicPrice;
+                            $part['item_id'] = $part_id;
+                            $finalArray[] = $part;
                         }
 //                    } elseif (count($categoryRec) > 0) {
 //                        $variations = array();
