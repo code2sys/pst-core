@@ -900,64 +900,66 @@ class Ebay_M extends Master_M {
                             $rb['*StartPrice'] = $basicPrice;
                             $finalArray[] = $rb;
                         }
-                    } elseif (count($categoryRec) > 0) {
-                        $variations = array();
-                        $combopartIds = $this->checkForComboReporting($part_id);
-                        if (is_array($combopartIds)) {
-                            $PriceArr = array();
-                            $finalPriceArr = array('retail_min' => 0, 'retail_max' => 0, 'sale_min' => 0, 'sale_max' => 0);
-                            foreach ($combopartIds as $id) {
-                                $PriceArr[] = $this->getPriceRangeReporting($id, FALSE, FALSE);
-                                $where = array('partpartnumber.part_id' => $id);
-                                $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
-                                $this->db->where('partnumber.price > 0');
-                                $this->db->where('partdealervariation.quantity_available > 0');
-                                $this->db->select('partnumber, MIN(partnumber.dealer_sale) AS dealer_sale_min, MAX(partnumber.dealer_sale) AS dealer_sale_max', FALSE);
-                                $this->db->group_by('part_id');
-                                $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
-                                $partDealerRec = $this->selectRecord('partnumber', $where);
-
-                                if (empty($partDealerRec)) {
-                                    $PriceArr['dealer_sale_min'] = 0;
-                                    $PriceArr['dealer_sale_max'] = 0;
-                                }
-                            }
-                            foreach ($PriceArr as $pa) {
-                                $finalPriceArr['retail_min'] += $pa['retail_min'];
-                                $finalPriceArr['retail_max'] += $pa['retail_max'];
-                                $finalPriceArr['sale_min'] += $pa['sale_min'];
-                                $finalPriceArr['sale_max'] += $pa['sale_max'];
-                                $finalPriceArr['dealer_sale_min'] += $pa['dealer_sale_min'];
-                                $finalPriceArr['dealer_sale_max'] += $pa['dealer_sale_max'];
-                            }
-                            $combo_price = $this->calculateMarkupReporting($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup'], $finalPriceArr['dealer_sale_min'], $finalPriceArr['dealer_sale_max'], $finalPriceArr['cnt'])['sale_min'];
-                        }
-                        foreach ($categoryRec as $rb) {
-                            $newArray = $part;
-                            $newArray['*Quantity'] = $rb['*Quantity'];
-                            if(isset($combo_price))
-                                $newArray['*StartPrice'] = $combo_price;
-                            $newArray['*Description'] = '';
-                            $newArray['Relationship'] = 'Combo';
-
-                            $newArray['RelationshipDetails'] = $rb['RelationshipDetails'];
-                            $newArray['*Title'] = '';
-                            $combo_variations[] = $newArray;
-                        }
-                        $product_options = $this->getProductQuestions($part_id);
-                        $options_vailable = array();
-                        foreach ($product_options as $otions_array) {
-                            $options_vailable[$otions_array['question']][] = $otions_array['answer'];
-                        }
-                        if(isset($combo_price)) {
-                            $part['*StartPrice'] = $combo_price;
-                        }
-                        $part['product_options'] = $options_vailable;
-                        $part['product_variation'] = $combo_variations;
-                        $finalArray[] = $part;
+//                    } elseif (count($categoryRec) > 0) {
+//                        $variations = array();
+//                        $combopartIds = $this->checkForComboReporting($part_id);
+//                        if (is_array($combopartIds)) {
+//                            $PriceArr = array();
+//                            $finalPriceArr = array('retail_min' => 0, 'retail_max' => 0, 'sale_min' => 0, 'sale_max' => 0);
+//                            foreach ($combopartIds as $id) {
+//                                $PriceArr[] = $this->getPriceRangeReporting($id, FALSE, FALSE);
+//                                $where = array('partpartnumber.part_id' => $id);
+//                                $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
+//                                $this->db->where('partnumber.price > 0');
+//                                $this->db->where('partdealervariation.quantity_available > 0');
+//                                $this->db->select('partnumber, MIN(partnumber.dealer_sale) AS dealer_sale_min, MAX(partnumber.dealer_sale) AS dealer_sale_max', FALSE);
+//                                $this->db->group_by('part_id');
+//                                $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
+//                                $partDealerRec = $this->selectRecord('partnumber', $where);
+//
+//                                if (empty($partDealerRec)) {
+//                                    $PriceArr['dealer_sale_min'] = 0;
+//                                    $PriceArr['dealer_sale_max'] = 0;
+//                                }
+//                            }
+//                            foreach ($PriceArr as $pa) {
+//                                $finalPriceArr['retail_min'] += $pa['retail_min'];
+//                                $finalPriceArr['retail_max'] += $pa['retail_max'];
+//                                $finalPriceArr['sale_min'] += $pa['sale_min'];
+//                                $finalPriceArr['sale_max'] += $pa['sale_max'];
+//                                $finalPriceArr['dealer_sale_min'] += $pa['dealer_sale_min'];
+//                                $finalPriceArr['dealer_sale_max'] += $pa['dealer_sale_max'];
+//                            }
+//                            $combo_price = $this->calculateMarkupReporting($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup'], $finalPriceArr['dealer_sale_min'], $finalPriceArr['dealer_sale_max'], $finalPriceArr['cnt'])['sale_min'];
+//                        }
+//                        foreach ($categoryRec as $rb) {
+//                            $newArray = $part;
+//                            $newArray['*Quantity'] = $rb['*Quantity'];
+//                            if(isset($combo_price))
+//                                $newArray['*StartPrice'] = $combo_price;
+//                            $newArray['*Description'] = '';
+//                            $newArray['Relationship'] = 'Combo';
+//
+//                            $newArray['RelationshipDetails'] = $rb['RelationshipDetails'];
+//                            $newArray['*Title'] = '';
+//                            $combo_variations[] = $newArray;
+//                        }
+//                        $product_options = $this->getProductQuestions($part_id);
+//                        $options_vailable = array();
+//                        foreach ($product_options as $otions_array) {
+//                            $options_vailable[$otions_array['question']][] = $otions_array['answer'];
+//                        }
+//                        if(isset($combo_price)) {
+//                            $part['*StartPrice'] = $combo_price;
+//                        }
+//                        $part['product_options'] = $options_vailable;
+//                        $part['product_variation'] = $combo_variations;
+//                        $finalArray[] = $part;
                     } else {
-                        print "Should be unreachable line 959:";
-                        print_r($part);
+                            /*
+                             * JLB 09-07-17 Intentionally Left Blank.
+                             * This is a case where there were no part variations that had a quantity. Nothing to do here.
+                             */
                     }
 
                     if (!empty($fitmentArr)) {
