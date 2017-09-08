@@ -288,7 +288,7 @@ class Ebay_M extends Master_M {
             $itemspecifics_XML .= "</NameValueList>";
 
 
-            if ($product['product_variation']) {
+            if (array_key_exists("product_variation", $product) && is_array($product["product_variation"]) && count($product['product_variation']) > 0) {
                 $product['product_variation'] = array_unique($product['product_variation'], SORT_REGULAR);
 //                $this->pr($product['product_variation']);
                 $check_combo = FALSE;
@@ -307,6 +307,8 @@ class Ebay_M extends Master_M {
 //                    $this->pr($variation_key);
                     if (trim(strtolower($combination['Relationship'])) == 'variation') {
                         $variation = explode("=", $combination['RelationshipDetails']);
+                        // JLB 09-07-17
+                        // This code utterly baffles me. Why only one question?
                         if ($done < 1) {
                             $variation_XML .= '<NameValueList>';
                             $variation_XML .= '<Name>';
@@ -387,10 +389,11 @@ class Ebay_M extends Master_M {
                         $variation_XML .= '<VariationSpecifics>';
                         $variation_XML .= '<NameValueList>';
 
-                        if (trim(strtolower($combination['Relationship'])) == 'variation') {
-                            $variation_XML .= '<Name>' . $variations['0'] . '</Name>';
-                            $variation_XML .= '<Value>' . $variations['1'] . '</Value>';
-                        }
+                        // JLB - why does this check the exact same condition? Does it mutate?
+//                        if (trim(strtolower($combination['Relationship'])) == 'variation') {
+                        $variation_XML .= '<Name>' . $variations['0'] . '</Name>';
+                        $variation_XML .= '<Value>' . $variations['1'] . '</Value>';
+//                        }
 
                         $variation_XML .= '</NameValueList>';
                         $variation_XML .= '</VariationSpecifics>';
@@ -434,6 +437,25 @@ class Ebay_M extends Master_M {
                             }
                             $check_combo_again = TRUE;
                         }
+                    } else {
+                        // JLB 09-07-17
+                        // We're going to stamp things out here to match the other one, or else we might have no price.
+                        $variations = explode("=", $combination['RelationshipDetails']);
+                        $variation_XML .= '<Variation>';
+                        $product_price = $combination['*StartPrice'];
+                        $variation_XML .='<StartPrice>' . $combination['*StartPrice'] . '</StartPrice>';
+
+                        $variation_XML .='<Quantity>' . min($combination['*Quantity'], $quantity) . '</Quantity>';
+
+                        $variation_XML .= '<VariationSpecifics>';
+                        $variation_XML .= '<NameValueList>';
+
+                        $variation_XML .= '<Name>' . $variations['0'] . '</Name>';
+                        $variation_XML .= '<Value>' . $variations['1'] . '</Value>';
+
+                        $variation_XML .= '</NameValueList>';
+                        $variation_XML .= '</VariationSpecifics>';
+                        $variation_XML .= '</Variation>';
                     }
                 }
                 $compatibility_XML .= '</ItemCompatibilityList>';
@@ -444,14 +466,14 @@ class Ebay_M extends Master_M {
                     $uploadXML .= $compatibility_XML;
                     $uploadXML .= '<Quantity>' . min($product['product']['*Quantity'], $quantity) . '</Quantity>';
                     $product_price = $product['product']['*StartPrice'];
-                    $uploadXML .= '<StartPrice currencyID="USD">' . $product['product']['*StartPrice'] . '</StartPrice>';
+                    $uploadXML .= '<StartPrice currencyID="USD" alt="Jon1">' . $product['product']['*StartPrice'] . '</StartPrice>';
                 } else {
                     $uploadXML .= $variation_XML;
                 }
             } else {
                 $uploadXML .= '<Quantity>' . min($product['product']['*Quantity'], $quantity) . '</Quantity>';
                 $product_price = $product['product']['*StartPrice'];
-                $uploadXML .= '<StartPrice currencyID="USD">' . $product['product']['*StartPrice'] . '</StartPrice>';
+                $uploadXML .= '<StartPrice currencyID="USD" alt="Jon2">' . $product['product']['*StartPrice'] . '</StartPrice>';
             }
 
             $itemspecifics_XML .= "</ItemSpecifics>";
@@ -497,11 +519,16 @@ class Ebay_M extends Master_M {
     }
 
 
+    /*
+     * This transforms a list of products into an array $final.
+     * $final is mapped by part title.
+     */
     private function convertToEbayFormat($data) {
         //$this->pr($data);
         //echo("convertToEbayFormat");
         $final = array();
         foreach ($data as $key => $value) {
+
             if (strpos($value['*Title'], 'COMBO') !== FALSE || isset($value['product_options'])) {
                 $product_variation = $value['product_variation'];
                 $different_variations = $value['product_options'];
@@ -514,26 +541,27 @@ class Ebay_M extends Master_M {
                 );
                 //$this->pr($different_variations);
                 //die("aisi hoti hai");
-            } 
-			// else {
-                if (trim($value['*Title']) != "") {
-                    $product_data[$value['*Title']] = $value;
-                    $title = $value['*Title'];
-                    $variations = [];
+            }
+
+            // JLB 09-07-17 I think they incorrectly did compatibility and variation as the same thing...
+            if (trim($value['*Title']) != "") {
+                $title = $value['*Title'];
+                $final[$title]['product'] = $value;
+                if (trim(strtolower($value['Relationship'])) == "compatibility") {
+                    if (!array_key_exists("product_variation", $final[$title])) {
+                        $final[$title]["product_variation"] = array();
+                    }
+                    $final[$title]["product_variation"][] = $value;
                 }
+            }
 
-                if (trim(strtolower($value['Relationship'])) == "variation" || trim(strtolower($value['Relationship'])) == "compatibility") {
-                    $variations[] = $value;
-                }
+            // JLB 09-07-17
+            // I think this is again done wrong on the variation type.
+//            if (trim(strtolower($value['Relationship'])) == "variation" || trim(strtolower($value['Relationship'])) == "compatibility") {
+//                $variations[] = $value;
+//            }
 
-                $final[$title]['product'] = $product_data[$title];
-                $final[$title]['product_variation'] = $variations;
 
-//				$final[$title] = array(
- //                   'product' => $product_data[$title],
- //                   'product_variation' => $variations
- //               );
-            // }
 
 		 }
         //echo "************************************";
@@ -644,7 +672,7 @@ class Ebay_M extends Master_M {
 						brand.name AS 'C:Brand',
 						partnumber.price as customprice,
 						partnumber.sale as saleprice,
-						partvariation.manufacturer_part_number AS 'C:Manufacturer Part Number',
+						IfNull(partvariation.manufacturer_part_number, CONCAT('DLR', partvariation.distributor_id, '_', partvariation.part_number) AS 'C:Manufacturer Part Number',
 						'" . $this->store_zip_code . "' AS 'PostalCode',
 						'UPSGround' AS 'ShippingService-1:Option',
 						'1' AS 'ShippingService-1:FreeShipping',
@@ -787,12 +815,13 @@ class Ebay_M extends Master_M {
                 $partnumbers = $query->result_array();
                 $query->free_result();
 
-                if (is_array($partnumbers)) {
+                // JLB 09-07-17 This used to be the craziest thing.
+                if (is_array($partnumbers) && count($partnumbers) > 0) {
                     $categoryRec = array();
                     $fitmentArr = array();
                     $basicPrice = 0;
                     $samePrice = TRUE;
-                    if (count($partnumbers) > 0) {
+//                    if (count($partnumbers) > 0) {
                         foreach ($partnumbers as $pn) {
 
                             if ($pn['*Quantity'] > 0) {
@@ -878,62 +907,78 @@ class Ebay_M extends Master_M {
                                 }
                             }
                         }
-                    } else {
-                        $part["*Quantity"] = min($partnumbers[0]["*Quantity"], $quantity);
-                        $part['*StartPrice'] = $partnumbers[0]['price'];
-                        $finalArray[] = $part;
-                    }
+//                    } else {
+//                        // JLB 09-07-17 I don't think this else clause is EVER reached...
+//                        $part["*Quantity"] = min($partnumbers[0]["*Quantity"], $quantity);
+//                        $part['*StartPrice'] = $partnumbers[0]['price'];
+//                        $finalArray[] = $part;
+//                    }
 
-                    if (($samePrice) && (@$categoryRec)) {
-                        $part['*Quantity'] = '';
-                        $part['*StartPrice'] = $basicPrice;
-                        $part['item_id'] = $part_id;
-                        $finalArray[] = $part;
-
-                        foreach ($categoryRec as $rb) {
-                            $rb['*StartPrice'] = $basicPrice;
-                            $finalArray[] = $rb;
-                        }
-                    } elseif (!empty($categoryRec)) {
-                        $variations = array();
-                        $combopartIds = $this->checkForComboReporting($part_id);
-                        if (is_array($combopartIds)) {
-                            $PriceArr = array();
-                            $finalPriceArr = array('retail_min' => 0, 'retail_max' => 0, 'sale_min' => 0, 'sale_max' => 0);
-                            foreach ($combopartIds as $id) {
-                                $PriceArr[] = $this->getPriceRangeReporting($id, FALSE, FALSE);
-                                $where = array('partpartnumber.part_id' => $id);
-                                $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
-                                $this->db->where('partnumber.price > 0');
-                                $this->db->where('partdealervariation.quantity_available > 0');
-                                $this->db->select('partnumber, MIN(partnumber.dealer_sale) AS dealer_sale_min, MAX(partnumber.dealer_sale) AS dealer_sale_max', FALSE);
-                                $this->db->group_by('part_id');
-                                $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
-                                $partDealerRec = $this->selectRecord('partnumber', $where);
-
-                                if (empty($partDealerRec)) {
-                                    $PriceArr['dealer_sale_min'] = 0;
-                                    $PriceArr['dealer_sale_max'] = 0;
-                                }
-                            }
-                            foreach ($PriceArr as $pa) {
-                                $finalPriceArr['retail_min'] += $pa['retail_min'];
-                                $finalPriceArr['retail_max'] += $pa['retail_max'];
-                                $finalPriceArr['sale_min'] += $pa['sale_min'];
-                                $finalPriceArr['sale_max'] += $pa['sale_max'];
-                                $finalPriceArr['dealer_sale_min'] += $pa['dealer_sale_min'];
-                                $finalPriceArr['dealer_sale_max'] += $pa['dealer_sale_max'];
-                            }
-                            $combo_price = $this->calculateMarkupReporting($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup'], $finalPriceArr['dealer_sale_min'], $finalPriceArr['dealer_sale_max'], $finalPriceArr['cnt'])['sale_min'];
-                        }
+                    // JLB 09-07-17
+                    // First, it's either the same price or it's not.
+                    // Second, it's got to have a price. Otherwise, what are we doing? It gets a price by having a quantity.
+                    // if (($samePrice) && count($categoryRec) > 0) {
+                    // if (($samePrice) && $basicPrice > 0) {
+                    if (count($categoryRec) == 1) {
+//                        if (count($categoryRec) > 1) {
+//                            $part['*Quantity'] = '';
+//                            $part['*StartPrice'] = $basicPrice;
+//                            $part['item_id'] = $part_id;
+//                            $finalArray[] = $part;
+//
+//                            foreach ($categoryRec as $rb) {
+//                                $rb['*StartPrice'] = $basicPrice;
+//                                $finalArray[] = $rb;
+//                            }
+//                        } else {
+                            $part['*StartPrice'] = $basicPrice;
+                            $part['item_id'] = $part_id;
+                            $finalArray[] = $part;
+//                        }
+                    } elseif (count($categoryRec) > 0) { // JLB 09-07-17: This has to mean that there are at least two.
+                        // $variations = array();
+//                        $combopartIds = $this->checkForComboReporting($part_id);
+//                        if (is_array($combopartIds)) {
+//                            $PriceArr = array();
+//                            $finalPriceArr = array('retail_min' => 0, 'retail_max' => 0, 'sale_min' => 0, 'sale_max' => 0);
+//                            foreach ($combopartIds as $id) {
+//                                $PriceArr[] = $this->getPriceRangeReporting($id, FALSE, FALSE);
+//                                $where = array('partpartnumber.part_id' => $id);
+//                                $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
+//                                $this->db->where('partnumber.price > 0');
+//                                $this->db->where('partdealervariation.quantity_available > 0');
+//                                $this->db->select('partnumber, MIN(partnumber.dealer_sale) AS dealer_sale_min, MAX(partnumber.dealer_sale) AS dealer_sale_max', FALSE);
+//                                $this->db->group_by('part_id');
+//                                $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
+//                                $partDealerRec = $this->selectRecord('partnumber', $where);
+//
+//                                if (empty($partDealerRec)) {
+//                                    $PriceArr['dealer_sale_min'] = 0;
+//                                    $PriceArr['dealer_sale_max'] = 0;
+//                                }
+//                            }
+//                            foreach ($PriceArr as $pa) {
+//                                $finalPriceArr['retail_min'] += $pa['retail_min'];
+//                                $finalPriceArr['retail_max'] += $pa['retail_max'];
+//                                $finalPriceArr['sale_min'] += $pa['sale_min'];
+//                                $finalPriceArr['sale_max'] += $pa['sale_max'];
+//                                $finalPriceArr['dealer_sale_min'] += $pa['dealer_sale_min'];
+//                                $finalPriceArr['dealer_sale_max'] += $pa['dealer_sale_max'];
+//                            }
+//                            $combo_price = $this->calculateMarkupReporting($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup'], $finalPriceArr['dealer_sale_min'], $finalPriceArr['dealer_sale_max'], $finalPriceArr['cnt'])['sale_min'];
+//                        }
+                        /*
+                         * JLB - So, it's declaring all variations to be combo parts, so it never looks at this?
+                         */
+                        $combo_variations = array();
                         foreach ($categoryRec as $rb) {
                             $newArray = $part;
                             $newArray['*Quantity'] = $rb['*Quantity'];
-                            if(isset($combo_price))
-                                $newArray['*StartPrice'] = $combo_price;
+                            $newArray['*StartPrice'] = $rb['*StartPrice'];
+//                            if(isset($combo_price))
+//                                $newArray['*StartPrice'] = $combo_price;
                             $newArray['*Description'] = '';
-                            $newArray['Relationship'] = 'Combo';
-
+                            $newArray['Relationship'] = $rb['Relationship'];
                             $newArray['RelationshipDetails'] = $rb['RelationshipDetails'];
                             $newArray['*Title'] = '';
                             $combo_variations[] = $newArray;
@@ -943,12 +988,17 @@ class Ebay_M extends Master_M {
                         foreach ($product_options as $otions_array) {
                             $options_vailable[$otions_array['question']][] = $otions_array['answer'];
                         }
-                        if(isset($combo_price)) {
-                            $part['*StartPrice'] = $combo_price;
-                        }
+//                        if(isset($combo_price)) {
+//                            $part['*StartPrice'] = $combo_price;
+//                        }
                         $part['product_options'] = $options_vailable;
                         $part['product_variation'] = $combo_variations;
                         $finalArray[] = $part;
+                    } else {
+                            /*
+                             * JLB 09-07-17 Intentionally Left Blank.
+                             * This is a case where there were no part variations that had a quantity. Nothing to do here.
+                             */
                     }
 
                     if (!empty($fitmentArr)) {
@@ -993,6 +1043,7 @@ class Ebay_M extends Master_M {
                         }
                     }
                 }
+                // JLB 09-07-17 - This appears to go nowhere...why does it exist?
                 if (empty($part['saleprice'])&&isset($part['customprice'])) {
                     $part['*StartPrice'] = $part['customprice'];
 
@@ -2194,7 +2245,7 @@ class Ebay_M extends Master_M {
         if (is_array($query->result_array())) {
             foreach ($query->result_array() as $paypal_value_check) {
                 if (key_exists('value', $paypal_value_check) && $paypal_value_check['value'] != '') {
-                    return $paypal_value_check['value'];
+                    return floatVal($paypal_value_check['value']);
                 }
             }
         }
