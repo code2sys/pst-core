@@ -672,7 +672,7 @@ class Ebay_M extends Master_M {
 						brand.name AS 'C:Brand',
 						partnumber.price as customprice,
 						partnumber.sale as saleprice,
-						partvariation.manufacturer_part_number AS 'C:Manufacturer Part Number',
+						IfNull(partvariation.manufacturer_part_number, CONCAT('DLR', partvariation.distributor_id, '_', partvariation.part_number) AS 'C:Manufacturer Part Number',
 						'" . $this->store_zip_code . "' AS 'PostalCode',
 						'UPSGround' AS 'ShippingService-1:Option',
 						'1' AS 'ShippingService-1:FreeShipping',
