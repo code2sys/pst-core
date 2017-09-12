@@ -75,7 +75,7 @@
                           <tr>
                               <td colspan=""5">
 
-                              <p>Last Run Results: (<a href="<?php echo jsite_url("/admin_content/download_ebay_feed_csv"); ?>">download</a>)</p>
+                              <h3>eBay Last Run Results (<a href="<?php echo jsite_url("/admin_content/download_ebay_feed_csv"); ?>">download</a>)</h3>
 
                               <table>
                                   <thead>
