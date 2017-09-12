@@ -17,6 +17,7 @@ class CronControl extends Master_Controller {
         print "Encrypting password: $password \n";
 
         if ($password == "") {
+            print_r($_ENV);
             $password = getenv("PASSWORD");
         }
         print $this->encrypt->encode($password) . "\n";
