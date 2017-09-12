@@ -33,7 +33,12 @@ class Ebay_M extends Master_M {
     protected $store_zip_code;
     protected $store_name;
     protected $debug;
-	
+
+    public function getFeedCounts() {
+        $query = $this->db->query("select count(*) as the_count, error, error_string from ebay_feed_item group by error_string order by error, count(*) desc");
+        return $query->result_array();
+    }
+
     public function __construct() {
         parent::__construct();
         $this->_dieSilentlyIfBad = false;
@@ -797,8 +802,8 @@ class Ebay_M extends Master_M {
                         '' AS '*Category',
                         '' AS 'StoreCategory'
                     FROM partnumber
-                    JOIN partnumberpartquestion ON partnumberpartquestion.partnumber_id = partnumber.partnumber_id
-                    JOIN partquestion ON partquestion.partquestion_id = partnumberpartquestion.partquestion_id
+                    JOIN partnumberpartquestion ON partnumberpartquestion.partnumber_id = partnumber.partnumber_id 
+                    JOIN partquestion ON partquestion.partquestion_id = partnumberpartquestion.partquestion_id 
                     JOIN partpartnumber ON partpartnumber.partnumber_id = partnumber.partnumber_id
                     JOIN partimage ON partimage.part_id = partpartnumber.part_id
                     JOIN part ON part.part_id = partpartnumber.part_id

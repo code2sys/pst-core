@@ -339,7 +339,19 @@ class Admin_Content extends Master_Controller {
         $this->_mainData['paypalemail'] = $this->Ebaysetting->check_paypalemail();
         $this->_mainData['ebaymarkup'] = $this->Ebaysetting->check_markup();
         $this->_mainData['quantity'] = $this->Ebaysetting->check_quantity();
+
+        // fetch the ebay statistics
+        $this->_mainData['ebay_feed_counts'] = $this->ebay_m->getFeedCounts();
+
+
         $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);
+    }
+
+    /*
+     * The purpose of this is to download the ebay feed as a CSV to see all the records...
+     */
+    public function download_ebay_feed_csv() {
+        // Header to send as a file
     }
 
     public function ebay_settings() {

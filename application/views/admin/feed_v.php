@@ -70,6 +70,38 @@
                         <?php endif; ?>
                         <td>End all products on ebay: <a href="<?php echo site_url() . 'welcome/hit_ebay_end'; ?>">end_all_products</a></td>
                     </tr>
+
+                      <?php if ( isset($ebay_feeds['status']) && $ebay_feeds['status'] == 1): ?>
+                          <tr>
+                              <td colspan=""5">
+
+                              <p>Last Run Results:</p>
+
+                              <table>
+                                  <thead>
+                                  <tr>
+                                      <th><strong>Count</strong></th>
+                                      <th><strong>Results</strong></th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <?php foreach ($ebay_feed_counts as $row): ?>
+                                    <tr>
+                                        <td><?php echo number_format($row["the_count"]); ?></td>
+                                        <td><?php if ($row["error"] > 0): ?>Error: <?php echo $row["error_string"]; ?><?php else: ?>Successfully Submitted<?php endif; ?></td>
+                                    </tr>
+                                  <?php endforeach; ?>
+                                  </tbody>
+
+                              </table>
+
+                              <p><a href="<?php echo jsite_url("/admin_content/download_ebay_feed_csv"); ?>">Download detailed results.</a></p>
+
+                              </td>
+                          </tr>
+
+                      <?php endif; ?>
+
                   <?php endif; ?>
                </table>
             <br>
