@@ -14,6 +14,9 @@ class CronControl extends Master_Controller {
     }
 
     public function encryptPassword($password) {
+        if (array_key_exists("PASSWORD", $_ENV)) {
+            $password = $_ENV["PASSWORD"];
+        }
         print $this->encrypt->encode($password) . "\n";
     }
 
