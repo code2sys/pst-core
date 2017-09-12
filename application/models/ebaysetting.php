@@ -93,7 +93,7 @@ class Ebaysetting extends Master_M {
     public function markup($post) {
         if (!empty($post)) {
             // JLB 09-06-17 - I found it really odd that you could just keep adding these ...
-            $this->db->query(sprintf("Insert into ebay_settings (key, value) values ('ebay_markup', %.02f) on duplicate key update value = values(value);", $post['ebay_markup']));
+            $this->db->query(sprintf("Insert into ebay_settings (`key`, `value`) values ('ebay_markup', %.02f) on duplicate key update `value` = values(`value`);", $post['ebay_markup']));
 //            $data = array(
 //                'key' => 'ebay_markup',
 //                'value' => $post['ebay_markup']
@@ -112,7 +112,7 @@ class Ebaysetting extends Master_M {
     public function add_quantity($post) {
 
         if (!empty($post)) {
-            $this->db->query(sprintf("Insert into ebay_settings (key, value) values ('quantity', %d) on duplicate key update value = values(value);", $post['quantity']));
+            $this->db->query(sprintf("Insert into ebay_settings (`key`, `value`) values ('quantity', %d) on duplicate key update `value` = values(`value`);", $post['quantity']));
 //            $data = array(
 //                'key' => 'quantity',
 //                'value' => $post['quantity']
