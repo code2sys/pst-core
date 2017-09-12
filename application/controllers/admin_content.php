@@ -358,7 +358,7 @@ class Admin_Content extends Master_Controller {
         header('Content-Type: text/csv');
 
 // It will be called downloaded.pdf
-        header('Content-Disposition: attachment; filename="ebay_run_results' . date('YMDHis') . '.pdf"');
+        header('Content-Disposition: attachment; filename="ebay_run_results' . date('YMDHis') . '.csv"');
 
         $handle = fopen("php://output", "w");
         fputcsv($handle, array(
