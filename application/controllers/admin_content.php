@@ -369,6 +369,8 @@ class Admin_Content extends Master_Controller {
             "Error Details"
         ));
 
+        return;
+
         // We have to then just fetch these guys and spit them out...
         $results = $this->ebay_m->getFeedResults();
 
