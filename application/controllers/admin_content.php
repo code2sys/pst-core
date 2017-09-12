@@ -351,7 +351,36 @@ class Admin_Content extends Master_Controller {
      * The purpose of this is to download the ebay feed as a CSV to see all the records...
      */
     public function download_ebay_feed_csv() {
+        $this->load->model('ebay_m');
+
         // Header to send as a file
+        // We'll be outputting a PDF
+        header('Content-Type: text/csv');
+
+// It will be called downloaded.pdf
+        header('Content-Disposition: attachment; filename="ebay_run_results' . data('YMDHis') . '.pdf"');
+
+        $handle = fopen("php://output", "w");
+        fputcsv($handle, array(
+            "Manufacturer Part #",
+            "Part Name",
+            "Error",
+            "Error Class",
+            "Error Details"
+        ));
+
+        // We have to then just fetch these guys and spit them out...
+        $results = $this->ebay_m->getFeedResults();
+
+        foreach ($results as $r) {
+            fputcsv($handle, array(
+                $r["sku"],
+                $r["title"],
+                $r["error"],
+                $r["error"] > 0 ? $r["error_string"] : "",
+                $r["error"] > 0 ? $r["long_error_string"] : ""
+            ));
+        }
     }
 
     public function ebay_settings() {

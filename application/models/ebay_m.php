@@ -34,6 +34,11 @@ class Ebay_M extends Master_M {
     protected $store_name;
     protected $debug;
 
+    public function getFeedResults() {
+        $query = $this->db->query("select sku, title, error, error_string, long_error_string from ebay_feed_item;");
+        return $query->result_array();
+    }
+
     public function getFeedCounts() {
         $query = $this->db->query("select count(*) as the_count, error, error_string from ebay_feed_item group by error_string order by error, count(*) desc");
         return $query->result_array();
