@@ -21,6 +21,7 @@ class CronControl extends Master_Controller {
             $password = trim(fgets($f));
         }
         print "Encrypting password: $password \n";
+        $this->load->library('encrypt');
         print $this->encrypt->encode($password) . "\n";
     }
 
