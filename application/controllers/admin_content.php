@@ -358,7 +358,7 @@ class Admin_Content extends Master_Controller {
         header('Content-Type: text/csv');
 
 // It will be called downloaded.pdf
-        header('Content-Disposition: attachment; filename="ebay_run_results' . data('YMDHis') . '.pdf"');
+        header('Content-Disposition: attachment; filename="ebay_run_results' . date('YMDHis') . '.pdf"');
 
         $handle = fopen("php://output", "w");
         fputcsv($handle, array(
@@ -368,8 +368,6 @@ class Admin_Content extends Master_Controller {
             "Error Class",
             "Error Details"
         ));
-
-        return;
 
         // We have to then just fetch these guys and spit them out...
         $results = $this->ebay_m->getFeedResults();
