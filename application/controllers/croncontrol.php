@@ -13,6 +13,10 @@ class CronControl extends Master_Controller {
         }
     }
 
+    public function encryptPassword($password) {
+        print $this->encrypt->encode($password) . "\n";
+    }
+
 	public function external_process_parts() {
         $this->load->model('admin_m');
         $this->admin_m->processParts(10000);
