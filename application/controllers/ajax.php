@@ -235,6 +235,29 @@ class Ajax extends Master_Controller {
         echo json_encode($makes);
     }
 
+    // JLB 09-27-17
+    // This is called AFTER year. So you have MAKE and year.
+    public function getNewModel() {
+        $makes = FALSE;
+        if ($this->validateBase() === TRUE) {
+            $this->load->model('parts_m');
+            $makes = $this->parts_m->getNewModelsDd($this->input->post('makeId'), $this->input->post('year'), @$this->input->post('partId'));
+        }
+        echo json_encode($makes);
+
+    }
+
+    // JLB 09-27-17
+    // This is called AFTER make. So you have only MAKE, not model.
+    public function getNewYear() {
+        $makes = FALSE;
+        if ($this->validateBase() === TRUE) {
+            $this->load->model('parts_m');
+            $makes = $this->parts_m->getNewYearsDd($this->input->post('makeId'), @$this->input->post('partId'));
+        }
+        echo json_encode($makes);
+    }
+
     public function getModel() {
         $makes = FALSE;
         if ($this->validateBase() === TRUE) {
