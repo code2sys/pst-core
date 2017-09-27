@@ -174,12 +174,10 @@ class Ajax extends Master_Controller {
 
     public function update_garage() {
         $this->load->model('account_m');
-        print_r($_REQUEST);
         if ($this->validateUpdateGarage() === TRUE) {
             $rideRec = $this->account_m->buildRideName($this->input->post());
             $_SESSION['garage'] = $this->account_m->updateGarage($rideRec, @$_SESSION['garage']);
         }
-        exit();
         $_SESSION['activeMachine'] = $rideRec;
         $currentlocation = str_replace('/qatesting/index.php', '', $_POST['url']);
         //echo $currentlocation;
