@@ -174,8 +174,8 @@ class Ajax extends Master_Controller {
 
     public function update_garage() {
         $this->load->model('account_m');
+        print_r($_REQUEST);
         if ($this->validateUpdateGarage() === TRUE) {
-            print_r($_REQUEST);
             $rideRec = $this->account_m->buildRideName($this->input->post());
             $_SESSION['garage'] = $this->account_m->updateGarage($rideRec, @$_SESSION['garage']);
         }
