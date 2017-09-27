@@ -156,7 +156,7 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                                     reverseMap[responseData[x]] = x;
                                 }
 
-                                arr.sort(function(a, b){return b - a});
+                                arr.sort(function(a, b){a = a.toLowerCase(); b = b.toLowerCase(); if (a < b) { return -1} else if (a > b) { return 1; } else { return 0; }});
                                 $('#model').selectbox("detach");
                                 var mySelect = $('#model');
                                 mySelect.html($('<option></option>').val('').html('-- Select Model --'));
