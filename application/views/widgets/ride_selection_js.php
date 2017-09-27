@@ -86,6 +86,14 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                             success: function(encodeResponse)
                             {
                                 responseData = JSON.parse(encodeResponse);
+
+                                var arr = [];
+
+                                for(var x in responseData){
+                                    arr.push(responseData[x]);
+                                }
+
+                                arr.sort(function(a, b){return a - b});
                                 $('#year').selectbox("detach");
                                 var mySelect = $('#year');
                                 mySelect.html($('<option></option>').val('').html('-- Select Year --'));
@@ -145,8 +153,7 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                                     arr.push(responseData[x]);
                                 }
 
-                                // newest year first?
-                                arr.sort(function(a, b){return a - b});
+                                arr.sort(function(a, b){return b - a});
                                 $('#model').selectbox("detach");
                                 var mySelect = $('#model');
                                 mySelect.html($('<option></option>').val('').html('-- Select Model --'));
