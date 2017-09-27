@@ -93,7 +93,7 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                                     arr.push(responseData[x]);
                                 }
 
-                                arr.sort(function(a, b){return a - b});
+                                arr.sort(function(a, b){return b - a});
                                 console.log(["Array in executeMake success", arr]);
                                 $('#year').selectbox("detach");
                                 var mySelect = $('#year');
