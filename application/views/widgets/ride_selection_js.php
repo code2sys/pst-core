@@ -94,10 +94,11 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                                 }
 
                                 arr.sort(function(a, b){return a - b});
+                                console.log(["Array in executeMake success", arr]);
                                 $('#year').selectbox("detach");
                                 var mySelect = $('#year');
                                 mySelect.html($('<option></option>').val('').html('-- Select Year --'));
-                                $.each(responseData, function(val, text) {
+                                $.each(arr, function(val, text) {
                                     mySelect.append(
                                         $('<option></option>').val(val).html(text)
                                     );
@@ -154,6 +155,7 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                                 }
 
                                 arr.sort(function(a, b){return b - a});
+                                console.log(["Array in executeYear success", arr]);
                                 $('#model').selectbox("detach");
                                 var mySelect = $('#model');
                                 mySelect.html($('<option></option>').val('').html('-- Select Model --'));
