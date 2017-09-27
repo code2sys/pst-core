@@ -145,7 +145,8 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                                     arr.push(responseData[x]);
                                 }
 
-                                arr.sort(function(a, b){return b-a});
+                                // newest year first?
+                                arr.sort(function(a, b){return a - b});
                                 $('#model').selectbox("detach");
                                 var mySelect = $('#model');
                                 mySelect.html($('<option></option>').val('').html('-- Select Model --'));
