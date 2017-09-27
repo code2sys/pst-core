@@ -137,7 +137,7 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                             type: 'POST',
                             url: <?php echo $base_url_string; ?> + 'ajax/getNewModel/',
                             data : {
-                                'year' :  val,
+                                'year' :  val, // $("#update_garage_form [name=year] option:selected").text(),
                                 'makeId' : $("#update_garage_form [name=make]").val(),
                                 <?php if(@$product['part_id']): ?>
                                 'partId' : '<?php echo $product['part_id']; ?>',
@@ -155,13 +155,14 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                                 }
 
                                 arr.sort(function(a, b){return b - a});
+
                                 console.log(["Array in executeYear success", arr]);
                                 $('#model').selectbox("detach");
                                 var mySelect = $('#model');
                                 mySelect.html($('<option></option>').val('').html('-- Select Model --'));
                                 $.each(arr, function(val, text) {
                                     mySelect.append(
-                                        $('<option></option>').val(val).html(text)
+                                        $('<option></option>').val(text).html(text)
                                     );
                                 });
                                 executeModel();
