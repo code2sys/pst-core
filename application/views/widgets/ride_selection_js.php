@@ -149,22 +149,24 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                                 responseData = JSON.parse(encodeResponse);
 
                                 var arr = [];
+                                var reverseMap = {};
 
                                 for(var x in responseData){
                                     arr.push(responseData[x]);
+                                    reverseMap[responseData[x]] = x;
                                 }
 
                                 arr.sort(function(a, b){return b - a});
-
-                                console.log(["Array in executeYear success", arr]);
                                 $('#model').selectbox("detach");
                                 var mySelect = $('#model');
                                 mySelect.html($('<option></option>').val('').html('-- Select Model --'));
-                                $.each(arr, function(val, text) {
+                                for (var i = 0; i < arr.length; i++) {
+                                    var text = arr[i];
+                                    var val = reverseMap[text];
                                     mySelect.append(
                                         $('<option></option>').val(val).html(text)
                                     );
-                                });
+                                }
                                 executeModel();
                                 $('#model').selectbox("attach");
                             }
