@@ -152,7 +152,7 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                                 mySelect.html($('<option></option>').val('').html('-- Select Model --'));
                                 $.each(arr, function(val, text) {
                                     mySelect.append(
-                                        $('<option></option>').val(text).html(text)
+                                        $('<option></option>').val(val).html(text)
                                     );
                                 });
                                 executeModel();
