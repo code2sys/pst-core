@@ -413,11 +413,11 @@ $detect = new Mobile_Detect;
                                 <select name="make" id="make" tabindex="2" class="selectField">
                                     <option>-Make-</option>
                                 </select>
-                                <select name="model" id="model" tabindex="3" class="selectField">
-                                    <option>-Model-</option>
-                                </select>
-                                <select name="year" id="year" tabindex="4" class="selectField">
+                                <select name="year" id="year" tabindex="3" class="selectField">
                                     <option>-Year-</option>
+                                </select>
+                                <select name="model" id="model" tabindex="4" class="selectField">
+                                    <option>-Model-</option>
                                 </select>
                                 <div class="btn-ful-wdt"><a href="javascript:void(0);" onClick="updateGarage();" id="add" class="addToCat button_no" style="padding:6px 13px; text-decoration:none; margin:0px;text-shadow:none; font:inherit; font-size:14px; float: left;border-radius: 0px;">Add To Garage</a></div>
                             </div>

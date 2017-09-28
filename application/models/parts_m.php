@@ -473,6 +473,51 @@ class Parts_M extends Master_M {
         return $recs;
     }
 
+    public function getNewModelsDd($makeId, $year, $partId = NULL) {
+        $recs = FALSE;
+        if (@$partId) {
+            $this->db->select('model.model_id, model.label, model.name');
+            $this->db->join('partnumbermodel', 'partnumbermodel.model_id = model.model_id');
+            $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumbermodel.partnumber_id');
+            $this->db->where('partpartnumber.part_id = ' . $partId);
+            $this->db->group_by('model.model_id');
+        }
+        $where = array('make_id' => $makeId, 'year' => $year);
+        $this->db->select("distinct model.*", FALSE);
+        $this->db->order_by('label');
+        $recs = $this->selectRecords('model join partnumbermodel using (model_id) ', $where);
+        if ($recs) {
+            $loop = $recs;
+            $recs = array();
+            foreach ($loop as $rec)
+                $recs[$rec['model_id']] = $rec['label'];
+        }
+        return $recs;
+    }
+
+    /*
+     * OK, so the idea here is that we have to return a list of acceptable years that could be queried back up...We have a make.
+     */
+    public function getNewYearsDd($makeId, $partId = NULL) {
+        $recs = FALSE;
+        if (@$partId) {
+            $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumbermodel.partnumber_id');
+            $this->db->where('partpartnumber.part_id = ' . $partId);
+        }
+        $where = array('make_id' => $makeId);
+        $this->db->select('distinct partnumbermodel.year ', FALSE);
+        $this->db->order_by('year', 'DESC');
+        $recs = $this->selectRecords('partnumbermodel join model using (model_id) ', $where);
+        if ($recs) {
+            $loop = $recs;
+            $recs = array();
+            foreach ($loop as $rec) {
+                $recs[$rec['year']] = $rec['year'];
+            }
+        }
+        return $recs;
+    }
+
     public function getYearsDd($modelId, $partId = NULL) {
         $recs = FALSE;
         if (@$partId) {

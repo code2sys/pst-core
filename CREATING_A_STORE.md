@@ -87,3 +87,13 @@ Make sure to change to your directory...
 </pre>
 
 
+Requesting a Development SSL Certificate
+-----------------------------------------
+
+You don't have to live with an SSL certificate error in your development environment; use a free one as follows:
+
+For the JBDev directory, which was jbdev.powersporttechnologies.com in /var/www/jbdev.powersporttechnologies.com/store/jbdev/html
+
+certbot certonly --webroot --webroot-path=/var/www/jbdev.powersporttechnologies.com/store/jbdev/html -d jbdev.powersporttechnologies.com
+
+
