@@ -3,12 +3,6 @@
 $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
 
 ?>
-
-/*
-  ride_selection_js
- base_url should already be defined...
-
- */
 <script type="application/javascript">
 
 
