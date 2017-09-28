@@ -29,11 +29,29 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                                 $('#make').selectbox("detach");
                                 var mySelect = $('#make');
                                 mySelect.html($('<option></option>').val('').html('-- Select Make --'));
-                                $.each(responseData, function(val, text) {
+
+
+                                // JLB 09-28-17
+                                // It would be great if these were alphabetized, otherwise, it's a little stupid.
+                                var reverseMap = {};
+                                var arr = [];
+                                for (var x in responseData) {
+                                    reverseMap[ responseData[x] ] = x;
+                                    arr.push(responseData[x]);
+                                }
+
+                                // now, sort it
+                                arr.sort(function(a, b){a = a.toLowerCase(); b = b.toLowerCase(); if (a < b) { return -1} else if (a > b) { return 1; } else { return 0; }});
+
+                                // Now, iterate and make them in alphabetical order
+                                for (var i = 0; i < arr.length; i++) {
+                                    var text = arr[i];
+                                    var val = reverseMap[text];
                                     mySelect.append(
                                         $('<option></option>').val(val).html(text)
                                     );
-                                });
+                                }
+
                                 executeMake();
                                 $('#make').selectbox("attach");
                             }
