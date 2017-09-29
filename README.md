@@ -8,3 +8,8 @@ Enabling the Vault
 
 1. Run the query to create the vault page.
 2. Add the ENABLE_VAULT and TOP_LEVEL_PAGE_ID_VAULT to environment.php.
+
+Server IPs
+----------
+
+If you change the server IP, you have to go add the IP to the whitelist in the Portal for receiving.
