@@ -2494,6 +2494,11 @@ class Admin_M extends Master_M {
         $post['status'] = $status;
         $data = array('total_cost' => $post['total_cost'], 'unit_cost' => $post['unit_cost'], 'parts' => $post['parts'], 'service' => $post['service'], 'auction_fee' => $post['auction_fee'], 'misc' => $post['misc']);
         $post['data'] = json_encode($data);
+
+        if (!array_key_exists("call_on_price", $post)) {
+            $post["call_on_price"] = 0;
+        }
+
         unset($post['total_cost']);
         unset($post['unit_cost']);
         unset($post['parts']);
