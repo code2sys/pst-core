@@ -1570,7 +1570,11 @@ class Admin_M extends Master_M {
             $imported = false;
             if (empty($distributorInventory)) {
                 if (USE_PORTAL_WS) {
-                    $output = file_get_contents("http://" . WS_HOST . "/migrateparts/index/" . STORE_NAME . "/" . urlencode($distributor["name"]) . "/" . urlencode($v["partnumber"]));
+                    $name = $distributor["name"];
+                    if ($name == "O'Neal") {
+                        $name = "ONeal";
+                    }
+                    $output = file_get_contents("http://" . WS_HOST . "/migrateparts/index/" . STORE_NAME . "/" . urlencode($name) . "/" . urlencode($v["partnumber"]));
                 } else {
                     exec(sprintf('/usr/bin/php /var/www/portal.powersporttechnologies.com/html/index.php "cron/migratePartByVendorPartNumberToStore/%s/%s/%s"', STORE_NAME, $distributor['name'], $v['partnumber']), $output);
                 }
