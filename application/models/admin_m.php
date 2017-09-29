@@ -1571,7 +1571,7 @@ class Admin_M extends Master_M {
             if (empty($distributorInventory)) {
                 if (USE_PORTAL_WS) {
                     $name = $distributor["name"];
-                    if ($name == "O'Neal") {
+                    if (strtolower($name) == "o'neal") {
                         $name = "ONeal";
                     }
                     $output = file_get_contents("http://" . WS_HOST . "/migrateparts/index/" . STORE_NAME . "/" . urlencode($name) . "/" . urlencode($v["partnumber"]));
