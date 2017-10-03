@@ -62,7 +62,7 @@ class Shopping extends Master_Controller {
     }
 
     protected function getActiveMachine() {
-        return (array_key_exists('activeMachine', $_SESSION) && !is_null($_SESSION['activeMachine'])) ? $_SESSION['activeMachine'] : null;
+        return (array_key_exists("garage", $_SESSION) && is_array($_SESSION["garage"]) && count($_SESSION["garage"]) > 0 && array_key_exists('activeMachine', $_SESSION) && !is_null($_SESSION['activeMachine'])) ? $_SESSION['activeMachine'] : null;
 
     }
 
