@@ -2149,8 +2149,8 @@ class Parts_M extends Master_M {
                 if (!is_null($activeMachine)) {
                     error_log(print_r($activeMachine, true));
                     $this->db->join('partnumbermodel', 'partpartnumber.partnumber_id = partnumbermodel.partnumber_id', 'LEFT');
-                    $this->db->where(sprintf(" (partnumbermodel.year is NULL OR partnumbermodel.year = %d) ", $activeMachine['year']));
-                    $this->db->where(sprintf("(partnumbermodel.model_id is NULL OR partnumbermodel.model_id = %d) "), $activeMachine['model']['model_id']);
+                    $this->db->where(sprintf(" (partnumbermodel.year is NULL OR partnumbermodel.year = %d) ", $activeMachine['year']), NULL, FALSE);
+                    $this->db->where(sprintf("(partnumbermodel.model_id is NULL OR partnumbermodel.model_id = %d) "), $activeMachine['model']['model_id'], NULL, FALSE);
 //                    $where['partnumbermodel.year'] = $activeMachine['year'];
 //                    $where['partnumbermodel.model_id'] = $activeMachine['model']['model_id'];
                 }
