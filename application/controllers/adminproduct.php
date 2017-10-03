@@ -672,7 +672,7 @@ class Adminproduct extends Admin {
     public function search_product() {
         if ($this->validateSearch() === TRUE) {
             $this->load->model('parts_m');
-            $products = $this->parts_m->getSearchResults($this->input->post(), NULL);
+            $products = $this->parts_m->getSearchResults($this->input->post(), NULL, NULL);
         }
         echo json_encode($products);
     }

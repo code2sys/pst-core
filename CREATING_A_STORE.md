@@ -64,7 +64,11 @@ ln -s ../../../core/html/qatesting/ .
 </pre>
 
 You also need to link the banner library to html/bannerlibrary.
+ln -s /var/www/productionbanners html/bannerlibrary
 
+And fix ownership
+chown -R customer1ftp.customer1ftp .
+chmod -R g+w .
 
 Virtual Host Configuration
 ---------------------------
@@ -79,6 +83,7 @@ Make sure to change to your directory...
 
 <pre>
 *	*	*	*	*	cd /var/www/pardy.powersporttechnologies.com/store && php html/index.php croncontrol/emails
+*	*	*	*	*	cd /var/www/pardy.powersporttechnologies.com/store && php html/index.php croncontrol/feeds
 15	*	*	*	*	cd /var/www/pardy.powersporttechnologies.com/store && php html/index.php croncontrol/hourly
 0	2	*	*	*	cd /var/www/pardy.powersporttechnologies.com/store && php html/index.php croncontrol/daily
 0	22	*	*	6	cd /var/www/pardy.powersporttechnologies.com/store && php html/index.php croncontrol/weeklys
@@ -92,8 +97,8 @@ Requesting a Development SSL Certificate
 
 You don't have to live with an SSL certificate error in your development environment; use a free one as follows:
 
-For the JBDev directory, which was jbdev.powersporttechnologies.com in /var/www/jbdev.powersporttechnologies.com/store/jbdev/html
+For the JBDev directory, which was muffsmotorsports.powersporttechnologies.com in /var/www/stores/muffsmotorsports/html
 
-certbot certonly --webroot --webroot-path=/var/www/jbdev.powersporttechnologies.com/store/jbdev/html -d jbdev.powersporttechnologies.com
+certbot certonly --webroot --webroot-path=/var/www/stores/CMCycles/html -d cmcycles.powersporttechnologies.com
 
 

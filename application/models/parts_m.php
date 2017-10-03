@@ -1967,7 +1967,8 @@ class Parts_M extends Master_M {
         }
     }
 
-    public function getSearchResults($filterArr = NULL, $limit = 20, $offset = 0) {
+    // JLB 10-03-17 I added this active machine parameter...why is it not here?
+    public function getSearchResults($filterArr = NULL, $activeMachine = null, $limit = 20, $offset = 0) {
         // BEGIN DEAL -  Must get this before buidling Search SQL in case it is needed.
         $dealPercent = 0;
         if (@$filterArr['deal']) {
@@ -2144,6 +2145,7 @@ class Parts_M extends Master_M {
                 $rec['stock_code'] = $this->getStockCodeByPartId($rec['part_id']);
                 $where = array('partpartnumber.part_id' => $rec['part_id']);
                 $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
+                // JLB 10-03-17 - I found this $activeMachine variable undefined. I assume that's why it doesn't filter right...
                 if (!is_null($activeMachine)) {
                     $this->db->join('partnumbermodel', 'partnumbermodel.partnumber_id = partpartnumber.partnumber_id', 'LEFT');
                     $where['partnumbermodel.year'] = $activeMachine['year'];
