@@ -2147,6 +2147,7 @@ class Parts_M extends Master_M {
                 $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
                 // JLB 10-03-17 - I found this $activeMachine variable undefined. I assume that's why it doesn't filter right...
                 if (!is_null($activeMachine)) {
+                    error_log(print_r($activeMachine, true));
                     $this->db->join('partnumbermodel', 'partnumbermodel.partnumber_id = partpartnumber.partnumber_id', 'LEFT');
                     $where['partnumbermodel.year'] = $activeMachine['year'];
                     $where['partnumbermodel.model_id'] = $activeMachine['model']['model_id'];
