@@ -58,6 +58,13 @@
                         </td>
                     </tr>
                     <tr>
+                        <td><strong>Display Pricing:</strong><br/><em>Products marked as &quot;Call for Price&quot; cannot be added to the shopping cart.</em></td>
+                        <td>
+                            <label><input type="radio" name="call_for_price" value="0" <?php if (!array_key_exists("call_for_price", $product) || $product["call_for_price"] == 0): ?>checked="checked"<?php endif; ?> /> Display Price (Default)</label>
+                            <label><input type="radio" name="call_for_price" value="1" <?php if (array_key_exists("call_for_price", $product) && $product["call_for_price"] > 0): ?>checked="checked"<?php endif; ?> /> Call For Price (Do Not Show Price)</label>
+                        </td>
+                    </tr>
+                    <tr>
                         <td><strong>Retail Price:</strong><br/><em>When selected, no discounting will be done for this product.</em></td>
                         <td>
                             <input type="checkbox" name="retail_price" value="1" <?php if (array_key_exists("retail_price", $product) && $product["retail_price"] > 0): ?>checked="checked"<?php endif; ?> />

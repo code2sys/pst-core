@@ -352,7 +352,7 @@ class Adminproduct extends Admin {
 
             // now, process, just a couple
             $this->load->model("admin_m");
-            $this->admin_m->processParts(1); // hopefully, that's you.
+            @$this->admin_m->processParts(1); // hopefully, that's you. This might generate output, so I actually am suppressing this.
 
             $_SESSION["product_edit_success"] = "Product updated successfully.";
         } else {
