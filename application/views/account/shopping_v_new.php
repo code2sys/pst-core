@@ -151,8 +151,17 @@ $detect = new Mobile_Detect;
                     <?php echo form_hidden('images', $product['images'][0]); ?>
 
                     <?php if (array_key_exists("call_for_price", $product) && $product["call_for_price"] > 0): ?>
-                    <div class="leftCol">
-                        <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>">CALL FOR PRICE</span>
+                    <?php
+                    if (!isset($store_name)) {
+                        $CI =& get_instance();
+                        $CI->load->model("admin_m");
+                        $store_name = $CI->admin_m->getAdminShippingProfile();
+                    }
+
+                    ?>
+                    <div class="leftCol" style="width:auto">
+                        <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>">CALL FOR PRICE</span><br/>
+                        <?php echo $store_name['phone'];?>
                     </div>
                     <div class="rightCol mrgnbtm45">
                     </div>
