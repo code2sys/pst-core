@@ -160,8 +160,8 @@ $detect = new Mobile_Detect;
 
                     ?>
                     <div class="leftCol" style="width:auto">
-                        <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>">CALL FOR PRICE</span><br/>
-                        <?php echo $store_name['phone'];?>
+                        <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>">CALL FOR PRICE<br/>
+                            <?php echo $store_name['phone'];?></span>
                     </div>
                     <div class="rightCol mrgnbtm45">
                     </div>
