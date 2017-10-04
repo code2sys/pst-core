@@ -4,7 +4,13 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
 
 ?>
 <script type="application/javascript">
+    function updateGarage()
+    {
+        var pathname = window.location.pathname;
+        $('#update_garage_form').append('<input type="hidden" name="url" value="'+pathname +'" />');
+        $('#update_garage_form').submit();
 
+    }
 
     function executeMachine() {
         $("#machine").selectbox({
@@ -203,6 +209,7 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
             onChange: function (val, inst)
             {
                 displayAdd(val);
+                updateGarage();
             }
         });
     }
@@ -216,13 +223,6 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
             $('#add').attr('class', 'button_no' );
     }
 
-    function updateGarage()
-    {
-        var pathname = window.location.pathname;
-        $('#update_garage_form').append('<input type="hidden" name="url" value="'+pathname +'" />');
-        $('#update_garage_form').submit();
-
-    }
 
     // JLB 09-27-17
     // I have no idea why these were run at the top before the functions were defined, and I fear running them does something bad...but it looks relatively safe.
