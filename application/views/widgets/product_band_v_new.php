@@ -51,9 +51,9 @@
 				<!-- FEATURED PRODUCTS ----->
 				<div class="section_head">
 					<p class="rplch1"><?php echo $band['label'];?> Featured Products</p>
-<!--					--><?php //if( $_GET['v'] == '' ) { ?>
-<!--						<a href="--><?php //echo base_url($band['page']).'?v=featured'; ?><!--" onclick="setNamedSearch(event, 'extra', 'extra', 'featured');" class="button" style="float:right;">View All</a>-->
-<!--					--><?php //} ?>
+					<?php if( $_GET['v'] == '' ) { ?>
+						<a href="<?php echo base_url($band['page']).'?v=featured'; ?>" onclick="setNamedSearch(event, 'extra', 'extra', 'featured');" class="button" style="float:right;">View All</a>
+					<?php } ?>
 					<div class="clear"></div>
 				</div>
 				
