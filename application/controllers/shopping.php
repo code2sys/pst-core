@@ -223,6 +223,7 @@ class Shopping extends Master_Controller {
     }
 
     public function productlist() {
+        $activeMachine = $this->getActiveMachine();
         $_SESSION['url'] = 'shopping/productlist/';
         $metaTag = '';
         //$_SESSION['internal'] = FALSE;
@@ -299,6 +300,10 @@ class Shopping extends Master_Controller {
             else
                 $title .= $categoryRec['title'];
 
+            if (!is_null($activeMachine)) {
+                $title .= ' for ' . $activeMachine['name'];
+            }
+
             $this->setMasterPageVars('title', $title);
             if ($categoryRec['meta_tag'])
                 $this->setMasterPageVars('descr', $categoryRec['meta_tag']);
@@ -336,7 +341,7 @@ class Shopping extends Master_Controller {
 				unset($categoryVideo[0]);
 			}
 			$this->_mainData['mainVideo'] = $mainVideo;
-			$this->_mainData['mainTitle'] = $mainTitle . ' JON';
+			$this->_mainData['mainTitle'] = $mainTitle;
 			$this->_mainData['video'] = $categoryVideo;
 		}
                 
@@ -349,7 +354,7 @@ class Shopping extends Master_Controller {
         if (@$listParameters['brand']) {
             $this->_mainData['brandMain'] = $this->parts_m->getBrand($listParameters['brand']);
         }
-        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $activeMachine = $this->getActiveMachine(), $this->_adpdtLimit);
+        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $activeMachine, $this->_adpdtLimit);
         $this->_mainData['questions'] = $this->parts_m->getFilterQuestions($listParameters);
 		
 		// echo '<pre>';
