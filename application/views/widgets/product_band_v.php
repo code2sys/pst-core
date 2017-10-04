@@ -75,7 +75,7 @@
 						<!-- END BREADCRUMBS -->
 						<?php endif; ?>
 						
-					<?php if(@$band['page'] && $band['page'] != 'shopping/productlist/recentlyViewed/0/'  && $band['page'] != 'shopping/productlist/recentlyViewed/' && $band['page'] != 'shopping/productlist/recentlyViewed' ): ?>
+					<?php if(@$band['page'] && $band['page'] != 'shopping/productlist/recentlyViewed/0/'  && $band['page'] != 'shopping/productlist/recentlyViewed/' && $band['page'] != 'shopping/productlist/recentlyViewed' && $band['label'] != "Recently Viewed"): ?>
 						<a href="<?php echo base_url($band['page']); ?>/" class="button" style="float:right;">View All</a>
 					<?php endif; ?>
 					<div class="clear"></div>
