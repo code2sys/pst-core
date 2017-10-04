@@ -349,7 +349,7 @@ class Shopping extends Master_Controller {
         if (@$listParameters['brand']) {
             $this->_mainData['brandMain'] = $this->parts_m->getBrand($listParameters['brand']);
         }
-        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $this->getActiveMachine(), $this->_adpdtLimit);
+        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $activeMachine = $this->getActiveMachine(), $this->_adpdtLimit);
         $this->_mainData['questions'] = $this->parts_m->getFilterQuestions($listParameters);
 		
 		// echo '<pre>';
@@ -385,7 +385,7 @@ class Shopping extends Master_Controller {
         $this->loadSidebar('widgets/brand_filter_v_product');
         $this->loadSidebar('widgets/question_filter_v_product');
         // PAGINATION
-        $this->_mainData['pages'] = $this->adpdtPagination($this->parts_m->getSearchCount($listParameters));
+        $this->_mainData['pages'] = $this->adpdtPagination($this->parts_m->getSearchCount($listParameters, $activeMachine));
         $this->_mainData['currentPage'] = 1;
         $this->_mainData['display_pages'] = $this->_pagination;
         $this->_mainData['pagination'] = $this->load->view('master/pagination/productlist_v', $this->_mainData, TRUE);
