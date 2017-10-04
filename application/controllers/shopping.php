@@ -356,7 +356,7 @@ class Shopping extends Master_Controller {
 		// print_r($this->_mainData['questions']);
 		// echo '</pre>';
 		
-        $this->_mainData['band']['label'] = 'Search Results';
+        $this->_mainData['band']['label'] = 'Search Results' . (is_null($activeMachine) ? " for " : "");
         $_SESSION['breadcrumbs'] = $listParameters;
         $this->_mainData['breadcrumbs'] = $listParameters;
         $this->_mainData['mainProductBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
