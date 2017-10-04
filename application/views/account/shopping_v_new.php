@@ -150,9 +150,7 @@ $detect = new Mobile_Detect;
                     <?php echo form_hidden('display_name', $product['name']); ?>
                     <?php echo form_hidden('images', $product['images'][0]); ?>
 
-
-                    <?php print_r($product); ?>
-                    <?php if (array_key_exists("call_on_price", $product) && $product["call_on_price"] > 0): ?>
+                    <?php if (array_key_exists("call_for_price", $product) && $product["call_for_price"] > 0): ?>
                     <div class="leftCol">
                         <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>">CALL FOR PRICE</span>
                     </div>
