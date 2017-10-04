@@ -148,8 +148,28 @@ $detect = new Mobile_Detect;
                 <div id="formCont">
                     <?php echo form_hidden('part_id', $product['part_id']); ?>
                     <?php echo form_hidden('display_name', $product['name']); ?>
-                    <?php echo form_hidden('images', $product['images'][0]); ?>        		
+                    <?php echo form_hidden('images', $product['images'][0]); ?>
+
+                    <?php if (array_key_exists("call_on_price", $product) && $product["call_on_price"] > 0): ?>
                     <div class="leftCol">
+                        <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>">CALL FOR PRICE</span>
+                    </div>
+                        <div class="clear"></div>
+
+                        <div class="prodPurchaseCont">
+                            <div class="leftCol">
+                                <div class="socialIconCont">
+                                    <a class="facebookIcon" href="http://www.facebook.com/share.php?u=<?php echo base_url('shopping/item/' . $product['part_id']); ?>" target="_blank"></a>
+                                    <a href="https://twitter.com/share" data-lang="en" target="_blank" class="twitterIcon"></a>
+                                    <a href="mailto:?subject=Check out this Part&amp;body=Check out this site <?php echo base_url('shopping/item/' . $product['part_id']); ?>." title="Share by Email" class="mailIcon"></a>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php else: ?>
+
+                    <div class="leftCol">
+
                         <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>">$<?php
                             echo $product['price']['sale_min'];
                             if (@$product['price']['sale_max']): echo ' - $' . $product['price']['sale_max'];
@@ -195,6 +215,7 @@ $detect = new Mobile_Detect;
                         <?php endif; ?>
                 <!--<span class="stockStatus">In Stock</span>-->
                     </div>
+
                     <div class="clear"></div>
 
                     <?php
@@ -295,6 +316,7 @@ $detect = new Mobile_Detect;
                     </div>
                     <div class="clear"></div>
                 </div>
+
                 <div class="prodPurchaseCont">
                     <div class="leftCol">
                         <div class="socialIconCont">
@@ -310,6 +332,9 @@ $detect = new Mobile_Detect;
                         <div class="clear"></div>
                     </div>
                 </div>
+
+                <?php endif; ?>
+
             </div>
         </div>
         <div class="clear"></div>
