@@ -1,4 +1,8 @@
-<?php $img = 'test_image.jpg'; 
+<?php
+
+$is_search_results = $band['label'] == 'Search Results' || 'Search Results' == substr($band['label'], 0, strlen('Search Results'));
+
+$img = 'test_image.jpg';
 	if(@$_SESSION['garage'] ): foreach($_SESSION['garage'] as $label => $rideRecs): 
 		 switch(@$rideRecs['make']['machinetype_id']):
 			case '13':
@@ -28,7 +32,7 @@
 				<div class="section_head">
 					<h4><?php echo $band['label']; ?></h4>
 					<?php //print_r($breadcrumbs); ?>
-					<?php if(!empty($breadcrumbs) && ($band['label'] == 'Search Results')): ?>
+					<?php if(!empty($breadcrumbs) && $is_search_results): ?>
 					<!-- BREADCRUMBS -->
 						<div style="float:right; font-size:12px;">
 							| &nbsp;
@@ -101,7 +105,7 @@
 					<?php if (@$prod['images']): ?>
 
 						<div class="product_photo" >
-							<img <?php if(($key == 0) && ($band['label'] == 'Search Results')): ?>itemprop="image"<?php endif; ?> src="<?php echo base_url('productimages/'. $prod['images'][0]['path']); ?>">
+							<img <?php if(($key == 0) && $is_search_results): ?>itemprop="image"<?php endif; ?> src="<?php echo base_url('productimages/'. $prod['images'][0]['path']); ?>">
 						</div>
 						<?php else: ?>
 						<div class="product_photo">
