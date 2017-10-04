@@ -336,7 +336,7 @@ class Shopping extends Master_Controller {
 				unset($categoryVideo[0]);
 			}
 			$this->_mainData['mainVideo'] = $mainVideo;
-			$this->_mainData['mainTitle'] = $mainTitle;
+			$this->_mainData['mainTitle'] = $mainTitle . ' JON';
 			$this->_mainData['video'] = $categoryVideo;
 		}
                 
