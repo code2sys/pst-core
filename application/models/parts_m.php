@@ -2091,6 +2091,17 @@ class Parts_M extends Master_M {
         } else {
             $filterArr['search'][0] = '';
         }
+
+        // JLB I bet this has to be up here, too...
+        if (!is_null($activeMachine)) {
+            $this->db->join('partnumbermodel', 'partpartnumber.partnumber_id = partnumbermodel.partnumber_id', 'LEFT');
+            $this->db->where(sprintf(" (partnumbermodel.year is NULL OR partnumbermodel.year = %d) AND  (partnumbermodel.model_id is NULL OR partnumbermodel.model_id = %d) ", $activeMachine['year'], $activeMachine['model']['model_id']), NULL, FALSE);
+//                    $where['partnumbermodel.year'] = $activeMachine['year'];
+//                    $where['partnumbermodel.model_id'] = $activeMachine['model']['model_id'];
+        }
+
+
+
         if (!is_null($limit)) {
             if (!is_null($offset))
                 $this->db->limit($limit, $offset);
@@ -2147,7 +2158,6 @@ class Parts_M extends Master_M {
                 $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
                 // JLB 10-03-17 - I found this $activeMachine variable undefined. I assume that's why it doesn't filter right...
                 if (!is_null($activeMachine)) {
-                    error_log(print_r($activeMachine, true));
                     $this->db->join('partnumbermodel', 'partpartnumber.partnumber_id = partnumbermodel.partnumber_id', 'LEFT');
                     $this->db->where(sprintf(" (partnumbermodel.year is NULL OR partnumbermodel.year = %d) AND  (partnumbermodel.model_id is NULL OR partnumbermodel.model_id = %d) ", $activeMachine['year'], $activeMachine['model']['model_id']), NULL, FALSE);
 //                    $where['partnumbermodel.year'] = $activeMachine['year'];
