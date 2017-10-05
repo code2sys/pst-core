@@ -115,6 +115,13 @@
 						
 						<h3><a href="<?php echo base_url('shopping/item/'.$prod['part_id'].'/'.$seoUrl); ?>"><?php echo $prod['label']; ?></a></h3>
 					</div>
+                    <?php if (array_key_exists('call_for_price', $prod) && $prod['call_for_price'] > 0): ?>
+                    <div style="float:left;"><div class="price">
+                            Call For Price
+                    </div></div>
+
+
+                        <?php else: ?>
 					<div style="float:left;"><div class="price">
 						$<?php echo $prod['price']['sale_min']; if(@$prod['price']['sale_max']): echo ' - $' . $prod['price']['sale_max'];  endif; ?>
 						</div><div class="discount">
@@ -123,6 +130,7 @@
 						<?php  endif; ?>
 						</div>
 					</div>
+                        <?php endif; ?>
 					<div class="clear"></div>
 					<div class="product_photo_small">
 					<?php if (is_array(@$prod['images'])): $i = 0;  while($i < 3): ?>
