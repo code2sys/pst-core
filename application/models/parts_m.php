@@ -1665,7 +1665,11 @@ class Parts_M extends Master_M {
         return @$cart;
     }
 
-    public function getSearchCount($filterArr = NULL) {
+    /*
+     * JLB 10-04-17
+     * You know what's insane? This looks so much like getSearchResults... Why couldn't some or any of this have been put in a single funciton? This sort of crap always bites us in the end.
+     */
+    public function getSearchCount($filterArr = NULL, $activeMachine = NULL) {
         // BEGIN DEAL -  Must get this before buidling Search SQL in case it is needed.
         $where = array('key' => 'deal_percentage');
         $record = $this->selectRecord('config', $where);
@@ -1738,12 +1742,15 @@ class Parts_M extends Master_M {
                 $custom_where = rtrim($custom_where, 'OR') . ')';
                 $this->db->where($custom_where);
 
-
-                //foreach($filterArr['search'] as $search)
-                //{
-                //	$this->db->like('name',strtoupper($search));
-                //}
             }
+        }
+
+        // JLB I bet this has to be up here, too...
+        if (!is_null($activeMachine)) {
+            $this->db->join('partnumbermodel', 'partpartnumber.partnumber_id = partnumbermodel.partnumber_id', 'LEFT');
+            $this->db->where(sprintf(" (partnumbermodel.year is NULL OR partnumbermodel.year = %d) AND  (partnumbermodel.model_id is NULL OR partnumbermodel.model_id = %d) ", $activeMachine['year'], $activeMachine['model']['model_id']), NULL, FALSE);
+//                    $where['partnumbermodel.year'] = $activeMachine['year'];
+//                    $where['partnumbermodel.model_id'] = $activeMachine['model']['model_id'];
         }
 
         $this->db->group_by('part.part_id');
@@ -1967,7 +1974,8 @@ class Parts_M extends Master_M {
         }
     }
 
-    public function getSearchResults($filterArr = NULL, $limit = 20, $offset = 0) {
+    // JLB 10-03-17 I added this active machine parameter...why is it not here?
+    public function getSearchResults($filterArr = NULL, $activeMachine = null, $limit = 20, $offset = 0) {
         // BEGIN DEAL -  Must get this before buidling Search SQL in case it is needed.
         $dealPercent = 0;
         if (@$filterArr['deal']) {
@@ -2090,6 +2098,17 @@ class Parts_M extends Master_M {
         } else {
             $filterArr['search'][0] = '';
         }
+
+        // JLB I bet this has to be up here, too...
+        if (!is_null($activeMachine)) {
+            $this->db->join('partnumbermodel', 'partpartnumber.partnumber_id = partnumbermodel.partnumber_id', 'LEFT');
+            $this->db->where(sprintf(" (partnumbermodel.year is NULL OR partnumbermodel.year = %d) AND  (partnumbermodel.model_id is NULL OR partnumbermodel.model_id = %d) ", $activeMachine['year'], $activeMachine['model']['model_id']), NULL, FALSE);
+//                    $where['partnumbermodel.year'] = $activeMachine['year'];
+//                    $where['partnumbermodel.model_id'] = $activeMachine['model']['model_id'];
+        }
+
+
+
         if (!is_null($limit)) {
             if (!is_null($offset))
                 $this->db->limit($limit, $offset);
@@ -2144,10 +2163,12 @@ class Parts_M extends Master_M {
                 $rec['stock_code'] = $this->getStockCodeByPartId($rec['part_id']);
                 $where = array('partpartnumber.part_id' => $rec['part_id']);
                 $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
+                // JLB 10-03-17 - I found this $activeMachine variable undefined. I assume that's why it doesn't filter right...
                 if (!is_null($activeMachine)) {
-                    $this->db->join('partnumbermodel', 'partnumbermodel.partnumber_id = partpartnumber.partnumber_id', 'LEFT');
-                    $where['partnumbermodel.year'] = $activeMachine['year'];
-                    $where['partnumbermodel.model_id'] = $activeMachine['model']['model_id'];
+                    $this->db->join('partnumbermodel', 'partpartnumber.partnumber_id = partnumbermodel.partnumber_id', 'LEFT');
+                    $this->db->where(sprintf(" (partnumbermodel.year is NULL OR partnumbermodel.year = %d) AND  (partnumbermodel.model_id is NULL OR partnumbermodel.model_id = %d) ", $activeMachine['year'], $activeMachine['model']['model_id']), NULL, FALSE);
+//                    $where['partnumbermodel.year'] = $activeMachine['year'];
+//                    $where['partnumbermodel.model_id'] = $activeMachine['model']['model_id'];
                 }
                 $this->db->where("(CASE WHEN partvariation.quantity_available = 0 AND partvariation.stock_code = 'Closeout' THEN CASE WHEN partdealervariation.quantity_available = 0 THEN 0 ELSE 1 END ELSE 1 END )");
                 $this->db->where('partnumber.price > 0');
