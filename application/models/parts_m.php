@@ -2105,7 +2105,7 @@ class Parts_M extends Master_M {
         }
         $this->db->group_by('part_id');
         $this->db->where('partnumber.price > 0');
-        $this->db->select('part.name as label, partnumber.partnumber_id,
+        $this->db->select('part.call_for_price, part.name as label, partnumber.partnumber_id,
 										  count(partnumber) as cnt,
 										  part.part_id,
 										  part.featured as featured,
