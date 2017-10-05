@@ -1246,7 +1246,7 @@ class Parts_M extends Master_M {
             $where .= ' )';
             $this->db->where($where, NULL, FALSE);
         }
-        $this->db->select('part.part_id, name as label');
+        $this->db->select('part.part_id, name as label, part.call_for_price');
         $where = array('featured' => 1);
         $this->db->group_by('part.part_id');
         if (is_numeric($limit))
@@ -1294,7 +1294,7 @@ class Parts_M extends Master_M {
             $where .= ' )';
             $this->db->where($where, NULL, FALSE);
         }
-        $this->db->select('part.part_id, name as label, AVG(reviews.rating) as rating, reviews.review');
+        $this->db->select('part.part_id, name as label, AVG(reviews.rating) as rating, reviews.review, part.call_for_price');
         $this->db->join('reviews', 'reviews.part_id = part.part_id');
         $where = array();
         $this->db->group_by('part.part_id');
@@ -1331,7 +1331,7 @@ class Parts_M extends Master_M {
         if (is_numeric($limit))
             $this->db->limit($limit);
         // Filter for Anything on Sale	
-        $this->db->select('part.part_id, part.name as label', FALSE);
+        $this->db->select('part.part_id, part.name as label, part.call_for_price', FALSE);
         $where['(partnumber.price - partnumber.sale) > (.' . $dealPercent . ' * partnumber.price)'] = NULL;
         $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
         $this->db->join('part', 'part.part_id = partpartnumber.part_id');
@@ -1395,7 +1395,7 @@ class Parts_M extends Master_M {
             $categories = $this->getCategories($categoryId);
         $this->db->limit(4);
         // Filter for Anything on Sale	
-        $this->db->select('product_sku, count(*) qty, part.part_id, part.name as label, part.image');
+        $this->db->select('product_sku, count(*) qty, part.part_id, part.name as label, part.image, part.call_for_price');
         $this->db->join('partnumber', 'partnumber.partnumber = order_product.product_sku');
         $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
         $this->db->join('part', 'part.part_id = partpartnumber.part_id');
@@ -1449,7 +1449,7 @@ class Parts_M extends Master_M {
         $returnArr = FALSE;
 
         $this->db->limit(4);
-        $this->db->select('part.part_id, part.name as label, part.image');
+        $this->db->select('part.part_id, part.name as label, part.image, part.call_for_price');
         //$this->db->group_by('part.part_id');
         $this->db->order_by('part_id', 'random');
         // Filter for Categories 3 levels deep - must go after part join
@@ -1499,7 +1499,7 @@ class Parts_M extends Master_M {
         //	$categories = $this->getCategories($categoryId);
         $this->db->limit(4);
         // Filter for Anything on Sale	
-        $this->db->select('product_sku, count(*) qty, part.part_id, part.name as label, part.image');
+        $this->db->select('product_sku, count(*) qty, part.part_id, part.name as label, part.image, part.call_for_price');
         $this->db->join('partnumber', 'partnumber.partnumber = order_product.product_sku');
         $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
         $this->db->join('part', 'part.part_id = partpartnumber.part_id');
@@ -1538,7 +1538,7 @@ class Parts_M extends Master_M {
         } else {
             $this->db->limit(4);
             // Filter for Anything on Sale	
-            $this->db->select('count(*) qty, part.part_id, part.name as label, part.image');
+            $this->db->select('count(*) qty, part.part_id, part.name as label, part.image, part.call_for_price');
             $this->db->join('partbrand', 'partbrand.part_id = part.part_id');
             $this->db->where('partbrand.brand_id = ' . $brandId);
             $this->db->order_by('part_id', 'RANDOM');
@@ -1577,7 +1577,7 @@ class Parts_M extends Master_M {
                 $this->db->join('category cat2', 'cat2.category_id = category.parent_category_id');
                 $where['(category.category_id = ' . $categoryId . ' OR category.parent_category_id = ' . $categoryId . ' OR cat2.category_id = ' . $categoryId . ') '] = NULL;
             }
-            $this->db->select('part.part_id, part.name as label, part.image');
+            $this->db->select('part.part_id, part.name as label, part.image, part.call_for_price ');
             $where = array('part.part_id' => $id);
             $product = $this->selectRecord('part', $where);
 
@@ -1605,7 +1605,7 @@ class Parts_M extends Master_M {
         if ($this->recordExists('wishlist', $where)) {
             $wishlist = $this->selectRecord('wishlist', $where);
             $where = array('wishlist_id' => $wishlist['id']);
-            $this->db->select('wishlistpart_id, part.part_id, wishlist_part.rideName as name, partnumber.price, image, partnumber.partnumber, partnumber.sale');
+            $this->db->select('wishlistpart_id, part.part_id, wishlist_part.rideName as name, partnumber.price, image, partnumber.partnumber, partnumber.sale, part.call_for_price');
             $this->db->join('part', 'part.part_id = wishlist_part.part_id');
             $this->db->join('partnumber', 'partnumber.partnumber = wishlist_part.partnumber');
             $wishlistparts = $this->selectRecords('wishlist_part', $where);
@@ -2105,7 +2105,7 @@ class Parts_M extends Master_M {
         }
         $this->db->group_by('part_id');
         $this->db->where('partnumber.price > 0');
-        $this->db->select('part.name as label, partnumber.partnumber_id,
+        $this->db->select('part.call_for_price, part.name as label, partnumber.partnumber_id,
 										  count(partnumber) as cnt,
 										  part.part_id,
 										  part.featured as featured,
