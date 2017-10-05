@@ -1577,7 +1577,7 @@ class Parts_M extends Master_M {
                 $this->db->join('category cat2', 'cat2.category_id = category.parent_category_id');
                 $where['(category.category_id = ' . $categoryId . ' OR category.parent_category_id = ' . $categoryId . ' OR cat2.category_id = ' . $categoryId . ') '] = NULL;
             }
-            $this->db->select('part.part_id, part.name as label, part.image');
+            $this->db->select('part.part_id, part.name as label, part.image, part.call_for_price ');
             $where = array('part.part_id' => $id);
             $product = $this->selectRecord('part', $where);
 
