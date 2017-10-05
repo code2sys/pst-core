@@ -1246,7 +1246,7 @@ class Parts_M extends Master_M {
             $where .= ' )';
             $this->db->where($where, NULL, FALSE);
         }
-        $this->db->select('part.part_id, name as label');
+        $this->db->select('part.part_id, name as label, part.call_for_price');
         $where = array('featured' => 1);
         $this->db->group_by('part.part_id');
         if (is_numeric($limit))
