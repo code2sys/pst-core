@@ -186,6 +186,8 @@ class Ajax extends Master_Controller {
         redirect($currentlocation);
     }
 
+    // JLB 10-03-17
+    // I'll admit this delete function makes NO SENSE. This is the craziest data structure. Whoever did this was being intentionally obtuse.
     public function delete_from_garage() {
         unset($_SESSION['garage'][$_POST['garageLabel']]);
         if (!empty($_SESSION['garage'])) {
@@ -208,8 +210,15 @@ class Ajax extends Master_Controller {
                 $rideRec = $_SESSION['garage'][$firstLabel];
                 unset($_SESSION['garage'][$firstLabel]);
             }
+        } else {
+            // JLB 10-03-17
+            // If you remove the last ride, there should not be an active machine, right?
+            unset($_SESSION["activeMachine"]);
         }
         $_SESSION['garage'] = $this->account_m->updateGarage(@$rideRec, @$_SESSION['garage']);
+        if (isset($rideRec) && !is_null($rideRec)) {
+            $_SESSION["activeMachine"] = $rideRec;
+        }
     }
 
     public function change_active_garage() {

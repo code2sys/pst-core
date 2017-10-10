@@ -61,6 +61,11 @@ class Shopping extends Master_Controller {
             return @$pagination;
     }
 
+    protected function getActiveMachine() {
+        return (array_key_exists("garage", $_SESSION) && is_array($_SESSION["garage"]) && count($_SESSION["garage"]) > 0 && array_key_exists('activeMachine', $_SESSION) && !is_null($_SESSION['activeMachine'])) ? $_SESSION['activeMachine'] : null;
+
+    }
+
     public function generateAdPdtListTable($order = 'name', $dir = 'DESC', $page = 1) {
         if (@$_POST['ajax'] && ($this->validateAdPdtPageBundle() !== FALSE)) {// If form validation passes use passed sorting
             $page = $this->input->post('page');
@@ -70,7 +75,7 @@ class Shopping extends Master_Controller {
         $filter = ($filter == 'NULL') ? NULL : $filter;
         $offset = ($page - 1) * $this->_adpdtLimit;
         $this->_mainData['band']['label'] = 'Search Results';
-        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($filter, $this->_adpdtLimit, $offset);
+        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($filter, $this->getActiveMachine(), $this->_adpdtLimit, $offset);
         $tableView = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
         if (@$_POST['ajax']) {
             echo $tableView;
@@ -218,6 +223,7 @@ class Shopping extends Master_Controller {
     }
 
     public function productlist() {
+        $activeMachine = $this->getActiveMachine();
         $_SESSION['url'] = 'shopping/productlist/';
         $metaTag = '';
         //$_SESSION['internal'] = FALSE;
@@ -294,6 +300,10 @@ class Shopping extends Master_Controller {
             else
                 $title .= $categoryRec['title'];
 
+            if (!is_null($activeMachine)) {
+                $title .= ' for ' . $activeMachine['name'];
+            }
+
             $this->setMasterPageVars('title', $title);
             if ($categoryRec['meta_tag'])
                 $this->setMasterPageVars('descr', $categoryRec['meta_tag']);
@@ -344,14 +354,14 @@ class Shopping extends Master_Controller {
         if (@$listParameters['brand']) {
             $this->_mainData['brandMain'] = $this->parts_m->getBrand($listParameters['brand']);
         }
-        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $this->_adpdtLimit);
+        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $activeMachine, $this->_adpdtLimit);
         $this->_mainData['questions'] = $this->parts_m->getFilterQuestions($listParameters);
 		
 		// echo '<pre>';
 		// print_r($this->_mainData['questions']);
 		// echo '</pre>';
 		
-        $this->_mainData['band']['label'] = 'Search Results';
+        $this->_mainData['band']['label'] = 'Search Results' . (!is_null($activeMachine) ? " for " . $activeMachine["name"] : "");
         $_SESSION['breadcrumbs'] = $listParameters;
         $this->_mainData['breadcrumbs'] = $listParameters;
         $this->_mainData['mainProductBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
@@ -374,13 +384,13 @@ class Shopping extends Master_Controller {
 
         unset($this->_mainData['band']);
 
-        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters, NULL);
+        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters, $this->getActiveMachine(), NULL);
         // Created Variables for it in Category section, but calling it here to take advantage of breadcrumbs.
         $this->loadSidebar('widgets/category_filter_v_product');
         $this->loadSidebar('widgets/brand_filter_v_product');
         $this->loadSidebar('widgets/question_filter_v_product');
         // PAGINATION
-        $this->_mainData['pages'] = $this->adpdtPagination($this->parts_m->getSearchCount($listParameters));
+        $this->_mainData['pages'] = $this->adpdtPagination($this->parts_m->getSearchCount($listParameters, $activeMachine));
         $this->_mainData['currentPage'] = 1;
         $this->_mainData['display_pages'] = $this->_pagination;
         $this->_mainData['pagination'] = $this->load->view('master/pagination/productlist_v', $this->_mainData, TRUE);
@@ -535,7 +545,7 @@ class Shopping extends Master_Controller {
         if (@$listParameters['brand']) {
             $this->_mainData['brandMain'] = $this->parts_m->getBrand($listParameters['brand']);
         }
-        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $this->_adpdtLimit);
+        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $this->getActiveMachine(), $this->_adpdtLimit);
         $this->_mainData['questions'] = $this->parts_m->getFilterQuestions($listParameters);
 		
 		// echo '<pre>';
@@ -565,7 +575,7 @@ class Shopping extends Master_Controller {
 
         unset($this->_mainData['band']);
 
-        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters, NULL);
+        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters, $this->getActiveMachine(), NULL);
         // Created Variables for it in Category section, but calling it here to take advantage of breadcrumbs.
         $this->loadSidebar('widgets/category_filter_v');
         $this->loadSidebar('widgets/brand_filter_v');
@@ -641,7 +651,7 @@ class Shopping extends Master_Controller {
         unset($this->_mainData['band']);
 
         // ACTUAL PRODUCT SEARCH IS DONE IN THIS MODEL FUNCTION
-        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $this->_adpdtLimit);
+        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $this->getActiveMachine(), $this->_adpdtLimit);
         //usort($this->_mainData['band']['products'], 'sortByOrder');
         $this->_mainData['questions'] = $this->parts_m->getFilterQuestions($listParameters);
         $this->_mainData['band']['label'] = 'Search Results';
@@ -772,9 +782,9 @@ class Shopping extends Master_Controller {
             $this->_mainData['category'] = $this->parts_m->getSearchCategoriesBrand($listParameters, 1000);
 
             $listParameters['extra'] = 'featured';
-            $featured = $this->parts_m->getSearchResults($listParameters, 1000);
+            $featured = $this->parts_m->getSearchResults($listParameters, $this->getActiveMachine(), 1000);
             $listParameters['extra'] = 'closeout';
-            $closeouts = $this->parts_m->getSearchResults($listParameters, 1000);
+            $closeouts = $this->parts_m->getSearchResults($listParameters, $this->getActiveMachine(), 1000);
             unset($listParameters['extra']);
 
             if (isset($_GET['v']) && $_GET['v'] != '') {

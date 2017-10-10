@@ -27,6 +27,12 @@ if (isset($keywords) &&	$keywords != "") {
         $meta_keywords = $pageRec["keywords"];
 }
 
+
+if (!defined('SEARCH_PLACEHOLDER_WORDING')) {
+    define('SEARCH_PLACEHOLDER_WORDING', 'Search Parts and Apparel');
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -340,7 +346,7 @@ if (isset($keywords) &&	$keywords != "") {
 			</div>	
 			<div class="searchHolder search-one">
 				<form action="<?php echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-					<input id="search" name="search" placeholder="Search Parts and Apparel" class="search-bx" style="float:left;" />
+					<input id="search" name="search" placeholder="<?php echo SEARCH_PLACEHOLDER_WORDING; ?>" class="search-bx" style="float:left;" />
 					<a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
 				</form>
 				<div class="clear"></div>
