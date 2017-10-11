@@ -1316,8 +1316,37 @@ img.powerlogo-a {
     font-family: sans-serif;
 }
 
+.vehicleCategory a.navacross10 {
+    width: 110px;
+}
+.vehicleCategory a.navacross9 {
+    width: 122px;
+}
+.vehicleCategory a.navacross8 {
+    width: 138px;
+}
+.vehicleCategory a.navacross7,
 .vehicleCategory a.navacrossseven {
     width: 158px;
+}
+.vehicleCategory a.navacross6 ,
+.vehicleCategory a.navacrossix {
+    width: 184px;
+}
+.vehicleCategory a.navacross5 {
+    width: 221px;
+}
+.vehicleCategory a.navacross4 {
+    width: 276px;
+}
+.vehicleCategory a.navacross3 {
+    width: 368px;
+}
+.vehicleCategory a.navacross2 {
+    width: 553px;
+}
+.vehicleCategory a.navacross1 {
+    width: 1106px;
 }
 
 
