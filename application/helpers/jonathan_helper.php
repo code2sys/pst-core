@@ -9,6 +9,20 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * Time: 10:01 AM
  */
 
+function jonathan_prepareGlobalPrimaryNavigation() {
+    $CI =& get_instance();
+    $CI->load->model("Primarynavigation_m");
+    $active_primary_navigation = $CI->Primarynavigation_m->getPrimaryNavigation(true);
+
+    for ($i = 0; $i < count($active_primary_navigation); $i++) {
+        $active_primary_navigation[$i]["external_attr"] = $active_primary_navigation[$i]["external"] > 0 ? " target='_blank' " : "";
+        $active_primary_navigation[$i]["mobile_label"] = $active_primary_navigation[$i]["mobile_label"] != "" ? $active_primary_navigation[$i]["mobile_label"] : $active_primary_navigation[$i]["label"];
+
+    }
+
+    return $active_primary_navigation;
+}
+
 
 if (!function_exists("jonathan_extract_float_value")) {
     function jonathan_extract_float_value($string) {

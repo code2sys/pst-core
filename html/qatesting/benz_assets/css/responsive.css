@@ -3319,8 +3319,40 @@ span.glyphicon-filter {
         margin:0 !important
     }
 
+    .container_b .vehicleCategory a.navacross10 {
+        width:922px !important;
+    }
+    .container_b .vehicleCategory a.navacross9 {
+        width:102px !important;
+    }
+    .container_b .vehicleCategory a.navacross8 {
+        width:115px !important;
+    }
+    .container_b .vehicleCategory a.navacross7,
     .container_b .vehicleCategory a.navacrossseven {
         width:132px !important;
+    }
+    .container_b .vehicleCategory a.navacross6,
+    .container_b .vehicleCategory a.navacrosssix {
+        width:154px !important;
+    }
+    .container_b .vehicleCategory a.navacross5 {
+        width:184px !important;
+    }
+    .container_b .vehicleCategory a.navacross4 {
+        width:231px !important;
+    }
+    .container_b .vehicleCategory a.navacross3 {
+        width:308px !important;
+    }
+    .container_b .vehicleCategory a.navacrossseven {
+        width:132px !important;
+    }
+    .container_b .vehicleCategory a.navacross2 {
+        width:462px !important;
+    }
+    .container_b .vehicleCategory a.navacross1 {
+        width:924px !important;
     }
     .actv {
         box-shadow:none !important;

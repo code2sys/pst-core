@@ -39,6 +39,9 @@ if (!is_null($pageIndex) && $pageIndex < 9)
 					<?php if(in_array('categories', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
 						<li><a href="<?php echo base_url('/admin/category'); ?>" ><i class="fa fa-th"></i>&nbsp;Categories</a></li>
 					<?php } ?>
+<!--					--><?php //if(in_array('navigation', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
+<!--						<li><a href="--><?php //echo base_url('/adminnavigation/index'); ?><!--" ><i class="fa fa-navicon"></i>&nbsp;Navigation</a></li>-->
+<!--					--><?php //} ?>
 					<?php if(in_array('brands', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
 						<li><a href="<?php echo base_url('/admin/brand'); ?>"><i class="fa fa-tag"></i>&nbsp;Brands</a></li>
 					<?php } ?>

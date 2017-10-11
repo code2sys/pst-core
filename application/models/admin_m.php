@@ -1230,6 +1230,28 @@ class Admin_M extends Master_M {
         $data['google_trust'] = json_encode($data['google_trust']);
         $where = array('id' => 1);
         $return = $this->updateRecord('contact', $data, $where, FALSE);
+
+        // JLB 10-11-17
+        // We have to hack the navigation...
+        if (array_key_exists("partsfinder_link", $data) && $data["partsfinder_link"] != "") {
+            // does it exist?
+            $query = $this->db->query("Select * from primarynavigation where class = 'last oemparts'");
+            $matches = $query->result_array();
+            if (count($matches) == 0) {
+                $query = $this->db->query("Select max(ordinal) as max_ordinal from primarynavigation");
+                $matches = $query->result_array();
+                $max_ordinal = $matches[0]["max_ordinal"];
+
+                $this->db->query("Insert into primarynavigation (active, url, label, class, span_id, image_url, external, ordinal, mobile_label) values (1, ?, 'Shop OEM Parts', 'last oemparts', 'sop', '/assets/oem_parts.png', 1, ?, 'Shop OEM Parts')", array($data["partsfinder_link"], $max_ordinal + 1));
+            } else {
+                $this->db->query("Update primarynavigation set url = ? where class = 'last oemparts' limit 1;", array($data["partsfinder_link"]));
+            }
+        } else {
+            $this->db->query("Delete from primarynavigation where class = 'last oemparts' limit 1");
+        }
+
+
+        return $return;
     }
 
     public function getAdminShippingProfile() {
