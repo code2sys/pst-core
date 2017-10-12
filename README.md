@@ -13,3 +13,13 @@ Server IPs
 ----------
 
 If you change the server IP, you have to go add the IP to the whitelist in the Portal for receiving.
+
+Adding a Category
+-----------------
+
+* You have to add a constant for the top level category to the store environment
+* You have to make a new page though the database
+* You have to add a new page constant to the store environment
+* You have to make a new page controller
+* You have to add the category check in master_v_new
+* You have to add the route overrides for the top level searches

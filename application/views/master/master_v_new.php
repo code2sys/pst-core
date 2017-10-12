@@ -592,6 +592,38 @@ $(window).load(function() {
    
    function setMainSearchCategory(event, section, id)
    {
+       // JLB 10-12-17
+       // This is the stupidest thing in the world if it happens to the top-level categories...
+       id = parseInt(id, 10);
+       if (id == <?php echo TOP_LEVEL_CAT_STREET_BIKES; ?> || id == <?php echo TOP_LEVEL_CAT_ATV_PARTS; ?> || id == <?php echo TOP_LEVEL_CAT_UTV_PARTS; ?> || id == <?php echo TOP_LEVEL_CAT_VTWIN_PARTS; ?> || id == <?php echo TOP_LEVEL_CAT_DIRT_BIKES; ?> || id == <?php echo TOP_LEVEL_CAT_MARINE; ?>) {
+           // sometimes, they just do these URLs wrong.
+           switch(id) {
+               case <?php echo TOP_LEVEL_CAT_STREET_BIKES; ?>:
+                   window.location.href = '/streetbikeparts';
+                   break;
+               case <?php echo TOP_LEVEL_CAT_ATV_PARTS; ?>:
+                   window.location.href = '/atvparts';
+                   break;
+               case <?php echo TOP_LEVEL_CAT_UTV_PARTS; ?>:
+                   window.location.href = '/utvparts';
+                   break;
+               case <?php echo TOP_LEVEL_CAT_VTWIN_PARTS; ?>:
+                   window.location.href = '/vtwin';
+                   break;
+               case <?php echo TOP_LEVEL_CAT_DIRT_BIKES; ?>:
+                   window.location.href = '/dirtbikeparts';
+                   break;
+               case <?php echo TOP_LEVEL_CAT_MARINE; ?>:
+                   window.location.href = '/marine';
+                   break;
+               default:
+                   return true;
+           }
+
+           event.preventDefault();
+           return false; // just keep on moving. Nothing to see here.
+       }
+
 	   event.preventDefault();
 	   $.post(base_url + 'ajax/setSearchCategory/',
 		{
