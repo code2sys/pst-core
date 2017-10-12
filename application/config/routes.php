@@ -58,6 +58,7 @@ $route["dirtbikepart"] = "dirtbikeparts/redirectToHome";
 $route["shopping/productlist/dirt-bike-parts"] = "dirtbikeparts/redirectToHome";
 $route["shopping/productlist/dirt-bike-parts_dirt-bike-parts"] = "dirtbikeparts/redirectToHome";
 $route["shopping/productlist/street-bike-parts"] = "streetbikeparts/redirectToHome";
+$route["shopping/productlist/street-bike-parts_street-bike-parts"] = "streetbikeparts/redirectToHome";
 $route["shopping/productlist/v-twin-parts_v-twin-parts"] = "vtwin/redirectToHome";
 $route["shopping/productlist/v-twin-parts"] = "vtwin/redirectToHome";
 $route["shopping/productlist/atv-parts"] = "atvparts/redirectToHome";
