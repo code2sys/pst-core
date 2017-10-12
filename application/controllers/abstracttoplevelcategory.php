@@ -14,6 +14,11 @@ class Abstracttoplevelcategory extends Master_Controller {
     protected $_pageId;
     protected $_categoryId;
 
+    public function redirectToHome() {
+        $this->load->helper("url");
+        redirect("/" . $_SESSION['url'], 'location', 301);
+    }
+
     function __construct()
     {
         parent::__construct();

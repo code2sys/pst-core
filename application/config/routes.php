@@ -53,6 +53,9 @@ $route['atvparts'] = 'atvparts/index';
 $route['utvparts'] = 'utvparts/index';
 $route['admin'] = 'admin/index';
 
+$route["streetbikepart"] = "streetbikeparts/redirectToHome";
+$route["shopping/productlist/street-bike-parts"] = "streetbikeparts/redirectToHome";
+
 $route['atv/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['utv/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['streetbike/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
