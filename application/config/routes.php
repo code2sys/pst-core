@@ -60,7 +60,7 @@ $route["shopping/productlist/street-bike-parts"] = "streetbikeparts/redirectToHo
 $route["shopping/productlist/v-twin-parts_v-twin-parts"] = "vtwin/redirectToHome";
 $route["shopping/productlist/v-twin-parts"] = "vtwin/redirectToHome";
 $route["shopping/productlist/atv-parts"] = "atvparts/redirectToHome";
-$route["shopping/productlist/utv-parts "] = "utvparts/redirectToHome";
+$route["shopping/productlist/utv-parts"] = "utvparts/redirectToHome";
 
 $route['atv/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['utv/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
