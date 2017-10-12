@@ -600,31 +600,28 @@ $(window).load(function() {
            switch(id) {
                case <?php echo TOP_LEVEL_CAT_STREET_BIKES; ?>:
                    window.location.href = '/streetbikeparts';
-                   return true;
                    break;
                case <?php echo TOP_LEVEL_CAT_ATV_PARTS; ?>:
                    window.location.href = '/atvparts';
-                   return true;
                    break;
                case <?php echo TOP_LEVEL_CAT_UTV_PARTS; ?>:
                    window.location.href = '/utvparts';
-                   return true;
                    break;
                case <?php echo TOP_LEVEL_CAT_VTWIN_PARTS; ?>:
                    window.location.href = '/vtwin';
-                   return true;
                    break;
                case <?php echo TOP_LEVEL_CAT_DIRT_BIKES; ?>:
                    window.location.href = '/dirtbikeparts';
-                   return true;
                    break;
                case <?php echo TOP_LEVEL_CAT_MARINE; ?>:
                    window.location.href = '/marine';
-                   return true;
                    break;
+               default:
+                   return true;
            }
 
-           return true; // just keep on moving. Nothing to see here.
+           event.preventDefault();
+           return false; // just keep on moving. Nothing to see here.
        }
 
 	   event.preventDefault();
