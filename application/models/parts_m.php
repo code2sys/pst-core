@@ -2542,7 +2542,7 @@ class Parts_M extends Master_M {
             $row = $get->row();
             $categories = $this->getParentCategores($row->category_id);
 
-            if (!empty($categories) && (isset($categories[TOP_LEVEL_CAT_UTV_PARTS]) || isset($categories[TOP_LEVEL_CAT_STREET_BIKES]) || isset($categories[TOP_LEVEL_CAT_DIRT_BIKES]) || isset($categories[TOP_LEVEL_CAT_ATV_PARTS]))) {
+            if (!empty($categories) && (isset($categories[TOP_LEVEL_CAT_UTV_PARTS]) || isset($categories[TOP_LEVEL_CAT_STREET_BIKES]) || isset($categories[TOP_LEVEL_CAT_DIRT_BIKES]) || isset($categories[TOP_LEVEL_CAT_ATV_PARTS]) || isset($categories[TOP_LEVEL_CAT_MARINE]))) {
                 reset($categories);
                 $first_key = key($categories);
                 $data['navCategories'] = $this->getCategories($first_key);
@@ -2554,6 +2554,7 @@ class Parts_M extends Master_M {
                 $topCategories[2]['id'] = TOP_LEVEL_CAT_ATV_PARTS;
                 $topCategories[3]['id'] = TOP_LEVEL_CAT_UTV_PARTS;
                 $topCategories[4]['id'] = TOP_LEVEL_CAT_VTWIN_PARTS;
+                $topCategories[5]['id'] = TOP_LEVEL_CAT_MARINE;
                 $keyToUse = array_rand($topCategories);
                 $data['navCategories'] = $this->getCategories($topCategories[$keyToUse]['id']);
                 $data['parent'] = $topCategories[$keyToUse]['id'];
@@ -2565,6 +2566,7 @@ class Parts_M extends Master_M {
             $topCategories[2]['id'] = TOP_LEVEL_CAT_ATV_PARTS;
             $topCategories[3]['id'] = TOP_LEVEL_CAT_UTV_PARTS;
             $topCategories[4]['id'] = TOP_LEVEL_CAT_VTWIN_PARTS;
+            $topCategories[5]['id'] = TOP_LEVEL_CAT_MARINE;
             $keyToUse = array_rand($topCategories);
 
             $data['navCategories'] = $this->getCategories($topCategories[$keyToUse]['id']);

@@ -23,3 +23,4 @@ Adding a Category
 * You have to make a new page controller
 * You have to add the category check in master_v_new
 * You have to add the route overrides for the top level searches
+* You have to add that top-level category into parts_m.php
