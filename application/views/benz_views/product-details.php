@@ -55,8 +55,8 @@ unset($motorcycle['videos'][0]);
 				<?php if( $motorcycle['call_on_price'] == '1' ) { ?>
 					<p class="cfp">Call For Price</p>
 				<?php } else { ?>
-					<p>Retail Price: &nbsp; $<?php echo $motorcycle['retail_price'];?></p>
-					<p>Sale Price: &nbsp; &nbsp;&nbsp;$<?php echo $motorcycle['sale_price'];?></p>
+					<p>Retail Price: &nbsp; <span class="strikethrough">$<?php echo $motorcycle['retail_price'];?></span>
+                    <p>Sale Price: &nbsp; &nbsp;<span class="redtext"><?php echo $motorcycle['sale_price'];?></span></p>
 				<?php } ?>
 				<h4>Highlights</h4>	
 				<hr>
