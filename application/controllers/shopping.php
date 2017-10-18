@@ -1048,6 +1048,12 @@ class Shopping extends Master_Controller {
 
         print "<!-- Inside 0 -->\n";
 
+        if ($is_inside) {
+            print "<!-- I is inside! -->";
+        } else {
+            print "<!-- I is not inside! -->";
+        }
+
         if ($is_inside == 1 && !empty($this->_mainData['breadcrumbs'])) {
             print "<!-- Inside 1 -->\n";
 
