@@ -446,7 +446,7 @@ class Shopping extends Master_Controller {
                 $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
             }
         }
-        
+
 
         $this->setFooterView('master/footer_v.php');
         $this->renderMasterPage('master/master_v', 'info/product_list_v', $this->_mainData);
@@ -1046,10 +1046,16 @@ class Shopping extends Master_Controller {
         /* Preparing Top Parent Category */
         $parentt = "";
 
+        print "<!-- Inside 0 -->\n";
+
         if ($is_inside == 1 && !empty($this->_mainData['breadcrumbs'])) {
+            print "<!-- Inside 1 -->\n";
 
             $session_based_breadcrumb = $this->_mainData['breadcrumbs'];
+            print "<!-- " . print_r($session_based_breadcrumb) . " -->\n";
             if (!empty($session_based_breadcrumb['category'])) {
+                print "<!-- Inside 2 -->\n";
+
 
                 if (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_STREET_BIKES])) {
                     $parentt = TOP_LEVEL_CAT_STREET_BIKES;
