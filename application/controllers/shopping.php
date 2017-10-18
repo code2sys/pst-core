@@ -1055,14 +1055,14 @@ class Shopping extends Master_Controller {
         }
 
         $session_based_breadcrumb = $this->_mainData['breadcrumbs'];
-        print "<!-- " . print_r($session_based_breadcrumb) . " -->\n";
+        print "<!-- " . print_r($session_based_breadcrumb, true) . " -->\n";
 
 
         if ($is_inside == 1 && !empty($this->_mainData['breadcrumbs'])) {
             print "<!-- Inside 1 -->\n";
 
             $session_based_breadcrumb = $this->_mainData['breadcrumbs'];
-            print "<!-- " . print_r($session_based_breadcrumb) . " -->\n";
+            print "<!-- " . print_r($session_based_breadcrumb, true) . " -->\n";
             if (!empty($session_based_breadcrumb['category'])) {
                 print "<!-- Inside 2 -->\n";
 
