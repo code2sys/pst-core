@@ -1054,6 +1054,10 @@ class Shopping extends Master_Controller {
             print "<!-- I is not inside! -->";
         }
 
+        $session_based_breadcrumb = $this->_mainData['breadcrumbs'];
+        print "<!-- " . print_r($session_based_breadcrumb) . " -->\n";
+
+
         if ($is_inside == 1 && !empty($this->_mainData['breadcrumbs'])) {
             print "<!-- Inside 1 -->\n";
 
