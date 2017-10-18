@@ -415,29 +415,38 @@ class Shopping extends Master_Controller {
         $getTopParentTemp = $this->uri->segment(3);
         $getTopParentTemp = explode("_", $getTopParentTemp);
 
-        if (isset($getTopParentTemp[0]) && $getTopParentTemp[0] == 'dirt-bike-parts' || $getTopParentTemp[0] == 'atv-parts' ||
-                $getTopParentTemp[0] == 'street-bike-parts' || $getTopParentTemp[0] == 'utv-parts' || $getTopParentTemp[0] == 'v-twin-parts') {
+        // JLB 10-18-17
+        // OK, this is another retrofit. I think that the thing that is going on is that you have to work backwards through the name
+        // through the navigation to get this correct thing to show up...This is still not right, but it extends with teh navigation now...
+        if (isset($getTopParentTemp[0]) && $getTopParentTemp[0] != "") {
 
-            $top_parent = TOP_LEVEL_CAT_DIRT_BIKES;
+            $top_parent = -1;
+            global $active_primary_navigation;
 
-            if ($getTopParentTemp[0] == "street-bike-parts") {
-                $top_parent = TOP_LEVEL_CAT_STREET_BIKES;
-            } else if ($getTopParentTemp[0] == "atv-parts") {
-                $top_parent = TOP_LEVEL_CAT_ATV_PARTS;
-            } else if ($getTopParentTemp[0] == "utv-parts") {
-                $top_parent = TOP_LEVEL_CAT_UTV_PARTS;
-            } else if ($getTopParentTemp[0] == "v-twin-parts") {
-                $top_parent = TOP_LEVEL_CAT_VTWIN_PARTS;
+            if (!isset($active_primary_navigation)) {
+                $active_primary_navigation = jonathan_prepareGlobalPrimaryNavigation();
             }
 
-            $this->_mainData['cat_header'] = 1;
-            $this->_mainData['top_parent'] = $top_parent;
-            
-            /*  GETTING CATEGORIES FOR TOP NAV */
-            $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent(0, $top_parent);
-            $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
-            
+            foreach ($active_primary_navigation as $rec) {
+                if ($rec["category_description"] != "") {
+                    $clean_name = str_replace(" ", "-", strtolower($rec["category_description"]));
+                    if ($clean_name == $getTopParentTemp[0]) {
+                        $top_parent = $rec["category_id"];
+                    }
+                }
+            }
+
+            if ($top_parent > 0) {
+
+                $this->_mainData['cat_header'] = 1;
+                $this->_mainData['top_parent'] = $top_parent;
+
+                /*  GETTING CATEGORIES FOR TOP NAV */
+                $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent(0, $top_parent);
+                $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
+            }
         }
+        
 
         $this->setFooterView('master/footer_v.php');
         $this->renderMasterPage('master/master_v', 'info/product_list_v', $this->_mainData);
