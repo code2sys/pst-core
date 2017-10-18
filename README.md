@@ -24,3 +24,4 @@ Adding a Category
 * You have to add the category check in master_v_new
 * You have to add the route overrides for the top level searches
 * You have to add that top-level category into parts_m.php
+* You have to add the $("#stp").addClass('actv'); for you new top-level navigations...
