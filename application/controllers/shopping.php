@@ -1033,6 +1033,7 @@ class Shopping extends Master_Controller {
         /* Deciding if the page browsed innerly or from outside source */
         $is_inside = 0;
         $referer = ( isset($_SERVER['HTTP_REFERER']) ) ? $_SERVER['HTTP_REFERER'] : '';
+        print "<!-- Referer: $referer and website " . WEBSITE_HOSTNAME . " -->\n";
         if (strpos($referer, WEBSITE_HOSTNAME) !== false) {
             $is_inside = 1;
         }
