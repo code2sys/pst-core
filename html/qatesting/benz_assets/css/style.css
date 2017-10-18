@@ -1075,8 +1075,9 @@ img.powerlogo-a {
 .bx-rit p span {
 	color:#273dab
 }
-.strikethrough, .bx-rit p span. {
+.strikethrough, .bx-rit p span.strikethrough {
     text-decoration: line-through;
+    color: black;
 }
 .redtext, .bx-rit p span.redtext {
     color: red;
