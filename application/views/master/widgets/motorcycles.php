@@ -26,14 +26,19 @@ mustache_tmpl_set($template, "MOTORCYCLE_SHOP_DISABLE", defined("MOTORCYCLE_SHOP
 if (count($featured) > 0) {
     mustache_tmpl_set($template, "ShowFeaturedModels", true);
 
+
     foreach ($featured as $feature) {
+        if ($feature["sale_price"]>0 && $feature["sale_price"]!=="0.00") {
+
+        }
         mustache_tmpl_iterate($template, "FeaturedModels");
         mustache_tmpl_set($template, "FeaturedModels", array(
             "link" => strtolower(str_replace(" ", "", $feature['type'])).'/'.str_replace(' ', '_', trim($feature['title'])).'/'.$feature['sku'],
             "image_name" => $feature["image_name"],
             "original_title" => $feature["title"],
             "call_on_price" => $feature["call_on_price"] == 1,
-            "sale_price" => $feature["sale_price"]
+            "sale_price" => $feature["sale_price"],
+            "destination_charge" => $feature["destination_charge"] == 1 ? " " : " "
         ));
     }
 }
