@@ -1037,7 +1037,7 @@ class Shopping extends Master_Controller {
         if (strpos($referer, WEBSITE_HOSTNAME) !== false) {
             $is_inside = 1;
         }
-        $is_inside = 0;
+        // $is_inside = 0;
 
         $this->_mainData['is_inside'] = $is_inside;
 
