@@ -893,15 +893,16 @@ class Shopping extends Master_Controller {
             // So, here's what is required: I need to get the categories for this part. I need to then figure out if you looked at that category. If you did, great, we have the drill down. If you did not, I just need to fall through to leftmost favoritism.
             $match = false;
 
-            for ($i = 0; !$match && ($i < count($category_stack)); $i++) {
-                // get the genealogy for this category
-                if (array_key_exists($category_stack[$i], $part_cat_LUT)) {
-                    // OK, we have our hit...
-                    $matching_category_id = $category_stack[$i];
-                    $matching_category = $part_cat_LUT[$matching_category_id];
-                    $match = true;
-                }
-            }
+            // I think that the next one will do this same work, but will avoid the pathological cases.
+//            for ($i = 0; !$match && ($i < count($category_stack)); $i++) {
+//                // get the genealogy for this category
+//                if (array_key_exists($category_stack[$i], $part_cat_LUT)) {
+//                    // OK, we have our hit...
+//                    $matching_category_id = $category_stack[$i];
+//                    $matching_category = $part_cat_LUT[$matching_category_id];
+//                    $match = true;
+//                }
+//            }
 
             if ($match) {
                 $leftmost_favoritism = false;
