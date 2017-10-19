@@ -123,10 +123,19 @@ $media_url = jsite_url("/media/");
                                 <h3><?php echo $motorcycle['title']; ?></h3>
                                 <?php if ($motorcycle['call_on_price'] == '1') { ?>
                                     <p class="cfp">Call For Price</p>
-                                <?php } else { ?>
-                                    <p>Retail Price: &nbsp; $<?php echo $motorcycle['retail_price']; ?></p>
-                                    <p>Sale Price: &nbsp; &nbsp;&nbsp;$<?php echo $motorcycle['sale_price']; ?></p>
-                                <?php } ?>
+                                <?php } else {
+                                    if ($motorcycle['sale_price']>0 && $motorcycle['sale_price']!=="0.00") {
+                                        ?>
+                                        <p>Retail Price: &nbsp; <span class="strikethrough">$<?php echo $motorcycle['retail_price']; ?></span></p>
+                                        <p>Sale Price: &nbsp;&nbsp;&nbsp;<span class="redtext">$<?php echo $motorcycle['sale_price']; ?></span></p>
+                                        <?php
+                                    } else {
+                                        ?><p>Retail Price: &nbsp; $<?php echo $motorcycle['retail_price']; ?></p><?php
+                                    }
+                                    if ($motorcycle["destination_charge"]) {
+                                        ?><sub>* Plus Applicable destination charge</sub><?php
+                                    }
+                                } ?>
                             </div>
                             <div class="mid-text-right">
                                 <p>condition :<span><?php echo $motorcycle['condition'] == '1' ? 'New' : 'Pre-Owned'; ?></span></p>
