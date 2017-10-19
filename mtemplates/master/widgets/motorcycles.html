@@ -34,21 +34,19 @@
     <div class="container_b">
         <h1 class="head-txt"> featured models: <span> <a href="/Motorcycle_List">shop more</a> </span></h1>
         <div id="hotels-flats" class="owl-carousel">
-            {{#FeaturedModels}}
-            <a href="{{link}}">
-                <div class="item">
-                    <div class="item-box">
+            {{#FeaturedModels}}}
+            <div class="item">
+                <div class="item-box">
+                    <a href="{{link}}">
                         <img class="lazyOwl" data-src="/media/{{image_name}}" alt="Motorcycle Image">
                         <p>{{original_title}}</p>
-                        {{#call_on_price}}
-                        <h2 class="cfp">Call For Price</h2>
-                        {{/call_on_price}}
-                        {{^call_on_price}}
-                        <h2>Sale Price: &nbsp;${{sale_price}}</h2>
-                        {{/call_on_price}}
-                    </div>
+                       {{{price}}}
+                    </a>
+                    {{#destination_charge}}
+                    <sub>* Plus Applicable destination charge</sub>
+                    {{/destination_charge}}
                 </div>
-            </a>
+            </div>
             {{/FeaturedModels}}
         </div>
     </div>
