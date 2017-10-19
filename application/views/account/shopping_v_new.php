@@ -29,7 +29,7 @@ $detect = new Mobile_Detect;
                     print " &gt; ";
                 }
 
-                print htmlentities($breadCrumbCategories[$i]["name"]);
+                print "<a href='#'>" .  htmlentities($breadCrumbCategories[$i]["name"]) . "</a>";
             }
 
         }
