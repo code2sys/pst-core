@@ -59,7 +59,7 @@ unset($motorcycle['videos'][0]);
                        <p>Retail Price: &nbsp; <span class="strikethrough">$<?php echo $motorcycle['retail_price'];?></span></p>
                        <p>Sale Price: &nbsp; &nbsp;<span class="redtext">$<?php echo $motorcycle['sale_price'];?></span></p>
                     <?php } else { ?>
-                        <p>Retail Price: &nbsp; <span>$<?php echo $motorcycle['retail_price'];?></span></p>
+                        <p>Retail Price: &nbsp; $<?php echo $motorcycle['retail_price'];?></p>
 				    <?php
 				    }
                     if ($motorcycle["destination_charge"]) {
