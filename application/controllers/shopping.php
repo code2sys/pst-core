@@ -910,17 +910,22 @@ class Shopping extends Master_Controller {
                 // OK, one more try - we are going to attempt a substring match...
                 $category_names = jonathan_getCategoryNames();
                 print_r($category_names);
-                print "-->\n";
+                print "\n\nPart Category Names: ";
                 $part_category_names = array_keys($part_cat_name_LUT);
+                print_r($part_category_names);
 
                 for ($i = 0; !$match && ($i < count($category_stack)); $i++) {
                     $this_category_id = $category_stack[$i];
+                    print "Considering $this_category_id \n";
 
                     if (array_key_exists($this_category_id, $category_names)) {
                         $this_category_name = strtolower($category_names[$this_category_id]);
+                        print "Considering $this_category_name \n";
                         // we have to go look for the substring...
                         foreach ($part_category_names as $pcn) {
+                            print "Comparing to $pcn \n";
                             if (!$match && ($this_category_name == substr(strtolower($pcn), strlen($this_category_name)))) {
+                                print "Match found! \n";
                                 // we've found one...
                                 $matching_category_id = $this_category_id;
                                 $matching_category = $part_cat_LUT[$matching_category_id];
@@ -933,6 +938,7 @@ class Shopping extends Master_Controller {
                 if ($match) {
                     $leftmost_favoritism = false;
                 }
+                print "-->\n";
             }
         }
 
