@@ -18,14 +18,14 @@ function jonathan_saveCategoryToStack($category_id) {
         $_SESSION["categoryNames"] = array();
     }
 
-    $_SESSION["categoryStack"][] = $category_id;
+    array_unshift($_SESSION["categoryStack"], $category_id);
 
     $CI =& get_instance();
     $CI->load->model("parts_m");
     $_SESSION["categoryNames"][$category_id] = $CI->parts_m->getCategoryLongName($category_id);
 
     while (count($_SESSION["categoryStack"]) > 20) {
-        array_shift($_SESSION["categoryStack"]);
+        array_pop($_SESSION["categoryStack"]);
     }
 }
 
