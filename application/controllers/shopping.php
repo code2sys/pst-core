@@ -996,11 +996,11 @@ class Shopping extends Master_Controller {
 
         /*  GETTING CATEGORIES FOR TOP NAV */
         if (($c = count($this->_mainData["breadCrumbCategories"])) > 0) {
+            array_reverse($this->_mainData["breadCrumbCategories"]);
             $top_parent_category_id = $this->_mainData["breadCrumbCategories"][$c - 1]["category_id"];
             foreach ($this->_mainData["breadCrumbCategories"] as $cat) {
                 $cats[] = $cat["category_id"];
             }
-            array_reverse($cats);
         }
         $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent($partId, $top_parent_category_id);
         $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
