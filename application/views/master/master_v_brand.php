@@ -590,7 +590,7 @@ echo $CI->load->view("master/tracking", array(
 <?php
 $CI =& get_instance();
 echo $CI->load->view("widgets/ride_selection_js", array(
-    "product" => isset($prodct) ? $product : null,
+    "product" => isset($product) ? $product : null,
 
 ), true);
 ?>
