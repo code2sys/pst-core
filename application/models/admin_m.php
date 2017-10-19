@@ -2520,6 +2520,9 @@ class Admin_M extends Master_M {
         if (!array_key_exists("call_on_price", $post)) {
             $post["call_on_price"] = 0;
         }
+        if (!array_key_exists("destination_charge", $post)) {
+            $post["destination_charge"] = 0;
+        }
 
         unset($post['total_cost']);
         unset($post['unit_cost']);

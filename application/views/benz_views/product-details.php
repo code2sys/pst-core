@@ -54,11 +54,19 @@ unset($motorcycle['videos'][0]);
 				<h3><?php echo $motorcycle['title'];?></h3>
 				<?php if( $motorcycle['call_on_price'] == '1' ) { ?>
 					<p class="cfp">Call For Price</p>
-				<?php } else { ?>
-					<p>Retail Price: &nbsp; $<?php echo $motorcycle['retail_price'];?></p>
-					<p>Sale Price: &nbsp; &nbsp;&nbsp;$<?php echo $motorcycle['sale_price'];?></p>
-				<?php } ?>
-				<h4>Highlights</h4>	
+                <?php } else {
+                    if ($motorcycle['sale_price']>0 && $motorcycle['sale_price'] !== "0.00") { ?>
+                       <p>Retail Price: &nbsp; <span class="strikethrough">$<?php echo $motorcycle['retail_price'];?></span></p>
+                       <p>Sale Price: &nbsp; &nbsp;<span class="redtext">$<?php echo $motorcycle['sale_price'];?></span></p>
+                    <?php } else { ?>
+                        <p>Retail Price: &nbsp; $<?php echo $motorcycle['retail_price'];?></p>
+				    <?php
+				    }
+                    if ($motorcycle["destination_charge"]) {
+                        echo "<sub>* Plus Applicable destination charge</sub>";
+                    }
+                } ?>
+				<h4>Highlights</h4>
 				<hr>
 				<div class="dtal-txt">
 					<label>location :</label>
@@ -152,9 +160,9 @@ unset($motorcycle['videos'][0]);
 							<!--<p><?php echo $recently['title'];?></p>-->
 							<?php if( $recently['call_on_price'] == '1' ) { ?>
 								<p class="cfp">Call For Price</p>
-							<?php } else { ?>
+							<?php } elseif (($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00")) { ?>
 								<span>$<?php echo number_format($recently['sale_price'],2);?></span>
-							<?php } ?>
+                            <?php } ?>
 						</div>
 					<?php } ?>
 				</div>		

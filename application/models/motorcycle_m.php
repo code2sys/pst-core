@@ -42,42 +42,10 @@ class Motorcycle_M extends Master_M {
             $filter["condition"] = 1;
         }
 
-        if (isset($_GET['brands']) && (is_array($_GET['brands']) || $_GET['brands'] != "")) {
-            if (!is_array($_GET['brands'])) {
-                $brnds = explode('$', $_GET['brands']);
-                $brnds = array_filter($brnds);
-            } else {
-                $brnds = $_GET['brands'];
-            }
-            $filter['brands'] = $brnds;
-        }
-        if (isset($_GET['years']) && (is_array($_GET['years']) || $_GET['years'] != "")) {
-            if (!is_array($_GET['years'])) {
-                $years = explode('$', $_GET['years']);
-                $years = array_filter($years);
-            } else {
-                $years = $_GET['years'];
-            }
-            $filter['years'] = $years;
-        }
-        if (isset($_GET['categories']) && (is_array($_GET['categories']) || $_GET['categories'] != "")) {
-            if (!is_array($_GET['categories'])) {
-                $categories = explode('$', $_GET['categories']);
-                $categories = array_filter($categories);
-            } else {
-                $categories = $_GET['categories'];
-            }
-            $filter['categories'] = $categories;
-        }
-        if (isset($_GET['vehicles']) && (is_array($_GET['vehicles']) || $_GET['vehicles'] != "")) {
-            if (!is_array($_GET['vehicles'])) {
-                $vehicles = explode('$', $_GET['vehicles']);
-                $vehicles = array_filter($vehicles);
-            } else {
-                $vehicles = $_GET['vehicles'];
-            }
-            $filter['vehicles'] = $vehicles;
-        }
+        $filter['brands'] = $this->processReturnValue($_GET['brands']);
+        $filter['years'] = $this->processReturnValue($_GET['years']);
+        $filter['categories'] = $this->processReturnValue($_GET['categories']);
+        $filter['vehicles'] = $this->processReturnValue($_GET['vehicles']);
 
         return $filter;
     }
@@ -153,12 +121,16 @@ class Motorcycle_M extends Master_M {
     public function getMotorcycle( $id ){
         $where = array('motorcycle.id' => $id );
         $record = $this->selectRecord('motorcycle', $where);
+
         $iwhere = array('motorcycleimage.motorcycle_id' => $id );
         $this->db->order_by('motorcycleimage.priority_number asc');
+
         $record['images'] = $this->selectRecords('motorcycleimage', $iwhere);
         $vwhere = array('motorcycle_video.part_id' => $id );
+
         $this->db->order_by('motorcycle_video.id asc');
         $record['videos'] = $this->selectRecords('motorcycle_video', $vwhere);
+
         return $record;
     }
 
@@ -347,5 +319,23 @@ class Motorcycle_M extends Master_M {
         $this->db->select('id');
         $record = $this->selectRecord('motorcycle', $where);
         return $record['id'];
+    }
+
+    /**
+     * @param $value
+     * @param $filter
+     * @return mixed
+     */
+    private function processReturnValue($value)
+    {
+        if (isset($value) && (is_array($value) || $value != "")) {
+            if (!is_array($value)) {
+                $value = explode('$', $value);
+                $value = array_filter($value);
+            } else {
+                $value = $value;
+            }
+        }
+        return $value;
     }
 }
