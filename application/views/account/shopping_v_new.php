@@ -12,6 +12,8 @@ if ((@$validRide) && (@$garageNeeded) && (!empty($_SESSION['activeMachine']))):
 endif;
  require_once 'Mobile_Detect.php';
 $detect = new Mobile_Detect;
+$CI =& get_instance();
+
 ?>
 <div class="container dtlpg" style="margin-top:30px;" id="mdcntnr">
     <div class="breadCrumb">
@@ -29,7 +31,7 @@ $detect = new Mobile_Detect;
                     print " &gt; ";
                 }
 
-                print "<a href='#'>" .  htmlentities($breadCrumbCategories[$i]["name"]) . "</a>";
+                print "<a href='" . $CI->parts_m->categoryReturnURL($breadCrumbCategories[$i]["category_id"]) . "'>" .  htmlentities($breadCrumbCategories[$i]["name"]) . "</a>";
             }
 
         }
