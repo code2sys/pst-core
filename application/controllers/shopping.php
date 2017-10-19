@@ -868,6 +868,9 @@ class Shopping extends Master_Controller {
         // We need to set the top parent category ID to the first, leftmost one...
         $part_categories = $this->parts_m->getPartCategories($partId);
 
+        print "Part Categories: ";
+        print_r($part_categories);
+
         // Now, make an LUT
         $part_cat_LUT = array();
         foreach ($part_categories as $c) {
