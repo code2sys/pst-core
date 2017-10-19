@@ -1004,6 +1004,7 @@ class Shopping extends Master_Controller {
         $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent($partId, $top_parent_category_id);
         $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
         $this->_mainData['top_parent'] = $top_parent_category_id;
+        print "<!-- Top Parent Category $top_parent_category_id --> \n";
         // we have to get the category name...
         foreach ($active_primary_navigation as $a) {
             if ($a["category_id"] == $top_parent_category_id) {
