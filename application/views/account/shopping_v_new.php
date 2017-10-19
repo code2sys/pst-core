@@ -56,12 +56,15 @@ $detect = new Mobile_Detect;
         } else {
             ?>
             |&nbsp;<?php foreach ($secondBreadCrumb as $key => $bread) { ?>
-                <a href="<?php echo base_url() . $bread['link']; ?>" onclick="setMainSearchCategory(event, 'category', '<?php echo $bread['id']; ?>');"><?php echo $bread['name']; ?></a> 
+                <a href="<?php echo base_url() . $bread['link']; ?>"
+                   onclick="setMainSearchCategory(event, 'category', '<?php echo $bread['id']; ?>');"><?php echo $bread['name']; ?></a>
                 <?php
                 if (($key + 1) < count($secondBreadCrumb)) {
                     echo ">";
                 }
             }
+        }
+        if (isset($brandMain) && array_key_exists("brand_id", $brandMain) && $brandMain["brand_id"] > 0) {
             echo "|&nbsp;";
             ?>
             <a href="<?php echo base_url() . $brandMain['slug']; ?>" onclick="setNamedSearchBrandt(event, 'brand', '<?php echo $brandMain['brand_id'];?>', '<?php echo $brandMain['name'];?>');"><?php echo $brandMain['name']; ?></a> 
