@@ -21,17 +21,18 @@ $detect = new Mobile_Detect;
          * OK, this is the new breadcrumbs.
          * We're just intending to show a category.
          */
+        if (count($breadCrumbCategories) > 0) {
+            ?>| <?php
 
-        print_r($breadCrumbCategories);
+            for ($i = 0; $i < count($breadCrumbCategories); $i++) {
+                if ($i > 0) {
+                    print " &gt; ";
+                }
 
-        foreach ($breadCrumbCategories as $c) {
-            ?>
-        |
-        <?php
-
+                print htmlentities($c["name"]);
+            }
 
         }
-
 
         ?>
         <?php
