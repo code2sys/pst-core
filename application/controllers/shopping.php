@@ -877,7 +877,7 @@ class Shopping extends Master_Controller {
         $part_cat_name_LUT = array();
         foreach ($part_categories as $c) {
             $part_cat_LUT[$c["category_id"]] = $c;
-            $part_cat_name_LUT[$c["long_name"]] = $c;
+            $part_cat_name_LUT[$c["long_name"]] = $c["category_id"];
 //            // This is a rollup. Hopefully this doesn't take too long. What we really need is a common prefix function and structure.
 //            $category_genealogy = $this->parts_m->categoryLineage($c["category_id"]);
 //            foreach ($category_genealogy as $cd) {
