@@ -963,6 +963,7 @@ class Shopping extends Master_Controller {
             $tld_deep_choice = array();
             for ($i = 0; $i < count($part_categories); $i++) {
                 $pc = $part_categories[$i];
+                print_r($pc);
                 $top_category = strtolower(trim(substr($pc[$i]["long_name"], 0, strpos($pc[$i]["long_name"], ">") - 1)));
                 $depth_score = substr_count($pc[$i]["long_name"], ">");
                 if (!array_key_exists($top_category, $tld_scores)) {
