@@ -906,8 +906,11 @@ class Shopping extends Master_Controller {
             if ($match) {
                 $leftmost_favoritism = false;
             } else {
+                print "<!-- Category names: ";
                 // OK, one more try - we are going to attempt a substring match...
                 $category_names = jonathan_getCategoryNames();
+                print_r($category_names);
+                print "-->\n";
                 $part_category_names = array_keys($part_cat_name_LUT);
 
                 for ($i = 0; !$match && ($i < count($category_stack)); $i++) {
@@ -925,6 +928,10 @@ class Shopping extends Master_Controller {
                             }
                         }
                     }
+                }
+
+                if ($match) {
+                    $leftmost_favoritism = false;
                 }
             }
         }
