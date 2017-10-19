@@ -998,9 +998,15 @@ class Shopping extends Master_Controller {
             }
         }
 
-        
-        // $this->_mainData['sizeChart'] = $this->parts_m->getSizeChartByCategory($cats, $this->_mainData['brandMain']['brand_id'], $partId);
-        
+
+        if (count($cats) > 0) {
+            $this->_mainData['sizeChart'] = $this->parts_m->getSizeChartByCategory($cats, $this->_mainData['brandMain']['brand_id'], $partId);
+        }
+
+        print "<!-- CATS: ";
+        print_r($cats);
+        print "-->\n";
+
         $this->setNav('master/navigation_v', 0);
         $this->setFooterView('master/footer_v.php');
 
