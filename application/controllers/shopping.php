@@ -957,7 +957,7 @@ class Shopping extends Master_Controller {
         $this->_mainData['top_parent'] = $top_parent_category_id;
 
         
-        $this->_mainData['sizeChart'] = $this->parts_m->getSizeChartByCategory($cats, $this->_mainData['brandMain']['brand_id'], $partId);
+        // $this->_mainData['sizeChart'] = $this->parts_m->getSizeChartByCategory($cats, $this->_mainData['brandMain']['brand_id'], $partId);
         
         $this->setNav('master/navigation_v', 0);
         $this->setFooterView('master/footer_v.php');
