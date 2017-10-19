@@ -511,9 +511,10 @@ class Parts_M extends Master_M {
             $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumbermodel.partnumber_id');
             $this->db->where('partpartnumber.part_id = ' . $partId);
             $this->db->group_by('model.model_id');
+        } else {
+            $this->db->select("distinct model.*", FALSE);
         }
         $where = array('make_id' => $makeId, 'year' => $year);
-        $this->db->select("distinct model.*", FALSE);
         $this->db->order_by('label');
         $recs = $this->selectRecords('model join partnumbermodel using (model_id) ', $where);
         if ($recs) {
