@@ -9,6 +9,27 @@ class Parts_M extends Master_M {
     protected $cache_partNumberIsRetail;
     protected $cache_partVariationIsRetail;
 
+    // It shouldn't take that long so let's justdo simple recursion.
+    public function categoryLineage($category_id) {
+        if ($category_id == 0 || is_null($category_id)) {
+            return array();
+        }
+
+        $query = $this->db->query("SElect * from category where category_id = ?", array($category_id));
+        $results = $query->result_array();
+
+        if (count($results) > 0) {
+            return array_merge($results, $this->categoryLineage($results[0]["parent_category_id"]));
+        } else {
+            return array();
+        }
+    }
+
+    public function getPartCategories($part_id) {
+        $query = $this->db->query("Select category.* from category join partcategory where part_id = ?", array($part_id));
+        return $query->result_array();
+    }
+
     function __construct() {
         parent::__construct();
         $this->cache_partIsRetail = array();

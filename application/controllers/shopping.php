@@ -847,79 +847,120 @@ class Shopping extends Master_Controller {
         $this->_mainData['rideSelector'] = $this->load->view('widgets/ride_select_v', $this->_mainData, TRUE);
 
         /* Deciding if the page browsed innerly or from outside source */
-        $is_inside = count(jonathan_getCategoryStack()) > 0 ? 1 : 0;
-        // If you've looked at something, and you have a category stack, then you are inside.
-//        $referer = ( isset($_SERVER['HTTP_REFERER']) ) ? $_SERVER['HTTP_REFERER'] : '';
-//        print "<!-- Referer: $referer and website " . WEBSITE_HOSTNAME . " -->\n";
-//        if (strpos($referer, WEBSITE_HOSTNAME) !== false) {
-//            $is_inside = 1;
-//        }
-//        $is_inside = 0;
-
+        $category_stack = jonathan_getCategoryStack();
+        $is_inside = count($category_stack) > 0 ? 1 : 0;
         $this->_mainData['is_inside'] = $is_inside;
 
-        /* 	MAKING DYNAMIC BREADCRUMB, IT WILL BE USED IF PRODUCT WILL BE OPENED FROM EXTERNAL URL */
-        $this->_mainData['secondBreadCrumb'] = $this->parts_m->getSecondBreadCrumb($partId);
-
-        /* Preparing Top Parent Category */
-        $parentt = "";
-
-        $session_based_breadcrumb = $this->_mainData['breadcrumbs'];
+        // JLB 10-19-17
+        // This code is just insane. I'm attempting to force down order on it.
+        $leftmost_favoritism = true;
+        $top_parent_category_id = TOP_LEVEL_CAT_STREET_BIKES; // This is an old bias that almost completely does not matter.
+        $cats = array(); // We have to get the list of category IDs, in order, so as to preserve the sizing charts.
 
 
-        if ($is_inside == 1 && !empty($this->_mainData['breadcrumbs'])) {
-            print "<!-- Inside 1 -->\n";
+        global $active_primary_navigation;
 
-            $session_based_breadcrumb = $this->_mainData['breadcrumbs'];
-            print "<!-- " . print_r($session_based_breadcrumb, true) . " -->\n";
-            if (!empty($session_based_breadcrumb['category'])) {
-                print "<!-- Inside 2 -->\n";
-                global $active_primary_navigation;
+        if (!isset($active_primary_navigation)) {
+            $active_primary_navigation = jonathan_prepareGlobalPrimaryNavigation();
+        }
 
-                if (!isset($active_primary_navigation)) {
-                    $active_primary_navigation = jonathan_prepareGlobalPrimaryNavigation();
+
+        // We need to set the top parent category ID to the first, leftmost one...
+        $part_categories = $this->parts_m->getPartCategories($partId);
+
+        // Now, make an LUT
+        $part_cat_LUT = array();
+        foreach ($part_categories as $c) {
+            $part_cat_LUT[$c["category_id"]] = $c;
+            // This is a rollup. Hopefully this doesn't take too long. What we really need is a common prefix function and structure.
+            $category_genealogy = $this->parts_m->categoryLineage($c["category_id"]);
+            foreach ($category_genealogy as $cd) {
+                $part_cat_LUT[$cd["category_id"]] = $cd;
+            }
+        }
+
+        // This just means they've looked around on the website this session...
+        $matching_category_id = 0;
+        $matching_category = null;
+
+        if ($is_inside > 0) {
+            // So, here's what is required: I need to get the categories for this part. I need to then figure out if you looked at that category. If you did, great, we have the drill down. If you did not, I just need to fall through to leftmost favoritism.
+            $match = false;
+
+            for ($i = 0; !$match && ($i < count($category_stack)); $i++) {
+                // get the genealogy for this category
+                if (array_key_exists($category_stack[$i], $part_cat_LUT)) {
+                    // OK, we have our hit...
+                    $matching_category_id = $category_stack[$i];
+                    $matching_category = $part_cat_LUT[$matching_category_id];
+                    $match = true;
+                }
+            }
+
+            if ($match) {
+                $leftmost_favoritism = false;
+            }
+        }
+
+        // OK, in this case, they have not been browsing around
+        if ($leftmost_favoritism) {
+            // I need to figure out the categories for this one and then see which ones live within the leftmost navigation.
+            // OK, so this is going to be something like - GO DEEP. We've not hit a category that they were looking at, so we better GO DEEP.
+            // OK, instead of making it N^2, we have to compute the scores.
+            $tld_scores = array();
+            $tld_deep_choice = array();
+            for ($i = 0; $i < count($part_categories); $i++) {
+                $pc = $part_categories[$i];
+                $top_category = strtolower(trim(substr($pc[$i]["long_name"], 0, strpos($pc[$i]["long_name"], ">") - 1)));
+                $depth_score = substr_count($pc[$i]["long_name"], ">");
+                if (!array_key_exists($top_category, $tld_scores)) {
+                    $tld_scores[$top_category] = 0;
                 }
 
-                $parentt = null;
-                for ($i = 0; $i < count($active_primary_navigation); $i++) {
-                    if (is_null($parentt)) {
-                        $nav_top_level_cat_id = $active_primary_navigation[$i]["category_id"];
-                        if ($nav_top_level_cat_id > 0 && array_key_exists($nav_top_level_cat_id, $session_based_breadcrumb["category"]) && !empty($session_based_breadcrumb["category"][$nav_top_level_cat_id])) {
-                            $parentt = $nav_top_level_cat_id;
-                        }
+                if ($depth_score > $tld_scores[$top_category]) {
+                    $tld_scores[$top_category] = $depth_score;
+                    $tld_deep_choice[$top_category] = $pc;
+                }
+            }
+
+            // OK, now we should have scores, we should be able to do a left-to-right match.
+            $match = false;
+
+            for ($i = 0; !$match && $i < count($active_primary_navigation); $i++) {
+                // OK, we're looking for our choice...
+                $candidate_label = strtolower(trim($active_primary_navigation[$i]["category_description"]));
+                if ($candidate_label != "") {
+                    if (array_key_exists($candidate_label, $tld_scores) && $tld_scores[$candidate_label] > 0) {
+                        // OK, great.
+                        $match = true;
+                        $matching_category = $tld_deep_choice[$candidate_label];
+                        $matching_category_id = $matching_category["category_id"];
                     }
                 }
             }
         }
 
-        if (empty($parentt) && !empty($this->_mainData['secondBreadCrumb'][0]['id'])) {
-            $parentt = $this->_mainData['secondBreadCrumb'][0]['id']; // Getting top level Category from second breadcrumb.
-        }
-        
-        /*  GETTING CATEGORIES FOR TOP NAV */
-        $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent($partId, (!empty($parentt)) ? $parentt : 0);
-        $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
-        $this->_mainData['top_parent'] = (!empty($parentt)) ? $parentt : TOP_LEVEL_CAT_STREET_BIKES;
+        // OK, now that we have a category in hand, $matching_category_id, we can roll up to generate the whole sequence of categories for the purpose of making breadcrumbs.
+        // Note that this means we are always going to have a list of categories...
+        $this->_mainData["breadCrumbCategories"] = $this->parts_m->categoryLineage($matching_category_id);
 
-        $cats = array();
-        foreach($this->_mainData['secondBreadCrumb'] as $cat ) {
-            $cats[] = $cat['id'];
+        /*  GETTING CATEGORIES FOR TOP NAV */
+        if (($c = count($this->_mainData["breadCrumbCategories"])) > 0) {
+            $top_parent_category_id = $this->_mainData["breadCrumbCategories"][$c - 1]["category_id"];
+            foreach ($this->_mainData["breadCrumbCategories"] as $cat) {
+                $cats[] = $cat["category_id"];
+            }
+            array_reverse($cats);
         }
+        $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent($partId, $top_parent_category_id);
+        $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
+        $this->_mainData['top_parent'] = $top_parent_category_id;
+
         
         $this->_mainData['sizeChart'] = $this->parts_m->getSizeChartByCategory($cats, $this->_mainData['brandMain']['brand_id'], $partId);
         
         $this->setNav('master/navigation_v', 0);
         $this->setFooterView('master/footer_v.php');
-//         echo '<pre>';
-//         print_r($this->_mainData);
-//         echo '</pre>';exit;
-        print "<!-- Final Breadcrumb: ";
-        print_r($this->_mainData['breadcrumbs']);
-        print "--> \n";
-
-        print "<!-- Final Second Breadcrumb: ";
-        print_r($this->_mainData['secondBreadCrumb']);
-        print "--> \n";
 
         $this->renderMasterPage('master/master_v_new', 'account/shopping_v_new', $this->_mainData);
     }

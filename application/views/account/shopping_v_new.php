@@ -15,55 +15,26 @@ $detect = new Mobile_Detect;
 ?>
 <div class="container dtlpg" style="margin-top:30px;" id="mdcntnr">
     <div class="breadCrumb">
-        <?php if (!empty($breadcrumbs) && $is_inside == 1) { ?>
-            <?php
-            foreach ($breadcrumbs as $name => $value) {
-                if (($name == 'parent_category_id') | ($name == 'category') || ($name == 'brand') || ($name == 'search')) {
-                    ?> 
-                    |&nbsp;
-                    <?php
-                    if (($name == 'category') && (is_array($value))) {
-                        if (@$value['name']) {
-                            ?>		
-                            <a href="<?php echo base_url('shopping/productlist' . $value['link']); ?>" onclick="setMainSearchCategory(event, 'category', '<?php echo $value['name']; ?>');">Category</a>
-                            <?php
-                        } else {
-                            $i = 0;
-                            foreach ($value as $id => $cat) {
-                                $i++;
-                                ?>
-                                <a href="<?php echo base_url('shopping/productlist' . $cat['link']); ?>" onclick="setMainSearchCategory(event, 'category', '<?php echo $id; ?>');"><?php echo $cat['name']; ?></a>
-                                <?php if (count($value) == $i) { ?>&nbsp; <?php
-                                } else {
-                                    echo ">";
-                                }
-                                ?>
-                                <?php
-                            }
-                        }
-                    } elseif ($name == 'search') {
-                        ?>
-                        <a href="<?php echo base_url('shopping/search_product/?search=' . $value[0]); ?>">Search</a>
-                        <?php foreach ($value as $v) { ?>
-                            |&nbsp;<a href="javascript:void(0);"><?php echo ucfirst($v); ?></a>
-                        <?php } ?>
-                    <?php } elseif ($name == 'brand') { ?>
-                        <a href="<?php echo base_url($value['slug']); ?>"><?php echo $value['label']; ?></a>
-                        <?php
-                    }
-                }
-            }
-        } else {
+        <?php
+        /*
+         * JLB 10-19-17
+         * OK, this is the new breadcrumbs.
+         * We're just intending to show a category.
+         */
+
+        print_r($breadCrumbCategories);
+
+        foreach ($breadCrumbCategories as $c) {
             ?>
-            |&nbsp;<?php foreach ($secondBreadCrumb as $key => $bread) { ?>
-                <a href="<?php echo base_url() . $bread['link']; ?>"
-                   onclick="setMainSearchCategory(event, 'category', '<?php echo $bread['id']; ?>');"><?php echo $bread['name']; ?></a>
-                <?php
-                if (($key + 1) < count($secondBreadCrumb)) {
-                    echo ">";
-                }
-            }
+        |
+        <?php
+
+
         }
+
+
+        ?>
+        <?php
         if (isset($brandMain) && array_key_exists("brand_id", $brandMain) && $brandMain["brand_id"] > 0) {
             echo "|&nbsp;";
             ?>
