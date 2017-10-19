@@ -923,6 +923,10 @@ class Shopping extends Master_Controller {
         print_r($this->_mainData['breadcrumbs']);
         print "--> \n";
 
+        print "<!-- Final Second Breadcrumb: ";
+        print_r($this->_mainData['secondBreadCrumb']);
+        print "--> \n";
+
         $this->renderMasterPage('master/master_v_new', 'account/shopping_v_new', $this->_mainData);
     }
 
