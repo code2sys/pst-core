@@ -932,7 +932,7 @@ class Shopping extends Master_Controller {
                                 $depth_score = substr_count($pcn, ">");
 
                                 if ($depth_score > $current_match_score) {
-                                    print "Deeper one found: $depth_score \n";
+                                    print "Deeper one found: $depth_score  $this_category_id \n";
                                     $current_match_score = $depth_score;
 
                                     // we've found one...
