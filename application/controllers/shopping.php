@@ -282,11 +282,8 @@ class Shopping extends Master_Controller {
                 $value = strip_tags($value);
         }
 
-        print "List parameters: <!-- ";
-        print_r($listParameters);
-        print "-->";
-
-        if (@$listParameters['category']) {
+        if (array_key_exists("category", $listParameters) && $listParameters['category'] != "") {
+            jonathan_saveCategoryToStack($listParameters["category"]);
             $this->_mainData['category'] = $this->parts_m->getFilteredCategories($listParameters['category'], $listParameters);
             $categoryRec = $this->parts_m->getCategory($listParameters['category']);
             if (@$categoryRec['notice'])
@@ -852,6 +849,9 @@ class Shopping extends Master_Controller {
 
     /*     * ***************************** Brand Function End ********************************* */
     public function item($partId = NULL) {
+        print "<!-- Category stack: ";
+        print_r(jonathan_getCategoryStack());
+        print "-->\n";
         // echo '<pre>';
         // print_r($_SESSION);
         // echo '</pre>';
