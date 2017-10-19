@@ -992,11 +992,10 @@ class Shopping extends Master_Controller {
 
         // OK, now that we have a category in hand, $matching_category_id, we can roll up to generate the whole sequence of categories for the purpose of making breadcrumbs.
         // Note that this means we are always going to have a list of categories...
-        $this->_mainData["breadCrumbCategories"] = $this->parts_m->categoryLineage($matching_category_id);
+        $this->_mainData["breadCrumbCategories"] = array_reverse($this->parts_m->categoryLineage($matching_category_id));
 
         /*  GETTING CATEGORIES FOR TOP NAV */
         if (($c = count($this->_mainData["breadCrumbCategories"])) > 0) {
-            array_reverse($this->_mainData["breadCrumbCategories"]);
             $top_parent_category_id = $this->_mainData["breadCrumbCategories"][$c - 1]["category_id"];
             foreach ($this->_mainData["breadCrumbCategories"] as $cat) {
                 $cats[] = $cat["category_id"];
