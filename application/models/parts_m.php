@@ -26,7 +26,7 @@ class Parts_M extends Master_M {
     }
 
     public function getPartCategories($part_id) {
-        $query = $this->db->query("Select category.* from category join partcategory where part_id = ?", array($part_id));
+        $query = $this->db->query("Select category.* from category join partcategory using (category_id) where part_id = ?", array($part_id));
         return $query->result_array();
     }
 
