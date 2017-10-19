@@ -661,9 +661,7 @@ class Shopping extends Master_Controller {
 
     /*     * ***************************** Brand Function End ********************************* */
     public function item($partId = NULL) {
-        print "<!-- Category stack: ";
-        print_r(jonathan_getCategoryStack());
-        print "-->\n";
+
         // echo '<pre>';
         // print_r($_SESSION);
         // echo '</pre>';
@@ -868,10 +866,6 @@ class Shopping extends Master_Controller {
         // We need to set the top parent category ID to the first, leftmost one...
         $part_categories = $this->parts_m->getPartCategories($partId);
 
-        print "<!-- Part Categories: ";
-        print_r($part_categories);
-        print " -->\n";
-
         // Now, make an LUT
         $part_cat_LUT = array();
         $part_cat_name_LUT = array();
@@ -907,29 +901,21 @@ class Shopping extends Master_Controller {
             if ($match) {
                 $leftmost_favoritism = false;
             } else {
-                print "<!-- Category names: ";
                 // OK, one more try - we are going to attempt a substring match...
                 $category_names = jonathan_getCategoryNames();
-                print_r($category_names);
-                print "\n\nPart Category Names: ";
                 $part_category_names = array_keys($part_cat_name_LUT);
-                print_r($part_category_names);
 
                 $current_match_score = -1;
 
                 for ($i = 0; !$match && ($i < count($category_stack)); $i++) {
                     $this_category_id = $category_stack[$i];
-                    print "Considering $this_category_id \n";
 
                     if (array_key_exists($this_category_id, $category_names)) {
                         $this_category_name = strtolower($category_names[$this_category_id]);
-                        print "Considering $this_category_name \n";
                         // we have to go look for the substring...
                         foreach ($part_category_names as $pcn) {
-                            print "Comparing to $pcn \n";
                             if ($this_category_name == substr(strtolower($pcn), 0, strlen($this_category_name))) {
                                 // Since we're plumbing this way, we really should go for the deepest we can go...
-                                print "Match found! \n";
                                 $depth_score = substr_count($pcn, ">");
 
                                 if ($depth_score > $current_match_score) {
@@ -937,7 +923,6 @@ class Shopping extends Master_Controller {
 
                                     // we've found one...
                                     $matching_category_id = $part_cat_name_LUT[$pcn];
-                                    print "Deeper one found: $depth_score  $matching_category_id \n";
                                     $matching_category = $part_cat_LUT[$matching_category_id];
                                     $match = true;
                                 }
@@ -949,13 +934,11 @@ class Shopping extends Master_Controller {
                 if ($match) {
                     $leftmost_favoritism = false;
                 }
-                print "-->\n";
             }
         }
 
         // OK, in this case, they have not been browsing around
         if ($leftmost_favoritism) {
-            print "<!-- Leftmost favoritism engaged \n";
             // I need to figure out the categories for this one and then see which ones live within the leftmost navigation.
             // OK, so this is going to be something like - GO DEEP. We've not hit a category that they were looking at, so we better GO DEEP.
             // OK, instead of making it N^2, we have to compute the scores.
@@ -963,10 +946,7 @@ class Shopping extends Master_Controller {
             $tld_deep_choice = array();
             for ($i = 0; $i < count($part_categories); $i++) {
                 $pc = $part_categories[$i];
-                print_r($pc);
-                print "Long name: " . $pc["long_name"] . "\n";
                 $top_category = strtolower(trim(substr($pc["long_name"], 0, strpos($pc["long_name"], ">") - 1)));
-                print "Top category: $top_category \n";
                 $depth_score = substr_count($pc["long_name"], ">");
                 if (!array_key_exists($top_category, $tld_scores)) {
                     $tld_scores[$top_category] = 0;
@@ -977,10 +957,6 @@ class Shopping extends Master_Controller {
                     $tld_deep_choice[$top_category] = $pc;
                 }
             }
-
-            print "Here we are for our structures: \n";
-            print_r($tld_deep_choice);
-            print_r($tld_scores);
 
             // OK, now we should have scores, we should be able to do a left-to-right match.
             $match = false;
@@ -998,7 +974,6 @@ class Shopping extends Master_Controller {
                 }
             }
 
-            print " --> \n\n";
         }
 
         // OK, now that we have a category in hand, $matching_category_id, we can roll up to generate the whole sequence of categories for the purpose of making breadcrumbs.
@@ -1015,7 +990,7 @@ class Shopping extends Master_Controller {
         $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent($partId, $top_parent_category_id);
         $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
         $this->_mainData['top_parent'] = $top_parent_category_id;
-        print "<!-- Top Parent Category $top_parent_category_id --> \n";
+
         // we have to get the category name...
         foreach ($active_primary_navigation as $a) {
             if ($a["category_id"] == $top_parent_category_id) {
