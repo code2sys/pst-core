@@ -282,6 +282,10 @@ class Shopping extends Master_Controller {
                 $value = strip_tags($value);
         }
 
+        print "List parameters: <!-- ";
+        print_r($listParameters);
+        print "-->";
+
         if (@$listParameters['category']) {
             $this->_mainData['category'] = $this->parts_m->getFilteredCategories($listParameters['category'], $listParameters);
             $categoryRec = $this->parts_m->getCategory($listParameters['category']);

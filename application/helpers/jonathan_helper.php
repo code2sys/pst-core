@@ -9,6 +9,23 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * Time: 10:01 AM
  */
 
+
+function jonathan_saveCategoryToStack($category_id) {
+    if (!array_key_exists("categoryStack", $_SESSION)) {
+        $_SESSION["categoryStack"] = array();
+    }
+
+    $_SESSION["categoryStack"][] = $category_id;
+
+    while (count($_SESSION["categoryStack"]) > 20) {
+        array_shift($_SESSION["categoryStack"]);
+    }
+}
+
+function jonathan_getCategoryStack() {
+    return array_key_exists("categoryStack", $_SESSION) ? $_SESSION["categoryStack"] : array();
+}
+
 function jonathan_prepareGlobalPrimaryNavigation() {
     $CI =& get_instance();
     $CI->load->model("Primarynavigation_m");
