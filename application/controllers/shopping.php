@@ -955,6 +955,7 @@ class Shopping extends Master_Controller {
 
         // OK, in this case, they have not been browsing around
         if ($leftmost_favoritism) {
+            print "<!-- Leftmost favoritism engaged -->\n";
             // I need to figure out the categories for this one and then see which ones live within the leftmost navigation.
             // OK, so this is going to be something like - GO DEEP. We've not hit a category that they were looking at, so we better GO DEEP.
             // OK, instead of making it N^2, we have to compute the scores.
