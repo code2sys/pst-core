@@ -9,6 +9,15 @@ class Parts_M extends Master_M {
     protected $cache_partNumberIsRetail;
     protected $cache_partVariationIsRetail;
 
+    public function getCategoryLongName($category_id) {
+        $query = $this->db->query("Select long_name from category where category_id = ?", array($category_id));
+        foreach ($query->result_array() as $row) {
+            return $row["long_name"];
+        }
+
+        return "";
+    }
+
     // It shouldn't take that long so let's justdo simple recursion.
     public function categoryLineage($category_id) {
         if ($category_id == 0 || is_null($category_id)) {

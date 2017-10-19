@@ -874,8 +874,10 @@ class Shopping extends Master_Controller {
 
         // Now, make an LUT
         $part_cat_LUT = array();
+        $part_cat_name_LUT = array();
         foreach ($part_categories as $c) {
             $part_cat_LUT[$c["category_id"]] = $c;
+            $part_cat_name_LUT[$c["long_name"]] = $c;
 //            // This is a rollup. Hopefully this doesn't take too long. What we really need is a common prefix function and structure.
 //            $category_genealogy = $this->parts_m->categoryLineage($c["category_id"]);
 //            foreach ($category_genealogy as $cd) {
@@ -903,6 +905,27 @@ class Shopping extends Master_Controller {
 
             if ($match) {
                 $leftmost_favoritism = false;
+            } else {
+                // OK, one more try - we are going to attempt a substring match...
+                $category_names = jonathan_getCategoryNames();
+                $part_category_names = array_keys($part_cat_name_LUT);
+
+                for ($i = 0; !$match && ($i < count($category_stack)); $i++) {
+                    $this_category_id = $category_stack[$i];
+
+                    if (array_key_exists($this_category_id, $category_names)) {
+                        $this_category_name = strtolower($category_names[$this_category_id]);
+                        // we have to go look for the substring...
+                        foreach ($part_category_names as $pcn) {
+                            if (!$match && ($this_category_name == substr(strtolower($pcn), strlen($this_category_name)))) {
+                                // we've found one...
+                                $matching_category_id = $this_category_id;
+                                $matching_category = $part_cat_LUT[$matching_category_id];
+                                $match = true;
+                            }
+                        }
+                    }
+                }
             }
         }
 

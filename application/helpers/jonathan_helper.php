@@ -14,8 +14,15 @@ function jonathan_saveCategoryToStack($category_id) {
     if (!array_key_exists("categoryStack", $_SESSION)) {
         $_SESSION["categoryStack"] = array();
     }
+    if (!array_key_exists("categoryNames", $_SESSION)) {
+        $_SESSION["categoryNames"] = array();
+    }
 
     $_SESSION["categoryStack"][] = $category_id;
+
+    $CI =& get_instance();
+    $CI->load->model("parts_m");
+    $_SESSION["categoryNames"][$category_id] = $CI->parts_m->getCategoryLongName($category_id);
 
     while (count($_SESSION["categoryStack"]) > 20) {
         array_shift($_SESSION["categoryStack"]);
@@ -24,6 +31,10 @@ function jonathan_saveCategoryToStack($category_id) {
 
 function jonathan_getCategoryStack() {
     return array_key_exists("categoryStack", $_SESSION) ? $_SESSION["categoryStack"] : array();
+}
+
+function jonathan_getCategoryNames() {
+    return array_key_exists("categoryNames", $_SESSION) ? $_SESSION["categoryNames"] : array();
 }
 
 function jonathan_prepareGlobalPrimaryNavigation() {
