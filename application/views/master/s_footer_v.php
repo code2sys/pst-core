@@ -84,62 +84,25 @@ echo $CI->load->view("braintree", array(
 <?php foreach($category as $id => $ref){ $catd = $ref['label'];} ?>
 <script>
 	var ctd = '<?php echo $catd; ?>';
-	
-	if(ctd=='UTV PARTS'){
-		$("#stp").removeClass('actv');
-		$('#sdp').removeClass('actv');
-		$('#sap').removeClass('actv');
-		$('#sup').addClass('actv');
-		$('#sbb').removeClass('actv');
-	}else if(ctd=='DIRT BIKE PARTS'){
-		$("#stp").removeClass('actv');
-		$('#sdp').addClass('actv');
-		$('#sap').removeClass('actv');
-		$('#sup').removeClass('actv');
-		$('#sbb').removeClass('actv');
-	}else if(ctd=='STREET BIKE PARTS'){
-		$("#stp").addClass('actv');
-		$('#sdp').removeClass('actv');
-		$('#sap').removeClass('actv');
-		$('#sup').removeClass('actv');
-		$('#sbb').removeClass('actv');
-	}else if(ctd=='ATV PARTS'){
-		$("#stp").removeClass('actv');
-		$('#sdp').removeClass('actv');
-		$('#sap').addClass('actv');
-		$('#sup').removeClass('actv');
-		$('#sbb').removeClass('actv');
-	}
+
+    <?php
+    if (!isset($CI)) {
+        $CI =& get_instance();
+    }
+    echo $CI->load->view("master/widgets/selector2_js");
+    ?>
+
 	
 </script>
 <script>
 	var ct = '<?php echo $top_parent; ?>';
-	
-	if(ct=='<?php echo TOP_LEVEL_CAT_UTV_PARTS; ?>'){
-		$("#stp").removeClass('actv');
-		$('#sdp').removeClass('actv');
-		$('#sap').removeClass('actv');
-		$('#sup').addClass('actv');
-		$('#sbb').removeClass('actv');
-	}else if(ct== '<?php echo TOP_LEVEL_CAT_DIRT_BIKES; ?>'){
-		$("#stp").removeClass('actv');
-		$('#sdp').addClass('actv');
-		$('#sap').removeClass('actv');
-		$('#sup').removeClass('actv');
-		$('#sbb').removeClass('actv');
-	}else if(ct=='<?php echo TOP_LEVEL_CAT_STREET_BIKES; ?>'){
-		$("#stp").addClass('actv');
-		$('#sdp').removeClass('actv');
-		$('#sap').removeClass('actv');
-		$('#sup').removeClass('actv');
-		$('#sbb').removeClass('actv');
-	}else if(ct=='<?php echo TOP_LEVEL_CAT_ATV_PARTS; ?>'){
-		$("#stp").removeClass('actv');
-		$('#sdp').removeClass('actv');
-		$('#sap').removeClass('actv');
-		$('#sup').addClass('actv');
-		$('#sbb').removeClass('actv');
-	}
+
+    <?php
+    if (!isset($CI)) {
+        $CI =& get_instance();
+    }
+    echo $CI->load->view("master/widgets/selector3_js");
+    ?>
 	
 </script>
 </body>

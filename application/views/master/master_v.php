@@ -650,44 +650,14 @@ echo $CI->load->view("master/tracking", array(
 
         <script>
             var url      = window.location.href;
-            if(url=='<?php echo base_url('streetbikeparts') ?>'){
-                $("#stp").addClass('actv');
-                $('#sdp').removeClass('actv');
-                $('#sap').removeClass('actv');
-                $('#sup').removeClass('actv');
-                $('#sbb').removeClass('actv');
-            }else if(url=='<?php echo base_url('dirtbikeparts') ?>'){
-                $("#stp").removeClass('actv');
-                $('#sdp').addClass('actv');
-                $('#sap').removeClass('actv');
-                $('#sup').removeClass('actv');
-                $('#sbb').removeClass('actv');
-            }else if(url=='<?php echo base_url('atvparts') ?>'){
-                $("#stp").removeClass('actv');
-                $('#sdp').removeClass('actv');
-                $('#sap').addClass('actv');
-                $('#sup').removeClass('actv');
-                $('#sbb').removeClass('actv');
-            }else if(url=='<?php echo base_url('utvparts') ?>'){
-                $("#stp").removeClass('actv');
-                $('#sdp').removeClass('actv');
-                $('#sap').removeClass('actv');
-                $('#sup').addClass('actv');
-                $('#sbb').removeClass('actv');
-            }else if(url=='<?php echo base_url('Motorcycle_Gear_Brands') ?>'){
-                $("#stp").removeClass('actv');
-                $('#sdp').removeClass('actv');
-                $('#sap').removeClass('actv');
-                $('#sup').removeClass('actv');
-                $('#sbb').addClass('actv');
-            }else if(url=='<?php echo base_url('vtwin') ?>'){
-                $("#stp").removeClass('actv');
-                $('#sdp').removeClass('actv');
-                $('#sap').removeClass('actv');
-                $('#svp').addClass('actv');
-                $('#sbb').removeClass('actv');
+
+            <?php
+            if (!isset($CI)) {
+                $CI =& get_instance();
             }
-	
+            echo $CI->load->view("master/widgets/selector_js");
+            ?>
+
         </script>
         <script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
 

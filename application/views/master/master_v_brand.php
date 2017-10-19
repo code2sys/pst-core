@@ -597,14 +597,13 @@ echo $CI->load->view("widgets/ride_selection_js", array(
 
 <script>
 	var url      = window.location.href;
-	if(url=='<?php echo base_url('Motorcycle_Gear_Brands') ?>'){
-		$("#stp").removeClass('actv');
-		$('#sdp').removeClass('actv');
-		$('#sap').removeClass('actv');
-		$('#sup').removeClass('actv');
-		$('#sbb').addClass('actv');
-	}
-	
+    <?php
+    if (!isset($CI)) {
+        $CI =& get_instance();
+    }
+    echo $CI->load->view("master/widgets/selector_js");
+    ?>
+
 </script>
 <script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
 <?php
