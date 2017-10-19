@@ -27,16 +27,26 @@ if (count($featured) > 0) {
     mustache_tmpl_set($template, "ShowFeaturedModels", true);
 
     foreach ($featured as $feature) {
+        if ($feature["call_on_price"] == 1) {
+            $price = '<h2 class="cfp">Call For Price</h2>';
+        }
+        else {
+            if ($feature["sale_price"] == 0 || $feature["sale_price"] === "0.00") {
+                $price = "<h2>Retail Price: $" . $feature["retail_price"] . "</h2>";
+            } else {
+                $price = "<h2>Sale Price: $" . $feature["sale_price"] . "</h2>";
+            }
+        }
+
         mustache_tmpl_iterate($template, "FeaturedModels");
         mustache_tmpl_set($template, "FeaturedModels", array(
             "link" => strtolower(str_replace(" ", "", $feature['type'])).'/'.str_replace(' ', '_', trim($feature['title'])).'/'.$feature['sku'],
             "image_name" => $feature["image_name"],
             "original_title" => $feature["title"],
-            "call_on_price" => $feature["call_on_price"] == 1,
-            "sale_price" => $feature["sale_price"]
+            "price" => $price,
+            "destination_charge" => $feature["destination_charge"]
         ));
     }
 }
-
 
 echo mustache_tmpl_parse($template);

@@ -22,10 +22,13 @@ if (@$motorcycles) {
                     <h3><?php echo $motorcycle['title']; ?></h3>
                     <?php if ($motorcycle['call_on_price'] == '1') { ?>
                         <p class="cfp">Call For Price</p>
-        <?php } else { ?>
-                        <p>Retail Price: &nbsp; $<?php echo $motorcycle['retail_price']; ?></p>
-                        <p>Sale Price: &nbsp; &nbsp;&nbsp;$<?php echo $motorcycle['sale_price']; ?></p>
-        <?php } ?>
+                    <?php } else { ?>
+                        <p>Retail Price<?php echo $motorcycle['retail_price']; ?></p><?php
+                        if ($motorcycle['sale_price'] > 0 && $motorcycle['sale_price'] !== "0.00") {?>
+                            <p>Sale Price: &nbsp; &nbsp;&nbsp;$<?php echo $motorcycle['sale_price']; ?></p>
+                        <?php }
+                    }
+                ?>
                 </div>
                 <div class="mid-text-right">
                     <p>condition :<span><?php echo $motorcycle['condition'] == '1' ? 'New' : 'Pre-Owned'; ?></span></p>
