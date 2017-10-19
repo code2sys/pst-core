@@ -31,7 +31,7 @@ $CI =& get_instance();
                     print " &gt; ";
                 }
 
-                print "<a href='/shopping/productlist/" . $CI->parts_m->categoryReturnURL($breadCrumbCategories[$i]["category_id"]) . "'>" .  htmlentities($breadCrumbCategories[$i]["name"]) . "</a>";
+                print "<a href='/shopping/productlist" . $CI->parts_m->categoryReturnURL($breadCrumbCategories[$i]["category_id"]) . "'>" .  htmlentities($breadCrumbCategories[$i]["name"]) . "</a>";
             }
 
         }
