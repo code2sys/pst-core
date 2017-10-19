@@ -965,6 +965,7 @@ class Shopping extends Master_Controller {
                 $pc = $part_categories[$i];
                 print_r($pc);
                 $top_category = strtolower(trim(substr($pc[$i]["long_name"], 0, strpos($pc[$i]["long_name"], ">") - 1)));
+                print "Top category: $top_category \n";
                 $depth_score = substr_count($pc[$i]["long_name"], ">");
                 if (!array_key_exists($top_category, $tld_scores)) {
                     $tld_scores[$top_category] = 0;
