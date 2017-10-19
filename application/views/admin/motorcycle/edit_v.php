@@ -175,12 +175,16 @@ $cstdata = (array) json_decode($product['data']);
 									</td>
 									<td style="width:75px;" class="min-wdh"><b>Sale Price:</b></td>
 									<td class="inr-td scnd">
-										<input type="number" min="1" name="sale_price" value="<?php echo $product['sale_price']==''?$_POST['sale_price']:$product['sale_price']; ?>" class="text small small-hndr sl-prc">
+										<input type="number" name="sale_price" value="<?php echo $product['sale_price']=='' || $product['sale_price']=="0.00"?$_POST['sale_price']:$product['sale_price']; ?>" class="text small small-hndr sl-prc">
 									</td>
-									<td class="inr-td scnd">
-										<input type="checkbox" name="call_on_price" value="1" class="text small small-hndr sl-prc" id="call_on_price" <?php echo $product['call_on_price'] == '1' ? 'checked' : '';?>>
-										<label for="call_on_price">Call On Price</label>
-									</td>
+                                    <td class="inr-td scnd">
+                                        <input type="checkbox" name="call_on_price" value="1" class="text small small-hndr sl-prc" id="call_on_price" <?php echo $product['call_on_price'] == '1' ? 'checked' : '';?>>
+                                        <label for="call_on_price">Call On Price</label>
+                                    </td>
+                                    <td class="inr-td scnd">
+                                        <input type="checkbox" name="destination_charge" value="1" class="text small small-hndr sl-prc" id="destination_charge" <?php echo $product['destination_charge'] == '1' ? 'checked' : '';?>>
+                                        <label for="destination_charge">Destination Charge</label>
+                                    </td>
 								</tr>
 							</table>
 						</td>
