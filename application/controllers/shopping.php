@@ -282,7 +282,8 @@ class Shopping extends Master_Controller {
                 $value = strip_tags($value);
         }
 
-        if (@$listParameters['category']) {
+        if (array_key_exists("category", $listParameters) && $listParameters['category'] != "") {
+            jonathan_saveCategoryToStack($listParameters["category"]);
             $this->_mainData['category'] = $this->parts_m->getFilteredCategories($listParameters['category'], $listParameters);
             $categoryRec = $this->parts_m->getCategory($listParameters['category']);
             if (@$categoryRec['notice'])
@@ -415,218 +416,39 @@ class Shopping extends Master_Controller {
         $getTopParentTemp = $this->uri->segment(3);
         $getTopParentTemp = explode("_", $getTopParentTemp);
 
-        if (isset($getTopParentTemp[0]) && $getTopParentTemp[0] == 'dirt-bike-parts' || $getTopParentTemp[0] == 'atv-parts' ||
-                $getTopParentTemp[0] == 'street-bike-parts' || $getTopParentTemp[0] == 'utv-parts' || $getTopParentTemp[0] == 'v-twin-parts') {
+        // JLB 10-18-17
+        // OK, this is another retrofit. I think that the thing that is going on is that you have to work backwards through the name
+        // through the navigation to get this correct thing to show up...This is still not right, but it extends with teh navigation now...
+        if (isset($getTopParentTemp[0]) && $getTopParentTemp[0] != "") {
 
-            $top_parent = TOP_LEVEL_CAT_DIRT_BIKES;
+            $top_parent = -1;
+            global $active_primary_navigation;
 
-            if ($getTopParentTemp[0] == "street-bike-parts") {
-                $top_parent = TOP_LEVEL_CAT_STREET_BIKES;
-            } else if ($getTopParentTemp[0] == "atv-parts") {
-                $top_parent = TOP_LEVEL_CAT_ATV_PARTS;
-            } else if ($getTopParentTemp[0] == "utv-parts") {
-                $top_parent = TOP_LEVEL_CAT_UTV_PARTS;
-            } else if ($getTopParentTemp[0] == "v-twin-parts") {
-                $top_parent = TOP_LEVEL_CAT_VTWIN_PARTS;
+            if (!isset($active_primary_navigation)) {
+                $active_primary_navigation = jonathan_prepareGlobalPrimaryNavigation();
             }
 
-            $this->_mainData['cat_header'] = 1;
-            $this->_mainData['top_parent'] = $top_parent;
-            
-            /*  GETTING CATEGORIES FOR TOP NAV */
-            $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent(0, $top_parent);
-            $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
-            
-        }
-
-        $this->setFooterView('master/footer_v.php');
-        $this->renderMasterPage('master/master_v', 'info/product_list_v', $this->_mainData);
-    }
-
-    public function productlist_old() {
-        $_SESSION['url'] = 'shopping/productlist/';
-        $metaTag = '';
-        //$_SESSION['internal'] = FALSE;
-
-        //$_SESSION['internal'] = FALSE;
-        if (@$_SESSION['internal'] === TRUE) {
-            $listParameters = @$_SESSION['search'];
-            $_SESSION['internal'] = FALSE;
-        } else {
-            $listParameters = $this->uri->uri_to_assoc();
-            $stringSearch = $this->uri->segment(3);
-            $underscoreCheck = substr($stringSearch, -1); // returns "_"
-            if ($underscoreCheck == '_')
-                $stringSearch = substr($stringSearch, 0, -1);
-            $pieces = explode('_', $stringSearch);
-            if (empty($pieces[0]))
-                redirect();
-            elseif (($pieces[0] != 'featured') && ($pieces[0] != 'deal')) {
-                if ($pieces[0] == 'search') {
-                    $_SESSION['search'] = array();
-                    foreach ($pieces as $piece) {
-                        if ($piece == 'search')
-                            continue;
-                        $_SESSION['search']['search'][] = $piece;
-                        $listParameters = @$_SESSION['search'];
+            foreach ($active_primary_navigation as $rec) {
+                if ($rec["category_description"] != "") {
+                    $clean_name = str_replace(" ", "-", strtolower($rec["category_description"]));
+                    if ($clean_name == $getTopParentTemp[0]) {
+                        $top_parent = $rec["category_id"];
                     }
-                } else
-                    $listParameters = $this->parts_m->createSearchParametersFromURL($pieces);
-                $_SESSION['search'] = $listParameters;
-            }
-            if (empty($listParameters))
-                redirect();
-        }
-
-        if (count($listParameters) == 1 && !empty($listParameters['brand'])) {
-            $brand = $this->parts_m->getBrandById($listParameters['brand']['id']);
-            redirect(site_url($brand['slug']));
-        }
-        // SIDEBAR ITEMS
-        $this->_mainData['machines'] = $this->parts_m->getMachinesDd();
-        $this->loadSidebar('widgets/garage_v');
-        // Filter options for current search
-
-        $brandTitle = '';
-        if (@$listParameters['brand']) {
-            $brandTitle = $listParameters['brand']['name'] . ' ';
-        }
-
-        foreach ($listParameters as $section => &$value) {
-            if (($section == 'question') || ($section == 'search')) {
-                foreach ($value as &$answer)
-                    $answer = strip_tags($answer);
-            } elseif (is_array($value))
-                $value = strip_tags($value['id']);
-            else
-                $value = strip_tags($value);
-        }
-
-        if (@$listParameters['category']) {
-            $this->_mainData['category'] = $this->parts_m->getFilteredCategories($listParameters['category'], $listParameters);
-            $categoryRec = $this->parts_m->getCategory($listParameters['category']);
-            if (@$categoryRec['notice'])
-                $this->_mainData['notice'] = $categoryRec['notice'];
-            if (strpos($categoryRec['long_name'], ' > ') !== FALSE) {
-                $pieces = explode(' > ', $categoryRec['long_name']);
-                $linkArr = array($listParameters['category'] => $categoryRec['long_name']);
-            } else
-                $pieces = array($listParameters['category'] => $categoryRec['long_name']);
-
-            // Set Category SEO
-            $title = $brandTitle . ' ';
-            if (is_null($categoryRec['title']))
-                $title .= str_replace(' > ', ', ', $categoryRec['long_name']);
-            else
-                $title .= $categoryRec['title'];
-
-            $this->setMasterPageVars('title', $title);
-            if ($categoryRec['meta_tag'])
-                $this->setMasterPageVars('descr', $categoryRec['meta_tag']);
-            if ($categoryRec['keywords'])
-                $this->setMasterPageVars('keywords', $categoryRec['keywords']);
-            // End Category SEO
-            $listParameters['category'] = $this->parts_m->getCategoryByName($pieces);
-            $this->loadJS('<script>$( document ).ready(function() { $("#category").slideToggle("fast");});</script>');
-        } else {
-            $this->_mainData['category'] = $this->parts_m->getSearchCategories($listParameters);
-        }
-
-        $this->_mainData['brand'] = $this->parts_m->getBrands($listParameters);
-
-        unset($this->_mainData['band']);
-
-        // ACTUAL PRODUCT SEARCH IS DONE IN THIS MODEL FUNCTION
-        $listParameters1 = $listParameters;
-        unset($listParameters1['search']);
-        if (!empty($listParameters['search'])) {
-            $listParameters1['search'][] = implode(' ', $listParameters['search']);
-        }
-        if (@$listParameters['brand']) {
-            $this->_mainData['brandMain'] = $this->parts_m->getBrand($listParameters['brand']);
-        }
-        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $this->getActiveMachine(), $this->_adpdtLimit);
-        $this->_mainData['questions'] = $this->parts_m->getFilterQuestions($listParameters);
-		
-		// echo '<pre>';
-		// print_r($this->_mainData['questions']);
-		// echo '</pre>';
-		
-        $this->_mainData['band']['label'] = 'Search Results';
-        $_SESSION['breadcrumbs'] = $listParameters;
-        $this->_mainData['breadcrumbs'] = $listParameters;
-        $this->_mainData['mainProductBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
-
-        // TOP ITEMS
-
-        $this->_mainData['shippingBar'] = $this->load->view('info/shipping_bar_v', $this->_mainData, TRUE);
-        $this->_mainData['brandSlider'] = $this->load->view('info/brand_slider_v', $this->_mainData, TRUE);
-
-        $this->_mainData['rideSelector'] = $this->load->view('widgets/ride_select_v', $this->_mainData, TRUE);
-
-        // MAIN SECTION
-
-        $this->_mainData['band'] = $this->parts_m->getRecentlyViewed(0, @$_SESSION['recentlyViewed'], 4);
-        if (empty($this->_mainData['band'])) {
-            $this->_mainData['recentlyViewedBand'] = '';
-        } else {
-            $this->_mainData['recentlyViewedBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
-        }
-
-        unset($this->_mainData['band']);
-
-        $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters, $this->getActiveMachine(), NULL);
-        // Created Variables for it in Category section, but calling it here to take advantage of breadcrumbs.
-        $this->loadSidebar('widgets/category_filter_v');
-        $this->loadSidebar('widgets/brand_filter_v');
-        $this->loadSidebar('widgets/question_filter_v');
-        // PAGINATION
-        $this->_mainData['pages'] = $this->adpdtPagination($this->parts_m->getSearchCount($listParameters));
-        $this->_mainData['currentPage'] = 1;
-        $this->_mainData['display_pages'] = $this->_pagination;
-        $this->_mainData['pagination'] = $this->load->view('master/pagination/productlist_v', $this->_mainData, TRUE);
-        if (@$this->_mainData['band']['products'][0]['images'][0]['path']) {
-            $metaTag .= '<meta property="og:image" content="' . jsite_url('/productimages/') . $this->_mainData['band']['products'][0]['images'][0]['path'] . '"/>';
-            $this->setMasterPageVars('metatag', $metaTag);
-        }
-
-        $googleAdWordsScript = '<script>
-								var google_tag_params = {
-								ecomm_pagetype: \'category\'
-								};
-								</script>';
-        $this->loadJS($googleAdWordsScript);
-
-        $this->setNav('master/navigation_v', 0);
-        $this->_mainData['pages'] = $this->pages_m->getPages(1, 'footer');
-
-        $this->_mainData['new_header'] = 1;
-
-        $getTopParentTemp = $this->uri->segment(3);
-        $getTopParentTemp = explode("_", $getTopParentTemp);
-
-        if (isset($getTopParentTemp[0]) && $getTopParentTemp[0] == 'dirt-bike-parts' || $getTopParentTemp[0] == 'atv-parts' ||
-                $getTopParentTemp[0] == 'street-bike-parts' || $getTopParentTemp[0] == 'utv-parts') {
-
-            $top_parent = TOP_LEVEL_CAT_DIRT_BIKES;
-
-            if ($getTopParentTemp[0] == "street-bike-parts") {
-                $top_parent = TOP_LEVEL_CAT_STREET_BIKES;
-            } else if ($getTopParentTemp[0] == "atv-parts") {
-                $top_parent = TOP_LEVEL_CAT_ATV_PARTS;
-            } else if ($getTopParentTemp[0] == "utv-parts") {
-                $top_parent = TOP_LEVEL_CAT_UTV_PARTS;
+                }
             }
 
-            $this->_mainData['cat_header'] = 1;
-            $this->_mainData['top_parent'] = $top_parent;
+            if ($top_parent > 0) {
 
-            /*  GETTING CATEGORIES FOR TOP NAV */
-            $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent(0, $top_parent);
-            $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
+                $this->_mainData['cat_header'] = 1;
+                $this->_mainData['top_parent'] = $top_parent;
+
+                /*  GETTING CATEGORIES FOR TOP NAV */
+                $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent(0, $top_parent);
+                $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
+            }
         }
 
-		
+
         $this->setFooterView('master/footer_v.php');
         $this->renderMasterPage('master/master_v', 'info/product_list_v', $this->_mainData);
     }
@@ -839,6 +661,7 @@ class Shopping extends Master_Controller {
 
     /*     * ***************************** Brand Function End ********************************* */
     public function item($partId = NULL) {
+
         // echo '<pre>';
         // print_r($_SESSION);
         // echo '</pre>';
@@ -1022,301 +845,165 @@ class Shopping extends Master_Controller {
         $this->_mainData['rideSelector'] = $this->load->view('widgets/ride_select_v', $this->_mainData, TRUE);
 
         /* Deciding if the page browsed innerly or from outside source */
-        $is_inside = 0;
-        $referer = ( isset($_SERVER['HTTP_REFERER']) ) ? $_SERVER['HTTP_REFERER'] : '';
-        if (strpos($referer, WEBSITE_HOSTNAME) !== false) {
-            $is_inside = 1;
-        }
-        $is_inside = 0;
-
+        $category_stack = jonathan_getCategoryStack();
+        $is_inside = count($category_stack) > 0 ? 1 : 0;
         $this->_mainData['is_inside'] = $is_inside;
 
-        /* 	MAKING DYNAMIC BREADCRUMB, IT WILL BE USED IF PRODUCT WILL BE OPENED FROM EXTERNAL URL */
-        $this->_mainData['secondBreadCrumb'] = $this->parts_m->getSecondBreadCrumb($partId);
+        // JLB 10-19-17
+        // This code is just insane. I'm attempting to force down order on it.
+        $leftmost_favoritism = true;
+        $top_parent_category_id = TOP_LEVEL_CAT_STREET_BIKES; // This is an old bias that almost completely does not matter.
+        $cats = array(); // We have to get the list of category IDs, in order, so as to preserve the sizing charts.
 
-        /* Preparing Top Parent Category */
-        $parentt = "";
 
-        if ($is_inside == 1 && !empty($this->_mainData['breadcrumbs'])) {
+        global $active_primary_navigation;
 
-            $session_based_breadcrumb = $this->_mainData['breadcrumbs'];
-            if (!empty($session_based_breadcrumb['category'])) {
+        if (!isset($active_primary_navigation)) {
+            $active_primary_navigation = jonathan_prepareGlobalPrimaryNavigation();
+        }
 
-                if (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_STREET_BIKES])) {
-                    $parentt = TOP_LEVEL_CAT_STREET_BIKES;
-                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_DIRT_BIKES])) {
-                    $parentt = TOP_LEVEL_CAT_DIRT_BIKES;
-                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_ATV_PARTS])) {
-                    $parentt = TOP_LEVEL_CAT_ATV_PARTS;
-                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_UTV_PARTS])) {
-                    $parentt = TOP_LEVEL_CAT_UTV_PARTS;
-                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_VTWIN_PARTS])) {
-                    $parentt = TOP_LEVEL_CAT_VTWIN_PARTS;
+
+        // We need to set the top parent category ID to the first, leftmost one...
+        $part_categories = $this->parts_m->getPartCategories($partId);
+
+        // Now, make an LUT
+        $part_cat_LUT = array();
+        $part_cat_name_LUT = array();
+        foreach ($part_categories as $c) {
+            $part_cat_LUT[$c["category_id"]] = $c;
+            $part_cat_name_LUT[$c["long_name"]] = $c["category_id"];
+//            // This is a rollup. Hopefully this doesn't take too long. What we really need is a common prefix function and structure.
+//            $category_genealogy = $this->parts_m->categoryLineage($c["category_id"]);
+//            foreach ($category_genealogy as $cd) {
+//                $part_cat_LUT[$cd["category_id"]] = $cd;
+//            }
+        }
+
+        // This just means they've looked around on the website this session...
+        $matching_category_id = 0;
+        $matching_category = null;
+
+        if ($is_inside > 0) {
+            // So, here's what is required: I need to get the categories for this part. I need to then figure out if you looked at that category. If you did, great, we have the drill down. If you did not, I just need to fall through to leftmost favoritism.
+            $match = false;
+
+            // I think that the next one will do this same work, but will avoid the pathological cases.
+//            for ($i = 0; !$match && ($i < count($category_stack)); $i++) {
+//                // get the genealogy for this category
+//                if (array_key_exists($category_stack[$i], $part_cat_LUT)) {
+//                    // OK, we have our hit...
+//                    $matching_category_id = $category_stack[$i];
+//                    $matching_category = $part_cat_LUT[$matching_category_id];
+//                    $match = true;
+//                }
+//            }
+
+            if ($match) {
+                $leftmost_favoritism = false;
+            } else {
+                // OK, one more try - we are going to attempt a substring match...
+                $category_names = jonathan_getCategoryNames();
+                $part_category_names = array_keys($part_cat_name_LUT);
+
+                $current_match_score = -1;
+
+                for ($i = 0; !$match && ($i < count($category_stack)); $i++) {
+                    $this_category_id = $category_stack[$i];
+
+                    if (array_key_exists($this_category_id, $category_names)) {
+                        $this_category_name = strtolower($category_names[$this_category_id]);
+                        // we have to go look for the substring...
+                        foreach ($part_category_names as $pcn) {
+                            if ($this_category_name == substr(strtolower($pcn), 0, strlen($this_category_name))) {
+                                // Since we're plumbing this way, we really should go for the deepest we can go...
+                                $depth_score = substr_count($pcn, ">");
+
+                                if ($depth_score > $current_match_score) {
+                                    $current_match_score = $depth_score;
+
+                                    // we've found one...
+                                    $matching_category_id = $part_cat_name_LUT[$pcn];
+                                    $matching_category = $part_cat_LUT[$matching_category_id];
+                                    $match = true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if ($match) {
+                    $leftmost_favoritism = false;
                 }
             }
         }
 
-        if (empty($parentt) && !empty($this->_mainData['secondBreadCrumb'][0]['id'])) {
-            $parentt = $this->_mainData['secondBreadCrumb'][0]['id']; // Getting top level Category from second breadcrumb.
-        }
-        
-        /*  GETTING CATEGORIES FOR TOP NAV */
-        $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent($partId, (!empty($parentt)) ? $parentt : 0);
-        $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
-        $this->_mainData['top_parent'] = (!empty($parentt)) ? $parentt : TOP_LEVEL_CAT_STREET_BIKES;
+        // OK, in this case, they have not been browsing around
+        if ($leftmost_favoritism) {
+            // I need to figure out the categories for this one and then see which ones live within the leftmost navigation.
+            // OK, so this is going to be something like - GO DEEP. We've not hit a category that they were looking at, so we better GO DEEP.
+            // OK, instead of making it N^2, we have to compute the scores.
+            $tld_scores = array();
+            $tld_deep_choice = array();
+            for ($i = 0; $i < count($part_categories); $i++) {
+                $pc = $part_categories[$i];
+                $top_category = strtolower(trim(substr($pc["long_name"], 0, strpos($pc["long_name"], ">") - 1)));
+                $depth_score = substr_count($pc["long_name"], ">");
+                if (!array_key_exists($top_category, $tld_scores)) {
+                    $tld_scores[$top_category] = 0;
+                }
 
-        $cats = array();
-        foreach($this->_mainData['secondBreadCrumb'] as $cat ) {
-            $cats[] = $cat['id'];
-        }
-        
-        $this->_mainData['sizeChart'] = $this->parts_m->getSizeChartByCategory($cats, $this->_mainData['brandMain']['brand_id'], $partId);
-        
-        $this->setNav('master/navigation_v', 0);
-        $this->setFooterView('master/footer_v.php');
-//         echo '<pre>';
-//         print_r($this->_mainData);
-//         echo '</pre>';exit;
-        $this->renderMasterPage('master/master_v_new', 'account/shopping_v_new', $this->_mainData);
-    }
+                if ($depth_score > $tld_scores[$top_category]) {
+                    $tld_scores[$top_category] = $depth_score;
+                    $tld_deep_choice[$top_category] = $pc;
+                }
+            }
 
-    public function item_old($partId = NULL) {
-        // echo '<pre>';
-        // print_r($_SESSION);
-        // echo '</pre>';
-        //unset($_SESSION['search']['search']);
-        $_SESSION['url'] = 'shopping/item/' . $partId;
-        $this->setHeaderVars('<script type="text/javascript" src="' . $this->_mainData['assets'] . '/js/rating.js"></script>
-		<link rel="stylesheet" type="text/css" href="' . $this->_mainData['assets'] . '/css/rating.css" />');
+            // OK, now we should have scores, we should be able to do a left-to-right match.
+            $match = false;
 
-        if (is_null($partId) || !is_numeric($partId))
-            redirect('shopping/productlist/');
-
-        // *************ACTIVE RIDE EVALUATION ****************** //
-        $this->_mainData['garageNeeded'] = FALSE;
-        $this->_mainData['validRide'] = TRUE;
-        $garageNeeded = $this->parts_m->validMachines($partId);
-        if ($garageNeeded) {
-            // If Ride is needed assume the activeMachine is not the right one.
-            $this->_mainData['garageNeeded'] = TRUE;
-            $this->_mainData['validRide'] = FALSE;
-            if (!empty($_SESSION['garage']) && !empty($_SESSION['activeMachine'])) {
-                foreach ($garageNeeded as $ride) {
-                    if (($ride['model_id'] == $_SESSION['activeMachine']['model']['model_id']) && ($ride['year'] == $_SESSION['activeMachine']['year'])) {
-                        $this->_mainData['validRide'] = TRUE;  // Active Machine has been verified
-                        break;
+            for ($i = 0; !$match && $i < count($active_primary_navigation); $i++) {
+                // OK, we're looking for our choice...
+                $candidate_label = strtolower(trim($active_primary_navigation[$i]["category_description"]));
+                if ($candidate_label != "") {
+                    if (array_key_exists($candidate_label, $tld_scores) && $tld_scores[$candidate_label] > 0) {
+                        // OK, great.
+                        $match = true;
+                        $matching_category = $tld_deep_choice[$candidate_label];
+                        $matching_category_id = $matching_category["category_id"];
                     }
                 }
             }
-        }
-        // ******************** END ACTIVE RIDE EVALUATION ********************* //
-        // *********************	 FORM SUBMISSION ********************************//
-        if ($this->validateProduct() === TRUE) {
-            $post = $this->input->post();
-			if(@$_SESSION['garage']) {
-				$garragePartNumber = $this->parts_m->validGarragePartNumber($partId, $_SESSION['garage'][$_SESSION['activeMachine']['name']]);
-				if(@$garragePartNumber['partnumber'] && $garragePartNumber['partnumber'] != '' ) {
-					$post['partnumber'] = $garragePartNumber['partnumber'];
-				}
-			}
-            if (@$post['question']) {
-                $post['partnumber'] = $post['question'][0];
-                foreach ($post['question'] as $partnumber) {
-                    $questAns = $this->parts_m->getQuestionAnswerByNumber($partnumber);
-                    $post['display_name'] .= '|||' . $questAns['question'] . ' :: ' . $questAns['answer'] . '||';
-                    // get answer and add it to display name
-                }
-                if (count($post['question']) == 1)
-                    unset($post['question']);
-            }
-            if (($this->_mainData['garageNeeded']) && ($this->_mainData['validRide']) && (@$_SESSION['garage'] )) {
-                if (!is_numeric(strpos($post['display_name'], '|||Fits')))
-                    $post['display_name'] .= '|||Fits :: ' . $_SESSION['activeMachine']['name'] . '||';
-					$post['ftmnt'] = $_SESSION['activeMachine']['name'];
-            }
-            if ($post['type'] == 'cart') {  // ADD TO CART
-                $_SESSION['cart'][$post['partnumber']] = $post;
-                if (@$_SESSION['userRecord']['id'])
-                    $this->parts_m->updateCart();
-                redirect('shopping/cart');
-            }
-            elseif ($post['type'] == 'wishlist') { // ADD TO WISHLIST
-                if (@$_SESSION['userRecord']['id']) {
-                    $this->parts_m->updateWishList($post, $_SESSION['userRecord']['id']);
-                    redirect('shopping/wishlist');
-                } else {
-                    $_SESSION['wishlist'] = $post;
-                    redirect('shopping/wishlist');
-                }
-            }
+
         }
 
-        // ********************************* END FORM SUBMISSION ********************************************** //
-        // Widgets
-        //$this->loadSidebar('widgets/garage_v');
-        $this->_mainData['band'] = $this->parts_m->relatedProducts($partId, @$_SESSION['activeMachine']);
-        $this->_mainData['part_sizechart'] = $this->parts_m->getProductSizeChartFE($partId);
-        $this->loadSidebar('widgets/side_related_prod_v');
-        $productVideo = $this->admin_m->getProductVideos($partId);
-        $mainVideo = $mainTitle = '';
-        foreach ($productVideo as $key => $val) {
-            if ($val['ordering'] == 1) {
-                $mainVideo = $val['video_url'];
-                $mainTitle = $val['title'];
-                unset($productVideo[$key]);
-                break;
-            }
-        }
-        if ($mainVideo == '') {
-            $mainVideo = $productVideo[0];
-            unset($productVideo[0]);
-        }
-        $this->_mainData['mainVideo'] = $mainVideo;
-        $this->_mainData['mainTitle'] = $mainTitle;
-        $this->_mainData['video'] = $productVideo;
-
-        // Main Page Data
-        if (@$_SESSION['recentlyViewed'])
-            $_SESSION['recentlyViewed'] = array_reverse($_SESSION['recentlyViewed'], TRUE);
-        $_SESSION['recentlyViewed'][$partId] = $partId;
-        $_SESSION['recentlyViewed'] = array_reverse($_SESSION['recentlyViewed'], TRUE);
-        $this->_mainData['validMachines'] = $this->parts_m->validMachines($partId, @$_SESSION['activeMachine']);
-        if ($this->_mainData['garageNeeded']) {
-            $this->_mainData['product'] = $this->parts_m->getProduct($partId, @$_SESSION['activeMachine']);
-            $this->_mainData['validMachines'] = $this->parts_m->validMachines($partId);
-            if ($this->_mainData['validRide'])
-                $this->_mainData['questions'] = $this->parts_m->getProductQuestions($partId, @$_SESSION['activeMachine']);
-        }
-        else {
-            $this->_mainData['product'] = $this->parts_m->getProduct($partId, NULL);
-            $this->_mainData['questions'] = $this->parts_m->getProductQuestions($partId, NULL);
-        }
-        
-        $stock = false;
-        if (empty($this->_mainData['questions'])) {
-            $stock = true;
-			$this->load->model('account_m');
-            $partnumber = $this->account_m->getStockByPartId($partId);
-			$this->_mainData['partnumbercustom'] = $partnumber['partnumber'];
-        }
-		
-        if (!empty($_SESSION['garage']) && !empty($this->_mainData['validMachines'])) {
-            $stock = true;
-        }
-
-        if (!empty($this->_mainData['validMachines']) && empty($_SESSION['garage'])) {
-            $stock = false;
-        }
-
-        $this->_mainData['stock'] = $stock;
-        $this->_mainData['brandMain'] = $this->parts_m->getBrandByPart($partId);
-
-        // Build Page    	
-        $this->_mainData['band'] = $this->parts_m->getRecentlyViewed(NULL, @$_SESSION['recentlyViewed'], 4);
-        if ($this->_mainData['band'])
-            $this->_mainData['recentlyViewedBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
-
-        //BREADCRUMBS PREPPING
-        $this->_mainData['breadcrumbs'] = @$_SESSION['breadcrumbs'];
-        if (@$this->_mainData['breadcrumbs']['parent_category_id']) {
-            $categoryId = $this->parts_m->getCategoryByPartId($partId, $this->_mainData['breadcrumbs']['parent_category_id']);
-            if ($categoryId)
-                $this->_mainData['breadcrumbs']['category'] = $categoryId;
-            unset($this->_mainData['breadcrumbs']['parent_category_id']);
-        }
-        if (@$this->_mainData['breadcrumbs']['category']) {
-            if (is_array($this->_mainData['breadcrumbs']['category'])) {
-                foreach ($this->_mainData['breadcrumbs']['category'] as $id => &$cat) {
-                    $url = $this->parts_m->categoryReturnURL($id);
-                    $cat = array('name' => $cat, 'link' => $url);
-                }
-            } else {
-                $url = $this->parts_m->categoryReturnURL($this->_mainData['breadcrumbs']['category']);
-                $this->_mainData['breadcrumbs']['category'] = array('name' => $this->_mainData['breadcrumbs']['category'], 'link' => $url);
-            }
-        }
-        if (@$this->_mainData['breadcrumbs']['brand']) {
-            $url = $this->parts_m->returnBrandURL($this->_mainData['breadcrumbs']);
-            $brandDtl = $this->parts_m->getBrandById($this->_mainData['breadcrumbs']['brand']);
-            $this->_mainData['breadcrumbs']['brand'] = array('name' => $this->_mainData['breadcrumbs']['brand'], 'link' => $url, 'label' => $brandDtl['name'], 'slug' => $brandDtl['slug']);
-        }
-        if (@$this->_mainData['product']['images'][0]['path']) {
-            $metaTag = '<meta property="og:image" content="' . jsite_url('/productimages/') . $this->_mainData['product']['images'][0]['path'] . '"/>';
-            $this->setMasterPageVars('metatag', $metaTag);
-        }
-        $desc = 'I found Discount Prices on ' . $this->_mainData['product']['name'];
-        $this->setMasterPageVars('descr', $desc);
-        $googleAdWordsScript = '<script type="text/javascript">
-								var google_tag_params = {
-								ecomm_prodid: \'' . $this->_mainData['product']['partnumber'] . '\',
-								ecomm_pagetype: \'Product\',
-								ecomm_totalvalue: \'' . $this->_mainData['product']['price']['sale_min'] . '\'
-								};
-								</script>';
-        $this->loadTopJS($googleAdWordsScript);
-        $title = $this->_mainData['product']['name'] . " - " . WEBSITE_NAME;
-        $this->setMasterPageVars('title', $title);
-        // END BREADCRUMBS PREPPING
-
-        $this->_mainData['shippingBar'] = $this->load->view('info/shipping_bar_v', $this->_mainData, TRUE);
-        $this->_mainData['brandSlider'] = $this->load->view('info/brand_slider_v', $this->_mainData, TRUE);
-        $this->_mainData['machines'] = $this->parts_m->getMachinesDd($partId);
-        $this->_mainData['rideSelector'] = $this->load->view('widgets/ride_select_v', $this->_mainData, TRUE);
-
-        /* Deciding if the page browsed innerly or from outside source */
-        $is_inside = 0;
-        $referer = ( isset($_SERVER['HTTP_REFERER']) ) ? $_SERVER['HTTP_REFERER'] : '';
-        if (strpos($referer, WEBSITE_HOSTNAME) !== false) {
-            $is_inside = 1;
-        }
-        $is_inside = 0;
-
-        $this->_mainData['is_inside'] = $is_inside;
-
-        /* 	MAKING DYNAMIC BREADCRUMB, IT WILL BE USED IF PRODUCT WILL BE OPENED FROM EXTERNAL URL */
-        $this->_mainData['secondBreadCrumb'] = $this->parts_m->getSecondBreadCrumb($partId);
-
-        /* Preparing Top Parent Category */
-        $parentt = "";
-
-        if ($is_inside == 1 && !empty($this->_mainData['breadcrumbs'])) {
-
-            $session_based_breadcrumb = $this->_mainData['breadcrumbs'];
-            if (!empty($session_based_breadcrumb['category'])) {
-
-                if (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_STREET_BIKES])) {
-                    $parentt = TOP_LEVEL_CAT_STREET_BIKES;
-                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_DIRT_BIKES])) {
-                    $parentt = TOP_LEVEL_CAT_DIRT_BIKES;
-                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_ATV_PARTS])) {
-                    $parentt = TOP_LEVEL_CAT_ATV_PARTS;
-                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_UTV_PARTS])) {
-                    $parentt = TOP_LEVEL_CAT_UTV_PARTS;
-                }
-            }
-        }
-
-        if (empty($parentt) && !empty($this->_mainData['secondBreadCrumb'][0]['id'])) {
-            $parentt = $this->_mainData['secondBreadCrumb'][0]['id']; // Getting top level Category from second breadcrumb.
-        }
+        // OK, now that we have a category in hand, $matching_category_id, we can roll up to generate the whole sequence of categories for the purpose of making breadcrumbs.
+        // Note that this means we are always going to have a list of categories...
+        $this->_mainData["breadCrumbCategories"] = array_reverse($this->parts_m->categoryLineage($matching_category_id));
 
         /*  GETTING CATEGORIES FOR TOP NAV */
-        $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent($partId, (!empty($parentt)) ? $parentt : 0);
-        $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
-        $this->_mainData['top_parent'] = (!empty($parentt)) ? $parentt : TOP_LEVEL_CAT_STREET_BIKES;
-
-        $cats = array();
-        foreach($this->_mainData['secondBreadCrumb'] as $cat ) {
-            $cats[] = $cat['id'];
+        if (($c = count($this->_mainData["breadCrumbCategories"])) > 0) {
+            $top_parent_category_id = $this->_mainData["breadCrumbCategories"][0]["category_id"];
+            foreach ($this->_mainData["breadCrumbCategories"] as $cat) {
+                $cats[] = $cat["category_id"];
+            }
         }
+        $nav_categories_and_parent = $this->parts_m->nav_categories_and_parent($partId, $top_parent_category_id);
+        $this->_mainData['nav_categories'] = $nav_categories_and_parent['navCategories'];
+        $this->_mainData['top_parent'] = $top_parent_category_id;
+
+        // we have to get the category name...
+        foreach ($active_primary_navigation as $a) {
+            if ($a["category_id"] == $top_parent_category_id) {
+                $this->_mainData['catd'] = $a["category_description"];
+            }
+        }
+
         
-        $this->_mainData['sizeChart'] = $this->parts_m->getSizeChartByCategory($cats, $this->_mainData['brandMain']['brand_id'], $partId);
+        // $this->_mainData['sizeChart'] = $this->parts_m->getSizeChartByCategory($cats, $this->_mainData['brandMain']['brand_id'], $partId);
         
         $this->setNav('master/navigation_v', 0);
         $this->setFooterView('master/footer_v.php');
-        // echo '<pre>';
-        // print_r($this->_mainData);
-        // echo '</pre>';exit;
+
         $this->renderMasterPage('master/master_v_new', 'account/shopping_v_new', $this->_mainData);
     }
 

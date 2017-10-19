@@ -12,56 +12,33 @@ if ((@$validRide) && (@$garageNeeded) && (!empty($_SESSION['activeMachine']))):
 endif;
  require_once 'Mobile_Detect.php';
 $detect = new Mobile_Detect;
+$CI =& get_instance();
+
 ?>
 <div class="container dtlpg" style="margin-top:30px;" id="mdcntnr">
     <div class="breadCrumb">
-        <?php if (!empty($breadcrumbs) && $is_inside == 1) { ?>
-            <?php
-            foreach ($breadcrumbs as $name => $value) {
-                if (($name == 'parent_category_id') | ($name == 'category') || ($name == 'brand') || ($name == 'search')) {
-                    ?> 
-                    |&nbsp;
-                    <?php
-                    if (($name == 'category') && (is_array($value))) {
-                        if (@$value['name']) {
-                            ?>		
-                            <a href="<?php echo base_url('shopping/productlist' . $value['link']); ?>" onclick="setMainSearchCategory(event, 'category', '<?php echo $value['name']; ?>');">Category</a>
-                            <?php
-                        } else {
-                            $i = 0;
-                            foreach ($value as $id => $cat) {
-                                $i++;
-                                ?>
-                                <a href="<?php echo base_url('shopping/productlist' . $cat['link']); ?>" onclick="setMainSearchCategory(event, 'category', '<?php echo $id; ?>');"><?php echo $cat['name']; ?></a>
-                                <?php if (count($value) == $i) { ?>&nbsp; <?php
-                                } else {
-                                    echo ">";
-                                }
-                                ?>
-                                <?php
-                            }
-                        }
-                    } elseif ($name == 'search') {
-                        ?>
-                        <a href="<?php echo base_url('shopping/search_product/?search=' . $value[0]); ?>">Search</a>
-                        <?php foreach ($value as $v) { ?>
-                            |&nbsp;<a href="javascript:void(0);"><?php echo ucfirst($v); ?></a>
-                        <?php } ?>
-                    <?php } elseif ($name == 'brand') { ?>
-                        <a href="<?php echo base_url($value['slug']); ?>"><?php echo $value['label']; ?></a>
-                        <?php
-                    }
+        <?php
+        /*
+         * JLB 10-19-17
+         * OK, this is the new breadcrumbs.
+         * We're just intending to show a category.
+         */
+        if (count($breadCrumbCategories) > 0) {
+            ?>| <?php
+
+            for ($i = 0; $i < count($breadCrumbCategories); $i++) {
+                if ($i > 0) {
+                    print " &gt; ";
                 }
+
+                print "<a href='/shopping/productlist" . $CI->parts_m->categoryReturnURL($breadCrumbCategories[$i]["category_id"]) . "' onClick='setMainSearchCategory(event, \"category\", \"" . $breadCrumbCategories[$i]["category_id"] . "\");'>" .  htmlentities($breadCrumbCategories[$i]["name"]) . "</a>";
             }
-        } else {
-            ?>
-            |&nbsp;<?php foreach ($secondBreadCrumb as $key => $bread) { ?>
-                <a href="<?php echo base_url() . $bread['link']; ?>" onclick="setMainSearchCategory(event, 'category', '<?php echo $bread['id']; ?>');"><?php echo $bread['name']; ?></a> 
-                <?php
-                if (($key + 1) < count($secondBreadCrumb)) {
-                    echo ">";
-                }
-            }
+
+        }
+
+        ?>
+        <?php
+        if (isset($brandMain) && array_key_exists("brand_id", $brandMain) && $brandMain["brand_id"] > 0) {
             echo "|&nbsp;";
             ?>
             <a href="<?php echo base_url() . $brandMain['slug']; ?>" onclick="setNamedSearchBrandt(event, 'brand', '<?php echo $brandMain['brand_id'];?>', '<?php echo $brandMain['name'];?>');"><?php echo $brandMain['name']; ?></a> 

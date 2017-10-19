@@ -30,6 +30,8 @@ class Abstracttoplevelcategory extends Master_Controller {
 
     public function index()
     {
+        jonathan_saveCategoryToStack($this->_categoryId);
+
         $this->_mainData['pageRec'] = $this->pages_m->getPageRec($this->_pageId);
         $this->setMasterPageVars('metatag', html_entity_decode($this->_mainData['pageRec']['metatags']));
         $this->setMasterPageVars('css', html_entity_decode($this->_mainData['pageRec']['css']));
