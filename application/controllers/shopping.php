@@ -996,7 +996,7 @@ class Shopping extends Master_Controller {
 
         /*  GETTING CATEGORIES FOR TOP NAV */
         if (($c = count($this->_mainData["breadCrumbCategories"])) > 0) {
-            $top_parent_category_id = $this->_mainData["breadCrumbCategories"][$c - 1]["category_id"];
+            $top_parent_category_id = $this->_mainData["breadCrumbCategories"][0]["category_id"];
             foreach ($this->_mainData["breadCrumbCategories"] as $cat) {
                 $cats[] = $cat["category_id"];
             }
