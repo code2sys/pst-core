@@ -914,6 +914,8 @@ class Shopping extends Master_Controller {
                 $part_category_names = array_keys($part_cat_name_LUT);
                 print_r($part_category_names);
 
+                $current_match_score = -1;
+
                 for ($i = 0; !$match && ($i < count($category_stack)); $i++) {
                     $this_category_id = $category_stack[$i];
                     print "Considering $this_category_id \n";
@@ -924,12 +926,20 @@ class Shopping extends Master_Controller {
                         // we have to go look for the substring...
                         foreach ($part_category_names as $pcn) {
                             print "Comparing to $pcn \n";
-                            if (!$match && ($this_category_name == substr(strtolower($pcn), 0, strlen($this_category_name)))) {
+                            if ($this_category_name == substr(strtolower($pcn), 0, strlen($this_category_name))) {
+                                // Since we're plumbing this way, we really should go for the deepest we can go...
                                 print "Match found! \n";
-                                // we've found one...
-                                $matching_category_id = $this_category_id;
-                                $matching_category = $part_cat_LUT[$matching_category_id];
-                                $match = true;
+                                $depth_score = substr_count($pcn, ">");
+
+                                if ($depth_score > $current_match_score) {
+                                    print "Deeper one found: $depth_score \n";
+                                    $current_match_score = $depth_score;
+
+                                    // we've found one...
+                                    $matching_category_id = $this_category_id;
+                                    $matching_category = $part_cat_LUT[$matching_category_id];
+                                    $match = true;
+                                }
                             }
                         }
                     }
