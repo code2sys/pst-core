@@ -847,13 +847,14 @@ class Shopping extends Master_Controller {
         $this->_mainData['rideSelector'] = $this->load->view('widgets/ride_select_v', $this->_mainData, TRUE);
 
         /* Deciding if the page browsed innerly or from outside source */
-        $is_inside = 0;
-        $referer = ( isset($_SERVER['HTTP_REFERER']) ) ? $_SERVER['HTTP_REFERER'] : '';
-        print "<!-- Referer: $referer and website " . WEBSITE_HOSTNAME . " -->\n";
-        if (strpos($referer, WEBSITE_HOSTNAME) !== false) {
-            $is_inside = 1;
-        }
-        $is_inside = 0;
+        $is_inside = count(jonathan_getCategoryStack()) > 0 ? 1 : 0;
+        // If you've looked at something, and you have a category stack, then you are inside.
+//        $referer = ( isset($_SERVER['HTTP_REFERER']) ) ? $_SERVER['HTTP_REFERER'] : '';
+//        print "<!-- Referer: $referer and website " . WEBSITE_HOSTNAME . " -->\n";
+//        if (strpos($referer, WEBSITE_HOSTNAME) !== false) {
+//            $is_inside = 1;
+//        }
+//        $is_inside = 0;
 
         $this->_mainData['is_inside'] = $is_inside;
 
@@ -863,16 +864,7 @@ class Shopping extends Master_Controller {
         /* Preparing Top Parent Category */
         $parentt = "";
 
-        print "<!-- Inside 0 -->\n";
-
-        if ($is_inside) {
-            print "<!-- I is inside! -->";
-        } else {
-            print "<!-- I is not inside! -->";
-        }
-
         $session_based_breadcrumb = $this->_mainData['breadcrumbs'];
-        print "<!-- " . print_r($session_based_breadcrumb, true) . " -->\n";
 
 
         if ($is_inside == 1 && !empty($this->_mainData['breadcrumbs'])) {
@@ -882,18 +874,20 @@ class Shopping extends Master_Controller {
             print "<!-- " . print_r($session_based_breadcrumb, true) . " -->\n";
             if (!empty($session_based_breadcrumb['category'])) {
                 print "<!-- Inside 2 -->\n";
+                global $active_primary_navigation;
 
+                if (!isset($active_primary_navigation)) {
+                    $active_primary_navigation = jonathan_prepareGlobalPrimaryNavigation();
+                }
 
-                if (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_STREET_BIKES])) {
-                    $parentt = TOP_LEVEL_CAT_STREET_BIKES;
-                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_DIRT_BIKES])) {
-                    $parentt = TOP_LEVEL_CAT_DIRT_BIKES;
-                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_ATV_PARTS])) {
-                    $parentt = TOP_LEVEL_CAT_ATV_PARTS;
-                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_UTV_PARTS])) {
-                    $parentt = TOP_LEVEL_CAT_UTV_PARTS;
-                } elseif (!empty($session_based_breadcrumb['category'][TOP_LEVEL_CAT_VTWIN_PARTS])) {
-                    $parentt = TOP_LEVEL_CAT_VTWIN_PARTS;
+                $parentt = null;
+                for ($i = 0; $i < count($active_primary_navigation); $i++) {
+                    if (is_null($parentt)) {
+                        $nav_top_level_cat_id = $active_primary_navigation[$i]["category_id"];
+                        if ($nav_top_level_cat_id > 0 && array_key_exists($nav_top_level_cat_id, $session_based_breadcrumb["category"]) && !empty($session_based_breadcrumb["category"][$nav_top_level_cat_id])) {
+                            $parentt = $nav_top_level_cat_id;
+                        }
+                    }
                 }
             }
         }
