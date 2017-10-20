@@ -585,7 +585,7 @@ a:active {
 }
 .product_icon img {
 	height: 42px;  
-    width: 42px;  
+    width: auto;
     position: absolute;   
     left: 100px;  
 	margin: auto;  
