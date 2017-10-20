@@ -587,8 +587,8 @@ a:active {
 	height: 42px;  
     width: auto;
     position: absolute;   
-    left: 100px;  
-	margin: auto;  
+    /*left: 100px;  */
+    /*margin: auto;  */
 
 	/*BORDER RADIUS*/
 	border-radius: 3px;
