@@ -109,7 +109,7 @@ if (!function_exists('tag_creating')) {
                             <?php if ($has_fitment): ?>
                             <div class="product_icon" ><img src="<?php $height = 42; if(@$prod['activeRide']) { echo $fitment_image; $width = round($fitment_width * $height / $fitment_height, 0);  } else { echo $universal_image; $width = round($universal_width * $height / $universal_height, 0); } ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" ></div>
                                 <?php else: ?>
-                                    <div class="product_icon" ><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="></div>
+                                    <div class="product_icon" ></div>
                                 <?php endif; ?>
                             <div class="clear"></div>
                             <img <?php if(($key == 0) && $is_search_results): ?>itemprop="image"<?php endif; ?> src="<?php echo base_url('productimages/'. $prod['images'][0]['path']); ?>">
