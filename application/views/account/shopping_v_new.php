@@ -1,5 +1,5 @@
 <?php
-if (isset($validRide) && $validRide && isset($garageNeeded) && $garageNeeded) {
+if ((isset($validRide) && $validRide && (isset($garageNeeded) && $garageNeeded)) || $product["universal_fitment"] > 0) {
     require(__DIR__ . "/../fitment_common.php");
 } else {
     $has_fitment = false;
