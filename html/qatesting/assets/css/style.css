@@ -586,6 +586,29 @@ a:active {
 }
 
 
+.product_icon {
+	margin: 1em 0;
+	height: 42px;
+	width: 42px;
+	float:left;
+	margin-top:-40px;
+	position: relative;
+	display: block;
+	overflow: hidden;
+	width:100%;
+}
+.product_icon img {
+	height: 42px;
+	width: auto;
+	position: absolute;
+	/*left: 100px;  */
+	/*margin: auto;  */
+
+	/*BORDER RADIUS*/
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
 
 .product_photo .product_icon {
 	margin: 0px;
