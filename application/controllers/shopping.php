@@ -83,7 +83,13 @@ class Shopping extends Master_Controller {
             return $tableView;
     }
 
+    /*
+     * JLB 2017-10-23
+     * I think this function is unused. It generates an error.
+     */
     public function index($cat = 'ES', $sub = NULL) {
+        redirect("/shopping/cart");
+        exit();
 
         $this->_mainData['cat'] = $cat;
         $this->_mainData['openCat'] = $cat;
