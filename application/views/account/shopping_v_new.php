@@ -60,7 +60,7 @@ $CI =& get_instance();
             <?php if ($has_fitment) {
                 $image_to_use = $height = $width = 0;
                 if ($product["universal_fitment"] > 0) {
-                    $image_to_use = $univeral_image;
+                    $image_to_use = $universal_image;
                     $height = $universal_height;
                     $width = $universal_width;
                 } else {
