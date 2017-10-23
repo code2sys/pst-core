@@ -9,10 +9,6 @@ require_once 'Mobile_Detect.php';
 $detect = new Mobile_Detect;
 $CI =& get_instance();
 
-print "<!-- PRODUCT: ";
-print_r($product);
-print "-->\n";
-
 ?>
 <div class="container dtlpg" style="margin-top:30px;" id="mdcntnr">
     <div class="breadCrumb">
@@ -752,6 +748,15 @@ if ($garageNeeded):
 
         return false;
     }
+
+    <?php if ($garageNeeded && !$validRide) {
+        ?>
+    $(document).on("ready", function() {
+        $('.error').show();
+        $('#error_message').text('Your machine does not match this item.  Please change your active machine above to add this item to cart.');
+    });
+<?php
+    } ?>
 
     function submitWishlist()
     {
