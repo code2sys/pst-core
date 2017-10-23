@@ -90,24 +90,6 @@ class Shopping extends Master_Controller {
     public function index($cat = 'ES', $sub = NULL) {
         redirect("/shopping/cart");
         exit();
-
-        $this->_mainData['cat'] = $cat;
-        $this->_mainData['openCat'] = $cat;
-
-        $this->_mainData['productTable'] = $this->product_table($cat, $sub);
-        $this->_mainData['pagination'] = $this->pagination();
-        $this->_mainData['categories'] = $this->products_m->getCategories(TRUE);
-
-        $this->_mainData['subCategories'] = $this->products_m->getSubCategories($cat);
-        $this->_mainData['subCategory'] = $sub;
-        $this->_mainData['sidebar'] = $this->load->view('account/category_sidebar_v', $this->_mainData, TRUE);
-
-        $this->_mainData['shoppingCart'] = $this->generateShoppingCart();
-
-
-        $this->setNav('master/navigation_v', 1);
-        $this->setFooterView('master/footer_v.php');
-        $this->renderMasterPage('master/master_v', 'account/shopping_v', $this->_mainData);
     }
 
     public function cart() {
