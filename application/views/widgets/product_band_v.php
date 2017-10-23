@@ -7,12 +7,7 @@ $is_search_results = $band['label'] == 'Search Results' || 'Search Results' == s
  * I saw somebody using the if(): endif in a pure PHP block and I wanted to vomit.
  */
 
-$has_fitment = array_key_exists("garage", $_SESSION) && count($_SESSION["garage"]) > 0;
-$fitment_image = "/assets/perfect_fit.png";
-$universal_image = "/assets/universal_fit.png";
-$fitment_width = 155;
-$universal_width = 177;
-$fitment_height =$universal_height = 68;
+require(__DIR__ . "/../fitment_common.php");
 
 if (!function_exists('tag_creating')) {
     function tag_creating($url)
@@ -107,7 +102,7 @@ if (!function_exists('tag_creating')) {
 
                         <div class="product_photo" >
                             <?php if ($has_fitment && ((array_key_exists("activeRide", $prod) && $prod["activeRide"]) || (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0))): ?>
-                            <div class="product_icon" style="height: 42px;"><img src="<?php $height = 42; if(@$prod['activeRide']) { $alt_tag = "Perfect Fit"; echo $fitment_image; $width = round($fitment_width * $height / $fitment_height, 0);  } else if (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0) { $alt_tag = "Universal Fit"; echo $universal_image; $width = round($universal_width * $height / $universal_height, 0); } ?>" alt="<?php echo $alt_tag; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" ></div>
+                            <div class="product_icon" style="height: 42px;"><img src="<?php $height = 42; if(@$prod['activeRide']) { $alt_tag = "Perfect Fit"; echo $fitment_image; $width = round($fitment_width * $height / $fitment_height, 0);  } else if (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0) { $alt_tag = "Universal Fit"; echo $universal_image; $width = round($universal_width * $height / $universal_height, 0); } ?>" alt="<?php echo $alt_tag; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style="width: <?php echo $width; ?>px !important; height: <?php echo $height; ?>px !important;" ></div>
                                 <?php else: ?>
                                     <div class="product_icon" ></div>
                                 <?php endif; ?>

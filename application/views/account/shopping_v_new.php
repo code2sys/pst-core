@@ -1,16 +1,11 @@
 <?php
-if ((@$validRide) && (@$garageNeeded) && (!empty($_SESSION['activeMachine']))):
-    $imgg = 'test_image.jpg';
-    switch (@$_SESSION['activeMachine']['make']['machinetype_id']):
-        case '13':
-            $imgg = 'icon_dirtbike_check.png';
-            break;
-        default:
-            $imgg = 'icon_dirtbike_check.png';
-            break;
-    endswitch;
-endif;
- require_once 'Mobile_Detect.php';
+if ((isset($validRide) && $validRide && (isset($garageNeeded) && $garageNeeded)) || $product["universal_fitment"] > 0) {
+    require(__DIR__ . "/../fitment_common.php");
+} else {
+    $has_fitment = false;
+}
+
+require_once 'Mobile_Detect.php';
 $detect = new Mobile_Detect;
 $CI =& get_instance();
 
@@ -62,16 +57,35 @@ $CI =& get_instance();
         <!-- CONTENT -->
         <div class="clear"></div>
         <div class="prodSec">
+            <?php if ($has_fitment) {
+                $image_to_use = $height = $width = 0;
+                if ($product["universal_fitment"] > 0) {
+                    $image_to_use = $universal_image;
+                    $height = $universal_height;
+                    $width = $universal_width;
+                } else {
+                    $image_to_use = $fitment_image;
+                    $height = $fitment_height;
+                    $width = $fitment_width;
+                }
+                $height = floor($height / 2.0);
+                $width = floor($width / 2.0);
+                ?>
+
+
+            <?php } ?>
             <?php if (@$product['images']): ?>
                 <img itemprop="image" src="<?php echo jsite_url("/productimages/"); ?><?php echo $product['images'][0]['path']; ?>" id="base_image" style="  margin: 0 auto; display: table;  max-width: 318px!important;  max-height: 335px!important;">
                 <?php /* ?>  DISPLAYING THE CHECK MARK, IF PRODUCT PART MATCHES WITH GARAGE <?php */ ?>
-                <?php if (@$imgg): ?><img src="<?php echo $assets; ?>/images/<?php echo $imgg; ?>" height="28" width="30" style=" position: relative; margin-top: -42px; float: right; margin-right: 28px;" ><?php endif; ?>
+
             <?php else: ?>
                 <img src="<?php echo $assets; ?>/images/test_image.jpg" id="base_image" style="  margin: 0 auto; display: table;  max-width: 318px!important;  max-height: 335px!important;">
 
                 <?php /* ?>  DISPLAYING THE CHECK MARK, IF PRODUCT PART MATCHES WITH GARAGE <?php */ ?>
-                <?php if (@$imgg): ?><img src="<?php echo $assets; ?>/images/<?php echo $imgg; ?>" height="42" width="42" style=" position: relative; margin-top: -42px; float: right; margin-right: 28px;" ><?php endif; ?>	
             <?php endif; ?>
+            <?php if ($has_fitment): ?><img src="<?php echo $image_to_use; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style=" position: relative; margin-top: -<?php echo 10 + $height; ?>px; float: right; margin-right: 12px; width: <?php echo $width; ?>px !important; height: <?php echo $height; ?>px !important; " ><?php endif; ?>
+
+
             <?php if( @$product['stock_code'] && $product['stock_code'] == 'Closeout' ) { ?>
                 <img class="clsout" src="/qatesting/newassets/images/clst.png" alt="Closeout" />
             <?php } ?>
