@@ -83,7 +83,7 @@ $CI =& get_instance();
 
                 <?php /* ?>  DISPLAYING THE CHECK MARK, IF PRODUCT PART MATCHES WITH GARAGE <?php */ ?>
             <?php endif; ?>
-            <?php if ($has_fitment): ?><img src="<?php echo $image_to_use; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style=" position: relative; margin-top: -<?php echo 10 + $height; ?>px; float: right; margin-right: <?php echo $width; ?>px;" ><?php endif; ?>
+            <?php if ($has_fitment): ?><img src="<?php echo $image_to_use; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style=" position: relative; margin-top: -<?php echo 10 + $height; ?>px; float: right; margin-right: 12px;" ><?php endif; ?>
 
 
             <?php if( @$product['stock_code'] && $product['stock_code'] == 'Closeout' ) { ?>
