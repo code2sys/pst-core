@@ -754,7 +754,11 @@ if ($garageNeeded):
     $(document).on("ready", function() {
         $('.error').show();
         $('#error_message').text('Your machine does not match this item.  Please change your active machine above to add this item to cart.');
-        $("span#price").hide();
+        if ($("#price").text() == "$0") {
+            $("span#price").hide();
+        } else {
+            $("span#price").show();
+        }
     });
 <?php
     } ?>
