@@ -586,6 +586,23 @@ a:active {
 }
 
 
+
+.product_photo .product_icon {
+	margin: 0px;
+	position: absolute;
+	z-index: 1;
+	bottom: 0;
+	right: 0;
+	text-align: right;
+}
+
+.product_photo .product_icon img {
+	background: transparent;
+	margin-left: auto;
+	margin-right: 0;
+}
+
+
 .product_box_text {
 	height:48px;
 	float:left;
