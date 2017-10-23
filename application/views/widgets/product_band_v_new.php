@@ -1,15 +1,8 @@
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <p class="vdottl"><?php echo $mainTitle;?></p>
-<?php $img = 'test_image.jpg';
-if(@$_SESSION['garage'] ): foreach($_SESSION['garage'] as $label => $rideRecs):
-    switch(@$rideRecs['make']['machinetype_id']):
-        case '13':
-            $img = 'icon_dirtbike_check.png';
-            break;
-        default:
-            $img = 'icon_dirtbike_check.png';
-            break;
-    endswitch; endforeach; endif;
+<?php
+
+require(__DIR__ . "/../fitment_common.php");
 
 if (!function_exists('tag_creating')) {
     function tag_creating($url)
@@ -77,14 +70,25 @@ if (!function_exists('tag_creating')) {
                         <?php if (@$prod['images']): ?>
 
                             <div class="product_photo" >
+                                <?php if ($has_fitment && ((array_key_exists("activeRide", $prod) && $prod["activeRide"]) || (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0))): ?>
+                                    <div class="product_icon" style="height: 42px;"><img src="<?php $height = 42; if(@$prod['activeRide']) { $alt_tag = "Perfect Fit"; echo $fitment_image; $width = round($fitment_width * $height / $fitment_height, 0);  } else if (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0) { $alt_tag = "Universal Fit"; echo $universal_image; $width = round($universal_width * $height / $universal_height, 0); } ?>" alt="<?php echo $alt_tag; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style="width: <?php echo $width; ?>px !important; height: <?php echo $height; ?>px !important;" ></div>
+                                <?php else: ?>
+                                    <div class="product_icon" ></div>
+                                <?php endif; ?>
+                                <div class="clear"></div>
                                 <img <?php if(($key == 0) && ($band['label'] == 'Search Results')): ?>itemprop="image"<?php endif; ?> src="<?php echo base_url('productimages/'. $prod['images'][0]['path']); ?>">
                             </div>
                         <?php else: ?>
                             <div class="product_photo">
+                                <?php if ($has_fitment && ((array_key_exists("activeRide", $prod) && $prod["activeRide"]) || (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0))): ?>
+                                    <div class="product_icon" style="height: 42px;"><img src="<?php $height = 42; if(@$prod['activeRide']) { $alt_tag = "Perfect Fit"; echo $fitment_image; $width = round($fitment_width * $height / $fitment_height, 0);  } else if (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0) { $alt_tag = "Universal Fit"; echo $universal_image; $width = round($universal_width * $height / $universal_height, 0); } ?>" alt="<?php echo $alt_tag; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style="width: <?php echo $width; ?>px !important; height: <?php echo $height; ?>px !important;" ></div>
+                                <?php else: ?>
+                                    <div class="product_icon" ></div>
+                                <?php endif; ?>
+                                <div class="clear"></div>
                                 <img src="<?php echo $assets; ?>/images/test_image.jpg">
                             </div>
                         <?php endif; ?>
-                        <div class="product_icon" ><?php if(@$prod['activeRide']): ?><img src="<?php echo $assets; ?>/images/<?php echo $img; ?>" height="42" width="42" ></div><div class="clear"><?php endif; ?></div>
                     </a>
                     <!-- END IMAGE -->
                     <div class="product_box_text">
@@ -161,14 +165,25 @@ if (!function_exists('tag_creating')) {
                         <?php if (@$prod['images']): ?>
 
                             <div class="product_photo" >
+                                <?php if ($has_fitment && ((array_key_exists("activeRide", $prod) && $prod["activeRide"]) || (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0))): ?>
+                                    <div class="product_icon" style="height: 42px;"><img src="<?php $height = 42; if(@$prod['activeRide']) { $alt_tag = "Perfect Fit"; echo $fitment_image; $width = round($fitment_width * $height / $fitment_height, 0);  } else if (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0) { $alt_tag = "Universal Fit"; echo $universal_image; $width = round($universal_width * $height / $universal_height, 0); } ?>" alt="<?php echo $alt_tag; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style="width: <?php echo $width; ?>px !important; height: <?php echo $height; ?>px !important;" ></div>
+                                <?php else: ?>
+                                    <div class="product_icon" ></div>
+                                <?php endif; ?>
+                                <div class="clear"></div>
                                 <img <?php if(($key == 0) && ($band['label'] == 'Search Results')): ?>itemprop="image"<?php endif; ?> src="<?php echo base_url('productimages/'. $prod['images'][0]['path']); ?>">
                             </div>
                         <?php else: ?>
                             <div class="product_photo">
+                                <?php if ($has_fitment && ((array_key_exists("activeRide", $prod) && $prod["activeRide"]) || (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0))): ?>
+                                    <div class="product_icon" style="height: 42px;"><img src="<?php $height = 42; if(@$prod['activeRide']) { $alt_tag = "Perfect Fit"; echo $fitment_image; $width = round($fitment_width * $height / $fitment_height, 0);  } else if (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0) { $alt_tag = "Universal Fit"; echo $universal_image; $width = round($universal_width * $height / $universal_height, 0); } ?>" alt="<?php echo $alt_tag; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style="width: <?php echo $width; ?>px !important; height: <?php echo $height; ?>px !important;" ></div>
+                                <?php else: ?>
+                                    <div class="product_icon" ></div>
+                                <?php endif; ?>
+                                <div class="clear"></div>
                                 <img src="<?php echo $assets; ?>/images/test_image.jpg">
                             </div>
                         <?php endif; ?>
-                        <div class="product_icon" ><?php if(@$prod['activeRide']): ?><img src="<?php echo $assets; ?>/images/<?php echo $img; ?>" height="42" width="42" ></div><div class="clear"><?php endif; ?></div>
                     </a>
                     <!-- END IMAGE -->
                     <div class="product_box_text">
@@ -243,14 +258,25 @@ if (!function_exists('tag_creating')) {
                     <?php if (@$prod['images']): ?>
 
                         <div class="product_photo" >
+                            <?php if ($has_fitment && ((array_key_exists("activeRide", $prod) && $prod["activeRide"]) || (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0))): ?>
+                                <div class="product_icon" style="height: 42px;"><img src="<?php $height = 42; if(@$prod['activeRide']) { $alt_tag = "Perfect Fit"; echo $fitment_image; $width = round($fitment_width * $height / $fitment_height, 0);  } else if (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0) { $alt_tag = "Universal Fit"; echo $universal_image; $width = round($universal_width * $height / $universal_height, 0); } ?>" alt="<?php echo $alt_tag; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style="width: <?php echo $width; ?>px !important; height: <?php echo $height; ?>px !important;" ></div>
+                            <?php else: ?>
+                                <div class="product_icon" ></div>
+                            <?php endif; ?>
+                            <div class="clear"></div>
                             <img <?php if(($key == 0) && ($band['label'] == 'Search Results')): ?>itemprop="image"<?php endif; ?> src="<?php echo base_url('productimages/'. $prod['images'][0]['path']); ?>">
                         </div>
                     <?php else: ?>
                         <div class="product_photo">
+                            <?php if ($has_fitment && ((array_key_exists("activeRide", $prod) && $prod["activeRide"]) || (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0))): ?>
+                                <div class="product_icon" style="height: 42px;"><img src="<?php $height = 42; if(@$prod['activeRide']) { $alt_tag = "Perfect Fit"; echo $fitment_image; $width = round($fitment_width * $height / $fitment_height, 0);  } else if (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0) { $alt_tag = "Universal Fit"; echo $universal_image; $width = round($universal_width * $height / $universal_height, 0); } ?>" alt="<?php echo $alt_tag; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style="width: <?php echo $width; ?>px !important; height: <?php echo $height; ?>px !important;" ></div>
+                            <?php else: ?>
+                                <div class="product_icon" ></div>
+                            <?php endif; ?>
+                            <div class="clear"></div>
                             <img src="<?php echo $assets; ?>/images/test_image.jpg">
                         </div>
                     <?php endif; ?>
-                    <div class="product_icon" ><?php if(@$prod['activeRide']): ?><img src="<?php echo $assets; ?>/images/<?php echo $img; ?>" height="42" width="42" ></div><div class="clear"><?php endif; ?></div>
                 </a>
                 <!-- END IMAGE -->
                 <div class="product_box_text">
@@ -329,14 +355,25 @@ if (!function_exists('tag_creating')) {
                         <?php if (@$prod['images']): ?>
 
                             <div class="product_photo" >
+                                <?php if ($has_fitment && ((array_key_exists("activeRide", $prod) && $prod["activeRide"]) || (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0))): ?>
+                                    <div class="product_icon" style="height: 42px;"><img src="<?php $height = 42; if(@$prod['activeRide']) { $alt_tag = "Perfect Fit"; echo $fitment_image; $width = round($fitment_width * $height / $fitment_height, 0);  } else if (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0) { $alt_tag = "Universal Fit"; echo $universal_image; $width = round($universal_width * $height / $universal_height, 0); } ?>" alt="<?php echo $alt_tag; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style="width: <?php echo $width; ?>px !important; height: <?php echo $height; ?>px !important;" ></div>
+                                <?php else: ?>
+                                    <div class="product_icon" ></div>
+                                <?php endif; ?>
+                                <div class="clear"></div>
                                 <img <?php if(($key == 0) && ($band['label'] == 'Search Results')): ?>itemprop="image"<?php endif; ?> src="<?php echo base_url('productimages/'. $prod['images'][0]['path']); ?>">
                             </div>
                         <?php else: ?>
                             <div class="product_photo">
+                                <?php if ($has_fitment && ((array_key_exists("activeRide", $prod) && $prod["activeRide"]) || (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0))): ?>
+                                    <div class="product_icon" style="height: 42px;"><img src="<?php $height = 42; if(@$prod['activeRide']) { $alt_tag = "Perfect Fit"; echo $fitment_image; $width = round($fitment_width * $height / $fitment_height, 0);  } else if (array_key_exists("universal_fitment", $prod) && $prod["universal_fitment"] > 0) { $alt_tag = "Universal Fit"; echo $universal_image; $width = round($universal_width * $height / $universal_height, 0); } ?>" alt="<?php echo $alt_tag; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style="width: <?php echo $width; ?>px !important; height: <?php echo $height; ?>px !important;" ></div>
+                                <?php else: ?>
+                                    <div class="product_icon" ></div>
+                                <?php endif; ?>
+                                <div class="clear"></div>
                                 <img src="<?php echo $assets; ?>/images/test_image.jpg">
                             </div>
                         <?php endif; ?>
-                        <div class="product_icon" ><?php if(@$prod['activeRide']): ?><img src="<?php echo $assets; ?>/images/<?php echo $img; ?>" height="42" width="42" ></div><div class="clear"><?php endif; ?></div>
                     </a>
                     <!-- END IMAGE -->
                     <div class="product_box_text">

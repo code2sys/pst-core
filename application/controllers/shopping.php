@@ -621,7 +621,7 @@ class Shopping extends Master_Controller {
             $this->_mainData['band']['page'] = $brand;
             $_SESSION['breadcrumbs'] = $listParameters;
             $this->_mainData['breadcrumbs'] = $listParameters;
-            $this->_mainData['mainProductBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
+            $this->_mainData['mainProductBand'] = $this->load->view('widgets/product_band_v_new', $this->_mainData, TRUE);
 
             $this->_mainData['shippingBar'] = $this->load->view('info/shipping_bar_v', $this->_mainData, TRUE);
             // Created Variables for it in Category section, but calling it here to take advantage of breadcrumbs.
