@@ -586,6 +586,46 @@ a:active {
 }
 
 
+.product_icon {
+	margin: 1em 0;
+	height: 42px;
+	width: 42px;
+	float:left;
+	margin-top:-40px;
+	position: relative;
+	display: block;
+	overflow: hidden;
+	width:100%;
+}
+.product_icon img {
+	height: 42px;
+	width: auto;
+	position: absolute;
+	/*left: 100px;  */
+	/*margin: auto;  */
+
+	/*BORDER RADIUS*/
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+.product_photo .product_icon {
+	margin: 0px;
+	position: absolute;
+	z-index: 1;
+	bottom: 0;
+	right: 0;
+	text-align: right;
+}
+
+.product_photo .product_icon img {
+	background: transparent;
+	margin-left: auto;
+	margin-right: 0;
+}
+
+
 .product_box_text {
 	height:48px;
 	float:left;

@@ -444,6 +444,23 @@ a.revBtn{background-image:url(../images/whiteStar.png); background-repeat:no-rep
 	-webkit-border-radius: 3px;
 }
 
+
+.product_photo .product_icon {
+	margin: 0px;
+	position: absolute;
+	z-index: 1;
+	bottom: 0;
+	right: 0;
+	text-align: right;
+}
+
+.product_photo .product_icon img {
+	background: transparent;
+	margin-left: auto;
+	margin-right: 0;
+}
+
+
 .bnz-nv {
     padding: 3px 0 1px 0;
 }
