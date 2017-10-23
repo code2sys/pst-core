@@ -9,6 +9,10 @@ require_once 'Mobile_Detect.php';
 $detect = new Mobile_Detect;
 $CI =& get_instance();
 
+print "<!-- PRODUCT: ";
+print_r($product);
+print "-->\n";
+
 ?>
 <div class="container dtlpg" style="margin-top:30px;" id="mdcntnr">
     <div class="breadCrumb">
