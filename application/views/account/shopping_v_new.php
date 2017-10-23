@@ -749,6 +749,20 @@ if ($garageNeeded):
         return false;
     }
 
+    <?php if ($garageNeeded && !$validRide) {
+        ?>
+    $(document).on("ready", function() {
+        $('.error').show();
+        $('#error_message').text('Your machine does not match this item.  Please change your active machine above to add this item to cart.');
+        if ($("#price").text() == "$0") {
+            $("span#price").hide();
+        } else {
+            $("span#price").show();
+        }
+    });
+<?php
+    } ?>
+
     function submitWishlist()
     {
         var proceed;
