@@ -43,10 +43,10 @@ span.glyphicon-filter {
 	.drop-blok {
 		display:none;
 	}
-	.prodSec img:nth-child(2) {
-		width: 42px !important;
-		height: 42px !important;
-	}
+	/*.prodSec img:nth-child(2) {*/
+		/*width: 42px !important;*/
+		/*height: 42px !important;*/
+	/*}*/
 	
 	#toggle ul li.last,
 	#toggle ul.sbOptions li{
@@ -711,10 +711,10 @@ span.glyphicon-filter {
 	ul.sbOptions {
 		width:200px !important
 	}
-	.prodSec img:nth-child(2) {
-		width: 42px !important;
-		height: 42px !important;
-	}
+	/*.prodSec img:nth-child(2) {*/
+		/*width: 42px !important;*/
+		/*height: 42px !important;*/
+	/*}*/
 	.pop .area {
 		width: 460px;		
 	}	
