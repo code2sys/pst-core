@@ -553,6 +553,21 @@ a:active {
 	-webkit-border-radius: 3px;
 }
 
+.product_photo .product_icon {
+	margin: 0px;
+	position: absolute;
+	z-index: 1;
+	bottom: 0;
+	right: 0;
+	text-align: right;
+}
+
+.product_photo .product_icon img {
+	background: transparent;
+	margin-left: auto;
+	margin-right: 0;
+}
+
 .reviews {
 	font-size: 12px;
 }
@@ -570,10 +585,10 @@ a:active {
 }
 .product_icon img {
 	height: 42px;  
-    width: 42px;  
+    width: auto;
     position: absolute;   
-    left: 100px;  
-	margin: auto;  
+    /*left: 100px;  */
+    /*margin: auto;  */
 
 	/*BORDER RADIUS*/
 	border-radius: 3px;
@@ -592,7 +607,7 @@ a:active {
 .product_box_text {
 	height:48px;
 	float:left;
-	margin-top:-20px;
+	/*margin-top:-20px;*/
 	margin-bottom: 10px;
 	overflow:hidden;
 	width:100%;

@@ -423,10 +423,52 @@ class Admin_M extends Master_M {
         }
     }
 
+    /*
+     * JLB 10-22-17
+     * I don't want to have to keep looking these things up; I just want to make my list of categories, which is probably small, and cache it in memory.
+     */
+
+    protected $fitment_categories;
+    protected $fitment_category_map;
+    protected function initializeFitmentCategories() {
+        $this->fitment_categories = array();
+        $this->fitment_category_map = array();
+
+        // get the first round of categories that do fitments
+        $query = $this->db->query("Select category_id from category where fitment_based = 1");
+        foreach ($query->result_array() as $row) {
+            $this->fitment_categories[] = $row["category_id"];
+        }
+        $parent_categories = $this->fitment_categories;
+
+        if (count($parent_categories) > 0) {
+            do {
+                $new_categories = array();
+
+                $query = $this->db->query("Select category_id from category where parent_category_id in (" . implode(",", $parent_categories) . ")");
+                foreach ($query->result_array() as $row) {
+                    $new_categories[] = $row["category_id"];
+                }
+
+                if (count($new_categories) > 0) {
+                    $this->fitment_categories = array_merge($this->fitment_categories, $new_categories);
+                    $parent_categories = $new_categories;
+                }
+
+            } while(count($new_categories) > 0);
+        }
+
+        foreach ($this->fitment_categories as $c_id) {
+            $this->fitment_category_map["c" . $c_id] = true;
+        }
+    }
+
     public function processParts($limit = 4000) {
         $CI =& get_instance();
         $CI->load->model("parts_m");
         $debug = false;
+
+        $this->initializeFitmentCategories();
 
         $this->db->limit($limit);
         $this->db->order_by('recCreated ASC');
@@ -688,6 +730,19 @@ class Admin_M extends Master_M {
                     }
                 }
 
+
+                /*
+                 * JLB 10-22-17
+                 * We added a new feature where we are flagging the part as universal fitment or not.
+                 */
+                $universal_fitment = 0;
+
+                if ($this->part_hasFitmentAncestorCategory($records[$i]["part_id"])) {
+                    $universal_fitment = $this->part_hasFitment($records[$i]["part_id"]) ? 0 : 1;
+                }
+                $this->db->query("Update part set universal_fitment = ? where part_id = ? limit 1", array($universal_fitment, $records[$i]["part_id"]));
+
+
                 $where = array('part_id' => $records[$i]['part_id']);
                 $this->deleteRecord('queued_parts', $where);
             }
@@ -698,6 +753,27 @@ class Admin_M extends Master_M {
         $this->TheCronJob->fixNullManufacturers();
         $this->TheCronJob->fixBrandSlugs();
         $this->TheCronJob->fixBrandLongNames();
+    }
+
+    public function part_hasFitmentAncestorCategory($part_id) {
+        $query = $this->db->query("Select category_id from partcategory where part_id = ?", array($part_id));
+
+        foreach ($query->result_array() as $row) {
+            if (array_key_exists("c" . $row["category_id"], $this->fitment_category_map)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function part_hasFitment($part_id) {
+        $query = $this->db->query("Select count(*) as cnt from part join partpartnumber using (part_id) join partnumbermodel using (partnumber_id) where part.part_id = ?", array($part_id));
+        $count = 0;
+        foreach ($query->result_array() as $row) {
+            $count = $row['cnt'];
+        }
+        return $count > 0;
     }
 
     public function processPartsInventoryReceiving($limit = 10) {
