@@ -7,12 +7,7 @@ $is_search_results = $band['label'] == 'Search Results' || 'Search Results' == s
  * I saw somebody using the if(): endif in a pure PHP block and I wanted to vomit.
  */
 
-$has_fitment = array_key_exists("garage", $_SESSION) && count($_SESSION["garage"]) > 0;
-$fitment_image = "/assets/perfect_fit.png";
-$universal_image = "/assets/universal_fit.png";
-$fitment_width = 155;
-$universal_width = 177;
-$fitment_height =$universal_height = 68;
+require(__DIR__ . "/../fitment_common.php");
 
 if (!function_exists('tag_creating')) {
     function tag_creating($url)
