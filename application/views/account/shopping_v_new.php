@@ -58,18 +58,18 @@ $CI =& get_instance();
         <div class="clear"></div>
         <div class="prodSec">
             <?php if ($has_fitment) {
-                $image_to_use = $height = $width = 0;
+                $image_to_use = $height = $j_width = 0;
                 if ($product["universal_fitment"] > 0) {
                     $image_to_use = $universal_image;
                     $height = $universal_height;
-                    $width = $universal_width;
+                    $j_width = $universal_width;
                 } else {
                     $image_to_use = $fitment_image;
                     $height = $fitment_height;
-                    $width = $fitment_width;
+                    $j_width = $fitment_width;
                 }
                 $height = floor($height / 2.0);
-                $width = floor($width / 2.0);
+                $j_width = floor($j_width / 2.0);
                 ?>
 
 
@@ -83,7 +83,7 @@ $CI =& get_instance();
 
                 <?php /* ?>  DISPLAYING THE CHECK MARK, IF PRODUCT PART MATCHES WITH GARAGE <?php */ ?>
             <?php endif; ?>
-            <?php if ($has_fitment): ?><img src="<?php echo $image_to_use; ?>" height="<?php echo $height; ?>" width="<?php echo $width; ?>" style=" position: relative; margin-top: -<?php echo 10 + $height; ?>px; float: right; margin-right: 12px; width: <?php echo $width; ?>px !important; height: <?php echo $height; ?>px !important; " ><?php endif; ?>
+            <?php if ($has_fitment): ?><img src="<?php echo $image_to_use; ?>" height="<?php echo $height; ?>" width="<?php echo $j_width; ?>" style=" position: relative; margin-top: -<?php echo 10 + $height; ?>px; float: right; margin-right: 12px; width: <?php echo $j_width; ?>px !important; height: <?php echo $height; ?>px !important; " ><?php endif; ?>
 
 
             <?php if( @$product['stock_code'] && $product['stock_code'] == 'Closeout' ) { ?>
