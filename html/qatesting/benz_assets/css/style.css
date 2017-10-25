@@ -988,7 +988,7 @@ img.powerlogo-a {
 			list-style-type: none;
 			margin: 44px 0;
 			padding: 0px;
-			width: 171px;
+			/*width: 171px;*/
 			overflow: hidden;
 			height: 50px;
 			float: right;
@@ -1264,7 +1264,7 @@ ul.lSPager.lSGallery {
     list-style-type: none;
     margin: 44px 0;
     padding: 0px;
-    width: 171px;
+    /*width: 171px;*/
     overflow: hidden;
     height: 50px;
     float: right;
