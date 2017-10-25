@@ -73,6 +73,10 @@ $route['dirtbike/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['watercraft/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['snowmobile/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['utility/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
+$route['car/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
+$route['truck/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
+$route['boat/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
+$route['trailer/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 
 $route['vault'] = 'vault/index';
 

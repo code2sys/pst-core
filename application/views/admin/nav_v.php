@@ -68,7 +68,7 @@ if (!is_null($pageIndex) && $pageIndex < 9)
 					<?php } ?>
                     <?php if (!defined("MOTORCYCLE_SHOP_DISABLE") || !MOTORCYCLE_SHOP_DISABLE): ?>
 					<?php if(in_array('mInventory', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
-						<li><a href="<?php echo base_url('/admin/mInventory'); ?>" ><i class="fa fa-motorcycle"></i>&nbsp;Motorcycle Inventory</a></li>
+						<li><a href="<?php echo base_url('/admin/mInventory'); ?>" ><i class="fa fa-motorcycle"></i>&nbsp;Unit Inventory</a></li>
 					<?php } ?>
                     <?php endif; ?>
                     <?php
