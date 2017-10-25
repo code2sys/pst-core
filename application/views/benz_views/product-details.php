@@ -165,9 +165,23 @@ unset($motorcycle['videos'][0]);
 							<!--<p><?php echo $recently['title'];?></p>-->
 							<?php if( $recently['call_on_price'] == '1' ) { ?>
 								<p class="cfp">Call For Price</p>
-							<?php } elseif (($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00")) { ?>
-								<span>$<?php echo number_format($recently['sale_price'],2);?></span>
-                            <?php } ?>
+                                <?php
+                                } else {
+                                if ($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00") { ?>
+                                    <p>Retail Price: &nbsp; <span
+                                                class="strikethrough">$<?php echo $recently['retail_price']; ?></span>
+                                    </p>
+                                    <p>Sale Price: &nbsp; &nbsp;<span
+                                                class="redtext">$<?php echo $recently['sale_price']; ?></span></p>
+                                <?php } else { ?>
+                                    <p>Retail Price: &nbsp; $<?php echo $recently['retail_price']; ?></p>
+                                    <?php
+                                }
+                                if ($recently["destination_charge"]) {
+                                    echo "<sub>* Plus Applicable destination charge</sub>";
+                                }
+                            }
+                            ?>
 						</div>
 					<?php } ?>
 				</div>		
