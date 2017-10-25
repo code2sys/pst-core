@@ -50,7 +50,7 @@ if (@$motorcycles) {
                         <p>mileage :<span><?php echo $motorcycle['mileage']; ?></span></p>
                     <?php } ?>
                     <?php if ($motorcycle['engine_type'] != '') { ?>
-                        <p>fuel type :<span><?php echo $motorcycle['engine_type']; ?></span></p>
+                        <p>Engine Type :<span><?php echo $motorcycle['engine_type']; ?></span></p>
         <?php } ?>
                 </div>
             </div>
