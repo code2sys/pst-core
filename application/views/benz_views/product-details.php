@@ -169,12 +169,12 @@ unset($motorcycle['videos'][0]);
                                 } else {
                                 if ($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00") { ?>
                                     <p>Retail Price: &nbsp; <span
-                                                class="strikethrough">$<?php echo $recently['retail_price']; ?></span>
+                                                class="strikethrough">$<?php echo number_format($recently['retail_price'], 2); ?></span>
                                     </p>
                                     <p>Sale Price: &nbsp; &nbsp;<span
-                                                class="redtext">$<?php echo $recently['sale_price']; ?></span></p>
+                                                class="redtext">$<?php echo number_format($recently['sale_price'], 2); ?></span></p>
                                 <?php } else { ?>
-                                    <p>Retail Price: &nbsp; $<?php echo $recently['retail_price']; ?></p>
+                                    <p>Retail Price: &nbsp; $<?php echo number_format($recently['retail_price'], 2); ?></p>
                                     <?php
                                 }
                                 if ($recently["destination_charge"]) {
