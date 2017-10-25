@@ -57,7 +57,12 @@ if (@$motorcycles) {
             <div class="mid-r-but">
                 <a href="#"  data-toggle="modal" data-target="#myModal<?php echo $motorcycle['id']; ?>"><img src="<?php echo $new_assets_url; ?>images/message.png" width="20px" height="22px;"/><span class="mid-cen">GET a quote</span></a>
                 <a href="#" data-toggle="modal" data-target="#myModal<?php echo $motorcycle['id']; ?>"><img src="<?php echo $new_assets_url; ?>images/outgoing.png" width="20px" height="24px;"/>value your <span>trade</span></a>
-                <a href="#"><img src="<?php echo $new_assets_url; ?>images/doll.png" width="10px" height="20px;"/><span class="mid-cen">GET FINANCING</span></a>
+                <a href="#"><img src="<?php echo $new_assets_url; ?>images/doll.png" width="10px" height="20px;"/><span class="mid-cen"><?php
+                        if (!defined('GET_FINANCING_WORDING')) {
+                            define('GET_FINANCING_WORDING', 'GET FINANCING');
+                        }
+                        echo GET_FINANCING_WORDING;
+                        ?></span></a>
                 <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $title . '/' . $motorcycle['sku']); ?>"><img src="<?php echo $new_assets_url; ?>images/list.png" width="15px" height="20px;"/>VIEW DETAILS</a>
             </div>
         </div>

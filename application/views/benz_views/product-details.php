@@ -28,7 +28,12 @@ unset($motorcycle['videos'][0]);
 					<li><a href="#" data-toggle="modal" data-target="#myModal">GET A QUOTE</a></li>
 					<li><a href="#" data-toggle="modal" data-target="#myModal">TRADE VALUE</a></li>
 					<li style="margin-right:10px;" data-toggle="modal" data-target="#myModal"><a href="#"><?php if (defined('WORDING_SCHEDULE_TEST_DRIVE')) { echo WORDING_SCHEDULE_TEST_DRIVE; } else { ?>SCHEDULE TEST DRIVE<?php } ?></a></li>
-					<li><a href="/pages/index/financerequest">GET FINANCING</a></li>
+					<li><a href="/pages/index/financerequest"><?php
+                            if (!defined('GET_FINANCING_WORDING')) {
+                                define('GET_FINANCING_WORDING', 'GET FINANCING');
+                            }
+                            echo GET_FINANCING_WORDING;
+                            ?></a></li>
 					<!--<li><a href="#" data-toggle="modal" data-target="#myModal">GET FINANCING</a></li>-->
 					<li><a href="https://www.progressive.com/motorcycle/" target="_blank" >INSURANCE QUOTE</a></li>
 					<!--<li><a href="#">HISTORY REPORT</a></li>
