@@ -990,7 +990,7 @@ img.powerlogo-a {
 			padding: 0px;
 			/*width: 171px;*/
 			overflow: hidden;
-			height: 50px;
+			/*height: 50px;*/
 			float: right;
 		}
 		.mypagination ul li {
@@ -1266,7 +1266,7 @@ ul.lSPager.lSGallery {
     padding: 0px;
     /*width: 171px;*/
     overflow: hidden;
-    height: 50px;
+    /*height: 50px;*/
     float: right;
 }
 .mypagination ul li {
