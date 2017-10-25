@@ -250,6 +250,9 @@ $media_url = jsite_url("/media/");
                         <h4 style="margin:0 0 20px">RECENTLY VIEWED</h4>
                     </div>
                     <div class="fltrbx">
+                        <!--
+                        <?php print_r($recentlyMotorcycle); ?>
+                        -->
                         <?php foreach ($recentlyMotorcycle as $recently) { ?>
                             <?php $title = str_replace(' ', '_', trim($recently['title'])); ?>
                             <div class="col-md-12 text-center padg">
