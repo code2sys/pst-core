@@ -262,7 +262,6 @@ class Admin extends Master_Controller {
         $this->form_validation->set_rules('category', 'Category', 'required');
         $this->form_validation->set_rules('condition', 'Condition', 'required');
         $this->form_validation->set_rules('sku', 'Sku', 'required');
-        $this->form_validation->set_rules('category', 'Category', 'required');
         return $this->form_validation->run();
     }
 
