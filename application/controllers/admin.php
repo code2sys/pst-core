@@ -259,7 +259,7 @@ class Admin extends Master_Controller {
         $this->form_validation->set_rules('vehicle_type', 'Vehicle Type', 'required');
         $this->form_validation->set_rules('make', 'Make', 'required');
         $this->form_validation->set_rules('model', 'Model', 'required');
-        $this->form_validation->set_rules('categoru', 'Category', 'required');
+        $this->form_validation->set_rules('category', 'Category', 'required');
         $this->form_validation->set_rules('condition', 'Condition', 'required');
         $this->form_validation->set_rules('sku', 'Sku', 'required');
         $this->form_validation->set_rules('category', 'Category', 'required');
