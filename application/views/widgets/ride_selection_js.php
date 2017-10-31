@@ -4,6 +4,12 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
 
 ?>
 <script type="application/javascript">
+    var model_val;
+    var make_val;
+    var year_val;
+    var machine_val;
+
+
     function updateGarage()
     {
         var pathname = window.location.pathname;
@@ -18,6 +24,7 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
             {
                 if(val != '')
                 {
+                    machine_val = val;
                     $.ajax(
                         {
                             async: false,
@@ -90,6 +97,7 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
             {
                 if(val != '')
                 {
+                    make_val = val;
                     $.ajax(
                         {
                             async: false,
@@ -149,6 +157,7 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
             {
                 if(val != '')
                 {
+                    year_val = val;
                     $.ajax(
                         {
                             async: false,
@@ -156,7 +165,7 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
                             url: <?php echo $base_url_string; ?> + 'ajax/getNewModel/',
                             data : {
                                 'year' :  val, // $("#update_garage_form [name=year] option:selected").text(),
-                                'makeId' : $("#update_garage_form [name=make]").val(),
+                                'makeId' : make_val,
                                 <?php if(@$product['part_id']): ?>
                                 'partId' : '<?php echo $product['part_id']; ?>',
                                 <?php endif; ?>
