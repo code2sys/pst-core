@@ -202,7 +202,7 @@ class Productuploadermodel extends CI_Model {
         if (!$handle) {
             // set an error message and return
 
-            return;
+            return 0;
         }
         $column_data["header"] = fgetcsv($handle);
         $column_data["first_row"] = fgetcsv($handle);
