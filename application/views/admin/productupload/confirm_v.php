@@ -15,9 +15,6 @@
             <button id="button" type="submit">Confirm and Process</button>
         </form>
 
-        <form method="get" action="<?php echo base_url('adminproductuploader/index'); ?>" >
-            <button id="button2" type="submit">Upload A New File</button>
-        </form>
-
+        <p><a href="<?php echo base_url('adminproductuploader/index'); ?>">Click here to upload a new file.</a></p>
     </div>
 </div>
