@@ -433,12 +433,11 @@ class Productuploadermodel extends CI_Model {
                 $basename = $p["upload_file"];
         }
 
-        $fullname = $this->upload_directory . $basename;
+        $fullname = $this->upload_directory . '/' . $basename;
 
         // OK, shove it down as an attachment...
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="' . $basename . '.csv"');
-        print $fullname . "\n";
         print file_get_contents($fullname);
     }
 
