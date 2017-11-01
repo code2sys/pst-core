@@ -144,11 +144,13 @@ class Productuploadermodel extends CI_Model {
     }
 
     protected $productupload_cache;
+    protected $distributor_cache;
 
     public function __construct() {
         parent::__construct();
         $this->upload_directory = STORE_DIRECTORY . "/uploads";
         $this->productupload_cache = array();
+        $this->distributor_cache = array();
     }
 
     public function implodeList($table, $column) {
@@ -355,16 +357,55 @@ class Productuploadermodel extends CI_Model {
     }
 
     protected function getDealerDistributor() {
-
+        $this->distributor_cache = array();
+        $query = $this->db->query("Select distributor_id, name from distributor");
+        foreach ($query->result_array() as $row) {
+            $clean_name = $this->clean_name($row["name"]);
+            $this->distributor_cache[$clean_name] = $row["distributor_id"];
+        }
     }
 
     protected function findDealerPartNumber($distributor, $part_number) {
-
+        $distributor_id = $this->queryPart($distributor);
+        if ($distributor_id > 0) {
+            return $this->queryPart($distributor_id, $part_number);
+        } else {
+            return 0;
+        }
     }
 
+    protected function clean_name($string) {
+        return preg_replace("/[^a-z0-9]/", "", strtolower(trim($string)));
+    }
+
+    protected function queryDistributor($distributor_name) {
+        if (count($this->distributor_cache) == 0) {
+            $this->getDealerDistributor();
+        }
+        $clean_name = $this->clean_name($distributor_name);
+        return array_key_exists($clean_name, $this->distributor_cache) ? $this->distributor_cache[$clean_name] : 0;
+    }
+
+    protected function queryPart($distributor_id, $part_number) {
+        $query = $this->db->query("Select partvariation_id from partvariation where distributor_id = ? and (part_number = ? or clean_part_number = ?)", array($distributor_id, $part_number, $part_number));
+        foreach ($query->result_array() as $row) {
+            return $row["partvariation_id"];
+        }
+        return 0;
+    }
+
+    /*
+     * We have to check the following:
+     * - We have to recognize the distributor
+     * - We can look for that part number to figure out if we know it or not
+     * - If we are provided a machine, make, model, we need to have a year (check the whole chain...)
+     * - Enforce the required fields...
+     * - We can create a new manufacturer
+     */
     public function applyMapping($productupload_id, $limit = 200) {
         // OK, you have to open the file handles for append...
         $p = $this->get($productupload_id);
+        $columndata = unserialize($p["columndata"]);
         $new_handle = fopen($this->upload_directory . "/" . $p["new_file"], "a");
         $update_handle = fopen($this->upload_directory . "/" . $p["update_file"], "a");
         $reject_handle = fopen($this->upload_directory . "/" . $p["reject_file"], "a");
@@ -381,7 +422,22 @@ class Productuploadermodel extends CI_Model {
             $row_count++;
         }
 
-        $header = $this->getHeader($productupload_id);
+        // get the flags
+        $inverted_columns = array();
+        for ($i = 0; $i < count($columndata["columns"]); $i++) {
+            $col = $columndata["columns"][$i];
+            if ($col != "") {
+                if (array_key_exists($col, $inverted_columns)) {
+                    if (!is_array($inverted_columns[$col])) {
+                        $inverted_columns[$col] = array($inverted_columns[$col]);
+                    }
+                    $inverted_columns[$col][] = $i;
+                } else {
+                    $inverted_columns[$col] = $i;
+                }
+            }
+        }
+
 
         // now, we have to map them...
         $new_count = $update_count = $reject_count = 0;
@@ -391,10 +447,69 @@ class Productuploadermodel extends CI_Model {
             $reject = false;
             $reject_reason = "Uninitialized.";
 
-            if ($new) {
+            // OK, we have to try all these out...
+            $distributor_value = trim(array_key_exists("distributor", $inverted_columns) ? $row[$inverted_columns["distributor"]] : "");
+            // part number part_number
+            $part_number_value = trim(array_key_exists("part_number", $inverted_columns) ? $row[$inverted_columns["part_number"]] : "");
+            // part name part
+            $part_value = trim(array_key_exists("part", $inverted_columns) ? $row[$inverted_columns["part"]] : "");
+            // manufacturer manufacturer
+            $manufacturer_value = trim(array_key_exists("manufacturer", $inverted_columns) ? $row[$inverted_columns["manufacturer"]] : "");
+            // category category
+            $category_value = trim(array_key_exists("category", $inverted_columns) ? $row[$inverted_columns["category"]] : "");
+
+            if ($distributor_value == "") {
+                $reject = true;
+                $reject_reason = "Distributor value is required.";
+            } else if ($part_number_value == "") {
+                $reject = true;
+                $reject_reason = "Distributor part number value is required.";
+            } else if ($part_value == "") {
+                $reject = true;
+                $reject_reason = "Part name value is required.";
+            } else if ($manufacturer_value == "") {
+                $reject = true;
+                $reject_reason = "Manufacturer value is required.";
+            } else if ($category_value == "") {
+                $reject = true;
+                $reject_reason = "Category value is required.";
+            }
+
+            if (!$reject) {
+                // OK, if we are here, then we are looking at a possible value...
+                $distributor_id = $this->queryDistributor($distributor_value);
+                if ($distributor_id > 0) {
+                    // QUESTION - Should we be restricting machine typ?
+                    // OK, if fitment is provided...is it complete?
+                    $machine_type_value = trim(array_key_exists("machine_type", $inverted_columns) ? $row[$inverted_columns["machine_type"]] : "");
+                    $make_value = trim(array_key_exists("make", $inverted_columns) ? $row[$inverted_columns["make"]] : "");
+                    $model_value = trim(array_key_exists("model", $inverted_columns) ? $row[$inverted_columns["model"]] : "");
+                    $year_value = trim(array_key_exists("year", $inverted_columns) ? $row[$inverted_columns["year"]] : "");
+
+                    if (($machine_type_value != "" || $make_value != "" || $model_value != "" || $year_value != "") && ($machine_type_value == "" || $make_value == "" || $model_value == "" || $year_value == "")) {
+                        $reject = true;
+                        $reject_reason = "Please specify all four values for fitment - machine type, make, model, and year.";
+                    }
+
+                    if (!$reject) {
+                        // If we are still here, we are going to add this thing, we just need to know if we need to add or update it...
+                        $part_id = $this->queryPart($distributor_id, $part_number_value);
+
+                        $update = $part_id > 0;
+                        $new = !$update;
+                    }
+
+                } else {
+                    $reject = true;
+                    $reject_reason = "Sorry, that distributor is unknown. Please first define new distributors under Content > Distributors.";
+                }
+
+            }
+
+            if (!$reject && $new) {
                 $new_count++;
                 fputcsv($new_handle, $row);
-            } else if ($update) {
+            } else if (!$reject && $update) {
                 $update_count++;
                 fputcsv($update_handle, $row);
             } else {
