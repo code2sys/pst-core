@@ -416,6 +416,9 @@ class Productuploadermodel extends CI_Model {
     }
 
     public function download($productupload_id, $mode = "all") {
+        // Just have to find the correct file and dump it... If you are here, then you are requesting it all...
+        $p = $this->get($productupload_id);
+
 
     }
 
@@ -429,18 +432,25 @@ class Productuploadermodel extends CI_Model {
         $p = $this->get($productupload_id);
         switch (strtolower($status)) {
             case "new":
-                return $p["new_row_count"];
+                $basename = $p["new_file"];
                 break;
             case "update":
-                return $p["update_row_count"];
+                $basename = $p["update_file"];
                 break;
 
             case "reject":
-                return $p["reject_row_count"];
+                $basename = $p["reject_file"];
                 break;
             default:
-                return 0;
+                $basename = $p["upload_file"];
         }
+
+        $fullname = $this->upload_directory . $basename;
+
+        // OK, shove it down as an attachment...
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $basename . '.csv"');
+        print file_get_contents($fullname);
     }
 
     public function process($productupload_id, $limit = 100) {
