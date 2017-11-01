@@ -71,6 +71,7 @@ class Adminproductuploader extends Admin
 
     public function download($productupload_id, $mode = "all") {
         $this->_validateProductUploadID($productupload_id);
+        print "Hi $productupload_id $mode \n";
         $this->Productuploadermodel->download($productupload_id, $mode);
     }
 
