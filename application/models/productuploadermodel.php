@@ -418,19 +418,7 @@ class Productuploadermodel extends CI_Model {
     public function download($productupload_id, $mode = "all") {
         // Just have to find the correct file and dump it... If you are here, then you are requesting it all...
         $p = $this->get($productupload_id);
-
-
-    }
-
-    public function confirm($productupload_id) {
-
-        $this->db->query("Update productupload set status = 'Processed', processed_row_count = 0, new_row_count = 0, reject_row_count = 0, update_row_count = 0 where productupload_id = ?", array($productupload_id));
-        $this->clearCache($productupload_id);
-    }
-
-    public function getStatusCounts($productupload_id, $status = "New") {
-        $p = $this->get($productupload_id);
-        switch (strtolower($status)) {
+        switch (strtolower($mode)) {
             case "new":
                 $basename = $p["new_file"];
                 break;
@@ -452,6 +440,30 @@ class Productuploadermodel extends CI_Model {
         header('Content-Disposition: attachment; filename="' . $basename . '.csv"');
         print $fullname . "\n";
         print file_get_contents($fullname);
+    }
+
+    public function confirm($productupload_id) {
+
+        $this->db->query("Update productupload set status = 'Processed', processed_row_count = 0, new_row_count = 0, reject_row_count = 0, update_row_count = 0 where productupload_id = ?", array($productupload_id));
+        $this->clearCache($productupload_id);
+    }
+
+    public function getStatusCounts($productupload_id, $status = "New") {
+        $p = $this->get($productupload_id);
+        switch (strtolower($status)) {
+            case "new":
+                return $p["new_row_count"];
+                break;
+            case "update":
+                return $p["update_row_count"];
+                break;
+
+            case "reject":
+                return $p["reject_row_count"];
+                break;
+            default:
+                return 0;
+        }
     }
 
     public function process($productupload_id, $limit = 100) {
