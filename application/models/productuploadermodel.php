@@ -450,6 +450,7 @@ class Productuploadermodel extends CI_Model {
         // OK, shove it down as an attachment...
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="' . $basename . '.csv"');
+        print $fullname . "\n";
         print file_get_contents($fullname);
     }
 
