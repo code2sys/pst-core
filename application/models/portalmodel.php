@@ -188,7 +188,7 @@ class Portalmodel extends Master_M {
     }
 
     public function insertPartPartNumber($part_id, $partnumber_id) {
-        $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?)", array($part_id, $partnumber_id));
+        $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?) on duplicate key update partpartnumber_id = values(partpartnumber_id)", array($part_id, $partnumber_id));
     }
 
     public function getCustomerDistributor($customerdistributor) {

@@ -394,6 +394,23 @@ class Productuploadermodel extends CI_Model {
         return 0;
     }
 
+    protected function getInvertedColumns($columndata) {
+        $inverted_columns = array();
+        for ($i = 0; $i < count($columndata["columns"]); $i++) {
+            $col = $columndata["columns"][$i];
+            if ($col != "") {
+                if (array_key_exists($col, $inverted_columns)) {
+                    if (!is_array($inverted_columns[$col])) {
+                        $inverted_columns[$col] = array($inverted_columns[$col]);
+                    }
+                    $inverted_columns[$col][] = $i;
+                } else {
+                    $inverted_columns[$col] = $i;
+                }
+            }
+        }
+    }
+
     /*
      * We have to check the following:
      * - We have to recognize the distributor
@@ -423,21 +440,7 @@ class Productuploadermodel extends CI_Model {
         }
 
         // get the flags
-        $inverted_columns = array();
-        for ($i = 0; $i < count($columndata["columns"]); $i++) {
-            $col = $columndata["columns"][$i];
-            if ($col != "") {
-                if (array_key_exists($col, $inverted_columns)) {
-                    if (!is_array($inverted_columns[$col])) {
-                        $inverted_columns[$col] = array($inverted_columns[$col]);
-                    }
-                    $inverted_columns[$col][] = $i;
-                } else {
-                    $inverted_columns[$col] = $i;
-                }
-            }
-        }
-
+        $inverted_columns = $this->getInvertedColumns($columndata);
 
         // now, we have to map them...
         $new_count = $update_count = $reject_count = 0;
@@ -580,8 +583,352 @@ class Productuploadermodel extends CI_Model {
         }
     }
 
-    public function process($productupload_id, $limit = 100) {
+    /*
+     * This will turn this row, which is number-ordered array, into an associative array
+     */
+    protected function explodeToAssoc($inverted_column, $row) {
+        $result = array();
+        foreach ($inverted_column as $k => $n) {
+            if ($n < count($row)) {
+                if (array_key_exists($k, $result)) {
+                    $result[$k] = array($k);
+                    $result[$k][] = $row[$n];
+                } else {
+                    $result[$k] = $row[$n];
+                }
+            }
+        }
+        return $result;
+    }
 
+    // We're doing an update, we can be a whole lot more lenient about this part
+    protected function applyUpdate($assoc_row) {
+        // OK, we know what this is...
+        $distributor_id = $this->queryDistributor($assoc_row["distributor"]);
+        $partvariation_id = $this->queryPart($distributor_id, $assoc_row["part_number"]);
+        $this->sub_apply($assoc_row, $distributor_id, $partvariation_id);
+    }
+
+    // Now, for this one, we must create enough to keep that thing in place. This should mirror the code when you create a new part in the admin one-at-a-time.
+    protected function applyNew($assoc_row) {
+        $distributor_id = $this->queryDistributor($assoc_row["distributor"]);
+        $this->sub_apply($assoc_row, $distributor_id);
+
+
+    }
+
+    // Reference: Controllers/Adminproduct::product_add_save
+    protected function sub_apply($row, $distributor_id, $partvariation_id = 0) {
+        // you should plow through all of it - name, manufacturer, description, categories... that's what we put into product_add_save...
+        $part_name = trim($row["name"]);
+        $manufacturer = trim($row["manufacturer"]);
+        if ($manufacturer == "") {
+            $manufacturer = trim($row["new_manufacturer"]);
+        }
+        $description = array_key_exists("description", $row) ? $row["description"] : "";
+        $categories = $row["categories"];
+
+        $CI =& get_instance();
+        $CI->load->model("Portalmodel");
+        $part_id = $CI->Portalmodel->makePartByName($part_name, $description);
+
+        // Make the manufacturer
+        $manufacturer_id = $CI->Portalmodel->getOrMakeManufacturer($manufacturer);
+
+        // Assign the manufacturer
+        $CI->Portalmodel->assignPartManufacturer($part_id, $manufacturer_id);
+
+        // OK, time for the categories...
+        $categories = preg_split("/\s*;\s*/", $categories);
+        foreach ($categories as $c) {
+            $c = trim($c);
+            $c = $CI->Portalmodel->getOrCreateCategory($c);
+            $CI->Portalmodel->addPartCategory($part_id, $c);
+        }
+
+        // OK, now, the part should be there, one way, or another.
+        // What you have to do now is go down to part variation...
+        if ($partvariation_id == 0) {
+            // you better create it...
+            $partvariation_id = $CI->Portalmodel->createPartVariation($row["part_number"], array_key_exists("quantity", $row) ? $row["quantity"] : 0, (array_key_exists("closeout", $row) && ($row["closeout"] == 1 || trim(strtolower($row["closeout"])) == "yes" || trim(strtolower($row["closeout"])) == "y")) ? "Closeout":"Normal", array_key_exists("cost", $row) ? $row["cost"] : 0, array_key_exists("price", $row) ? $row["price"] : 0, NULL, NULL);
+
+            // And, I guess, make this thing a part number?
+            $partnumber_id = $CI->Portalmodel->createPartNumber($row["part_number"], array_key_exists("cost", $row) ? $row["cost"] : 0, array_key_exists("price", $row) ? $row["price"] : 0, NULL);
+
+            // And link them..
+            $CI->Portalmodel->setPartVariationPartNumber($partvariation_id, $partnumber_id);
+        } else {
+            // Get the partnumber associated with this partvariation_id...
+            $partnumber_id = 0;
+            $query = $this->db->query("Select partnumber_id from partvariation where partvariation_id = ?", array($partvariation_id));
+            foreach ($query->result_array() as $datarow) {
+                $partnumber_id = $datarow["partnumber_id"];
+            }
+
+            // Best make sure there's an entry in dealer part variation...
+            $present = false;
+            $query = $this->db->query("Select * from partdealervariation where partvariation_id = ?", array($partvariation_id));
+            foreach ($query->result_array() as $this_row) {
+                $present = true;
+            }
+
+            if (!$present) {
+                $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, quantity_last_updated, cost, price, clean_part_number, revisionset_id, manufacturer_part_number, weight, stock_code) select partvariation_id, part_number, partnumber_id, distributor_id, 0, 0, now(), cost, price, clean_part_number, revisionset_id, manufacturer_part_number, weight, stock_code from partvariation where partvariation_id = ? on duplicate key update quantity_available = values(quantity_available), quantity_ten_plus = values(quantity_ten_plus), quantity_last_updated = now(), cost = values(cost), price = values(price), weight = values(weight), stock_code = values(stock_code)", array($partvariation_id));
+            }
+
+            // TODO
+            // Should we be updating categories? Description?
+
+        }
+
+
+        // OK, if it's not there, you'll have to insert into partpartnumber...
+        $CI->Portalmodel->insertPartPartNumber($part_id, $partnumber_id);
+
+        $update_query = "Update partdealervariation set ";
+        $values = array();
+
+        // If quantity, price, etc is provided, we need to consider adding this to the dealer part variation and setting it accordingly...
+        if (array_key_exists("quantity", $row) && $row["quantity"] != "") {
+            $update_query .= " quantity_available = ? ";
+            $values[] = $row["quantity"];
+        }
+        if (array_key_exists("price", $row) && $row["price"] != "") {
+            if (count($values) > 0) {
+                $update_query .= " , ";
+            }
+            $update_query .= " price = ? ";
+            $values[] = $row["price"];
+        }
+        if (array_key_exists("cost", $row) && $row["cost"] != "") {
+            if (count($values) > 0) {
+                $update_query .= " , ";
+            }
+            $update_query .= " cost = ? ";
+            $values[] = $row["cost"];
+        }
+        if (array_key_exists("closeout", $row) && $row["closeout"] != "") {
+            if (count($values) > 0) {
+                $update_query .= " , ";
+            }
+            $update_query .= " stock_code = ? ";
+            $values[] = (1 == $row["closeout"] || "y" == strtolower(trim($row["closeout"])) || "yes" == strtolower(trim($row["closeout"]))) ? "Closeout" : "Normal";
+        }
+
+        if (count($values) > 0) {
+            $values[] = $partvariation_id;
+            $this->db->query($update_query . " where partvariation_id = ? limit 1", $values);
+        }
+
+        if (array_key_exists("question", $row) && $row["question"] != "") {
+            // OK, is there a question for this that is not a product question?
+            $partquestion_id = 0;
+
+            $query = $this->db->query("Select partquestion_id from partquestion where part_id = ? and question = ? ", array($part_id, $row["question"]));
+            foreach ($query->result_array() as $datarow) {
+                $partquestion_id = $datarow["partquestion_id"];
+
+            }
+
+            if ($partquestion_id == 0) {
+                $this->db->query("Insert into partquestion (part_id, question) values (?, ?)", array($part_id, $row["question"]));
+                $partquestion_id = $this->db->insert_id();
+            }
+
+            // Now, the answer...
+            $this->db->query("Insert into partnumberpartquestion (partquestion_id, partnumber_id) values (?, ?) on duplicate key update partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id)", array($partquestion_id, $partnumber_id));
+        }
+
+        if (array_key_exists("product_question", $row)) {
+            if (!is_array($row["product_question"])) {
+                if ($row["product_question"] != "") {
+                    $row["product_question"] = array($row["product_question"]);
+                }
+            }
+        }
+
+        if (array_key_exists("product_answer", $row)) {
+            if (!is_array($row["product_answer"])) {
+                if ($row["product_answer"] != "") {
+                    $row["product_answer"] = array($row["product_answer"]);
+                }
+            }
+        }
+
+        if (is_array($row["product_question"]) && count($row["product_question"]) > 0) {
+            // OK, we need to put these in... we probably have to look for better stuff...
+            $question_map = array();
+            $seen_questions = array();
+            $query = $this->db->query("Select question, partquestion_id from partquestion where part_id = ? and productquestion > 0");
+            foreach ($query->result_array() as $datarow) {
+                $question_map[strtoupper(trim($datarow["question"]))] = $partquestion_id;
+            }
+
+            for ($i = 0; $i < count($row["product_question"]); $i++) {
+                $q = $row["product_question"][$i];
+                if (array_key_exists(strtoupper(trim($q)), $question_map)) {
+                    $partquestion_id = $question_map[strtoupper(trim($q))];
+                } else {
+                    // we have to insert it...
+                    $this->db->query("Insert into partquestion (question, part_id, productquestion) values (?, ?, 1)", array($q, $part_id));
+                    $partquestion_id = $this->db->insert_id();
+                }
+                $seen_questions[] = $partquestion_id;
+
+                // set the answer...
+                $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key set answer = values(answer)", array($partnumber_id, $partquestion_id, $row["product_answer"][$i]));
+            }
+            
+            // for each you haven't seen, you have to delete it...
+            foreach ($question_map as $q => $id) {
+                if (!in_array($id, $seen_questions)) {
+                    $this->db->query("Delete from partquestion where partquestion_id = ? and part_id = ? limit 1", array($id, $part_id));
+                }
+            }
+        }
+
+        // And we should look at the product questions, if required...
+
+        // And I guess we should consider fitment if it exists, right?
+        if (array_key_exists("machine_type", $row) && $row["machine_type"] != "") {
+            // does this machine type exist?
+            $machinetype_id = 0;
+            $this->db->query("Insert into machinetype (name, label, revisionset_id) values (?, ?, 1) on duplicate key update machinetype_id = last_insert_id(machinetype_id)", array($row["machine_type"], $row["machine_type"]));
+            $machinetype_id = $this->db->insert_id();
+
+            // does the make exist?
+            $make_id = 0;
+            $this->db->query("Insert into make (name, label, machinetype_id) values (?, ?, ?) on duplicate key update make_id = last_insert_id(make_id)", array($row["make"], $row["make"], $machinetype_id));
+            $make_id = $this->db->insert_id();
+
+            // Does the model exist?
+            $model_id = 0;
+            $this->db->query("Insert into model (label, make_id, name) values (?, ?, ?) on duplicate key update model_id = last_insert_id(model_id)", array($row["model"], $make_id, $row["model"]));
+            $model_id = $this->db->insert_id();
+
+            // break up the years
+            $start_year = $end_year = 0;
+
+            $matches = array();
+            $year = trim($row["year"]);
+            $cy = intVal(date("Y"));
+            $my = $cy % 100;
+            if (preg_match("/^[0-9]{4}$/", $year)) {
+                $start_year = $end_year = intVal($year);
+            } else if (preg_match("/^[0-9]{2}$/", $year)) {
+                $start_year = intVal($year);
+                if ($start_year > 2 + $my) {
+                    $start_year = $start_year + 100 * floor($cy / 100.0);
+                } else {
+                    $start_year = $start_year + 100 * (floor($cy / 100.0) - 1);
+                }
+                $end_year = $start_year;
+            } else if (preg_match("/^\s*([0-9]{4})\s*\-\s*([0-9]{4})\s*$/", $year, $matches)) {
+                $start_year = intVal($matches[1]);
+                $end_year = intVal($matches[2]);
+            } else if (preg_match("/^\s*([0-9]{2})\s*\-\s*([0-9]{2})\s*$/", $year, $matches)) {
+                $start_year = intVal($matches[1]);
+                if ($start_year > 2 + $my) {
+                    $start_year = $start_year + 100 * floor($cy / 100.0);
+                } else {
+                    $start_year = $start_year + 100 * (floor($cy / 100.0) - 1);
+                }
+                $end_year = intVal($matches[2]);
+                if ($end_year > 2 + $my) {
+                    $end_year = $end_year + 100 * floor($cy / 100.0);
+                } else {
+                    $end_year = $end_year + 100 * (floor($cy / 100.0) - 1);
+                }
+            }
+
+            if ($start_year > 0) {
+                for ($i = $start_year; $i <= $end_year; $i++) {
+                    $this->db->query("Insert into partnumbermodel (partnumber_id, model_id, year) values (?, ?, ?) on duplicate key update partnumbermodel_id = values(partnumbermodel_id)", array($partnumber_id, $model_id, $i));
+                }
+            }
+        }
+
+        // We need to reprocess this part.
+        $this->db->query("Insert into queued_parts (part_id) values (?)", array($part_id));
+    }
+
+    public function process($productupload_id, $limit = 100) {
+        // First, we have to process these guys in order...
+        $p = $this->get($productupload_id);
+        $columndata = unserialize($p["columndata"]);
+
+        // process all the rejects...
+        if ($p["processed_row_count"] == 0) {
+            $p["processed_row_count"] = $p["reject_row_count"];
+        }
+
+        $inverted_columns = $this->getInvertedColumns($columndata);
+
+
+        // Now, we are going to do updates, then we are going to do news...
+        if (($p["processed_row_count"] < $p["reject_row_count"] + $p["update_row_count"]) && $limit > 0) {
+            // well, we have to process the update
+            $upload_fh = fopen($this->upload_directory . "/" . $p["update_file"], "r");
+            // discard the header
+            fgetcsv($upload_fh);
+
+            // We have to chew through to our position
+            $starting_position = $p["reject_row_count"];
+            while ($starting_position < $p["processed_row_count"]) {
+                // you just have to chew them up...
+                fgetcsv($upload_fh);
+                $starting_position++;
+            }
+
+            while ($limit > 0) {
+                $row = fgetcsv($upload_fh);
+                if (FALSE !== $row) {
+                    // OK, we have a live one...
+                    $assoc_row = $this->explodeToAssoc($inverted_columns, $row);
+                    $this->applyUpdate($assoc_row);
+                    $limit--;
+                    $p["processed_row_count"]++;
+                } else {
+                    break; // escape the while loop since the file is exhausted...
+                }
+            }
+
+            fclose($upload_fh);
+        }
+
+
+        if ($p["processed_row_count"] < $p["upload_row_count"] && $limit > 0) {
+            // we have to process the new stuff
+            $upload_fh = fopen($this->upload_directory . "/" . $p["new_file"], "r");
+            // discard the header
+            fgetcsv($upload_fh);
+
+            // We have to chew through to our position
+            $starting_position = $p["reject_row_count"] + $p["update_row_count"];
+            while ($starting_position < $p["processed_row_count"]) {
+                // you just have to chew them up...
+                fgetcsv($upload_fh);
+                $starting_position++;
+            }
+
+            while ($limit > 0) {
+                $row = fgetcsv($upload_fh);
+                if (FALSE !== $row) {
+                    // OK, we have a live one...
+                    $limit--;
+                    $assoc_row = $this->explodeToAssoc($inverted_columns, $row);
+                    $this->applyUpdate($assoc_row);
+                    $p["processed_row_count"]++;
+                } else {
+                    break; // escape the while loop since the file is exhausted...
+                }
+            }
+
+            fclose($upload_fh);
+        }
+
+        // update it...
+        $this->db->query("Update productupload set processed_row_count = ? where productupload_id = ?", array($productupload_id, $p["processed_row_count"]));
     }
 
     public function getUnprocessedRowCount($productupload_id) {

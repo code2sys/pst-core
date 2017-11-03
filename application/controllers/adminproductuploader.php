@@ -180,6 +180,7 @@ class Adminproductuploader extends Admin
         if ($count > 0) {
             $this->Productuploadermodel->process($productupload_id);
             $this->_mainData["productupload_id"] = $productupload_id;
+            $this->_mainData["rows_remaining"] = $count;
             $this->setNav('admin/nav_v', 2);
             $this->renderMasterPage('admin/master_v', 'admin/productupload/process_v', $this->_mainData);
         } else {
