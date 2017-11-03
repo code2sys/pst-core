@@ -624,7 +624,7 @@ class Productuploadermodel extends CI_Model {
         print_r($row);
 
         // you should plow through all of it - name, manufacturer, description, categories... that's what we put into product_add_save...
-        $part_name = trim($row["name"]);
+        $part_name = trim($row["part"]);
         $manufacturer = trim($row["manufacturer"]);
         if ($manufacturer == "") {
             $manufacturer = trim($row["new_manufacturer"]);
