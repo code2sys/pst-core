@@ -562,7 +562,7 @@ class Productuploadermodel extends CI_Model {
 
     public function confirm($productupload_id) {
 
-        $this->db->query("Update productupload set status = 'Processed', processed_row_count = 0, new_row_count = 0, reject_row_count = 0, update_row_count = 0 where productupload_id = ?", array($productupload_id));
+        $this->db->query("Update productupload set status = 'Processed', processed_row_count = 0 where productupload_id = ?", array($productupload_id));
         $this->clearCache($productupload_id);
     }
 
