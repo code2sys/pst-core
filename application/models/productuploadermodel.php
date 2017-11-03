@@ -853,6 +853,8 @@ class Productuploadermodel extends CI_Model {
     }
 
     public function process($productupload_id, $limit = 100) {
+        $debug = false;
+
         // First, we have to process these guys in order...
         $p = $this->get($productupload_id);
         $columndata = unserialize($p["columndata"]);
@@ -862,11 +864,23 @@ class Productuploadermodel extends CI_Model {
             $p["processed_row_count"] = $p["reject_row_count"];
         }
 
+        if ($debug) {
+            print "Processed row count: " . $p["processed_row_count"] . "\n";
+        }
+
         $inverted_columns = $this->getInvertedColumns($columndata);
+
+        if ($debug) {
+            print "Inverted columns: \n";
+            print_r($inverted_columns);
+        }
 
 
         // Now, we are going to do updates, then we are going to do news...
         if (($p["processed_row_count"] < $p["reject_row_count"] + $p["update_row_count"]) && $limit > 0) {
+            if ($debug) {
+                print "Within the update leg \n";
+            }
             // well, we have to process the update
             $upload_fh = fopen($this->upload_directory . "/" . $p["update_file"], "r");
             // discard the header
@@ -875,6 +889,9 @@ class Productuploadermodel extends CI_Model {
             // We have to chew through to our position
             $starting_position = $p["reject_row_count"];
             while ($starting_position < $p["processed_row_count"]) {
+                if ($debug) {
+                    print "Chewing up $starting_position to get to " . $p["processed_row_count"] . "\n";
+                }
                 // you just have to chew them up...
                 fgetcsv($upload_fh);
                 $starting_position++;
@@ -883,8 +900,15 @@ class Productuploadermodel extends CI_Model {
             while ($limit > 0) {
                 $row = fgetcsv($upload_fh);
                 if (FALSE !== $row) {
+                    if ($debug) {
+                        print "Fetching another row from the file\n";
+                    }
                     // OK, we have a live one...
                     $assoc_row = $this->explodeToAssoc($inverted_columns, $row);
+                    if ($debug) {
+                        print "Row: ";
+                        print_r($assoc_row);
+                    }
                     $this->applyUpdate($assoc_row);
                     $limit--;
                     $p["processed_row_count"]++;
@@ -898,6 +922,9 @@ class Productuploadermodel extends CI_Model {
 
 
         if ($p["processed_row_count"] < $p["upload_row_count"] && $limit > 0) {
+            if ($debug) {
+                print "In the new leg \n";
+            }
             // we have to process the new stuff
             $upload_fh = fopen($this->upload_directory . "/" . $p["new_file"], "r");
             // discard the header
@@ -906,6 +933,9 @@ class Productuploadermodel extends CI_Model {
             // We have to chew through to our position
             $starting_position = $p["reject_row_count"] + $p["update_row_count"];
             while ($starting_position < $p["processed_row_count"]) {
+                if ($debug) {
+                    print "Chewing up $starting_position \n";
+                }
                 // you just have to chew them up...
                 fgetcsv($upload_fh);
                 $starting_position++;
@@ -915,10 +945,17 @@ class Productuploadermodel extends CI_Model {
                 $row = fgetcsv($upload_fh);
                 if (FALSE !== $row) {
                     // OK, we have a live one...
-                    $limit--;
+                    if ($debug) {
+                        print "Fetching another row from the file \n";
+                    }
                     $assoc_row = $this->explodeToAssoc($inverted_columns, $row);
+                    if ($debug) {
+                        print "Found row: ";
+                        print_r($assoc_row);
+                    }
                     $this->applyUpdate($assoc_row);
                     $p["processed_row_count"]++;
+                    $limit--;
                 } else {
                     break; // escape the while loop since the file is exhausted...
                 }
