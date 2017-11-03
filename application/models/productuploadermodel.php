@@ -620,9 +620,6 @@ class Productuploadermodel extends CI_Model {
 
     // Reference: Controllers/Adminproduct::product_add_save
     protected function sub_apply($row, $distributor_id, $partvariation_id = 0) {
-        print "Call to sub_apply with distributor $distributor_id partvariation $partvariation_id \n";
-        print_r($row);
-
         // you should plow through all of it - name, manufacturer, description, categories... that's what we put into product_add_save...
         $part_name = trim($row["part"]);
         $manufacturer = trim($row["manufacturer"]);
@@ -863,7 +860,9 @@ class Productuploadermodel extends CI_Model {
         $p = $this->get($productupload_id);
         $columndata = unserialize($p["columndata"]);
 
-        print_r($p);
+        if ($debug) {
+            print_r($p);
+        }
 
         // process all the rejects...
         if ($p["processed_row_count"] == 0) {
