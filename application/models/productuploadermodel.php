@@ -627,7 +627,7 @@ class Productuploadermodel extends CI_Model {
             $manufacturer = trim($row["new_manufacturer"]);
         }
         $description = array_key_exists("description", $row) ? $row["description"] : "";
-        $categories = $row["categories"];
+        $categories = $row["category"];
 
         $CI =& get_instance();
         $CI->load->model("Portalmodel");
@@ -646,6 +646,9 @@ class Productuploadermodel extends CI_Model {
             $c = $CI->Portalmodel->getOrCreateCategory($c);
             $CI->Portalmodel->addPartCategory($part_id, $c);
         }
+
+        // TODO:
+        // Should we delete categories?
 
         // OK, now, the part should be there, one way, or another.
         // What you have to do now is go down to part variation...
