@@ -3,6 +3,7 @@
 
         <h1><i class="fa fa-upload"></i>&nbsp;Upload Multiple Products</h1>
         <p><b>You can upload multiple products via CSV file here.</b></p>
+        <p>To get started, <a href="/assets/Multiple_Product_Upload_Template.csv" download="Multiple_Product_Upload_Template.csv">download our starting template</a>. Be sure to upload your file in CSV format.</p>
         <br>
 
         <!-- VALIDATION ALERT -->
