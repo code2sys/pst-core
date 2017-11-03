@@ -409,6 +409,7 @@ class Productuploadermodel extends CI_Model {
                 }
             }
         }
+        return $inverted_columns;
     }
 
     /*
@@ -441,8 +442,6 @@ class Productuploadermodel extends CI_Model {
 
         // get the flags
         $inverted_columns = $this->getInvertedColumns($columndata);
-        print_r($inverted_columns);
-        exit();
 
         // now, we have to map them...
         $new_count = $update_count = $reject_count = 0;
