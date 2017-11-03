@@ -741,6 +741,8 @@ class Productuploadermodel extends CI_Model {
 
             // Now, the answer...
             $this->db->query("Insert into partnumberpartquestion (partquestion_id, partnumber_id, answer) values (?, ?, ?) on duplicate key update answer = values(answer), partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id)", array($partquestion_id, $partnumber_id, $row["answer"]));
+
+            $this->db->query("Insert into partquestionanswer (partquestion_id, answer) values (?, ?) on duplicate key update partquestionanswer_id = last_inser_id(partquestionanswer_id)", array($partquestion_id, $row["answer"]));
         }
 
         if (array_key_exists("product_question", $row)) {
@@ -781,6 +783,9 @@ class Productuploadermodel extends CI_Model {
 
                 // set the answer...
                 $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key set answer = values(answer)", array($partnumber_id, $partquestion_id, $row["product_answer"][$i]));
+
+                $this->db->query("Insert into partquestionanswer (partquestion_id, answer) values (?, ?) on duplicate key update partquestionanswer_id = last_inser_id(partquestionanswer_id)", array($partquestion_id, $row["product_answer"][$i]));
+
             }
             
             // for each you haven't seen, you have to delete it...
