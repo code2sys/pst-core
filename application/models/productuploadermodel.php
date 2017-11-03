@@ -654,10 +654,10 @@ class Productuploadermodel extends CI_Model {
         // What you have to do now is go down to part variation...
         if ($partvariation_id == 0) {
             // you better create it...
-            $partvariation_id = $CI->Portalmodel->createPartVariation($row["part_number"], array_key_exists("quantity", $row) ? $row["quantity"] : 0, (array_key_exists("closeout", $row) && ($row["closeout"] == 1 || trim(strtolower($row["closeout"])) == "yes" || trim(strtolower($row["closeout"])) == "y")) ? "Closeout":"Normal", array_key_exists("cost", $row) ? $row["cost"] : 0, array_key_exists("price", $row) ? $row["price"] : 0, NULL, NULL);
+            $partvariation_id = $CI->Portalmodel->partvariation($row["part_number"], array_key_exists("quantity", $row) ? $row["quantity"] : 0, (array_key_exists("closeout", $row) && ($row["closeout"] == 1 || trim(strtolower($row["closeout"])) == "yes" || trim(strtolower($row["closeout"])) == "y")) ? "Closeout":"Normal", array_key_exists("cost", $row) ? $row["cost"] : 0, array_key_exists("price", $row) ? $row["price"] : 0, $distributor_id);
 
             // And, I guess, make this thing a part number?
-            $partnumber_id = $CI->Portalmodel->createPartNumber($row["part_number"], array_key_exists("cost", $row) ? $row["cost"] : 0, array_key_exists("price", $row) ? $row["price"] : 0, NULL);
+            $partnumber_id = $CI->Portalmodel->createPartNumber($row["part_number"], array_key_exists("cost", $row) ? $row["cost"] : 0, array_key_exists("price", $row) ? $row["price"] : 0, $distributor_id);
 
             // And link them..
             $CI->Portalmodel->setPartVariationPartNumber($partvariation_id, $partnumber_id);
