@@ -859,6 +859,8 @@ class Productuploadermodel extends CI_Model {
         $p = $this->get($productupload_id);
         $columndata = unserialize($p["columndata"]);
 
+        print_r($p);
+
         // process all the rejects...
         if ($p["processed_row_count"] == 0) {
             $p["processed_row_count"] = $p["reject_row_count"];
