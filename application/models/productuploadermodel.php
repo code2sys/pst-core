@@ -965,7 +965,7 @@ class Productuploadermodel extends CI_Model {
         }
 
         // update it...
-        $this->db->query("Update productupload set processed_row_count = ? where productupload_id = ?", array($productupload_id, $p["processed_row_count"]));
+        $this->db->query("Update productupload set processed_row_count = ? where productupload_id = ?", array($p["processed_row_count"], $productupload_id));
     }
 
     public function getUnprocessedRowCount($productupload_id) {
