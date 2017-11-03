@@ -132,7 +132,7 @@ class Portalmodel extends Master_M {
     }
 
     public function makePartByName($part_name, $description) {
-        $this->db->query("Insert into part (name, description, mx, revisionset_id, protect) values (?, ?, 0, 1, 1) on duplicate update part_id = last_insert_id(part_id)", array($part_name, $description));
+        $this->db->query("Insert into part (name, description, mx, revisionset_id, protect) values (?, ?, 0, 1, 1) on duplicate key update part_id = last_insert_id(part_id)", array($part_name, $description));
         return $this->db->insert_id();
     }
 
