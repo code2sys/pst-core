@@ -132,7 +132,7 @@ class Portalmodel extends Master_M {
     }
 
     public function makePartByName($part_name, $description) {
-        $this->db->query("Insert into part (name, description, mx, revisionset_id, protect) values (?, ?, 0, 1, 1)", array($part_name, $description));
+        $this->db->query("Insert into part (name, description, mx, revisionset_id, protect) values (?, ?, 0, 1, 1) on duplicate key update part_id = last_insert_id(part_id)", array($part_name, $description));
         return $this->db->insert_id();
     }
 
@@ -173,6 +173,16 @@ class Portalmodel extends Master_M {
         return $partvariation_id;
     }
 
+    public function newCreatePartVariation($part_number, $quantity_available, $stock_code, $cost, $price, $distributor_id) {
+        $this->db->query("Insert into partvariation (part_number, distributor_id, stock_code, quantity_last_updated, cost, price, protect, clean_part_number) values (?, ?, ?, now(), ?, ?, 1, ?) on duplicate key update partvariation_id = last_insert_id(partvariation_id), stock_code = values(stock_code), quantity_last_updated = values(quantity_last_updated), cost = values(cost), price = values(price), protect = values(protect), customerdistributor_id = values(customerdistributor_id)", array($part_number, $distributor_id, $stock_code, $cost, $price, preg_replace("/[^a-z0-9]/i", "", $part_number)));
+        $partvariation_id = $this->db->insert_id();
+
+        // now, you must enter this into partdealervariation
+        $this->db->query("Insert into partdealervariation (partvariation_id, part_number, distributor_id, quantity_available, stock_code, quantity_last_updated, cost, price, clean_part_number) select partvariation_id, part_number, distributor_id, ?, stock_code, quantity_last_updated, cost, price, clean_part_number from partvariation where partvariation_id = ?  on duplicate key update stock_code = values(stock_code), quantity_last_updated = values(quantity_last_updated), cost = values(cost), price = values(price), quantity_available = values(quantity_available) ", array($quantity_available, $partvariation_id));
+
+        return $partvariation_id;
+    }
+
     public function setPartVariationPartNumber($partvariation_id, $partnumber_id) {
         $this->db->query("Update partvariation set partnumber_id = ? where partvariation_id = ? limit 1", array($partnumber_id, $partvariation_id));
         $this->db->query("Update partdealervariation set partnumber_id = ? where partvariation_id = ? limit 1", array($partnumber_id, $partvariation_id));
@@ -188,7 +198,7 @@ class Portalmodel extends Master_M {
     }
 
     public function insertPartPartNumber($part_id, $partnumber_id) {
-        $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?)", array($part_id, $partnumber_id));
+        $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?) on duplicate key update partpartnumber_id = values(partpartnumber_id)", array($part_id, $partnumber_id));
     }
 
     public function getCustomerDistributor($customerdistributor) {
