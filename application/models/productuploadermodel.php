@@ -26,28 +26,28 @@ class Productuploadermodel extends CI_Model {
             ),
             array(
                 "name" => "machine_type",
-                "label" => "Machine Type",
-                "alternates" => array("machinetype"),
+                "label" => "Fitment - Machine Type",
+                "alternates" => array("machinetype", "machine", "machines"),
                 "description" => "Store major machine type category, or leave blank for a universal part. Known values are: " . $this->implodeList("machinetype", "name"),
                 "required" => false
             ),
             array(
                 "name" => "make",
-                "label" => "Vehicle Manufacturer",
+                "label" => "Fitment - Manufacturer",
                 "alternates" => array(),
                 "description" => "The vehicle manufacturer, or leave blank for a universal part. Known values are: " . $this->implodeList("make", "name"),
                 "required" => false
             ),
             array(
                 "name" => "model",
-                "label" => "Vehicle Model",
+                "label" => "Fitment - Model",
                 "alternates" => array(),
                 "description" => "The corresponding vehicle model; must specify the make, model, year, and machine type.",
                 "required" => false
             ),
             array(
                 "name" => "year",
-                "label" => "Vehicle Year",
+                "label" => "Fitment - Year",
                 "alternates" => array(),
                 "description" => "Speciy vehicle year; can be specified as YY, YYYY, or YYYY-YYYY for a range.",
                 "required" => false
@@ -55,7 +55,7 @@ class Productuploadermodel extends CI_Model {
             array(
                 "name" => "part",
                 "label" => "Part Name",
-                "alternates" => array(),
+                "alternates" => array("product", "productname", "product name"),
                 "description" => "A unique product name.",
                 "required" => true
             ),
@@ -96,16 +96,16 @@ class Productuploadermodel extends CI_Model {
             ),
             array(
                 "name" => "product_question",
-                "label" => "Additional Product Question",
-                "alternates" => array("Product Question"),
+                "label" => "Product Question",
+                "alternates" => array("Product Question", "Product Question 1", "Product Question 2", "Product Question 3", "Product Question 4"),
                 "description" => "Additional product question(s). Enter one column per question; must have corresponding answers in the same order left-to-right.",
                 "required" => false,
                 "multiple" => true
             ),
             array(
                 "name" => "product_answer",
-                "label" => "Additional Product Answer",
-                "alternates" => array("Product Answer"),
+                "label" => "Product Answer",
+                "alternates" => array("Product Answer", "Product Answer 1", "Product Answer 2", "Product Answer 3", "Product Answer 4"),
                 "description" => "Additional product answer(s). Must be in corresponding order to the additional product question(s)",
                 "required" => false,
                 "multiple" => true
