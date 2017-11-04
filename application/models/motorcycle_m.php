@@ -286,7 +286,7 @@ class Motorcycle_M extends Master_M {
         if (@$filter['brands']) {
             $bwhere = ' (';
             foreach ($filter['brands'] as $brand) {
-                $bwhere .= " motorcycle.make = '" . $brand."' OR";
+                $bwhere .= " motorcycle.make = '" . addslashes($brand)."' OR";
             }
             $bwhere = rtrim($bwhere, 'OR');
             $bwhere .= ' ) ';
