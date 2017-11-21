@@ -74,8 +74,8 @@ class CRS_M extends Master_M
         $ch = curl_init(self::BASE_CRS_URL . $function);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $arguments);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+//        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+//        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         $output = curl_exec($ch);
         $info = curl_getinfo($ch);
         print_r($info);
