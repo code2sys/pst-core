@@ -129,13 +129,21 @@ class CronControl extends Master_Controller {
 
         $matching_motorcycles = $query->result_array();
 
+        print_r($matching_motorcycles);
+
         foreach ($matching_motorcycles as $m) {
             $motorcycle_id = $m["motorcycle_id"];
             $trim_id = $m["crs_trim_id"];
             $version_number = $m["version_number"];
 
+            print "M: ";
+            print_r($m);
+            print "Attributes:" ;
+
             // get the attributes...
             $attributes = $this->CRS_m->getTrimAttributes($trim_id, $version_number);
+
+            print_r($attributes);
 
             // Now, you have to update them all...
             foreach ($attributes as $a) {
