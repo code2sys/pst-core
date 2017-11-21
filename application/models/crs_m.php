@@ -19,6 +19,7 @@ class CRS_M extends Master_M
      */
 
     const BASE_CRS_URL = "https://crs1.internal.powersporttechnologies.com/api/index.php/";
+    const BASE_CRS_HOST = "cts1.internal.powersporttechnologies.com";
 
     // get the machine type. Super simple.
     public function getMachineType()
@@ -70,7 +71,9 @@ class CRS_M extends Master_M
     protected function postRequest($function, $arguments = array())
     {
         //get the CRS webform data
-        $ch = curl_init(self::BASE_CRS_URL . $function);
+        $ch = curl_init(self::BASE_CRS_URL . $function, array(
+            "host" => self::BASE_CRS_HOST
+        ));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $arguments);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
