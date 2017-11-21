@@ -76,7 +76,8 @@ class CRS_M extends Master_M
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYSTATUS, FALSE);
         $output = curl_exec($ch);
-
+        $info = curl_getinfo($ch);
+        print_r($info);
         print_r($ch);
         print_r($output);
 
