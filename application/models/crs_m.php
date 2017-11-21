@@ -81,6 +81,7 @@ class CRS_M extends Master_M
         print_r($info);
         print_r($ch);
         print_r($output);
+        print curl_error($ch);
 
         //Process CRS into arrays.
         $crsFullData = json_decode($output, true);
