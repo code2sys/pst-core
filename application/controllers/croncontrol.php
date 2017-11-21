@@ -70,6 +70,7 @@ class CronControl extends Master_Controller {
 	public function weekly()
 	{
 		$this->_runJob('weekly');
+		$this->refreshCRSData();
 	}
 
 	public function monthly()
@@ -117,6 +118,69 @@ class CronControl extends Master_Controller {
 		$this->load->model('parts_m');
 		$this->parts_m->closeoutReprisingSchedule();
 	}
+
+
+	public function refreshCRSData() {
+        // OK, this is straightforward, we have to get the motorcycles that have trim IDs, and we have to update the specifications...
+        $query = $this->db->query("Select motorcycle.id as motorcycle_id, crs_trim_id, IfNull(max(motorcyclespec.version_number), 0) as version_number from motorcycle left join motorcyclespec on motorcycle.id = motorcyclespec.motorcycle_id where crs_trim_id > 0 group by motorcycle.id");
+
+        // we're going to refresh the data for this...
+        $this->load->model("CRS_m");
+
+        $matching_motorcycles = $query->result_array();
+
+        foreach ($matching_motorcycles as $m) {
+            $motorcycle_id = $m["motorcycle_id"];
+            $trim_id = $m["crs_trim_id"];
+            $version_number = $m["version_number"];
+
+            // get the attributes...
+            $attributes = $this->CRS_m->getTrimAttributes($trim_id, $version_number);
+
+            // Now, you have to update them all...
+            foreach ($attributes as $a) {
+                $this->db->query("Insert into motorcyclespec (version_number, value, feature_name, attribute_name, type, external_package_id, motorcycle_id, final_value, source, crs_attribute_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update value = If(source = 'CRS', values(value), value), final_value = If(source = 'CRS' AND override = 0, values(final_value), final_value)", array(
+                    $a["version_number"],
+                    $a["text_value"],
+                    $a["feature_name"],
+                    $a["label"],
+                    $a["type"],
+                    $a["package_id"],
+                    $motorcycle_id,
+                    $a["text_value"],
+                    "CRS",
+                    $a["attribute_id"]
+                ));
+            }
+        }
+
+        // Now, we need to get the photos...
+        $query = $this->db->query("Select motorcycle.id as motorcycle_id, crs_trim_id, IfNull(max(motorcycleimage.version_number), 0) as version_number, IfNull(max(motorcycleimage.priority_number), 0) as ordinal from motorcycle left join motorcycleimage on motorcycle.id = motorcycleimage.motorcycle_id where crs_trim_id > 0 group by motorcycle.id");
+
+        $matching_motorcycles = $query->result_array();
+
+        foreach ($matching_motorcycles as $m) {
+            $motorcycle_id = $m["motorcycle_id"];
+            $trim_id = $m["crs_trim_id"];
+            $version_number = $m["version_number"];
+            $ordinal = $m["ordinal"];
+
+            // get the photos...
+            $photos = $this->CRS_m->getTrimPhotos($trim_id, $version_number);
+
+            foreach ($photos as $p) {
+                $ordinal++;
+                // this needs to be inserted...
+                $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, ?, 1, ?, 'CRS')", array(
+                    $motorcycle_id,
+                    $p["photo_url"],
+                    $p["photo_label"],
+                    $ordinal,
+                    $p["version_number"]
+                ));
+            }
+        }
+    }
 }
 
 /* End of file croncontrol.php */
