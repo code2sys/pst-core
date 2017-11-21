@@ -73,7 +73,6 @@ class CRS_M extends Master_M
         //get the CRS webform data
         $ch = curl_init(self::BASE_CRS_URL . $function);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $arguments);
-        curl_setopt($ch, CURLOPT_SSLVERSION, 3);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
