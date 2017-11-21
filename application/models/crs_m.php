@@ -18,7 +18,7 @@ class CRS_M extends Master_M
      * This batch of functionality is on the web service.  It's an extremely lightweight interface.
      */
 
-    const BASE_CRS_URL = "https://crs1.internal.powersporttechnologies.com/api/index.php/";
+    const BASE_CRS_URL = "https://10.132.5.32/api/index.php/";
     const BASE_CRS_HOST = "cts1.internal.powersporttechnologies.com";
 
     // get the machine type. Super simple.
