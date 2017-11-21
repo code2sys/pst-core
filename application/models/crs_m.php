@@ -24,11 +24,11 @@ class CRS_M extends Master_M
     // get the machine type. Super simple.
     public function getMachineType()
     {
-        return $this->postRequest("getMachineType");
+        return $this->postRequest("getMachineType", "records");
     }
 
     public function getMakes($args = array()) {
-        return $this->postRequest("getMake", $args);
+        return $this->postRequest("getMake", $args, "records");
     }
 
     public function getMakesByMachineType($machine_type) {
@@ -51,16 +51,16 @@ class CRS_M extends Master_M
     }
 
     public function getTrims($args = array()) {
-        return $this->postRequest("getTrims", $args);
+        return $this->postRequest("getTrims", $args, "records");
     }
 
     // get the extra details...
     public function getTrimAttributes($trim_id, $version_number = 0) {
-        return $this->postRequest("getTrimAttributes", array("trim_id" => $trim_id, "version_number" => $version_number));
+        return $this->postRequest("getTrimAttributes", array("trim_id" => $trim_id, "version_number" => $version_number), "specifications");
     }
 
     public function getTrimPhotos($trim_id, $version_number = 0) {
-        return $this->postRequest("getTrimPhotos", array("trim_id" => $trim_id, "version_number" => $version_number));
+        return $this->postRequest("getTrimPhotos", array("trim_id" => $trim_id, "version_number" => $version_number), "photos");
     }
 
     // query the VIN...
@@ -68,7 +68,7 @@ class CRS_M extends Master_M
         return $this->postRequest("decodeVin", array("vin" => $vin_pattern));
     }
 
-    protected function postRequest($function, $arguments = array())
+    protected function postRequest($function, $arguments = array(), $key = "")
     {
         //get the CRS webform data
         $ch = curl_init(self::BASE_CRS_URL . $function);
@@ -87,7 +87,16 @@ class CRS_M extends Master_M
         $crsFullData = json_decode($output, true);
         if (array_key_exists("success", $crsFullData)) {
             if ($crsFullData["success"]) {
-                return $crsFullData["data"];
+                $data = $crsFullData["data"];
+                if ($key != "") {
+                    if (array_key_exists($key, $data)) {
+                        return $data[$key];
+                    } else {
+                        throw new \Exception("Expected key $key for $function not found");
+                    }
+                } else {
+                    return $data;
+                }
             } else {
                 // An error...
                 throw new \Exception("Error in call to ${function} - " . $crsFullData["error_code"] . " - " . $crsFullData["error_string"]);
