@@ -71,9 +71,7 @@ class CRS_M extends Master_M
     protected function postRequest($function, $arguments = array())
     {
         //get the CRS webform data
-        $ch = curl_init(self::BASE_CRS_URL . $function, array(
-            "host" => self::BASE_CRS_HOST
-        ));
+        $ch = curl_init(self::BASE_CRS_URL . $function);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $arguments);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
