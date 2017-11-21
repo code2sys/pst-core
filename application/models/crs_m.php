@@ -77,6 +77,7 @@ class CRS_M extends Master_M
         curl_setopt($ch, CURLOPT_SSL_VERIFYSTATUS, FALSE);
         $output = curl_exec($ch);
 
+        print_r($ch);
         print_r($output);
 
         //Process CRS into arrays.
