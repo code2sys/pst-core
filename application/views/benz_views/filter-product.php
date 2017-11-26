@@ -4,6 +4,12 @@ $media_url = jsite_url("/media/");
 
 if (@$motorcycles) {
     foreach ($motorcycles as $motorcycle) {
+
+        // What is the default...
+        $motorcycle_image = $motorcycle['image_name'];
+        if ($motorcycle['external'] == 0) {
+            $motorcycle_image = $media_url . $motorcycle_image;
+        }
         ?>
         <div class="mid-r">
         <?php $title = str_replace(' ', '_', trim($motorcycle['title'])); ?>
@@ -13,7 +19,7 @@ if (@$motorcycles) {
                             <!--<img src="<?php echo $new_assets_url; ?>images/imgpsh_fullsize (6).png" width="152px;"/>-->
                     </div>
                     <div class="mid-r-img-veh">
-                        <img src="<?php echo $media_url . $motorcycle['image_name']; ?>" width="px;"/>
+                        <img src="<?php echo $motorcycle_image; ?>" width="px;"/>
                     </div>
                 </div>
             </a>
@@ -39,7 +45,9 @@ if (@$motorcycles) {
                 </div>
                 <div class="mid-text-right">
                     <p>condition :<span><?php echo $motorcycle['condition'] == '1' ? 'New' : 'Pre-Owned'; ?></span></p>
-                    <p>color :<span><?php echo $motorcycle['color']; ?></span></p>
+                    <?php if ($motorcycle["color"] != "N/A"): ?>
+                        <p>color :<span><?php echo $motorcycle['color']; ?></span></p>
+                    <?php endif; ?>
                     <?php if ($motorcycle['engine_hours'] > 0) { ?>
                         <p>engine hours :<span><?php echo $motorcycle['engine_hours']; ?></span></p>
                     <?php } ?>
