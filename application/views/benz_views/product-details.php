@@ -156,7 +156,8 @@ unset($motorcycle['videos'][0]);
                 "master_class" => "col-md-3 col-xs-12 fltrbar pull-right pdig oder col-sm-4",
                 "subclass" => "col-xs-12",
                 "innersubclass" => "",
-                "recentlyMotorcycle" => $recentlyMotorcycle
+                "recentlyMotorcycle" => $recentlyMotorcycle,
+                "no_fify" => true
             ), true);
             ?>
 
