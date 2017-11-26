@@ -270,7 +270,7 @@ $media_url = jsite_url("/media/");
                 <?php } ?>
                 <div class="fltrbar search-two my-wdt">
                     <div class="col-md-12 text-center">
-                        <h4 style="margin:0 0 20px">RECENTLY VIEWED</h4>
+                        <h4 style="margin:0 0 20px">RECENTLY VIEWED a</h4>
                     </div>
                     <div class="fltrbx">
                         <?php foreach ($recentlyMotorcycle as $recently) {
