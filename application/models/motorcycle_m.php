@@ -108,7 +108,7 @@ class Motorcycle_M extends Master_M {
         $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number ', 'left');
         $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
         $this->db->group_by('motorcycle.id');
-        $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name as type', FALSE);
+        $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name  as type, motorcycleimage.external', FALSE);
         $this->db->limit($limit, $offset);
         $records = $this->selectRecords('motorcycle', $where);
         $this->db->_protect_identifiers=true;
