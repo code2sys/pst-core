@@ -29,7 +29,7 @@ if (@$motorcycles) {
                     <?php if ($motorcycle['call_on_price'] == '1') { ?>
                         <p class="cfp">Call For Price</p>
                     <?php } else {
-                        if ($motorcycle['sale_price']>0 && $motorcycle['sale_price']!=="0.00") { ?>
+                        if ($motorcycle['sale_price']>0 && $motorcycle['sale_price']!=="0.00" && $motorcycle["sale_price"] != $motorcycle["retail_price"]) { ?>
                             <?php if ($motorcycle["retail_price"] > 0): ?>
                         <p>Retail Price: &nbsp; <span class="strikethrough">$<?php echo $motorcycle['retail_price']; ?></span><br>
                             <?php endif; ?>
