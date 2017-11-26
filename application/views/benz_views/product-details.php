@@ -220,7 +220,7 @@ unset($motorcycle['videos'][0]);
                                 ?>
                                 <tr class="row<?php echo $k; ?>">
                                     <td class="label" valign="top"><?php echo $s["attribute_name"]; ?></td>
-                                    <td class="value" valign="top"><?php echo $s["text_value"]; ?><?php if ($s["external_package_id"] > 0): ?>*<?php endif; ?></td>
+                                    <td class="value" valign="top"><?php echo $s["final_value"]; ?><?php if ($s["external_package_id"] > 0): ?>*<?php endif; ?></td>
                                 </tr>
                                 <?php
                                 $k = 1 - $k;
