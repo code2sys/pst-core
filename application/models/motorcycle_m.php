@@ -116,7 +116,7 @@ class Motorcycle_M extends Master_M {
     }
 
     public function getMotorcycleImages($id) {
-        $query = $this->db->query("Select * from motorcycleimages where motorcycle_id = ? and disable = 0 order by priority_number ", array($id));
+        $query = $this->db->query("Select * from motorcycleimage where motorcycle_id = ? and disable = 0 order by priority_number ", array($id));
         return $query->result_array();
     }
 
