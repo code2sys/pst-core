@@ -160,7 +160,9 @@ $media_url = jsite_url("/media/");
                             </div>
                             <div class="mid-text-right">
                                 <p>condition :<span><?php echo $motorcycle['condition'] == '1' ? 'New' : 'Pre-Owned'; ?></span></p>
+                                <?php if ($motorcycle["color"] != "N/A"): ?>
                                 <p>color :<span><?php echo $motorcycle['color']; ?></span></p>
+                                <?php endif; ?>
                                 <?php if ($motorcycle['engine_hours'] > 0) { ?>
                                     <p>engine hours :<span><?php echo $motorcycle['engine_hours']; ?></span></p>
                                 <?php } ?>
