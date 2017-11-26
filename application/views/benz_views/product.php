@@ -245,7 +245,9 @@ $media_url = jsite_url("/media/");
                 <?php
                 $CI =& get_instance();
                 echo $CI->load->view("benz_views/recently_viewed", array(
-                    "master_class" => "fltrbar search-two my-wdt"
+                    "master_class" => "fltrbar search-two my-wdt",
+                    "subclass" => "",
+                    "innersubclass" => ""
                 ), true);
                 ?>
                 <div class="mypagination">
