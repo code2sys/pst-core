@@ -121,7 +121,7 @@ class Motorcycle_M extends Master_M {
     }
 
     public function getMotorcycleSpecs($id) {
-        $query = $this->db->query("Select * from motorcyclespec where motorcycle_id = ? and hidden = 0 and (crs_attribute_id < 230000) and (crs_attribute_id >= 20000) and crs_attribute_id not in (20005, 20008) order by crs_attribute_id ", array($id));
+        $query = $this->db->query("Select * from motorcyclespec where motorcycle_id = ? and hidden = 1 and (crs_attribute_id < 230000) and (crs_attribute_id >= 20000) and crs_attribute_id not in (20005, 20008) order by crs_attribute_id ", array($id));
         return $query->result_array();
     }
 
