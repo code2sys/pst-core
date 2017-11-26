@@ -104,6 +104,7 @@ class Motorcycle_CI extends Welcome {
         $this->_mainData['motorcycle'] = $this->motorcycle_m->getMotorcycle($id);
         $_SESSION['recentlyMotorcycle'][$id] = $id;
 
+
         if (@$this->_mainData['motorcycle']['images'][0]['image_name']) {
             //$metaTag = '<meta property="og:image" content="'.$this->_mainData['motorcycle']['images'][0]['image_name'].'"/>';
             $metaTag = '<meta property="og:image" content="' . jsite_url('/media/') . $this->_mainData['motorcycle']['images'][0]['image_name'] . '"/>';

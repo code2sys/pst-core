@@ -155,11 +155,17 @@ unset($motorcycle['videos'][0]);
 					<h4 class="recnt" style="margin:20px 0 20px">RECENTLY VIEWED</h4>
 				</div>
 				<div class="fltrbx ">		
-					<?php foreach( $recentlyMotorcycle as $recently ) { ?>
+					<?php foreach( $recentlyMotorcycle as $recently ) {
+
+                        $motorcycle_image = $recently['image_name'];
+                        if ($recently['external'] == 0) {
+                            $motorcycle_image = base_url().'media/'. $motorcycle_image;
+                        }
+					    ?>
 						<?php $title = str_replace(' ', '_', trim($recently['title']));?>
 						<div class="col-md-12 text-center">
 							<a href="<?php echo base_url(strtolower($recently['type']).'/'.$title.'/'.$recently['sku']);?>">
-								<img class="rvm" src=" <?php echo base_url().'media/'.$recently['image_name']; ?>" />
+								<img class="rvm" src="<?php echo $motorcycle_image; ?>" />
 							</a>
 							<a href="<?php echo base_url(strtolower($recently['type']).'/'.$title.'/'.$recently['sku']);?>"><h1 class="head-txt"><?php echo $recently['title'];?></h1></a>
 							<!--<p><?php echo $recently['title'];?></p>-->
@@ -167,7 +173,7 @@ unset($motorcycle['videos'][0]);
 								<p class="cfp">Call For Price</p>
                                 <?php
                                 } else {
-                                if ($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00") { ?>
+                                if ($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00" && $recently["sale_price"] != $recently['retail_price']) { ?>
                                     <p>Retail Price: &nbsp; <span
                                                 class="strikethrough">$<?php echo number_format($recently['retail_price'], 2); ?></span>
                                     </p>
