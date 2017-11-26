@@ -13,6 +13,10 @@ if (!isset($subclass)) {
     $subclass = "";
 }
 
+if (!isset($innersubclass)) {
+    $innersubclass = "";
+}
+
 ?>
 <?php if (isset($master_class) && $master_class != ""): ?>
 <div class="<?php echo $master_class; ?>">
@@ -20,7 +24,7 @@ if (!isset($subclass)) {
     <div class="col-md-12 text-center <?php echo $subclass; ?>">
         <h4 style="margin:0 0 20px">RECENTLY VIEWED</h4>
     </div>
-    <div class="fltrbx">
+    <div class="fltrbx <?php echo $innersubclass; ?>">
         <?php foreach ($recentlyMotorcycle as $recently) {
 
             $motorcycle_image = $recently['image_name'];
