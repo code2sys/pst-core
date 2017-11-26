@@ -119,6 +119,175 @@ class CronControl extends Master_Controller {
 		$this->parts_m->closeoutReprisingSchedule();
 	}
 
+	protected function _getStockMotoCategory() {
+        $name = "Dealer";
+        $query = $this->db->query("Select * from motorcycle_category where name = ?", array($name));
+        $id = 0;
+        foreach ($query->result_array() as $row) {
+            $id = $row["id"];
+        }
+
+        if ($id == 0) {
+            $this->db->query("Insert into motorcycle_category (name, date_added) values (?, now())", array($name));
+            $id = $this->db->insert_id();
+        }
+        return $id;
+    }
+
+    protected function _getMachineTypeMotoType($machine_type) {
+        $type_id = 0;
+        $query = $this->db->query("Select id from motorcycle_type where crs_type = ?", array($machine_type));
+        foreach ($query->result_array() as $row) {
+            $type_id = $row["id"];
+        }
+        return $type_id;
+    }
+
+	/*
+	 * The point of this one is to be able to request some specific information and then to load them.
+	 * Basically, you have some modes:
+	 * "C": Just gets the current ones
+	 * "N": Gets the new ones
+	 * "A": Adds them
+	 *
+	 */
+	public function addProductLine($machine_type, $make_id, $mode = "C", $starting_year = 0, $ending_year = 0) {
+        $this->load->model("CRS_m");
+
+        $uniqid = uniqid("");
+
+        if ($mode == "C") {
+            $matching_motorcycles = $this->CRS_m->getTrims(array(
+                "current" => true,
+                "make_id" => $make_id,
+                "machine_type" => $machine_type
+            ));
+
+
+        } else if ($starting_year > 0) {
+            if ($ending_year < $starting_year) {
+                $ending_year = $starting_year;
+            }
+
+            $matching_motorcycles = array();
+            for ($y = $starting_year; $y <= $ending_year; $y++) {
+                $matching_motorcycles = array_merge($matching_motorcycles, $this->CRS_m->getTrims(array(
+                    "make_id" => $make_id,
+                    "machine_type" => $machine_type,
+                    "year" => $y
+                )));
+            }
+        } else {
+            throw new Exception("You must provide a starting year.");
+        }
+
+        // clear the unique IDs...
+        $this->db->query("Update motorcycle set uniqid = '' where crs_machinetype = ? and crs_make_id = ? and `condition` = 1", array($machine_type, $make_id));
+
+        $vehicle_type = $this->_getMachineTypeMotoType($machine_type);
+        if ($vehicle_type == 0) {
+            throw new Exception("No type found for $machine_type ");
+        }
+
+        // Now we have to get $category_id .. for now, we're going to call it Stock...
+        $category_id = $this->_getStockMotoCategory();
+
+        // Now, we have to enter them...
+        foreach ($matching_motorcycles as $m) {
+            // Is there one of these?
+            $crs_model = $m["model"];
+            $crs_model_id = $m["model_id"];
+            $crs_make = $m["make"];
+            $crs_make_id = $m["make_id"];
+            $crs_machinetype = $m["machine_type"];
+            $crs_trim = $m["trim"];
+            $crs_display_name = $m["display_name"];
+            $crs_trim_id = $m["trim_id"];
+
+            // Is there one of these?
+            $query = $this->db->query("Select * from motorcycle where `condition` = 1 and source = 'CRS' and crs_trim_id = ?", array($crs_trim_id));
+            $results = $query->result_array();
+
+            if (count($results) == 0) {
+                // you need to add them...
+                $trim = $this->CRS_m->getTrim($crs_trim_id);
+                // OK, we need to insert it...
+                if (count($trim) > 0) {
+                    $trim = $trim[0];
+
+                    // OK, we have to add it, and then we have to add the motorcycle... but first we have to get some of the specs
+                    $retail_price = $sale_price = $trim["msrp"];
+
+                    $engine_type = ""; // 30003
+                    $transmission = ""; // 40002
+                    // look for 20007 for a msrp + destination fee..
+
+                    foreach ($trim["specifications"] as $s) {
+                        $attribute_id = $s["attribute_id"];
+
+                        if ($attribute_id == 30003) {
+                            $engine_type = $s["text_value"];
+                        } else if ($attribute_id == 40002) {
+                            $transmission = $s["text_value"];
+                        } else if ($attribute_id == 20007) {
+                            $retail_price = $sale_price= $s["text_value"];
+                        }
+                    }
+
+                    $this->db->query("Insert into motorcycle (title, description, status, `condition`, sku, engine_type, transmission, retail_price, sale_price, data, margin, profit, category, vehicle_type, year, make, model, color, craigslist_feed_status, cycletrader_feed_status, crs_trim_id, crs_machinetype, crs_model_id, crs_make_id, crs_year, uniqid, source, crs_version_number) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(
+                        $trim["year"]. " " . $trim["make"] . " " . $trim["display_name"],
+                        '',
+                        1,
+                        1,
+                        'CRS' . $trim['trim_id'],
+                        $engine_type,
+                        $transmission,
+                        $retail_price,
+                        $sale_price,
+                        json_encode(array(
+                            "total_cost" => $retail_price,
+                            "unit_cost" => $retail_price,
+                            "parts" => "",
+                            "service" => "",
+                            "auction_fee" => "",
+                            "misc" => ""
+                        )),
+                        0.00,
+                        0.00,
+                        $category_id,
+                        $vehicle_type,
+                        $trim["year"],
+                        $trim["make"],
+                        $trim["display_name"],
+                        "N/A",
+                        0,
+                        0,
+                        $trim["trim_id"],
+                        $trim["machine_type"],
+                        $trim["model_id"],
+                        $trim["make_id"],
+                        $trim["year"],
+                        $uniqid,
+                        'CRS',
+                        $trim["version_number"]
+                    ));
+
+                    $motorcycle_id = $this->db->insert_id();
+
+                    // We need to insert the trim_photo
+                    $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, 1, 1, ?, 'CRS')", array($motorcycle_id, $trim["trim_photo"], 'Trim Photo: ' . $trim['display_name']));
+
+                }
+            }
+        }
+
+        // We have to purge them...
+        if ($mode == 'C' || $mode == 'A') {
+            $this->db->query("Delete from motorcycle where uniqid = '' and source = 'CRS' and crs_machinetype = ? and crs_make_id = ? and `condition` = 1", array($machine_type, $make_id));
+        }
+
+        $this->refreshCRSData();
+    }
 
 	public function refreshCRSData() {
         // OK, this is straightforward, we have to get the motorcycles that have trim IDs, and we have to update the specifications...
@@ -129,21 +298,13 @@ class CronControl extends Master_Controller {
 
         $matching_motorcycles = $query->result_array();
 
-        print_r($matching_motorcycles);
-
         foreach ($matching_motorcycles as $m) {
             $motorcycle_id = $m["motorcycle_id"];
             $trim_id = $m["crs_trim_id"];
             $version_number = $m["version_number"];
 
-            print "M: ";
-            print_r($m);
-            print "Attributes:" ;
-
             // get the attributes...
             $attributes = $this->CRS_m->getTrimAttributes($trim_id, $version_number);
-
-            print_r($attributes);
 
             // Now, you have to update them all...
             foreach ($attributes as $a) {

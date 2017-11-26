@@ -54,6 +54,10 @@ class CRS_M extends Master_M
         return $this->postRequest("getTrims", $args, "records");
     }
 
+    public function getTrim($trim_id) {
+        return $this->postRequest("getTrim", array("trim_id" => $trim_id), "trims");
+    }
+
     // get the extra details...
     public function getTrimAttributes($trim_id, $version_number = 0) {
         return $this->postRequest("getTrimAttributes", array("trim_id" => $trim_id, "version_number" => $version_number), "specifications");
