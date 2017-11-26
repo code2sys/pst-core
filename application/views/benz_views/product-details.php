@@ -99,11 +99,13 @@ unset($motorcycle['videos'][0]);
 				<div class="dtal-txt">
 					<label>model :</label>
 					<span><?php echo $motorcycle['model'];?></span>
-				</div>				
+				</div>
+                <?php if ($motorcycle['color'] != 'N/A'): ?>
 				<div class="dtal-txt">
 					<label>color :</label>
 					<span><?php echo $motorcycle['color'];?></span>
 				</div>
+                <?php endif; ?>
 				<?php if( $motorcycle['mileage'] > 0 ) { ?>
 					<div class="dtal-txt">
 						<label>mileage :</label>
