@@ -53,8 +53,8 @@ unset($motorcycle['videos'][0]);
                             }
 
 						    ?>
-							<li data-thumb="<?php echo $media_url.$image['image_name']; ?>">
-								<a class="fancybox" href="<?php echo $media_url.$image['image_name']; ?>" data-fancybox-group="gallery">
+							<li data-thumb="<?php echo $image_url; ?>">
+								<a class="fancybox" href="<?php echo $image_url; ?>" data-fancybox-group="gallery">
 									<img src="<?php echo $image_url; ?>" />
 								</a>
 							</li>
@@ -285,7 +285,13 @@ unset($motorcycle['videos'][0]);
 
 <script language="javascript">
 	function fbshareCurrentPage()
-	{window.open("http://www.facebook.com/share.php?u="+escape(window.location.href)+"&picture="+"<?php echo $media_url.$motorcycle['images'][0]['image_name']?>", '', 
+	{window.open("http://www.facebook.com/share.php?u="+escape(window.location.href)+"&picture="+"<?php
+            if ($motorcycle['images'][0]["external"] > 0) {
+                echo $motorcycle['images'][0]['image_name'];
+            } else {
+                echo $media_url.$motorcycle['images'][0]['image_name'];
+            }
+        ?>", '',
 	'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
 	return false; }
 </script>
