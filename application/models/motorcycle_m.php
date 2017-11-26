@@ -120,6 +120,10 @@ class Motorcycle_M extends Master_M {
         return $query->result_array();
     }
 
+    public function getMotorcycleSpecs($id) {
+        $query = $this->db->query("Select * from motorcyclespec where motorcycle_id = ? and hidden = 0 and (crs_attribute_id < 230000) and (crs_attribute_id >= 20000) and crs_attribute_id not in (20005, 20008) order by crs_attribute_id ", array($id));
+        return $query->result_array();
+    }
 
     public function getMotorcycle( $id ){
         $where = array('motorcycle.id' => $id );
@@ -133,6 +137,9 @@ class Motorcycle_M extends Master_M {
 
         $this->db->order_by('motorcycle_video.id asc');
         $record['videos'] = $this->selectRecords('motorcycle_video', $vwhere);
+
+
+        $record["specs"] = $this->getMotorcycleSpecs($id);
 
         return $record;
     }

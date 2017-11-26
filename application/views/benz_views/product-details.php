@@ -194,6 +194,48 @@ unset($motorcycle['videos'][0]);
 							<div class="clear mn-hght"></div>
 						<?php } ?>
 					<?php echo $motorcycle['description'];?>
+
+                    <?php if (count($motorcycle['specs']) > 0): ?>
+
+                        <h3>Specifications</h3>
+
+                            <?php
+                            $feature_name = "";
+                            foreach ($motorcycle["specs"] as $s) {
+                                if ($feature_name != $s["feature_name"]) {
+                                    if ($feature_name != ""):
+                                    ?>
+                </table>
+                                        <?php
+                                        endif;
+                                    $feature_name = $s["feature_name"];
+                                    ?>
+                    <p><strong><?php echo $feature_name; ?></strong></p>
+                    <table border="0" width="100%" class="stripedtable">
+                        <?php
+                                    $k = 0;
+
+
+                                }
+                                ?>
+                                <tr class="row<?php echo $k; ?>">
+                                    <td class="label" valign="top"><?php echo $s["attribute_name"]; ?></td>
+                                    <td class="value" valign="top"><?php echo $s["text_value"]; ?><?php if ($s["external_package_id"] > 0): ?>*<?php endif; ?></td>
+                                </tr>
+                                <?php
+                                $k = 1 - $k;
+
+                            }
+
+                            ?>
+
+
+                        <?php if ($feature_name != ""): ?></table><?php endif; ?>
+
+
+                        <p><em>* This feature may require an additional add-on package that may not be included in the retail or sale price.</em></p>
+                    <?php endif; ?>
+
 					<!--<h3>Integer tellus dui venenatis non:</h3>
 					<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,  content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover </p>
 					<h3>Vivamus porta tellus</h3>
