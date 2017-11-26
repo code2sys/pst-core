@@ -275,7 +275,7 @@ class CronControl extends Master_Controller {
                     $motorcycle_id = $this->db->insert_id();
 
                     // We need to insert the trim_photo
-                    $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, 1, 1, ?, 'CRS')", array($motorcycle_id, $trim["trim_photo"], 'Trim Photo: ' . $trim['display_name']));
+                    $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, 1, 1, ?, 'CRS')", array($motorcycle_id, $trim["trim_photo"], 'Trim Photo: ' . $trim['display_name'], $trim["version_number"]));
 
                 }
             }
