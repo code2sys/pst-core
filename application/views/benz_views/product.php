@@ -273,11 +273,17 @@ $media_url = jsite_url("/media/");
                         <h4 style="margin:0 0 20px">RECENTLY VIEWED</h4>
                     </div>
                     <div class="fltrbx">
-                        <?php foreach ($recentlyMotorcycle as $recently) { ?>
+                        <?php foreach ($recentlyMotorcycle as $recently) {
+
+                            $motorcycle_image = $recently['image_name'];
+                            if ($recently['external'] == 0) {
+                                $motorcycle_image = base_url().'media/'. $motorcycle_image;
+                            }
+                            ?>
                             <?php $title = str_replace(' ', '_', trim($recently['title'])); ?>
                             <div class="col-md-12 text-center padg">
                                 <a class="fify" href="<?php echo base_url(strtolower($recently['type']) . '/' . $title . '/' . $recently['sku']); ?>">
-                                    <img class="rvm" src=" <?php echo base_url() . 'media/' . $recently['image_name']; ?>" />
+                                    <img class="rvm" src=" <?php echo $motorcycle_image; ?>" />
                                 </a>
                                 <a class="fify" href="<?php echo base_url(strtolower($recently['type']) . '/' . $title . '/' . $recently['sku']); ?>"><h1 class="head-txt"><?php echo $recently['title']; ?></h1></a>
                                 <!--<p><?php echo $recently['title']; ?></p>-->
