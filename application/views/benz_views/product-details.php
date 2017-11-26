@@ -197,6 +197,28 @@ unset($motorcycle['videos'][0]);
 
                     <?php if (count($motorcycle['specs']) > 0): ?>
 
+                        <div>
+                        <style scoped>
+
+                            .row1 {
+                                bgcolor: white;
+                            }
+
+                            td {
+                                padding: 3px;
+                                width: 50%;
+                            }
+
+                            td.key {
+                                font-weight: bold;
+                            }
+
+                            td.value {
+                                text-align: right;
+                            }
+
+
+                        </style>
                         <h3>Specifications</h3>
 
                             <?php
@@ -234,6 +256,7 @@ unset($motorcycle['videos'][0]);
 
 
                         <p><em>* This feature may require an additional add-on package that may not be included in the retail or sale price.</em></p>
+                        </div>
                     <?php endif; ?>
 
 					<!--<h3>Integer tellus dui venenatis non:</h3>
