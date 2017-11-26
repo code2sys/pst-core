@@ -86,7 +86,7 @@ $media_url = jsite_url("/media/");
                 "subclass" => "search-one flat fit-none"
             ), true);
             ?>
-            
+
         </div>			
         <!--here -->
         <div class="next">

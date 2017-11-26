@@ -15,7 +15,7 @@ if (!isset($subclass)) {
 
 ?>
 <?php if (isset($master_class) && $master_class != ""): ?>
-<div class="">
+<div class="<?php echo $masteR_class; ?>">
     <?php endif; ?>
     <div class="col-md-12 text-center <?php echo $subclass; ?>">
         <h4 style="margin:0 0 20px">RECENTLY VIEWED</h4>
