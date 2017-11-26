@@ -201,7 +201,7 @@ unset($motorcycle['videos'][0]);
                         <style scoped>
 
                             .row1 {
-                                bgcolor: white;
+                                background-color: white;
                             }
 
                             td {
