@@ -242,7 +242,7 @@ unset($motorcycle['videos'][0]);
                                 ?>
                                 <tr class="row<?php echo $k; ?>">
                                     <td class="key" valign="top"><?php echo $s["attribute_name"]; ?></td>
-                                    <td class="value" valign="top"><?php echo $s["final_value"]; ?><?php if ($s["external_package_id"] > 0): ?>*<?php endif; ?></td>
+                                    <td class="value" valign="top"><?php echo $s["final_value"]; ?></td>
                                 </tr>
                                 <?php
                                 $k = 1 - $k;
@@ -255,7 +255,7 @@ unset($motorcycle['videos'][0]);
                         <?php if ($feature_name != ""): ?></table><?php endif; ?>
 
 
-                        <p><em>* This feature may require an additional add-on package that may not be included in the retail or sale price.</em></p>
+                        <p><em>Certain features may require an additional add-on package that may not be included in the retail or sale price. Please contact the dealership for full details.</em></p>
                         </div>
                     <?php endif; ?>
 
