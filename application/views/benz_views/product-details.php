@@ -45,10 +45,17 @@ unset($motorcycle['videos'][0]);
 			<div class="col-md-8 col-xs-12 col-sm-7 pdig sect-sid">
 				<div class="clearfix" style="width:100%;">
 					<ul id="image-gallery" class="gallery list-unstyled cS-hidden">
-						<?php foreach( $motorcycle['images'] as $image ) { ?>
+						<?php foreach( $motorcycle['images'] as $image ) {
+
+						    $image_url = $image["image_name"];
+						    if ($image["external"] == 0) {
+						        $image_url = $media_url. $image_url;
+                            }
+
+						    ?>
 							<li data-thumb="<?php echo $media_url.$image['image_name']; ?>">
 								<a class="fancybox" href="<?php echo $media_url.$image['image_name']; ?>" data-fancybox-group="gallery">
-									<img src="<?php echo $media_url.$image['image_name']; ?>" />
+									<img src="<?php echo $image_url; ?>" />
 								</a>
 							</li>
 						<?php } ?>

@@ -115,17 +115,20 @@ class Motorcycle_M extends Master_M {
         return $records;
     }
 
-
+    public function getMotorcycleImages($id) {
+        $query = $this->db->query("Select * from motorcycleimages where motorcycle_id = ? and disable = 0 order by priority_number ", array($id));
+        return $query->result_array();
+    }
 
 
     public function getMotorcycle( $id ){
         $where = array('motorcycle.id' => $id );
         $record = $this->selectRecord('motorcycle', $where);
 
-        $iwhere = array('motorcycleimage.motorcycle_id' => $id );
-        $this->db->order_by('motorcycleimage.priority_number asc');
+//        $iwhere = array('motorcycleimage.motorcycle_id' => $id );
+//        $this->db->order_by('motorcycleimage.priority_number asc');
 
-        $record['images'] = $this->selectRecords('motorcycleimage', $iwhere);
+        $record['images'] = $this->getMotorcycleImages($id); // $this->selectRecords('motorcycleimage', $iwhere);
         $vwhere = array('motorcycle_video.part_id' => $id );
 
         $this->db->order_by('motorcycle_video.id asc');
