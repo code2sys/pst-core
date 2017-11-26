@@ -291,7 +291,7 @@ $media_url = jsite_url("/media/");
                                     <p class="cfp">Call For Price</p>
                                     <?php
                                 } else {
-                                    if ($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00") { ?>
+                                    if ($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00" && $recently['sale_price'] != $recently['retail_price']) { ?>
                                         <p>Retail Price: &nbsp; <span
                                                     class="strikethrough">$<?php echo number_format($recently['retail_price'], 2); ?></span>
                                         </p>
