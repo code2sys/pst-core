@@ -357,4 +357,33 @@ class Motorcycle_M extends Master_M {
         }
         return $value;
     }
+
+    // This is modeled on the function from Portalmodel for the search results
+    public function enhancedGetMotorcycles($filter = NULL, $orderBy = NULL, $limit = 20, $offset = 0) {
+        $this->load->helper("jonathan");
+
+        $where = jonathan_generate_likes(array("motorcycle.name", "motorcycle.make", "motorcycle.model", "motorcycle_category.name", "motorcycle.year", "motorcycle_type.name"), $filter, "WHERE");
+
+        $total_count = 0;
+        $query = $this->db->query("Select count(*) as cnt from motorcycle");
+        foreach ($query->result_array() as $row) {
+            $total_count = $row['cnt'];
+        }
+
+        // Now, is there a filter?
+        $filtered_count = $total_count;
+        if ($where != "") {
+            // $query = $this->db->query("Select count(distinct part_id) as cnt from part left join partpartnumber using (part_id) left join partnumber  using (partnumber_id)  left join (select partvariation.*, concat(distributor.name, ' ', partvariation.part_number) as partlabel from partvariation join distributor using (distributor_id)) zpartvariation using (partnumber_id) left join partimage using (part_id) $where");
+            $query = $this->db->query("Select count(distinct motorcycle.id) as cnt from motorcycle join motorcycle_category on motorcycle.category = motorcycle_category.id join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id $where");
+            foreach ($query->result_array() as $row) {
+                $filtered_count = $row["cnt"];
+            }
+        }
+
+        // Finally, run it!
+        $query = $this->db->query("Select motorcycle.sku, motorcycle_category.name as category_name, motorcycle_type.name as type_name, motorcycle.title, motorcycle.featured, motorcycle.status, motorcycle.condition, motorcycle.retail_price, motorcycle.sale_price, motorcycle.condition, IfNull(motorcycle.mileage, 0) as mileage, motorcycle.source from motorcycle join motorcycle_category on motorcycle.category = motorcycle_category.id join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id $where $orderBy limit $limit offset $offset ");
+        $rows = $query->result_array();
+
+        return array($rows, $total_count, $filtered_count);
+    }
 }
