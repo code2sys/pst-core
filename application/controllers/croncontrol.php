@@ -155,6 +155,13 @@ class CronControl extends Master_Controller {
         return $type_id;
     }
 
+    protected function getNextCRSSKU() {
+        $query = $this->db->query("select ifnull(max(sku), 'D0') as sku from motorcycle where sku like 'D%';");
+        $match = $query->result_array()[0]["sku"];
+        $number = intVal(substr($match, 1)) + 1;
+        return 'D' . $number;
+    }
+
 	/*
 	 * The point of this one is to be able to request some specific information and then to load them.
 	 * Basically, you have some modes:
@@ -277,7 +284,7 @@ class CronControl extends Master_Controller {
                         $title,
                         1,
                         1,
-                        'CRS' . $trim['trim_id'],
+                        $this->getNextCRSSKU(),
                         $engine_type,
                         $transmission,
                         $retail_price,
