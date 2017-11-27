@@ -155,11 +155,20 @@ class CronControl extends Master_Controller {
         return $type_id;
     }
 
+    protected function SKUInUse($sku) {
+        $query = $this->db->query("select count(*) as cnt from motorcycle where sku = ?", array($sku));
+        return 0 < $query->result_array()[0]["cnt"];
+    }
+
     protected function getNextCRSSKU() {
-        $query = $this->db->query("select ifnull(max(sku), 'D0') as sku from motorcycle where sku like 'D%';");
-        $match = $query->result_array()[0]["sku"];
-        $number = intVal(substr($match, 1)) + 1;
-        return 'D' . $number;
+        $query = $this->db->query("select count(*) as cnt from motorcycle where sku like 'D%';");
+        $count = $query->result_array()[0]["cnt"];
+
+        $count++;
+        while ($this->SKUInUse("D" . $count)) {
+            $count++;
+        }
+        return "D" . $count;
     }
 
 	/*
