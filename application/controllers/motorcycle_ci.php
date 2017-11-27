@@ -48,11 +48,12 @@ class Motorcycle_CI extends Welcome {
     public function benzProduct() {
         // JLB 11-27-17
         // I think this is a problem with a default.
-        if (!array_key_exists("fltr", $_REQUEST)) {
+        if (!array_key_exists("fltr", $_REQUEST) && !array_key_exists("fltr", $_GET)) {
             if (!defined("MOTORCYCLE_SHOP_NEW") || MOTORCYCLE_SHOP_NEW) {
                 $_REQUEST["fltr"] = "new";
+                $_GET["fltr"] = "new";
             } else {
-                $_REQUEST["fltr"] = "pre-owned";
+                $_GET["fltr"] = "pre-owned";
             }
         }
 
