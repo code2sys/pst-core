@@ -2166,7 +2166,7 @@ class Admin extends Master_Controller {
             "motorcycle.sku",
             "motorcycle_category.name",
             "motorcycle_type.name",
-            "",
+            "motorcycle.title",
             "motorcycle.title",
             "motorcycle.featured",
             "motorcycle.status",
@@ -2175,7 +2175,7 @@ class Admin extends Master_Controller {
             "motorcycle.condition",
             "motorcycle.mileage",
             "motorcycle.source",
-            ""
+            "motorcycle.title"
         );
 
         $length = array_key_exists("length", $_REQUEST) ? $_REQUEST["length"] : 500;
