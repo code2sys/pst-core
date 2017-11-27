@@ -168,14 +168,25 @@ unset($motorcycle['videos'][0]);
                 "recentlyMotorcycle" => $recentlyMotorcycle,
                 "no_fify" => true
             ), true);
+
+            $show_info = !empty($mainVideo) || (trim($motorcycle['description']) != "");
+            $show_spec = (count($motorcycle['specs']) > 0);
             ?>
 
 			<div class="col-md-9 col-xs-12 col-sm-8 pdig vide-wdt">
-				<a href="#" class="btn info-btn">
+                <?php if ($show_info): ?>
+				<a href="#" class="btn info-btn" id="product-details-info">
 					info
 				</a>
+                <?php endif; ?>
+                <?php if ($show_spec): ?>
+				<a href="#" class="btn info-btn" id="product-details-spec">
+					specifications
+				</a>
+                <?php endif; ?>
 				<hr class="hr-lne">
-				<div class="info">
+                <?php if ($show_info): ?>
+                <div class="info" id="product-details-info-body">
                         <?php if (!empty($mainVideo)) { ?>
 					<div class="vds rmv">
 							<?php
@@ -194,6 +205,10 @@ unset($motorcycle['videos'][0]);
 							<div class="clear mn-hght"></div>
 						<?php } ?>
 					<?php echo $motorcycle['description'];?>
+                </div>
+                <?php endif; ?>
+                <?php if ($show_spec): ?>
+                <div class="info" id="product-details-spec-body">
 
                     <?php if (count($motorcycle['specs']) > 0): ?>
 
@@ -257,6 +272,7 @@ unset($motorcycle['videos'][0]);
 
                         <p><em>Certain features may require an additional add-on package that may not be included in the retail or sale price. Please contact the dealership for full details.</em></p>
                         </div>
+
                     <?php endif; ?>
 
 					<!--<h3>Integer tellus dui venenatis non:</h3>
@@ -268,10 +284,37 @@ unset($motorcycle['videos'][0]);
 						<li>discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..",</li>
 					</ul>-->
 				</div>
-			</div>
+                <?php endif; ?>
+
+            </div>
 		</div>
 	</div>
 </div>
+
+<?php if ($show_info && $show_spec): ?>
+<script type="application/javascript">
+    $(document).ready(function() {
+        // Hide the spec stuff
+        $("#product-details-spec").css("opacity", 0.5);
+        $("#product-details-spec-body").hide();
+
+        $("#product-details-spec").on("click", function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $("#product-details-info-body").hide();
+            $("#product-details-spec-body").show();
+        });
+
+        $("#product-details-info").on("click", function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $("#product-details-spec-body").hide();
+            $("#product-details-info-body").show();
+        });
+
+    });
+</script>
+<?php endif; ?>
 
 <div class="modal fade pop" id="myModal">
 	<div class="modal-dialog area">	  
