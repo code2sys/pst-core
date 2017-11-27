@@ -175,14 +175,14 @@ unset($motorcycle['videos'][0]);
 
 			<div class="col-md-9 col-xs-12 col-sm-8 pdig vide-wdt">
                 <?php if ($show_info): ?>
-				<a href="#" class="btn info-btn" id="product-details-info">
+				<span href="#" class="btn info-btn" id="product-details-info">
 					info
-				</a>
+				</span>
                 <?php endif; ?>
                 <?php if ($show_spec): ?>
-				<a href="#" class="btn info-btn" id="product-details-spec">
+				<span href="#" class="btn info-btn" id="product-details-spec">
 					specifications
-				</a>
+				</span>
                 <?php endif; ?>
 				<hr class="hr-lne">
                 <?php if ($show_info): ?>
