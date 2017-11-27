@@ -19,7 +19,7 @@ unset($motorcycle['videos'][0]);
 			<nav class="breadcrumb">
 				<a href="<?php echo base_url(); ?>">Home</a>
 				<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
-				<a href="<?php echo base_url('Motorcycle_List'); ?>">Motorcycle List</a>
+				<a href="<?php echo base_url('Motorcycle_List'); ?>?fltr=<?php echo $motorcycle['condition'] == 1 ? 'new' : 'pre-owned'; ?>">Motorcycle List</a>
 				<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
 				<a href="<?php echo base_url('welcome/benzDetails/'.$motorcycle['id']); ?>"><?php echo $motorcycle['title'];?></a>
 			</nav>
