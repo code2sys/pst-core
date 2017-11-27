@@ -36,10 +36,10 @@
 
         <div class="admin_search_left">
             <div class="clear"></div>
-            <h1><i class="fa fa-motorcycle"></i>&nbsp;New & Used Motorcycles</h1>
+            <h1><i class="fa fa-motorcycle"></i>&nbsp;New & Used Unit Inventory</h1>
             <p><b>To add a new product click the button below.</b></p>
             <br>
-            <a href="<?php echo base_url('admin/motorcycle_edit'); ?>" id="button"><i class="fa fa-plus"></i>&nbsp;Add a new Product</a>
+            <a href="<?php echo base_url('admin/motorcycle_edit'); ?>" id="button"><i class="fa fa-plus"></i>&nbsp;Add a new Unit</a>
         </div>
 
 
@@ -70,7 +70,7 @@
             </table>
         </div>
         <!-- END PRODUCT LIST -->
-        <a href="<?php echo base_url('admin/motorcycle_edit'); ?>" id="button"><i class="fa fa-plus"></i>&nbsp;Add a new Product</a>
+        <a href="<?php echo base_url('admin/motorcycle_edit'); ?>" id="button"><i class="fa fa-plus"></i>&nbsp;Add a new Unit</a>
 
         <div class="clear"></div>
 
