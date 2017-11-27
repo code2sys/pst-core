@@ -46,6 +46,17 @@ class Motorcycle_CI extends Welcome {
      * This is the main Motorcycle_List page.
      */
     public function benzProduct() {
+        // JLB 11-27-17
+        // I think this is a problem with a default.
+        if (!array_key_exists("fltr", $_REQUEST)) {
+            if (!defined("MOTORCYCLE_SHOP_NEW") || MOTORCYCLE_SHOP_NEW) {
+                $_REQUEST["fltr"] = "new";
+            } else {
+                $_REQUEST["fltr"] = "pre-owned";
+            }
+        }
+
+
         $this->load->model('pages_m');
         $this->load->model('motorcycle_m');
 
