@@ -2181,14 +2181,14 @@ class Admin extends Master_Controller {
         $length = array_key_exists("length", $_REQUEST) ? $_REQUEST["length"] : 500;
         $start = array_key_exists("start", $_REQUEST) ? $_REQUEST["start"] : 0;
 
-        $order_string = "order by motorcycle.name asc ";
+        $order_string = "order by motorcycle.title asc ";
 
         if (array_key_exists("order", $_REQUEST) && is_array($_REQUEST["order"]) && count($_REQUEST["order"]) > 0) {
             // OK, there's a separate order string...
             $order_string = "order by ";
             $orderings = $_REQUEST["order"];
             if (count($orderings) == 0) {
-                $order_string .= " motorcycle.name asc";
+                $order_string .= " motorcycle.title asc";
             } else {
                 for ($i = 0; $i < count($orderings); $i++) {
                     if ($i > 0) {
