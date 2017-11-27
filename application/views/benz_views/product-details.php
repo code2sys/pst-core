@@ -239,6 +239,9 @@ unset($motorcycle['videos'][0]);
                             <?php
                             $feature_name = "";
                             foreach ($motorcycle["specs"] as $s) {
+                                if ($s["attribute_name"] == "") {
+                                    continue; // just skip it.
+                                }
                                 if ($feature_name != $s["feature_name"]) {
                                     if ($feature_name != ""):
                                     ?>
