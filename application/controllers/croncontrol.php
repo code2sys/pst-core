@@ -119,8 +119,17 @@ class CronControl extends Master_Controller {
 		$this->parts_m->closeoutReprisingSchedule();
 	}
 
-	protected function _getStockMotoCategory() {
-        $name = "Dealer";
+	protected $stock_moto_category_cache;
+	protected function _getStockMotoCategory($name = "Dealer") {
+
+	    if (!isset($this->stock_moto_category_cache) || !is_array($this->stock_moto_category_cache)) {
+	        $this->stock_moto_category_cache = array();
+        }
+
+        if (array_key_exists($name, $this->stock_moto_category_cache)) {
+	        return $this->stock_moto_category_cache[$name];
+        }
+
         $query = $this->db->query("Select * from motorcycle_category where name = ?", array($name));
         $id = 0;
         foreach ($query->result_array() as $row) {
@@ -131,6 +140,9 @@ class CronControl extends Master_Controller {
             $this->db->query("Insert into motorcycle_category (name, date_added) values (?, now())", array($name));
             $id = $this->db->insert_id();
         }
+
+        $this->stock_moto_category_cache[$name] = $id;
+
         return $id;
     }
 
@@ -189,8 +201,18 @@ class CronControl extends Master_Controller {
             throw new Exception("No type found for $machine_type ");
         }
 
+        $offroad_vehicle_type = 0;
+        $query = $this->db->query("Select id from motorcycle_type where name = 'Off-Road'");
+        foreach ($query->result_array() as $row) {
+            $offroad_vehicle_type = $row["id"];
+        }
+        if ($offroad_vehicle_type == 0) {
+            throw new Exception("No Off-Road vehicle type found.");
+        }
+
+        // We sometimes need this in hand - the off-road type...
+
         // Now we have to get $category_id .. for now, we're going to call it Stock...
-        $category_id = $this->_getStockMotoCategory();
 
         // Now, we have to enter them...
         foreach ($matching_motorcycles as $m) {
@@ -215,12 +237,19 @@ class CronControl extends Master_Controller {
                 if (count($trim) > 0) {
                     $trim = $trim[0];
 
+                    $category_id = $this->_getStockMotoCategory();
+
+
                     // OK, we have to add it, and then we have to add the motorcycle... but first we have to get some of the specs
                     $retail_price = $sale_price = $trim["msrp"];
+                    $this_machine_type = $vehicle_type;
 
                     $engine_type = ""; // 30003
                     $transmission = ""; // 40002
-                    // look for 20007 for a msrp + destination fee..
+                    // look for 20002 for a msrp + destination fee..
+                    // JLB 2017-11-27
+                    // 10011 is the category...
+                    // Further, if is Off-Road, then we have to re-type the machine it's a MOT from Street Bike to Off-Road.
 
                     foreach ($trim["specifications"] as $s) {
                         $attribute_id = $s["attribute_id"];
@@ -229,14 +258,23 @@ class CronControl extends Master_Controller {
                             $engine_type = $s["text_value"];
                         } else if ($attribute_id == 40002) {
                             $transmission = $s["text_value"];
-                        } else if ($attribute_id == 20007) {
+                        } else if ($attribute_id == 20002) {
                             $retail_price = $sale_price= $s["text_value"];
+                        } else if ($attribute_id == 10011) {
+                            $category_id = $this->_getStockMotoCategory($s["text_value"]);
+
+                            // Special conversion to Dirt Bike
+                            if ($s["text_value"] == "Off-Road" && $machine_type == "MOT") {
+                                // We have to change the type...
+                                $this_machine_type = $offroad_vehicle_type;
+                            }
                         }
                     }
 
-                    $this->db->query("Insert into motorcycle (title, description, status, `condition`, sku, engine_type, transmission, retail_price, sale_price, data, margin, profit, category, vehicle_type, year, make, model, color, craigslist_feed_status, cycletrader_feed_status, crs_trim_id, crs_machinetype, crs_model_id, crs_make_id, crs_year, uniqid, source, crs_version_number) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(
-                        $trim["year"]. " " . $trim["make"] . " " . $trim["display_name"],
-                        '',
+                    // JLB 11-27-17: We just set the destination charge = 1.
+                    $this->db->query("Insert into motorcycle (title, description, status, `condition`, sku, engine_type, transmission, retail_price, sale_price, data, margin, profit, category, vehicle_type, year, make, model, color, craigslist_feed_status, cycletrader_feed_status, crs_trim_id, crs_machinetype, crs_model_id, crs_make_id, crs_year, uniqid, source, crs_version_number, destination_charge) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)", array(
+                        ($title = $trim["year"]. " " . $trim["make"] . " " . $trim["display_name"]),
+                        $title,
                         1,
                         1,
                         'CRS' . $trim['trim_id'],
@@ -255,7 +293,7 @@ class CronControl extends Master_Controller {
                         0.00,
                         0.00,
                         $category_id,
-                        $vehicle_type,
+                        $this_machine_type,
                         $trim["year"],
                         $trim["make"],
                         $trim["display_name"],
