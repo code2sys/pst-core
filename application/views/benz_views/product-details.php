@@ -299,6 +299,8 @@ unset($motorcycle['videos'][0]);
         $("#product-details-spec-body").hide();
 
         $("#product-details-spec").on("click", function(e) {
+            $("#product-details-spec").css("opacity", 1.0);
+            $("#product-details-info").css("opacity", 0.5);
             e.stopPropagation();
             e.preventDefault();
             $("#product-details-info-body").hide();
@@ -306,6 +308,8 @@ unset($motorcycle['videos'][0]);
         });
 
         $("#product-details-info").on("click", function(e) {
+            $("#product-details-info").css("opacity", 1.0);
+            $("#product-details-spec").css("opacity", 0.5);
             e.stopPropagation();
             e.preventDefault();
             $("#product-details-spec-body").hide();
