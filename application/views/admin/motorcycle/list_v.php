@@ -117,6 +117,40 @@
 
     });
 
+
+    function submitAjaxAction(id, action) {
+        if (action == "edit") {
+            // we just have to redirect it.
+            window.location.href = "<?php echo site_url('admin/motorcycle_edit'); ?>/" + id;
+            return false; // all done..
+        }
+
+        if (action == "remove") {
+            if (!confirm("Are you sure? This will remove the unit record from the database.")) {
+                return false;
+            }
+        }
+
+        // we have to do a callback...
+        $.ajax({
+            "type" : "POST",
+            "dataType": "json",
+            "url" : "<?php echo site_url("admin/motorcycle_ajax_"); ?>" + action + "/" + id,
+            "data" : {},
+            "success" : function(data) {
+                // OK, we need to make the table refresh
+                if (data.success) {
+                    // we just need to refresh the table
+                    $(".tabular_data table").DataTable().ajax.reload();
+                } else {
+                    // throw the error.
+                    alert("Error: " + data.error_message);
+                }
+            }
+        });
+
+    }
+
     $(document).ready(function() {
         // We need to bind these actions
         $(".tabular_data").on("click", ".edit-button", function(e) {

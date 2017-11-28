@@ -2241,6 +2241,52 @@ class Admin extends Master_Controller {
     }
 
 
+    /*
+     * We added some ajax actions.
+     */
+    public function motorcycle_ajax_active($id) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            $this->_printAjaxError("Sorry, you do not have access to this feature.");
+        }
+
+        $this->db->query("Update motorcycle set status = 1 where id = ?", array($id));
+        $this->_printAjaxSuccess();
+    }
+
+    public function motorcycle_ajax_inactive($id) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            $this->_printAjaxError("Sorry, you do not have access to this feature.");
+        }
+
+        $this->db->query("Update motorcycle set status = 0 where id = ?", array($id));
+        $this->_printAjaxSuccess();
+    }
+
+    public function motorcycle_ajax_remove($id) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            $this->_printAjaxError("Sorry, you do not have access to this feature.");
+        }
+
+        $this->db->query("Delete from motorcycle where id = ?", array($id));
+        $this->_printAjaxSuccess();
+    }
+
+    protected function _printAjaxError($error_message) {
+        print json_encode(array(
+            "success" => false,
+            "error_message" => $error_message
+        ));
+        exit();
+    }
+
+    protected function _printAjaxSuccess($data = array()) {
+        print json_encode(array(
+            "success" => true,
+            "data" => $data
+        ));
+        exit();
+    }
+
     public function motorcycle_edit($id = NULL, $updated = null) {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
