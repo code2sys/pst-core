@@ -115,33 +115,35 @@
             ]
         });
 
+    });
+
+    $(document).ready(function() {
         // We need to bind these actions
-        $(window).on("click", ".edit-button", function(e) {
+        $(".tabular_data").on("click", ".edit-button", function(e) {
             e.preventDefault();
             console.log("Edit Button");
             console.log(e);
         });
 
         // We need to bind these actions
-        $(window).on("click", ".remove-button", function(e) {
+        $(".tabular_data").on("click", ".remove-button", function(e) {
             e.preventDefault();
             console.log("remove Button");
             console.log(e);
         });
 
         // We need to bind these actions
-        $(window).on("click", ".active-button", function(e) {
+        $(".tabular_data").on("click", ".active-button", function(e) {
             e.preventDefault();
             console.log("active Button");
             console.log(e);
         });
 
         // We need to bind these actions
-        $(window).on("click", ".inactive-button", function(e) {
+        $(".tabular_data").on("click", ".inactive-button", function(e) {
             e.preventDefault();
             console.log("inactive Button");
             console.log(e);
         });
-
     });
 </script>
