@@ -3,6 +3,12 @@
     <div class="content">
         <div class="clear"></div>
 
+        <style >
+            span.nowrap {
+                white-space:nowrap;
+            }
+        </style>
+
         <!-- VALIDATION ALERT -->
         <?php if (validation_errors() || @$errors): ?>
             <div class="validation_error" id="login_validation_error">
