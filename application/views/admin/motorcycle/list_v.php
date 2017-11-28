@@ -155,29 +155,25 @@
         // We need to bind these actions
         $(".tabular_data").on("click", ".edit-button", function(e) {
             e.preventDefault();
-            console.log("Edit Button");
-            console.log(e);
+            submitAjaxAction(e.target.dataset.motorcycleId, "edit");
         });
 
         // We need to bind these actions
         $(".tabular_data").on("click", ".remove-button", function(e) {
             e.preventDefault();
-            console.log("remove Button");
-            console.log(e);
+            submitAjaxAction(e.target.dataset.motorcycleId, "remove");
         });
 
         // We need to bind these actions
         $(".tabular_data").on("click", ".active-button", function(e) {
             e.preventDefault();
-            console.log("active Button");
-            console.log(e);
+            submitAjaxAction(e.target.dataset.motorcycleId, "active");
         });
 
         // We need to bind these actions
         $(".tabular_data").on("click", ".inactive-button", function(e) {
             e.preventDefault();
-            console.log("inactive Button");
-            console.log(e);
+            submitAjaxAction(e.target.dataset.motorcycleId, "inactive");
         });
     });
 </script>
