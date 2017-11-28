@@ -2222,9 +2222,9 @@ class Admin extends Master_Controller {
                 $p["condition"] == 1 ? "New" : "Used",
                 $p["mileage"],
                 $p["source"],
-                "<a href='#' class='edit-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-edit'></i> Edit</a> " ./* edit */ /* delete */ /* active */ /* inactive */
-                "<a href='#' class='remove-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-remove'></i> Remove</a> " .
-                ($p["status"] > 0 ? "<a href='#' class='inactive-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-play'></i> Active</a> " : "<a href='#' class='active-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-pause'></i> Inactive</a> ")
+                "<a href='#' class='edit-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-edit'></i> Edit</a><br/> " ./* edit */ /* delete */ /* active */ /* inactive */
+                "<a href='#' class='remove-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-remove'></i> Remove</a><br/> " .
+                ($p["status"] > 0 ? "<a href='#' class='inactive-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-play'></i> Active</a><br/> " : "<a href='#' class='active-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-pause'></i> Inactive</a><br/> ")
             );
         }
 
