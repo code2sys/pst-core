@@ -2244,6 +2244,62 @@ class Admin extends Master_Controller {
     /*
      * We added some ajax actions.
      */
+    public function motorcycle_ajax_ac_make() {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            $this->_printAjaxError("Sorry, you do not have access to this feature.");
+        }
+
+        // OK, we have to come up with suggestions
+        $year = array_key_exists("year", $_REQUEST) ? $_REQUEST["year"] : 0;
+        $machine_type = array_key_exists("machine_type", $_REQUEST) ? $_REQUEST["machine_type"] : "";
+
+        if ($machine_type == "") {
+            $this->_printAjaxError("Sorry, you must specify a machine type.");
+        }
+
+        $args = array(
+            "machine_type" => $machine_type
+        );
+
+        if ($year > 0) {
+            $args["year"] = $year;
+        }
+
+        $this->load->model("CRS_m");
+        $this->_printAjaxSuccess($this->CRS_m->getMakes($args));
+    }
+
+    public function motorcycle_ajax_ac_model() {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            $this->_printAjaxError("Sorry, you do not have access to this feature.");
+        }
+
+        // OK, we have to come up with suggestions
+        $year = array_key_exists("year", $_REQUEST) ? $_REQUEST["year"] : 0;
+        $machine_type = array_key_exists("machine_type", $_REQUEST) ? $_REQUEST["machine_type"] : "";
+        $make = array_key_exists("make", $_REQUEST) ? $_REQUEST["make"] : "";
+
+        if ($machine_type == "") {
+            $this->_printAjaxError("Sorry, you must specify a machine type.");
+        }
+
+        if ($make == "") {
+            $this->_printAjaxError("Sorry, you must specify a make.");
+        }
+
+        $args = array(
+            "machine_type" => $machine_type,
+            "make" => $make
+        );
+
+        if ($year > 0) {
+            $args["year"] = $year;
+        }
+
+        $this->load->model("CRS_m");
+        $this->_printAjaxSuccess($this->CRS_m->getTrims($args));
+    }
+
     public function motorcycle_ajax_active($id) {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             $this->_printAjaxError("Sorry, you do not have access to this feature.");

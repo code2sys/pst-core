@@ -303,6 +303,19 @@ $cstdata = (array) json_decode($product['data']);
         }
     }
 
+    function filterArrayByTerm(source_array, term) {
+        var result_array = [];
+
+        var regex = new RegExp(term, "i");
+        for (var i = 0; i < source_array.length; i++) {
+            if (regex.exec(source_array[i])) {
+                result_array.push(source_array[i]);
+            }
+        }
+
+        return result_array;
+    }
+
     $("input[name=year]").on("change", function(e) {
         var year = $("input[name=year]").val();
         var error = false;
@@ -323,6 +336,28 @@ $cstdata = (array) json_decode($product['data']);
     $("input[name='make']").autocomplete({
         source: function(request, response) {
             var data = getQueryBasis();
+
+            if (data === false) {
+                response([]); // just bail out...
+            } else {
+                var suggestion_array = [];
+                $.ajax({
+                    "type" : "POST",
+                    "dataType" : "json",
+                    "url" : "<?php echo site_url("admin/motorcycle_ajax_ac_make"); ?>",
+                    "data" : data,
+                    "success" : function(data) {
+                        if (data.success) {
+                            var returned_data = data.data;
+                            console.log(returned_data);
+                        }
+                    },
+                    "complete" : function() {
+                        response(suggestion_array);
+                    }
+                })
+            }
+
             console.log(["Found data in make query", data]);
             console.log(request.term); var term = request.term; console.log($("input[name=year]").val()); response([term, "a"+term, "b"+term, "c"+term]);
         }
