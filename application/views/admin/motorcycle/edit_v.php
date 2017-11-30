@@ -50,6 +50,36 @@ $cstdata = (array) json_decode($product['data']);
             <div class="hidden_table">
                 <table width="100%" cellpadding="6">
                     <tr>
+                        <td style="width:50px;"><b>Vehicle:</b></td>
+                        <td>
+                            <select name="vehicle_type" class="small-hndr" style="border-radius:0;">
+                                <option value="">Select Vehicle</option>
+                                <?php foreach( $vehicles as $v ) { ?>
+                                    <option value="<?php echo $v['id'];?>" <?php if($product['vehicle_type'] == $v['id']) { echo "selected"; }else if($_POST['vehicle_type']==$v['id']){echo "selected";} ?>><?php echo $v['name'];?></option>
+                                <?php } ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Year:</b></td>
+                        <td>
+                            <input type="number" min="1900" name="year" value="<?php echo $product['year']==''?$_POST['year']:$product['year']; ?>" class="text small small-hndr frst ttl-1">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td ><b>Make:</b></td>
+                        <td>
+                            <input type="text" name="make" value="<?php echo $product['make']==''?$_POST['make']:$product['make']; ?>" class="text small ttl-1">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td ><b>Model:</b></td>
+                        <td >
+                            <input type="text" name="model" value="<?php echo $product['model']==''?$_POST['model']:$product['model']; ?>" class="text small ttl-1">
+                        </td>
+                    </tr>
+
+                    <tr>
                         <td style="width:50px;"><b>Title:</b></td>
                         <td>
                             <input id="name" name="title" placeholder="Enter Title" class="text large ttl" value="<?php echo $product['title']==''?$_POST['title']:$product['title']; ?>" readonly />
@@ -79,17 +109,7 @@ $cstdata = (array) json_decode($product['data']);
 							<input type="text" name="category" value="<?php echo $product['name']==''?$_POST['category']:$product['name']; ?>" class="text small">
                         </td>
                     </tr>
-                    <tr>
-                        <td style="width:50px;"><b>Vehicle:</b></td>
-                        <td>
-							<select name="vehicle_type" class="small-hndr" style="border-radius:0;">
-							<option value="">Select Vehicle</option>
-							<?php foreach( $vehicles as $v ) { ?>
-								<option value="<?php echo $v['id'];?>" <?php if($product['vehicle_type'] == $v['id']) { echo "selected"; }else if($_POST['vehicle_type']==$v['id']){echo "selected";} ?>><?php echo $v['name'];?></option>
-							<?php } ?>
-							</select>
-                        </td>
-                    </tr>
+
                     <tr>
                         <td style="width:50px;"><b>Condition:</b></td>
                         <td>
@@ -105,26 +125,7 @@ $cstdata = (array) json_decode($product['data']);
                             <input type="text" name="sku" value="<?php echo $product['sku']==''?$_POST['sku']:$product['sku']; ?>" class="text small small-hndr">
                         </td>
                     </tr>
-                    <tr>
-						<td colspan="2">
-							<table width="100%" class="inr">
-								<tr>
-									<td class="min-wdh"><b>Year:</b></td>
-									<td class="inr-td scnd mx-wdt">
-										<input type="number" min="1900" name="year" value="<?php echo $product['year']==''?$_POST['year']:$product['year']; ?>" class="text small small-hndr frst ttl-1">
-									</td>
-									<td style="width:45px" class="min-wdh"><b>Make:</b></td>
-									<td class="inr-td scnd small-input">
-										<input type="text" name="make" value="<?php echo $product['make']==''?$_POST['make']:$product['make']; ?>" class="text small ttl-1">
-									</td>
-									<td style="width:50px;" class="min-wdh"><b>model:</b></td>
-									<td class="inr-td scnd">
-										<input type="text" name="model" value="<?php echo $product['model']==''?$_POST['model']:$product['model']; ?>" class="text small ttl-1">
-									</td>
-								</tr>
-							</table>
-						</td>
-                    </tr>
+
                     <tr>
                         <td style="width:50px;"><b>Vin Number:</b></td>
                         <td>
