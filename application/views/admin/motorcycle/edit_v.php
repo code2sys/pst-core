@@ -63,19 +63,19 @@ $cstdata = (array) json_decode($product['data']);
                     <tr>
                         <td><b>Year:</b></td>
                         <td>
-                            <input type="number" min="1900" name="year" value="<?php echo $product['year']==''?$_POST['year']:$product['year']; ?>" class="text small small-hndr frst ttl-1">
+                            <input type="number" min="1900" name="year" value="<?php echo $product['year']==''?$_POST['year']:$product['year']; ?>" class="text ">
                         </td>
                     </tr>
                     <tr>
                         <td ><b>Make:</b></td>
                         <td>
-                            <input type="text" name="make" value="<?php echo $product['make']==''?$_POST['make']:$product['make']; ?>" class="text small ttl-1">
+                            <input type="text" name="make" value="<?php echo $product['make']==''?$_POST['make']:$product['make']; ?>" class="text ">
                         </td>
                     </tr>
                     <tr>
                         <td ><b>Model:</b></td>
                         <td >
-                            <input type="text" name="model" value="<?php echo $product['model']==''?$_POST['model']:$product['model']; ?>" class="text small ttl-1">
+                            <input type="text" name="model" value="<?php echo $product['model']==''?$_POST['model']:$product['model']; ?>" class="text ">
                         </td>
                     </tr>
 
