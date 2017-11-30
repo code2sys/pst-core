@@ -268,6 +268,41 @@ $cstdata = (array) json_decode($product['data']);
 .inr-td {width:200px;}
 </style>
 <script type="text/javascript">
+    var vehicleTypes = <?php echo json_encode($vehicles); ?>;
+
+    function getQueryBasis() {
+        var year = $("input[name=year]").val().trim();
+        var vehicle_type = $("select[name=vehicle_type]").val().trim();
+
+
+        // look, if they got nothing, they got nothing...
+        if (vehicle_type === "") {
+            return false;
+        }
+
+        // does this one have a thing for CRS?
+        // TODO: Special case for off road....
+        var crs_vehicle_type = "";
+        for (var i = 0; i < vehicleTypes.length; i++) {
+            if (parseInt(vehicleTypes[i].id, 10) === parseInt(vehicle_type, 10)) {
+                crs_vehicle_type = vehicleTypes[i].crs_type;
+            }
+        }
+
+        if (crs_vehicle_type !== "") {
+            // OK, start to make your data.
+            var data = {
+                machine_type: crs_vehicle_type
+            };
+            if (year !== "") {
+                data.year = year;
+            }
+            return data;
+        } else {
+            return false;
+        }
+    }
+
     $("input[name=year]").on("change", function(e) {
         var year = $("input[name=year]").val();
         var error = false;
@@ -285,6 +320,20 @@ $cstdata = (array) json_decode($product['data']);
         }
     });
 
+    $("input[name='make']").autocomplete({
+        source: function(request, response) {
+            var data = getQueryBasis();
+            console.log(["Found data in make query", data]);
+            console.log(request.term); var term = request.term; console.log($("input[name=year]").val()); response([term, "a"+term, "b"+term, "c"+term]);
+        }
+    });
+
+    $("input[name='model']").autocomplete({
+        source: function(request, response) {
+            console.log(["Found data in model query", data]);
+            console.log(request.term); var term = request.term; console.log($("input[name=year]").val()); response([term, "a"+term, "b"+term, "c"+term]);
+        }
+    });
 
 	$(document).on('keyup','.sm', function() {
 		var ttl = 0;
