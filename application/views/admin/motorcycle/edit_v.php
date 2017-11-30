@@ -273,6 +273,7 @@ $cstdata = (array) json_decode($product['data']);
     function getQueryBasis() {
         var year = $("input[name=year]").val().trim();
         var vehicle_type = $("select[name=vehicle_type]").val().trim();
+        var make = $("select[name=make]").val().trim();
 
 
         // look, if they got nothing, they got nothing...
@@ -296,6 +297,9 @@ $cstdata = (array) json_decode($product['data']);
             };
             if (year !== "") {
                 data.year = year;
+            }
+            if (make !== "") {
+                data.make = make;
             }
             return data;
         } else {
@@ -342,6 +346,10 @@ $cstdata = (array) json_decode($product['data']);
             if (data === false) {
                 response([]); // just bail out...
             } else {
+                if (data.make) {
+                    delete(data.make);
+                }
+
                 var suggestion_array = [];
                 $.ajax({
                     "type" : "POST",
