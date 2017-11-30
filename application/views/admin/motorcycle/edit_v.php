@@ -388,7 +388,7 @@ $cstdata = (array) json_decode($product['data']);
                             var returned_data = data.data;
                             console.log(returned_data);
                             for (var i = 0; i < returned_data.length; i++) {
-                                suggestion_array.push(returned_data[i].trim);
+                                suggestion_array.push(returned_data[i].display_name);
                             }
                             suggestion_array = filterArrayByTerm(suggestion_array, request.term);
                             suggestion_array.sort();
