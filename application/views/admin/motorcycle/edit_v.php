@@ -370,8 +370,35 @@ $cstdata = (array) json_decode($product['data']);
 
     $("input[name='model']").autocomplete({
         source: function(request, response) {
-            console.log(["Found data in model query", data]);
-            console.log(request.term); var term = request.term; console.log($("input[name=year]").val()); response([term, "a"+term, "b"+term, "c"+term]);
+            var data = getQueryBasis();
+
+            console.log(["Found data in make query", data]);
+
+            if (data === false) {
+                response([]); // just bail out...
+            } else {
+                var suggestion_array = [];
+                $.ajax({
+                    "type" : "POST",
+                    "dataType" : "json",
+                    "url" : "<?php echo site_url("admin/motorcycle_ajax_ac_model"); ?>",
+                    "data" : data,
+                    "success" : function(data) {
+                        if (data.success) {
+                            var returned_data = data.data;
+                            console.log(returned_data);
+                            for (var i = 0; i < returned_data.length; i++) {
+                                suggestion_array.push(returned_data[i].trim);
+                            }
+                            suggestion_array = filterArrayByTerm(suggestion_array, request.term);
+                            suggestion_array.sort();
+                        }
+                    },
+                    "complete" : function() {
+                        response(suggestion_array);
+                    }
+                })
+            }
         }
     });
 
