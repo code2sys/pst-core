@@ -63,7 +63,7 @@ $cstdata = (array) json_decode($product['data']);
                     <tr>
                         <td><b>Year:</b></td>
                         <td>
-                            <input type="number" min="1900" name="year" value="<?php echo $product['year']==''?$_POST['year']:$product['year']; ?>" class="text ">
+                            <input type="number" min="1900" name="year" value="<?php echo $product['year']==''?$_POST['year']:$product['year']; ?>" class="text "> <span style="color: red; font-style: italic; display: none" id="year-error">Please use a four-digit year.</span>
                         </td>
                     </tr>
                     <tr>
@@ -268,6 +268,24 @@ $cstdata = (array) json_decode($product['data']);
 .inr-td {width:200px;}
 </style>
 <script type="text/javascript">
+    $("input[name=year]").on("change", function(e) {
+        var year = $("input[name=year]").val();
+        var error = false;
+        if (year && year !== "") {
+            year = parseInt(year, 10);
+            if (year < 1900) {
+                error = true;
+            }
+        }
+
+        if (error) {
+            $("#year-error").show();
+        } else {
+            $("#year-error").hide();
+        }
+    });
+
+
 	$(document).on('keyup','.sm', function() {
 		var ttl = 0;
 		$('.sm').each(function() {
