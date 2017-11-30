@@ -271,9 +271,25 @@ $cstdata = (array) json_decode($product['data']);
     var vehicleTypes = <?php echo json_encode($vehicles); ?>;
 
     function getQueryBasis() {
-        var year = $("input[name=year]").val().trim();
-        var vehicle_type = $("select[name=vehicle_type]").val().trim();
-        var make = $("select[name=make]").val().trim();
+        var year, vehicle_type, make;
+
+        try {
+            year = $("input[name=year]").val().trim();
+        } catch(err) {
+            year = "";
+        }
+
+        try {
+            vehicle_type = $("select[name=vehicle_type]").val().trim();
+        } catch(err) {
+            vehicle_type = "";
+        }
+
+        try {
+            make = $("select[name=make]").val().trim();
+        } catch(err) {
+            make = "";
+        }
 
 
         // look, if they got nothing, they got nothing...
