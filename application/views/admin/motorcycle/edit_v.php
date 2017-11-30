@@ -337,6 +337,8 @@ $cstdata = (array) json_decode($product['data']);
         source: function(request, response) {
             var data = getQueryBasis();
 
+            console.log(["Found data in make query", data]);
+
             if (data === false) {
                 response([]); // just bail out...
             } else {
@@ -358,8 +360,6 @@ $cstdata = (array) json_decode($product['data']);
                 })
             }
 
-            console.log(["Found data in make query", data]);
-            console.log(request.term); var term = request.term; console.log($("input[name=year]").val()); response([term, "a"+term, "b"+term, "c"+term]);
         }
     });
 
