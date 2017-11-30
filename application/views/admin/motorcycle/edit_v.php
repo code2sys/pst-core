@@ -352,6 +352,11 @@ $cstdata = (array) json_decode($product['data']);
                         if (data.success) {
                             var returned_data = data.data;
                             console.log(returned_data);
+                            for (var i = 0; i < returned_data.length; i++) {
+                                suggestion_array.push(returned_data[i].make);
+                            }
+                            suggestion_array = filterArrayByTerm(suggestion_array, request.term);
+                            suggestion_array.sort();
                         }
                     },
                     "complete" : function() {
