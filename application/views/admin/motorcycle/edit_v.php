@@ -286,7 +286,7 @@ $cstdata = (array) json_decode($product['data']);
         }
 
         try {
-            make = $("select[name=make]").val().trim();
+            make = $("input[name=make]").val().trim();
         } catch(err) {
             make = "";
         }
@@ -396,7 +396,7 @@ $cstdata = (array) json_decode($product['data']);
         source: function(request, response) {
             var data = getQueryBasis();
 
-            console.log(["Found data in make query", data]);
+            console.log(["Found data in model query", data]);
 
             if (data === false) {
                 response([]); // just bail out...
