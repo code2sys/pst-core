@@ -2344,6 +2344,9 @@ class Admin extends Master_Controller {
     }
 
     public function motorcycle_edit($id = NULL, $updated = null) {
+	if ($_SERVER["REMOTE_ADDR"] != "107.143.140.42") {
+		throw new Exception("Internal Error");
+	}
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
