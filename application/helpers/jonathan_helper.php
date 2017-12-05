@@ -181,5 +181,15 @@ function jprint_interactive_footer($pages) {
     <?php
 }
 
+// for the blocks
+function jget_store_block($block_name) {
+    $filename = STORE_DIRECTORY . "/store_block_" .     $block_name;
+    if (file_exists($filename)) {
+        return file_get_contents($filename);
+    } else {
+        return "";
+    }
+}
+
 
 
