@@ -69,13 +69,13 @@ $cstdata = (array) json_decode($product['data']);
                     <tr>
                         <td ><b>Make:</b></td>
                         <td>
-                            <input type="text" name="make" value="<?php echo $product['make']==''?$_POST['make']:$product['make']; ?>" class="text ">
+                            <input type="text" name="make" value="<?php echo $product['make']==''?$_POST['make']:$product['make']; ?>" class="text " style="width: 300px">
                         </td>
                     </tr>
                     <tr>
                         <td ><b>Model:</b></td>
                         <td >
-                            <input type="text" name="model" value="<?php echo $product['model']==''?$_POST['model']:$product['model']; ?>" class="text ">
+                            <input type="text" name="model" value="<?php echo $product['model']==''?$_POST['model']:$product['model']; ?>" class="text " style="width: 300px">
                         </td>
                     </tr>
 
