@@ -12,6 +12,7 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 
 	?>
 <head>
+    <?php echo jget_store_block("top_header"); ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<?php echo @$metatag; ?>
@@ -61,11 +62,13 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 		});
 	});
 	</script>
-	
-	
+
+    <?php echo jget_store_block("bottom_header"); ?>
+
 </head>
 
 <body>
+<?php echo jget_store_block("top_body"); ?>
 	<div class="topBar_b">
 		<div class="container_b">
 			<p class="creditCar_b fltL_b">
@@ -719,6 +722,6 @@ $(window).load(function() {
     min-height: 10px;
 }
 </style>
-
+<?php echo jget_store_block("bottom_body"); ?>
 </body>
 </html>	

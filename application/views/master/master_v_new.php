@@ -37,7 +37,9 @@ if (!defined('SEARCH_PLACEHOLDER_WORDING')) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title><?php echo $page_title; ?></title>
+    <?php echo jget_store_block("top_header"); ?>
+
+    <title><?php echo $page_title; ?></title>
 	<?php
 	$CI =& get_instance();
 	echo $CI->load->view("master/top_header", array(
@@ -227,10 +229,12 @@ if (!defined('SEARCH_PLACEHOLDER_WORDING')) {
 </style>
 	<link rel="stylesheet" href="<?php echo jsite_url("/basebranding.css"); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url("/custom.css"); ?>" />
+    <?php echo jget_store_block("bottom_header"); ?>
 
 </head>
 
 <body>
+<?php echo jget_store_block("top_body"); ?>
 <div id="loading-background" style="display:none;">
   <img src="<?php echo $new_assets_url;?>images/ajax-loader-black.gif" alt="Loading..." />
 </div>
@@ -677,6 +681,8 @@ echo $CI->load->view("master/bottom_footer", array(
 	"store_name" => $store_name
 ));
 ?>
+<?php echo jget_store_block("bottom_body"); ?>
+
 </body>
 </html>
 

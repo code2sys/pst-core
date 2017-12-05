@@ -40,7 +40,9 @@ if (!defined('SEARCH_PLACEHOLDER_WORDING')) {
 $new_assets_url = jsite_url("/qatesting/benz_assets/");
 ?>
 <head>
-	<title><?php echo $page_title; ?></title>
+    <?php echo jget_store_block("top_header"); ?>
+
+    <title><?php echo $page_title; ?></title>
 	<?php
 	$CI =& get_instance();
 	echo $CI->load->view("master/top_header", array(
@@ -92,10 +94,13 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 			min-height:240px;
 		}
 	</style>
-	
+    <?php echo jget_store_block("bottom_header"); ?>
+
 </head>
 
 <body>
+<?php echo jget_store_block("top_body"); ?>
+
 	<div class="topBar_b">
 		<div class="container_b">
 			<p class="creditCar_b fltL_b">
@@ -629,5 +634,7 @@ echo $CI->load->view("widgets/ride_selection_js", array(
 		"store_name" => $store_name
 	));
 	?>
+<?php echo jget_store_block("bottom_body"); ?>
+
 </body>
 </html>
