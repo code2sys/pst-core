@@ -83,7 +83,7 @@ if (!is_null($pageIndex) && $pageIndex < 9)
                     <!--<li><a href="<?php echo base_url('/admin/closeout_rules'); ?>" ><i class="fa fa-cubes"></i>&nbsp;Closeout Schedule</a></li>-->
                 </ul>
             </li>
-            <li><a href="<?php echo base_url('/users'); ?>" <?php echo $arr[5]; ?>><i class="fa fa-users"></i>&nbsp;Finance</a>
+            <li><a href="<?php echo base_url('/admin'); ?>" <?php echo $arr[5]; ?>><i class="fa fa-credit-card"></i>&nbsp;Finance</a>
                 <ul>
 					<?php if(in_array('finance', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
 						<li><a href="<?php echo base_url('/admin/credit_applications'); ?>" ><i class="fa fa-user"></i>&nbsp;Credit Applications</a></li>
