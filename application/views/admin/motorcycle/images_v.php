@@ -79,7 +79,7 @@ $(document).ready(function(){
 					<ul id="sortable">
 						<?php foreach( $image as $k => $v ) { ?>
 						<li style="padding:20px;" id="<?php echo $v['id'] ?>" class="ui-state-default">
-							<div class="tabe"><img height="50" width="50"  src="<?php echo base_url($media); ?>/<?php echo $v['image_name']; ?>"></div>
+							<div class="tabe"><img src="<?php echo $v["external"] > 0 ? $v["image_name"] : "/media/" . $v["image_name"]; ?>" style="width: 50px; height: auto;"></div>
 							<form class="form_standard" enctype="multipart/form-data" method="post">
 								<input id="name" name="description[<?php echo $v['id'];?>]" placeholder="Description" value="<?php echo $v['description'];?>" class="text medium" /><br>
 								<input type="submit" value="Update Description" name="update">
