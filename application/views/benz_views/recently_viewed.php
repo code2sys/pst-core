@@ -35,7 +35,7 @@ if (!isset($no_fify)) {
             if ($recently['external'] == 0) {
                 $motorcycle_image = base_url().'media/'. $motorcycle_image;
             }
-            if ($motorcycle_image == "" || is_null($motorcycle_image)) {
+            if ($motorcycle_image == "" || is_null($motorcycle_image) || $motorcycle_image == $media_url) {
                 $motorcycle_image = "/assets/image_unavailable.png";
             }
 
