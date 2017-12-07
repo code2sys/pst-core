@@ -4,6 +4,20 @@
 <div class="content_wrap">
     <div class="content">
 
+        <?php
+        $CI =& get_instance();
+        echo $CI->load->view("admin/motorcycle/moto_head", array(
+            "new" => @$new,
+            "product" => @$product,
+            "success" => @$success,
+            "assets" => $assets,
+            "id" => @$id,
+            "active" => "description",
+            "descriptor" => "Description"
+        ), true);
+
+        ?>
+
         <h1><i class="fa fa-motorcycle"></i>&nbsp;Edit <?php echo $product["title"]; ?> - Description</h1>
         <p><b>Please fill out all fields within required tabs with an *</b></p>
         <br>

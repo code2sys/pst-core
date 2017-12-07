@@ -5,44 +5,20 @@ $cstdata = (array) json_decode($product['data']);
 <div class="content_wrap">
     <div class="content">
 
-        <h1><i class="fa fa-motorcycle"></i>&nbsp;<?php if (@$new): ?>Add Unit<?php else: ?>Edit <?php echo $product["title"]; ?> - General Options<?php endif; ?></h1>
-        <p><b>Please fill out all fields within required tabs with an *</b></p>
-        <br>
+        <?php
+        $CI =& get_instance();
+        echo $CI->load->view("admin/motorcycle/moto_head", array(
+            "new" => @$new,
+            "product" => @$product,
+            "success" => @$success,
+            "assets" => $assets,
+            "id" => @$id,
+            "active" => "edit",
+            "descriptor" => "General Options"
+        ), true);
 
-        <!-- ERROR -->
-        <?php if (validation_errors()): ?>
-            <div class="error">
-                <h1><span style="color:#C90;"><i class="fa fa-warning"></i></span>&nbsp;Error</h1>
-                <p><?php echo validation_errors(); ?></p>
-            </div>
-        <?php endif; ?>
-        <!-- END ERROR -->
+        ?>
 
-        <!-- SUCCESS -->
-        <?php if (@$success): ?>
-			<div class="success">
-			  <img src="<?php echo $assets; ?>/images/success.png" style="float:left;margin-right:10px;">
-			<h1>Success</h1>
-			<div class="clear"></div>
-			<p>
-			  Your changes have been made.
-			</p>
-			<div class="clear"></div>
-			</div>
-        <?php endif; ?>
-        <!-- END SUCCESS -->
-
-
-        <!-- TABS -->
-        <div class="tab">
-            <ul>
-                <li><a href="<?php echo base_url('admin/motorcycle_edit/' . $id); ?>" class="active"><i class="fa fa-bars"></i>&nbsp;General Options*</a></li>
-                <li><a href="<?php echo base_url('admin/motorcycle_description/' . $id); ?>"><i class="fa fa-file-text-o"></i>&nbsp;Description*</a></li>
-                <li><a href="<?php echo base_url('admin/motorcycle_images/' . $id); ?>"><i class="fa fa-image"></i>&nbsp;Images*</a></li>
-                <li><a href="<?php echo base_url('admin/motorcycle_video/' . $id); ?>"><i class="fa fa-image"></i>&nbsp;Videos</a></li>
-                <div class="clear"></div>
-            </ul>
-        </div>
         <!-- END TABS -->
         <?php echo form_open('admin/update_motorcycle/' . $id, array('class' => 'form_standard')); ?>	
         <!-- TAB CONTENT -->
