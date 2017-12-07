@@ -10,6 +10,10 @@ if (@$motorcycles) {
         if ($motorcycle['external'] == 0) {
             $motorcycle_image = $media_url . $motorcycle_image;
         }
+        if ($motorcycle_image == "" || is_null($motorcycle_image)) {
+            $motorcycle_image = "/assets/image_unavailable.png";
+        }
+
         ?>
         <div class="mid-r">
         <?php $title = str_replace(' ', '_', trim($motorcycle['title'])); ?>
