@@ -112,6 +112,7 @@ abstract class Motorcycleadmin extends Firstadmin
         if (is_null($id))
             redirect('admin/motorcycle_edit');
 
+
         if ($this->input->post()) {
             if (isset($_POST['update'])) {
                 $arr = array();
@@ -169,6 +170,7 @@ abstract class Motorcycleadmin extends Firstadmin
             $this->_mainData['image'] = $this->admin_m->getMotorcycleImage($id);
         }
         $this->_mainData['id'] = $id;
+        $this->_mainData['product'] = $this->admin_m->getAdminMotorcycle($id);
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/motorcycle/images_v', $this->_mainData);
     }
@@ -200,6 +202,8 @@ abstract class Motorcycleadmin extends Firstadmin
             $this->_mainData['success'] = TRUE;
         }
 
+
+        $this->_mainData['product'] = $this->admin_m->getAdminMotorcycle($id);
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/motorcycle/video_v', $this->_mainData);
     }
