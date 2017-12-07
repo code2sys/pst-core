@@ -35,6 +35,10 @@ if (!isset($no_fify)) {
             if ($recently['external'] == 0) {
                 $motorcycle_image = base_url().'media/'. $motorcycle_image;
             }
+            if ($motorcycle_image == "" || is_null($motorcycle_image)) {
+                $motorcycle_image = "/assets/image_unavailable.png";
+            }
+
             ?>
             <?php $title = str_replace(' ', '_', trim($recently['title'])); ?>
             <div class="col-md-12 text-center padg">
