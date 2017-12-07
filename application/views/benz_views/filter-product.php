@@ -7,10 +7,10 @@ if (@$motorcycles) {
 
         // What is the default...
         $motorcycle_image = $motorcycle['image_name'];
-        if ($motorcycle['external'] == 0) {
+        if ($motorcycle['external'] == 0 ) {
             $motorcycle_image = $media_url . $motorcycle_image;
         }
-        if ($motorcycle_image == "" || is_null($motorcycle_image)) {
+        if ($motorcycle_image == "" || is_null($motorcycle_image) || $motorcycle_image == $media_url) {
             $motorcycle_image = "/assets/image_unavailable.png";
         }
 

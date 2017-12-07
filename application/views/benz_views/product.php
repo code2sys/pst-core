@@ -100,7 +100,7 @@ $media_url = jsite_url("/media/");
                         $motorcycle_image = $media_url . $motorcycle_image;
                     }
 
-                    if ($motorcycle_image == "" || is_null($motorcycle_image)) {
+                    if ($motorcycle_image == "" || is_null($motorcycle_image) || $motorcycle_image == $media_url) {
                         $motorcycle_image = "/assets/image_unavailable.png";
                     }
                     ?>
