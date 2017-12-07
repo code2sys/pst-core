@@ -2655,11 +2655,17 @@ class Admin_M extends Master_M {
     // }
 
     public function getMotorcycleImage($id) {
-        $where = array('motorcycle_id' => $id);
+        $where = array('motorcycle_id' => $id, "disable" => 0);
         $orderBy = 'priority_number asc';
         //$this->db->order_by('priority_number asc');
         $record = $this->selectRecords('motorcycleimage', $where, $orderBy);
         return $record;
+    }
+
+    public function fetchSpecificMotorcycleImage($motorcycleimage_id) {
+        $query = $this->db->query("Select * from motorcycleimage where id = ?", array($motorcycleimage_id));
+        $results = $query->result_array();
+        return count($results) > 0 ? $results[0] : null;
     }
 
     public function getMotorcycleCategory() {
@@ -2675,7 +2681,25 @@ class Admin_M extends Master_M {
     }
 
     public function deleteMotorcycleImage($id, $motorcycle_id) {
-        $this->db->delete('motorcycleimage', array('id' => $id, 'motorcycle_id' => $motorcycle_id));
+        // JLB 12-07-17
+        // We have to see if this is an external or internal image... If it's an external image, we have to just mark it as disabled.
+        // If it's an internal image, we also have to go remove the file. I can't believe they would never remove the files.
+        $image = $this->fetchSpecificMotorcycleImage($id);
+
+        if (is_null($image)) {
+            return;
+        }
+
+        if ($image["external"] > 0) {
+            $this->db->query("Update motorcycleimage set disable = 1 where id = ? limit 1", array($id));
+        } else {
+            $this->db->delete('motorcycleimage', array('id' => $id, 'motorcycle_id' => $motorcycle_id));
+            // go purge the image...
+            $filename = STORE_DIRECTORY . "/html/media/" . $image["image_name"];
+            if (file_exists($filename) && is_file($filename) && is_writable($filename)) {
+                unlink($filename);
+            }
+        }
     }
 
     public function updateMotorcycleImageDescription($id, $pst) {
