@@ -5,7 +5,7 @@ $cstdata = (array) json_decode($product['data']);
 <div class="content_wrap">
     <div class="content">
 
-        <h1><i class="fa fa-cube"></i>&nbsp;<?php if (@$new): ?>New<?php else: ?>Edit<?php endif; ?> Product</h1>
+        <h1><i class="fa fa-motorcycle"></i>&nbsp;<?php if (@$new): ?>Add Unit<?php else: ?>Edit <?php echo $product["title"]; ?><?php endif; ?></h1>
         <p><b>Please fill out all fields within required tabs with an *</b></p>
         <br>
 
