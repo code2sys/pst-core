@@ -120,6 +120,11 @@ class Motorcycle_M extends Master_M {
         return $query->result_array();
     }
 
+    public function getMotorcyclSpecGroups($id) {
+        $query = $this->db->query("Select * from motorcyclespecgroup where motorcycle_id = ? and hidden = 0 order by ordinal", array($id));
+        return $query->result_array();
+    }
+
     public function getMotorcycleSpecs($id) {
         $query = $this->db->query("Select motorcyclespec.*, motorcyclespecgroup.name as spec_group, motorcyclespecgroup.ordinal as group_ordinal from motorcyclespec join motorcyclespecgroup using (motorcyclespecgroup_id) where motorcyclespec.motorcycle_id = ? and motorcyclespecgroup.hidden = 0 and motorcyclespec.hidden = 0 and (crs_attribute_id is null OR ((crs_attribute_id < 230000) and (crs_attribute_id >= 20000) and crs_attribute_id not in (20005, 20008))) order by motorcyclespecgroup.ordinal, motorcyclespec.ordinal", array($id));
         return $query->result_array();
