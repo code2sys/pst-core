@@ -167,13 +167,39 @@ $cstdata = (array) json_decode($product['data']);
         className: "SpecView",
         template: _.template($("#SpecView").html()),
         events: {
+            "click .remove-spec-button" : "removeSpecButton"
+        },
+        "removeSpecButton" : function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (confirm("Really remove this?")) {
+
+                $.ajax({
+                    "url" : "/admin/ajax_motorcycle_spec_remove/<?php echo $motorcycle_id; ?>/" + this.model.get("motorcyclespec_id"),
+                    "type" : "POST",
+                    "dataType" : "json",
+                    "data": {
+                    },
+                    "success" : _.bind(function(data) {
+                        if (data.success) {
+                            showGritter("Success", "Removed successfully");
+                            $(this.el).remove(); // clear it out...
+                        } else {
+                            // error...
+                            showGritter("Error", data.error_message);
+                        }
+                    }
+                });
+            }
         },
         initialize: function(options) {
             this.options = options || {};
-            _.bindAll(this, "render");
+            _.bindAll(this, "render", "removeSpecButton");
         },
         "render" : function() {
             $(this.el).html(this.template(this.model.toJSON()));
+            $(this.el).attr("data-motorcyclespec-id", this.model.get("motorcyclespec_id"));
             return this;
         }
     });
