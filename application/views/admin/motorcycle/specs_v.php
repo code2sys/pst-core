@@ -84,7 +84,7 @@ $cstdata = (array) json_decode($product['data']);
     });
 
     window.SpecGroupCollection = Backbone.Collection.extend({
-        model: SpecGroupCollection,
+        model: SpecGroupModel,
         comparator: function(x) {
             return parseInt(x.get("ordinal"), 10);
         }
