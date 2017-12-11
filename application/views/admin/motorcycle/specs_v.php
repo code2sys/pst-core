@@ -20,7 +20,7 @@ $cstdata = (array) json_decode($product['data']);
         <a href="#" class="remove-specgroup-button"><i class="fa fa-trash-o"></i>&nbsp;Remove</a>
     </div>
     <div style="float: left">
-        <a href="#" class="drag-drop-specgroup-button"><i class="fa fa-arrows-v"></i>&nbsp;Reorder</a>
+        <a href="#" class="drag-drop-specgroup-button"><i class="fa fa-arrows-v"></i></a>
     </div>
 
     <div class="preview-specgroup">
@@ -42,7 +42,7 @@ $cstdata = (array) json_decode($product['data']);
         <a href="#" class="remove-spec-button"><i class="fa fa-trash-o"></i>&nbsp;Remove</a>
     </div>
     <div style="float: left">
-        <a href="#" class="drag-drop-spec-button"><i class="fa fa-arrows-v"></i>&nbsp;Reorder</a>
+        <a href="#" class="drag-drop-spec-button"><i class="fa fa-arrows-v"></i></a>
     </div>
 
     <div class="preview">
@@ -167,7 +167,7 @@ $cstdata = (array) json_decode($product['data']);
             _.bindAll(this, "render");
         },
         "render" : function() {
-            $(this.el).html(this.template({}));
+            $(this.el).html(this.template(this.model.toJSON()));
             return this;
         }
     });
