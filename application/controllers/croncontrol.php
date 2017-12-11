@@ -364,6 +364,7 @@ class CronControl extends Master_Controller {
 
         if ($motorcyclespecgroup_id == 0) {
             $this->db->query("Insert into motorcyclespecgroup (name, ordinal, source, crs_attributegroup_number, motorcycle_id) values (?, ?, 'PST', ?, ?)", array($attributegroup_name, $attributegroup_number, $attributegroup_number, $motorcycle_id));
+            $motorcyclespecgroup_id = $this->db->insert_id();
         }
 
         // OK, set it ..
