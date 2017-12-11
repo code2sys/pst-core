@@ -210,7 +210,7 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->db->query("Insert into motorcyclespec (motorcycle_id, motorcyclespecgroup_id, feature_name, attribute_name, value, final_value) values (?, ?, '', '', '', '')", array($motorcycle_id, $motorcyclespecgroup_id));
         $motorcyclespec_id = $this->db->insert_id();
 
-        $cnt_query = $this->db->query("Select count(*) as cnt from motocyclespec where motorcycle_id = ? and motorcyclespecgroup_id = ? and motorcyclespec_id < ?", array($motorcycle_id, $motorcyclespecgroup_id, $motorcyclespec_id));
+        $cnt_query = $this->db->query("Select count(*) as cnt from motorcyclespec where motorcycle_id = ? and motorcyclespecgroup_id = ? and motorcyclespec_id < ?", array($motorcycle_id, $motorcyclespecgroup_id, $motorcyclespec_id));
         $count = $cnt_query->result_array();
         $count = $count[0]["cnt"];
         if (is_null($count)) {
