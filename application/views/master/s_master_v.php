@@ -31,8 +31,9 @@ if (isset($keywords) &&	$keywords != "") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	
-	<title><?php echo $page_title; ?></title>
+    <?php echo jget_store_block("top_header"); ?>
+
+    <title><?php echo $page_title; ?></title>
 
 	<?php
 	$CI =& get_instance();
@@ -77,10 +78,12 @@ if (isset($keywords) &&	$keywords != "") {
 
 	<link rel="stylesheet" href="<?php echo jsite_url("/basebranding.css"); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url("/custom.css"); ?>" />
+    <?php echo jget_store_block("bottom_header"); ?>
 
 </head>
 
 <body class="body">
+<?php echo jget_store_block("top_body"); ?>
 
 <!-- WRAPPER ==============================================================================-->
 <div class="wrap">
@@ -176,7 +179,7 @@ echo $CI->load->view("master/tracking", array(
 
 ?>
 
-</body>
+
 <script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
 <?php
 $CI =& get_instance();
@@ -184,5 +187,6 @@ echo $CI->load->view("master/bottom_footer", array(
 	"store_name" => $store_name
 ));
 ?>
-
+<?php echo jget_store_block("bottom_body"); ?>
+</body>
 </html>
