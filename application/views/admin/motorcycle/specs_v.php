@@ -15,21 +15,20 @@ $cstdata = (array) json_decode($product['data']);
 <script type="application/javascript" src="https://portal.powersporttechnologies.com/thirdparty/dropzone/dropzone.js" ></script>
 <script type="application/javascript" src="/assets/newjs/jquery-ui.min.js" ></script>
 <script type="text/template" id="SpecGroupView">
-    <script type="text/template" id="SpecView">
-        <div style="float: right">
-            <a href="#" class="edit-specgroup-button"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
-            <a href="#" class="remove-specgroup-button"><i class="fa fa-trash-o"></i>&nbsp;Remove</a>
-        </div>
-        <div style="float: left">
-            <a href="#" class="drag-drop-specgroup-button"><i class="fa fa-arrows-v"></i>&nbsp;Reorder</a>
-        </div>
+    <div style="float: right">
+        <a href="#" class="edit-specgroup-button"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+        <a href="#" class="remove-specgroup-button"><i class="fa fa-trash-o"></i>&nbsp;Remove</a>
+    </div>
+    <div style="float: left">
+        <a href="#" class="drag-drop-specgroup-button"><i class="fa fa-arrows-v"></i>&nbsp;Reorder</a>
+    </div>
 
-        <div class="preview-specgroup">
-        <%= obj.name %>
-        </div>
-        <div class="edit-specgroup">
+    <div class="preview-specgroup">
+    <%= obj.name %>
+    </div>
+    <div class="edit-specgroup">
 
-        </div>
+    </div>
 
     <div style="clear: both">
     </div>
