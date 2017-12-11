@@ -266,4 +266,17 @@ $cstdata = (array) json_decode($product['data']);
     .small-hndr {width:100px !important;}
     .frst {margin-left: 55px !important;}
     .inr-td {width:200px;}
+
+    .SpecGroupView {
+        border: 1px solid gray;
+        padding: 1em;
+        margin-bottom: 0.5em;
+
+    }
+
+    .SpecGroupView .preview-specgroup,
+    .SpecGroupView .edit-specgroup {
+        margin-left: 0.25em; margin-right: 0.25em;
+    }
+
 </style>
