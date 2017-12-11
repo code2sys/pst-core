@@ -46,7 +46,7 @@ $cstdata = (array) json_decode($product['data']);
     </div>
 
     <div class="preview">
-        <div class="label"><%= obj.feature_name %><% if (obj.attribute_name && obj.attribute_name != '') { %><%= obj.attribute_name %><% } %></div>
+        <div class="label"><%= obj.feature_name %><% if (obj.attribute_name && obj.attribute_name != '') { %> - <%= obj.attribute_name %><% } %></div>
         <div class="value"><%= obj.final_value %></div>
     </div>
     <div class="edit">
@@ -287,7 +287,21 @@ $cstdata = (array) json_decode($product['data']);
     .SpecGroupView .SpecView:nth-child(odd) {
         background-color: #dddddd;
         border-top: 1px solid gray;
-        bordre-bottom: 1px solid gray;
+        border-bottom: 1px solid gray;
     }
 
+    .SpecGroupView {
+        padding: 1em;
+    }
+
+    .SpecView .label {
+        font-weight: bold;
+        float: left;
+        max-width: 50%;
+    }
+
+    .SpecView .value {
+        float: right;
+        max-width: 50%;
+    }
 </style>
