@@ -121,7 +121,7 @@ class Motorcycle_M extends Master_M {
     }
 
     public function getMotorcyclSpecGroups($id) {
-        $query = $this->db->query("Select * from motorcyclespecgroup where motorcycle_id = ? and hidden = 0 order by ordinal", array($id));
+        $query = $this->db->query("Select * from motorcyclespecgroup where motorcycle_id = ? and hidden = 0 and (crs_attributegroup_number is null OR crs_attributegroup_number = 0 or (crs_attributegroup_number >= 2 AND crs_attributegroup_number < 23)) order by ordinal", array($id));
         return $query->result_array();
     }
 
