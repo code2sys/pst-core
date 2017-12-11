@@ -67,6 +67,25 @@ $cstdata = (array) json_decode($product['data']);
 </script>
 <script type="application/javascript">
 
+
+    function showGritter(title, message) {
+        $.extend($.gritter.options, {
+            time: 1500 // hang on the screen for ...
+        });
+
+        setTimeout(function () {
+            $.gritter.add({
+                title: title,
+                text: message,
+                image: '',
+                sticky: false,
+                time: 5000
+            });
+            return false;
+        }, 800);
+    }
+
+
     window.SpecModel = Backbone.Model.extend({
 
     });
