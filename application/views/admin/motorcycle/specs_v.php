@@ -290,7 +290,7 @@ $cstdata = (array) json_decode($product['data']);
         border-bottom: 1px solid gray;
     }
 
-    .SpecGroupView {
+    .SpecView {
         padding: 1em;
     }
 
@@ -303,6 +303,6 @@ $cstdata = (array) json_decode($product['data']);
     .SpecView .value {
         float: right;
         max-width: 50%;
-        padding-right: 3em;
+        padding-right: 1.5em;
     }
 </style>
