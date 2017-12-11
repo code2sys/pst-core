@@ -239,16 +239,13 @@ unset($motorcycle['videos'][0]);
                             <?php
                             $feature_name = "";
                             foreach ($motorcycle["specs"] as $s) {
-                                if ($s["attribute_name"] == "") {
-                                    continue; // just skip it.
-                                }
-                                if ($feature_name != $s["feature_name"]) {
+                                if ($feature_name != $s["spec_group"]) {
                                     if ($feature_name != ""):
                                     ?>
                 </table>
                                         <?php
                                         endif;
-                                    $feature_name = $s["feature_name"];
+                                    $feature_name = $s["spec_group"];
                                     ?>
                     <p><strong><?php echo $feature_name; ?></strong></p>
                     <table border="0" width="100%" class="stripedtable">
@@ -259,7 +256,7 @@ unset($motorcycle['videos'][0]);
                                 }
                                 ?>
                                 <tr class="row<?php echo $k; ?>">
-                                    <td class="key" valign="top"><?php echo $s["attribute_name"]; ?></td>
+                                    <td class="key" valign="top"><?php echo $s["feature_name"] . ($s["attribute_name"] != "" ? " - " . $s["attribute_name"] : ""); ?></td>
                                     <td class="value" valign="top"><?php echo $s["final_value"]; ?></td>
                                 </tr>
                                 <?php
