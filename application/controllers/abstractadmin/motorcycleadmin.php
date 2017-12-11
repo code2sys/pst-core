@@ -207,7 +207,24 @@ abstract class Motorcycleadmin extends Firstadmin
 
     // you can add a new spec to the group
     public function ajax_motorcycle_specgroup_addspec($motorcycle_id, $motorcyclespecgroup_id) {
+        $this->db->query("Insert into motorcyclespec (motorcycle_id, motorcyclespecgroup_id, feature_name, attribute_name, value, final_value) values (?, ?, '', '', '', '')", array($motorcycle_id, $motorcyclespecgroup_id));
+        $motorcyclespec_id = $this->db->insert_id();
 
+        $cnt_query = $this->db->query("Select count(*) as cnt from motocyclespec where motorcycle_id = ? and motorcyclespecgroup_id = ? and motorcyclespec_id < ?", array($motorcycle_id, $motorcyclespecgroup_id, $motorcyclespec_id));
+        $count = $cnt_query->result_array();
+        $count = $count[0]["cnt"];
+        if (is_null($count)) {
+            $count = 0;
+        }
+        $count++;
+
+        $this->db->query("Update motorcyclespec set ordinal = ? where motorcyclespec_id = ? limit 1", array($count, $motorcyclespec_id));
+
+        $query = $this->db->query("Select * from motorcyclespec where motorcyclespec_id = ?", array($motorcyclespec_id));
+        $results = $query->result_array();
+        $this->_printAjaxSuccess(array(
+            "model" => $results[0]
+        ));
     }
 
     // you can edit/update the spec

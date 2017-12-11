@@ -35,6 +35,10 @@ $cstdata = (array) json_decode($product['data']);
 
     <div class="spec-holder"></div>
 
+    <div style="text-align: right">
+        <a href="#" class="add-spec-button"><i class="fa fa-plus"></i>&nbsp;Add Spec</a>
+    </div>
+
 </script>
 <script type="text/template" id="SpecView">
     <div style="float: right">
@@ -87,7 +91,14 @@ $cstdata = (array) json_decode($product['data']);
 
 
     window.SpecModel = Backbone.Model.extend({
-
+        defaults : {
+            "motorcyclespec_id" : 0,
+            "created": "",
+            "version_number" : "",
+            "final_value" : "",
+            "feature_name" : "",
+            "attribute_name" : ""
+        }
     });
 
     window.SpecCollection = Backbone.Collection.extend({
@@ -128,7 +139,33 @@ $cstdata = (array) json_decode($product['data']);
         className: "SpecGroupView",
         template: _.template($("#SpecGroupView").html()),
         events: {
-            "click .remove-specgroup-button" : "removeSpecgroupButton"
+            "click .remove-specgroup-button" : "removeSpecgroupButton",
+            "click .add-spec-button" : "addSpecButton"
+        },
+        "addSpecButton" : function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            $.ajax({
+                "url" : "/admin/ajax_motorcycle_specgroup_addspec/<?php echo $id; ?>/" + this.model.get("motorcyclespecgroup_id"),
+                "type" : "POST",
+                "dataType" : "json",
+                "data": {
+                },
+                "success" : _.bind(function(data) {
+                    if (data.success) {
+                        // we have to add a new one...
+                        var m = new SpecModel(data.model);
+                        this.$(".spec-holder").append(new SpecView({
+                            model: m
+                        }).render().el);
+
+                    } else {
+                        // error...
+                        showGritter("Error", data.error_message);
+                    }
+                }, this)
+            });
         },
         "removeSpecgroupButton" : function(e) {
             e.preventDefault();
