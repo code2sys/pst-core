@@ -37,7 +37,9 @@ if (!defined('SEARCH_PLACEHOLDER_WORDING')) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title><?php echo $page_title; ?></title>
+    <?php echo jget_store_block("top_header"); ?>
+
+    <title><?php echo $page_title; ?></title>
     <?php
 	$new_assets_url = jsite_url("/qatesting/newassets/");
 	$new_assets_url1 = jsite_url("/qatesting/benz_assets/");
@@ -218,10 +220,12 @@ if (!defined('SEARCH_PLACEHOLDER_WORDING')) {
 
 	<link rel="stylesheet" href="<?php echo jsite_url("/basebranding.css"); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url("/custom.css"); ?>" />
+    <?php echo jget_store_block("bottom_header"); ?>
 
 </head>
 
 <body class="body" <?php if(isset($new_header)){?>style="width:100%;margin:0 auto;"<?php }?>>
+<?php echo jget_store_block("top_body"); ?>
 
 <!-- WRAPPER ==============================================================================-->
 <div class="wrap">
@@ -737,5 +741,6 @@ echo $CI->load->view("master/bottom_footer", array(
 	"store_name" => $store_name
 ));
 ?>
+<?php echo jget_store_block("bottom_body"); ?>
 </body>
 </html>
