@@ -392,7 +392,7 @@ class CronControl extends Master_Controller {
             foreach ($attributes as $a) {
                 $motorcyclespecgroup_id = $this->_getAttributeGroup($motorcycle_id, $a["attributegroup_name"], $a["attributegroup_number"]);
 
-                $this->db->query("Insert into motorcyclespec (version_number, value, feature_name, attribute_name, type, external_package_id, motorcycle_id, final_value, source, crs_attribute_id, motorcyclespecgroup_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update value = If(source = 'PST', values(value), value), final_value = If(source = 'PST' AND override = 0, values(final_value), final_value)", array(
+                $this->db->query("Insert into motorcyclespec (version_number, value, feature_name, attribute_name, type, external_package_id, motorcycle_id, final_value, source, crs_attribute_id, motorcyclespecgroup_id, ordinal) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update value = If(source = 'PST', values(value), value), final_value = If(source = 'PST' AND override = 0, values(final_value), final_value), motorcyclespecgroup_id = values(motorcyclespecgroup_id)", array(
                     $a["version_number"],
                     $a["text_value"],
                     $a["feature_name"],
@@ -401,9 +401,10 @@ class CronControl extends Master_Controller {
                     $a["package_id"],
                     $motorcycle_id,
                     $a["text_value"],
-                    "CRS",
+                    "PST",
                     $a["attribute_id"],
-                    $motorcyclespecgroup_id
+                    $motorcyclespecgroup_id,
+                    $a["attribute_id"] % 10000
                 ));
             }
         }
