@@ -19,7 +19,7 @@ $cstdata = (array) json_decode($product['data']);
         <a href="#" class="edit-specgroup-button"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
         <a href="#" class="remove-specgroup-button"><i class="fa fa-trash-o"></i>&nbsp;Remove</a>
     </div>
-    <div style="float: left">
+    <div style="float: left; margin-right: 0.5em">
         <a href="#" class="drag-drop-specgroup-button"><i class="fa fa-arrows-v"></i></a>
     </div>
 
@@ -41,7 +41,7 @@ $cstdata = (array) json_decode($product['data']);
         <a href="#" class="edit-spec-button"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
         <a href="#" class="remove-spec-button"><i class="fa fa-trash-o"></i>&nbsp;Remove</a>
     </div>
-    <div style="float: left">
+    <div style="float: left; margin-right: 0.5em;">
         <a href="#" class="drag-drop-spec-button"><i class="fa fa-arrows-v"></i></a>
     </div>
 
@@ -277,6 +277,17 @@ $cstdata = (array) json_decode($product['data']);
     .SpecGroupView .preview-specgroup,
     .SpecGroupView .edit-specgroup {
         margin-left: 0.25em; margin-right: 0.25em;
+    }
+
+    .SpecGroupView .spec-holder {
+        border: 1px solid gray;
+        margin: 1em;
+    }
+
+    .SpecGroupView .SpecView:nth-child(odd) {
+        background-color: #dddddd;
+        border-top: 1px solid gray;
+        bordre-bottom: 1px solid gray;
     }
 
 </style>
