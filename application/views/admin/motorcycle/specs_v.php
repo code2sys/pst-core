@@ -303,5 +303,6 @@ $cstdata = (array) json_decode($product['data']);
     .SpecView .value {
         float: right;
         max-width: 50%;
+        padding-right: 3em;
     }
 </style>
