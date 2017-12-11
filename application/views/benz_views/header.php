@@ -12,8 +12,12 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 
 	?>
 <head>
+
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <?php if (isset($title)): ?>
+    <title><?php echo $title; ?></title>
+    <?php endif; ?>
 	<?php echo @$metatag; ?>
 	
 	<!--Motercycle Content Start-->
@@ -719,6 +723,23 @@ $(window).load(function() {
     min-height: 10px;
 }
 </style>
+    <?php
+    $CI = & get_instance();
+    echo $CI->load->view("master/tracking", array(
+        "store_name" => $store_name,
+        "product" => @$product,
+        "ga_ecommerce" => true,
+        "show_ga_conversion" => true
+    ), true);
+    ?>
 
+    <script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
+
+    <?php
+    $CI =& get_instance();
+    echo $CI->load->view("master/bottom_footer", array(
+        "store_name" => $store_name
+    ));
+    ?>
 </body>
 </html>	
