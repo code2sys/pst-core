@@ -127,7 +127,7 @@ $cstdata = (array) json_decode($product['data']);
 
                 this.$(".spec-holder").sortable({
                     placeholder: "ui-state-highlight",
-                    handle: ".drag-drop-specgroup-button"
+                    handle: ".drag-drop-spec-button"
                 });
 
             }
