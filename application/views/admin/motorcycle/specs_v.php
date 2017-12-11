@@ -124,6 +124,12 @@ $cstdata = (array) json_decode($product['data']);
                         model: mySpecGroupLUT[motorcyclespecgroup_id][i]
                     }).render().el);
                 }
+
+                this.$(".spec-holder").sortable({
+                    placeholder: "ui-state-highlight",
+                    handle: ".drag-drop-specgroup-button"
+                });
+
             }
         },
         "render" : function() {
