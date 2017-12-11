@@ -407,21 +407,21 @@ class CronControl extends Master_Controller {
                     $a["attribute_id"] % 10000
                 ));
 
-                print "Insert into motorcyclespec (version_number, value, feature_name, attribute_name, type, external_package_id, motorcycle_id, final_value, source, crs_attribute_id, motorcyclespecgroup_id, ordinal) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update value = If(source = 'PST', values(value), value), final_value = If(source = 'PST' AND override = 0, values(final_value), final_value), motorcyclespecgroup_id = values(motorcyclespecgroup_id)\n";
-                print_r(array(
-                    $a["version_number"],
-                    $a["text_value"],
-                    $a["feature_name"],
-                    $a["label"],
-                    $a["type"],
-                    $a["package_id"],
-                    $motorcycle_id,
-                    $a["text_value"],
-                    "PST",
-                    $a["attribute_id"],
-                    $motorcyclespecgroup_id,
-                    $a["attribute_id"] % 10000
-                ));
+//                print "Insert into motorcyclespec (version_number, value, feature_name, attribute_name, type, external_package_id, motorcycle_id, final_value, source, crs_attribute_id, motorcyclespecgroup_id, ordinal) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update value = If(source = 'PST', values(value), value), final_value = If(source = 'PST' AND override = 0, values(final_value), final_value), motorcyclespecgroup_id = values(motorcyclespecgroup_id)\n";
+//                print_r(array(
+//                    $a["version_number"],
+//                    $a["text_value"],
+//                    $a["feature_name"],
+//                    $a["label"],
+//                    $a["type"],
+//                    $a["package_id"],
+//                    $motorcycle_id,
+//                    $a["text_value"],
+//                    "PST",
+//                    $a["attribute_id"],
+//                    $motorcyclespecgroup_id,
+//                    $a["attribute_id"] % 10000
+//                ));
 
             }
         }
