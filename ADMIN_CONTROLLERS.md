@@ -25,8 +25,6 @@ Of course, that means you have to manage the chain. Here it is.
 * Individualpageadmin
 * Finaladmin
 
-
-
 If you have general-purpose functions, those can go in Firstadmin. If you have to make a new group of functionality, insert it as the penultimate item, extend the one in front of it in line, and then update Finaladmin.
 
 

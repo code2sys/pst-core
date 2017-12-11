@@ -243,7 +243,7 @@ class CronControl extends Master_Controller {
             $crs_trim_id = $m["trim_id"];
 
             // Is there one of these?
-            $query = $this->db->query("Select * from motorcycle where `condition` = 1 and source = 'CRS' and crs_trim_id = ?", array($crs_trim_id));
+            $query = $this->db->query("Select * from motorcycle where `condition` = 1 and source = 'PST' and crs_trim_id = ?", array($crs_trim_id));
             $results = $query->result_array();
 
             if (count($results) == 0) {
@@ -322,14 +322,14 @@ class CronControl extends Master_Controller {
                         $trim["make_id"],
                         $trim["year"],
                         $uniqid,
-                        'CRS',
+                        'PST',
                         $trim["version_number"]
                     ));
 
                     $motorcycle_id = $this->db->insert_id();
 
                     // We need to insert the trim_photo
-                    $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, 1, 1, ?, 'CRS')", array($motorcycle_id, $trim["trim_photo"], 'Trim Photo: ' . $trim['display_name'], $trim["version_number"]));
+                    $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, 1, 1, ?, 'PST')", array($motorcycle_id, $trim["trim_photo"], 'Trim Photo: ' . $trim['display_name'], $trim["version_number"]));
 
                 }
             }
@@ -337,10 +337,38 @@ class CronControl extends Master_Controller {
 
         // We have to purge them...
         if ($mode == 'C' || $mode == 'A') {
-            $this->db->query("Delete from motorcycle where uniqid = '' and source = 'CRS' and crs_machinetype = ? and crs_make_id = ? and `condition` = 1", array($machine_type, $make_id));
+            $this->db->query("Delete from motorcycle where uniqid = '' and source = 'PST' and crs_machinetype = ? and crs_make_id = ? and `condition` = 1", array($machine_type, $make_id));
         }
 
         $this->refreshCRSData();
+    }
+
+    protected $motorcycle_attributegroups;
+	protected function _getAttributeGroup($motorcycle_id, $attributegroup_name, $attributegroup_number) {
+	    if (!isset($this->motorcycle_attributegroups)) {
+	        $this->motorcycle_attributegroups = array();
+        }
+
+        $key = $motorcycle_id . "-" . $attributegroup_number;
+	    if (array_key_exists($key, $this->motorcycle_attributegroups)) {
+	        return $this->motorcycle_attributegroups[$key];
+        }
+
+        // OK, if we're still here, we have to insert it or create it...
+        $query = $this->db->query("Select motorcyclespecgroup_id from  motorcyclespecgroup where motorcycle_id = ? and crs_attributegroup_number = ? ", array($motorcycle_id, $attributegroup_number));
+	    $motorcyclespecgroup_id = 0;
+
+	    foreach ($query->result_array() as $row) {
+	        $motorcyclespecgroup_id = $row["motorcyclespecgroup_id"];
+        }
+
+        if ($motorcyclespecgroup_id == 0) {
+            $this->db->query("Insert into motorcyclespecgroup (name, ordinal, source, crs_attributegroup_number, motorcycle_id) values (?, ?, 'PST', ?, ?)", array($attributegroup_name, $attributegroup_number, $attributegroup_number, $motorcycle_id));
+        }
+
+        // OK, set it ..
+        $this->motorcycle_attributegroups[$key] = $motorcyclespecgroup_id;
+	    return $motorcyclespecgroup_id;
     }
 
 	public function refreshCRSData() {
@@ -362,7 +390,9 @@ class CronControl extends Master_Controller {
 
             // Now, you have to update them all...
             foreach ($attributes as $a) {
-                $this->db->query("Insert into motorcyclespec (version_number, value, feature_name, attribute_name, type, external_package_id, motorcycle_id, final_value, source, crs_attribute_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update value = If(source = 'CRS', values(value), value), final_value = If(source = 'CRS' AND override = 0, values(final_value), final_value)", array(
+                $motorcyclespecgroup_id = $this->_getAttributeGroup($motorcycle_id, $a["attributegroup_name"], $a["attributegroup_number"]);
+
+                $this->db->query("Insert into motorcyclespec (version_number, value, feature_name, attribute_name, type, external_package_id, motorcycle_id, final_value, source, crs_attribute_id, motorcyclespecgroup_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update value = If(source = 'PST', values(value), value), final_value = If(source = 'PST' AND override = 0, values(final_value), final_value)", array(
                     $a["version_number"],
                     $a["text_value"],
                     $a["feature_name"],
@@ -372,7 +402,8 @@ class CronControl extends Master_Controller {
                     $motorcycle_id,
                     $a["text_value"],
                     "CRS",
-                    $a["attribute_id"]
+                    $a["attribute_id"],
+                    $motorcyclespecgroup_id
                 ));
             }
         }
@@ -394,7 +425,7 @@ class CronControl extends Master_Controller {
             foreach ($photos as $p) {
                 $ordinal++;
                 // this needs to be inserted...
-                $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, ?, 1, ?, 'CRS')", array(
+                $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, ?, 1, ?, 'PST')", array(
                     $motorcycle_id,
                     $p["photo_url"],
                     $p["photo_label"],
