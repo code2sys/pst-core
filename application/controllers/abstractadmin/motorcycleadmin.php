@@ -217,7 +217,8 @@ abstract class Motorcycleadmin extends Firstadmin
 
     // you can remove a spec group
     public function ajax_motorcycle_specgroup_remove($motorcycle_id, $motorcyclespecgroup_id) {
-
+        $this->db->query("Update motorcyclespecgroup set hidden = 1 where motorcycle_id = ? and motorcyclespecgroup_id = ?", array($motorcycle_id, $motorcyclespecgroup_id));
+        $this->_printAjaxSuccess();
     }
 
     // you can reorder a spec group
