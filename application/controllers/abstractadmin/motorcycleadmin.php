@@ -175,6 +175,57 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->renderMasterPage('admin/master_v', 'admin/motorcycle/images_v', $this->_mainData);
     }
 
+    public function motorcycle_specs($id = NULL) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($id)) {
+            redirect('admin/motorcycle_edit');
+        }
+
+        $this->_mainData['id'] = $id;
+
+
+        $this->_mainData['product'] = $this->admin_m->getAdminMotorcycle($id);
+        $this->load->model("motorcycle_m");
+        $this->_mainData['specs'] = $this->motorcycle_m->getMotorcycleSpecs($id);
+        $this->_mainData['specgroups'] = $this->motorcycle_m->getMotorcyclSpecGroups($id);
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/motorcycle/specs_v', $this->_mainData);
+    }
+
+    // OK, you can remove a spec
+    public function ajax_motorcycle_spec_remove($motorcycle_id, $motorcyclespec_id) {
+
+    }
+
+    // You can add a new group
+    public function ajax_motorcycle_specgroup_add($motorcycle_id) {
+
+    }
+
+    // you can add a new spec to the group
+    public function ajax_motorcycle_specgroup_addspec($motorcycle_id, $motorcyclespecgroup_id) {
+
+    }
+
+    // you can edit/update the spec
+    public function ajax_motorcycle_spec_update($motorcycle_id, $motorcyclespec_id) {
+
+    }
+
+    // you can remove a spec group
+    public function ajax_motorcycle_specgroup_remove($motorcycle_id, $motorcyclespecgroup_id) {
+
+    }
+
+    // you can reorder a spec group
+
+
+    // you can reorder specs within a group
+
+
+
     public function motorcycle_video($id = NULL, $updated = null) {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
