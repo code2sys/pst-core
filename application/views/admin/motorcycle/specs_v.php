@@ -128,10 +128,36 @@ $cstdata = (array) json_decode($product['data']);
         className: "SpecGroupView",
         template: _.template($("#SpecGroupView").html()),
         events: {
+            "click .remove-specgroup-button" : "removeSpecgroupButton"
+        },
+        "removeSpecgroupButton" : function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (confirm("Remove this entire functional group?")) {
+
+                $.ajax({
+                    "url" : "/admin/ajax_motorcycle_specgroup_remove/<?php echo $id; ?>/" + this.model.get("motorcyclespecgroup_id"),
+                    "type" : "POST",
+                    "dataType" : "json",
+                    "data": {
+                    },
+                    "success" : _.bind(function(data) {
+                        if (data.success) {
+                            showGritter("Success", "Removed successfully");
+                            $(this.el).remove(); // clear it out...
+                        } else {
+                            // error...
+                            showGritter("Error", data.error_message);
+                        }
+                    }, this)
+                });
+            }
+
         },
         initialize: function(options) {
             this.options = options || {};
-            _.bindAll(this, "render", "subrender");
+            _.bindAll(this, "render", "subrender", "removeSpecgroupButton");
         },
         "subrender" : function() {
             this.$(".spec-holder").html("");
