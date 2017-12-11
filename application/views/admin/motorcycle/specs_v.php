@@ -176,7 +176,7 @@ $cstdata = (array) json_decode($product['data']);
             if (confirm("Really remove this?")) {
 
                 $.ajax({
-                    "url" : "/admin/ajax_motorcycle_spec_remove/<?php echo $motorcycle_id; ?>/" + this.model.get("motorcyclespec_id"),
+                    "url" : "/admin/ajax_motorcycle_spec_remove/<?php echo $id; ?>/" + this.model.get("motorcyclespec_id"),
                     "type" : "POST",
                     "dataType" : "json",
                     "data": {
