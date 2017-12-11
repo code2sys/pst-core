@@ -311,4 +311,10 @@ $cstdata = (array) json_decode($product['data']);
         max-width: 50%;
         padding-right: 1.5em;
     }
+
+    .SpecView.ui-state-highlight {
+        background-color: yellow;
+        border: 2px dashed red;
+        height: 3em;
+    }
 </style>
