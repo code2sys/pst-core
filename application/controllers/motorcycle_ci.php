@@ -114,6 +114,7 @@ class Motorcycle_CI extends Welcome {
         $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
 
         $this->_mainData['motorcycle'] = $this->motorcycle_m->getMotorcycle($id);
+        $this->setMasterPageVars('title', @$this->_mainData['motorcycle']['title']);
         $_SESSION['recentlyMotorcycle'][$id] = $id;
 
 
