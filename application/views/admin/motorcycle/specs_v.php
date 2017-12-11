@@ -237,6 +237,12 @@ $cstdata = (array) json_decode($product['data']);
                     model: mySpecGroupCollection.at(i)
                 }).render().el);
             }
+
+            this.$(".holder").sortable({
+                placeholder: "ui-state-highlight",
+                handle: ".drag-drop-specgroup-button"
+            });
+
         },
         "render" : function() {
             $(this.el).html(this.template({}));
