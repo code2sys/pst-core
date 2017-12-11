@@ -228,7 +228,7 @@ $cstdata = (array) json_decode($product['data']);
         },
         initialize: function(options) {
             this.options = options || {};
-            _.bindAll(this, "render", "subrender");
+            _.bindAll(this, "render", "subrender", "addOne");
         },
         subrender: function() {
             this.$(".holder").html("");
@@ -242,6 +242,11 @@ $cstdata = (array) json_decode($product['data']);
             $(this.el).html(this.template({}));
             this.subrender();
             return this;
+        },
+        "addOne" : function(m) {
+            this.$(".holder").append(new SpecGroupView({
+                model: m
+            }).render().el);
         }
     });
 
@@ -297,6 +302,24 @@ $cstdata = (array) json_decode($product['data']);
             e.preventDefault();
 
             // OK, we're going to make an ajax call
+            $.ajax({
+                "url" : "/admin/ajax_motorcycle_specgroup_add/<?php echo $id; ?>",
+                "type" : "POST",
+                "dataType" : "json",
+                "data": {
+                },
+                "success" : _.bind(function(data) {
+                    if (data.success) {
+                        // we have to add a new one...
+                        var m = new SpecGroupModel(data.model);
+                        this.options.specgroups.addOne(m);
+
+                    } else {
+                        // error...
+                        showGritter("Error", data.error_message);
+                    }
+                }, this)
+            });
         },
         initialize: function(options) {
             this.options = options || {};

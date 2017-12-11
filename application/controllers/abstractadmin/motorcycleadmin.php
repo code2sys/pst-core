@@ -202,12 +202,29 @@ abstract class Motorcycleadmin extends Firstadmin
 
     // You can add a new group
     public function ajax_motorcycle_specgroup_add($motorcycle_id) {
+        $this->db->query("Insert into motorcyclespecgroup (motorcycle_id, name, source) values (?, '', 'Admin'')", array($motorcycle_id));
+        $motorcyclespecgroup_id = $this->db->insert_id();
 
+        $cnt_query = $this->db->query("Select max(ordinal) as cnt from motorcyclespecgroup where motorcycle_id = ? and motorcyclespecgroup_id < ?", array($motorcycle_id, $motorcyclespecgroup_id));
+        $count = $cnt_query->result_array();
+        $count = $count[0]["cnt"];
+        if (is_null($count)) {
+            $count = 0;
+        }
+        $count++;
+
+        $this->db->query("Update motorcyclespecgroup set ordinal = ? where motorcyclespecgroup_id = ? limit 1", array($count, $motorcyclespecgroup_id));
+
+        $query = $this->db->query("Select * from motorcyclespecgroup where motorcyclespecgroup_id = ?", array($motorcyclespecgroup_id));
+        $results = $query->result_array();
+        $this->_printAjaxSuccess(array(
+            "model" => $results[0]
+        ));
     }
 
     // you can add a new spec to the group
     public function ajax_motorcycle_specgroup_addspec($motorcycle_id, $motorcyclespecgroup_id) {
-        $this->db->query("Insert into motorcyclespec (motorcycle_id, motorcyclespecgroup_id, feature_name, attribute_name, value, final_value) values (?, ?, '', '', '', '')", array($motorcycle_id, $motorcyclespecgroup_id));
+        $this->db->query("Insert into motorcyclespec (motorcycle_id, motorcyclespecgroup_id, feature_name, attribute_name, value, final_value, source) values (?, ?, '', '', '', '', 'Admin')", array($motorcycle_id, $motorcyclespecgroup_id));
         $motorcyclespec_id = $this->db->insert_id();
 
         $cnt_query = $this->db->query("Select max(ordinal) as cnt from motorcyclespec where motorcycle_id = ? and motorcyclespecgroup_id = ? and motorcyclespec_id < ?", array($motorcycle_id, $motorcyclespecgroup_id, $motorcyclespec_id));
