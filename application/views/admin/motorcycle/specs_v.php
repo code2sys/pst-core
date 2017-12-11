@@ -189,7 +189,7 @@ $cstdata = (array) json_decode($product['data']);
                             // error...
                             showGritter("Error", data.error_message);
                         }
-                    }
+                    }, this)
                 });
             }
         },
