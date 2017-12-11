@@ -196,7 +196,8 @@ abstract class Motorcycleadmin extends Firstadmin
 
     // OK, you can remove a spec
     public function ajax_motorcycle_spec_remove($motorcycle_id, $motorcyclespec_id) {
-
+        $this->db->query("Update motorcyclespec set hidden = 1 where motorcycle_id = ? and motorcyclespec_id = ?", array($motorcycle_id, $motorcyclespec_id));
+        $this->_printAjaxSuccess();
     }
 
     // You can add a new group
