@@ -90,6 +90,18 @@ abstract class Motorcycleadmin extends Firstadmin
             $id = $this->admin_m->updateMotorcycle($id, $post);
 
             if ($was_new && array_key_exists("crs_trim_id", $_REQUEST) && $_REQUEST["crs_trim_id"] != "") {
+
+                // Do we need to get the thumbnail?
+                $trim = $this->CRS_m->getTrim($_REQUEST["crs_trim_id"]);
+                if (count($trim) > 0) {
+                    $trim = $trim[0];
+                    if ($trim["trim_photo"] != "") {
+                        $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, 1, 1, ?, 'PST')", array($id, $trim["trim_photo"], 'Trim Photo: ' . $trim['display_name'], $trim["version_number"]));
+                    }
+
+                }
+
+
                 $this->load->model("CRSCron_m");
                 $this->CRSCron_m->refreshCRSData($id);
             }
