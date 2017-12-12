@@ -428,9 +428,9 @@ $cstdata = (array) json_decode($product['data']);
         var model = $("input[name='model']").val();
         if (trimData[model]) {
             var m = trimData[model];
-            $("input[name='engine_type']").val(model.engine_type);
-            $("input[name='transmission']").val(model.transmission);
-            $("input[name='retail_price']").val(model.msrp);
+            $("input[name='engine_type']").val(m.engine_type);
+            $("input[name='transmission']").val(m.transmission);
+            $("input[name='retail_price']").val(m.msrp);
         }
     });
 
