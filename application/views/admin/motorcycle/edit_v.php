@@ -55,12 +55,14 @@ $cstdata = (array) json_decode($product['data']);
                         </td>
                     </tr>
 
+                    <?php if ($id > 0): ?>
                     <tr>
                         <td style="width:50px;"><b>Title:</b></td>
                         <td>
                             <input id="name" name="title" placeholder="Enter Title" class="text large ttl" value="<?php echo $product['title']==''?$_POST['title']:$product['title']; ?>" readonly />
                         </td>
                     </tr>
+                    <?php endif; ?>
                     <tr>
                         <td style="width:50px;"><b>Active:</b></td>
                         <td>
@@ -431,6 +433,7 @@ $cstdata = (array) json_decode($product['data']);
             $("input[name='engine_type']").val(m.engine_type);
             $("input[name='transmission']").val(m.transmission);
             $("input[name='retail_price']").val(m.msrp);
+            $("input[name='destination_charge']").attr("checked", true)
         }
     });
 
