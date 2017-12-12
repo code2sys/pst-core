@@ -356,6 +356,7 @@ $cstdata = (array) json_decode($product['data']);
                     "url" : "<?php echo site_url("admin/motorcycle_ajax_ac_make"); ?>",
                     "data" : data,
                     "success" : function(data) {
+                        $(".make_suggestion").hide();
                         if (data.success) {
                             var returned_data = data.data;
                             console.log(returned_data);
