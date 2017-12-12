@@ -418,6 +418,10 @@ $cstdata = (array) json_decode($product['data']);
         }
     });
 
+    $("input[name='make']").on("focus", function(e) {
+        $("input[name='make']").autocomplete("search", "");
+    });
+
     var trimData = {};
 
     $("input[name='model']").autocomplete({
