@@ -419,7 +419,7 @@ $cstdata = (array) json_decode($product['data']);
     });
 
     $("input[name='make']").on("focus", function(e) {
-        $("input[name='make']").autocomplete("search", "");
+        $("input[name='make']").autocomplete("search", $("input[name='make']").val());
     });
 
     var trimData = {};
