@@ -273,7 +273,36 @@ $cstdata = (array) json_decode($product['data']);
                 this.$(".spec-holder").sortable({
                     placeholder: "ui-state-highlight",
                     handle: ".drag-drop-spec-button"
-                });
+                }).on("sortstop", _.bind(function(event, ui) {
+                    /*
+                    The idea here is that we're going to get the IDs in order of the things under this, then we'll shove that up. That will create new in-order ordinals.
+                     */
+                    var new_order = [];
+
+                    this.$(".SpecView").each(function() {
+                        new_order.push($(this).attr("data-motorcyclespec-id"));
+                    });
+
+                    if (new_order.length > 0) {
+                        // now, blow your mind, post toastee.
+                        $.ajax({
+                            "url" : "/admin/ajax_motorcycle_specs_reorder/<?php echo $id; ?>/" + this.model.get("motorcyclespecgroup_id"),
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                "new_order" : new_order
+                            },
+                            success: _.bind(function(data) {
+                                if (data.success) {
+                                    showGritter("Success", "Order updated.");
+                                } else {
+                                    showGritter("Error", "Sorry, change failed. Please refresh and try again.");
+                                }
+                            }, this)
+                        });
+                    }
+
+                }, this));
 
             }
         },
