@@ -92,6 +92,7 @@ abstract class Motorcycleadmin extends Firstadmin
             if ($was_new && array_key_exists("crs_trim_id", $_REQUEST) && $_REQUEST["crs_trim_id"] != "") {
 
                 // Do we need to get the thumbnail?
+                $this->load->model("CRS_m");
                 $trim = $this->CRS_m->getTrim($_REQUEST["crs_trim_id"]);
                 if (count($trim) > 0) {
                     $trim = $trim[0];
