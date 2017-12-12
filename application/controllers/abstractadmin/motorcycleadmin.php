@@ -270,7 +270,7 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->_printAjaxSuccess();
     }
 
-    // you can reorder a spec group
+    // you can reorder specs within a group
     public function ajax_motorcycle_specs_reorder($motorcycle_id, $motorcyclespecgroup_id) {
         $new_order = array_key_exists("new_order", $_REQUEST) ? $_REQUEST["new_order"] : array();
 
@@ -281,8 +281,17 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->_printAjaxSuccess();
     }
 
+    // you can reorder a spec group
+    public function ajax_motorcycle_specgroups_reorder($motorcycle_id) {
+        $new_order = array_key_exists("new_order", $_REQUEST) ? $_REQUEST["new_order"] : array();
 
-    // you can reorder specs within a group
+        // now, apply it...
+        for ($i = 0; $i < count($new_order); $i++) {
+            $this->db->query("Update motorcyclespecgroup set ordinal = ? where motorcycle_id = ? and motorcyclespecgroup_id = ?", array($i, $motorcycle_id, $new_order[$i]));
+        }
+        $this->_printAjaxSuccess();
+    }
+
 
 
 
