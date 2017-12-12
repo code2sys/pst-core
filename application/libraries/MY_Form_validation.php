@@ -35,4 +35,20 @@ class MY_Form_validation extends CI_Form_validation {
         return (strlen($str) < $val) ? FALSE : TRUE;
     }
 
+
+    public function sku_not_in_use($str, $val) {
+        // the SKU cannot be in use for any other bike...
+        $CI =& get_instance();
+        $CI->load->helper("url");
+        $url = uri_string();
+        $url = explode("/", $url);
+        $last_number = $url[count($url) - 1];
+        $last_number = intVal($last_number);
+
+        $query = $CI->db->query("Select count(*) as cnt from motorcycle where sku = ? and id != ?", array($str, $last_number));
+        $count = $query->result_array();
+        $count = $count[0];
+        return $count == 0;
+    }
+
 }
