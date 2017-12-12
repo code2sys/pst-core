@@ -171,7 +171,7 @@ $cstdata = (array) json_decode($product['data']);
             // we need to save it, then we have to update the model and the preview, then we have to pretend we pressed the cancel button.
 // OK, we're going to make an ajax call
             $.ajax({
-                "url" : "/admin/ajax_motorcycle_specgroup_update/<?php echo $id; ?>/" + this.model.geT("motorcyclespecgroup_id"),
+                "url" : "/admin/ajax_motorcycle_specgroup_update/<?php echo $id; ?>/" + this.model.get("motorcyclespecgroup_id"),
                 "type" : "POST",
                 "dataType" : "json",
                 "data": {
