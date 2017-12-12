@@ -30,6 +30,7 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->form_validation->set_rules('model', 'Model', 'required');
         $this->form_validation->set_rules('category', 'Category', 'required');
         $this->form_validation->set_rules('condition', 'Condition', 'required');
+        $this->form_validation->set_message('sku_not_in_use', 'That SKU is already in use.');
         $this->form_validation->set_rules('sku', 'Sku', 'required|sku_not_in_use');
         $this->form_validation->set_rules('crs_trim_id', 'Trim ID', '');
         return $this->form_validation->run();
