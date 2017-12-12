@@ -426,7 +426,7 @@ $cstdata = (array) json_decode($product['data']);
             "success" => @$success,
             "assets" => $assets,
             "id" => @$id,
-            "active" => "edit",
+            "active" => "specs",
             "descriptor" => "Specifications Options"
         ), true);
 
