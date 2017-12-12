@@ -49,6 +49,7 @@ abstract class Motorcycleadmin extends Firstadmin
             $this->_mainData['success'] = TRUE;
         }
         $this->_mainData['vehicles'] = $this->admin_m->getMotorcycleVehicle();
+        $this->_mainData['category'] = $this->admin_m->getMotorcycleCategory();
         $this->_mainData['id'] = $id;
         $this->setNav('admin/nav_v', 2);
 

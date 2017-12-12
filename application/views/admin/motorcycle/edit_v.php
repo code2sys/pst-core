@@ -342,6 +342,12 @@ $cstdata = (array) json_decode($product['data']);
         }
     });
 
+    $("input[name='category']").autocomplete({
+        source: <?php echo json_encode(array_map(function($x) {
+        return $x["name"];
+    }, $category)); ?>
+    });
+
     $("input[name='make']").autocomplete({
         source: function(request, response) {
             var data = getQueryBasis();
