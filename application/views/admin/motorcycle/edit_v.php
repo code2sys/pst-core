@@ -487,6 +487,10 @@ $cstdata = (array) json_decode($product['data']);
         }
     });
 
+    $("input[name='model']").on( "autocompleteclose", function( event, ui ) {
+        $("input[name='model']").change();
+    } );
+
 
     $("form").on("submit", function(e) {
        var error = false;
