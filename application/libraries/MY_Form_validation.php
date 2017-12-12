@@ -48,6 +48,7 @@ class MY_Form_validation extends CI_Form_validation {
         $query = $CI->db->query("Select count(*) as cnt from motorcycle where sku = ? and id != ?", array($str, $last_number));
         $count = $query->result_array();
         $count = $count[0];
+        error_log("sku_not_in_use string $str val $val cnt $count ");
         return $count == 0;
     }
 
