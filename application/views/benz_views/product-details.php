@@ -133,10 +133,12 @@ unset($motorcycle['videos'][0]);
 					<label>Height</label>
 					<span>44.7 In.</span>
 				</div>-->
+                <?php if (!is_null($motorcycle['vin_number']) && trim($motorcycle['vin_number']) != ""): ?>
 				<div class="dtal-txt">
 					<label>Vin :</label>
 					<span><?php echo $motorcycle['vin_number'];?></span>
 				</div>
+                <?php endif; ?>
 				<div class="dtal-txt">
 					<label>Stock Code :</label>
 					<span><?php echo $motorcycle['sku'];?></span>
