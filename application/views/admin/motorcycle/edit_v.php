@@ -20,7 +20,11 @@ $cstdata = (array) json_decode($product['data']);
         ?>
 
         <!-- END TABS -->
-        <?php echo form_open('admin/update_motorcycle/' . $id, array('class' => 'form_standard')); ?>	
+        <?php echo form_open('admin/update_motorcycle/' . $id, array('class' => 'form_standard')); ?>
+        <?php
+        if ($id == 0): ?>
+            <input type="hidden" name="crs_trim_id" value="" />
+        <?php endif; ?>
         <!-- TAB CONTENT -->
         <div class="tab_content">
             <div class="hidden_table">
@@ -433,7 +437,8 @@ $cstdata = (array) json_decode($product['data']);
             $("input[name='engine_type']").val(m.engine_type);
             $("input[name='transmission']").val(m.transmission);
             $("input[name='retail_price']").val(m.msrp);
-            $("input[name='destination_charge']").attr("checked", true)
+            $("input[name='destination_charge']").attr("checked", true);
+            $("input[name='crs_trim_id']").val(m.trim_id);
         }
     });
 
