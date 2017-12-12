@@ -51,7 +51,7 @@ $cstdata = (array) json_decode($product['data']);
                     <tr>
                         <td ><b>Model:</b></td>
                         <td >
-                            <input type="text" name="model" value="<?php echo $product['model']==''?$_POST['model']:$product['model']; ?>" class="text " style="width: 300px">
+                            <input type="text" name="model" value="<?php echo $product['model']==''?$_POST['model']:$product['model']; ?>" class="text " style="width: 300px"> <span class="model_suggestion" style="display:none; font-style: italic">Please begin typing a model/trim to see auto-complete suggestions.</span>
                         </td>
                     </tr>
 
@@ -356,7 +356,6 @@ $cstdata = (array) json_decode($product['data']);
                     "url" : "<?php echo site_url("admin/motorcycle_ajax_ac_make"); ?>",
                     "data" : data,
                     "success" : function(data) {
-                        $(".make_suggestion").hide();
                         if (data.success) {
                             var returned_data = data.data;
                             console.log(returned_data);
@@ -368,11 +367,20 @@ $cstdata = (array) json_decode($product['data']);
                         }
                     },
                     "complete" : function() {
+                        $(".make_suggestion").hide();
                         response(suggestion_array);
                     }
                 })
             }
 
+        }
+    });
+
+    $("input[name='make']").on("change", function(e) {
+        if ("" == $("input[name=model]").val()) {
+            $(".model_suggestion").show();
+        } else {
+            $(".model_suggestion").hide();
         }
     });
 
@@ -403,6 +411,7 @@ $cstdata = (array) json_decode($product['data']);
                         }
                     },
                     "complete" : function() {
+                        $(".model_suggestion").hide();
                         response(suggestion_array);
                     }
                 })
