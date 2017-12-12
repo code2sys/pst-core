@@ -23,7 +23,7 @@ $cstdata = (array) json_decode($product['data']);
         <?php echo form_open('admin/update_motorcycle/' . $id, array('class' => 'form_standard')); ?>
         <?php
         if ($id == 0): ?>
-            <input type="hidden" name="crs_trim_id" value="" />
+            <input type="hidden" name="crs_trim_id" value="<?php if (array_key_exists("crs_trim_id", $_REQUEST)) { echo htmlentities($_REQUEST["crs_trim_id"]); } ?>" />
         <?php endif; ?>
         <!-- TAB CONTENT -->
         <div class="tab_content">
