@@ -384,6 +384,8 @@ $cstdata = (array) json_decode($product['data']);
         }
     });
 
+    var trimData = {};
+
     $("input[name='model']").autocomplete({
         source: function(request, response) {
             var data = getQueryBasis();
@@ -403,8 +405,10 @@ $cstdata = (array) json_decode($product['data']);
                         if (data.success) {
                             var returned_data = data.data;
                             console.log(returned_data);
+                            trimData = {};
                             for (var i = 0; i < returned_data.length; i++) {
                                 suggestion_array.push(returned_data[i].display_name);
+                                trimData[returned_data[i].display_name] = returned_data[i];
                             }
                             suggestion_array = filterArrayByTerm(suggestion_array, request.term);
                             suggestion_array.sort();
@@ -416,6 +420,17 @@ $cstdata = (array) json_decode($product['data']);
                     }
                 })
             }
+        }
+    });
+
+    $("input[name='model']").on("change", function(e) {
+        // if it changes, and if it's in our look-up table, we have to auto-populate a few fields...
+        var model = $("input[name='model']").val();
+        if (trimData[model]) {
+            var m = trimData[model];
+            $("input[name='engine_type']").val(model.engine_type);
+            $("input[name='transmission']").val(model.transmission);
+            $("input[name='retail_price']").val(model.msrp);
         }
     });
 
