@@ -437,7 +437,6 @@ $cstdata = (array) json_decode($product['data']);
         <!-- TAB CONTENT -->
         <div class="tab_content">
 
-            // instructions
             <div class="instructions">
                 <p>
                     Here, you can add, edit, remove, and re-order specifications for this unit in your inventory. Specifications are displayed in functional groups; you can re-order functional groups of specifications as well.

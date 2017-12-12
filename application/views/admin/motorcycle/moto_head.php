@@ -13,7 +13,9 @@
 
 
 <h1><i class="fa fa-motorcycle"></i>&nbsp;<?php if (@$new): ?>Add Unit<?php else: ?>Edit <?php echo $product["title"]; ?> - <?php echo $descriptor; ?><?php endif; ?></h1>
+<?php if ($active == "edit"): ?>
 <p><b>Please fill out all fields within required tabs with an *</b></p>
+<?php endif; ?>
 <br>
 
 <!-- ERROR -->
