@@ -281,6 +281,7 @@ $cstdata = (array) json_decode($product['data']);
             $(this.el).html(this.template(this.model.toJSON()));
             this.subrender();
             this.cancelButton();
+            $(this.el).attr("data-motorcyclespecgroup-id", this.model.get("motorcyclespecgroup_id"));
             return this;
         }
     });
