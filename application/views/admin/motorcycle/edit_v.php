@@ -45,7 +45,7 @@ $cstdata = (array) json_decode($product['data']);
                     <tr>
                         <td ><b>Make:</b></td>
                         <td>
-                            <input type="text" name="make" value="<?php echo $product['make']==''?$_POST['make']:$product['make']; ?>" class="text " style="width: 300px">
+                            <input type="text" name="make" value="<?php echo $product['make']==''?$_POST['make']:$product['make']; ?>" class="text " style="width: 300px"> <span class="make_suggestion" style="display:none; font-style: italic">Please begin typing a make to see auto-complete suggestions.</span>
                         </td>
                     </tr>
                     <tr>
@@ -327,6 +327,13 @@ $cstdata = (array) json_decode($product['data']);
         } else {
             $("#year-error").hide();
         }
+
+        // If the other one is blank...we should tell them to do something about it..
+        if ("" == $("input[name=make]").val()) {
+            $(".make_suggestion").show();
+        } else {
+            $(".make_suggestion").hide();
+        }
     });
 
     $("input[name='make']").autocomplete({
@@ -401,6 +408,10 @@ $cstdata = (array) json_decode($product['data']);
             }
         }
     });
+
+
+
+    // This is probably all junk for assembling the title - we should just assemble it server-side and permit them to edit it.
 
 	$(document).on('keyup','.sm', function() {
 		var ttl = 0;
