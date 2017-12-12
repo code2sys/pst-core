@@ -35,6 +35,9 @@ $cstdata = (array) json_decode($product['data']);
                         <td style="width:50px;"><b>Vehicle:*</b></td>
                         <td>
                             <?php if ($suppress): ?>
+                                <?php foreach( $vehicles as $v ) { ?>
+                                    <?php if($product['vehicle_type'] == $v['id']) { echo htmlentities($v["name"]); }; ?></option>
+                                <?php } ?>
                             <?php echo htmlentities($product['vehicle_type']); ?>
                             <?php else: ?>
                             <select name="vehicle_type" class="small-hndr" style="border-radius:0;">
