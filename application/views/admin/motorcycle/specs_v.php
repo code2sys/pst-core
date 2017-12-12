@@ -58,7 +58,11 @@ $cstdata = (array) json_decode($product['data']);
         <div class="value"><%= obj.final_value %></div>
     </div>
     <div class="edit">
-
+        <strong>Label: </strong> <input type="text" name="feature_name" size="60" maxlength="128" /><br/>
+        <strong>Optional Additional Label: </strong> <input type="text" name="attribute_name" size="60" maxlength="128" /><br/>
+        <strong>Value: </strong> <input type="text" name="final_value" size="60" maxlength="1024" /><br/>
+        <button class="save-spec-button btn-primary" type="button">Save</button>
+        <button class="cancel-spec-button btn-default" type="button">Cancel</button>
     </div>
 
     <div style="clear: both"></div>
@@ -322,7 +326,74 @@ $cstdata = (array) json_decode($product['data']);
         className: "SpecView",
         template: _.template($("#SpecView").html()),
         events: {
-            "click .remove-spec-button" : "removeSpecButton"
+            "click .remove-spec-button" : "removeSpecButton",
+            "submit form" : "emptyAction",
+            "click .edit-spec-button" : "showEditForm",
+            "click .save-spec-button" : "saveButton",
+            "click .cancel-spec-button" : "cancelButton"
+        },
+
+        "emptyAction" : function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        },
+        "showEditForm" : function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            this.$(".preview-specgroup").hide();
+            this.$(".edit-specgroup").show();
+            this.$(".preview-specgroup").hide();
+            this.$("input[name=name]").val(this.model.get("name"));
+        },
+        "saveButton" : function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            // we need to save it, then we have to update the model and the preview, then we have to pretend we pressed the cancel button.
+// OK, we're going to make an ajax call
+            $.ajax({
+                "url" : "/admin/ajax_motorcycle_spec_update/<?php echo $id; ?>/" + this.model.get("motorcyclespecgroup_id") + "/" + this.model.get("motorcyclespec_id"),
+                "type" : "POST",
+                "dataType" : "json",
+                "data": {
+                    "feature_name" : this.$("input[name=feature_name]").val(),
+                    "attribute_name" : this.$("input[name=attribute_name]").val(),
+                    "final_value" : this.$("input[name=final_value]").val()
+                },
+                "success" : _.bind(function(data) {
+                    if (data.success) {
+                        // we have to add a new one...
+                        showGritter("Success", "Spec updated successfully.");
+                        this.model.set("feature_name", data.data.feature_name);
+                        this.model.set("attribute_name", data.data.attribute_name);
+                        this.model.set("final_value", data.data.final_value);
+                        this.cancelButton();
+                    } else {
+                        // error...
+                        showGritter("Error", data.error_message);
+                    }
+                }, this)
+            });
+        },
+        "cancelButton" : function(e) {
+            if (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+
+            // we have to fill in the name and the value...
+            this.$(".preview .value").html(this.model.get("final_value"));
+            var a_name = this.model.get("attribute_name");
+            if (a_name && a_name !== "") {
+                this.$(".preview .label").html(this.model.get("feature_name") + " - " + a_name);
+            } else {
+                this.$(".preview .label").html(this.model.get("feature_name"));
+            }
+            this.$(".preview .value").html(this.model.get("final_value"));
+            this.$(".preview").show();
+            this.$(".edit").hide();
+            this.$(".edit-spec-button").show();
         },
         "removeSpecButton" : function(e) {
             e.preventDefault();
@@ -350,11 +421,12 @@ $cstdata = (array) json_decode($product['data']);
         },
         initialize: function(options) {
             this.options = options || {};
-            _.bindAll(this, "render", "removeSpecButton");
+            _.bindAll(this, "render", "removeSpecButton", "emptyAction", "showEditForm", "saveButton", "cancelButton");
         },
         "render" : function() {
             $(this.el).html(this.template(this.model.toJSON()));
             $(this.el).attr("data-motorcyclespec-id", this.model.get("motorcyclespec_id"));
+            this.cancelButton();
             return this;
         }
     });

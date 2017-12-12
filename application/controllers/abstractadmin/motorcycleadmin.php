@@ -252,6 +252,17 @@ abstract class Motorcycleadmin extends Firstadmin
             "name" => $name
         ));
     }
+    public function ajax_motorcycle_spec_update($motorcycle_id, $motorcyclespecgroup_id, $motorcyclespec_id) {
+        $final_value = trim(array_key_exists("final_value", $_REQUEST) ? $_REQUEST["final_value"] : "");
+        $feature_name = trim(array_key_exists("feature_name", $_REQUEST) ? $_REQUEST["feature_name"] : "");
+        $attribute_name = trim(array_key_exists("attribute_name", $_REQUEST) ? $_REQUEST["attribute_name"] : "");
+        $this->db->query("Update motorcyclespec set final_value = ?, feature_name = ?, attribute_name = ? where motorcyclespec_id = ? and motorcyclespecgroup_id = ? and motorcycle_id = ? limit 1", array($final_value, $feature_name, $attribute_name, $motorcyclespec_id, $motorcyclespecgroup_id, $motorcycle_id));
+        $this->_printAjaxSuccess(array(
+            "final_value" => $final_value,
+            "feature_name" => $feature_name,
+            "attribute_name" => $attribute_name
+        ));
+    }
 
     // you can remove a spec group
     public function ajax_motorcycle_specgroup_remove($motorcycle_id, $motorcyclespecgroup_id) {
