@@ -369,6 +369,12 @@ $cstdata = (array) json_decode($product['data']);
     }, $category)); ?>
     });
 
+    $("input[name='category']").on("focus", function(e) {
+        $("input[name='category']").autocomplete("search", $("input[name='category']").val());
+    });
+
+
+
     $("input[name='make']").autocomplete({
         minLength: 0,
         source: function(request, response) {
@@ -461,6 +467,12 @@ $cstdata = (array) json_decode($product['data']);
             }
         }
     });
+
+
+    $("input[name='model']").on("focus", function(e) {
+        $("input[name='model']").autocomplete("search", $("input[name='model']").val());
+    });
+
 
     $("input[name='model']").on("change", function(e) {
         // if it changes, and if it's in our look-up table, we have to auto-populate a few fields...
