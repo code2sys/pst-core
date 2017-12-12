@@ -363,12 +363,14 @@ $cstdata = (array) json_decode($product['data']);
     });
 
     $("input[name='category']").autocomplete({
+        minLength: 0,
         source: <?php echo json_encode(array_map(function($x) {
         return $x["name"];
     }, $category)); ?>
     });
 
     $("input[name='make']").autocomplete({
+        minLength: 0,
         source: function(request, response) {
             var data = getQueryBasis();
 
@@ -419,6 +421,7 @@ $cstdata = (array) json_decode($product['data']);
     var trimData = {};
 
     $("input[name='model']").autocomplete({
+        minLength: 0,
         source: function(request, response) {
             var data = getQueryBasis();
 
