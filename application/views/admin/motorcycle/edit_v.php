@@ -17,6 +17,8 @@ $cstdata = (array) json_decode($product['data']);
             "descriptor" => "General Options"
         ), true);
 
+        $suppress = $id > 0 && $product["crs_trim_id"] > 0;
+
         ?>
 
         <!-- END TABS -->
@@ -32,30 +34,46 @@ $cstdata = (array) json_decode($product['data']);
                     <tr>
                         <td style="width:50px;"><b>Vehicle:*</b></td>
                         <td>
+                            <?php if ($suppress): ?>
+                            <?php echo htmlentities($product['vehicle_type']); ?>
+                            <?php else: ?>
                             <select name="vehicle_type" class="small-hndr" style="border-radius:0;">
                                 <option value="">Select Vehicle</option>
                                 <?php foreach( $vehicles as $v ) { ?>
                                     <option value="<?php echo $v['id'];?>" <?php if($product['vehicle_type'] == $v['id']) { echo "selected"; }else if($_POST['vehicle_type']==$v['id']){echo "selected";} ?>><?php echo $v['name'];?></option>
                                 <?php } ?>
                             </select>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <tr>
                         <td><b>Year:*</b></td>
                         <td>
+                            <?php if ($suppress): ?>
+                                <?php echo htmlentities($product['year']); ?>
+                            <?php else: ?>
                             <input type="number" min="1900" name="year" value="<?php echo $product['year']==''?$_POST['year']:$product['year']; ?>" class="text "> <span style="color: red; font-style: italic; display: none" id="year-error">Please use a four-digit year.</span>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <tr>
                         <td ><b>Make:*</b></td>
                         <td>
+                            <?php if ($suppress): ?>
+                                <?php echo htmlentities($product['make']); ?>
+                            <?php else: ?>
                             <input type="text" name="make" value="<?php echo $product['make']==''?$_POST['make']:$product['make']; ?>" class="text " style="width: 300px"> <span class="make_suggestion" style="display:none; font-style: italic">Please begin typing a make to see auto-complete suggestions.</span>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <tr>
                         <td ><b>Model:*</b></td>
                         <td >
+                            <?php if ($suppress): ?>
+                                <?php echo htmlentities($product['model']); ?>
+                            <?php else: ?>
                             <input type="text" name="model" value="<?php echo $product['model']==''?$_POST['model']:$product['model']; ?>" class="text " style="width: 300px"> <span class="model_suggestion" style="display:none; font-style: italic">Please begin typing a model/trim to see auto-complete suggestions.</span>
+                            <?php endif; ?>
                         </td>
                     </tr>
 
@@ -63,7 +81,7 @@ $cstdata = (array) json_decode($product['data']);
                     <tr>
                         <td style="width:50px;"><b>Title:</b></td>
                         <td>
-                            <input id="name" name="title" placeholder="Enter Title" class="text large ttl" value="<?php echo $product['title']==''?$_POST['title']:$product['title']; ?>" readonly />
+                            <input id="name" name="title" placeholder="Enter Title" class="text large ttl" value="<?php echo $product['title']==''?$_POST['title']:$product['title']; ?>"  />
                         </td>
                     </tr>
                     <?php endif; ?>

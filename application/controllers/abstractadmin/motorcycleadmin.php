@@ -23,13 +23,16 @@ abstract class Motorcycleadmin extends Firstadmin
         return $this->form_validation->run();
     }
 
-    protected function validateMotorcycle($suppress = false) {
+    protected function validateMotorcycle($suppress = false, $require_title = false) {
         $this->load->library('form_validation');
         if (!$suppress) {
             $this->form_validation->set_rules('vehicle_type', 'Vehicle Type', 'required');
             $this->form_validation->set_rules('make', 'Make', 'required');
             $this->form_validation->set_rules('year', 'Year', 'required');
             $this->form_validation->set_rules('model', 'Model', 'required');
+        }
+        if ($require_title) {
+            $this->form_validation->set_rules('title', 'Title', 'required');
         }
         $this->form_validation->set_rules('category', 'Category', 'required');
         $this->form_validation->set_rules('condition', 'Condition', 'required');
@@ -73,7 +76,7 @@ abstract class Motorcycleadmin extends Firstadmin
         // we need to know if this already has an id...
         $motorcycle = $this->admin_m->getAdminMotorcycle($id);
 
-        if ($this->validateMotorcycle($id > 0 && $motorcycle["ext_trim_id"] > 0) === TRUE) {
+        if ($this->validateMotorcycle($id > 0 && $motorcycle["crs_trim_id"] > 0, $id > 0) === TRUE) {
             // we need to assemble the title, if appropriate, for $id == 0
             $post = $this->input->post();
             $was_new = false;
