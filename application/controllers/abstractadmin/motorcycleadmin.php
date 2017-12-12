@@ -69,7 +69,21 @@ abstract class Motorcycleadmin extends Firstadmin
 
 
         if ($this->validateMotorcycle() === TRUE) {
-            $id = $this->admin_m->updateMotorcycle($id, $this->input->post());
+            // we need to assemble the title, if appropriate, for $id == 0
+            $post = $this->input->post();
+
+            if (is_null($id) || $id == 0) {
+                // we need to assemble the title...
+                $post["title"] = $post["year"] . " " . $post["make"] . " " . $post["model"] . (array_key_exists("color", $post) ? " " . $post["color"] : "");
+            }
+
+            $id = $this->admin_m->updateMotorcycle($id, $post);
+
+            if (array_key_exists("crs_trim_id", $_REQUEST) && $_REQUEST["crs_trim_id"] != "") {
+                $this->load->model("CRSCron_m");
+                $this->CRSCron_m->refreshCRSData($id);
+            }
+
             redirect('admin/motorcycle_edit/' . $id . '/updated');
         } else {
             $this->motorcycle_edit($id);

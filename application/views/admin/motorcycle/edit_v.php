@@ -88,7 +88,7 @@ $cstdata = (array) json_decode($product['data']);
                     <tr>
                         <td style="width:50px;"><b>Category:*</b></td>
                         <td>
-							<input type="text" name="category" value="<?php echo $product['name']==''?$_POST['category']:$product['name']; ?>" class="text small">
+							<input type="text" name="category" value="<?php echo $product['name']==''?$_POST['category']:$product['name']; ?>" class="text small"> <?php if ($id == 0): ?><span class="categorymessage">Please begin typing a category to see auto-complete suggestions.</span><?php endif; ?>
                         </td>
                     </tr>
 
