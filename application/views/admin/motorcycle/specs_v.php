@@ -214,7 +214,7 @@ $cstdata = (array) json_decode($product['data']);
                 "success" : _.bind(function(data) {
                     if (data.success) {
                         // we have to add a new one...
-                        var m = new SpecModel(data.model);
+                        var m = new SpecModel(data.data.model);
                         this.$(".spec-holder").append(new SpecView({
                             model: m
                         }).render().el);
@@ -379,7 +379,7 @@ $cstdata = (array) json_decode($product['data']);
                 "success" : _.bind(function(data) {
                     if (data.success) {
                         // we have to add a new one...
-                        var m = new SpecGroupModel(data.model);
+                        var m = new SpecGroupModel(data.data.model);
                         this.options.specgroups.addOne(m);
 
                     } else {
