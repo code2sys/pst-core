@@ -27,7 +27,11 @@ $cstdata = (array) json_decode($product['data']);
     <%= obj.name %>
     </div>
     <div class="edit-specgroup">
-
+    <form>
+        <strong>Group Title: </strong> <input type="text" name="name" size="60" maxlength="128" /><br/>
+        <button class="save-specgroup-button btn-primary" type="button">Save</button>
+        <button class="cancel-specgroup-button btn-default" type="button">Cancel</button>
+    </form>
     </div>
 
     <div style="clear: both">
@@ -301,7 +305,61 @@ $cstdata = (array) json_decode($product['data']);
         className: "AddSpecGroupView",
         template: _.template($("#AddSpecGroupView").html()),
         events: {
-            "click .add-spec-group-button" : "addspecgroup"
+            "click .add-spec-group-button" : "addspecgroup",
+            "submit form" : "emptyAction",
+            "click .edit-specgroup-button" : "showEditForm",
+            "click .save-specgroup-button" : "saveButton",
+            "click .cancel-specgroup-button" : "cancelButton"
+        },
+        "emptyAction" : function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        },
+        "showEditForm" : function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            this.$(".preview-specgroup").hide();
+            this.$(".edit-specgroup").show();
+            this.$(".preview-specgroup").hide();
+            this.$("input[name=name]").val(this.model.get("name"));
+        },
+        "saveButton" : function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            // we need to save it, then we have to update the model and the preview, then we have to pretend we pressed the cancel button.
+// OK, we're going to make an ajax call
+            $.ajax({
+                "url" : "/admin/ajax_motorcycle_specgroup_update/<?php echo $id; ?>/" + this.model.geT("motorcyclespecgroup_id"),
+                "type" : "POST",
+                "dataType" : "json",
+                "data": {
+                    "name" : this.$("input[name=name]").val()
+                },
+                "success" : _.bind(function(data) {
+                    if (data.success) {
+                        // we have to add a new one...
+                        showGritter("Success", "Title updated successfully.");
+                        this.model.set(data.name);
+                        this.cancelButton();
+                    } else {
+                        // error...
+                        showGritter("Error", data.error_message);
+                    }
+                }, this)
+            });
+        },
+        "cancelButton" : function(e) {
+            if (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+
+            this.$(".preview-specgroup").html(this.model.get("name"));
+            this.$(".preview-specgroup").show();
+            this.$(".edit-specgroup").hide();
+            this.$(".preview-specgroup").show();
         },
         "addspecgroup" : function(e) {
             e.stopPropagation();
