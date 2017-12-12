@@ -202,7 +202,7 @@ abstract class Motorcycleadmin extends Firstadmin
 
     // You can add a new group
     public function ajax_motorcycle_specgroup_add($motorcycle_id) {
-        $this->db->query("Insert into motorcyclespecgroup (motorcycle_id, name, source) values (?, '', 'Admin'')", array($motorcycle_id));
+        $this->db->query("Insert into motorcyclespecgroup (motorcycle_id, name, source) values (?, '', 'Admin')", array($motorcycle_id));
         $motorcyclespecgroup_id = $this->db->insert_id();
 
         $cnt_query = $this->db->query("Select max(ordinal) as cnt from motorcyclespecgroup where motorcycle_id = ? and motorcyclespecgroup_id < ?", array($motorcycle_id, $motorcyclespecgroup_id));
