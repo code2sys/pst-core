@@ -23,16 +23,18 @@ abstract class Motorcycleadmin extends Firstadmin
         return $this->form_validation->run();
     }
 
-    protected function validateMotorcycle() {
+    protected function validateMotorcycle($suppress = false) {
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('vehicle_type', 'Vehicle Type', 'required');
-        $this->form_validation->set_rules('make', 'Make', 'required');
-        $this->form_validation->set_rules('model', 'Model', 'required');
+        if (!$suppress) {
+            $this->form_validation->set_rules('vehicle_type', 'Vehicle Type', 'required');
+            $this->form_validation->set_rules('make', 'Make', 'required');
+            $this->form_validation->set_rules('year', 'Year', 'required');
+            $this->form_validation->set_rules('model', 'Model', 'required');
+        }
         $this->form_validation->set_rules('category', 'Category', 'required');
         $this->form_validation->set_rules('condition', 'Condition', 'required');
         $this->form_validation->set_message('sku_not_in_use', 'That SKU is already in use.');
         $this->form_validation->set_rules('sku', 'Sku', 'required|sku_not_in_use');
-        $this->form_validation->set_rules('crs_trim_id', 'Trim ID', '');
         return $this->form_validation->run();
     }
 
@@ -68,18 +70,23 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->load->helper('async');
 
 
-        if ($this->validateMotorcycle() === TRUE) {
+        // we need to know if this already has an id...
+        $motorcycle = $this->admin_m->getAdminMotorcycle($id);
+
+        if ($this->validateMotorcycle($id > 0 && $motorcycle["ext_trim_id"] > 0) === TRUE) {
             // we need to assemble the title, if appropriate, for $id == 0
             $post = $this->input->post();
+            $was_new = false;
 
             if (is_null($id) || $id == 0) {
+                $was_new = true;
                 // we need to assemble the title...
                 $post["title"] = $post["year"] . " " . $post["make"] . " " . $post["model"] . (array_key_exists("color", $post) ? " " . $post["color"] : "");
             }
 
             $id = $this->admin_m->updateMotorcycle($id, $post);
 
-            if (array_key_exists("crs_trim_id", $_REQUEST) && $_REQUEST["crs_trim_id"] != "") {
+            if ($was_new && array_key_exists("crs_trim_id", $_REQUEST) && $_REQUEST["crs_trim_id"] != "") {
                 $this->load->model("CRSCron_m");
                 $this->CRSCron_m->refreshCRSData($id);
             }
