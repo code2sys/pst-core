@@ -245,8 +245,12 @@ abstract class Motorcycleadmin extends Firstadmin
     }
 
     // you can edit/update the spec
-    public function ajax_motorcycle_spec_update($motorcycle_id, $motorcyclespec_id) {
-
+    public function ajax_motorcycle_specgroup_update($motorcycle_id, $motorcyclespecgroup_id) {
+        $name = trim(array_key_exists("name", $_REQUEST) ? $_REQUEST["name"] : "");
+        $this->db->query("Update motorcyclespecgroup set name = ? where motorcyclespecgroup where motorcyclespecgroup_id = ? and motorcycle_id = ? limit 1", array($name, $motorcyclespecgroup_id, $motorcycle_id));
+        $this->_printAjaxSuccess(array(
+            "name" => $name
+        ));
     }
 
     // you can remove a spec group
