@@ -26,7 +26,7 @@ $cstdata = (array) json_decode($product['data']);
             <div class="hidden_table">
                 <table width="100%" cellpadding="6">
                     <tr>
-                        <td style="width:50px;"><b>Vehicle:</b></td>
+                        <td style="width:50px;"><b>Vehicle:*</b></td>
                         <td>
                             <select name="vehicle_type" class="small-hndr" style="border-radius:0;">
                                 <option value="">Select Vehicle</option>
@@ -37,19 +37,19 @@ $cstdata = (array) json_decode($product['data']);
                         </td>
                     </tr>
                     <tr>
-                        <td><b>Year:</b></td>
+                        <td><b>Year:*</b></td>
                         <td>
                             <input type="number" min="1900" name="year" value="<?php echo $product['year']==''?$_POST['year']:$product['year']; ?>" class="text "> <span style="color: red; font-style: italic; display: none" id="year-error">Please use a four-digit year.</span>
                         </td>
                     </tr>
                     <tr>
-                        <td ><b>Make:</b></td>
+                        <td ><b>Make:*</b></td>
                         <td>
                             <input type="text" name="make" value="<?php echo $product['make']==''?$_POST['make']:$product['make']; ?>" class="text " style="width: 300px"> <span class="make_suggestion" style="display:none; font-style: italic">Please begin typing a make to see auto-complete suggestions.</span>
                         </td>
                     </tr>
                     <tr>
-                        <td ><b>Model:</b></td>
+                        <td ><b>Model:*</b></td>
                         <td >
                             <input type="text" name="model" value="<?php echo $product['model']==''?$_POST['model']:$product['model']; ?>" class="text " style="width: 300px"> <span class="model_suggestion" style="display:none; font-style: italic">Please begin typing a model/trim to see auto-complete suggestions.</span>
                         </td>
@@ -82,7 +82,7 @@ $cstdata = (array) json_decode($product['data']);
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:50px;"><b>Category:</b></td>
+                        <td style="width:50px;"><b>Category:*</b></td>
                         <td>
 							<input type="text" name="category" value="<?php echo $product['name']==''?$_POST['category']:$product['name']; ?>" class="text small">
                         </td>
@@ -98,7 +98,7 @@ $cstdata = (array) json_decode($product['data']);
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:50px;"><b>SKU:</b></td>
+                        <td style="width:50px;"><b>SKU:*</b></td>
                         <td>
                             <input type="text" name="sku" value="<?php echo $product['sku']==''?$_POST['sku']:$product['sku']; ?>" class="text small small-hndr">
                         </td>
@@ -437,6 +437,29 @@ $cstdata = (array) json_decode($product['data']);
         }
     });
 
+
+    $("form").on("submit", function(e) {
+       var error = false;
+
+       // do they have a sku?
+        var required_fields = ["vehicle_type", "make", "model", "year", "sku", "msrp"];
+
+        for (var i = 0; i < required_fields.length; i++) {
+            var $m = $("[name='" + required_fields[i]+ "']");
+            if ($m.length > 0) {
+                if ($m.val() == "") {
+                    error = true;
+                    alert("Please specify " + (required_fields[i].replace("_", " ")));
+                }
+            }
+        }
+
+       if (error) {
+           e.preventDefault();
+           e.stopPropagation();
+       }
+       return !error;
+    });
 
 
     // This is probably all junk for assembling the title - we should just assemble it server-side and permit them to edit it.
