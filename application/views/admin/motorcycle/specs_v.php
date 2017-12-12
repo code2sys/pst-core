@@ -144,91 +144,7 @@ $cstdata = (array) json_decode($product['data']);
         template: _.template($("#SpecGroupView").html()),
         events: {
             "click .remove-specgroup-button" : "removeSpecgroupButton",
-            "click .add-spec-button" : "addSpecButton"
-        },
-        "addSpecButton" : function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            $.ajax({
-                "url" : "/admin/ajax_motorcycle_specgroup_addspec/<?php echo $id; ?>/" + this.model.get("motorcyclespecgroup_id"),
-                "type" : "POST",
-                "dataType" : "json",
-                "data": {
-                },
-                "success" : _.bind(function(data) {
-                    if (data.success) {
-                        // we have to add a new one...
-                        var m = new SpecModel(data.model);
-                        this.$(".spec-holder").append(new SpecView({
-                            model: m
-                        }).render().el);
-
-                    } else {
-                        // error...
-                        showGritter("Error", data.error_message);
-                    }
-                }, this)
-            });
-        },
-        "removeSpecgroupButton" : function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            if (confirm("Remove this entire functional group?")) {
-
-                $.ajax({
-                    "url" : "/admin/ajax_motorcycle_specgroup_remove/<?php echo $id; ?>/" + this.model.get("motorcyclespecgroup_id"),
-                    "type" : "POST",
-                    "dataType" : "json",
-                    "data": {
-                    },
-                    "success" : _.bind(function(data) {
-                        if (data.success) {
-                            showGritter("Success", "Removed successfully");
-                            $(this.el).remove(); // clear it out...
-                        } else {
-                            // error...
-                            showGritter("Error", data.error_message);
-                        }
-                    }, this)
-                });
-            }
-
-        },
-        initialize: function(options) {
-            this.options = options || {};
-            _.bindAll(this, "render", "subrender", "removeSpecgroupButton");
-        },
-        "subrender" : function() {
-            this.$(".spec-holder").html("");
-            // we have to stamp them out...
-            var motorcyclespecgroup_id = this.model.get("motorcyclespecgroup_id");
-            if (mySpecGroupLUT[motorcyclespecgroup_id]) {
-                for (var i = 0; i< mySpecGroupLUT[motorcyclespecgroup_id].length; i++) {
-                    this.$(".spec-holder").append(new SpecView({
-                        model: mySpecGroupLUT[motorcyclespecgroup_id][i]
-                    }).render().el);
-                }
-
-                this.$(".spec-holder").sortable({
-                    placeholder: "ui-state-highlight",
-                    handle: ".drag-drop-spec-button"
-                });
-
-            }
-        },
-        "render" : function() {
-            $(this.el).html(this.template(this.model.toJSON()));
-            this.subrender();
-            return this;
-        }
-    });
-
-    window.SpecGroupsView = Backbone.View.extend({
-        className: "SpecGroupsView",
-        template: _.template($("#SpecGroupsView").html()),
-        events: {
+            "click .add-spec-button" : "addSpecButton",
             "submit form" : "emptyAction",
             "click .edit-specgroup-button" : "showEditForm",
             "click .save-specgroup-button" : "saveButton",
@@ -285,9 +201,96 @@ $cstdata = (array) json_decode($product['data']);
             this.$(".edit-specgroup").hide();
             this.$(".preview-specgroup").show();
         },
+        "addSpecButton" : function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            $.ajax({
+                "url" : "/admin/ajax_motorcycle_specgroup_addspec/<?php echo $id; ?>/" + this.model.get("motorcyclespecgroup_id"),
+                "type" : "POST",
+                "dataType" : "json",
+                "data": {
+                },
+                "success" : _.bind(function(data) {
+                    if (data.success) {
+                        // we have to add a new one...
+                        var m = new SpecModel(data.model);
+                        this.$(".spec-holder").append(new SpecView({
+                            model: m
+                        }).render().el);
+
+                    } else {
+                        // error...
+                        showGritter("Error", data.error_message);
+                    }
+                }, this)
+            });
+        },
+        "removeSpecgroupButton" : function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (confirm("Remove this entire functional group?")) {
+
+                $.ajax({
+                    "url" : "/admin/ajax_motorcycle_specgroup_remove/<?php echo $id; ?>/" + this.model.get("motorcyclespecgroup_id"),
+                    "type" : "POST",
+                    "dataType" : "json",
+                    "data": {
+                    },
+                    "success" : _.bind(function(data) {
+                        if (data.success) {
+                            showGritter("Success", "Removed successfully");
+                            $(this.el).remove(); // clear it out...
+                        } else {
+                            // error...
+                            showGritter("Error", data.error_message);
+                        }
+                    }, this)
+                });
+            }
+
+        },
         initialize: function(options) {
             this.options = options || {};
-            _.bindAll(this, "render", "subrender", "addOne", "emptyAction", "showEditForm", "saveButton", "cancelButton");
+            _.bindAll(this, "render", "subrender", "removeSpecgroupButton", "emptyAction", "showEditForm", "saveButton", "cancelButton");
+        },
+        "subrender" : function() {
+            this.$(".spec-holder").html("");
+            // we have to stamp them out...
+            var motorcyclespecgroup_id = this.model.get("motorcyclespecgroup_id");
+            if (mySpecGroupLUT[motorcyclespecgroup_id]) {
+                for (var i = 0; i< mySpecGroupLUT[motorcyclespecgroup_id].length; i++) {
+                    this.$(".spec-holder").append(new SpecView({
+                        model: mySpecGroupLUT[motorcyclespecgroup_id][i]
+                    }).render().el);
+                }
+
+                this.$(".spec-holder").sortable({
+                    placeholder: "ui-state-highlight",
+                    handle: ".drag-drop-spec-button"
+                });
+
+            }
+        },
+        "render" : function() {
+            $(this.el).html(this.template(this.model.toJSON()));
+            this.subrender();
+            this.cancelButton();
+            return this;
+        }
+    });
+
+    window.SpecGroupsView = Backbone.View.extend({
+        className: "SpecGroupsView",
+        template: _.template($("#SpecGroupsView").html()),
+        events: {
+
+        },
+
+        initialize: function(options) {
+            this.options = options || {};
+            _.bindAll(this, "render", "subrender", "addOne");
         },
         subrender: function() {
             this.$(".holder").html("");
