@@ -165,7 +165,7 @@ $cstdata = (array) json_decode($product['data']);
 
             this.$(".preview-specgroup").hide();
             this.$(".edit-specgroup").show();
-            this.$(".preview-specgroup").hide();
+            this.$(".edit-specgroup-button").hide();
             this.$("input[name=name]").val(this.model.get("name"));
         },
         "saveButton" : function(e) {
@@ -203,7 +203,7 @@ $cstdata = (array) json_decode($product['data']);
             this.$(".preview-specgroup").html(this.model.get("name"));
             this.$(".preview-specgroup").show();
             this.$(".edit-specgroup").hide();
-            this.$(".preview-specgroup").show();
+            this.$(".edit-specgroup-button").show();
         },
         "addSpecButton" : function(e) {
             e.preventDefault();
@@ -341,10 +341,12 @@ $cstdata = (array) json_decode($product['data']);
             e.stopPropagation();
             e.preventDefault();
 
-            this.$(".preview-specgroup").hide();
-            this.$(".edit-specgroup").show();
-            this.$(".preview-specgroup").hide();
-            this.$("input[name=name]").val(this.model.get("name"));
+            this.$(".preview").hide();
+            this.$(".edit").show();
+            this.$(".edit-spec-button").hide();
+            this.$("input[name=final_value]").val(this.model.get("final_value"));
+            this.$("input[name=attribute_name]").val(this.model.get("attribute_name"));
+            this.$("input[name=feature_name]").val(this.model.get("feature_name"));
         },
         "saveButton" : function(e) {
             e.stopPropagation();
