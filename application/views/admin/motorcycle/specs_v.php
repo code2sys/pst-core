@@ -181,7 +181,7 @@ $cstdata = (array) json_decode($product['data']);
                     if (data.success) {
                         // we have to add a new one...
                         showGritter("Success", "Title updated successfully.");
-                        this.model.set(data.name);
+                        this.model.set(data.data.name);
                         this.cancelButton();
                     } else {
                         // error...
