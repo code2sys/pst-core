@@ -498,6 +498,7 @@ abstract class Motorcycleadmin extends Firstadmin
         // OK, we have to come up with suggestions
         $year = array_key_exists("year", $_REQUEST) ? $_REQUEST["year"] : 0;
         $machine_type = array_key_exists("machine_type", $_REQUEST) ? $_REQUEST["machine_type"] : "";
+        $offroad = array_key_exists("offroad", $_REQUEST) ? $_REQUEST["offroad"] : null;
 
         if ($machine_type == "") {
             $this->_printAjaxError("Sorry, you must specify a machine type.");
@@ -509,6 +510,10 @@ abstract class Motorcycleadmin extends Firstadmin
 
         if ($year > 0) {
             $args["year"] = $year;
+        }
+
+        if (!is_null($offroad)) {
+            $args["offroad"] = $offroad;
         }
 
         $this->load->model("CRS_m");
@@ -524,6 +529,7 @@ abstract class Motorcycleadmin extends Firstadmin
         $year = array_key_exists("year", $_REQUEST) ? $_REQUEST["year"] : 0;
         $machine_type = array_key_exists("machine_type", $_REQUEST) ? $_REQUEST["machine_type"] : "";
         $make = array_key_exists("make", $_REQUEST) ? $_REQUEST["make"] : "";
+        $offroad = array_key_exists("offroad", $_REQUEST) ? $_REQUEST["offroad"] : null;
 
         if ($machine_type == "") {
             $this->_printAjaxError("Sorry, you must specify a machine type.");
@@ -541,6 +547,10 @@ abstract class Motorcycleadmin extends Firstadmin
         if ($year > 0) {
             $args["year"] = $year;
         }
+        if (!is_null($offroad)) {
+            $args["offroad"] = $offroad;
+        }
+
 
         $this->load->model("CRS_m");
         $this->_printAjaxSuccess($this->CRS_m->getTrims($args));
