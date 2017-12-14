@@ -255,14 +255,49 @@ $media_url = jsite_url("/media/");
                 ), true);
                 ?>
                 <div class="mypagination">
-                    <ul>
-                        <?php if ($pages > 1) { ?>
-                            <li class="active pgn"><a href="javascript:void(0);">1</a></li>
-                        <?php } ?>
-                        <?php for ($i = 2; $i <= $pages; $i++) { ?>
-                            <li class="pgn"><a href="javascript:void(0);"><?php echo $i; ?></a></li>
-                        <?php } ?>
-                    </ul>
+                    <?php $page = 1; ?>
+                    <div class="mypagination">
+                        <ul>
+                            <?php if ($pages > 1): ?>
+                                <?php if ($page > 1): ?>
+                                    <li class=" pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page - 1; ?>">← Previous</a></li>
+
+                                    <?php if ($page > 1): ?>
+
+                                        <?php if ($page > 2): ?>
+                                            <li class="pager_spacer">&horbar;</li>
+                                        <?php endif; ?>
+
+                                        <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 1; ?>"><?php echo $page - 2; ?></a></li>
+
+                                    <?php endif; ?>
+
+                                    <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 1; ?>"><?php echo $page - 1; ?></a></li>
+                                <?php endif; ?>
+
+                                <li class="active pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page; ?>"><?php echo $page; ?></a></li>
+
+
+                                <?php if ($page < $pages): ?>
+                                    <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 1; ?>"><?php echo $page + 1; ?></a></li>
+
+                                    <?php if ($page < $pages - 1): ?>
+                                        <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 2; ?>"><?php echo $page + 2; ?></a></li>
+
+                                        <?php if ($page < $pages - 2): ?>
+                                            <li class="pager_spacer">&horbar;</li>
+                                        <?php endif; ?>
+
+
+                                    <?php endif; ?>
+
+                                    <li class=" pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 1; ?>">Next →</a></li>
+                                <?php endif; ?>
+
+
+                            <?php endif; ?>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>	

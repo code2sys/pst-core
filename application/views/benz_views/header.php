@@ -252,7 +252,7 @@ echo $CI->load->view("braintree", array(
 	</script>
 	<script>
 	$(document).on('click', '.pgn', function() {
-		var pg = $('a', $(this)).html();
+		var pg = $('a', $(this)).attr("data-page-number");
 		if(!$(this).hasClass('active')) {
 			var brands = $("input[name='brand[]']:checkbox:checked").map(function(){
 				return $(this).val();
