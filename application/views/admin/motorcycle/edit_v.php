@@ -32,6 +32,12 @@ $cstdata = (array) json_decode($product['data']);
             <div class="hidden_table">
                 <table width="100%" cellpadding="6">
                     <tr>
+                        <td style="width:50px;"><b>Vin Number:</b></td>
+                        <td>
+                            <input type="text" name="vin_number" value="<?php echo $product['vin_number']==''?$_POST['vin_number']:$product['vin_number']; ?>" class="text small">
+                        </td>
+                    </tr>
+                    <tr>
                         <td style="width:50px;"><b>Vehicle:*</b></td>
                         <td>
                             <?php if ($suppress): ?>
@@ -128,12 +134,6 @@ $cstdata = (array) json_decode($product['data']);
                         </td>
                     </tr>
 
-                    <tr>
-                        <td style="width:50px;"><b>Vin Number:</b></td>
-                        <td>
-                            <input type="text" name="vin_number" value="<?php echo $product['vin_number']==''?$_POST['vin_number']:$product['vin_number']; ?>" class="text small">
-                        </td>
-                    </tr>
                     <tr>
 						<td colspan="2">
 							<table width="100%" class="inr">
@@ -488,6 +488,9 @@ $cstdata = (array) json_decode($product['data']);
             $("input[name='retail_price']").val(m.msrp);
             $("input[name='destination_charge']").attr("checked", true);
             $("input[name='crs_trim_id']").val(m.trim_id);
+            if (m.default_category) {
+                $("input[name='category']").val(m.default_category);
+            }
         }
     });
 
