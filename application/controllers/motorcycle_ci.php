@@ -46,6 +46,18 @@ class Motorcycle_CI extends Welcome {
      * This is the main Motorcycle_List page.
      */
     public function benzProduct() {
+        // JLB 11-27-17
+        // I think this is a problem with a default.
+        if (!array_key_exists("fltr", $_REQUEST) && !array_key_exists("fltr", $_GET)) {
+            if (!defined("MOTORCYCLE_SHOP_NEW") || MOTORCYCLE_SHOP_NEW) {
+                $_REQUEST["fltr"] = "new";
+                $_GET["fltr"] = "new";
+            } else {
+                $_GET["fltr"] = "pre-owned";
+            }
+        }
+
+
         $this->load->model('pages_m');
         $this->load->model('motorcycle_m');
 
@@ -102,7 +114,9 @@ class Motorcycle_CI extends Welcome {
         $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
 
         $this->_mainData['motorcycle'] = $this->motorcycle_m->getMotorcycle($id);
+        $this->setMasterPageVars('title', @$this->_mainData['motorcycle']['title']);
         $_SESSION['recentlyMotorcycle'][$id] = $id;
+
 
         if (@$this->_mainData['motorcycle']['images'][0]['image_name']) {
             //$metaTag = '<meta property="og:image" content="'.$this->_mainData['motorcycle']['images'][0]['image_name'].'"/>';

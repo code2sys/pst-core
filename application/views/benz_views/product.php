@@ -80,45 +80,30 @@ $media_url = jsite_url("/media/");
                     <?php } ?>
                 </div>
             </div>
-            <div class="col-md-12 text-center search-one flat fit-none">
-                <h4 style="margin:20px 0 20px">RECENTLY VIEWED</h4>
-            </div>
-            <div class="fltrbx search-one fit-none">
-                <?php foreach ($recentlyMotorcycle as $recently) { ?>
-                    <?php $title = str_replace(' ', '_', trim($recently['title'])); ?>
-                    <div class="col-md-12 text-center padg">
-                        <a href="<?php echo base_url(strtolower($recently['type']) . '/' . $title . '/' . $recently['sku']); ?>">
-                            <img class="rvm" src=" <?php echo base_url() . 'media/' . $recently['image_name']; ?>" />
-                        </a>
-                        <a href="<?php echo base_url(strtolower($recently['type']) . '/' . $title . '/' . $recently['sku']); ?>"><h1 class="head-txt"><?php echo $recently['title']; ?></h1></a>
-                        <!--<p><?php echo $recently['title']; ?></p>-->
-                        <?php if( $recently['call_on_price'] == '1' ) { ?>
-                            <p class="cfp">Call For Price</p>
-                            <?php
-                        } else {
-                            if ($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00") { ?>
-                                <p>Retail Price: &nbsp; <span
-                                            class="strikethrough">$<?php echo number_format($recently['retail_price'], 2); ?></span>
-                                </p>
-                                <p>Sale Price: &nbsp; &nbsp;<span
-                                            class="redtext">$<?php echo number_format($recently['sale_price'], 2); ?></span></p>
-                            <?php } else { ?>
-                                <p>Retail Price: &nbsp; $<?php echo number_format($recently['retail_price'], 2); ?></p>
-                                <?php
-                            }
-                            if ($recently["destination_charge"]) {
-                                echo "<sub>* Plus Applicable destination charge</sub>";
-                            }
-                        }
-                        ?>
-                    </div>
-                <?php } ?>
-            </div>		
+            <?php
+            $CI =& get_instance();
+            echo $CI->load->view("benz_views/recently_viewed", array(
+                "subclass" => "search-one flat fit-none",
+                "innersubclass" => "search-one fit-none"
+            ), true);
+            ?>
+
         </div>			
         <!--here -->
         <div class="next">
             <div class="mid prdts">
-                <?php foreach ($motorcycles as $motorcycle) { ?>
+                <?php foreach ($motorcycles as $motorcycle) {
+
+                    // What is the default...
+                    $motorcycle_image = $motorcycle['image_name'];
+                    if ($motorcycle['external'] == 0) {
+                        $motorcycle_image = $media_url . $motorcycle_image;
+                    }
+
+                    if ($motorcycle_image == "" || is_null($motorcycle_image) || $motorcycle_image == $media_url) {
+                        $motorcycle_image = "/assets/image_unavailable.png";
+                    }
+                    ?>
                     <div class="mid-r">
                         <?php $title = str_replace(' ', '_', trim($motorcycle['title'])); ?>
                         <span class="blok"><?php //echo preg_replace('/[^A-Za-z0-9\-]/', '', $title); ?></span>
@@ -128,7 +113,7 @@ $media_url = jsite_url("/media/");
                                         <!--<img src="<?php echo $new_assets_url; ?>images/imgpsh_fullsize (6).png" width="152px;"/>-->
                                 </div>
                                 <div class="mid-r-img-veh">
-                                    <img src="<?php echo $media_url . $motorcycle['image_name']; ?>" width="px;"/>
+                                    <img src="<?php echo $motorcycle_image; ?>" width="px;"/>
                                 </div>
                             </div>
                         </a>
@@ -138,7 +123,7 @@ $media_url = jsite_url("/media/");
                                 <?php if ($motorcycle['call_on_price'] == '1') { ?>
                                     <p class="cfp">Call For Price</p>
                                 <?php } else {
-                                    if ($motorcycle['sale_price']>0 && $motorcycle['sale_price']!=="0.00") { ?>
+                                    if ($motorcycle['sale_price']>0 && $motorcycle['sale_price']!=="0.00" && $motorcycle["sale_price"] != $motorcycle["retail_price"]) { ?>
                                         <?php if ($motorcycle["retail_price"] > 0): ?>
                                             <p>Retail Price: &nbsp; <span class="strikethrough">$<?php echo $motorcycle['retail_price']; ?></span><br>
                                                 <?php endif; ?>
@@ -153,7 +138,9 @@ $media_url = jsite_url("/media/");
                             </div>
                             <div class="mid-text-right">
                                 <p>condition :<span><?php echo $motorcycle['condition'] == '1' ? 'New' : 'Pre-Owned'; ?></span></p>
+                                <?php if ($motorcycle["color"] != "N/A"): ?>
                                 <p>color :<span><?php echo $motorcycle['color']; ?></span></p>
+                                <?php endif; ?>
                                 <?php if ($motorcycle['engine_hours'] > 0) { ?>
                                     <p>engine hours :<span><?php echo $motorcycle['engine_hours']; ?></span></p>
                                 <?php } ?>
@@ -259,42 +246,14 @@ $media_url = jsite_url("/media/");
                     </div>
 
                 <?php } ?>
-                <div class="fltrbar search-two my-wdt">
-                    <div class="col-md-12 text-center">
-                        <h4 style="margin:0 0 20px">RECENTLY VIEWED</h4>
-                    </div>
-                    <div class="fltrbx">
-                        <?php foreach ($recentlyMotorcycle as $recently) { ?>
-                            <?php $title = str_replace(' ', '_', trim($recently['title'])); ?>
-                            <div class="col-md-12 text-center padg">
-                                <a class="fify" href="<?php echo base_url(strtolower($recently['type']) . '/' . $title . '/' . $recently['sku']); ?>">
-                                    <img class="rvm" src=" <?php echo base_url() . 'media/' . $recently['image_name']; ?>" />
-                                </a>
-                                <a class="fify" href="<?php echo base_url(strtolower($recently['type']) . '/' . $title . '/' . $recently['sku']); ?>"><h1 class="head-txt"><?php echo $recently['title']; ?></h1></a>
-                                <!--<p><?php echo $recently['title']; ?></p>-->
-                                <?php if( $recently['call_on_price'] == '1' ) { ?>
-                                    <p class="cfp">Call For Price</p>
-                                    <?php
-                                } else {
-                                    if ($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00") { ?>
-                                        <p>Retail Price: &nbsp; <span
-                                                    class="strikethrough">$<?php echo number_format($recently['retail_price'], 2); ?></span>
-                                        </p>
-                                        <p>Sale Price: &nbsp; &nbsp;<span
-                                                    class="redtext">$<?php echo number_format($recently['sale_price'], 2); ?></span></p>
-                                    <?php } else { ?>
-                                        <p>Retail Price: &nbsp; $<?php echo number_format($recently['retail_price'], 2); ?></p>
-                                        <?php
-                                    }
-                                    if ($recently["destination_charge"]) {
-                                        echo "<sub>* Plus Applicable destination charge</sub>";
-                                    }
-                                }
-                                ?>
-                            </div>
-                        <?php } ?>
-                    </div>				
-                </div>
+                <?php
+                $CI =& get_instance();
+                echo $CI->load->view("benz_views/recently_viewed", array(
+                    "master_class" => "fltrbar search-two my-wdt",
+                    "subclass" => "",
+                    "innersubclass" => ""
+                ), true);
+                ?>
                 <div class="mypagination">
                     <ul>
                         <?php if ($pages > 1) { ?>

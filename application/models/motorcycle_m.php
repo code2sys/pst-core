@@ -104,32 +104,47 @@ class Motorcycle_M extends Master_M {
     public function getMotorcycles( $filter = array() , $limit = 6, $offset = 0) {
         $where = $this->buildWhere($filter);
         $this->db->_protect_identifiers=false;
-        $this->db->join(' (select min(priority_number) as priority_number, motorcycle_id from motorcycleimage group by motorcycle_id) motorcycleimageA', 'motorcycleimageA.motorcycle_id = motorcycle.id', 'left');
+        $this->db->join(' (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA', 'motorcycleimageA.motorcycle_id = motorcycle.id', 'left');
         $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number ', 'left');
         $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
         $this->db->group_by('motorcycle.id');
-        $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name as type', FALSE);
+        $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name  as type, motorcycleimage.external', FALSE);
         $this->db->limit($limit, $offset);
         $records = $this->selectRecords('motorcycle', $where);
         $this->db->_protect_identifiers=true;
         return $records;
     }
 
+    public function getMotorcycleImages($id) {
+        $query = $this->db->query("Select * from motorcycleimage where motorcycle_id = ? and disable = 0 order by priority_number ", array($id));
+        return $query->result_array();
+    }
 
+    public function getMotorcyclSpecGroups($id) {
+        $query = $this->db->query("Select * from motorcyclespecgroup where motorcycle_id = ? and hidden = 0 and (crs_attributegroup_number is null OR crs_attributegroup_number = 0 or (crs_attributegroup_number >= 2 AND crs_attributegroup_number < 23)) order by ordinal", array($id));
+        return $query->result_array();
+    }
 
+    public function getMotorcycleSpecs($id) {
+        $query = $this->db->query("Select motorcyclespec.*, motorcyclespecgroup.name as spec_group, motorcyclespecgroup.ordinal as group_ordinal from motorcyclespec join motorcyclespecgroup using (motorcyclespecgroup_id) where motorcyclespec.motorcycle_id = ? and motorcyclespecgroup.hidden = 0 and motorcyclespec.hidden = 0 and (crs_attribute_id is null OR ((crs_attribute_id < 230000) and (crs_attribute_id >= 20000) and crs_attribute_id not in (20005, 20008))) order by motorcyclespecgroup.ordinal, motorcyclespec.ordinal", array($id));
+        return $query->result_array();
+    }
 
     public function getMotorcycle( $id ){
         $where = array('motorcycle.id' => $id );
         $record = $this->selectRecord('motorcycle', $where);
 
-        $iwhere = array('motorcycleimage.motorcycle_id' => $id );
-        $this->db->order_by('motorcycleimage.priority_number asc');
+//        $iwhere = array('motorcycleimage.motorcycle_id' => $id );
+//        $this->db->order_by('motorcycleimage.priority_number asc');
 
-        $record['images'] = $this->selectRecords('motorcycleimage', $iwhere);
+        $record['images'] = $this->getMotorcycleImages($id); // $this->selectRecords('motorcycleimage', $iwhere);
         $vwhere = array('motorcycle_video.part_id' => $id );
 
         $this->db->order_by('motorcycle_video.id asc');
         $record['videos'] = $this->selectRecords('motorcycle_video', $vwhere);
+
+
+        $record["specs"] = $this->getMotorcycleSpecs($id);
 
         return $record;
     }
@@ -240,29 +255,26 @@ class Motorcycle_M extends Master_M {
         return $record;
     }
 
-    public function getFeaturedMonster() {
-        $where = array(
-            'motorcycle.featured' => '1',
-            'motorcycleimage.priority_number' => '0',
-        );
-        $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
-        $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id', 'left');
-        $this->db->select('motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type');
-        $this->db->group_by('motorcycle.id');
-        $records = $this->selectRecords('motorcycle', $where);
-        return $records;
+    public function getFeaturedMonster()
+    {
+        $query = "Select motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type, motorcycleimage.external from motorcycle join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id left join (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA on motorcycleimageA.motorcycle_id = motorcycle.id left join motorcycleimage on motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number where motorcycle.featured = 1  group by motorcycle.id";
+        $query = $this->db->query($query);
+        return $query->result_array();
     }
 
     public function getReccentlyMotorcycles( $ids ) {
         $where = array();
         $this->db->where_in('motorcycle.id',$ids);
         //$where = array('motorcycle.featured' => '1' );
+        $this->db->_protect_identifiers=false;
         $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
-        $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id', 'left');
+        $this->db->join(' (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA', 'motorcycleimageA.motorcycle_id = motorcycle.id', 'left');
+        $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number ', 'left');
         $this->db->group_by('motorcycle.id');
         $this->db->limit("3");
         $this->db->order_by("motorcycle.id","DESC");
-        $this->db->select('motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type');
+        $this->db->select('motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type, motorcycleimage.external');
+        $this->db->_protect_identifiers=true;
         $records = $this->selectRecords('motorcycle', $where);
         return $records;
     }
@@ -337,5 +349,34 @@ class Motorcycle_M extends Master_M {
             }
         }
         return $value;
+    }
+
+    // This is modeled on the function from Portalmodel for the search results
+    public function enhancedGetMotorcycles($filter = NULL, $orderBy = NULL, $limit = 20, $offset = 0) {
+        $this->load->helper("jonathan");
+
+        $where = jonathan_generate_likes(array("motorcycle.title", "motorcycle.make", "motorcycle.model", "motorcycle_category.name", "motorcycle.year", "motorcycle_type.name"), $filter, "WHERE");
+
+        $total_count = 0;
+        $query = $this->db->query("Select count(*) as cnt from motorcycle");
+        foreach ($query->result_array() as $row) {
+            $total_count = $row['cnt'];
+        }
+
+        // Now, is there a filter?
+        $filtered_count = $total_count;
+        if ($where != "") {
+            // $query = $this->db->query("Select count(distinct part_id) as cnt from part left join partpartnumber using (part_id) left join partnumber  using (partnumber_id)  left join (select partvariation.*, concat(distributor.name, ' ', partvariation.part_number) as partlabel from partvariation join distributor using (distributor_id)) zpartvariation using (partnumber_id) left join partimage using (part_id) $where");
+            $query = $this->db->query("Select count(distinct motorcycle.id) as cnt from motorcycle join motorcycle_category on motorcycle.category = motorcycle_category.id join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id $where");
+            foreach ($query->result_array() as $row) {
+                $filtered_count = $row["cnt"];
+            }
+        }
+
+        // Finally, run it!
+        $query = $this->db->query("Select motorcycle.id, motorcycle.sku, motorcycle_category.name as category_name, motorcycle_type.name as type_name, motorcycle.title, motorcycle.featured, motorcycle.status, motorcycle.condition, motorcycle.retail_price, motorcycle.sale_price, motorcycle.condition, IfNull(motorcycle.mileage, 0) as mileage, motorcycle.source, motorcycleimage.image_name, motorcycleimage.external from motorcycle join motorcycle_category on motorcycle.category = motorcycle_category.id join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id left join (select motorcycle_id, min(priority_number) as priority_number from motorcycleimage where disable = 0 group by motorcycle_id ) thumbnail_motorcycleimage on motorcycle.id = thumbnail_motorcycleimage.motorcycle_id left join motorcycleimage on thumbnail_motorcycleimage.motorcycle_id = motorcycleimage.motorcycle_id AND thumbnail_motorcycleimage.priority_number = motorcycleimage.priority_number  $where group by motorcycle.id $orderBy limit $limit offset $offset ");
+        $rows = $query->result_array();
+
+        return array($rows, $total_count, $filtered_count);
     }
 }

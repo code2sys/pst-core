@@ -5,56 +5,94 @@ $cstdata = (array) json_decode($product['data']);
 <div class="content_wrap">
     <div class="content">
 
-        <h1><i class="fa fa-cube"></i>&nbsp;<?php if (@$new): ?>New<?php else: ?>Edit<?php endif; ?> Product</h1>
-        <p><b>Please fill out all fields within required tabs with an *</b></p>
-        <br>
+        <?php
+        $CI =& get_instance();
+        echo $CI->load->view("admin/motorcycle/moto_head", array(
+            "new" => @$new,
+            "product" => @$product,
+            "success" => @$success,
+            "assets" => $assets,
+            "id" => @$id,
+            "active" => "edit",
+            "descriptor" => "General Options"
+        ), true);
 
-        <!-- ERROR -->
-        <?php if (validation_errors()): ?>
-            <div class="error">
-                <h1><span style="color:#C90;"><i class="fa fa-warning"></i></span>&nbsp;Error</h1>
-                <p><?php echo validation_errors(); ?></p>
-            </div>
-        <?php endif; ?>
-        <!-- END ERROR -->
+        $suppress = $id > 0 && $product["crs_trim_id"] > 0;
 
-        <!-- SUCCESS -->
-        <?php if (@$success): ?>
-			<div class="success">
-			  <img src="<?php echo $assets; ?>/images/success.png" style="float:left;margin-right:10px;">
-			<h1>Success</h1>
-			<div class="clear"></div>
-			<p>
-			  Your changes have been made.
-			</p>
-			<div class="clear"></div>
-			</div>
-        <?php endif; ?>
-        <!-- END SUCCESS -->
+        ?>
 
-
-        <!-- TABS -->
-        <div class="tab">
-            <ul>
-                <li><a href="<?php echo base_url('admin/motorcycle_edit/' . $id); ?>" class="active"><i class="fa fa-bars"></i>&nbsp;General Options*</a></li>
-                <li><a href="<?php echo base_url('admin/motorcycle_description/' . $id); ?>"><i class="fa fa-file-text-o"></i>&nbsp;Description*</a></li>
-                <li><a href="<?php echo base_url('admin/motorcycle_images/' . $id); ?>"><i class="fa fa-image"></i>&nbsp;Images*</a></li>
-                <li><a href="<?php echo base_url('admin/motorcycle_video/' . $id); ?>"><i class="fa fa-image"></i>&nbsp;Videos</a></li>
-                <div class="clear"></div>
-            </ul>
-        </div>
         <!-- END TABS -->
-        <?php echo form_open('admin/update_motorcycle/' . $id, array('class' => 'form_standard')); ?>	
+        <?php echo form_open('admin/update_motorcycle/' . $id, array('class' => 'form_standard')); ?>
+        <?php
+        if ($id == 0): ?>
+            <input type="hidden" name="crs_trim_id" value="<?php if (array_key_exists("crs_trim_id", $_REQUEST)) { echo htmlentities($_REQUEST["crs_trim_id"]); } ?>" />
+        <?php endif; ?>
         <!-- TAB CONTENT -->
         <div class="tab_content">
             <div class="hidden_table">
                 <table width="100%" cellpadding="6">
                     <tr>
-                        <td style="width:50px;"><b>Title:</b></td>
+                        <td style="width:50px;"><b>Vin Number:</b></td>
                         <td>
-                            <input id="name" name="title" placeholder="Enter Title" class="text large ttl" value="<?php echo $product['title']==''?$_POST['title']:$product['title']; ?>" readonly />
+                            <input type="text" name="vin_number" value="<?php echo $product['vin_number']==''?$_POST['vin_number']:$product['vin_number']; ?>" class="text small">
                         </td>
                     </tr>
+                    <tr>
+                        <td style="width:50px;"><b>Vehicle:*</b></td>
+                        <td>
+                            <?php if ($suppress): ?>
+                                <?php foreach( $vehicles as $v ) { ?>
+                                    <?php if($product['vehicle_type'] == $v['id']) { echo htmlentities($v["name"]); }; ?></option>
+                                <?php } ?>
+                            <?php else: ?>
+                            <select name="vehicle_type" class="small-hndr" style="border-radius:0;">
+                                <option value="">Select Vehicle</option>
+                                <?php foreach( $vehicles as $v ) { ?>
+                                    <option value="<?php echo $v['id'];?>" <?php if($product['vehicle_type'] == $v['id']) { echo "selected"; }else if($_POST['vehicle_type']==$v['id']){echo "selected";} ?>><?php echo $v['name'];?></option>
+                                <?php } ?>
+                            </select>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Year:*</b></td>
+                        <td>
+                            <?php if ($suppress): ?>
+                                <?php echo htmlentities($product['year']); ?>
+                            <?php else: ?>
+                            <input type="number" min="1900" name="year" value="<?php echo $product['year']==''?$_POST['year']:$product['year']; ?>" class="text "> <span style="color: red; font-style: italic; display: none" id="year-error">Please use a four-digit year.</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td ><b>Make:*</b></td>
+                        <td>
+                            <?php if ($suppress): ?>
+                                <?php echo htmlentities($product['make']); ?>
+                            <?php else: ?>
+                            <input type="text" name="make" value="<?php echo $product['make']==''?$_POST['make']:$product['make']; ?>" class="text " style="width: 300px"> <span class="make_suggestion" style="display:none; font-style: italic">Please begin typing a make to see auto-complete suggestions.</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td ><b>Model:*</b></td>
+                        <td >
+                            <?php if ($suppress): ?>
+                                <?php echo htmlentities($product['model']); ?>
+                            <?php else: ?>
+                            <input type="text" name="model" value="<?php echo $product['model']==''?$_POST['model']:$product['model']; ?>" class="text " style="width: 300px"> <span class="model_suggestion" style="display:none; font-style: italic">Please begin typing a model/trim to see auto-complete suggestions.</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+
+                    <?php if ($id > 0): ?>
+                    <tr>
+                        <td style="width:50px;"><b>Title:</b></td>
+                        <td>
+                            <input id="name" name="title" placeholder="Enter Title" class="text large ttl" value="<?php echo $product['title']==''?$_POST['title']:$product['title']; ?>"  />
+                        </td>
+                    </tr>
+                    <?php endif; ?>
                     <tr>
                         <td style="width:50px;"><b>Active:</b></td>
                         <td>
@@ -74,22 +112,12 @@ $cstdata = (array) json_decode($product['data']);
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:50px;"><b>Category:</b></td>
+                        <td style="width:50px;"><b>Category:*</b></td>
                         <td>
-							<input type="text" name="category" value="<?php echo $product['name']==''?$_POST['category']:$product['name']; ?>" class="text small">
+							<input type="text" name="category" value="<?php echo $product['name']==''?$_POST['category']:$product['name']; ?>" class="text small"> <?php if ($id == 0): ?><span class="categorymessage">Please begin typing a category to see auto-complete suggestions.</span><?php endif; ?>
                         </td>
                     </tr>
-                    <tr>
-                        <td style="width:50px;"><b>Vehicle:</b></td>
-                        <td>
-							<select name="vehicle_type" class="small-hndr" style="border-radius:0;">
-							<option value="">Select Vehicle</option>
-							<?php foreach( $vehicles as $v ) { ?>
-								<option value="<?php echo $v['id'];?>" <?php if($product['vehicle_type'] == $v['id']) { echo "selected"; }else if($_POST['vehicle_type']==$v['id']){echo "selected";} ?>><?php echo $v['name'];?></option>
-							<?php } ?>
-							</select>
-                        </td>
-                    </tr>
+
                     <tr>
                         <td style="width:50px;"><b>Condition:</b></td>
                         <td>
@@ -100,37 +128,12 @@ $cstdata = (array) json_decode($product['data']);
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:50px;"><b>SKU:</b></td>
+                        <td style="width:50px;"><b>SKU:*</b></td>
                         <td>
                             <input type="text" name="sku" value="<?php echo $product['sku']==''?$_POST['sku']:$product['sku']; ?>" class="text small small-hndr">
                         </td>
                     </tr>
-                    <tr>
-						<td colspan="2">
-							<table width="100%" class="inr">
-								<tr>
-									<td class="min-wdh"><b>Year:</b></td>
-									<td class="inr-td scnd mx-wdt">
-										<input type="number" min="1900" name="year" value="<?php echo $product['year']==''?$_POST['year']:$product['year']; ?>" class="text small small-hndr frst ttl-1">
-									</td>
-									<td style="width:45px" class="min-wdh"><b>Make:</b></td>
-									<td class="inr-td scnd small-input">
-										<input type="text" name="make" value="<?php echo $product['make']==''?$_POST['make']:$product['make']; ?>" class="text small ttl-1">
-									</td>
-									<td style="width:50px;" class="min-wdh"><b>model:</b></td>
-									<td class="inr-td scnd">
-										<input type="text" name="model" value="<?php echo $product['model']==''?$_POST['model']:$product['model']; ?>" class="text small ttl-1">
-									</td>
-								</tr>
-							</table>
-						</td>
-                    </tr>
-                    <tr>
-                        <td style="width:50px;"><b>Vin Number:</b></td>
-                        <td>
-                            <input type="text" name="vin_number" value="<?php echo $product['vin_number']==''?$_POST['vin_number']:$product['vin_number']; ?>" class="text small">
-                        </td>
-                    </tr>
+
                     <tr>
 						<td colspan="2">
 							<table width="100%" class="inr">
@@ -267,6 +270,335 @@ $cstdata = (array) json_decode($product['data']);
 .inr-td {width:200px;}
 </style>
 <script type="text/javascript">
+    var vehicleTypes = <?php echo json_encode($vehicles); ?>;
+    var autoVehicleType = 0;
+    var autoMake = "";
+    var autoModel = "";
+    var autoYear = "";
+    <?php if ($id == 0): ?>
+    var suppress_vin_decoder = false;
+
+    // If you change the VIN, you should ripple down all the effects...
+    $("input[name=vin_number]").on("change", function(e) {
+        var vin = $("input[name=vin_number]").val().trim();
+
+        if (!suppress_vin_decoder && (vin !== "")) {
+            // OK, get 'em
+            $.ajax({
+                "type" : "POST",
+                "dataType" : "json",
+                "url" : "<?php echo site_url("admin/ajax_motorcycle_vin_decoder"); ?>",
+                "data" : {
+                    vin: vin
+                },
+                "success" : function(data) {
+                    if (data.success) {
+                        var returnedTrims = data.data;
+
+                        // we should set all of these...
+                        if (returnedTrims.trim_id) {
+                            trimData[returnedTrims.display_name] = returnedTrims;
+
+                            for (var i = 0; i < vehicleTypes.length; i++) {
+                                if (vehicleTypes[i].crs_type == returnedTrims.machine_type) {
+                                    $("select[name='vehicle_type']").val(vehicleTypes[i].id);
+                                    autoVehicleType = vehicleTypes[i].id;
+                                }
+                            }
+
+                            autoYear = returnedTrims.year;
+                            $("input[name='year']").val(returnedTrims.year);
+                            autoMake = returnedTrims.make;
+                            $("input[name='make']").val(returnedTrims.make);
+                            autoModel = returnedTrims.display_name;
+                            $("input[name='model']").val(returnedTrims.display_name).change();
+                        }
+                    }
+                }
+            })
+
+        }
+    });
+
+
+    <?php else: ?>
+    var suppress_vin_decoder = true;
+    <?php endif; ?>
+
+
+    $("select[name='vehicle_type']").on("change", function(e) {
+        if ($("select[name='vehicle_type']").val() != autoVehicleType) {
+            suppress_vin_decoder = true;
+        }
+    });
+
+    function getQueryBasis() {
+        var year, vehicle_type, make;
+
+        try {
+            year = $("input[name=year]").val().trim();
+        } catch(err) {
+            year = "";
+        }
+
+        try {
+            vehicle_type = $("select[name=vehicle_type]").val().trim();
+        } catch(err) {
+            vehicle_type = "";
+        }
+
+        try {
+            make = $("input[name=make]").val().trim();
+        } catch(err) {
+            make = "";
+        }
+
+
+        // look, if they got nothing, they got nothing...
+        if (vehicle_type === "") {
+            return false;
+        }
+
+        // does this one have a thing for CRS?
+        // TODO: Special case for off road....
+        var crs_vehicle_type = "";
+        var offroad = null;
+        for (var i = 0; i < vehicleTypes.length; i++) {
+            if (parseInt(vehicleTypes[i].id, 10) === parseInt(vehicle_type, 10)) {
+                crs_vehicle_type = vehicleTypes[i].crs_type;
+                if (crs_vehicle_type == "MOT") {
+                    offroad = vehicleTypes[i].offroad;
+                }
+            }
+        }
+
+        if (crs_vehicle_type !== "") {
+            // OK, start to make your data.
+            var data = {
+                machine_type: crs_vehicle_type,
+                offroad: offroad
+            };
+            if (year !== "") {
+                data.year = year;
+            }
+            if (make !== "") {
+                data.make = make;
+            }
+            return data;
+        } else {
+            return false;
+        }
+    }
+
+    function filterArrayByTerm(source_array, term) {
+        var result_array = [];
+
+        var regex = new RegExp(term, "i");
+        for (var i = 0; i < source_array.length; i++) {
+            if (regex.exec(source_array[i])) {
+                result_array.push(source_array[i]);
+            }
+        }
+
+        return result_array;
+    }
+
+    $("input[name=year]").on("change", function(e) {
+        var year = $("input[name=year]").val();
+        if (year !== autoYear && year !== "") {
+            suppress_vin_decoder = true;
+        }
+        var error = false;
+        if (year && year !== "") {
+            year = parseInt(year, 10);
+            if (year < 1900) {
+                error = true;
+            }
+        }
+
+        if (error) {
+            $("#year-error").show();
+        } else {
+            $("#year-error").hide();
+        }
+
+        // If the other one is blank...we should tell them to do something about it..
+        if ("" == $("input[name=make]").val()) {
+            $(".make_suggestion").show();
+        } else {
+            $(".make_suggestion").hide();
+        }
+    });
+
+
+    var categories = <?php echo json_encode(array_map(function($x) {
+        return $x["name"];
+    }, $category)); ?>;
+    categories.sort();
+
+    $("input[name='category']").autocomplete({
+        minLength: 0,
+        source: categories
+    });
+
+    $("input[name='category']").on("focus", function(e) {
+        $("input[name='category']").autocomplete("search", $("input[name='category']").val());
+    });
+
+
+
+    $("input[name='make']").autocomplete({
+        minLength: 0,
+        source: function(request, response) {
+            var data = getQueryBasis();
+
+            console.log(["Found data in make query", data]);
+
+            if (data === false) {
+                response([]); // just bail out...
+            } else {
+                if (data.make) {
+                    delete(data.make);
+                }
+
+                var suggestion_array = [];
+                $.ajax({
+                    "type" : "POST",
+                    "dataType" : "json",
+                    "url" : "<?php echo site_url("admin/motorcycle_ajax_ac_make"); ?>",
+                    "data" : data,
+                    "success" : function(data) {
+                        if (data.success) {
+                            var returned_data = data.data;
+                            console.log(returned_data);
+                            for (var i = 0; i < returned_data.length; i++) {
+                                suggestion_array.push(returned_data[i].make);
+                            }
+                            suggestion_array = filterArrayByTerm(suggestion_array, request.term);
+                            suggestion_array.sort();
+                        }
+                    },
+                    "complete" : function() {
+                        $(".make_suggestion").hide();
+                        response(suggestion_array);
+                    }
+                })
+            }
+
+        }
+    });
+
+    $("input[name='make']").on("change", function(e) {
+        if ($("input[name='make']").val() != autoMake) {
+            suppress_vin_decoder = true;
+        }
+        if ("" == $("input[name=model]").val()) {
+            $(".model_suggestion").show();
+        } else {
+            $(".model_suggestion").hide();
+        }
+    });
+
+    $("input[name='make']").on("focus", function(e) {
+        $("input[name='make']").autocomplete("search", $("input[name='make']").val());
+    });
+
+    var trimData = {};
+
+    $("input[name='model']").autocomplete({
+        minLength: 0,
+        source: function(request, response) {
+            var data = getQueryBasis();
+
+            console.log(["Found data in model query", data]);
+
+            if (data === false) {
+                response([]); // just bail out...
+            } else {
+                var suggestion_array = [];
+                $.ajax({
+                    "type" : "POST",
+                    "dataType" : "json",
+                    "url" : "<?php echo site_url("admin/motorcycle_ajax_ac_model"); ?>",
+                    "data" : data,
+                    "success" : function(data) {
+                        if (data.success) {
+                            var returned_data = data.data;
+                            console.log(returned_data);
+                            trimData = {};
+                            for (var i = 0; i < returned_data.length; i++) {
+                                suggestion_array.push(returned_data[i].display_name);
+                                trimData[returned_data[i].display_name] = returned_data[i];
+                            }
+                            suggestion_array = filterArrayByTerm(suggestion_array, request.term);
+                            suggestion_array.sort();
+                        }
+                    },
+                    "complete" : function() {
+                        $(".model_suggestion").hide();
+                        response(suggestion_array);
+                    }
+                })
+            }
+        }
+    });
+
+
+    $("input[name='model']").on("focus", function(e) {
+        $("input[name='model']").autocomplete("search", $("input[name='model']").val());
+    });
+
+
+    $("input[name='model']").on("change", function(e) {
+        if ($("input[name='model']").val() != autoModel) {
+            suppress_vin_decoder = true;
+        }
+        // if it changes, and if it's in our look-up table, we have to auto-populate a few fields...
+        var model = $("input[name='model']").val();
+        if (trimData[model]) {
+            var m = trimData[model];
+            $("input[name='engine_type']").val(m.engine_type);
+            $("input[name='transmission']").val(m.transmission);
+            $("input[name='retail_price']").val(m.msrp);
+            $("input[name='destination_charge']").attr("checked", true);
+            $("input[name='crs_trim_id']").val(m.trim_id);
+            if (m.default_category) {
+                $("input[name='category']").val(m.default_category);
+            }
+        }
+    });
+
+    $("input[name='model']").on( "autocompleteclose", function( event, ui ) {
+        $("input[name='model']").change();
+    } );
+
+
+    $("form").on("submit", function(e) {
+       var error = false;
+
+       // do they have a sku?
+        var required_fields = ["vehicle_type", "make", "model", "year", "sku", "msrp"];
+
+        for (var i = 0; i < required_fields.length; i++) {
+            var $m = $("[name='" + required_fields[i]+ "']");
+            if ($m.length > 0) {
+                if ($m.val() == "") {
+                    error = true;
+                    alert("Please specify " + (required_fields[i].replace("_", " ")));
+                }
+            }
+        }
+
+       if (error) {
+           e.preventDefault();
+           e.stopPropagation();
+       }
+       return !error;
+    });
+
+
+    // This is probably all junk for assembling the title - we should just assemble it server-side and permit them to edit it.
+
 	$(document).on('keyup','.sm', function() {
 		var ttl = 0;
 		$('.sm').each(function() {

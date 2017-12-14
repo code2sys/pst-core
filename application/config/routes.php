@@ -70,6 +70,7 @@ $route['atv/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['utv/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['streetbike/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['dirtbike/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
+$route['off-road/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['watercraft/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['snowmobile/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
 $route['utility/(:any)/(:any)'] = 'motorcycle_ci/benzDetails/$1/$2';
