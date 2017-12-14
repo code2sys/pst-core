@@ -136,9 +136,6 @@ class Motorcycle_CI extends Welcome {
     public function filterMotorcycle() {
         $this->load->model('motorcycle_m');
         $curPage = intVal($this->input->post("page") ? $this->input->post("page") : 0);
-        if ($curPage > 0) {
-            $curPage = $curPage - 1;
-        }
         $offset = ($curPage * 6);
 
         $filter = $this->motorcycle_m->assembleFilterFromRequest(true);
