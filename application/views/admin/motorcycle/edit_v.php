@@ -295,7 +295,12 @@ $cstdata = (array) json_decode($product['data']);
                         if (returnedTrims.trim_id) {
                             trimData[returnedTrims.display_name] = returnedTrims;
 
-                            $("input[name='vehicle_type']").val(returnedTrims.machine_type);
+                            for (var i = 0; i < vehicleTypes.length; i++) {
+                                if (vehicleTypes[i].crs_type == returnedTrims.machine_type) {
+                                    $("select[name='vehicle_type']").val(vehicleTypes[i].id);
+                                }
+                            }
+
                             $("input[name='year']").val(returnedTrims.year);
                             $("input[name='make']").val(returnedTrims.make);
                             $("input[name='model']").val(returnedTrims.model).change();
