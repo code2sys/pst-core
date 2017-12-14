@@ -303,7 +303,7 @@ $cstdata = (array) json_decode($product['data']);
 
                             $("input[name='year']").val(returnedTrims.year);
                             $("input[name='make']").val(returnedTrims.make);
-                            $("input[name='model']").val(returnedTrims.model).change();
+                            $("input[name='model']").val(returnedTrims.display_name).change();
                         }
                     }
                 }
