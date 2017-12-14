@@ -148,7 +148,7 @@ class Motorcycle_CI extends Welcome {
 
         $total = $this->motorcycle_m->getTotal($filter);
         $motorcycles['pages'] = ceil($total / 6);
-        $motorcycles['page'] = $curPage;
+        $motorcycles['page'] = $curPage + 1;
 
         $filteredProducts = $this->load->view('benz_views/filter-product.php', $motorcycles, true);
         echo $filteredProducts;

@@ -279,7 +279,7 @@ echo $CI->load->view("braintree", array(
 				return $(this).val();
 			}).get();
 			var condition = "<?php echo $_GET['fltr'];?>";
-			//pg = parseInt(pg)-1;
+			pg = parseInt(pg)-1;
 			
 			var ajax_url = "<?php echo site_url('motorcycle_ci/filterMotorcycle');?>";
 			$.post( ajax_url, {'brands':brands,'years':years,'categories':categories,'vehicles':vehicles, 'condition':condition,'page':pg}, function( result ){
