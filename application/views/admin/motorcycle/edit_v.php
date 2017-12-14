@@ -362,16 +362,21 @@ $cstdata = (array) json_decode($product['data']);
         // does this one have a thing for CRS?
         // TODO: Special case for off road....
         var crs_vehicle_type = "";
+        var offroad = null;
         for (var i = 0; i < vehicleTypes.length; i++) {
             if (parseInt(vehicleTypes[i].id, 10) === parseInt(vehicle_type, 10)) {
                 crs_vehicle_type = vehicleTypes[i].crs_type;
+                if (crs_vehicle_type == "MOT") {
+                    offroad = vehicleTypes[i].offroad;
+                }
             }
         }
 
         if (crs_vehicle_type !== "") {
             // OK, start to make your data.
             var data = {
-                machine_type: crs_vehicle_type
+                machine_type: crs_vehicle_type,
+                offroad: offroad
             };
             if (year !== "") {
                 data.year = year;
