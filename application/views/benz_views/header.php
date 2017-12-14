@@ -65,6 +65,12 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 		});
 	});
 	</script>
+    <style>
+        .pager_spacer span {
+            background: #eee;
+            
+        }
+    </style>
 
     <?php echo jget_store_block("bottom_header"); ?>
 
