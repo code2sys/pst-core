@@ -362,11 +362,15 @@ $cstdata = (array) json_decode($product['data']);
         }
     });
 
+
+    var categories = <?php echo json_encode(array_map(function($x) {
+        return $x["name"];
+    }, $category)); ?>;
+    categories.sort();
+
     $("input[name='category']").autocomplete({
         minLength: 0,
-        source: <?php echo json_encode(array_map(function($x) {
-        return $x["name"];
-    }, $category)); ?>
+        source: categories
     });
 
     $("input[name='category']").on("focus", function(e) {
