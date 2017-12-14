@@ -69,7 +69,11 @@ class CRS_M extends Master_M
 
     // query the VIN...
     public function queryVin($vin_pattern) {
-        return $this->postRequest("decodeVin", array("vin" => $vin_pattern));
+        try {
+            return $this->postRequest("decodeVin", array("vin" => $vin_pattern));
+        } catch (Exception $e) {
+            return array();
+        }
     }
 
     protected function postRequest($function, $arguments = array(), $key = "")
@@ -85,7 +89,7 @@ class CRS_M extends Master_M
 
         //Process CRS into arrays.
         $crsFullData = json_decode($output, true);
-        if (array_key_exists("success", $crsFullData)) {
+        if (is_array($crsFullData) && array_key_exists("success", $crsFullData)) {
             if ($crsFullData["success"]) {
                 $data = $crsFullData["data"];
                 if ($key != "") {
