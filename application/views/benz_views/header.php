@@ -68,7 +68,13 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
     <style>
         .pager_spacer span {
             background: #eee;
-            
+            text-decoration: none;
+            color: #000;
+            padding: 9px 8px 5px;
+            font-size: 15px;
+            display: block;
+            margin: 0 2px;
+            line-height: normal;
         }
     </style>
 
