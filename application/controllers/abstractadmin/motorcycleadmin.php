@@ -234,6 +234,16 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->renderMasterPage('admin/master_v', 'admin/motorcycle/specs_v', $this->_mainData);
     }
 
+    public function ajax_motorcycle_vin_decoder() {
+        $vin = trim(array_key_exists("vin", $_REQUEST) ? $_REQUEST["vin"] : "");
+        if ($vin != "") {
+            $this->load->model("CRS_m");
+            $this->_printAjaxSuccess($this->CRS_m->queryVin($vin));
+        } else {
+            $this->_printAjaxError("No VIN received.");
+        }
+    }
+
     // OK, you can remove a spec
     public function ajax_motorcycle_spec_remove($motorcycle_id, $motorcyclespec_id) {
         $this->db->query("Update motorcyclespec set hidden = 1 where motorcycle_id = ? and motorcyclespec_id = ?", array($motorcycle_id, $motorcyclespec_id));

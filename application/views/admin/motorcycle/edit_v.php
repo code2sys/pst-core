@@ -271,6 +271,48 @@ $cstdata = (array) json_decode($product['data']);
 </style>
 <script type="text/javascript">
     var vehicleTypes = <?php echo json_encode($vehicles); ?>;
+    <?php if ($id == 0): ?>
+    var suppress_vin_decoder = false;
+
+    // If you change the VIN, you should ripple down all the effects...
+    $("input[name=vin_number]").on("change", function(e) {
+        var vin = $("input[name=vin_number]").val().trim();
+
+        if (!suppress_vin_decoder && (vin !== "")) {
+            // OK, get 'em
+            $.ajax({
+                "type" : "POST",
+                "dataType" : "json",
+                "url" : "<?php echo site_url("admin/ajax_motorcycle_vin_decoder"); ?>",
+                "data" : {
+                    vin: vin
+                },
+                "success" : function(data) {
+                    if (data.success) {
+                        var returnedTrims = data.data;
+
+                        // we should set all of these...
+                        if (returnedTrims.length > 0) {
+                            for (var i = 0; i < returnedTrims.length; i++) {
+                                trimData[returnedTrims[i].display_name] = returnedTrims[i];
+                            }
+
+                            $("input[name='vehicle_type']").val(returnedTrims[0].machine_type);
+                            $("input[name='year']").val(returnedTrims[0].year);
+                            $("input[name='make']").val(returnedTrims[0].make);
+                            $("input[name='model']").val(returnedTrims[0].model).change();
+                        }
+                    }
+                }
+            })
+
+        }
+    });
+
+
+    <?php else: ?>
+    var suppress_vin_decoder = true;
+    <?php endif; ?>
 
     function getQueryBasis() {
         var year, vehicle_type, make;
@@ -339,6 +381,7 @@ $cstdata = (array) json_decode($product['data']);
     }
 
     $("input[name=year]").on("change", function(e) {
+        suppress_vin_decoder = true;
         var year = $("input[name=year]").val();
         var error = false;
         if (year && year !== "") {
@@ -421,6 +464,7 @@ $cstdata = (array) json_decode($product['data']);
     });
 
     $("input[name='make']").on("change", function(e) {
+        suppress_vin_decoder = true;
         if ("" == $("input[name=model]").val()) {
             $(".model_suggestion").show();
         } else {
@@ -479,6 +523,7 @@ $cstdata = (array) json_decode($product['data']);
 
 
     $("input[name='model']").on("change", function(e) {
+        suppress_vin_decoder = true;
         // if it changes, and if it's in our look-up table, we have to auto-populate a few fields...
         var model = $("input[name='model']").val();
         if (trimData[model]) {
