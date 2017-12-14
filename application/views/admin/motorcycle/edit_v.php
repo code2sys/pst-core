@@ -292,15 +292,13 @@ $cstdata = (array) json_decode($product['data']);
                         var returnedTrims = data.data;
 
                         // we should set all of these...
-                        if (returnedTrims.length > 0) {
-                            for (var i = 0; i < returnedTrims.length; i++) {
-                                trimData[returnedTrims[i].display_name] = returnedTrims[i];
-                            }
+                        if (returnedTrims.trim_id) {
+                            trimData[returnedTrims.display_name] = returnedTrims;
 
-                            $("input[name='vehicle_type']").val(returnedTrims[0].machine_type);
-                            $("input[name='year']").val(returnedTrims[0].year);
-                            $("input[name='make']").val(returnedTrims[0].make);
-                            $("input[name='model']").val(returnedTrims[0].model).change();
+                            $("input[name='vehicle_type']").val(returnedTrims.machine_type);
+                            $("input[name='year']").val(returnedTrims.year);
+                            $("input[name='make']").val(returnedTrims.make);
+                            $("input[name='model']").val(returnedTrims.model).change();
                         }
                     }
                 }
