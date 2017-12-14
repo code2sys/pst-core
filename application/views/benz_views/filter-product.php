@@ -167,17 +167,17 @@ if (@$motorcycles) {
             <?php if ($page > 1): ?>
                 <li class=" pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page - 1; ?>">← Previous</a></li>
 
-                <?php if ($page > 1): ?>
+                <?php if ($page > 2): ?>
 
-                    <?php if ($page > 2): ?>
+                    <?php if ($page > 3): ?>
                         <li class="pager_spacer">&horbar;</li>
                     <?php endif; ?>
 
-                    <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 1; ?>"><?php echo $page - 2; ?></a></li>
+                    <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page - 2; ?>"><?php echo $page - 2; ?></a></li>
 
                 <?php endif; ?>
 
-                <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 1; ?>"><?php echo $page - 1; ?></a></li>
+                <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page - 1; ?>"><?php echo $page - 1; ?></a></li>
             <?php endif; ?>
 
             <li class="active pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page; ?>"><?php echo $page; ?></a></li>
