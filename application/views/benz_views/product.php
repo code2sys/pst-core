@@ -265,7 +265,7 @@ $media_url = jsite_url("/media/");
                                         <?php if ($page > 2): ?>
 
                                             <?php if ($page > 3): ?>
-                                            <li class="pager_spacer"><span>&horbar;</span></li>
+                                            <li class="pager_spacer"><span>&hellip;</span></li>
 
                                         <?php endif; ?>
 
@@ -286,7 +286,7 @@ $media_url = jsite_url("/media/");
                                         <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 2; ?>"><?php echo $page + 2; ?></a></li>
 
                                         <?php if ($page < $pages - 2): ?>
-                                            <li class="pager_spacer"><span>&horbar;</span></li>
+                                            <li class="pager_spacer"><span>&hellip;</span></li>
 
                                         <?php endif; ?>
 
