@@ -475,4 +475,8 @@ unset($motorcycle['videos'][0]);
         display: block;
         height: 60px;
     }
+    #image-gallery li {
+        background-color: white;
+    }
+
 </style>
