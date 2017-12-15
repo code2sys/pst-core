@@ -105,9 +105,8 @@ $media_url = jsite_url("/media/");
                     }
                     ?>
                     <div class="mid-r">
-                        <?php $title = str_replace(' ', '_', trim($motorcycle['title'])); ?>
                         <span class="blok"><?php //echo preg_replace('/[^A-Za-z0-9\-]/', '', $title); ?></span>
-                        <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $title . '/' . $motorcycle['sku']); ?>">
+                        <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']); ?>">
                             <div class="mid-r-img">
                                 <div class="mid-r-logo">
                                         <!--<img src="<?php echo $new_assets_url; ?>images/imgpsh_fullsize (6).png" width="152px;"/>-->
@@ -164,7 +163,7 @@ $media_url = jsite_url("/media/");
                                     }
                                     echo GET_FINANCING_WORDING;
                                     ?></span></a>
-                            <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $title . '/' . $motorcycle['sku']); ?>"><img src="<?php echo $new_assets_url; ?>images/list.png" width="15px" height="20px;"/>VIEW DETAILS</a>
+                            <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']); ?>"><img src="<?php echo $new_assets_url; ?>images/list.png" width="15px" height="20px;"/>VIEW DETAILS</a>
                         </div>
                     </div>
 

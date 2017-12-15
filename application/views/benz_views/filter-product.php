@@ -16,8 +16,7 @@ if (@$motorcycles) {
 
         ?>
         <div class="mid-r">
-        <?php $title = str_replace(' ', '_', trim($motorcycle['title'])); ?>
-            <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $title . '/' . $motorcycle['sku']); ?>">
+            <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']); ?>">
                 <div class="mid-r-img">
                     <div class="mid-r-logo">
                             <!--<img src="<?php echo $new_assets_url; ?>images/imgpsh_fullsize (6).png" width="152px;"/>-->
@@ -75,7 +74,7 @@ if (@$motorcycles) {
                         }
                         echo GET_FINANCING_WORDING;
                         ?></span></a>
-                <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $title . '/' . $motorcycle['sku']); ?>"><img src="<?php echo $new_assets_url; ?>images/list.png" width="15px" height="20px;"/>VIEW DETAILS</a>
+                <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $motorcyle['url_title'] . '/' . $motorcycle['sku']); ?>"><img src="<?php echo $new_assets_url; ?>images/list.png" width="15px" height="20px;"/>VIEW DETAILS</a>
             </div>
         </div>
 

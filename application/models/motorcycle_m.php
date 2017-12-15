@@ -319,8 +319,10 @@ class Motorcycle_M extends Master_M {
         return $record['cnt'];
     }
 
+    // JLB 12-15-17
+    // This is the URL title.
     public function getMotorcycleIdByTitle( $title ) {
-        $where = array('trim(title)' => $title);
+        $where = array('trim(url_title)' => $title);
         $this->db->select('id');
         $record = $this->selectRecord('motorcycle', $where);
         return $record['id'];
