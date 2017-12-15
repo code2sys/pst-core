@@ -463,3 +463,16 @@ unset($motorcycle['videos'][0]);
 
 <?php //include('footer.php'); ?>
 	
+<style>
+    .lSSlideOuter .lSPager.lSGallery img {
+        display: block;
+        height: auto;
+        width: 100%;
+        max-height: 60px;
+    }
+
+    .lSSlideOuter .lSPager.lSGallery a {
+        display: block;
+        height: 60px;
+    }
+</style>
