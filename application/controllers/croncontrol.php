@@ -348,6 +348,19 @@ class CronControl extends Master_Controller {
 	    $this->load->model("CRSCron_m");
 	    $this->CRSCron_m->refreshCRSData();
     }
+
+    /*
+     * JLB Added these for Lightspeed
+     */
+    public function getLightspeedUnitsXML() {
+        $this->load->model("Lightspeed_m");
+        $this->Lightspeed_m->get_units_xml();
+    }
+    public function getLightspeedPartsXML() {
+        $this->load->model("Lightspeed_m");
+        $this->Lightspeed_m->get_parts_xml();
+    }
+
 }
 
 /* End of file croncontrol.php */
