@@ -40,9 +40,13 @@ class Lightspeed_M extends Master_M {
     }
 
     public function get_major_units() {
+        print "A\n";
         $string = "Dealer";
+        print "B\n";
         $call = $this->call($string);
+        print "C\n";
         $dealers = json_decode($call);
+        print "D\n";
 
         if($dealers == NULL) {
             throw new \Exception("An error occurred and no data was received from Lightspeed. Possible cause: incorrect Lightspeed username or password.");
