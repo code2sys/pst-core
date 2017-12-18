@@ -59,6 +59,8 @@ class Lightspeed_M extends Master_M {
             $call = $this->call($string);
             $bikes = json_decode($call);
 
+            print_r($bikes);
+
             foreach($bikes as $bike) {
                 $bike->NewUsed = ($bike->NewUsed=="U")?2:1;
                 $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . $bike->Model . ($bike->CodeName != "" ? " " . $bike->CodeName : "") . ($bike->Color != "" ? " " . $bike->Color : "");
