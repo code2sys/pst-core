@@ -84,7 +84,8 @@ $media_url = jsite_url("/media/");
             $CI =& get_instance();
             echo $CI->load->view("benz_views/recently_viewed", array(
                 "subclass" => "search-one flat fit-none",
-                "innersubclass" => "search-one fit-none"
+                "innersubclass" => "search-one fit-none",
+                "recentlyMotorcycle" => $recentlyMotorcycle
             ), true);
             ?>
 
@@ -250,7 +251,8 @@ $media_url = jsite_url("/media/");
                 echo $CI->load->view("benz_views/recently_viewed", array(
                     "master_class" => "fltrbar search-two my-wdt",
                     "subclass" => "",
-                    "innersubclass" => ""
+                    "innersubclass" => "",
+                    "recentlyMotorcycle" => $recentlyMotorcycle
                 ), true);
                 ?>
                 <div class="mypagination">
