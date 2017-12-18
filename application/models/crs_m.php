@@ -76,6 +76,14 @@ class CRS_M extends Master_M
         }
     }
 
+    public function bestTryDecodeVin($VIN, $Make, $ModelYear) {
+        try {
+            return $this->postRequest("bestTryDecodeVin", array("vin" => $VIN, "make" => $Make, "year" => $ModelYear));
+        } catch (Exception $e) {
+            return array();
+        }
+    }
+
     protected function postRequest($function, $arguments = array(), $key = "")
     {
         //get the CRS webform data

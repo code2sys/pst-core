@@ -225,7 +225,11 @@ class Lightspeed_M extends Master_M {
                 if (!array_key_exists("trim_id", $vin_match)) {
                     $vin_match = $CI->CRS_m->queryVin($bike->VIN, true);
                 }
-                
+
+                if (!array_key_exists("trim_id", $vin_match)) {
+                    $vin_match = $CI->CRS_m->bestTryDecodeVin($bike->VIN, $bike->Make, $bike->ModelYear);
+                }
+
                 if (!array_key_exists("trim_id", $vin_match)) {
                     // we have to attempt to match based on make, model, year...
 
