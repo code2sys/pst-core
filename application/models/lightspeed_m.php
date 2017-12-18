@@ -134,13 +134,34 @@ class Lightspeed_M extends Master_M {
                     "destination_charge" => ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
                     "lightspeed" => 1,
                     "lightspeed_flag" => 1,
-                    "source" => "Lightspeed"
+                    "source" => "Lightspeed",
+                    "status" => 1
+                );
+
+                $update_array = array(
+                    'lightspeed_dealerID' => $bike->DealerId,
+                    'sku' => $bike->StockNumber,
+                    'vin_number' => $bike->VIN,
+                    'lightspeed_location' => $bike->Location,
+                    'lightspeed_timestamp' => $ts,
+                    'mileage' => $bike->Odometer,
+                    'data' => $bike->data,
+                    'color' => $bike->Color,
+                    'sale_price' => $bike->WebPrice,
+                    'retail_price' => $bike->MSRP,
+                    'description' => $bike->WebDescription,
+                    'call_on_price' => $bike->WebPriceHidden,
+                    "destination_charge" => ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
+                    "lightspeed" => 1,
+                    "lightspeed_flag" => 1,
+                    "source" => "Lightspeed",
+                    "status" => 1
                 );
 
                 $results = $this->selectRecords('motorcycle', $where);
                 if($results) {
                     $where = array('sku' => $bike->StockNumber);
-                    $motorcycle = $this->updateRecord('motorcycle', $motorcycle_array, $where, FALSE);
+                    $motorcycle = $this->updateRecord('motorcycle', $update_array, $where, FALSE);
                     $valid_count++;
                 } else {
                     // we have to set some nulls. I think this is stupid, too.
