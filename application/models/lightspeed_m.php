@@ -146,6 +146,7 @@ class Lightspeed_M extends Master_M {
                 );
 
                 $bike->WebPrice = ($bike->WebPrice <= 0) ? $bike->MSRP : $bike->WebPrice;
+                $bike->Color = $this->cleanColors($bike->Color);
 
                 $motorcycle_array = array(
                     'lightspeed_dealerID' => $bike->DealerId,
