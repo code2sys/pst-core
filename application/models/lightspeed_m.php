@@ -23,6 +23,22 @@ class Lightspeed_M extends Master_M {
     private $store_url = '';
     private $boundary;
 
+    public function fetchMotorcycleCategory($category_name) {
+        $query = $this->db->query("Select * from motorcycle_category where name = ?", array($category_name));
+        $category_id = 0;
+        foreach ($query->result_array() as $row) {
+            $category_id = $row["id"];
+        }
+
+        if ($category_id == 0) {
+            // you have to insert it...
+            $this->db->query("Insert into motorcycle_category (name) values (?)", array($category_id));
+            $category_id = $this->db->insert_id();
+        }
+
+        return $category_id;
+    }
+
     public function get_major_units() {
         $string = "Dealer";
         $call = $this->call($string);
@@ -32,29 +48,33 @@ class Lightspeed_M extends Master_M {
             throw new \Exception("An error occurred and no data was received from Lightspeed. Possible cause: incorrect Lightspeed username or password.");
         }
 
+        $this->db->query("Update motorcycle set lightspeed_flag = 0");
+
+        $valid_count = 0;
+        $crs_trim_matches = 0;
+
         $ts = time();
         foreach($dealers as $dealer) {
-
-            echo "<br>Dealer id: " . $dealer->Cmf;
             $string = "Unit/".$dealer->Cmf;
             $call = $this->call($string);
-            var_dump($call);
             $bikes = json_decode($call);
-            echo "bikes: " . count($bikes);
 
             foreach($bikes as $bike) {
-
-                echo "<br>Bike:<br>";
                 $bike->NewUsed = ($bike->NewUsed=="U")?2:1;
-                $bike->WebTitle = ($bike->WebTitle!="")?$bike->WebTitle:$bike->ModelYear." ".$bike->Make." ".$bike->Model;
+                $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . $bike->Model . ($bike->CodeName != "" ? " " . $bike->CodeName : "") . ($bike->Color != "" ? " " . $bike->Color : "");
 
                 $data = array('total_cost' => $bike->totalCost, 'unit_cost' => $bike->totalCost, 'parts' => "", 'service' => "", 'auction_fee' => "", 'misc' => "");
                 $bike->data = json_encode($data);
 
-                $motorcycle_array = array('lightspeed_dealerID' => $bike->DealerId,
+                $where = array(
+                    "sku" => $bike->StockNumber
+                );
+
+                $motorcycle_array = array(
+                    'lightspeed_dealerID' => $bike->DealerId,
                     'sku' => $bike->StockNumber,
                     'condition' => $bike->NewUsed,
-                    'category' => "8",
+                    'category' => $this->fetchMotorcycleCategory($bike->UnitType), // TODO
                     'year' => $bike->ModelYear,
                     'make' => $bike->Make,
                     'model' => $bike->Model,
@@ -68,28 +88,42 @@ class Lightspeed_M extends Master_M {
                     'retail_price' => $bike->MSRP,
                     'description' => $bike->WebDescription,
                     'call_on_price' => $bike->WebPriceHidden,
-                    'title' => $bike->WebTitle );
+                    'title' => $bike->WebTitle,
+                    "destination_charge" => ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
+                    "lightspeed" => 1,
+                    "lightspeed_flag" => 1
+                );
 
 
                 $results = $this->selectRecords('motorcycle', $where);
                 if($results) {
-
-                    echo "Unit found!<br>";
                     $where = array('sku' => $bike->StockNumber);
                     $motorcycle = $this->updateRecord('motorcycle', $motorcycle_array, $where, FALSE);
-
+                    $valid_count++;
                 } else {
-
-                    var_dump($motorcycle_array);
                     $motorcycle = $this->createRecord('motorcycle', $motorcycle_array, FALSE);
+                    $valid_count++;
                 }
+
+                // Now, what is the ID for this motorcycle?
+
+                // Does this motorcycle have a zero group or a general group of settings? We need to be able to flag the settings group that comes from Lightspeed in some way...
+
+                // Finally, we need to optionally stick in the settings if they exist into this spec table...
+
+                // At last, we should attempt to look up the trim of this by CRS and, if there is one, set the trim ID
+
             }
-            echo "<br>********************";
 
         }
 
-        $where = array('lightspeed_timestamp != ' => $ts);
-        $this->deleteRecord('motorcycle', $where, FALSE);
+        if ($valid_count > 0) {
+            $this->db->query("Delete from motorcycle where lightspeed = 1 and lightspeed_flag = 0");
+        }
+
+        if ($crs_trim_matches > 0) {
+            // we should request the CRS data be refreshed.
+        }
 
     }
 
@@ -332,7 +366,7 @@ class Lightspeed_M extends Master_M {
         if( ( !$cred = $query->result_array() ) || $cred[0]['lightspeed_username'] == "" || $cred[0]['lightspeed_password'] == "" ) {
             if ($die_on_error) {
                 // HKofModesto
-                die("Lightspeed credentials not found.");
+                throw new Exception("Lightspeed credentials not found.");
             }
         }
 

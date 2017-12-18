@@ -51,7 +51,7 @@
                     <?php else: ?>
                         <tr>
                             <td><button type="button" name="get_lightspeed_feed" value="" onClick="window.location.href = '<?php echo base_url('admin_content/get_lightspeed_feed/'); ?>'; return false;">Request Lightspeed Feed</button></td>
-                            <td>Status : <?php echo isset($lightspeed_feeds['status']) && $lightspeed_feeds['status'] == 1 ? 'Completed' : 'Processing'; ?></td>
+                            <td>Status : <?php echo isset($lightspeed_feeds['status']) ? ($lightspeed_feeds['status'] == 2 ? 'Completed' : ($lightspeed_feeds['status'] == 1 ?'Processing' : 'Queued')) : "Idle"; ?></td>
                             <td>Last Run : <?php echo isset($lightspeed_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($lightspeed_feeds['run_at'])) : ''; ?></td>
                             <?php if ($lightspeed_major_unit_count > 0): ?>
                                 <td>Lightspeed Major Unit Count: <?php echo number_format($lightspeed_major_unit_count, 0); ?></td>
