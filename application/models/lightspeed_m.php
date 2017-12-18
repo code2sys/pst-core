@@ -100,7 +100,7 @@ class Lightspeed_M extends Master_M {
 
             foreach($bikes as $bike) {
                 $bike->NewUsed = ($bike->NewUsed=="U")?2:1;
-                $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . $bike->Model . ($bike->CodeName != "" ? " " . $bike->CodeName : "") . ($bike->Color != "" ? " " . $bike->Color : "");
+                $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . $bike->Model . ($bike->Color != "" ? " " . $bike->Color : "");
 
                 $data = array('total_cost' => $bike->totalCost, 'unit_cost' => $bike->totalCost, 'parts' => "", 'service' => "", 'auction_fee' => "", 'misc' => "");
                 $bike->data = json_encode($data);
@@ -199,7 +199,12 @@ class Lightspeed_M extends Master_M {
 
                 foreach ($matches as $match) {
                     if (!$exact_match) {
-                        if (strtolower($match["model"]) == strtolower($bike->Model) || strtolower($match["display_name"]) == strtolower($bike->Model) || preg_replace("/[^a-z0-9]/i", "", strtolower($match["model"])) == preg_replace("/[^a-z0-9]/i", "", strtolower($bike->Model)) ) {
+                        if (
+                            strtolower($match["model"]) == strtolower($bike->Model) ||
+                            strtolower($match["display_name"]) == strtolower($bike->Model) ||
+                            preg_replace("/[^a-z0-9]/i", "", strtolower($match["model"])) == preg_replace("/[^a-z0-9]/i", "", strtolower($bike->Model)) ||
+                            ($bike->CodeName != '' &&  preg_replace("/[^a-z0-9]/i", "", strtolower($match["display_name"])) == preg_replace("/[^a-z0-9]/i", "", strtolower($bike->CodeName)) )
+                        ) {
                             $exact_match = true;
                             $vin_match = $match;
                         }
