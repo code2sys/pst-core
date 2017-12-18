@@ -331,8 +331,15 @@ class Lightspeed_M extends Master_M {
         if( ( !$cred = $query->result_array() ) || $cred[0]['lightspeed_username'] == "" || $cred[0]['lightspeed_password'] == "" )
             die("Lightspeed credentials not found.");
 
-        $this->cred['Setting']['user']  = $cred[0]['lightspeed_username'];
-        $this->cred['Setting']['pass']  = $cred[0]['lightspeed_password'];
+        $this->cred['Setting']['user']  = trim($cred[0]['lightspeed_username']);
+        $this->cred['Setting']['pass']  = trim($cred[0]['lightspeed_password']);
+    }
 
+    public function getCredentials() {
+        $this->credentials();
+        return array(
+            "user" => $this->cred['Setting']['user'],
+            "pass" => $this->cred['Setting']['pass']
+        );
     }
 }
