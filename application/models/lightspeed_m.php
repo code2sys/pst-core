@@ -100,13 +100,16 @@ class Lightspeed_M extends Master_M {
                     "lightspeed_flag" => 1
                 );
 
+                print_r($motorcycle_array);
 
                 $results = $this->selectRecords('motorcycle', $where);
                 if($results) {
+                    print "Updating record\n";
                     $where = array('sku' => $bike->StockNumber);
                     $motorcycle = $this->updateRecord('motorcycle', $motorcycle_array, $where, FALSE);
                     $valid_count++;
                 } else {
+                    print "Creating record \n";
                     $motorcycle = $this->createRecord('motorcycle', $motorcycle_array, FALSE);
                     $valid_count++;
                 }
