@@ -109,6 +109,14 @@ class Lightspeed_M extends Master_M {
                     $motorcycle = $this->updateRecord('motorcycle', $motorcycle_array, $where, FALSE);
                     $valid_count++;
                 } else {
+                    // we have to set some nulls. I think this is stupid, too.
+                    $motorcycle_array["engine_type"] = "";
+                    $motorcycle_array["transmission"] = "";
+                    $motorcycle_array["margin"] = round(($bike->WebPrice - $bike->InvoiceAmt) / $bike->WebPrice, 2);
+                    $motorcycle_array["profit"] = $bike->WebPrice - $bike->InvoiceAmt;
+                    $motorcycle_array["craigslist_feed_status"] = 0;
+                    $motorcycle_array["cycletrader_feed_status"] = 0;
+
                     print "Creating record \n";
                     $motorcycle = $this->createRecord('motorcycle', $motorcycle_array, FALSE);
                     $valid_count++;
