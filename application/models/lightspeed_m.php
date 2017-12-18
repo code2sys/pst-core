@@ -23,6 +23,34 @@ class Lightspeed_M extends Master_M {
     private $store_url = '';
     private $boundary;
 
+    public function fetchMotorcycleType($category_name) {
+        // JLB: Invariably, we are going to have to do something about these..
+        $lookup_table = array(
+            "MOTORCYCLE" => "Street Bike"
+        );
+
+        if (array_key_exists($category_name, $lookup_table)) {
+            $category_name = $lookup_table[$category_name];
+        } else {
+            print "NEW UNIT TYPE: $category_name \n";
+        }
+
+        $query = $this->db->query("Select * from motorcycle_type where name = ?", array($category_name));
+        $category_id = 0;
+        foreach ($query->result_array() as $row) {
+            $category_id = $row["id"];
+        }
+
+        if ($category_id == 0) {
+            return $this->fetchMotorcycleType("Street Bike"); // just go with it...
+            // you have to insert it...
+            $this->db->query("Insert into motorcycle_type (name) values (?)", array($category_name));
+            $category_id = $this->db->insert_id();
+        }
+
+        return $category_id;
+    }
+
     public function fetchMotorcycleCategory($category_name) {
         $query = $this->db->query("Select * from motorcycle_category where name = ?", array($category_name));
         $category_id = 0;
@@ -82,6 +110,7 @@ class Lightspeed_M extends Master_M {
                     'lightspeed_dealerID' => $bike->DealerId,
                     'sku' => $bike->StockNumber,
                     'condition' => $bike->NewUsed,
+                    "vehicle_type" => $this->fetchMotorcycleType($bike->UnitType),
                     'category' => $this->fetchMotorcycleCategory($bike->UnitType), // TODO
                     'year' => $bike->ModelYear,
                     'make' => $bike->Make,
@@ -130,7 +159,7 @@ class Lightspeed_M extends Master_M {
 
                 // Finally, we need to optionally stick in the settings if they exist into this spec table...
 
-                // At last, we should attempt to look up the trim of this by CRS and, if there is one, set the trim ID
+                // At last, we should attempt to look up the trim of this by CRS and, if there is one, set the trim ID. We may also adjust the category and type if we get a match...
 
             }
 
