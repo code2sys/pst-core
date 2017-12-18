@@ -53,7 +53,7 @@ class CronJobHourly extends AbstractCronJob
                 print "5\n";
                 try {
                     print "6\n";
-                    $this->load->model("lightspeed_feed_log");
+                    $this->load->model("Lightspeed_m");
                     print "7\n";
                     $this->Lightspeed_m->get_major_units(); // that should fetch all those things, great.
                 } catch (Exception $e) {
