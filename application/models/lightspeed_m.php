@@ -185,6 +185,32 @@ class Lightspeed_M extends Master_M {
                 // Now, what is the ID for this motorcycle?
                 $vin_match = $CI->CRS_m->queryVin($bike->VIN);
 
+                if (!array_key_exists("trim_id", $vin_match)) {
+                    // we have to attempt to match based on make, model, year...
+                }
+
+                // do we try based on trim or display name if that fails?
+                $matches = $CI->CRS_m->getTrims(array(
+                    "year" => $bike->ModelYear,
+                    "make" => $bike->Make
+                ));
+
+                $exact_match = false;
+
+                foreach ($matches as $match) {
+                    if (!$exact_match) {
+                        if (strtolower($match["model"]) == strtolower($bike->Model) || strtolower($match["display_name"]) == strtolower($bike->Model) || preg_replace("/[^a-z0-9]/i", "", strtolower($match["model"])) == preg_replace("/[^a-z0-9]/i", "", strtolower($bike->Model)) ) {
+                            $exact_match = true;
+                            $vin_match = $match;
+                        }
+                    }
+                }
+
+                if (!$exact_match) {
+                    // do we try to do a close match?
+                }
+
+
                 if (array_key_exists("trim_id", $vin_match)) {
                     // we should definitely mark this
                     $this->db->query("Update motorcycle set crs_trim_id = ? where id = ? limit 1", array($vin_match["trim_id"], $motorcycle_id));
