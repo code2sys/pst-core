@@ -26,11 +26,15 @@ class Lightspeed_M extends Master_M {
     public function fetchMotorcycleType($category_name) {
         // JLB: Invariably, we are going to have to do something about these..
         $lookup_table = array(
-            "MOTORCYCLE" => "Street Bike"
+            "motorcycle" => "Street Bike",
+            "atv" => "ATV",
+            "utv" => "UTV",
+            "street bike" => "Street Bike",
+            "dirt" => "Off-Road"
         );
 
-        if (array_key_exists($category_name, $lookup_table)) {
-            $category_name = $lookup_table[$category_name];
+        if (array_key_exists(strtolower($category_name), $lookup_table)) {
+            $category_name = $lookup_table[strtolower($category_name)];
         } else {
             print "NEW UNIT TYPE: $category_name \n";
         }
