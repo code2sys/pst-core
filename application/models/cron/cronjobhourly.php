@@ -35,29 +35,40 @@ class CronJobHourly extends AbstractCronJob
 
     public function fixPendingLightspeed() {
 
+	    print "1\n";
+
         // JLB 12-18-17
         // Lightspeed, if you have it...
         if (defined('ENABLE_LIGHTSPEED') && ENABLE_LIGHTSPEED) {
+            print "2\n";
             $query = $this->db->query("select * from ebay_feed_log where run_by = 'admin' and status = 0");
             $results = $query->result_array();
 
+            print "3\n";
             if (count($results) > 0) {
+                print "4\n";
                 // OK, we should attempt to pull the major unit lightspeed parts..
                 $this->db->query("Update lightspeed_feed_log set status = 1, processing_start = now() where run_by = 'admin' and status = 0");
                 $error_string = "";
+                print "5\n";
                 try {
+                    print "6\n";
                     $this->load->model("lightspeed_feed_log");
+                    print "7\n";
                     $this->Lightspeed_m->get_major_units(); // that should fetch all those things, great.
                 } catch (Exception $e) {
                     $error_string = $e->getMessage();
+                    print "8\n";
                     if ($e->getMessage() != "Lightspeed credentials not found.") {
                         print "Lightspeed error: " . $e->getMessage() . "\n";
                     }
                 }
 
+                print "9\n";
                 $this->db->query("Update lightspeed_feed_log set status = 2, processing_end = now(), error_string = ? where run_by = 'admin' and status = 1", array($error_string));
             }
         }
+        print "10\n";
     }
 
 	public function fixPendingEBay() {
