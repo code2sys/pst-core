@@ -41,7 +41,7 @@ class CronJobHourly extends AbstractCronJob
         // Lightspeed, if you have it...
         if (defined('ENABLE_LIGHTSPEED') && ENABLE_LIGHTSPEED) {
             print "2\n";
-            $query = $this->db->query("select * from ebay_feed_log where run_by = 'admin' and status = 0");
+            $query = $this->db->query("select * from lightspeed_feed_log where run_by = 'admin' and status = 0");
             $results = $query->result_array();
 
             print "3\n";
