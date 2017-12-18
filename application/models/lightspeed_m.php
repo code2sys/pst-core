@@ -74,6 +74,42 @@ class Lightspeed_M extends Master_M {
         return $category_id;
     }
 
+    public function cleanColors($color) {
+        $lut = array(
+            "BK" => "Black",
+            "GN" => "Green",
+            "RE" => "Red",
+            "WTE" => "White",
+            "OR" => "Orange",
+            "GY" => "Gray",
+            "LIM" => "Lime",
+            "BL" => "Blue",
+            "GRY" => "Gray",
+            "WH" => "White",
+            "YW" => "Yellow",
+            "SIL" => "Silver",
+            "WHT" => "White",
+            "BE" => "Beige",
+            "BLU" => "Blue",
+            "CM GY" => "Camo Gray",
+            "KRT" => "Kawasaki Racing Team",
+            "SL" => "Silver",
+            "BLK" => "Black",
+            "CAMO" => "Camo",
+            "GN CAMO" => "Green Camo",
+            "TIT" => "Titanium",
+            "GRN" => "Green",
+            "RED" => "Red"
+        );
+
+        if (array_key_exists($color, $lut)) {
+            $color = $lut[$color];
+        } else {
+            print "UNRECOGNIZED COLOR: $color \n";
+        }
+        return $color;
+    }
+
     public function get_major_units() {
         $CI =& get_instance();
         $CI->load->model("CRS_m");
@@ -100,7 +136,7 @@ class Lightspeed_M extends Master_M {
 
             foreach($bikes as $bike) {
                 $bike->NewUsed = ($bike->NewUsed=="U")?2:1;
-                $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . $bike->Model . ($bike->Color != "" ? " " . $bike->Color : "");
+                $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . $bike->Model;
 
                 $data = array('total_cost' => $bike->totalCost, 'unit_cost' => $bike->totalCost, 'parts' => "", 'service' => "", 'auction_fee' => "", 'misc' => "");
                 $bike->data = json_encode($data);
