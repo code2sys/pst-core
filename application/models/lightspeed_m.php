@@ -32,8 +32,7 @@ class Lightspeed_M extends Master_M {
             "street bike" => "Street Bike",
             "dirt" => "Off-Road",
             "power equipment" => "Lawn and Garden",
-            "scooter" => "Scooter",
-            "ruv" => "RV"
+            "scooter" => "Scooter"
         );
 
         if (array_key_exists(strtolower($category_name), $lookup_table)) {
@@ -75,6 +74,10 @@ class Lightspeed_M extends Master_M {
     }
 
     public function get_major_units() {
+        $CI =& get_instance();
+        $CI->load->model("CRS_m");
+        $CI->load->model("CRSCron_M");
+
         $string = "Dealer";
         $call = $this->call($string);
         $dealers = json_decode($call);
@@ -150,9 +153,34 @@ class Lightspeed_M extends Master_M {
                     $valid_count++;
                 }
 
+                $motorcycle_id = 0;
+                $query = $this->db->query("Select id from motorcycle where sku = ?", array($motorcycle_array["sku"]));
+                foreach ($query->result_array() as $row) {
+                    $motorcycle_id = $row["id"];
+                }
+
                 // Now, what is the ID for this motorcycle?
+                $vin_match = $CI->CRS_m->queryVin($bike->VIN);
+
+                if (array_key_exists("trim_id", $vin_match)) {
+                    // we should definitely mark this
+                    $this->db->query("Update motorcycle set crs_trim_id = ? where id = ? limit 1", array($vin_match["trim_id"], $motorcycle_id));
+
+                    // what about the fields? transmission, engine_type,
+                    $this->db->query("Update motorcycle set transmission = ? where id = ? and (transmission = '' or transmission is null)", array($vin_match["transmission"], $motorcycle_id));
+                    $this->db->query("Update motorcycle set engine_type = ? where id = ? and (engine_type = '' or engine_type is null)", array($vin_match["engine_type"], $motorcycle_id));
+
+                    // We insert the thumbnail, too?
+                    if (array_key_exists("trim_photo", $vin_match) && $vin_match["trim_photo"] != "") {
+                        $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source, crs_thumbnail) values (?, ?, now(), ?, 1, 1, ?, 'PST', 1)", array($motorcycle_id, $vin_match["trim_photo"], 'Trim Photo: ' . $vin_match['display_name'], $vin_match["version_number"]));
+                    }
+
+                    // refresh it...
+                    $CI->CRSCron_M->refreshCRSData($motorcycle_id);
+                }
 
                 // Does this motorcycle have a zero group or a general group of settings? We need to be able to flag the settings group that comes from Lightspeed in some way...
+                
 
                 // Finally, we need to optionally stick in the settings if they exist into this spec table...
 
@@ -165,11 +193,6 @@ class Lightspeed_M extends Master_M {
         if ($valid_count > 0) {
             $this->db->query("Delete from motorcycle where lightspeed = 1 and lightspeed_flag = 0");
         }
-
-        if ($crs_trim_matches > 0) {
-            // we should request the CRS data be refreshed.
-        }
-
     }
 
     public function get_parts_xml() {
