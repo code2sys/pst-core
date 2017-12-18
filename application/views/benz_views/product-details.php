@@ -100,7 +100,7 @@ unset($motorcycle['videos'][0]);
 					<label>model :</label>
 					<span><?php echo $motorcycle['model'];?></span>
 				</div>
-                <?php if ($motorcycle['color'] != 'N/A'): ?>
+                <?php if ($motorcycle['color'] != 'N/A' && $motorcycle['color'] != ''): ?>
 				<div class="dtal-txt">
 					<label>color :</label>
 					<span><?php echo $motorcycle['color'];?></span>
@@ -117,14 +117,18 @@ unset($motorcycle['videos'][0]);
 						<span><?php echo $motorcycle['engine_hours'];?></span>
 					</div>
 				<?php } ?>
+                <?php if ($motorcycle['engine_type'] != ""): ?>
 				<div class="dtal-txt">
 					<label>Engine Type :</label>
 					<span><?php echo $motorcycle['engine_type'];?></span>
-				</div>				
+				</div>
+                <?php endif; ?>
+                <?php if ($motorcycle['transmission'] != ""): ?>
 				<div class="dtal-txt">
 					<label>transmission :</label>
 					<span><?php echo $motorcycle['transmission'];?></span>
-				</div>				
+				</div>
+                <?php endif; ?>
 				<!--<div class="dtal-txt">
 					<label>width :</label>
 					<span>32.1 In.</span>
