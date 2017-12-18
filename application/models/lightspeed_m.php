@@ -76,6 +76,8 @@ class Lightspeed_M extends Master_M {
                     "sku" => $bike->StockNumber
                 );
 
+                $bike->WebPrice = ($bike->WebPrice == 0) ? $bike->MSRP : $bike->WebPrice;
+
                 $motorcycle_array = array(
                     'lightspeed_dealerID' => $bike->DealerId,
                     'sku' => $bike->StockNumber,
