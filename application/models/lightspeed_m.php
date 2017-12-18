@@ -30,7 +30,10 @@ class Lightspeed_M extends Master_M {
             "atv" => "ATV",
             "utv" => "UTV",
             "street bike" => "Street Bike",
-            "dirt" => "Off-Road"
+            "dirt" => "Off-Road",
+            "power equipment" => "Lawn and Garden",
+            "scooter" => "Scooter",
+            "ruv" => "RV"
         );
 
         if (array_key_exists(strtolower($category_name), $lookup_table)) {
@@ -72,13 +75,9 @@ class Lightspeed_M extends Master_M {
     }
 
     public function get_major_units() {
-        print "A\n";
         $string = "Dealer";
-        print "B\n";
         $call = $this->call($string);
-        print "C\n";
         $dealers = json_decode($call);
-        print "D\n";
 
         if($dealers == NULL) {
             throw new \Exception("An error occurred and no data was received from Lightspeed. Possible cause: incorrect Lightspeed username or password.");
@@ -94,8 +93,6 @@ class Lightspeed_M extends Master_M {
             $string = "Unit/".$dealer->Cmf;
             $call = $this->call($string);
             $bikes = json_decode($call);
-
-            print_r($bikes);
 
             foreach($bikes as $bike) {
                 $bike->NewUsed = ($bike->NewUsed=="U")?2:1;
@@ -135,11 +132,8 @@ class Lightspeed_M extends Master_M {
                     "lightspeed_flag" => 1
                 );
 
-                print_r($motorcycle_array);
-
                 $results = $this->selectRecords('motorcycle', $where);
                 if($results) {
-                    print "Updating record\n";
                     $where = array('sku' => $bike->StockNumber);
                     $motorcycle = $this->updateRecord('motorcycle', $motorcycle_array, $where, FALSE);
                     $valid_count++;
@@ -152,7 +146,6 @@ class Lightspeed_M extends Master_M {
                     $motorcycle_array["craigslist_feed_status"] = 0;
                     $motorcycle_array["cycletrader_feed_status"] = 0;
 
-                    print "Creating record \n";
                     $motorcycle = $this->createRecord('motorcycle', $motorcycle_array, FALSE);
                     $valid_count++;
                 }
