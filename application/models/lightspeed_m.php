@@ -76,7 +76,7 @@ class Lightspeed_M extends Master_M {
                     "sku" => $bike->StockNumber
                 );
 
-                $bike->WebPrice = ($bike->WebPrice == 0) ? $bike->MSRP : $bike->WebPrice;
+                $bike->WebPrice = ($bike->WebPrice <= 0) ? $bike->MSRP : $bike->WebPrice;
 
                 $motorcycle_array = array(
                     'lightspeed_dealerID' => $bike->DealerId,
@@ -114,8 +114,8 @@ class Lightspeed_M extends Master_M {
                     // we have to set some nulls. I think this is stupid, too.
                     $motorcycle_array["engine_type"] = "";
                     $motorcycle_array["transmission"] = "";
-                    $motorcycle_array["margin"] = round(($bike->WebPrice - $bike->InvoiceAmt) / $bike->WebPrice, 2);
-                    $motorcycle_array["profit"] = $bike->WebPrice - $bike->InvoiceAmt;
+                    $motorcycle_array["margin"] = $bike->WebPrice > 0 ?  round(($bike->WebPrice - $bike->totalCost) / $bike->WebPrice, 2) : 0;
+                    $motorcycle_array["profit"] = $bike->WebPrice > 0 ? $bike->WebPrice - $bike->totalCost : 0;
                     $motorcycle_array["craigslist_feed_status"] = 0;
                     $motorcycle_array["cycletrader_feed_status"] = 0;
 
