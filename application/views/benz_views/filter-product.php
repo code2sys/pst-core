@@ -74,7 +74,7 @@ if (@$motorcycles) {
                         }
                         echo GET_FINANCING_WORDING;
                         ?></span></a>
-                <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $motorcyle['url_title'] . '/' . $motorcycle['sku']); ?>"><img src="<?php echo $new_assets_url; ?>images/list.png" width="15px" height="20px;"/>VIEW DETAILS</a>
+                <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']); ?>"><img src="<?php echo $new_assets_url; ?>images/list.png" width="15px" height="20px;"/>VIEW DETAILS</a>
             </div>
         </div>
 
