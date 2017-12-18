@@ -132,7 +132,8 @@ class Lightspeed_M extends Master_M {
                     'title' => $bike->WebTitle,
                     "destination_charge" => ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
                     "lightspeed" => 1,
-                    "lightspeed_flag" => 1
+                    "lightspeed_flag" => 1,
+                    "source" => "Lightspeed"
                 );
 
                 $results = $this->selectRecords('motorcycle', $where);
@@ -180,7 +181,7 @@ class Lightspeed_M extends Master_M {
                 }
 
                 // Does this motorcycle have a zero group or a general group of settings? We need to be able to flag the settings group that comes from Lightspeed in some way...
-                
+
 
                 // Finally, we need to optionally stick in the settings if they exist into this spec table...
 
