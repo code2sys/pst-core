@@ -68,9 +68,9 @@ class CRS_M extends Master_M
     }
 
     // query the VIN...
-    public function queryVin($vin_pattern) {
+    public function queryVin($vin_pattern, $fuzzy = false) {
         try {
-            return $this->postRequest("decodeVin", array("vin" => $vin_pattern));
+            return $this->postRequest($fuzzy ? "fuzzyDecodeVin" : "decodeVin", array("vin" => $vin_pattern));
         } catch (Exception $e) {
             return array();
         }

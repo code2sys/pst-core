@@ -223,27 +223,32 @@ class Lightspeed_M extends Master_M {
                 $vin_match = $CI->CRS_m->queryVin($bike->VIN);
 
                 if (!array_key_exists("trim_id", $vin_match)) {
-                    // we have to attempt to match based on make, model, year...
+                    $vin_match = $CI->CRS_m->queryVin($bike->VIN, true);
                 }
+                
+                if (!array_key_exists("trim_id", $vin_match)) {
+                    // we have to attempt to match based on make, model, year...
 
-                // do we try based on trim or display name if that fails?
-                $matches = $CI->CRS_m->getTrims(array(
-                    "year" => $bike->ModelYear,
-                    "make" => $bike->Make
-                ));
 
-                $exact_match = false;
+                    // do we try based on trim or display name if that fails?
+                    $matches = $CI->CRS_m->getTrims(array(
+                        "year" => $bike->ModelYear,
+                        "make" => $bike->Make
+                    ));
 
-                foreach ($matches as $match) {
-                    if (!$exact_match) {
-                        if (
-                            strtolower($match["model"]) == strtolower($bike->Model) ||
-                            strtolower($match["display_name"]) == strtolower($bike->Model) ||
-                            preg_replace("/[^a-z0-9]/i", "", strtolower($match["model"])) == preg_replace("/[^a-z0-9]/i", "", strtolower($bike->Model)) ||
-                            ($bike->CodeName != '' &&  preg_replace("/[^a-z0-9]/i", "", strtolower($match["display_name"])) == preg_replace("/[^a-z0-9]/i", "", strtolower($bike->CodeName)) )
-                        ) {
-                            $exact_match = true;
-                            $vin_match = $match;
+                    $exact_match = false;
+
+                    foreach ($matches as $match) {
+                        if (!$exact_match) {
+                            if (
+                                strtolower($match["model"]) == strtolower($bike->Model) ||
+                                strtolower($match["display_name"]) == strtolower($bike->Model) ||
+                                preg_replace("/[^a-z0-9]/i", "", strtolower($match["model"])) == preg_replace("/[^a-z0-9]/i", "", strtolower($bike->Model)) ||
+                                ($bike->CodeName != '' && preg_replace("/[^a-z0-9]/i", "", strtolower($match["display_name"])) == preg_replace("/[^a-z0-9]/i", "", strtolower($bike->CodeName)))
+                            ) {
+                                $exact_match = true;
+                                $vin_match = $match;
+                            }
                         }
                     }
                 }
