@@ -107,7 +107,7 @@ class Motorcycle_M extends Master_M {
         $this->db->join(' (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA', 'motorcycleimageA.motorcycle_id = motorcycle.id', 'left');
         $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number ', 'left');
         $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
-        $this->db->where(" motorcycle.status = 1 "); // JLB 12-18-17 Show only active ones...
+        $this->db->where("motorcycle.status", 1, false); // JLB 12-18-17 Show only active ones...
         $this->db->group_by('motorcycle.id');
         $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name  as type, motorcycleimage.external', FALSE);
         $this->db->limit($limit, $offset);
@@ -314,7 +314,7 @@ class Motorcycle_M extends Master_M {
         if (@$filter['vehicles']) {
             $this->db->where_in('motorcycle.vehicle_type', $filter['vehicles']);
         }
-        $this->db->where(" motorcycle.status = 1 ");
+        $this->db->where("motorcycle.status", 1, FALSE);
         $this->db->select('count(id) as cnt', FALSE);
         $this->db->limit('6');
         $record = $this->selectRecord('motorcycle', $where);
