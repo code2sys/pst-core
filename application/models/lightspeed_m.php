@@ -325,18 +325,23 @@ class Lightspeed_M extends Master_M {
      * @author Anik Goel
      */
 
-    private function credentials() {
+    private function credentials($die_on_error = true) {
         $sql = "SELECT lightspeed_username, lightspeed_password  FROM contact WHERE id = 1";
         $query = $this->db->query($sql);
-        if( ( !$cred = $query->result_array() ) || $cred[0]['lightspeed_username'] == "" || $cred[0]['lightspeed_password'] == "" )
-            die("Lightspeed credentials not found.");
+
+        if( ( !$cred = $query->result_array() ) || $cred[0]['lightspeed_username'] == "" || $cred[0]['lightspeed_password'] == "" ) {
+            if ($die_on_error) {
+                // HKofModesto
+                die("Lightspeed credentials not found.");
+            }
+        }
 
         $this->cred['Setting']['user']  = trim($cred[0]['lightspeed_username']);
         $this->cred['Setting']['pass']  = trim($cred[0]['lightspeed_password']);
     }
 
     public function getCredentials() {
-        $this->credentials();
+        $this->credentials(false);
         return array(
             "user" => $this->cred['Setting']['user'],
             "pass" => $this->cred['Setting']['pass']
