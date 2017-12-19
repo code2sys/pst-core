@@ -45,6 +45,24 @@ unset($motorcycle['videos'][0]);
 			<div class="col-md-8 col-xs-12 col-sm-7 pdig sect-sid">
 				<div class="clearfix" style="width:100%;">
 					<ul id="image-gallery" class="gallery list-unstyled cS-hidden">
+                        <?php
+                        // JLB 12-19-17
+                        // If we have > 1 image, and we have a CRS thumbnail image in the mix, we don't show that.
+                        if (count($motorcycle['images']) > 1) {
+                            $clean_images = array();
+
+                            foreach ($motorcycle['images'] as $img) {
+                                if (!($img['crs_thumbnail'] > 0)) {
+                                    $clean_images[] = $img;
+                                }
+                            }
+
+                            $motorcycle['images'] = $clean_images;
+                        }
+
+
+                        ?>
+
 						<?php foreach( $motorcycle['images'] as $image ) {
 
 						    $image_url = $image["image_name"];
