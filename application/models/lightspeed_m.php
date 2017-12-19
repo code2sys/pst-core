@@ -69,7 +69,7 @@ class Lightspeed_M extends Master_M {
 
         if ($category_id == 0) {
             // you have to insert it...
-            $this->db->query("Insert into motorcycle_category (name) values (?)", array($category_name));
+            $this->db->query("Insert into motorcycle_category (name) values (?)", array(ucwords($category_name)));
             $category_id = $this->db->insert_id();
         }
 

@@ -112,6 +112,9 @@ class CRSCron_M extends Master_M
             // get the photos...
             $photos = $CI->CRS_m->getTrimPhotos($trim_id, $version_number);
 
+            // skip it
+            $ordinal++;
+
             foreach ($photos as $p) {
                 $ordinal++;
                 // this needs to be inserted...
