@@ -31,12 +31,21 @@ $cstdata = (array) json_decode($product['data']);
         <div class="tab_content">
             <div class="hidden_table">
                 <table width="100%" cellpadding="6">
+                    <?php if ($id > 0): ?>
                     <tr>
                         <td style="width:50px;"><b>Vin Number:</b></td>
                         <td>
                             <input type="text" name="vin_number" value="<?php echo $product['vin_number']==''?$_POST['vin_number']:$product['vin_number']; ?>" class="text small">
                         </td>
                     </tr>
+                    <?php else: ?>
+                        <tr>
+                            <td style="width:50px;"><b>Vin Number:</b></td>
+                            <td>
+                                <input type="text" name="vin_number" value="<?php echo $product['vin_number']==''?$_POST['vin_number']:$product['vin_number']; ?>" class="text small"> <button type="button" id="query_vin">Search VIN</button> <span id="query_vin_failed" style="display: none; background: #fee; font-style: italic; font-weight: bold;">Sorry, no match by VIN.</span>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
                     <tr>
                         <td style="width:50px;"><b>Vehicle:*</b></td>
                         <td>
@@ -279,8 +288,11 @@ $cstdata = (array) json_decode($product['data']);
     var suppress_vin_decoder = false;
 
     // If you change the VIN, you should ripple down all the effects...
-    $("input[name=vin_number]").on("change", function(e) {
+    $("#query_vin").on("click", function(e) {
         var vin = $("input[name=vin_number]").val().trim();
+
+        // hack
+        suppress_vin_decoder = false;
 
         if (!suppress_vin_decoder && (vin !== "")) {
             // OK, get 'em
@@ -292,6 +304,7 @@ $cstdata = (array) json_decode($product['data']);
                     vin: vin
                 },
                 "success" : function(data) {
+                    var err = false;
                     if (data.success) {
                         var returnedTrims = data.data;
 
@@ -312,7 +325,17 @@ $cstdata = (array) json_decode($product['data']);
                             $("input[name='make']").val(returnedTrims.make);
                             autoModel = returnedTrims.display_name;
                             $("input[name='model']").val(returnedTrims.display_name).change();
+                        } else {
+                            err = true;
                         }
+                    } else {
+                        err = true;
+                    }
+
+                    if (err) {
+                        $("#query_vin_failed").show();
+                    } else {
+                        $("#query_vin_failed").hide();
                     }
                 }
             })
