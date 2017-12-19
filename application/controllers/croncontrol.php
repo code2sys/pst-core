@@ -70,6 +70,7 @@ class CronControl extends Master_Controller {
 	public function weekly()
 	{
 		$this->_runJob('weekly');
+		$this->refreshCRSData();
 	}
 
 	public function monthly()
@@ -117,6 +118,249 @@ class CronControl extends Master_Controller {
 		$this->load->model('parts_m');
 		$this->parts_m->closeoutReprisingSchedule();
 	}
+
+	protected $stock_moto_category_cache;
+	protected function _getStockMotoCategory($name = "Dealer") {
+
+	    if (!isset($this->stock_moto_category_cache) || !is_array($this->stock_moto_category_cache)) {
+	        $this->stock_moto_category_cache = array();
+        }
+
+        if (array_key_exists($name, $this->stock_moto_category_cache)) {
+	        return $this->stock_moto_category_cache[$name];
+        }
+
+        $query = $this->db->query("Select * from motorcycle_category where name = ?", array($name));
+        $id = 0;
+        foreach ($query->result_array() as $row) {
+            $id = $row["id"];
+        }
+
+        if ($id == 0) {
+            $this->db->query("Insert into motorcycle_category (name, date_added) values (?, now())", array($name));
+            $id = $this->db->insert_id();
+        }
+
+        $this->stock_moto_category_cache[$name] = $id;
+
+        return $id;
+    }
+
+    protected function _getMachineTypeMotoType($machine_type) {
+        $type_id = 0;
+        $query = $this->db->query("Select id from motorcycle_type where crs_type = ?", array($machine_type));
+        foreach ($query->result_array() as $row) {
+            $type_id = $row["id"];
+        }
+        return $type_id;
+    }
+
+    protected function SKUInUse($sku) {
+        $query = $this->db->query("select count(*) as cnt from motorcycle where sku = ?", array($sku));
+        return 0 < $query->result_array()[0]["cnt"];
+    }
+
+    protected function getNextCRSSKU() {
+        $query = $this->db->query("select count(*) as cnt from motorcycle where sku like 'D%';");
+        $count = $query->result_array()[0]["cnt"];
+
+        $count++;
+        while ($this->SKUInUse("D" . $count)) {
+            $count++;
+        }
+        return "D" . $count;
+    }
+
+	/*
+	 * The point of this one is to be able to request some specific information and then to load them.
+	 * Basically, you have some modes:
+	 * "C": Just gets the current ones
+	 * "N": Gets the new ones
+	 * "A": Adds them
+	 *
+	 */
+	public function addProductLine($machine_type, $make_id, $mode = "C", $starting_year = 0, $ending_year = 0) {
+        $this->load->model("CRS_m");
+
+        $uniqid = uniqid("");
+
+        if ($mode == "C") {
+            $matching_motorcycles = $this->CRS_m->getTrims(array(
+                "current" => true,
+                "make_id" => $make_id,
+                "machine_type" => $machine_type
+            ));
+
+
+        } else if ($starting_year > 0) {
+            if ($ending_year < $starting_year) {
+                $ending_year = $starting_year;
+            }
+
+            $matching_motorcycles = array();
+            for ($y = $starting_year; $y <= $ending_year; $y++) {
+                $matching_motorcycles = array_merge($matching_motorcycles, $this->CRS_m->getTrims(array(
+                    "make_id" => $make_id,
+                    "machine_type" => $machine_type,
+                    "year" => $y
+                )));
+            }
+        } else {
+            throw new Exception("You must provide a starting year.");
+        }
+
+        // clear the unique IDs...
+        $this->db->query("Update motorcycle set uniqid = '' where crs_machinetype = ? and crs_make_id = ? and `condition` = 1", array($machine_type, $make_id));
+
+        $vehicle_type = $this->_getMachineTypeMotoType($machine_type);
+        if ($vehicle_type == 0) {
+            throw new Exception("No type found for $machine_type ");
+        }
+
+        $offroad_vehicle_type = 0;
+        $query = $this->db->query("Select id from motorcycle_type where name = 'Off-Road'");
+        foreach ($query->result_array() as $row) {
+            $offroad_vehicle_type = $row["id"];
+        }
+        if ($offroad_vehicle_type == 0) {
+            throw new Exception("No Off-Road vehicle type found.");
+        }
+
+        // We sometimes need this in hand - the off-road type...
+
+        // Now we have to get $category_id .. for now, we're going to call it Stock...
+
+        // Now, we have to enter them...
+        foreach ($matching_motorcycles as $m) {
+            // Is there one of these?
+            $crs_model = $m["model"];
+            $crs_model_id = $m["model_id"];
+            $crs_make = $m["make"];
+            $crs_make_id = $m["make_id"];
+            $crs_machinetype = $m["machine_type"];
+            $crs_trim = $m["trim"];
+            $crs_display_name = $m["display_name"];
+            $crs_trim_id = $m["trim_id"];
+
+            // Is there one of these?
+            $query = $this->db->query("Select * from motorcycle where `condition` = 1 and source = 'PST' and crs_trim_id = ?", array($crs_trim_id));
+            $results = $query->result_array();
+
+            if (count($results) == 0) {
+                // you need to add them...
+                $trim = $this->CRS_m->getTrim($crs_trim_id);
+                // OK, we need to insert it...
+                if (count($trim) > 0) {
+                    $trim = $trim[0];
+
+                    $category_id = $this->_getStockMotoCategory();
+
+
+                    // OK, we have to add it, and then we have to add the motorcycle... but first we have to get some of the specs
+                    $retail_price = $sale_price = $trim["msrp"];
+                    $this_machine_type = $vehicle_type;
+
+                    $engine_type = ""; // 30003
+                    $transmission = ""; // 40002
+                    // look for 20002 for a msrp + destination fee..
+                    // JLB 2017-11-27
+                    // 10011 is the category...
+                    // Further, if is Off-Road, then we have to re-type the machine it's a MOT from Street Bike to Off-Road.
+
+                    foreach ($trim["specifications"] as $s) {
+                        $attribute_id = $s["attribute_id"];
+
+                        if ($attribute_id == 30003) {
+                            $engine_type = $s["text_value"];
+                        } else if ($attribute_id == 40002) {
+                            $transmission = $s["text_value"];
+                        } else if ($attribute_id == 20002) {
+                            $retail_price = $sale_price= $s["text_value"];
+                        } else if ($attribute_id == 10011) {
+                            $category_id = $this->_getStockMotoCategory($s["text_value"]);
+
+                            // Special conversion to Dirt Bike
+                            if ($s["text_value"] == "Off-Road" && $machine_type == "MOT") {
+                                // We have to change the type...
+                                $this_machine_type = $offroad_vehicle_type;
+                            }
+                        }
+                    }
+
+                    // JLB 11-27-17: We just set the destination charge = 1.
+                    $this->db->query("Insert into motorcycle (title, description, status, `condition`, sku, engine_type, transmission, retail_price, sale_price, data, margin, profit, category, vehicle_type, year, make, model, color, craigslist_feed_status, cycletrader_feed_status, crs_trim_id, crs_machinetype, crs_model_id, crs_make_id, crs_year, uniqid, source, crs_version_number, destination_charge) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)", array(
+                        preg_replace("/[^" . $this->config->item("permitted_uri_chars") . "]/i", "", ($title = $trim["year"]. " " . $trim["make"] . " " . $trim["display_name"])),
+                        $title,
+                        1,
+                        1,
+                        $this->getNextCRSSKU(),
+                        $engine_type,
+                        $transmission,
+                        $retail_price,
+                        $sale_price,
+                        json_encode(array(
+                            "total_cost" => $retail_price,
+                            "unit_cost" => $retail_price,
+                            "parts" => "",
+                            "service" => "",
+                            "auction_fee" => "",
+                            "misc" => ""
+                        )),
+                        0.00,
+                        0.00,
+                        $category_id,
+                        $this_machine_type,
+                        $trim["year"],
+                        $trim["make"],
+                        $trim["display_name"],
+                        "N/A",
+                        0,
+                        0,
+                        $trim["trim_id"],
+                        $trim["machine_type"],
+                        $trim["model_id"],
+                        $trim["make_id"],
+                        $trim["year"],
+                        $uniqid,
+                        'PST',
+                        $trim["version_number"]
+                    ));
+
+                    $motorcycle_id = $this->db->insert_id();
+
+                    // We need to insert the trim_photo
+                    $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source, crs_thumbnail) values (?, ?, now(), ?, 1, 1, ?, 'PST', 1) on duplicate key update source = 'PST'", array($motorcycle_id, $trim["trim_photo"], 'Trim Photo: ' . $trim['display_name'], $trim["version_number"]));
+
+                }
+            }
+        }
+
+        // We have to purge them...
+        if ($mode == 'C' || $mode == 'A') {
+            $this->db->query("Delete from motorcycle where uniqid = '' and source = 'PST' and crs_machinetype = ? and crs_make_id = ? and `condition` = 1", array($machine_type, $make_id));
+        }
+
+        $this->refreshCRSData();
+    }
+
+
+	public function refreshCRSData() {
+	    $this->load->model("CRSCron_m");
+	    $this->CRSCron_m->refreshCRSData();
+    }
+
+    /*
+     * JLB Added these for Lightspeed
+     */
+    public function getLightspeedUnitsXML() {
+        $this->load->model("Lightspeed_m");
+        $this->Lightspeed_m->get_units_xml();
+    }
+    public function getLightspeedPartsXML() {
+        $this->load->model("Lightspeed_m");
+        $this->Lightspeed_m->get_parts_xml();
+    }
+
 }
 
 /* End of file croncontrol.php */

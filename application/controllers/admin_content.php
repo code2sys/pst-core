@@ -302,6 +302,7 @@ class Admin_Content extends Master_Controller {
     }
 
     public function feeds() {
+        // JLB 2017-12-18 I found this and it scares me; what were they doing?
         ini_set('memory_limit', '999M');
 
         if (!$this->checkValidAccess('data_feeds') && !@$_SESSION['userRecord']['admin']) {
@@ -340,11 +341,51 @@ class Admin_Content extends Master_Controller {
         $this->_mainData['ebaymarkup'] = $this->Ebaysetting->check_markup();
         $this->_mainData['quantity'] = $this->Ebaysetting->check_quantity();
 
+        if (defined('ENABLE_LIGHTSPEED') && ENABLE_LIGHTSPEED) {
+            $this->load->model("Lightspeed_m");
+
+            // OK, we have lightspeed enabled...
+            $this->_mainData['lightspeed_enabled'] = true;
+
+            // OK, do we have credentials?
+            $lightspeed_error = "";
+
+            $c = $this->Lightspeed_m->getCredentials();
+
+            if ($c["user"] == "" || $c["pass"] == "") {
+                $lightspeed_error = "Lightspeed credentials are not configured in Store Profile.";
+            }
+
+            $this->_mainData["lightspeed_error"] = $lightspeed_error;
+
+            // If we have credentials, we should display the number of motorcycles, the last time it ran, and a prompt to run it again...which means we'll need a new table...
+            $query = $this->db->query("Select count(*) as cnt from motorcycle where lightspeed = 1");
+            $this->_mainData["lightspeed_major_unit_count"] = $query->result_array();
+            $this->_mainData["lightspeed_major_unit_count"] = $this->_mainData["lightspeed_major_unit_count"]['cnt'];
+
+            // When did this run last?
+            $query = $this->db->query("Select * From lightspeed_feed_log order by id desc limit 1");
+            $this->_mainData["lightspeed_feeds"] = $query->result_array();
+            if (count($this->_mainData["lightspeed_feeds"]) > 0){
+                $this->_mainData["lightspeed_feeds"] = $this->_mainData["lightspeed_feeds"][0];
+            } else {
+                unset($this->_mainData["lightspeed_feeds"]);
+            }
+        } else {
+            $this->_mainData['lightspeed_enabled'] = false;
+
+        }
+
         // fetch the ebay statistics
         $this->_mainData['ebay_feed_counts'] = $this->ebay_m->getFeedCounts();
 
 
         $this->renderMasterPage('admin/master_v', 'admin/feed_v', $this->_mainData);
+    }
+
+    public function get_lightspeed_feed() {
+        $this->db->query("Insert into lightspeed_feed_log (run_by) values ('admin') ");
+        header("Location: /admin_content/feeds");
     }
 
     /*
