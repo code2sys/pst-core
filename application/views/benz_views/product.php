@@ -51,20 +51,6 @@ $media_url = jsite_url("/media/");
                         </div>
                     <?php } ?>
                 </div>
-                <div class="filter-inner">
-                    <p class="parg-txt">Categories</p>
-                    <?php
-                    $ctgrs = explode('$', $_GET['categories']);
-                    $ctgrs = array_filter($ctgrs);
-                    ?>
-                    <?php foreach ($categories as $category) { ?>
-                        <?php $key = array_search($category['id'], $ctgrs); ?>
-                        <div class="checkbox checkbox-primary sdCheckbox">
-                            <input id="category<?php echo $category['id']; ?>" class="styled" name="category[]" value="<?php echo $category['id']; ?>" type="checkbox" <?php echo $ctgrs[$key] == $category['id'] ? 'checked' : ''; ?>>
-                            <label for="category<?php echo $category['id']; ?>"><?php echo $category['name']; ?></label>
-                        </div>
-                    <?php } ?>
-                </div>
                 <div class="filter-inner"> 	  				
                     <p class="parg-txt">Vehicle</p>
                     <?php
@@ -76,6 +62,21 @@ $media_url = jsite_url("/media/");
                         <div class="checkbox checkbox-primary sdCheckbox">
                             <input id="vehicle<?php echo $vehicle['id']; ?>" class="styled" name="vehicles[]" value="<?php echo $vehicle['id']; ?>" type="checkbox" <?php echo $vhcls[$key] == $vehicle['id'] ? 'checked' : ''; ?>>
                             <label for="vehicle<?php echo $vehicle['id']; ?>"><?php echo $vehicle['name']; ?></label>
+                        </div>
+                    <?php } ?>
+                </div>
+
+                <div class="filter-inner">
+                    <p class="parg-txt">Categories</p>
+                    <?php
+                    $ctgrs = explode('$', $_GET['categories']);
+                    $ctgrs = array_filter($ctgrs);
+                    ?>
+                    <?php foreach ($categories as $category) { ?>
+                        <?php $key = array_search($category['id'], $ctgrs); ?>
+                        <div class="checkbox checkbox-primary sdCheckbox">
+                            <input id="category<?php echo $category['id']; ?>" class="styled" name="category[]" value="<?php echo $category['id']; ?>" type="checkbox" <?php echo $ctgrs[$key] == $category['id'] ? 'checked' : ''; ?>>
+                            <label for="category<?php echo $category['id']; ?>"><?php echo $category['name']; ?></label>
                         </div>
                     <?php } ?>
                 </div>
