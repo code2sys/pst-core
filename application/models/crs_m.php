@@ -84,6 +84,14 @@ class CRS_M extends Master_M
         }
     }
 
+    public function findBestFit($vin, $make, $model, $year, $codeword) {
+        try {
+            return $this->postRequest("findBestFit", array("vin" => $vin, "make" => $make, "year" => $year, "model" => $model, "codeword" => $codeword, "store" => STORE_NAME), "matches");
+        } catch (Exception $e) {
+            return array();
+        }
+    }
+
     protected function postRequest($function, $arguments = array(), $key = "")
     {
         //get the CRS webform data

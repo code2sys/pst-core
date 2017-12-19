@@ -220,47 +220,7 @@ class Lightspeed_M extends Master_M {
                 }
 
                 // Now, what is the ID for this motorcycle?
-                $vin_match = $CI->CRS_m->queryVin($bike->VIN);
-
-                if (!array_key_exists("trim_id", $vin_match)) {
-                    $vin_match = $CI->CRS_m->queryVin($bike->VIN, true);
-                }
-
-                if (!array_key_exists("trim_id", $vin_match)) {
-                    $vin_match = $CI->CRS_m->bestTryDecodeVin($bike->VIN, $bike->Make, $bike->ModelYear);
-                }
-
-                if (!array_key_exists("trim_id", $vin_match)) {
-                    // we have to attempt to match based on make, model, year...
-
-
-                    // do we try based on trim or display name if that fails?
-                    $matches = $CI->CRS_m->getTrims(array(
-                        "year" => $bike->ModelYear,
-                        "make" => $bike->Make
-                    ));
-
-                    $exact_match = false;
-
-                    foreach ($matches as $match) {
-                        if (!$exact_match) {
-                            if (
-                                strtolower($match["model"]) == strtolower($bike->Model) ||
-                                strtolower($match["display_name"]) == strtolower($bike->Model) ||
-                                preg_replace("/[^a-z0-9]/i", "", strtolower($match["model"])) == preg_replace("/[^a-z0-9]/i", "", strtolower($bike->Model)) ||
-                                ($bike->CodeName != '' && preg_replace("/[^a-z0-9]/i", "", strtolower($match["display_name"])) == preg_replace("/[^a-z0-9]/i", "", strtolower($bike->CodeName)))
-                            ) {
-                                $exact_match = true;
-                                $vin_match = $match;
-                            }
-                        }
-                    }
-                }
-
-                if (!$exact_match) {
-                    // do we try to do a close match?
-                }
-
+                $vin_match = $CI->CRS_m->findBestFit($bike->VIN, $bike->Make, $bike->Model, $bike->ModelYear, $bike->CodeName);
 
                 if (array_key_exists("trim_id", $vin_match)) {
                     // we should definitely mark this
@@ -279,13 +239,10 @@ class Lightspeed_M extends Master_M {
                     $CI->CRSCron_M->refreshCRSData($motorcycle_id);
                 }
 
+                // Todo...
                 // Does this motorcycle have a zero group or a general group of settings? We need to be able to flag the settings group that comes from Lightspeed in some way...
-
-
                 // Finally, we need to optionally stick in the settings if they exist into this spec table...
-
                 // At last, we should attempt to look up the trim of this by CRS and, if there is one, set the trim ID. We may also adjust the category and type if we get a match...
-
             }
 
         }
