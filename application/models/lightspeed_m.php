@@ -222,7 +222,9 @@ class Lightspeed_M extends Master_M {
                 // Now, what is the ID for this motorcycle?
                 $vin_match = $CI->CRS_m->findBestFit($bike->VIN, $bike->Make, $bike->Model, $bike->ModelYear, $bike->CodeName);
 
-                print_r($vin_match);
+                if (is_array($vin_match) && count($vin_match) > 0) {
+                    $vin_match = $vin_match[0];
+                }
 
                 if (array_key_exists("trim_id", $vin_match)) {
                     // we should definitely mark this
