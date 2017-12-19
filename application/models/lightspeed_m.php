@@ -136,7 +136,7 @@ class Lightspeed_M extends Master_M {
 
             foreach($bikes as $bike) {
                 $bike->NewUsed = ($bike->NewUsed=="U")?2:1;
-                $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . $bike->Model;
+                $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . ($bike->CodeName != "" ? $bike->CodeName : $bike->Model);
 
                 $data = array('total_cost' => $bike->totalCost, 'unit_cost' => $bike->totalCost, 'parts' => "", 'service' => "", 'auction_fee' => "", 'misc' => "");
                 $bike->data = json_encode($data);
@@ -221,6 +221,8 @@ class Lightspeed_M extends Master_M {
 
                 // Now, what is the ID for this motorcycle?
                 $vin_match = $CI->CRS_m->findBestFit($bike->VIN, $bike->Make, $bike->Model, $bike->ModelYear, $bike->CodeName);
+
+                print_r($vin_match);
 
                 if (array_key_exists("trim_id", $vin_match)) {
                     // we should definitely mark this
