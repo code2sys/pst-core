@@ -64,11 +64,12 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 	</script>
 
     <?php echo jget_store_block("bottom_header"); ?>
-
+    <?php echo jget_store_block("moto_bottom_header"); ?>
 </head>
 
 <body>
 <?php echo jget_store_block("top_body"); ?>
+<?php echo jget_store_block("moto_top_body"); ?>
 	<div class="topBar_b">
 		<div class="container_b">
 			<p class="creditCar_b fltL_b">
