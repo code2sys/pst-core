@@ -584,6 +584,7 @@ $cstdata = (array) json_decode($product['data']);
             $("input[name='transmission']").val(m.transmission);
             $("input[name='retail_price']").val(m.msrp);
             $("input[name='destination_charge']").attr("checked", true);
+            $("input[name='status']").attr("checked", true);
             $("input[name='crs_trim_id']").val(m.trim_id);
             if (m.default_category) {
                 $("input[name='category']").val(m.default_category);
