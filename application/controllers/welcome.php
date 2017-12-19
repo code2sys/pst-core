@@ -299,8 +299,6 @@ class Welcome extends Master_Controller {
         $this->load->model('motorcycle_m');
         $this->_mainData['featured'] = $this->motorcycle_m->getFeaturedMonster();
         $this->renderMasterPage('master/master_v_front', 'info/storefront_v', $this->_mainData);
-
-        
     }
 
     public function benz() {

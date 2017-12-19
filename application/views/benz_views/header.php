@@ -13,8 +13,11 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 	?>
 <head>
     <?php echo jget_store_block("top_header"); ?>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <?php if (isset($title)): ?>
+    <title><?php echo $title; ?></title>
+    <?php endif; ?>
 	<?php echo @$metatag; ?>
 	
 	<!--Motercycle Content Start-->
@@ -62,6 +65,18 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 		});
 	});
 	</script>
+    <style>
+        .pager_spacer span {
+            background: #eee;
+            text-decoration: none;
+            color: #000;
+            padding: 9px 8px 5px;
+            font-size: 15px;
+            display: block;
+            margin: 0 2px;
+            line-height: normal;
+        }
+    </style>
 
     <?php echo jget_store_block("bottom_header"); ?>
 
@@ -249,7 +264,7 @@ echo $CI->load->view("braintree", array(
 	</script>
 	<script>
 	$(document).on('click', '.pgn', function() {
-		var pg = $('a', $(this)).html();
+		var pg = $('a', $(this)).attr("data-page-number");
 		if(!$(this).hasClass('active')) {
 			var brands = $("input[name='brand[]']:checkbox:checked").map(function(){
 				return $(this).val();
@@ -722,6 +737,18 @@ $(window).load(function() {
     min-height: 10px;
 }
 </style>
+    <?php
+    $CI = & get_instance();
+    echo $CI->load->view("master/tracking", array(
+        "store_name" => $store_name,
+        "product" => @$product,
+        "ga_ecommerce" => true,
+        "show_ga_conversion" => true
+    ), true);
+    ?>
+
+    <script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
+
 <?php echo jget_store_block("bottom_body"); ?>
 </body>
 </html>	

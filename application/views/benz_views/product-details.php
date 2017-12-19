@@ -19,7 +19,7 @@ unset($motorcycle['videos'][0]);
 			<nav class="breadcrumb">
 				<a href="<?php echo base_url(); ?>">Home</a>
 				<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
-				<a href="<?php echo base_url('Motorcycle_List'); ?>">Motorcycle List</a>
+				<a href="<?php echo base_url('Motorcycle_List'); ?>?fltr=<?php echo $motorcycle['condition'] == 1 ? 'new' : 'pre-owned'; ?>">Motorcycle List</a>
 				<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
 				<a href="<?php echo base_url('welcome/benzDetails/'.$motorcycle['id']); ?>"><?php echo $motorcycle['title'];?></a>
 			</nav>
@@ -45,10 +45,35 @@ unset($motorcycle['videos'][0]);
 			<div class="col-md-8 col-xs-12 col-sm-7 pdig sect-sid">
 				<div class="clearfix" style="width:100%;">
 					<ul id="image-gallery" class="gallery list-unstyled cS-hidden">
-						<?php foreach( $motorcycle['images'] as $image ) { ?>
-							<li data-thumb="<?php echo $media_url.$image['image_name']; ?>">
-								<a class="fancybox" href="<?php echo $media_url.$image['image_name']; ?>" data-fancybox-group="gallery">
-									<img src="<?php echo $media_url.$image['image_name']; ?>" />
+                        <?php
+                        // JLB 12-19-17
+                        // If we have > 1 image, and we have a CRS thumbnail image in the mix, we don't show that.
+                        if (count($motorcycle['images']) > 1) {
+                            $clean_images = array();
+
+                            foreach ($motorcycle['images'] as $img) {
+                                if (!($img['crs_thumbnail'] > 0)) {
+                                    $clean_images[] = $img;
+                                }
+                            }
+
+                            $motorcycle['images'] = $clean_images;
+                        }
+
+
+                        ?>
+
+						<?php foreach( $motorcycle['images'] as $image ) {
+
+						    $image_url = $image["image_name"];
+						    if ($image["external"] == 0) {
+						        $image_url = $media_url. $image_url;
+                            }
+
+						    ?>
+							<li data-thumb="<?php echo $image_url; ?>">
+								<a class="fancybox" href="<?php echo $image_url; ?>" data-fancybox-group="gallery">
+									<img src="<?php echo $image_url; ?>" />
 								</a>
 							</li>
 						<?php } ?>
@@ -60,7 +85,7 @@ unset($motorcycle['videos'][0]);
 				<?php if( $motorcycle['call_on_price'] == '1' ) { ?>
 					<p class="cfp">Call For Price</p>
                 <?php } else {
-                    if ($motorcycle['sale_price']>0 && $motorcycle['sale_price'] !== "0.00") { ?>
+                    if ($motorcycle['sale_price']>0 && $motorcycle['sale_price'] !== "0.00" && $motorcycle["sale_price"] != $motorcycle["retail_price"]) { ?>
                        <p>Retail Price: &nbsp; <span class="strikethrough">$<?php echo $motorcycle['retail_price'];?></span></p>
                        <p>Sale Price: &nbsp; &nbsp;<span class="redtext">$<?php echo $motorcycle['sale_price'];?></span></p>
                     <?php } else { ?>
@@ -92,11 +117,13 @@ unset($motorcycle['videos'][0]);
 				<div class="dtal-txt">
 					<label>model :</label>
 					<span><?php echo $motorcycle['model'];?></span>
-				</div>				
+				</div>
+                <?php if ($motorcycle['color'] != 'N/A' && $motorcycle['color'] != ''): ?>
 				<div class="dtal-txt">
 					<label>color :</label>
 					<span><?php echo $motorcycle['color'];?></span>
 				</div>
+                <?php endif; ?>
 				<?php if( $motorcycle['mileage'] > 0 ) { ?>
 					<div class="dtal-txt">
 						<label>mileage :</label>
@@ -108,14 +135,18 @@ unset($motorcycle['videos'][0]);
 						<span><?php echo $motorcycle['engine_hours'];?></span>
 					</div>
 				<?php } ?>
+                <?php if ($motorcycle['engine_type'] != ""): ?>
 				<div class="dtal-txt">
 					<label>Engine Type :</label>
 					<span><?php echo $motorcycle['engine_type'];?></span>
-				</div>				
+				</div>
+                <?php endif; ?>
+                <?php if ($motorcycle['transmission'] != ""): ?>
 				<div class="dtal-txt">
 					<label>transmission :</label>
 					<span><?php echo $motorcycle['transmission'];?></span>
-				</div>				
+				</div>
+                <?php endif; ?>
 				<!--<div class="dtal-txt">
 					<label>width :</label>
 					<span>32.1 In.</span>
@@ -124,10 +155,12 @@ unset($motorcycle['videos'][0]);
 					<label>Height</label>
 					<span>44.7 In.</span>
 				</div>-->
+                <?php if (!is_null($motorcycle['vin_number']) && trim($motorcycle['vin_number']) != ""): ?>
 				<div class="dtal-txt">
 					<label>Vin :</label>
 					<span><?php echo $motorcycle['vin_number'];?></span>
 				</div>
+                <?php endif; ?>
 				<div class="dtal-txt">
 					<label>Stock Code :</label>
 					<span><?php echo $motorcycle['sku'];?></span>
@@ -150,48 +183,34 @@ unset($motorcycle['videos'][0]);
 			</div>			
 		</div>
 		<div class="col-md-12 col-xs-12 pdig padg-one" style="padding-top:50px;">
-			<div class="col-md-3 col-xs-12 fltrbar pull-right pdig oder col-sm-4">
-				<div class="col-md-12 col-xs-12 text-center">
-					<h4 class="recnt" style="margin:20px 0 20px">RECENTLY VIEWED</h4>
-				</div>
-				<div class="fltrbx ">		
-					<?php foreach( $recentlyMotorcycle as $recently ) { ?>
-						<?php $title = str_replace(' ', '_', trim($recently['title']));?>
-						<div class="col-md-12 text-center">
-							<a href="<?php echo base_url(strtolower($recently['type']).'/'.$title.'/'.$recently['sku']);?>">
-								<img class="rvm" src=" <?php echo base_url().'media/'.$recently['image_name']; ?>" />
-							</a>
-							<a href="<?php echo base_url(strtolower($recently['type']).'/'.$title.'/'.$recently['sku']);?>"><h1 class="head-txt"><?php echo $recently['title'];?></h1></a>
-							<!--<p><?php echo $recently['title'];?></p>-->
-							<?php if( $recently['call_on_price'] == '1' ) { ?>
-								<p class="cfp">Call For Price</p>
-                                <?php
-                                } else {
-                                if ($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00") { ?>
-                                    <p>Retail Price: &nbsp; <span
-                                                class="strikethrough">$<?php echo number_format($recently['retail_price'], 2); ?></span>
-                                    </p>
-                                    <p>Sale Price: &nbsp; &nbsp;<span
-                                                class="redtext">$<?php echo number_format($recently['sale_price'], 2); ?></span></p>
-                                <?php } else { ?>
-                                    <p>Retail Price: &nbsp; $<?php echo number_format($recently['retail_price'], 2); ?></p>
-                                    <?php
-                                }
-                                if ($recently["destination_charge"]) {
-                                    echo "<sub>* Plus Applicable destination charge</sub>";
-                                }
-                            }
-                            ?>
-						</div>
-					<?php } ?>
-				</div>		
-			</div>
+            <?php
+            $CI =& get_instance();
+            echo $CI->load->view("benz_views/recently_viewed", array(
+                "master_class" => "col-md-3 col-xs-12 fltrbar pull-right pdig oder col-sm-4",
+                "subclass" => "col-xs-12",
+                "innersubclass" => "",
+                "recentlyMotorcycle" => $recentlyMotorcycle,
+                "no_fify" => true
+            ), true);
+
+            $show_info = !empty($mainVideo) || (trim($motorcycle['description']) != "");
+            $show_spec = (count($motorcycle['specs']) > 0);
+            ?>
+
 			<div class="col-md-9 col-xs-12 col-sm-8 pdig vide-wdt">
-				<a href="#" class="btn info-btn">
+                <?php if ($show_info): ?>
+				<span href="#" class="btn info-btn" id="product-details-info">
 					info
-				</a>
+				</span>
+                <?php endif; ?>
+                <?php if ($show_spec): ?>
+				<span href="#" class="btn info-btn" id="product-details-spec">
+					specifications
+				</span>
+                <?php endif; ?>
 				<hr class="hr-lne">
-				<div class="info">
+                <?php if ($show_info): ?>
+                <div class="info" id="product-details-info-body">
                         <?php if (!empty($mainVideo)) { ?>
 					<div class="vds rmv">
 							<?php
@@ -210,6 +229,76 @@ unset($motorcycle['videos'][0]);
 							<div class="clear mn-hght"></div>
 						<?php } ?>
 					<?php echo $motorcycle['description'];?>
+                </div>
+                <?php endif; ?>
+                <?php if ($show_spec): ?>
+                <div class="info" id="product-details-spec-body">
+
+                    <?php if (count($motorcycle['specs']) > 0): ?>
+
+                        <div>
+                        <style scoped>
+
+                            .row1 {
+                                background-color: white;
+                            }
+
+                            td {
+                                padding: 3px;
+                                width: 50%;
+                            }
+
+                            td.key {
+                                font-weight: bold;
+                            }
+
+                            td.value {
+                                text-align: right;
+                            }
+
+
+                        </style>
+                        <h3>Specifications</h3>
+
+                            <?php
+                            $feature_name = "";
+                            foreach ($motorcycle["specs"] as $s) {
+                                if ($feature_name != $s["spec_group"]) {
+                                    if ($feature_name != ""):
+                                    ?>
+                </table>
+                                        <?php
+                                        endif;
+                                    $feature_name = $s["spec_group"];
+                                    ?>
+                    <p><strong><?php echo $feature_name; ?></strong></p>
+                    <table border="0" width="100%" class="stripedtable">
+                        <?php
+                                    $k = 0;
+
+
+                                }
+                                ?>
+                                <tr class="row<?php echo $k; ?>">
+                                    <td class="key" valign="top"><?php echo $s["feature_name"] . ($s["attribute_name"] != "" ? " - " . $s["attribute_name"] : ""); ?></td>
+                                    <td class="value" valign="top"><?php echo $s["final_value"]; ?></td>
+                                </tr>
+                                <?php
+                                $k = 1 - $k;
+
+                            }
+
+                            ?>
+
+
+                        <?php if ($feature_name != ""): ?></table><?php endif; ?>
+
+
+                        <p><em>Certain features may require an additional add-on package that may not be included in the retail or sale price. Please contact the dealership for full details.</em></p>
+                        </div>
+
+                    <?php endif; ?>
+
 					<!--<h3>Integer tellus dui venenatis non:</h3>
 					<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,  content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover </p>
 					<h3>Vivamus porta tellus</h3>
@@ -219,10 +308,41 @@ unset($motorcycle['videos'][0]);
 						<li>discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..",</li>
 					</ul>-->
 				</div>
-			</div>
+                <?php endif; ?>
+
+            </div>
 		</div>
 	</div>
 </div>
+
+<?php if ($show_info && $show_spec): ?>
+<script type="application/javascript">
+    $(document).ready(function() {
+        // Hide the spec stuff
+        $("#product-details-spec").css("opacity", 0.5);
+        $("#product-details-spec-body").hide();
+
+        $("#product-details-spec").on("click", function(e) {
+            $("#product-details-spec").css("opacity", 1.0);
+            $("#product-details-info").css("opacity", 0.5);
+            e.stopPropagation();
+            e.preventDefault();
+            $("#product-details-info-body").hide();
+            $("#product-details-spec-body").show();
+        });
+
+        $("#product-details-info").on("click", function(e) {
+            $("#product-details-info").css("opacity", 1.0);
+            $("#product-details-spec").css("opacity", 0.5);
+            e.stopPropagation();
+            e.preventDefault();
+            $("#product-details-spec-body").hide();
+            $("#product-details-info-body").show();
+        });
+
+    });
+</script>
+<?php endif; ?>
 
 <div class="modal fade pop" id="myModal">
 	<div class="modal-dialog area">	  
@@ -303,7 +423,13 @@ unset($motorcycle['videos'][0]);
 
 <script language="javascript">
 	function fbshareCurrentPage()
-	{window.open("http://www.facebook.com/share.php?u="+escape(window.location.href)+"&picture="+"<?php echo $media_url.$motorcycle['images'][0]['image_name']?>", '', 
+	{window.open("http://www.facebook.com/share.php?u="+escape(window.location.href)+"&picture="+"<?php
+            if ($motorcycle['images'][0]["external"] > 0) {
+                echo $motorcycle['images'][0]['image_name'];
+            } else {
+                echo $media_url.$motorcycle['images'][0]['image_name'];
+            }
+        ?>", '',
 	'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
 	return false; }
 </script>
@@ -359,3 +485,20 @@ unset($motorcycle['videos'][0]);
 
 <?php //include('footer.php'); ?>
 	
+<style>
+    .lSSlideOuter .lSPager.lSGallery img {
+        display: block;
+        height: auto;
+        width: 100%;
+        max-height: 60px;
+    }
+
+    .lSSlideOuter .lSPager.lSGallery a {
+        display: block;
+        height: 60px;
+    }
+    #image-gallery li {
+        background-color: white;
+    }
+
+</style>

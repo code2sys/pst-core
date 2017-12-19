@@ -4,16 +4,25 @@ $media_url = jsite_url("/media/");
 
 if (@$motorcycles) {
     foreach ($motorcycles as $motorcycle) {
+
+        // What is the default...
+        $motorcycle_image = $motorcycle['image_name'];
+        if ($motorcycle['external'] == 0 ) {
+            $motorcycle_image = $media_url . $motorcycle_image;
+        }
+        if ($motorcycle_image == "" || is_null($motorcycle_image) || $motorcycle_image == $media_url) {
+            $motorcycle_image = "/assets/image_unavailable.png";
+        }
+
         ?>
         <div class="mid-r">
-        <?php $title = str_replace(' ', '_', trim($motorcycle['title'])); ?>
-            <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $title . '/' . $motorcycle['sku']); ?>">
+            <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']); ?>">
                 <div class="mid-r-img">
                     <div class="mid-r-logo">
                             <!--<img src="<?php echo $new_assets_url; ?>images/imgpsh_fullsize (6).png" width="152px;"/>-->
                     </div>
                     <div class="mid-r-img-veh">
-                        <img src="<?php echo $media_url . $motorcycle['image_name']; ?>" width="px;"/>
+                        <img src="<?php echo $motorcycle_image; ?>" width="px;"/>
                     </div>
                 </div>
             </a>
@@ -23,7 +32,7 @@ if (@$motorcycles) {
                     <?php if ($motorcycle['call_on_price'] == '1') { ?>
                         <p class="cfp">Call For Price</p>
                     <?php } else {
-                        if ($motorcycle['sale_price']>0 && $motorcycle['sale_price']!=="0.00") { ?>
+                        if ($motorcycle['sale_price']>0 && $motorcycle['sale_price']!=="0.00" && $motorcycle["sale_price"] != $motorcycle["retail_price"]) { ?>
                             <?php if ($motorcycle["retail_price"] > 0): ?>
                         <p>Retail Price: &nbsp; <span class="strikethrough">$<?php echo $motorcycle['retail_price']; ?></span><br>
                             <?php endif; ?>
@@ -39,7 +48,9 @@ if (@$motorcycles) {
                 </div>
                 <div class="mid-text-right">
                     <p>condition :<span><?php echo $motorcycle['condition'] == '1' ? 'New' : 'Pre-Owned'; ?></span></p>
-                    <p>color :<span><?php echo $motorcycle['color']; ?></span></p>
+                    <?php if ($motorcycle["color"] != "N/A"): ?>
+                        <p>color :<span><?php echo $motorcycle['color']; ?></span></p>
+                    <?php endif; ?>
                     <?php if ($motorcycle['engine_hours'] > 0) { ?>
                         <p>engine hours :<span><?php echo $motorcycle['engine_hours']; ?></span></p>
                     <?php } ?>
@@ -63,7 +74,7 @@ if (@$motorcycles) {
                         }
                         echo GET_FINANCING_WORDING;
                         ?></span></a>
-                <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $title . '/' . $motorcycle['sku']); ?>"><img src="<?php echo $new_assets_url; ?>images/list.png" width="15px" height="20px;"/>VIEW DETAILS</a>
+                <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']); ?>"><img src="<?php echo $new_assets_url; ?>images/list.png" width="15px" height="20px;"/>VIEW DETAILS</a>
             </div>
         </div>
 
@@ -151,11 +162,43 @@ if (@$motorcycles) {
 <?php } ?>
 <div class="mypagination">
     <ul>
-        <?php if ($pages > 1) { ?>
-            <li class="<?php if ($page == 0): ?>active<?php endif; ?> pgn"><a href="javascript:void(0);">1</a></li>
-        <?php } ?>
-        <?php for ($i = 2; $i <= $pages; $i++) { ?>
-            <li class="<?php if ($page == $i - 1): ?>active<?php endif; ?> pgn"><a href="javascript:void(0);"><?php echo $i; ?></a></li>
-        <?php } ?>
+        <?php if ($pages > 1): ?>
+            <?php if ($page > 1): ?>
+                <li class=" pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page - 1; ?>">← Previous</a></li>
+
+                <?php if ($page > 2): ?>
+
+                    <?php if ($page > 3): ?>
+                        <li class="pager_spacer"><span>&hellip;</span></li>
+                    <?php endif; ?>
+
+                    <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page - 2; ?>"><?php echo $page - 2; ?></a></li>
+
+                <?php endif; ?>
+
+                <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page - 1; ?>"><?php echo $page - 1; ?></a></li>
+            <?php endif; ?>
+
+            <li class="active pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page; ?>"><?php echo $page; ?></a></li>
+
+
+            <?php if ($page < $pages): ?>
+                <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 1; ?>"><?php echo $page + 1; ?></a></li>
+
+                <?php if ($page < $pages - 1): ?>
+                    <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 2; ?>"><?php echo $page + 2; ?></a></li>
+
+                    <?php if ($page < $pages - 2): ?>
+                        <li class="pager_spacer"><span>&hellip;</span></li>
+                    <?php endif; ?>
+
+
+                <?php endif; ?>
+
+                <li class=" pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 1; ?>">Next →</a></li>
+            <?php endif; ?>
+
+
+        <?php endif; ?>
     </ul>
 </div>

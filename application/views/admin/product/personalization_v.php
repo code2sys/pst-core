@@ -1,15 +1,15 @@
 <!-- Gritter -->
 <link rel="stylesheet"
-      href="https://portal.powersporttechnologies.com/smashing/theme/scripts/Gritter/css/jquery.gritter.css" />
+      href="/assets/Gritter/css/jquery.gritter.css" />
 <!--<link rel="stylesheet" href="/assets/newjs/jquery-ui.structure.min.css" />-->
 <link rel="stylesheet" href="/assets/newjs/jquery-ui.min.css" />
 
 <script type="text/javascript"
-        src="https://portal.powersporttechnologies.com/smashing/theme/scripts/Gritter/js/jquery.gritter.min.js"></script>
+        src="/assets/Gritter/js/jquery.gritter.min.js"></script>
 
-<script type="application/javascript" src="https://portal.powersporttechnologies.com/thirdparty/underscore/underscore-min.js" ></script>
-<script type="application/javascript" src="https://portal.powersporttechnologies.com/thirdparty/backbone/backbone-min.js" ></script>
-<script type="application/javascript" src="https://portal.powersporttechnologies.com/thirdparty/dropzone/dropzone.js" ></script>
+<script type="application/javascript" src="/assets/underscore/underscore-min.js" ></script>
+<script type="application/javascript" src="/assets/backbone/backbone-min.js" ></script>
+<script type="application/javascript" src="/assets/dropzone/dropzone.js" ></script>
 <script type="application/javascript" src="/assets/newjs/jquery-ui.min.js" ></script>
 <style>
     .widget {

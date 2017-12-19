@@ -429,6 +429,36 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 						</tr>
 <?php endif; ?>
 
+<?php if (defined('ENABLE_LIGHTSPEED') && ENABLE_LIGHTSPEED): ?>
+    <tr>
+        <td colspan="2">
+            <table width="100%" style="background-color:white;">
+                <tr>
+                    <td colspan="2">
+                        <strong>Lightspeed DMS Integration</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><em>Lightspeed DMS has an API for pulling major units (e.g., motorcycles). This requires a username and password to access.</em></td>
+                </tr>
+                <tr>
+                    <td style="width:30%;"><b>Lightspeed Username:</b></td>
+                    <td><?php echo form_input(array('name' => 'lightspeed_username',
+                            'value' => @$address['lightspeed_username'],
+                            'class' => 'text large')); ?></td>
+                </tr>
+                <tr>
+                    <td style="width:30%;"><b>Lightspeed Password:</b></td>
+                    <td><?php echo form_input(array('name' => 'lightspeed_password',
+                            'value' => @$address['lightspeed_password'],
+                            'class' => 'text large')); ?></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+<?php endif; ?>
+
+
 						<tr>
 							<td></td>
 							<td>

@@ -33,6 +33,37 @@
                     </tr>
                 </table>
 
+            <?php if ($lightspeed_enabled): ?>
+                <table width="100%" cellpadding="6">
+                    <tr>
+                        <th colspan="4"><h2>Lightspeed DMS Major Unit Feed:</h2></th>
+                    </tr>
+                    <?php if (isset($lightspeed_error) && ($lightspeed_error != "")): ?>
+                        <tr>
+                            <td colspan="5">
+                                <div style="border: 5px solid red; background: #fee; padding: 1em;">
+                                    <div style="text-align: center"><strong>Lightspeed Configuration Error</strong></div>
+                                    <p>Your store has the following Lightspeed configuration error:</p>
+                                    <p><?php echo $lightspeed_error; ?></p>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <tr>
+                            <td><button type="button" name="get_lightspeed_feed" value="" onClick="window.location.href = '<?php echo base_url('admin_content/get_lightspeed_feed/'); ?>'; return false;">Request Lightspeed Feed</button></td>
+                            <td>Status : <?php echo isset($lightspeed_feeds['status']) ? ($lightspeed_feeds['status'] == 2 ? 'Completed' : ($lightspeed_feeds['status'] == 1 ?'Processing' : 'Queued')) : "Idle"; ?></td>
+                            <td>Last Run : <?php echo isset($lightspeed_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($lightspeed_feeds['run_at'])) : ''; ?></td>
+                            <?php if ($lightspeed_major_unit_count > 0): ?>
+                                <td>Lightspeed Major Unit Count: <?php echo number_format($lightspeed_major_unit_count, 0); ?></td>
+                            <?php endif; ?>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+
+
+            <?php endif; ?>
+
+
               <table width="100%" cellpadding="6">
                     <tr>
                         <th colspan="5"><h2>Ebay Product Data Feed:</h2></th>

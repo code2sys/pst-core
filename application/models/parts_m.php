@@ -2382,7 +2382,7 @@ class Parts_M extends Master_M {
         $this->db->order_by('RAND()');
         $this->db->limit(4);
         $records = $this->selectRecords('reviews', $where);
-        if (is_null($partId)) {
+        if (is_null($partId) && isset($records) && is_array($records)) {
             foreach ($records as &$rec) {
                 $where = array('part_id' => $rec['part_id']);
                 $rec['images'] = $this->selectRecords('partimage', $where);
