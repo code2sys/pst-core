@@ -169,8 +169,11 @@ function jprint_interactive_footer($pages) {
         <?php
         foreach ($pages as $p) {
         ?>
+            <?php if ($p['external_link'] > 0): ?>
+        <li><a href="<?php echo $p['external_url']; ?>" target="_blank"><?php echo $p['label']; ?></a></li>
+                <?php else: ?>
         <li><a href="<?php echo site_url('pages/index/' . $p['tag']); ?>"><?php echo $p['label']; ?></a></li>
-            <?php
+            <?php endif;
         }
         ?>
     </ul>
