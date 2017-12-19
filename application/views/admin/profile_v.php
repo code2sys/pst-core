@@ -435,7 +435,7 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
             <table width="100%" style="background-color:white;">
                 <tr>
                     <td colspan="2">
-                        <strong>Lightspeed DMS Integration</strong>
+                        <strong><img src="/assets/ADP-Lightspeed-logo.jpg" alt="Lightspeed DMS Integration" /></strong>
                     </td>
                 </tr>
                 <tr>
