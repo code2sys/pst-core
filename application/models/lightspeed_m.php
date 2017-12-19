@@ -99,7 +99,8 @@ class Lightspeed_M extends Master_M {
             "GN CAMO" => "Green Camo",
             "TIT" => "Titanium",
             "GRN" => "Green",
-            "RED" => "Red"
+            "RED" => "Red",
+            "" => "N/A"
         );
 
         if (array_key_exists($color, $lut)) {
