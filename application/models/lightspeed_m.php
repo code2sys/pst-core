@@ -31,9 +31,11 @@ class Lightspeed_M extends Master_M {
             "utv" => "UTV",
             "street bike" => "Street Bike",
             "dirt" => "Off-Road",
-            "power equipment" => "Lawn and Garden",
+            "power equipment" => "Generators",
             "scooter" => "Scooter",
-            "ruv" => "RUV"
+            "ruv" => "RUV",
+            "generators" => "Generators",
+            "lawn and garden" => "Lawn and Garden"
         );
 
         if (array_key_exists(strtolower($category_name), $lookup_table)) {
