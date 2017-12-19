@@ -86,6 +86,9 @@ $(document).ready(function(){
 								<a href="<?php echo site_url('admin/deleteMotorcycleImage/'.$v['id'].'/'.$v['motorcycle_id']);?>">
 									<input type="button" class="dlt" value="Delete Image">
 								</a>
+                                <?php if ($v['crs_thumbnail'] > 0): ?>
+                                <em>Stock Photo - Used As Thumbnail Only</em>
+                                <?php endif; ?>
 							</form>
 						</li>
 						<?php } ?>
