@@ -51,14 +51,6 @@
 							<td>Meta Description</td><td><input id="metatags" name="metatags" value="<?php echo @$pageRec['metatags']; ?>" class="text large" /></td>
 						</tr>
 						<?php if(@$pageRec['id'] != 12): ?>
-						<tr>
-							<td>CSS</td><td><input id="css" name="css" value="<?php echo @$pageRec['css']; ?>" class="text large" /></td>
-						</tr>
-						<tr>
-							<td>*Javascript</td><td><span style="font-size:10px;">*Open and close your own script tags.</span><br />
-																		 <input id="javascript" name="javascript" value="<?php echo @$pageRec['javascript']; ?>" class="text large" />
-							</td>
-						</tr>
 						<?php if(@$pageRec['delete']): ?>
 						<tr>
 							<td>Icon</td><td><span style="font-size:10px;">*Font-Awesome icons must be used.</span>&nbsp;&nbsp; <br />
