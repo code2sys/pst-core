@@ -132,10 +132,7 @@
 					  
 					  
 					  
-				      <tr><td><b>Associated Product SKU:</b></td><td> <input type="text" placeholder="Associated Product SKU" name="associatedProductSKU" id="associatedProductSKU" value="<?php echo set_value('associatedProductSKU'); ?>" class="text medium" /></td></tr>
-				      <?php if(@$specialConstraints): foreach($specialConstraints as $opt):?>
-				      <tr><td><b><?php echo $opt['displayName']; ?></b></td><td> <?php echo form_checkbox($opt['ruleName'], $opt['couponSpecialConstraintsId'], set_checkbox($opt['ruleName']), 'class="checkbox" id="'.$opt['couponSpecialConstraintsId'].'"'); ?> </td></tr>
-				      <?php endforeach; endif; ?>
+
 					</table>
 			    </div>
 							<?php echo form_submit('create_new', 'Create New', 'class="new"'); ?>
