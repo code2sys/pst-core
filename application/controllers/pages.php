@@ -16,8 +16,6 @@ class Pages extends Master_Controller {
 	  	$this->form_validation->set_rules('title', 'Meta Title', 'required|xss_clean');
 	  	$this->form_validation->set_rules('keywords', 'Keywords', 'xss_clean');
 	  	$this->form_validation->set_rules('metatags', 'Metatags', 'xss_clean');
-	  	$this->form_validation->set_rules('css', 'CSS', 'xss_clean');
-	  	$this->form_validation->set_rules('javascript', 'Javascript', 'xss_clean');
 	  	$this->form_validation->set_rules('widget', 'Widgets', 'xss_clean');
 	  	$this->form_validation->set_rules('icon', 'Icon', 'xss_clean');
 	  	$this->form_validation->set_rules('location', 'location', 'xss_clean');
