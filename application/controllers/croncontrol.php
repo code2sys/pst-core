@@ -149,7 +149,6 @@ class CronControl extends Master_Controller {
 
     protected $_preserveMachineMotoType;
     protected function _getMachineTypeMotoType($machine_type, $offroad_flag) {
-        print "Call to _getMachineTypeMotoType($machine_type, $offroad_flag) \n";
         if (!isset($this->_preserveMachineMotoType)) {
             $this->_preserveMachineMotoType = array();
         }
@@ -165,8 +164,11 @@ class CronControl extends Master_Controller {
             $type_id = $row["id"];
         }
 
+        if ($type_id == 0) {
+            throw new \Exception("Could not find a match for _getMachineTypeMotoType($machine_type, $offroad_flag)");
+        }
+
         $this->_preserveMachineMotoType[$key] = $type_id;
-        print "Result is: $type_id \n";
         return $type_id;
     }
 
@@ -261,8 +263,6 @@ class CronControl extends Master_Controller {
                     // OK, we have to add it, and then we have to add the motorcycle... but first we have to get some of the specs
                     $retail_price = $sale_price = $trim["msrp"];
                     $this_machine_type = $this->_getMachineTypeMotoType($machine_type, $trim["offroad"]);
-                    print_r($trim);
-                    print "Machine type: $this_machine_type \n";
 
                     $engine_type = ""; // 30003
                     $transmission = ""; // 40002
