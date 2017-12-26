@@ -54,42 +54,42 @@
         <div>
             <table>
                 <tbody>
-            <?php foreach (array(
-                array("key" => "firstName", "label" => "First Name"),
-                array("key" => "lastName", "label" => "Last Name"),
-                array("key" => "email", "label" => "Email Address"),
-                array("key" => "phone", "label" => "Phone"),
-                array("key" => "address", "label" => "Address"),
-                array("key" => "city", "label" => "City"),
-                array("key" => "state", "label" => "State"),
-                array("key" => "zipcode", "label" => "Zip"),
-                array("key" => "date_of_ride", "label" => defined('WORDING_PLACEHOLDER_DATE_OF_RIDE') ? WORDING_PLACEHOLDER_DATE_OF_RIDE : "Date of Test Ride"),
-                array("key" => "make", "label" => "Make"),
-                array("key" => "model", "label" => "Model"),
-                array("key" => "year", "label" => "Year"),
-                array("key" => "miles", "label" => "Miles"),
-                array("key" => "accessories", "label" => "Accessories"),
-                array("key" => "questions", "label" => "Questions"),
-                array("key" => "motorcycle", "label" => "Motorcycle"),
-                array("key" => "created", "label" => "Request Date/Time"),
-                array("key" => "status", "label" => "Status")
+                <?php foreach (array(
+                                   array("key" => "firstName", "label" => "First Name"),
+                                   array("key" => "lastName", "label" => "Last Name"),
+                                   array("key" => "email", "label" => "Email Address"),
+                                   array("key" => "phone", "label" => "Phone"),
+                                   array("key" => "address", "label" => "Address"),
+                                   array("key" => "city", "label" => "City"),
+                                   array("key" => "state", "label" => "State"),
+                                   array("key" => "zipcode", "label" => "Zip"),
+                                   array("key" => "date_of_ride", "label" => defined('WORDING_PLACEHOLDER_DATE_OF_RIDE') ? WORDING_PLACEHOLDER_DATE_OF_RIDE : "Date of Test Ride"),
+                                   array("key" => "make", "label" => "Make"),
+                                   array("key" => "model", "label" => "Model"),
+                                   array("key" => "year", "label" => "Year"),
+                                   array("key" => "miles", "label" => "Miles"),
+                                   array("key" => "accessories", "label" => "Accessories"),
+                                   array("key" => "questions", "label" => "Questions"),
+                                   array("key" => "motorcycle", "label" => "Motorcycle"),
+                                   array("key" => "created", "label" => "Request Date/Time"),
+                                   array("key" => "status", "label" => "Status")
 
 
-                           ) as $rec) {
+                               ) as $rec) {
 
-                var $value = array_key_exists($rec["key"], $quote) ? $quote[ $rec["key"] ] : "";
+                    $value = array_key_exists($rec["key"], $quote) ? $quote[ $rec["key"] ] : "";
 
-                if ($value != "") {
-                    ?>
+                    if ($value != "") {
+                        ?>
 
-                    <tr>
-                        <td valign="top"><strong><?php echo $rec["label"]; ?></strong></td>
-                        <td valign="top"><?php echo htmlentities($value); ?></td>
-                    </tr>
-            <?php
-                }
+                        <tr>
+                            <td valign="top"><strong><?php echo $rec["label"]; ?></strong></td>
+                            <td valign="top"><?php echo htmlentities($value); ?></td>
+                        </tr>
+                        <?php
+                    }
 
-            } ?>
+                } ?>
                 </tbody>
             </table>
 
