@@ -124,6 +124,18 @@ unset($motorcycle['videos'][0]);
 					<span><?php echo $motorcycle['color'];?></span>
 				</div>
                 <?php endif; ?>
+                <?php if ($motorcycle['type'] != ''): ?>
+				<div class="dtal-txt">
+					<label>vehicle type :</label>
+					<span><?php echo $motorcycle['type'];?></span>
+				</div>
+                <?php endif; ?>
+                <?php if ($motorcycle['category'] != ''): ?>
+				<div class="dtal-txt">
+					<label>category :</label>
+					<span><?php echo $motorcycle['category'];?></span>
+				</div>
+                <?php endif; ?>
 				<?php if( $motorcycle['mileage'] > 0 ) { ?>
 					<div class="dtal-txt">
 						<label>mileage :</label>
