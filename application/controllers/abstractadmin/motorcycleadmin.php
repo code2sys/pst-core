@@ -633,12 +633,12 @@ abstract class Motorcycleadmin extends Firstadmin
         }
     }
 
-    public function motorcycle_quote_ajax_mark_as_sent($id) {
+    public function motorcycle_quote_mark_as_sent($id) {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
-            $this->_printAjaxError("Sorry, you do not have access to this feature.");
+            redirect('');
         }
         $this->db->query("Update motorcycle_enquiry set status = 'Sent', sent_time = now() where id = ?", array($id));
-        $this->_printAjaxSuccess();
+        header("Location: /admin/motorcycle_quote_view/" . $id);
     }
 
 

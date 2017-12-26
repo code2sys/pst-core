@@ -90,7 +90,17 @@
 
                         <tr>
                             <td valign="top"><strong><?php echo $rec["label"]; ?></strong></td>
-                            <td valign="top"><?php echo htmlentities($value); ?></td>
+                            <td valign="top"><?php echo htmlentities($value); ?><?php if ($rec["key"] == "status") {
+                                    if ($value == "Received") {
+                                        ?>
+                                        <a href="/admin/motorcycle_quote_mark_as_sent/<?php echo $quote["id"]; ?>" class="fa fa-check"><i></i>&nbsp;Mark As Sent</a>
+                                        <?php
+                                    } else {
+                                        echo " - " . date("m/d/Y g:i a T", strtotime($quote["sent_time"]));
+
+                                    }
+
+                                } ?></td>
                         </tr>
                         <?php
                     }
