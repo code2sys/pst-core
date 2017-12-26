@@ -280,14 +280,8 @@ class CronControl extends Master_Controller {
                             $transmission = $s["text_value"];
                         } else if ($attribute_id == 20002) {
                             $retail_price = $sale_price= $s["text_value"];
-//                        } else if ($attribute_id == 10011) {
-//                            $category_id = $this->_getStockMotoCategory($s["text_value"]);
-//
-//                            // Special conversion to Dirt Bike
-//                            if ($s["text_value"] == "Off-Road" && $machine_type == "MOT") {
-//                                // We have to change the type...
-//                                $this_machine_type = $offroad_vehicle_type;
-//                            }
+                        } else if ($attribute_id == 10011) {
+                            $category_id = $this->_getStockMotoCategory($s["text_value"]);
                         }
                     }
 
