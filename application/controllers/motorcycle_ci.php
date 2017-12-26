@@ -61,7 +61,13 @@ class Motorcycle_CI extends Welcome {
         $this->load->model('pages_m');
         $this->load->model('motorcycle_m');
 
-        $filter = $this->motorcycle_m->assembleFilterFromRequest();
+        if (array_key_exists("motorcycle_filter", $_SESSION) && is_array($_SESSION["motorcycle_filter"])) {
+            $filter = $_SESSION["motorcycle_filter"];
+        } else {
+            $filter = $this->motorcycle_m->assembleFilterFromRequest();
+            $_SESSION["motorcycle_filter"] = $filter;
+
+        }
 
         $this->_mainData['vehicles'] = $this->motorcycle_m->getMotorcycleVehicle($filter);
         $this->_mainData['brands'] = $this->motorcycle_m->getMotorcycleMake($filter);
