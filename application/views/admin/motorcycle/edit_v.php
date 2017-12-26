@@ -617,17 +617,25 @@ $cstdata = (array) json_decode($product['data']);
        // do they have a sku?
         var required_fields = ["vehicle_type", "make", "model", "year", "sku", "msrp"];
 
+        // If they are all blank, just refuse to do anything...
+        var error_count = 0;
         for (var i = 0; i < required_fields.length; i++) {
             var $m = $("[name='" + required_fields[i]+ "']");
             if ($m.length > 0) {
                 if ($m.val() == "") {
                     error = true;
-                    alert("Please specify " + (required_fields[i].replace("_", " ")));
+                    error_count++;
                 }
             }
         }
 
+
        if (error) {
+            if (error_count < required_fields.length) {
+                // well, they filled in SOMETHING
+                alert("Please fill in all required fields.");
+            }
+
            e.preventDefault();
            e.stopPropagation();
        }
