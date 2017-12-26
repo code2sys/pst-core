@@ -661,7 +661,7 @@ abstract class Motorcycleadmin extends Firstadmin
 
         $this->load->helper("jonathan");
 
-        $where = jonathan_generate_likes(array("status", "name", "email", "phone", "motorcycle"), $s = (array_key_exists("search", $_REQUEST) && array_key_exists("value", $_REQUEST["search"]) ? $_REQUEST["search"]["value"] : ""), "WHERE");
+        $where = jonathan_generate_likes(array("status", "firstName", "lastName", "email", "phone", "motorcycle"), $s = (array_key_exists("search", $_REQUEST) && array_key_exists("value", $_REQUEST["search"]) ? $_REQUEST["search"]["value"] : ""), "WHERE");
 
         // get total count
         $query = $this->db->query("Select count(*) as cnt from motorcycle_enquiry");
