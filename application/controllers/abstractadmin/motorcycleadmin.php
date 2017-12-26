@@ -697,7 +697,7 @@ abstract class Motorcycleadmin extends Firstadmin
             $clean_row[] =
 
             // put some actions on there...
-            "<span class='nowrap'><a href='#' class='edit-button' data-motorcycle-id='" . $row["id"] . "'><i class='fa fa-edit'></i>&nbsp;Edit</a></span><br/> " ./* edit */ /* delete */ /* active */ /* inactive */
+            "<span class='nowrap'><a href='#' class='view-button' data-motorcycle-id='" . $row["id"] . "'><i class='fa fa-search'></i>&nbsp;View</a></span><br/> " ./* edit */ /* delete */ /* active */ /* inactive */
             "<span class='nowrap'><a href='#' class='remove-button' data-motorcycle-id='" . $row["id"] . "'><i class='fa fa-remove'></i>&nbsp;Remove</a></span><br/> ";
 
             $output_rows[] = $clean_row;
