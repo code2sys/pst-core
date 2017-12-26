@@ -387,7 +387,7 @@ echo $CI->load->view("braintree", array(
 		}).get();
 
 		// This is just stupid, too...
-		var condition = "<?php echo (array_key_exists('fltr', $_GET) && $_GET['fltr'] != '') ? 'fltr=' . $_GET['fltr'] : '';?>";
+		var condition = "<?php echo (array_key_exists('fltr', $_GET) && $_GET['fltr'] != '') ? $_GET['fltr'] : '';?>";
 		
 		var cndn = "";
 		if( condition != "" ) {
