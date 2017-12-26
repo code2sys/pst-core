@@ -89,6 +89,7 @@
             "paging" : true,
             "info" : true,
             "stateSave" : true,
+            "order": [[ 0, "desc" ]],
             "columns" : [
                 { "width" : "15%", "type" : "datetime" },
                 null,
