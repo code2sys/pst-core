@@ -40,7 +40,7 @@
         <!-- END VALIDATION ALERT -->
 
 
-        <div class="admin_search_left">
+        <div class="">
             <div class="clear"></div>
             <h1><i class="fa fa-motorcycle"></i> Quote Requests</h1>
         </div>
