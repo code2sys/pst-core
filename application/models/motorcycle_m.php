@@ -132,8 +132,13 @@ class Motorcycle_M extends Master_M {
     }
 
     public function getMotorcycle( $id ){
-        $where = array('motorcycle.id' => $id );
-        $record = $this->selectRecord('motorcycle', $where);
+        $record = array();
+        $query = $this->db->query("select motorcycle.*, motorcycle_category.name as category, motorcycle_type.name as type from motorcycle left join motorcycle_category on motorcycle.category = motorcycle_category.id left join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id where motorcycle.id = ?", array($id));
+        foreach ($query->result_array() as $row) {
+            $record = $row;
+        }
+//        $where = array('motorcycle.id' => $id );
+//        $record = $this->selectRecord('motorcycle', $where);
 
 //        $iwhere = array('motorcycleimage.motorcycle_id' => $id );
 //        $this->db->order_by('motorcycleimage.priority_number asc');
