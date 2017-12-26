@@ -415,7 +415,7 @@ echo $CI->load->view("braintree", array(
 
 		// JLB 12-26-17
        // We need to tell this to change the filter. This helps given that they made the insane choice of POSTING the other things...Why would you ever post this???
-       url1 = (url1 != "" ? '&' : '')  + "filterChange=1";
+       url1 = url1 + (url1 != "" ? '&' : '')  + "filterChange=1";
 		
 		//var url1 = cndn+"&brands="+brnd+"&categories="+ctgr+"&years="+yrs+"&vehicles="+vhcl;
 		//alert(url1);
