@@ -1,6 +1,25 @@
 <?php
 $new_assets_url = jsite_url("/qatesting/newassets/");
 $media_url = jsite_url("/media/");
+
+// JLB 12-26-17
+// We have to retrofit this because the Benz guys never, ever thought to be consistent in naming.
+if (MOTORCYCLE_SHOP_NEW) {
+    if (!array_key_exists("fltr", $_GET)) {
+        if (array_key_exists("condition", $filter) && $filter["condition"] == 1) {
+            $_GET["fltr"] = "new";
+        } else {
+            $_GET["fltr"] = "pre-owned";
+        }
+    }
+} else {
+    $_GET["fltr"] = "pre-owned";
+}
+
+if (!array_key_exists("brands", $_GET)) {
+
+}
+
 ?>
 
 <!--

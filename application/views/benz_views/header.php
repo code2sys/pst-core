@@ -364,7 +364,14 @@ echo $CI->load->view("braintree", array(
     });
 
    });
-   
+
+  <?php
+          /*
+           * JLB 12-26-17
+           * This could earn my "dumbest fuck" award. Why did they put this thing over here, in the header file, when it's related to the product search screen?
+           */
+
+          ?>
    $(document).on('change', '.styled', function() {
 		var brands = $("input[name='brand[]']:checkbox:checked").map(function(){
 			return $(this).val();
@@ -378,7 +385,9 @@ echo $CI->load->view("braintree", array(
 		var vehicles = $("input[name='vehicles[]']:checkbox:checked").map(function(){
 			return $(this).val();
 		}).get();
-		var condition = "<?php echo $_GET['fltr'];?>";
+
+		// This is just stupid, too...
+		var condition = "<?php echo (array_key_exists('fltr', $_GET) && $_GET['fltr'] != '') ? 'fltr=' . $_GET['fltr'] : '';?>";
 		
 		var cndn = "";
 		if( condition != "" ) {
@@ -403,6 +412,10 @@ echo $CI->load->view("braintree", array(
 		if( vehicles.length > 0 ) {
 			url1 = url1+"&vehicles="+vhcl;
 		}
+
+		// JLB 12-26-17
+       // We need to tell this to change the filter. This helps given that they made the insane choice of POSTING the other things...Why would you ever post this???
+       url1 = (url1 != "" ? '&' : '')  + "filterChange=1";
 		
 		//var url1 = cndn+"&brands="+brnd+"&categories="+ctgr+"&years="+yrs+"&vehicles="+vhcl;
 		//alert(url1);
