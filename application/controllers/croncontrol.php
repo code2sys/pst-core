@@ -149,6 +149,7 @@ class CronControl extends Master_Controller {
 
     protected $_preserveMachineMotoType;
     protected function _getMachineTypeMotoType($machine_type, $offroad_flag) {
+        print "Call to _getMachineTypeMotoType($machine_type, $offroad_flag) \n";
         if (!isset($this->_preserveMachineMotoType)) {
             $this->_preserveMachineMotoType = array();
         }
@@ -165,7 +166,7 @@ class CronControl extends Master_Controller {
         }
 
         $this->_preserveMachineMotoType[$key] = $type_id;
-
+        print "Result is: $type_id \n";
         return $type_id;
     }
 
