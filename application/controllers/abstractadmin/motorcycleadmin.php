@@ -609,7 +609,28 @@ abstract class Motorcycleadmin extends Firstadmin
     }
 
     public function motorcycle_quote_view($id) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        $this->setNav('admin/nav_v', 5);
 
+        // getthe quote
+        $match = false;
+        $the_row = array();
+        $query = $this->db->query("Select * from motorcycle_enquiry where id = ?", array($id));
+        foreach ($query->result_array() as $row) {
+            $match = true;
+            $the_row = $row;
+        }
+
+        if (!$match) {
+            // redirect it...
+            header("Location: /admin/motorcycle_quotes");
+        } else {
+            // OK, we have to cram it down...
+            $this->_mainData["quote"] = $the_row;
+            $this->renderMasterPage('admin/master_v', 'admin/motorcycle/quotes_view', $this->_mainData);
+        }
     }
 
     public function motorcycle_quote_ajax_mark_as_sent($id) {
