@@ -91,7 +91,7 @@
             "processing" : true,
             "serverSide" : true,
             "ajax" : {
-                "url" : "<?php echo base_url("admin/motorcycle_quote_ajax"); ?>",
+                "url" : "<?php echo base_url("admin/minventory_ajax"); ?>",
                 "type" : "POST"
             },
             "data" : [],
