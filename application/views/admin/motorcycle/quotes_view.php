@@ -80,6 +80,12 @@
                     $value = array_key_exists($rec["key"], $quote) ? $quote[ $rec["key"] ] : "";
 
                     if ($value != "") {
+
+                        if ($rec["key"] == "created") {
+                            $value = date("m/d/Y g:i a T", strtotime($value));
+                        }
+
+
                         ?>
 
                         <tr>
