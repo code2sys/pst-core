@@ -591,7 +591,7 @@ abstract class Motorcycleadmin extends Firstadmin
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
-        $this->setNav('admin/nav_v', 3);
+        $this->setNav('admin/nav_v', 5);
 
         // Let's get those quotes, all of them...
         $query = $this->db->query("Select * from motorcycle_enquiry");
