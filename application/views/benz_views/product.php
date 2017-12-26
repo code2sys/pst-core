@@ -3,6 +3,12 @@ $new_assets_url = jsite_url("/qatesting/newassets/");
 $media_url = jsite_url("/media/");
 ?>
 
+<!--
+
+<?php print_r($filter); ?>
+
+-->
+
 <div class="sw filbar-bx">
     <div class="container_b">
         <div class="fltrbar">

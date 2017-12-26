@@ -80,6 +80,7 @@ class Motorcycle_CI extends Welcome {
         $this->_mainData['fpages'] = $this->pages_m->getPages(1, 'footer');
         $recently = $_SESSION['recentlyMotorcycle'];
         $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
+        $this->_mainData["filter"] = $filter;
         $this->renderMasterPage('benz_views/header.php', 'benz_views/product.php', $this->_mainData);
         // $this->load->view('benz_views/header.php');
         // $this->load->view('benz_views/product.php');
