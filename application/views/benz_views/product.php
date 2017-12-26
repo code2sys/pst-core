@@ -240,13 +240,15 @@ if (!array_key_exists("vehicles", $_GET) && array_key_exists("vehicles", $filter
                                     </div>
                                     <div class="form-group">						
                                         <input type="text" class="form-control" placeholder="zip code" name="zipcode">
-                                    </div>				
+                                    </div>
+                    <?php if (!defined('DISABLE_TEST_DRIVE') || !DISABLE_TEST_DRIVE): ?>
                                     <h3 class="txt-title"><?php if (defined('WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE')) { echo WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE; } else { ?>Want to Schedule a Test Drive?<?php } ?></h3>
 
                                     <div class="form-group">						
                                         <input type="text" class="form-control" placeholder="<?php if (defined('WORDING_PLACEHOLDER_DATE_OF_RIDE')) { echo WORDING_PLACEHOLDER_DATE_OF_RIDE; } else { ?>date of ride<?php } ?>" name="date_of_ride">
                                     </div>
                                     <hr class="brdr">
+                        <?php endif; ?>
                                     <h3 class="txt-title">Trade in?</h3>
 
                                     <div class="form-group">						
