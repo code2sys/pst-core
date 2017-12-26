@@ -16,58 +16,51 @@
                 <h1>Error</h1>
                 <div class="clear"></div>
                 <p><?php echo validation_errors();
-        if (@$errors): foreach ($errors as $error): echo $error;
-            endforeach;
-        endif; ?></p>
-		
-		
-		<?php if(@$success): ?>
-		<!-- SUCCESS MESSAGE -->
-  		<div class="success">
-  		  <img src="<?php echo $assets; ?>/images/success.png" style="float:left;margin-right:10px;">
-  	    <h1>Success</h1>
-  	    <div class="clear"></div>
-  	    <p>
-  	      Your changes have been made.
-  	    </p>
-  	    <div class="clear"></div>
-  		</div>
-		<!-- END SUCCESS MESSAGE -->
-		<?php endif; ?>
+                    if (@$errors): foreach ($errors as $error): echo $error;
+                    endforeach;
+                    endif; ?></p>
+
+
+                <?php if(@$success): ?>
+                    <!-- SUCCESS MESSAGE -->
+                    <div class="success">
+                        <img src="<?php echo $assets; ?>/images/success.png" style="float:left;margin-right:10px;">
+                        <h1>Success</h1>
+                        <div class="clear"></div>
+                        <p>
+                            Your changes have been made.
+                        </p>
+                        <div class="clear"></div>
+                    </div>
+                    <!-- END SUCCESS MESSAGE -->
+                <?php endif; ?>
 
             </div>
-<?php endif; ?>
+        <?php endif; ?>
         <!-- END VALIDATION ALERT -->
 
 
         <div class="admin_search_left">
             <div class="clear"></div>
-            <h1><i class="fa fa-motorcycle"></i>&nbsp;New & Used Unit Inventory</h1>
-            <p><b>To add a new product click the button below.</b></p>
-            <br>
-            <a href="<?php echo base_url('admin/motorcycle_edit'); ?>" id="button"><i class="fa fa-plus"></i>&nbsp;Add a new Unit</a>
+            <h1><i class="fa fa-motorcycle"></i> Quote Requests</h1>
         </div>
 
 
-        <div class="pagination"><?php echo @$pagination; ?></div>
         <div class="clear"></div>
         <!-- PRODUCT LIST -->
         <div class="tabular_data">
-            <table width="100%" cellpadding="10" id="admin_motorcycle_list_table_v">
+            <table width="100%" cellpadding="10" id="admin_motorcycle_quote_form">
                 <thead>
                 <tr>
-                    <th><b>SKU</b></th>
-                    <th><b>Category</b></th>
-                    <th><b>Type</b></th>
-                    <th><b>Image</b></th>
-                    <th><b>Title</b></th>
-                    <th><b>Featured</b></th>
-                    <th><b>Active</b></th>
-                    <th><b>MSRP</b></th>
-                    <th><b>Sale Price</b></th>
-                    <th><b>Condition</b></th>
-                    <th><b>Mileage</b></th>
-                    <th><b>Source</b></th>
+                    <th><b>Submitted</b></th>
+                    <th><b>Status</b></th>
+                    <th><b>Name</b></th>
+                    <th><b>Email</b></th>
+                    <th><b>Phone</b></th>
+                    <th><b>Motorcycle</b></th>
+<?php if (!defined("DISABLE_TEST_DRIVE") || !DISABLE_TEST_DRIVE): ?>
+                    <th><b><?php if (defined('WORDING_PLACEHOLDER_DATE_OF_RIDE')) { echo WORDING_PLACEHOLDER_DATE_OF_RIDE; } else { ?>Date of Test Ride<?php } ?></b></th>
+                    <?php endif; ?>
                     <th><b>Action</b></th>
                 </tr>
                 </thead>
@@ -75,8 +68,6 @@
                 </tbody>
             </table>
         </div>
-        <!-- END PRODUCT LIST -->
-        <a href="<?php echo base_url('admin/motorcycle_edit'); ?>" id="button"><i class="fa fa-plus"></i>&nbsp;Add a new Unit</a>
 
         <div class="clear"></div>
 
@@ -91,7 +82,7 @@
             "processing" : true,
             "serverSide" : true,
             "ajax" : {
-                "url" : "<?php echo base_url("admin/motorcycle_quote_ajax"); ?>",
+                "url" : "<?php echo base_url("admin/minventory_ajax"); ?>",
                 "type" : "POST"
             },
             "data" : [],
@@ -119,14 +110,14 @@
 
 
     function submitAjaxAction(id, action) {
-        if (action == "edit") {
+        if (action == "view") {
             // we just have to redirect it.
-            window.location.href = "<?php echo site_url('admin/motorcycle_edit'); ?>/" + id;
+            window.location.href = "<?php echo site_url('admin/motorcycle_quote_view'); ?>/" + id;
             return false; // all done..
         }
 
         if (action == "remove") {
-            if (!confirm("Are you sure? This will remove the unit record from the database.")) {
+            if (!confirm("Are you sure? This will remove the quote request from the database.")) {
                 return false;
             }
         }
@@ -135,7 +126,7 @@
         $.ajax({
             "type" : "POST",
             "dataType": "json",
-            "url" : "<?php echo site_url("admin/motorcycle_ajax_"); ?>" + action + "/" + id,
+            "url" : "<?php echo site_url("admin/motorcycle_quote_ajax_remove"); ?>" + action + "/" + id,
             "data" : {},
             "success" : function(data) {
                 // OK, we need to make the table refresh
@@ -153,27 +144,15 @@
 
     $(document).ready(function() {
         // We need to bind these actions
-        $(".tabular_data").on("click", ".edit-button", function(e) {
+        $(".tabular_data").on("click", ".view-button", function(e) {
             e.preventDefault();
-            submitAjaxAction(e.target.dataset.motorcycleId, "edit");
+            submitAjaxAction(e.target.dataset.motorcycleId, "view");
         });
 
         // We need to bind these actions
         $(".tabular_data").on("click", ".remove-button", function(e) {
             e.preventDefault();
             submitAjaxAction(e.target.dataset.motorcycleId, "remove");
-        });
-
-        // We need to bind these actions
-        $(".tabular_data").on("click", ".active-button", function(e) {
-            e.preventDefault();
-            submitAjaxAction(e.target.dataset.motorcycleId, "active");
-        });
-
-        // We need to bind these actions
-        $(".tabular_data").on("click", ".inactive-button", function(e) {
-            e.preventDefault();
-            submitAjaxAction(e.target.dataset.motorcycleId, "inactive");
         });
     });
 </script>

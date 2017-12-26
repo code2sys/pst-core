@@ -588,11 +588,16 @@ abstract class Motorcycleadmin extends Firstadmin
      */
 
     public function motorcycle_quotes() {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
         $this->setNav('admin/nav_v', 2);
 
         // Let's get those quotes, all of them...
+        $query = $this->db->query("Select * from motorcycle_enquiry");
+        $this->_mainData["inquiries"] = $query->result_array();
 
-        $this->renderMasterPage('admin/master_v', 'admin/motorcycle/list_v', $this->_mainData);
+        $this->renderMasterPage('admin/master_v', 'admin/motorcycle/quotes_index', $this->_mainData);
     }
 
     public function motorcycle_quote_ajax_remove($id) {
@@ -614,5 +619,101 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->db->query("Update motorcycle_enquiry set status = 'Sent', sent_time = now() where id = ?", array($id));
         $this->_printAjaxSuccess();
     }
+
+
+    public function motorcycle_quote_ajax() {
+        $columns = array(
+            "created",
+            "status",
+            "name",
+            "email", "phone", "motorcycle"
+        );
+
+        if (!defined("DISABLE_TEST_DRIVE") || !DISABLE_TEST_DRIVE) {
+            $columns[] = "date_of_ride";
+        }
+        $columns[] = "";
+
+
+        $length = array_key_exists("length", $_REQUEST) ? $_REQUEST["length"] : 500;
+        $start = array_key_exists("start", $_REQUEST) ? $_REQUEST["start"] : 0;
+
+        $order_string = "order by created desc ";
+
+        if (array_key_exists("order", $_REQUEST) && is_array($_REQUEST["order"]) && count($_REQUEST["order"]) > 0) {
+            // OK, there's a separate order string...
+            $order_string = "order by ";
+            $orderings = $_REQUEST["order"];
+            if (count($orderings) == 0) {
+                $order_string .= " created desc";
+            } else {
+                for ($i = 0; $i < count($orderings); $i++) {
+                    if ($i > 0) {
+                        $order_string .= ", ";
+                    }
+
+                    $field = $columns[$orderings[$i]["column"]];
+                    $order_string .=  $field . " " . $orderings[$i]["dir"];
+                }
+            }
+        }
+
+
+        $this->load->helper("jonathan");
+
+        $where = jonathan_generate_likes(array("status", "name", "email", "phone", "motorcycle"), $s = (array_key_exists("search", $_REQUEST) && array_key_exists("value", $_REQUEST["search"]) ? $_REQUEST["search"]["value"] : ""), "WHERE");
+
+        // get total count
+        $query = $this->db->query("Select count(*) as cnt from motorcycle_enquiry");
+        $total_count = 0;
+        foreach ($query->result_array() as $row) {
+            $total_count = $row['cnt'];
+        }
+
+        $query = $this->db->query("Select count(*) as cnt from motorcycle_enquiry $where");
+        $filtered_count = 0;
+        foreach ($query->result_array() as $row) {
+            $filtered_count = $row['cnt'];
+        }
+
+        $query = $this->db->query("Select motorcycle_enquiry.*, concat(first_name, ' ', last_name) as name from motorcycle_enquiry $where $order_string limit $length offset $start  ");
+        $rows = $query->result_array();
+
+        $output_rows = array();
+        foreach ($rows as $row) {
+            $clean_row = array(
+                date("m/d/Y g:i a T", strtotime($row['created'])),
+                $row['status'],
+                $row['name'],
+                $row['email'],
+                $row['phone'],
+                $row['motorcycle']
+            );
+
+            if (!defined("DISABLE_TEST_DRIVE") || !DISABLE_TEST_DRIVE) {
+                $clean_row[] = $row['date_of_ride'];
+            }
+
+            $clean_row[] =
+
+            // put some actions on there...
+            "<span class='nowrap'><a href='#' class='edit-button' data-motorcycle-id='" . $row["id"] . "'><i class='fa fa-edit'></i>&nbsp;Edit</a></span><br/> " ./* edit */ /* delete */ /* active */ /* inactive */
+            "<span class='nowrap'><a href='#' class='remove-button' data-motorcycle-id='" . $row["id"] . "'><i class='fa fa-remove'></i>&nbsp;Remove</a></span><br/> ";
+
+            $output_rows[] = $clean_row;
+        }
+
+        print json_encode(array(
+            "data" => $output_rows,
+            "draw" => array_key_exists("draw", $_REQUEST) ? $_REQUEST["draw"] : 0,
+            "recordsTotal" => $total_count,
+            "recordsFiltered" => $filtered_count,
+            "limit" => $length,
+            "offset" => $start,
+            "order_string" => $order_string,
+            "search" => $s
+        ));
+    }
+
 
 }
