@@ -676,7 +676,7 @@ abstract class Motorcycleadmin extends Firstadmin
             $filtered_count = $row['cnt'];
         }
 
-        $query = $this->db->query("Select motorcycle_enquiry.*, concat(first_name, ' ', last_name) as name from motorcycle_enquiry $where $order_string limit $length offset $start  ");
+        $query = $this->db->query("Select motorcycle_enquiry.*, concat(firstName, ' ', lastName) as name from motorcycle_enquiry $where $order_string limit $length offset $start  ");
         $rows = $query->result_array();
 
         $output_rows = array();
