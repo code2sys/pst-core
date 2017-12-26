@@ -123,7 +123,7 @@
         $.ajax({
             "type" : "POST",
             "dataType": "json",
-            "url" : "<?php echo site_url("admin/motorcycle_quote_ajax_remove"); ?>" + action + "/" + id,
+            "url" : "<?php echo site_url("admin/motorcycle_quote_ajax_"); ?>" + action + "/" + id,
             "data" : {},
             "success" : function(data) {
                 // OK, we need to make the table refresh
