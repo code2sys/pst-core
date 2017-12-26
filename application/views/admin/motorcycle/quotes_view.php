@@ -42,7 +42,7 @@
 
         <div class="">
             <div class="clear"></div>
-            <h1><i class="fa fa-motorcycle"></i> Quote Request from <?php echo htmlentities($quote["firstName"] . " " . $quote["lastName"]); ?></h1>
+            <h1><i class="fa fa-motorcycle"></i> Unit Inquiry from <?php echo htmlentities($quote["firstName"] . " " . $quote["lastName"]); ?></h1>
         </div>
 
         <!-- TODO - Button to mark it as appropriate -->

@@ -42,7 +42,7 @@
 
         <div class="">
             <div class="clear"></div>
-            <h1><i class="fa fa-motorcycle"></i> Quote Requests</h1>
+            <h1><i class="fa fa-motorcycle"></i> Unit Inquiries</h1>
         </div>
 
 
