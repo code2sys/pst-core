@@ -90,18 +90,14 @@
             "info" : true,
             "stateSave" : true,
             "columns" : [
-                { "width" : "15%" },
+                { "width" : "15%", "type" : "datetime" },
                 null,
                 null,
                 null,
                 null,
+                <?php if (!defined("DISABLE_TEST_DRIVE") || !DISABLE_TEST_DRIVE): ?>
                 null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
+                <?php endif; ?>
                 null
             ]
         });
