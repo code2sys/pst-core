@@ -42,7 +42,7 @@ $cstdata = (array) json_decode($product['data']);
                         <tr>
                             <td style="width:50px;"><b>Vin Number:</b></td>
                             <td>
-                                <input type="text" name="vin_number" value="<?php echo $product['vin_number']==''?$_POST['vin_number']:$product['vin_number']; ?>" class="text small"> <button type="button" id="query_vin">Search VIN</button> <span id="query_vin_failed" style="display: none; background: #fee; font-style: italic; font-weight: bold;">Sorry, no match by VIN.</span>
+                                <input type="text" name="vin_number" value="<?php echo $product['vin_number']==''?$_POST['vin_number']:$product['vin_number']; ?>" class="text small" id="vin_number_input"> <button type="button" id="query_vin">Search VIN</button> <span id="query_vin_failed" style="display: none; background: #fee; font-style: italic; font-weight: bold;">Sorry, no match by VIN.</span>
                             </td>
                         </tr>
                     <?php endif; ?>
@@ -287,8 +287,11 @@ $cstdata = (array) json_decode($product['data']);
     <?php if ($id == 0): ?>
     var suppress_vin_decoder = false;
 
-    // If you change the VIN, you should ripple down all the effects...
-    $("#query_vin").on("click", function(e) {
+    var queryVinFunction = function(e) {
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
         var vin = $("input[name=vin_number]").val().trim();
 
         // hack
@@ -341,7 +344,18 @@ $cstdata = (array) json_decode($product['data']);
             })
 
         }
+    };
+
+    // Also catch this...
+    // https://stackoverflow.com/questions/7060750/detect-the-enter-key-in-a-text-input-field
+    $("#vin_number_input").on('keyup', function (e) {
+        if (e.keyCode == 13) {
+            queryVinFunction(e);
+        }
     });
+
+    // If you change the VIN, you should ripple down all the effects...
+    $("#query_vin").on("click", queryVinFunction);
 
 
     <?php else: ?>

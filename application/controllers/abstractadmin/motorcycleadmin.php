@@ -583,5 +583,36 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->_printAjaxSuccess();
     }
 
+    /*
+     * These are for the Motorcycle Quotes
+     */
+
+    public function motorcycle_quotes() {
+        $this->setNav('admin/nav_v', 2);
+
+        // Let's get those quotes, all of them...
+
+        $this->renderMasterPage('admin/master_v', 'admin/motorcycle/list_v', $this->_mainData);
+    }
+
+    public function motorcycle_quote_ajax_remove($id) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            $this->_printAjaxError("Sorry, you do not have access to this feature.");
+        }
+        $this->db->query("Delete from motorcycle_enquiry where id = ?", array($id));
+        $this->_printAjaxSuccess();
+    }
+
+    public function motorcycle_quote_view($id) {
+
+    }
+
+    public function motorcycle_quote_ajax_mark_as_sent($id) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            $this->_printAjaxError("Sorry, you do not have access to this feature.");
+        }
+        $this->db->query("Update motorcycle_enquiry set status = 'Sent', sent_time = now() where id = ?", array($id));
+        $this->_printAjaxSuccess();
+    }
 
 }
