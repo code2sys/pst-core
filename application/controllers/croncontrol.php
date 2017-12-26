@@ -260,6 +260,8 @@ class CronControl extends Master_Controller {
                     // OK, we have to add it, and then we have to add the motorcycle... but first we have to get some of the specs
                     $retail_price = $sale_price = $trim["msrp"];
                     $this_machine_type = $this->_getMachineTypeMotoType($machine_type, $trim["offroad"]);
+                    print_r($trim);
+                    print "Machine type: $this_machine_type \n";
 
                     $engine_type = ""; // 30003
                     $transmission = ""; // 40002
