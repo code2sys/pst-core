@@ -16,8 +16,20 @@ if (MOTORCYCLE_SHOP_NEW) {
     $_GET["fltr"] = "pre-owned";
 }
 
-if (!array_key_exists("brands", $_GET)) {
+if (!array_key_exists("brands", $_GET) && array_key_exists("brands", $filter) && is_array($filter["brands"])) {
+    $_GET["brands"] = implode("$", $filter["brands"]);
+}
 
+if (!array_key_exists("years", $_GET) && array_key_exists("years", $filter) && is_array($filter["years"])) {
+    $_GET["years"] = implode("$", $filter["years"]);
+}
+
+if (!array_key_exists("categories", $_GET) && array_key_exists("categories", $filter) && is_array($filter["categories"])) {
+    $_GET["categories"] = implode("$", $filter["categories"]);
+}
+
+if (!array_key_exists("vehicles", $_GET) && array_key_exists("vehicles", $filter) && is_array($filter["vehicles"])) {
+    $_GET["vehicles"] = implode("$", $filter["vehicles"]);
 }
 
 ?>
@@ -259,7 +271,7 @@ if (!array_key_exists("brands", $_GET)) {
                                     <h3 class="txt-title">I am Interested in this Vehicle</h3>
 
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Poloris" value="<?php echo $motorcycle['title']; ?>" readonly name="motorcycle">
+                                        <input type="text" class="form-control" placeholder="Unit Name" value="<?php echo $motorcycle['title']; ?>" readonly name="motorcycle">
                                     </div>
                                     <input type="hidden" name="product_id" value="<?php echo $motorcycle['id']; ?>">
                                     <div class="col-md-12 text-center" style="float:none;">

@@ -421,7 +421,7 @@ unset($motorcycle['videos'][0]);
 					<h3 class="txt-title">I am Interested in this Vehicle</h3>
 					
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Poloris" value="<?php echo $motorcycle['title'];?>" readonly name="motorcycle">
+						<input type="text" class="form-control" placeholder="Unit Name" value="<?php echo $motorcycle['title'];?>" readonly name="motorcycle">
 					</div>
 						<input type="hidden" name="product_id" value="<?php echo $motorcycle['id'];?>">
 					<div class="col-md-12 text-center" style="float:none;">
