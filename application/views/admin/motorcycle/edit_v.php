@@ -615,7 +615,7 @@ $cstdata = (array) json_decode($product['data']);
        var error = false;
 
        // do they have a sku?
-        var required_fields = ["vehicle_type", "make", "model", "year", "sku", "msrp"];
+        var required_fields = ["vehicle_type", "make", "model", "year", "sku", "retail_price"];
 
         // If they are all blank, just refuse to do anything...
         var error_count = 0;
@@ -634,7 +634,6 @@ $cstdata = (array) json_decode($product['data']);
             if (error_count < required_fields.length) {
                 // well, they filled in SOMETHING
                 alert("Please fill in all required fields.");
-                console.log("Error count is " + error_count + " but required is " + required_fields.length);
             }
 
            e.preventDefault();
