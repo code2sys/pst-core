@@ -768,7 +768,7 @@ class Productuploadermodel extends CI_Model {
             }
 
             // Now, we run another update
-            $values[] = $partnumber_id;
+            $values_array[] = $partnumber_id;
             $this->db->query("Update partnumber set $values_string where partnumber_id = ? limit 1", $values_array);
         }
 
