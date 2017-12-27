@@ -699,6 +699,8 @@ class Productuploadermodel extends CI_Model {
 
         }
 
+        $partnumber_rollup = array();
+
         // OK, if it's not there, you'll have to insert into partpartnumber...
         $CI->Portalmodel->insertPartPartNumber($part_id, $partnumber_id);
 
@@ -716,6 +718,8 @@ class Productuploadermodel extends CI_Model {
             }
             $update_query .= " price = ? ";
             $values[] = $row["price"];
+            $partnumber_rollup[] = array("key" => "price", "value" => $row["price"]);
+            $partnumber_rollup[] = array("key" => "dealer_sale", "value" => $row["price"]);
         }
         // JLB 12-27-17
         // Add in the shipping weight here. It is going only on partdealervariation.
@@ -727,7 +731,8 @@ class Productuploadermodel extends CI_Model {
                 $update_query .= " , ";
             }
             $update_query .= " weight = ? ";
-            $values[] = floatVal($row["weight"]);
+            $values[] = $v = floatVal($row["weight"]);
+            $partnumber_rollup[] = array("key" => "weight", "value" => $v);
         }
         if (array_key_exists("cost", $row) && $row["cost"] != "") {
             if (count($values) > 0) {
@@ -735,6 +740,7 @@ class Productuploadermodel extends CI_Model {
             }
             $update_query .= " cost = ? ";
             $values[] = $row["cost"];
+            $partnumber_rollup[] = array("key" => "cost", "value" => $row["cost"]);
         }
         if (array_key_exists("closeout", $row) && $row["closeout"] != "") {
             if (count($values) > 0) {
@@ -747,6 +753,23 @@ class Productuploadermodel extends CI_Model {
         if (count($values) > 0) {
             $values[] = $partvariation_id;
             $this->db->query($update_query . " where partvariation_id = ? limit 1", $values);
+        }
+
+        if (count($partnumber_rollup) > 0) {
+            // OK, we have to do an update of partnumber, too...
+            $values_string = "";
+            $values_array = array();
+            foreach ($partnumber_rollup as $p) {
+                if ($values_string != "") {
+                    $values_string .= " , ";
+                }
+                $values_string .= $p["key"] . " = If(IsNull(" . $p["key"] . ") OR " . $p["key"] . " = 0, ?, " . $p["key"] . ")";
+                $values_array[] = $p["value"];
+            }
+
+            // Now, we run another update
+            $values[] = $partnumber_id;
+            $this->db->query("Update partnumber set $values_string where partnumber_id = ? limit 1", $values_array);
         }
 
         if (array_key_exists("question", $row) && $row["question"] != "") {
