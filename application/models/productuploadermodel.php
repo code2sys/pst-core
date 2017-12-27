@@ -698,7 +698,7 @@ class Productuploadermodel extends CI_Model {
             // Should we be updating categories? Description?
 
         }
-        
+
         // OK, if it's not there, you'll have to insert into partpartnumber...
         $CI->Portalmodel->insertPartPartNumber($part_id, $partnumber_id);
 
@@ -720,6 +720,9 @@ class Productuploadermodel extends CI_Model {
         // JLB 12-27-17
         // Add in the shipping weight here. It is going only on partdealervariation.
         if (array_key_exists("weight", $row) && $row["weight"] != "") {
+            // It looks like we are overriding the part variation entry, too, so I guess we set this...
+            $this->db->query("Update partvariation set weight = ? where partvariation_id = ? limit 1", array(floatVal($row["weight"]), $partvariation_id));
+
             if (count($values) > 0) {
                 $update_query .= " , ";
             }
