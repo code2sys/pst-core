@@ -1,7 +1,44 @@
 <?php
 $new_assets_url = jsite_url("/qatesting/newassets/");
 $media_url = jsite_url("/media/");
+
+// JLB 12-26-17
+// We have to retrofit this because the Benz guys never, ever thought to be consistent in naming.
+if (MOTORCYCLE_SHOP_NEW) {
+    if (!array_key_exists("fltr", $_GET)) {
+        if (array_key_exists("condition", $filter) && $filter["condition"] == 1) {
+            $_GET["fltr"] = "new";
+        } else {
+            $_GET["fltr"] = "pre-owned";
+        }
+    }
+} else {
+    $_GET["fltr"] = "pre-owned";
+}
+
+if (!array_key_exists("brands", $_GET) && array_key_exists("brands", $filter) && is_array($filter["brands"])) {
+    $_GET["brands"] = implode("$", $filter["brands"]);
+}
+
+if (!array_key_exists("years", $_GET) && array_key_exists("years", $filter) && is_array($filter["years"])) {
+    $_GET["years"] = implode("$", $filter["years"]);
+}
+
+if (!array_key_exists("categories", $_GET) && array_key_exists("categories", $filter) && is_array($filter["categories"])) {
+    $_GET["categories"] = implode("$", $filter["categories"]);
+}
+
+if (!array_key_exists("vehicles", $_GET) && array_key_exists("vehicles", $filter) && is_array($filter["vehicles"])) {
+    $_GET["vehicles"] = implode("$", $filter["vehicles"]);
+}
+
 ?>
+
+<!--
+
+<?php print_r($filter); ?>
+
+-->
 
 <div class="sw filbar-bx">
     <div class="container_b">
@@ -203,13 +240,15 @@ $media_url = jsite_url("/media/");
                                     </div>
                                     <div class="form-group">						
                                         <input type="text" class="form-control" placeholder="zip code" name="zipcode">
-                                    </div>				
+                                    </div>
+                    <?php if (!defined('DISABLE_TEST_DRIVE') || !DISABLE_TEST_DRIVE): ?>
                                     <h3 class="txt-title"><?php if (defined('WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE')) { echo WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE; } else { ?>Want to Schedule a Test Drive?<?php } ?></h3>
 
                                     <div class="form-group">						
                                         <input type="text" class="form-control" placeholder="<?php if (defined('WORDING_PLACEHOLDER_DATE_OF_RIDE')) { echo WORDING_PLACEHOLDER_DATE_OF_RIDE; } else { ?>date of ride<?php } ?>" name="date_of_ride">
                                     </div>
                                     <hr class="brdr">
+                        <?php endif; ?>
                                     <h3 class="txt-title">Trade in?</h3>
 
                                     <div class="form-group">						
@@ -234,7 +273,7 @@ $media_url = jsite_url("/media/");
                                     <h3 class="txt-title">I am Interested in this Vehicle</h3>
 
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Poloris" value="<?php echo $motorcycle['title']; ?>" readonly name="motorcycle">
+                                        <input type="text" class="form-control" placeholder="Unit Name" value="<?php echo $motorcycle['title']; ?>" readonly name="motorcycle">
                                     </div>
                                     <input type="hidden" name="product_id" value="<?php echo $motorcycle['id']; ?>">
                                     <div class="col-md-12 text-center" style="float:none;">

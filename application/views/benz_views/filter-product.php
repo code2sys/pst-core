@@ -112,13 +112,15 @@ if (@$motorcycles) {
                         </div>
                         <div class="form-group">						
                             <input type="text" class="form-control" placeholder="zip code" name="zipcode">
-                        </div>				
+                        </div>
+        <?php if (!defined('DISABLE_TEST_DRIVE') || !DISABLE_TEST_DRIVE): ?>
                         <h3 class="txt-title"><?php if (defined('WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE')) { echo WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE; } else { ?>Want to Schedule a Test Drive?<?php } ?></h3>
 
                         <div class="form-group">						
                             <input type="text" class="form-control" placeholder="<?php if (defined('WORDING_PLACEHOLDER_DATE_OF_RIDE')) { echo WORDING_PLACEHOLDER_DATE_OF_RIDE; } else { ?>date of ride<?php } ?>" name="date_of_ride">
                         </div>
                         <hr class="brdr">
+            <?php endif; ?>
                         <h3 class="txt-title">Trade in?</h3>
 
                         <div class="form-group">						
@@ -143,7 +145,7 @@ if (@$motorcycles) {
                         <h3 class="txt-title">I am Interested in this Vehicle</h3>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Poloris" value="<?php echo $motorcycle['title']; ?>" readonly name="motorcycle">
+                            <input type="text" class="form-control" placeholder="Unit Name" value="<?php echo $motorcycle['title']; ?>" readonly name="motorcycle">
                         </div>
                         <input type="hidden" name="product_id" value="<?php echo $motorcycle['id']; ?>">
                         <div class="col-md-12 text-center" style="float:none;">

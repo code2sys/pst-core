@@ -61,7 +61,14 @@ class Motorcycle_CI extends Welcome {
         $this->load->model('pages_m');
         $this->load->model('motorcycle_m');
 
-        $filter = $this->motorcycle_m->assembleFilterFromRequest();
+        if (!array_key_exists("filterChange", $_REQUEST) && array_key_exists("motorcycle_filter", $_SESSION) && is_array($_SESSION["motorcycle_filter"]) && (!array_key_exists("fltr", $_REQUEST) || (array_key_exists("motorcycle_fltr", $_SESSION) && $_SESSION["motorcycle_fltr"] == $_REQUEST["fltr"]))) {
+            $filter = $_SESSION["motorcycle_filter"];
+        } else {
+            $filter = $this->motorcycle_m->assembleFilterFromRequest();
+            $_SESSION["motorcycle_filter"] = $filter;
+            $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
+
+        }
 
         $this->_mainData['vehicles'] = $this->motorcycle_m->getMotorcycleVehicle($filter);
         $this->_mainData['brands'] = $this->motorcycle_m->getMotorcycleMake($filter);
@@ -74,6 +81,7 @@ class Motorcycle_CI extends Welcome {
         $this->_mainData['fpages'] = $this->pages_m->getPages(1, 'footer');
         $recently = $_SESSION['recentlyMotorcycle'];
         $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
+        $this->_mainData["filter"] = $filter;
         $this->renderMasterPage('benz_views/header.php', 'benz_views/product.php', $this->_mainData);
         // $this->load->view('benz_views/header.php');
         // $this->load->view('benz_views/product.php');
