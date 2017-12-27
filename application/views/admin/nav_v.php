@@ -88,7 +88,7 @@ if (!is_null($pageIndex) && $pageIndex < 9)
 					<?php if(in_array('finance', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
 						<li><a href="<?php echo base_url('/admin/credit_applications'); ?>" ><i class="fa fa-user"></i>&nbsp;Credit Applications</a></li>
 					<?php } ?>
-					<?php if(in_array('mInventory', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
+					<?php if(in_array('unitinquiries', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
 						<li><a href="<?php echo base_url('/admin/motorcycle_quotes'); ?>" ><i class="fa fa-motorcycle"></i>&nbsp;Unit Inquiries</a></li>
 					<?php } ?>
                 </ul>
