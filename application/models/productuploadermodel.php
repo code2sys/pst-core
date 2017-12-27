@@ -137,6 +137,20 @@ class Productuploadermodel extends CI_Model {
                 "description" => "Enter the number of items you have in stock.",
                 "required" => false,
                 "multiple" => false
+            ),
+            array(
+                "name" => "weight",
+                "label" => "Shipping Weight",
+                "description" => "Enter the shipping weight in pounds as a decimal number - e.g., 3.25.",
+                "required" => false,
+                "multiple" => false
+//            ),
+//            array(
+//                "name" => "image",
+//                "label" => "Image URL",
+//                "description" => "Provide a URL of a GIF, JPEG, or PNG image. These will be added to existing images for the part",
+//                "required" => false,
+//                "multiple" => true
             )
 
         );
@@ -684,8 +698,7 @@ class Productuploadermodel extends CI_Model {
             // Should we be updating categories? Description?
 
         }
-
-
+        
         // OK, if it's not there, you'll have to insert into partpartnumber...
         $CI->Portalmodel->insertPartPartNumber($part_id, $partnumber_id);
 
@@ -703,6 +716,15 @@ class Productuploadermodel extends CI_Model {
             }
             $update_query .= " price = ? ";
             $values[] = $row["price"];
+        }
+        // JLB 12-27-17
+        // Add in the shipping weight here. It is going only on partdealervariation.
+        if (array_key_exists("weight", $row) && $row["weight"] != "") {
+            if (count($values) > 0) {
+                $update_query .= " , ";
+            }
+            $update_query .= " weight = ? ";
+            $values[] = floatVal($row["weight"]);
         }
         if (array_key_exists("cost", $row) && $row["cost"] != "") {
             if (count($values) > 0) {
