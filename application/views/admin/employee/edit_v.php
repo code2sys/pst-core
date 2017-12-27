@@ -162,7 +162,7 @@ label{cursor:pointer;}
                                         <input type="checkbox" value="finance" name="permission[finance]" <?php echo in_array('finance', $employee['permissions']) ? 'checked' : '';?>/>Credit Applications
                                     </label>
                                     <label class="checkbox">
-                                        <input type="checkbox" value="finance" name="permission[unitinquiries]" <?php echo in_array('unitinquiries', $employee['permissions']) ? 'checked' : '';?>/> Unit Inquiries
+                                        <input type="checkbox" value="unitinquiries" name="permission[unitinquiries]" <?php echo in_array('unitinquiries', $employee['permissions']) ? 'checked' : '';?>/> Unit Inquiries
                                     </label>
                                 </div>
 								<div class="twnty">
