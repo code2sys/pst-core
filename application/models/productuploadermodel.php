@@ -993,8 +993,22 @@ class Productuploadermodel extends CI_Model {
         $this->db->query("Insert into queued_parts (part_id) values (?)", array($part_id));
     }
 
+    // https://stackoverflow.com/questions/6476212/save-image-from-url-with-curl-php#6476232
     protected function downloadFileToUrl($url, $filename) {
+        $fp = fopen ($filename, 'w+');              // open file handle
 
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_FILE, $fp);          // output to file
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1000);      // some large value to allow curl to run for a long time
+        curl_exec($ch);
+
+        curl_close($ch);                              // closing curl handle
+        fclose($fp);
+
+        // we need to resize it
+        $CI =& get_instance();
+        $CI->model_tool_image->resize($filename, 100, 100);
     }
 
     public function process($productupload_id, $limit = 100) {
