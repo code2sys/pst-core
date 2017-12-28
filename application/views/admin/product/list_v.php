@@ -34,7 +34,7 @@
             <p><b>To add a new product click the button below.</b></p>
             <br>
             <a href="<?php echo base_url("adminproduct/product_add"); ?>" id="button"><i class="fa fa-plus"></i>&nbsp;Add a new Product</a>
-<!--            <a href="--><?php //echo base_url("adminproductuploader/index"); ?><!--" id="button"><i class="fa fa-upload"></i>&nbsp;Upload Multiple Products</a>-->
+            <a href="<?php echo base_url("adminproductuploader/index"); ?>" id="button"><i class="fa fa-upload"></i>&nbsp;Upload Multiple Products</a>
         </div>
 
 

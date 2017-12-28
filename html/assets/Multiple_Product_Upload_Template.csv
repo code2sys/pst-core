@@ -1,2 +1,2 @@
-Distributor,Machine,Make,Model,Year,Distributor Part Number,Product Name,Brand,Question,Answer,Description,Category,Product Question 1,Product Answer 1,Product Question 2,Product Answer 2,MSRP,Cost,Closeout
-Tucker Rocky,DIRT BIKE,HONDA,CRF450R,2000-2005,568310,SAMPLE PRODUCT,SAMPLE,COLOR / SIZE,RED / 12mm,Sample Product Description,DIRT BIKE PARTS > DIRT BIKE PARTS > BARS & CONTROLS > CLUTCH LEVER,AGE & GENDER,MENS,,,50,25,N
+Distributor,Machine,Make,Model,Year,Distributor Part Number,Product Name,Brand,Question,Answer,Description,Category,Product Question 1,Product Answer 1,Product Question 2,Product Answer 2,MSRP,Cost,Closeout,Quantity Available,Shipping Weight
+Tucker Rocky,DIRT BIKE,HONDA,CRF450R,2000-2005,568310,SAMPLE PRODUCT,SAMPLE,COLOR / SIZE,RED / 12mm,Sample Product Description,DIRT BIKE PARTS > DIRT BIKE PARTS > BARS & CONTROLS > CLUTCH LEVER,AGE & GENDER,MENS,,,50,25,N,1,10

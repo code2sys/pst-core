@@ -588,7 +588,7 @@ abstract class Motorcycleadmin extends Firstadmin
      */
 
     public function motorcycle_quotes() {
-        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+        if (!$this->checkValidAccess('unitinquiries') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
         $this->setNav('admin/nav_v', 5);
@@ -601,7 +601,7 @@ abstract class Motorcycleadmin extends Firstadmin
     }
 
     public function motorcycle_quote_ajax_remove($id) {
-        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+        if (!$this->checkValidAccess('unitinquiries') && !@$_SESSION['userRecord']['admin']) {
             $this->_printAjaxError("Sorry, you do not have access to this feature.");
         }
         $this->db->query("Delete from motorcycle_enquiry where id = ?", array($id));
@@ -609,7 +609,7 @@ abstract class Motorcycleadmin extends Firstadmin
     }
 
     public function motorcycle_quote_view($id) {
-        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+        if (!$this->checkValidAccess('unitinquiries') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
         $this->setNav('admin/nav_v', 5);
@@ -634,7 +634,7 @@ abstract class Motorcycleadmin extends Firstadmin
     }
 
     public function motorcycle_quote_mark_as_sent($id) {
-        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+        if (!$this->checkValidAccess('unitinquiries') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
         $this->db->query("Update motorcycle_enquiry set status = 'Sent', sent_time = now() where id = ?", array($id));
@@ -643,6 +643,9 @@ abstract class Motorcycleadmin extends Firstadmin
 
 
     public function motorcycle_quote_ajax() {
+        if (!$this->checkValidAccess('unitinquiries') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
         $columns = array(
             "created",
             "status",

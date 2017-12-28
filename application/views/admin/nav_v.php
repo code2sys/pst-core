@@ -83,12 +83,12 @@ if (!is_null($pageIndex) && $pageIndex < 9)
                     <!--<li><a href="<?php echo base_url('/admin/closeout_rules'); ?>" ><i class="fa fa-cubes"></i>&nbsp;Closeout Schedule</a></li>-->
                 </ul>
             </li>
-            <li><a href="<?php echo base_url('/admin'); ?>" <?php echo $arr[5]; ?>><i class="fa fa-credit-card"></i>&nbsp;Finance</a>
+            <li><a href="<?php echo base_url('/admin'); ?>" <?php echo $arr[5]; ?>><i class="fa fa-credit-card"></i>&nbsp;Inquiries</a>
                 <ul>
 					<?php if(in_array('finance', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
 						<li><a href="<?php echo base_url('/admin/credit_applications'); ?>" ><i class="fa fa-user"></i>&nbsp;Credit Applications</a></li>
 					<?php } ?>
-					<?php if(in_array('mInventory', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
+					<?php if(in_array('unitinquiries', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
 						<li><a href="<?php echo base_url('/admin/motorcycle_quotes'); ?>" ><i class="fa fa-motorcycle"></i>&nbsp;Unit Inquiries</a></li>
 					<?php } ?>
                 </ul>
@@ -106,6 +106,8 @@ if (!is_null($pageIndex) && $pageIndex < 9)
 					<?php } ?>
 						<li><a href="<?php echo base_url('/welcome/logout'); ?>" ><i class="fa fa-sign-out"></i>&nbsp;Logout</a></li>
                 </ul>
+            </li>
+            <li><a href="/admin/helpvideos" <?php echo $arr[6]; ?>><i class="fa fa-question"></i>&nbsp;Help</a>
             </li>
             <li><a href="<?php echo base_url(''); ?>">&nbsp;Main Site</a>
             </li>
