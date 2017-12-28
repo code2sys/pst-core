@@ -124,6 +124,18 @@ unset($motorcycle['videos'][0]);
 					<span><?php echo $motorcycle['color'];?></span>
 				</div>
                 <?php endif; ?>
+                <?php if ($motorcycle['type'] != ''): ?>
+				<div class="dtal-txt">
+					<label>vehicle type :</label>
+					<span><?php echo $motorcycle['type'];?></span>
+				</div>
+                <?php endif; ?>
+                <?php if ($motorcycle['category'] != ''): ?>
+				<div class="dtal-txt">
+					<label>category :</label>
+					<span><?php echo $motorcycle['category'];?></span>
+				</div>
+                <?php endif; ?>
 				<?php if( $motorcycle['mileage'] > 0 ) { ?>
 					<div class="dtal-txt">
 						<label>mileage :</label>
@@ -378,13 +390,15 @@ unset($motorcycle['videos'][0]);
 					</div>
 					<div class="form-group">						
 						<input type="text" class="form-control" placeholder="zip code" name="zipcode">
-					</div>				
+					</div>
+                    <?php if (!defined('DISABLE_TEST_DRIVE') || !DISABLE_TEST_DRIVE): ?>
 					<h3 class="txt-title"><?php if (defined('WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE')) { echo WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE; } else { ?>Want to Schedule a Test Drive?<?php } ?></h3>
 					
 					<div class="form-group">						
 						<input type="text" class="form-control" placeholder="<?php if (defined('WORDING_PLACEHOLDER_DATE_OF_RIDE')) { echo WORDING_PLACEHOLDER_DATE_OF_RIDE; } else { ?>date of ride<?php } ?>" name="date_of_ride">
 					</div>
 					<hr class="brdr">
+                    <?php endif; ?>
 					<h3 class="txt-title">Trade in?</h3>
 					
 					<div class="form-group">						
@@ -409,7 +423,7 @@ unset($motorcycle['videos'][0]);
 					<h3 class="txt-title">I am Interested in this Vehicle</h3>
 					
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Poloris" value="<?php echo $motorcycle['title'];?>" readonly name="motorcycle">
+						<input type="text" class="form-control" placeholder="Unit Name" value="<?php echo $motorcycle['title'];?>" readonly name="motorcycle">
 					</div>
 						<input type="hidden" name="product_id" value="<?php echo $motorcycle['id'];?>">
 					<div class="col-md-12 text-center" style="float:none;">

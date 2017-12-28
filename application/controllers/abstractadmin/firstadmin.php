@@ -463,6 +463,11 @@ abstract class Firstadmin extends Master_Controller
 
     /*     * ******************************************************** END VALIDATION *********************************************************** */
 
+    public function helpvideos()
+    {
+        $this->setNav('admin/nav_v', 6);
+        $this->renderMasterPage('admin/master_v', 'admin/helpvideos_v', $this->_mainData);
+    }
 
 }
 

@@ -156,12 +156,15 @@ label{cursor:pointer;}
 										<input type="radio" value="user_specific_customers" name="prmsion" <?php echo in_array('user_specific_customers', $employee['permissions']) ? 'checked' : '';?>/>User Specific Customers
 									</label>
 								</div>
-								<div class="twnty">
-									<h4>Finance</h4>
-									<label class="checkbox">
-										<input type="checkbox" value="finance" name="permission[finance]" <?php echo in_array('finance', $employee['permissions']) ? 'checked' : '';?>/>Credit Applications
-									</label>
-								</div>
+                                <div class="twnty">
+                                    <h4>Inquiries</h4>
+                                    <label class="checkbox">
+                                        <input type="checkbox" value="finance" name="permission[finance]" <?php echo in_array('finance', $employee['permissions']) ? 'checked' : '';?>/>Credit Applications
+                                    </label>
+                                    <label class="checkbox">
+                                        <input type="checkbox" value="unitinquiries" name="permission[unitinquiries]" <?php echo in_array('unitinquiries', $employee['permissions']) ? 'checked' : '';?>/> Unit Inquiries
+                                    </label>
+                                </div>
 								<div class="twnty">
 									<h4>Users</h4>
 									<!--<label class="checkbox">

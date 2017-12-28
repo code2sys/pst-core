@@ -146,12 +146,29 @@ class CronControl extends Master_Controller {
         return $id;
     }
 
-    protected function _getMachineTypeMotoType($machine_type) {
+
+    protected $_preserveMachineMotoType;
+    protected function _getMachineTypeMotoType($machine_type, $offroad_flag) {
+        if (!isset($this->_preserveMachineMotoType)) {
+            $this->_preserveMachineMotoType = array();
+        }
+
+        $key = sprintf("%s-%d", $machine_type, $offroad_flag);
+        if (array_key_exists($key, $this->_preserveMachineMotoType)) {
+            return $this->_preserveMachineMotoType[$key];
+        }
+
         $type_id = 0;
-        $query = $this->db->query("Select id from motorcycle_type where crs_type = ?", array($machine_type));
+        $query = $this->db->query("Select id from motorcycle_type where crs_type = ? and offroad = ?", array($machine_type, $offroad_flag));
         foreach ($query->result_array() as $row) {
             $type_id = $row["id"];
         }
+
+        if ($type_id == 0) {
+            throw new \Exception("Could not find a match for _getMachineTypeMotoType($machine_type, $offroad_flag)");
+        }
+
+        $this->_preserveMachineMotoType[$key] = $type_id;
         return $type_id;
     }
 
@@ -212,19 +229,6 @@ class CronControl extends Master_Controller {
         // clear the unique IDs...
         $this->db->query("Update motorcycle set uniqid = '' where crs_machinetype = ? and crs_make_id = ? and `condition` = 1", array($machine_type, $make_id));
 
-        $vehicle_type = $this->_getMachineTypeMotoType($machine_type);
-        if ($vehicle_type == 0) {
-            throw new Exception("No type found for $machine_type ");
-        }
-
-        $offroad_vehicle_type = 0;
-        $query = $this->db->query("Select id from motorcycle_type where name = 'Off-Road'");
-        foreach ($query->result_array() as $row) {
-            $offroad_vehicle_type = $row["id"];
-        }
-        if ($offroad_vehicle_type == 0) {
-            throw new Exception("No Off-Road vehicle type found.");
-        }
 
         // We sometimes need this in hand - the off-road type...
 
@@ -258,7 +262,7 @@ class CronControl extends Master_Controller {
 
                     // OK, we have to add it, and then we have to add the motorcycle... but first we have to get some of the specs
                     $retail_price = $sale_price = $trim["msrp"];
-                    $this_machine_type = $vehicle_type;
+                    $this_machine_type = $this->_getMachineTypeMotoType($machine_type, $trim["offroad"]);
 
                     $engine_type = ""; // 30003
                     $transmission = ""; // 40002
@@ -278,12 +282,6 @@ class CronControl extends Master_Controller {
                             $retail_price = $sale_price= $s["text_value"];
                         } else if ($attribute_id == 10011) {
                             $category_id = $this->_getStockMotoCategory($s["text_value"]);
-
-                            // Special conversion to Dirt Bike
-                            if ($s["text_value"] == "Off-Road" && $machine_type == "MOT") {
-                                // We have to change the type...
-                                $this_machine_type = $offroad_vehicle_type;
-                            }
                         }
                     }
 
