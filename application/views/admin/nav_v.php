@@ -107,6 +107,8 @@ if (!is_null($pageIndex) && $pageIndex < 9)
 						<li><a href="<?php echo base_url('/welcome/logout'); ?>" ><i class="fa fa-sign-out"></i>&nbsp;Logout</a></li>
                 </ul>
             </li>
+            <li><a href="/admin/helpvideos" <?php echo $arr[6]; ?>><i class="fa fa-question"></i>&nbsp;Help</a>
+            </li>
             <li><a href="<?php echo base_url(''); ?>">&nbsp;Main Site</a>
             </li>
         </ul>
