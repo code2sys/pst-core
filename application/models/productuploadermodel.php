@@ -955,11 +955,11 @@ class Productuploadermodel extends CI_Model {
             // Now, verify that we can get this...
             for ($im = 0; $im < count($row["image"]); $im++) {
                 $url = $row["image"][$im];
-                error_log("Image: "  . $url);
+                //error_log("Image: "  . $url);
                 // we have to get a filename that doesn't exist...
                 $basename = basename($url);
                 $candidate_filename = tempnam(STORE_DIRECTORY . "/html/storeimages/", "") . ".png";
-                error_log("Candidate filename: " . $candidate_filename);
+                //error_log("Candidate filename: " . $candidate_filename);
 
                 // now, stick it somewhere
                 $this->downloadFileToUrl($url,  $candidate_filename);
@@ -990,7 +990,7 @@ class Productuploadermodel extends CI_Model {
 
     // https://stackoverflow.com/questions/6476212/save-image-from-url-with-curl-php#6476232
     protected function downloadFileToUrl($url, $filename) {
-        error_log("downloadFileToUrl($url, $filename)");
+        //error_log("downloadFileToUrl($url, $filename)");
         $temp_file = tempnam("/tmp", "img");
         $fp = fopen ($temp_file, 'w+');              // open file handle
 
