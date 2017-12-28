@@ -955,6 +955,7 @@ class Productuploadermodel extends CI_Model {
             // Now, verify that we can get this...
             for ($im = 0; $im < count($row["image"]); $im++) {
                 $url = $row["image"][$im];
+                error_log("Image: "  . $url);
                 // we have to get a filename that doesn't exist...
                 $basename = basename($url);
                 $count = 0;
@@ -963,6 +964,7 @@ class Productuploadermodel extends CI_Model {
                     $count++;
                     $candidate_filename = time() . "_" . $count . "_" . $basename;
                 }
+                error_log("Candidate filename: " . $candidate_filename);
 
                 // now, stick it somewhere
                 $this->downloadFileToUrl($url, STORE_DIRECTORY . "/html/storeimages/" . $candidate_filename);
