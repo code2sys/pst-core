@@ -945,6 +945,8 @@ class Productuploadermodel extends CI_Model {
             }
         }
 
+        error_log(print_r($row, true));
+
         // JLB 12-28-17
         // What about images?
         if (array_key_exists("image", $row)) {
