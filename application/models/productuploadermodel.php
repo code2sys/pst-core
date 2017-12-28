@@ -875,7 +875,7 @@ class Productuploadermodel extends CI_Model {
                 $seen_questions[] = $partquestion_id;
 
                 // set the answer...
-                $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key set answer = values(answer)", array($partnumber_id, $partquestion_id, $row["product_answer"][$i]));
+                $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key update answer = values(answer)", array($partnumber_id, $partquestion_id, $row["product_answer"][$i]));
 
                 $this->db->query("Insert into partquestionanswer (partquestion_id, answer) values (?, ?) on duplicate key update partquestionanswer_id = last_insert_id(partquestionanswer_id)", array($partquestion_id, $row["product_answer"][$i]));
 
