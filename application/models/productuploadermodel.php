@@ -585,7 +585,6 @@ class Productuploadermodel extends CI_Model {
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        error_log("HTTP Code: " . $httpcode);
         return $httpcode == 200; // If it's not 200, we can't do anything with it.
     }
 
@@ -946,8 +945,54 @@ class Productuploadermodel extends CI_Model {
             }
         }
 
+        // JLB 12-28-17
+        // What about images?
+        if (array_key_exists("image", $row)) {
+            if (!is_array($row["image"])) {
+                $row["image"] = array($row["image"]);
+            }
+
+            // Now, verify that we can get this...
+            for ($im = 0; $im < count($row["image"]); $im++) {
+                $url = $row["image"][$im];
+                // we have to get a filename that doesn't exist...
+                $basename = basename($url);
+                $count = 0;
+                $candidate_filename = time() . "_" . $count . "_" . $basename;
+                while (file_exists(STORE_DIRECTORY . "/html/storeimages/" . $candidate_filename)) {
+                    $count++;
+                    $candidate_filename = time() . "_" . $count . "_" . $basename;
+                }
+
+                // now, stick it somewhere
+                $this->downloadFileToUrl($url, STORE_DIRECTORY . "/html/storeimages/" . $candidate_filename);
+
+                // OK, so we need to look and update, or not.
+                $query = $this->db->query("Select * from partimage where part_id = ? and mx = 0 and external_url = ?", array($part_id, $url));
+
+                $partimage_id = 0;
+                foreach ($query->result_array() as $rec) {
+                    $partimage_id = $rec['partimage_id'];
+                }
+
+                if ($partimage_id > 0) {
+                    // update it.
+                    $this->db->query("update partimage set path = ? where partimage_id = ? limit 1", array("store/$candidate_filename", $partimage_id));
+                } else {
+                    // otherwise, insert it
+                    $this->db->query("Insert into partimage (part_id, original_filename, path, mx, external_url) values (?, ?, ?, 0, ?)", array($part_id, $basename, "store/$candidate_filename", $url));
+                }
+            }
+
+        }
+
+
         // We need to reprocess this part.
         $this->db->query("Insert into queued_parts (part_id) values (?)", array($part_id));
+    }
+
+    protected function downloadFileToUrl($url, $filename) {
+
     }
 
     public function process($productupload_id, $limit = 100) {
