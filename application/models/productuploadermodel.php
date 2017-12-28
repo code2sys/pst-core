@@ -643,15 +643,20 @@ class Productuploadermodel extends CI_Model {
      */
     protected function explodeToAssoc($inverted_column, $row) {
         print_r($inverted_column);
-        
+
         $result = array();
         foreach ($inverted_column as $k => $n) {
-            if ($n < count($row)) {
-                if (array_key_exists($k, $result)) {
-                    $result[$k] = array($k);
-                    $result[$k][] = $row[$n];
-                } else {
-                    $result[$k] = $row[$n];
+            if (!is_array($n)) {
+                $n = array($n);
+            }
+            foreach ($n as $m) {
+                if ($m < count($row)) {
+                    if (array_key_exists($k, $result)) {
+                        $result[$k] = array($k);
+                        $result[$k][] = $row[$m];
+                    } else {
+                        $result[$k] = $row[$m];
+                    }
                 }
             }
         }
