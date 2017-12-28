@@ -144,13 +144,13 @@ class Productuploadermodel extends CI_Model {
                 "description" => "Enter the shipping weight in pounds as a decimal number - e.g., 3.25.",
                 "required" => false,
                 "multiple" => false
-//            ),
-//            array(
-//                "name" => "image",
-//                "label" => "Image URL",
-//                "description" => "Provide a URL of a GIF, JPEG, or PNG image. These will be added to existing images for the part",
-//                "required" => false,
-//                "multiple" => true
+            ),
+            array(
+                "name" => "image",
+                "label" => "Image URL",
+                "description" => "Provide a URL of a GIF, JPEG, or PNG image. These will be added to existing images for the part",
+                "required" => false,
+                "multiple" => true
             )
 
         );
@@ -524,6 +524,27 @@ class Productuploadermodel extends CI_Model {
 
             }
 
+
+            // We have to check on these images and see if they exist, if it's defined...
+            if (!$reject && array_key_exists("image", $inverted_columns)) {
+                if (!is_array($inverted_columns["image"])) {
+                    $inverted_columns["image"] = array($inverted_columns["image"]);
+                }
+
+                // Now, verify that we can get this...
+                for ($im = 0; $im < count($inverted_columns["image"]) && !$reject; $im++) {
+                    $idx = $inverted_columns["image"][$im];
+                    if (count($row) > $idx && $row[$idx] != "") {
+                        // If it's a real image, we have to check it
+                        if (!$this->_isValidURL($row[$idx])) {
+                            $reject = true;
+                            $reject_reason = "Image " . ($im + 1) . " does not have a valid, reachable URL.";
+                        }
+                    }
+                }
+
+            }
+
             if (!$reject && $new) {
                 $new_count++;
                 fputcsv($new_handle, $row);
@@ -546,6 +567,26 @@ class Productuploadermodel extends CI_Model {
         if ($mapped_count + $newly_mapped >= $this->getRowCount($productupload_id)) {
             $this->setStatus($productupload_id, "Mapped");
         }
+    }
+
+    protected function _isValidURL($url) {
+        // This checks that it's a valid URL and we can actually fetch it...
+        //https://stackoverflow.com/questions/11797680/curl-getting-http-code#12629254
+        if(!$url || !is_string($url) || ! preg_match('/^http(s)?:\/\/[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i', $url)){
+            return false;
+        }
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
+        curl_setopt($ch, CURLOPT_NOBODY, true);    // we don't need body
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch, CURLOPT_TIMEOUT,10);
+        $output = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        error_log("HTTP Code: " . $httpcode);
+        return $httpcode == 200; // If it's not 200, we can't do anything with it.
     }
 
     public function download($productupload_id, $mode = "all") {
