@@ -958,12 +958,7 @@ class Productuploadermodel extends CI_Model {
                 error_log("Image: "  . $url);
                 // we have to get a filename that doesn't exist...
                 $basename = basename($url);
-                $count = 0;
-                $candidate_filename = time() . "_" . $count . "_" . $basename;
-                while (file_exists(STORE_DIRECTORY . "/html/storeimages/" . $candidate_filename)) {
-                    $count++;
-                    $candidate_filename = time() . "_" . $count . "_" . $basename;
-                }
+                $candidate_filename = tempnam(STORE_DIRECTORY . "/html/storeimages/", "") . ".png";
                 error_log("Candidate filename: " . $candidate_filename);
 
                 // now, stick it somewhere
@@ -979,10 +974,10 @@ class Productuploadermodel extends CI_Model {
 
                 if ($partimage_id > 0) {
                     // update it.
-                    $this->db->query("update partimage set path = ? where partimage_id = ? limit 1", array("store/$candidate_filename", $partimage_id));
+                    $this->db->query("update partimage set path = ? where partimage_id = ? limit 1", array("store/" . basename($candidate_filename), $partimage_id));
                 } else {
                     // otherwise, insert it
-                    $this->db->query("Insert into partimage (part_id, original_filename, path, mx, external_url) values (?, ?, ?, 0, ?)", array($part_id, $basename, "store/$candidate_filename", $url));
+                    $this->db->query("Insert into partimage (part_id, original_filename, path, mx, external_url) values (?, ?, ?, 0, ?)", array($part_id, $basename, "store/" . basename($candidate_filename), $url));
                 }
             }
 
@@ -995,7 +990,8 @@ class Productuploadermodel extends CI_Model {
 
     // https://stackoverflow.com/questions/6476212/save-image-from-url-with-curl-php#6476232
     protected function downloadFileToUrl($url, $filename) {
-        $fp = fopen ($filename, 'w+');              // open file handle
+        $temp_file = tempnam("/tmp", "img");
+        $fp = fopen ($temp_file, 'w+');              // open file handle
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_FILE, $fp);          // output to file
@@ -1008,7 +1004,14 @@ class Productuploadermodel extends CI_Model {
 
         // we need to resize it
         $CI =& get_instance();
-        $CI->model_tool_image->resize($filename, 100, 100);
+
+        require_once(__DIR__ . "/../../simpleimage.php");
+
+        $image = new SimpleImage();
+        $image->load($temp_file);
+        $image->save($filename, IMAGETYPE_PNG);
+        $image->setMaxDimension(144);
+        $image->save(dirname($filename) . "/t" . basename($filename), IMAGETYPE_PNG);
     }
 
     public function process($productupload_id, $limit = 100) {
