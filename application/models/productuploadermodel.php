@@ -144,13 +144,13 @@ class Productuploadermodel extends CI_Model {
                 "description" => "Enter the shipping weight in pounds as a decimal number - e.g., 3.25.",
                 "required" => false,
                 "multiple" => false
-//            ),
-//            array(
-//                "name" => "image",
-//                "label" => "Image URL",
-//                "description" => "Provide a URL of a GIF, JPEG, or PNG image. These will be added to existing images for the part",
-//                "required" => false,
-//                "multiple" => true
+            ),
+            array(
+                "name" => "image",
+                "label" => "Image URL",
+                "description" => "Provide a URL of a GIF, JPEG, or PNG image. These will be added to existing images for the part",
+                "required" => false,
+                "multiple" => true
             )
 
         );
@@ -524,6 +524,27 @@ class Productuploadermodel extends CI_Model {
 
             }
 
+
+            // We have to check on these images and see if they exist, if it's defined...
+            if (!$reject && array_key_exists("image", $inverted_columns)) {
+                if (!is_array($inverted_columns["image"])) {
+                    $inverted_columns["image"] = array($inverted_columns["image"]);
+                }
+
+                // Now, verify that we can get this...
+                for ($im = 0; $im < count($inverted_columns["image"]) && !$reject; $im++) {
+                    $idx = $inverted_columns["image"][$im];
+                    if (count($row) > $idx && $row[$idx] != "") {
+                        // If it's a real image, we have to check it
+                        if (!$this->_isValidURL($row[$idx])) {
+                            $reject = true;
+                            $reject_reason = "Image " . ($im + 1) . " does not have a valid, reachable URL.";
+                        }
+                    }
+                }
+
+            }
+
             if (!$reject && $new) {
                 $new_count++;
                 fputcsv($new_handle, $row);
@@ -546,6 +567,25 @@ class Productuploadermodel extends CI_Model {
         if ($mapped_count + $newly_mapped >= $this->getRowCount($productupload_id)) {
             $this->setStatus($productupload_id, "Mapped");
         }
+    }
+
+    protected function _isValidURL($url) {
+        // This checks that it's a valid URL and we can actually fetch it...
+        //https://stackoverflow.com/questions/11797680/curl-getting-http-code#12629254
+        if(!$url || !is_string($url) || ! preg_match('/^http(s)?:\/\/[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(\/.*)?$/i', $url)){
+            return false;
+        }
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
+        curl_setopt($ch, CURLOPT_NOBODY, true);    // we don't need body
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch, CURLOPT_TIMEOUT,10);
+        $output = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        return $httpcode == 200; // If it's not 200, we can't do anything with it.
     }
 
     public function download($productupload_id, $mode = "all") {
@@ -604,12 +644,17 @@ class Productuploadermodel extends CI_Model {
     protected function explodeToAssoc($inverted_column, $row) {
         $result = array();
         foreach ($inverted_column as $k => $n) {
-            if ($n < count($row)) {
-                if (array_key_exists($k, $result)) {
-                    $result[$k] = array($k);
-                    $result[$k][] = $row[$n];
-                } else {
-                    $result[$k] = $row[$n];
+            if (!is_array($n)) {
+                $n = array($n);
+            }
+            foreach ($n as $m) {
+                if ($m < count($row)) {
+                    if (array_key_exists($k, $result)) {
+                        $result[$k] = array($k);
+                        $result[$k][] = $row[$m];
+                    } else {
+                        $result[$k] = $row[$m];
+                    }
                 }
             }
         }
@@ -809,11 +854,11 @@ class Productuploadermodel extends CI_Model {
             }
         }
 
-        if (is_array($row["product_question"]) && count($row["product_question"]) > 0) {
+        if (array_key_exists("product_question", $row) && is_array($row["product_question"]) && count($row["product_question"]) > 0) {
             // OK, we need to put these in... we probably have to look for better stuff...
             $question_map = array();
             $seen_questions = array();
-            $query = $this->db->query("Select question, partquestion_id from partquestion where part_id = ? and productquestion > 0");
+            $query = $this->db->query("Select question, partquestion_id from partquestion where part_id = ? and productquestion > 0", array($part_id));
             foreach ($query->result_array() as $datarow) {
                 $question_map[strtoupper(trim($datarow["question"]))] = $partquestion_id;
             }
@@ -830,7 +875,7 @@ class Productuploadermodel extends CI_Model {
                 $seen_questions[] = $partquestion_id;
 
                 // set the answer...
-                $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key set answer = values(answer)", array($partnumber_id, $partquestion_id, $row["product_answer"][$i]));
+                $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key update answer = values(answer)", array($partnumber_id, $partquestion_id, $row["product_answer"][$i]));
 
                 $this->db->query("Insert into partquestionanswer (partquestion_id, answer) values (?, ?) on duplicate key update partquestionanswer_id = last_insert_id(partquestionanswer_id)", array($partquestion_id, $row["product_answer"][$i]));
 
@@ -905,8 +950,74 @@ class Productuploadermodel extends CI_Model {
             }
         }
 
+        // JLB 12-28-17
+        // What about images?
+        if (array_key_exists("image", $row)) {
+            if (!is_array($row["image"])) {
+                $row["image"] = array($row["image"]);
+            }
+
+            // Now, verify that we can get this...
+            for ($im = 0; $im < count($row["image"]); $im++) {
+                $url = $row["image"][$im];
+                //error_log("Image: "  . $url);
+                // we have to get a filename that doesn't exist...
+                $basename = basename($url);
+                $candidate_filename = tempnam(STORE_DIRECTORY . "/html/storeimages/", "") . ".png";
+                //error_log("Candidate filename: " . $candidate_filename);
+
+                // now, stick it somewhere
+                $this->downloadFileToUrl($url,  $candidate_filename);
+
+                // OK, so we need to look and update, or not.
+                $query = $this->db->query("Select * from partimage where part_id = ? and mx = 0 and external_url = ?", array($part_id, $url));
+
+                $partimage_id = 0;
+                foreach ($query->result_array() as $rec) {
+                    $partimage_id = $rec['partimage_id'];
+                }
+
+                if ($partimage_id > 0) {
+                    // update it.
+                    $this->db->query("update partimage set path = ? where partimage_id = ? limit 1", array("store/" . basename($candidate_filename), $partimage_id));
+                } else {
+                    // otherwise, insert it
+                    $this->db->query("Insert into partimage (part_id, original_filename, path, mx, external_url) values (?, ?, ?, 0, ?)", array($part_id, $basename, "store/" . basename($candidate_filename), $url));
+                }
+            }
+
+        }
+
+
         // We need to reprocess this part.
         $this->db->query("Insert into queued_parts (part_id) values (?)", array($part_id));
+    }
+
+    // https://stackoverflow.com/questions/6476212/save-image-from-url-with-curl-php#6476232
+    protected function downloadFileToUrl($url, $filename) {
+        //error_log("downloadFileToUrl($url, $filename)");
+        $temp_file = tempnam("/tmp", "img");
+        $fp = fopen ($temp_file, 'w+');              // open file handle
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_FILE, $fp);          // output to file
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1000);      // some large value to allow curl to run for a long time
+        curl_exec($ch);
+
+        curl_close($ch);                              // closing curl handle
+        fclose($fp);
+
+        // we need to resize it
+        $CI =& get_instance();
+
+        require_once(__DIR__ . "/../../simpleimage.php");
+
+        $image = new SimpleImage();
+        $image->load($temp_file);
+        $image->save($filename, IMAGETYPE_PNG);
+        $image->setMaxDimension(144);
+        $image->save(dirname($filename) . "/t" . basename($filename), IMAGETYPE_PNG);
     }
 
     public function process($productupload_id, $limit = 100) {
