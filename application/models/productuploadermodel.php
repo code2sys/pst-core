@@ -962,7 +962,7 @@ class Productuploadermodel extends CI_Model {
                 error_log("Candidate filename: " . $candidate_filename);
 
                 // now, stick it somewhere
-                $this->downloadFileToUrl($url, STORE_DIRECTORY . "/html/storeimages/" . $candidate_filename);
+                $this->downloadFileToUrl($url,  $candidate_filename);
 
                 // OK, so we need to look and update, or not.
                 $query = $this->db->query("Select * from partimage where part_id = ? and mx = 0 and external_url = ?", array($part_id, $url));
