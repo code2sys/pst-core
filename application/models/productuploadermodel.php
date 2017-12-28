@@ -642,6 +642,8 @@ class Productuploadermodel extends CI_Model {
      * This will turn this row, which is number-ordered array, into an associative array
      */
     protected function explodeToAssoc($inverted_column, $row) {
+        print_r($inverted_column);
+        
         $result = array();
         foreach ($inverted_column as $k => $n) {
             if ($n < count($row)) {
