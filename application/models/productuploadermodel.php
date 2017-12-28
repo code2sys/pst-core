@@ -858,7 +858,7 @@ class Productuploadermodel extends CI_Model {
             // OK, we need to put these in... we probably have to look for better stuff...
             $question_map = array();
             $seen_questions = array();
-            $query = $this->db->query("Select question, partquestion_id from partquestion where part_id = ? and productquestion > 0");
+            $query = $this->db->query("Select question, partquestion_id from partquestion where part_id = ? and productquestion > 0", array($part_id));
             foreach ($query->result_array() as $datarow) {
                 $question_map[strtoupper(trim($datarow["question"]))] = $partquestion_id;
             }
