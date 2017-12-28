@@ -642,8 +642,6 @@ class Productuploadermodel extends CI_Model {
      * This will turn this row, which is number-ordered array, into an associative array
      */
     protected function explodeToAssoc($inverted_column, $row) {
-        print_r($inverted_column);
-
         $result = array();
         foreach ($inverted_column as $k => $n) {
             if (!is_array($n)) {
@@ -681,8 +679,6 @@ class Productuploadermodel extends CI_Model {
 
     // Reference: Controllers/Adminproduct::product_add_save
     protected function sub_apply($row, $distributor_id, $partvariation_id = 0) {
-        print_r($row); exit();
-
         // you should plow through all of it - name, manufacturer, description, categories... that's what we put into product_add_save...
         $part_name = trim($row["part"]);
         $manufacturer = trim($row["manufacturer"]);
