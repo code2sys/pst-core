@@ -849,7 +849,7 @@ class Productuploadermodel extends CI_Model {
             }
         }
 
-        if (is_array($row["product_question"]) && count($row["product_question"]) > 0) {
+        if (array_key_exists("product_question", $row) && is_array($row["product_question"]) && count($row["product_question"]) > 0) {
             // OK, we need to put these in... we probably have to look for better stuff...
             $question_map = array();
             $seen_questions = array();
@@ -990,6 +990,7 @@ class Productuploadermodel extends CI_Model {
 
     // https://stackoverflow.com/questions/6476212/save-image-from-url-with-curl-php#6476232
     protected function downloadFileToUrl($url, $filename) {
+        error_log("downloadFileToUrl($url, $filename)");
         $temp_file = tempnam("/tmp", "img");
         $fp = fopen ($temp_file, 'w+');              // open file handle
 
