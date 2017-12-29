@@ -65,10 +65,7 @@ if (@$motorcycles) {
                         <p>mileage :<span><?php echo $motorcycle['mileage']; ?></span></p>
                     <?php } ?>
                     <?php if (($motorcycle['stock_status'] == 'In Stock' && $stock_status_mode >= 2 ) || ($stock_status_mode == 1)): ?>
-                        <p>
-                            availability :
-                            <span><?php echo $motorcycle['stock_status'];?></span>
-                        </p>
+                        <p>availability : <span><?php echo $motorcycle['stock_status'];?></span></p>
                     <?php endif; ?>
                     <?php if ($motorcycle['engine_type'] != '') { ?>
                         <p>Engine Type :<span><?php echo $motorcycle['engine_type']; ?></span></p>
