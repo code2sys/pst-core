@@ -109,7 +109,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
                 <?php if (($motorcycle['stock_status'] == 'In Stock' && $stock_status_mode >= 2 ) || ($stock_status_mode == 1)): ?>
                     <div class="dtal-txt">
                         <label>availability :</label>
-                        <span><?php echo $motorcycle['stock_status'];?></span>
+                        <span style="font-weight: bold; color: <?php echo $motorcycle['stock_status'] == 'In Stock' ? 'green' : 'red'; ?>"><?php echo $motorcycle['stock_status'];?></span>
                     </div>
                 <?php endif; ?>
 				<div class="dtal-txt">
