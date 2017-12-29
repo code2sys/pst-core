@@ -59,6 +59,7 @@ class CronControl extends Master_Controller {
 
 	public function hourly()
 	{
+	    $this->checkForCRSMigration(); // let's put it on the front...
 		$this->_runJob('hourly');
 	}
 
@@ -218,6 +219,7 @@ class CronControl extends Master_Controller {
             }
 
             // we should delete all other things hanging around
+            $this->db->query("Delete from motorcycle where source = 'PST' and crs_trim_id > 0 and (uniqid = '' or uniqid = ?)", array($uniqid));
 
             // clear it
             $this->db->query("Update crspull_feed_log set status = 2, processing_end = now() where status = 1");
