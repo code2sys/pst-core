@@ -197,7 +197,7 @@ class CronControl extends Master_Controller {
 
         if (file_exists($filename)) {
             print "Found: $filename\n";
-            $crs_struct = json_decode(file_gets_contents($filename), true);
+            $crs_struct = json_decode(file_get_contents($filename), true);
             print_r($crs_struct);
 
             $uniqid = uniqid("delete_crs");
