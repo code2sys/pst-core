@@ -57,10 +57,10 @@
             <h3>Store Stock Status Visibility:</h3>
 
             <form>
-                <label style="display: inline-block"><input type="radio" name="display_status_button" value="3"> Display inventory status on website</label>
-                <label style="display: inline-block"><input type="radio" name="display_status_button" value="2"> Display in-stock status only</label>
-                <label style="display: inline-block"><input type="radio" name="display_status_button" value="1"> Display out-of-stock status only</label>
-                <label style="display: inline-block"><input type="radio" name="display_status_button" value="0"> Do not show stock status</label>
+                <label style="display: inline-block"><input type="radio" name="display_status_button" value="3" <?php if ($stock_status_mode == 3): ?>checked="checked"<?php endif; ?>> Display inventory status on website</label>
+                <label style="display: inline-block"><input type="radio" name="display_status_button" value="2" <?php if ($stock_status_mode == 2): ?>checked="checked"<?php endif; ?>> Display in-stock status only</label>
+                <label style="display: inline-block"><input type="radio" name="display_status_button" value="1" <?php if ($stock_status_mode == 1): ?>checked="checked"<?php endif; ?>> Display out-of-stock status only</label>
+                <label style="display: inline-block"><input type="radio" name="display_status_button" value="0" <?php if ($stock_status_mode == 0): ?>checked="checked"<?php endif; ?>> Do not show stock status</label>
             </form>
 
         </div>
@@ -136,6 +136,14 @@
 
     });
 
+    $("input[name='display_status_button']").on("change", function(e) {
+        $.ajax({
+            "type" : "POST",
+            "dataType": "json",
+            "url" : "<?php echo site_url("admin/ajax_set_stock_status_mode"); ?>/" + $("input[name='display_status_button']:checked").val(),
+            "data" : {}
+        });
+    });
 
     function submitAjaxAction(id, action) {
         if (action == "edit") {
