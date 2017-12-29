@@ -206,9 +206,7 @@ class CronControl extends Master_Controller {
         $filename = "/var/www/crs_configs/" . STORE_NAME;
 
         if (file_exists($filename)) {
-            print "Found: $filename\n";
             $crs_struct = json_decode(file_get_contents($filename), true);
-            print_r($crs_struct);
 
             $uniqid = uniqid("delete_crs");
             $this->db->query("Update motorcycle set uniqid = ? where source = 'PST' and crs_trim_id > 0", array($uniqid));
