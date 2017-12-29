@@ -14,7 +14,7 @@ class CronControl extends Master_Controller {
     }
 
     public function fixPendingLightspeed() {
-        $this->load->model("cron/cronjobhourly");
+        $this->load->model("cron/cronjobhourly", "cronjobhourly");
         $this->cronjobhourly->fixPendingLightspeed();
     }
 
