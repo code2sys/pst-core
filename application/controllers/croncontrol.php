@@ -205,7 +205,7 @@ class CronControl extends Master_Controller {
 
             // Now, you have to add each of those, in order...
             foreach ($crs_struct as $c) {
-                $this->addProductLine($c["crs_machinetype"], $c["crs_make_id"], "A", $c["year"], $c["year"]);
+                $this->addProductLine($c["crs_machinetype"], $c["crs_make_id"], "N", $c["year"], $c["year"]);
             }
 
             // we should delete
