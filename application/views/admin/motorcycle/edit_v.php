@@ -14,7 +14,8 @@ $cstdata = (array) json_decode($product['data']);
             "assets" => $assets,
             "id" => @$id,
             "active" => "edit",
-            "descriptor" => "General Options"
+            "descriptor" => "General Options",
+            "source" => @$product["source"]
         ), true);
 
         $suppress = $id > 0 && $product["crs_trim_id"] > 0;

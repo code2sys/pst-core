@@ -67,7 +67,8 @@ $(document).ready(function(){
             "assets" => $assets,
             "id" => @$id,
             "active" => "images",
-            "descriptor" => "Images"
+            "descriptor" => "Images",
+            "source" => @$product["source"]
         ), true);
 
         ?>

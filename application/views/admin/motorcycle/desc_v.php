@@ -13,7 +13,8 @@
             "assets" => $assets,
             "id" => @$id,
             "active" => "description",
-            "descriptor" => "Description"
+            "descriptor" => "Description",
+            "source" => @$product["source"]
         ), true);
 
         ?>
