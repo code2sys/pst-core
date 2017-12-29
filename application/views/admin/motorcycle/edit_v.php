@@ -14,7 +14,9 @@ $cstdata = (array) json_decode($product['data']);
             "assets" => $assets,
             "id" => @$id,
             "active" => "edit",
-            "descriptor" => "General Options"
+            "descriptor" => "General Options",
+            "source" => @$product["source"],
+            "stock_status" => @$product["stock_status"]
         ), true);
 
         $suppress = $id > 0 && $product["crs_trim_id"] > 0;
@@ -106,6 +108,12 @@ $cstdata = (array) json_decode($product['data']);
                         <td style="width:50px;"><b>Active:</b></td>
                         <td>
                             <?php echo form_checkbox('status', 1, $product['status']); ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:50px;"><b>Stock Status:</b></td>
+                        <td>
+                            <?php echo form_dropdown('stock_status', array("In Stock" => "In Stock", "Out Of Stock" => "Out Of Stock"), array($product["stock_status"])); ?>
                         </td>
                     </tr>
                     <tr>
