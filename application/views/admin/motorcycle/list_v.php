@@ -1,5 +1,5 @@
 <style>
-    .show_active_button {
+    #button.show_active_button {
         color: white;
         text-shadow: none;
         background: -webkit-linear-gradient(#00E 1%, #OOC 100%);
