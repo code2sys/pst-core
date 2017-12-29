@@ -347,10 +347,10 @@ class CronControl extends Master_Controller {
                     }
 
                     // JLB 11-27-17: We just set the destination charge = 1.
-                    $this->db->query("Insert into motorcycle (title, description, status, `condition`, sku, engine_type, transmission, retail_price, sale_price, data, margin, profit, category, vehicle_type, year, make, model, color, craigslist_feed_status, cycletrader_feed_status, crs_trim_id, crs_machinetype, crs_model_id, crs_make_id, crs_year, uniqid, source, crs_version_number, destination_charge, stock_status, status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'Out Of Stock', ?)", array(
+                    $this->db->query("Insert into motorcycle (title, description, status, `condition`, sku, engine_type, transmission, retail_price, sale_price, data, margin, profit, category, vehicle_type, year, make, model, color, craigslist_feed_status, cycletrader_feed_status, crs_trim_id, crs_machinetype, crs_model_id, crs_make_id, crs_year, uniqid, source, crs_version_number, destination_charge, stock_status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'Out Of Stock')", array(
                         preg_replace("/[^" . $this->config->item("permitted_uri_chars") . "]/i", "", ($title = $trim["year"]. " " . $trim["make"] . " " . $trim["display_name"])),
                         $title,
-                        1,
+                        $stock_status,
                         1,
                         $this->getNextCRSSKU(),
                         $engine_type,
@@ -382,8 +382,8 @@ class CronControl extends Master_Controller {
                         $trim["year"],
                         $uniqid,
                         'PST',
-                        $trim["version_number"],
-                        $stock_status
+                        $trim["version_number"]
+
                     ));
 
                     $motorcycle_id = $this->db->insert_id();
