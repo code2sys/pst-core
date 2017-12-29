@@ -398,6 +398,26 @@ abstract class Motorcycleadmin extends Firstadmin
         redirect('admin/mInventory');
     }
 
+    public function motorcycle_outofstock_active() {
+        $this->_sub_motorcycle_outofstock(1);
+    }
+
+    public function motorcycle_outofstock_inactive() {
+        $this->_sub_motorcycle_outofstock(0);
+    }
+
+    protected function _sub_motorcycle_outofstock($value = 1) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        // OK, we have to switch them and save them...
+        $this->db->query("Update contact set out_of_stock_active = ? where id = 1 limit 1", array($value));
+        $this->db->query("Update motorcycle set active = ? where stock_status = 'Out Of Stock'", array($value));
+
+        redirect('admin/mInventory');
+    }
+
 
     public function mInventory() {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
