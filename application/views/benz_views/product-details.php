@@ -7,6 +7,10 @@ unset($motorcycle['videos'][0]);
 	// echo "<pre>";
 	// print_r($media_url.$motorcycle['images'][0]['image_name']);
 	// echo "</pre>";
+
+$CI =& get_instance();
+$stock_status_mode = $CI->_getStockStatusMode();
+
 ?>
 <style>
 	ul.lSPager.lSGallery {
@@ -101,7 +105,13 @@ unset($motorcycle['videos'][0]);
 				<div class="dtal-txt">
 					<label>location :</label>
 					<span><?php echo $store_name['city'].', '.$store_name['state'];?> </span>
-				</div>				
+				</div>
+                <?php if (($motorcycle['stock_status'] == 'In Stock' && $stock_status_mode >= 2 ) || ($stock_status_mode == 1)): ?>
+                    <div class="dtal-txt">
+                        <label>availability :</label>
+                        <span><?php echo $motorcycle['stock_status'];?></span>
+                    </div>
+                <?php endif; ?>
 				<div class="dtal-txt">
 					<label>Condition :</label>
 					<span><?php echo $motorcycle['condition'] == '1' ? 'New' : 'Pre-Owned';?></span>
@@ -124,6 +134,8 @@ unset($motorcycle['videos'][0]);
 					<span><?php echo $motorcycle['color'];?></span>
 				</div>
                 <?php endif; ?>
+
+
                 <?php if ($motorcycle['type'] != ''): ?>
 				<div class="dtal-txt">
 					<label>vehicle type :</label>

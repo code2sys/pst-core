@@ -12,6 +12,21 @@ require_once(__DIR__ . "/welcome.php");
 
 class Motorcycle_CI extends Welcome {
 
+    protected $_stock_status_mode;
+    public function _getStockStatusMode() {
+        if ($this->_stock_status_mode === 0 || $this->_stock_status_mode === 1) {
+            return $this->stock_status_mode;
+        }
+
+        // need to get it..
+        $query = $this->db->query("Select stock_status_mode from contact where id = 1");
+        foreach ($query->result_array() as $row) {
+            $this->_stock_status_mode = intVal($row["stock_status_mode"]);
+        }
+
+        return $this->_stock_status_mode;
+    }
+
     public function __construct()
     {
         parent::__construct();

@@ -32,6 +32,9 @@ if (!array_key_exists("vehicles", $_GET) && array_key_exists("vehicles", $filter
     $_GET["vehicles"] = implode("$", $filter["vehicles"]);
 }
 
+
+$CI =& get_instance();
+$stock_status_mode = $CI->_getStockStatusMode();
 ?>
 
 <!--
@@ -188,6 +191,12 @@ if (!array_key_exists("vehicles", $_GET) && array_key_exists("vehicles", $filter
                                 <?php if ($motorcycle['mileage'] > '0') { ?>
                                     <p>mileage :<span><?php echo $motorcycle['mileage']; ?></span></p>
                                 <?php } ?>
+                                <?php if (($motorcycle['stock_status'] == 'In Stock' && $stock_status_mode >= 2 ) || ($stock_status_mode == 1)): ?>
+                                    <div class="dtal-txt">
+                                        <label>availability :</label>
+                                        <span><?php echo $motorcycle['stock_status'];?></span>
+                                    </div>
+                                <?php endif; ?>
                                 <?php if ($motorcycle['engine_type'] != '') { ?>
                                     <p>Engine type :<span><?php echo $motorcycle['engine_type']; ?></span></p>
                                 <?php } ?>
