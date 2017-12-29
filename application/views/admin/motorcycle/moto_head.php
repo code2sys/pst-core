@@ -44,8 +44,8 @@
 
 <!-- JLB 12-29-17 This is where we put in the status and we include the stock -->
 <?php if (isset($source) && $source != ""): ?>
-<div style="text-align: center">
-    <div style="border: 1px solid black; padding: 3px; display: inline-block"><div style="display: inline-block; width: 10em;"><strong>Source:</strong></div><div style="display: inline-block; width: 10em;"><?php echo $source; ?></div><div style="display: inline-block; width: 10em;"><strong>Status:</strong></div><div style="display: inline-block; width: 10em;"><?php echo $source == "PST" ? "<span style='color: red'>Out Of Stock</span>" : "<span style='color: green; '>In Stock</span>"; ?></div></div>
+<div style="text-align: center; padding-bottom: 0.5em;">
+    <div style="border: 1px solid black; padding: 3px; display: inline-block"><div style="display: inline-block; width: 12em;"><strong>Source:</strong><?php echo $source; ?></div><div style="display: inline-block; width: 12em;"><strong>Status:</strong><?php echo $source == "PST" ? "<span style='color: red'>Out Of Stock</span>" : "<span style='color: green; '>In Stock</span>"; ?></div></div>
 </div>
 <?php endif; ?>
 
