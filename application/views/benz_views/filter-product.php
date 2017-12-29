@@ -68,7 +68,7 @@ if (@$motorcycles) {
                         <p>Engine Type :<span><?php echo $motorcycle['engine_type']; ?></span></p>
         <?php } ?>
                     <?php if (($motorcycle['stock_status'] == 'In Stock' && $stock_status_mode >= 2 ) || ($stock_status_mode == 1)): ?>
-                        <p>availability : <span><?php echo $motorcycle['stock_status'];?></span></p>
+                        <p>availability : <span style="color: <?php echo $motorcycle['stock_status'] == 'In Stock' ? 'green' : 'red'; ?>" ><?php echo $motorcycle['stock_status'];?></span></p>
                     <?php endif; ?>
 
                 </div>
