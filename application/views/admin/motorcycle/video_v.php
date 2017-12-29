@@ -12,7 +12,8 @@
             "id" => @$id,
             "active" => "video",
             "descriptor" => "Videos",
-            "source" => @$product["source"]
+            "source" => @$product["source"],
+            "stock_status" => @$product["stock_status"]
         ), true);
 
         ?>
