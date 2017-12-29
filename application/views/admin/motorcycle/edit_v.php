@@ -111,6 +111,12 @@ $cstdata = (array) json_decode($product['data']);
                         </td>
                     </tr>
                     <tr>
+                        <td style="width:50px;"><b>Stock Status:</b></td>
+                        <td>
+                            <?php echo form_dropdown('stock_status', array("In Stock", "Out Of Stock"), $product["stock_status"]); ?>
+                        </td>
+                    </tr>
+                    <tr>
                         <td style="width:50px;"><b>Feature:</b></td>
                         <td>
                             <?php echo form_checkbox('featured', 1, $product['featured']); ?>
