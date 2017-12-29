@@ -57,10 +57,10 @@
             <h3>Store Stock Status Visibility:</h3>
 
             <form>
-                <label><input type="radio" name="display_status_button" value="3"> Display inventory status on website</label>
-                <label><input type="radio" name="display_status_button" value="2"> Display in-stock status only</label>
-                <label><input type="radio" name="display_status_button" value="1"> Display out-of-stock status only</label>
-                <label><input type="radio" name="display_status_button" value="0"> Do not show stock status</label>
+                <label style="display: inline-block"><input type="radio" name="display_status_button" value="3"> Display inventory status on website</label>
+                <label style="display: inline-block"><input type="radio" name="display_status_button" value="2"> Display in-stock status only</label>
+                <label style="display: inline-block"><input type="radio" name="display_status_button" value="1"> Display out-of-stock status only</label>
+                <label style="display: inline-block"><input type="radio" name="display_status_button" value="0"> Do not show stock status</label>
             </form>
 
         </div>
