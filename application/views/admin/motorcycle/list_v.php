@@ -85,6 +85,7 @@
                     <th><b>Condition</b></th>
                     <th><b>Mileage</b></th>
                     <th><b>Source</b></th>
+                    <th><b>Stock Status</b></th>
                     <th><b>Action</b></th>
                 </tr>
                 </thead>
