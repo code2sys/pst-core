@@ -188,6 +188,37 @@ class CronControl extends Master_Controller {
         return "D" . $count;
     }
 
+    /*
+     * This is to check for CRS migration
+     */
+    public function checkForCRSMigration() {
+        // is there a CRS configuration file?
+        $filename = "/var/www/crs_configs/" . STORE_NAME;
+
+        if (file_exists($filename)) {
+            $crs_struct = json_decode(file_gets_contents($filename), true);
+
+            $uniqid = uniqid("delete_crs");
+            $this->db->query("Update motorcycle set uniqid = ? where source = 'PST' and crs_trim_id > 0", array($uniqid));
+
+            // Now, you have to add each of those, in order...
+            foreach ($crs_struct as $c) {
+                $this->addProductLine($c["crs_machinetype"], $c["crs_make_id"], "A", $c["year"], $c["year"]);
+            }
+        }
+
+    }
+
+    public function getExcludedTrimIDs() {
+        $query = $this->db->query("Select distinct crs_trim_id from motorcycle where source != 'PST' and crs_trim_id > 0");
+        $trim_LUT = array();
+        foreach ($query->result_array() as $row) {
+            $trim_LUT[$row["crs_trim_id"]] = true;
+        }
+        return $trim_LUT;
+    }
+
+
 	/*
 	 * The point of this one is to be able to request some specific information and then to load them.
 	 * Basically, you have some modes:
@@ -227,7 +258,7 @@ class CronControl extends Master_Controller {
         }
 
         // clear the unique IDs...
-        $this->db->query("Update motorcycle set uniqid = '' where crs_machinetype = ? and crs_make_id = ? and `condition` = 1", array($machine_type, $make_id));
+        $this->db->query("Update motorcycle set uniqid = '' where crs_machinetype = ? and crs_make_id = ? and `condition` = 1 and source = 'PST'", array($machine_type, $make_id));
 
 
         // We sometimes need this in hand - the off-road type...
@@ -247,7 +278,7 @@ class CronControl extends Master_Controller {
             $crs_trim_id = $m["trim_id"];
 
             // Is there one of these?
-            $query = $this->db->query("Select * from motorcycle where `condition` = 1 and source = 'PST' and crs_trim_id = ?", array($crs_trim_id));
+            $query = $this->db->query("Select * from motorcycle where `condition` = 1 and crs_trim_id = ?", array($crs_trim_id));
             $results = $query->result_array();
 
             if (count($results) == 0) {
