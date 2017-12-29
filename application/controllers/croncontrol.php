@@ -192,6 +192,15 @@ class CronControl extends Master_Controller {
      * This is to check for CRS migration
      */
     public function checkForCRSMigration() {
+        // Is there anything pending?
+        $query = $this->db->query("select * from crspull_feed_log where status = 0");
+        $results = $query->result_array();
+        if (count($results) == 0) {
+            return;
+        } else {
+            $this->db->query("update crspull_feed_log set status = 1, processing_start = now() where status = 0");
+        }
+
         // is there a CRS configuration file?
         $filename = "/var/www/crs_configs/" . STORE_NAME;
 
@@ -208,7 +217,11 @@ class CronControl extends Master_Controller {
                 $this->addProductLine($c["crs_machinetype"], $c["crs_make_id"], "N", $c["year"], $c["year"]);
             }
 
-            // we should delete
+            // we should delete all other things hanging around
+
+            // clear it
+            $this->db->query("Update crspull_feed_log set status = 2, processing_end = now() where status = 1");
+
         } else {
             print "Not found: $filename \n";
         }
