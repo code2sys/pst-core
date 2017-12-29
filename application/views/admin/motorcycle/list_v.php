@@ -2,7 +2,9 @@
     #button.show_active_button {
         color: white;
         text-shadow: none;
-        background: -webkit-linear-gradient(#00E 1%, #OOC 100%);
+        background: -webkit-linear-gradient(#00E 1%, #00C 100%);
+        background: -moz-linear-gradient(#00E 0%, #00C 100%);
+        background: -ms-linear-gradient(#00E 0%, #00C 100%);
     }
 </style>
 <!-- MAIN CONTENT =======================================================================================-->
