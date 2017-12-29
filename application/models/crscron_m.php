@@ -139,13 +139,15 @@ class CRSCron_M extends Master_M
      * Then remove A because it's extraneous.
      */
     public function removeExtraCRSBikes() {
+        print "Call to removeExtraCRSBikes \n";
         $query = $this->db->query("Select A.id from motorcycle A, motorcycle B where A.crs_trim_id > 0 and B.crs_trim_id > 0 and A.crs_trim_id = B.crs_trim_id and A.source = 'PST' and B.source != 'PST' and A.id != B.id and A.condition = 1 and B.condition = 1");
         $ids_to_delete = array();
         foreach ($query->result_array() as $row) {
             $ids_to_delete[] = $row["id"];
         }
+        print_r($ids_to_delete);
 
-        if (count($ids_to_delete)) {
+        if (count($ids_to_delete) > 0) {
             // OK, delete them.
             $this->db->query("Delete from motorcycle where id in (" . implode(",", $ids_to_delete) . ")");
         }
