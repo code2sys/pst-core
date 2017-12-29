@@ -357,10 +357,13 @@ class Lightspeed_M extends Master_M {
         if ($valid_count > 0) {
             $this->db->query("Delete from motorcycle where lightspeed = 1 and lightspeed_flag = 0");
 
-            // JLB 12-29-17
-            // At the end of this, we will remove any CRS items that overlap bikes from Lightspeed
-            $CI->CRSCron_M->removeExtraCRSBikes();
         }
+
+        // JLB 12-29-17
+        // At the end of this, we will remove any CRS items that overlap bikes from Lightspeed
+        print "A\n";
+        $CI->CRSCron_M->removeExtraCRSBikes();
+        print "B\n";
     }
 
     public function get_parts_xml() {
