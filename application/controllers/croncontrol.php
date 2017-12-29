@@ -205,6 +205,10 @@ class CronControl extends Master_Controller {
             foreach ($crs_struct as $c) {
                 $this->addProductLine($c["crs_machinetype"], $c["crs_make_id"], "A", $c["year"], $c["year"]);
             }
+
+            // we should delete
+        } else {
+            print "Not found: $filename \n";
         }
 
     }
