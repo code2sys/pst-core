@@ -177,7 +177,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
                                     }
                                 } ?>
                             </div>
-                            <p class="mid-text-right">
+                            <div class="mid-text-right">
                                 <p>condition :<span><?php echo $motorcycle['condition'] == '1' ? 'New' : 'Pre-Owned'; ?></span></p>
                                 <?php if ($motorcycle["color"] != "N/A"): ?>
                                 <p>color :<span><?php echo $motorcycle['color']; ?></span></p>
@@ -194,6 +194,10 @@ $stock_status_mode = $CI->_getStockStatusMode();
                                 <?php if ($motorcycle['engine_type'] != '') { ?>
                                     <p>Engine type :<span><?php echo $motorcycle['engine_type']; ?></span></p>
                                 <?php } ?>
+                                <?php if (($motorcycle['stock_status'] == 'In Stock' && $stock_status_mode >= 2 ) || ($stock_status_mode == 1)): ?>
+                                    <p>availability : <span><?php echo $motorcycle['stock_status'];?></span></p>
+                                <?php endif; ?>
+
                             </div>
                         </div>
                         <div class="mid-r-but">
