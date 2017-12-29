@@ -560,7 +560,9 @@ $cstdata = (array) json_decode($product['data']);
             "assets" => $assets,
             "id" => @$id,
             "active" => "specs",
-            "descriptor" => "Specifications Options"
+            "descriptor" => "Specifications Options",
+            "source" => @$product["source"],
+            "stock_status" => @$product["stock_status"]
         ), true);
 
         ?>

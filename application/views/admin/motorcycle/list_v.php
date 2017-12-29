@@ -48,6 +48,23 @@
             <a href="<?php echo base_url('admin/motorcycle_edit'); ?>" id="button"><i class="fa fa-plus"></i>&nbsp;Add a new Unit</a>
         </div>
 
+        <div class="admin_search_right">
+            <h3>Out-of-Stock Actions:</h3>
+
+            <a href="<?php echo base_url('admin/motorcycle_outofstock_inactive'); ?>" id="button"><i class="fa fa-pause"></i>&nbsp;Make All Out-of-Stock Units Inactive</a>
+            <a href="<?php echo base_url('admin/motorcycle_outofstock_active'); ?>" id="button"><i class="fa fa-play"></i>&nbsp;Make All Out-of-Stock Units Active</a>
+
+            <h3>Store Stock Status Visibility:</h3>
+
+            <form>
+                <label style="display: inline-block"><input type="radio" name="display_status_button" value="3" <?php if ($stock_status_mode == 3): ?>checked="checked"<?php endif; ?>> Display inventory status on website</label>
+                <label style="display: inline-block"><input type="radio" name="display_status_button" value="2" <?php if ($stock_status_mode == 2): ?>checked="checked"<?php endif; ?>> Display in-stock status only</label>
+                <label style="display: inline-block"><input type="radio" name="display_status_button" value="1" <?php if ($stock_status_mode == 1): ?>checked="checked"<?php endif; ?>> Display out-of-stock status only</label>
+                <label style="display: inline-block"><input type="radio" name="display_status_button" value="0" <?php if ($stock_status_mode == 0): ?>checked="checked"<?php endif; ?>> Do not show stock status</label>
+            </form>
+
+        </div>
+
 
         <div class="pagination"><?php echo @$pagination; ?></div>
         <div class="clear"></div>
@@ -68,6 +85,7 @@
                     <th><b>Condition</b></th>
                     <th><b>Mileage</b></th>
                     <th><b>Source</b></th>
+                    <th><b>Stock Status</b></th>
                     <th><b>Action</b></th>
                 </tr>
                 </thead>
@@ -111,12 +129,21 @@
                 null,
                 null,
                 null,
+                null,
                 null
             ]
         });
 
     });
 
+    $("input[name='display_status_button']").on("change", function(e) {
+        $.ajax({
+            "type" : "POST",
+            "dataType": "json",
+            "url" : "<?php echo site_url("admin/ajax_set_stock_status_mode"); ?>/" + $("input[name='display_status_button']:checked").val(),
+            "data" : {}
+        });
+    });
 
     function submitAjaxAction(id, action) {
         if (action == "edit") {

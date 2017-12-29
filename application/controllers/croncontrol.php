@@ -59,6 +59,7 @@ class CronControl extends Master_Controller {
 
 	public function hourly()
 	{
+	    $this->checkForCRSMigration(); // let's put it on the front...
 		$this->_runJob('hourly');
 	}
 
@@ -188,6 +189,65 @@ class CronControl extends Master_Controller {
         return "D" . $count;
     }
 
+    /*
+     * This is to check for CRS migration
+     */
+    public function checkForCRSMigration() {
+        // Is there anything pending?
+        $query = $this->db->query("select * from crspull_feed_log where status = 0");
+        $results = $query->result_array();
+        if (count($results) == 0) {
+            return;
+        } else {
+            $this->db->query("update crspull_feed_log set status = 1, processing_start = now() where status = 0");
+        }
+
+        // is there a CRS configuration file?
+        $filename = "/var/www/crs_configs/" . STORE_NAME;
+
+        if (file_exists($filename)) {
+            $crs_struct = json_decode(file_get_contents($filename), true);
+
+            $uniqid = uniqid("delete_crs");
+            $this->db->query("Update motorcycle set uniqid = ? where source = 'PST' and crs_trim_id > 0", array($uniqid));
+
+            // Now, you have to add each of those, in order...
+            foreach ($crs_struct as $c) {
+                $this->addProductLine($c["crs_machinetype"], $c["crs_make_id"], "N", $c["year"], $c["year"]);
+            }
+
+            // we should delete all other things hanging around
+            $this->db->query("Delete from motorcycle where source = 'PST' and crs_trim_id > 0 and uniqid = ? and `condition` = 1 ", array($uniqid));
+
+            // clear it
+            $this->db->query("Update crspull_feed_log set status = 2, processing_end = now() where status = 1");
+
+        } else {
+            print "Not found: $filename \n";
+        }
+
+    }
+
+    public function getExcludedTrimIDs() {
+        $query = $this->db->query("Select distinct crs_trim_id from motorcycle where source != 'PST' and crs_trim_id > 0");
+        $trim_LUT = array();
+        foreach ($query->result_array() as $row) {
+            $trim_LUT[$row["crs_trim_id"]] = true;
+        }
+        return $trim_LUT;
+    }
+
+    protected function _getStockStatusCRS() {
+        $query = $this->db->query("Select out_of_stock_active from contact where id = 1");
+        $status = 0;
+
+        foreach ($query->result_array() as $row) {
+            $status = $row["out_of_stock_active"];
+        }
+
+        return $status;
+    }
+
 	/*
 	 * The point of this one is to be able to request some specific information and then to load them.
 	 * Basically, you have some modes:
@@ -227,8 +287,9 @@ class CronControl extends Master_Controller {
         }
 
         // clear the unique IDs...
-        $this->db->query("Update motorcycle set uniqid = '' where crs_machinetype = ? and crs_make_id = ? and `condition` = 1", array($machine_type, $make_id));
+        $this->db->query("Update motorcycle set uniqid = '' where crs_machinetype = ? and crs_make_id = ? and `condition` = 1 and source = 'PST'", array($machine_type, $make_id));
 
+        $stock_status = $this->_getStockStatusCRS();
 
         // We sometimes need this in hand - the off-road type...
 
@@ -247,7 +308,7 @@ class CronControl extends Master_Controller {
             $crs_trim_id = $m["trim_id"];
 
             // Is there one of these?
-            $query = $this->db->query("Select * from motorcycle where `condition` = 1 and source = 'PST' and crs_trim_id = ?", array($crs_trim_id));
+            $query = $this->db->query("Select * from motorcycle where `condition` = 1 and crs_trim_id = ?", array($crs_trim_id));
             $results = $query->result_array();
 
             if (count($results) == 0) {
@@ -286,10 +347,10 @@ class CronControl extends Master_Controller {
                     }
 
                     // JLB 11-27-17: We just set the destination charge = 1.
-                    $this->db->query("Insert into motorcycle (title, description, status, `condition`, sku, engine_type, transmission, retail_price, sale_price, data, margin, profit, category, vehicle_type, year, make, model, color, craigslist_feed_status, cycletrader_feed_status, crs_trim_id, crs_machinetype, crs_model_id, crs_make_id, crs_year, uniqid, source, crs_version_number, destination_charge) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)", array(
+                    $this->db->query("Insert into motorcycle (title, description, status, `condition`, sku, engine_type, transmission, retail_price, sale_price, data, margin, profit, category, vehicle_type, year, make, model, color, craigslist_feed_status, cycletrader_feed_status, crs_trim_id, crs_machinetype, crs_model_id, crs_make_id, crs_year, uniqid, source, crs_version_number, destination_charge, stock_status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'Out Of Stock')", array(
                         preg_replace("/[^" . $this->config->item("permitted_uri_chars") . "]/i", "", ($title = $trim["year"]. " " . $trim["make"] . " " . $trim["display_name"])),
                         $title,
-                        1,
+                        $stock_status,
                         1,
                         $this->getNextCRSSKU(),
                         $engine_type,
@@ -322,6 +383,7 @@ class CronControl extends Master_Controller {
                         $uniqid,
                         'PST',
                         $trim["version_number"]
+
                     ));
 
                     $motorcycle_id = $this->db->insert_id();

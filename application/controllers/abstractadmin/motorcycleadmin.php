@@ -398,13 +398,56 @@ abstract class Motorcycleadmin extends Firstadmin
         redirect('admin/mInventory');
     }
 
+    public function motorcycle_outofstock_active() {
+        $this->_sub_motorcycle_outofstock(1);
+    }
+
+    public function motorcycle_outofstock_inactive() {
+        $this->_sub_motorcycle_outofstock(0);
+    }
+
+    protected function _sub_motorcycle_outofstock($value = 1) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        // OK, we have to switch them and save them...
+        $this->db->query("Update contact set out_of_stock_active = ? where id = 1 limit 1", array($value));
+        $this->db->query("Update motorcycle set `status` = ? where stock_status = 'Out Of Stock'", array($value));
+
+        redirect('admin/mInventory');
+    }
+
+    protected $_stock_status_mode;
+    protected function _getStockStatusMode() {
+        if ($this->_stock_status_mode === 0 || $this->_stock_status_mode === 1) {
+            return $this->stock_status_mode;
+        }
+
+        // need to get it..
+        $query = $this->db->query("Select stock_status_mode from contact where id = 1");
+        foreach ($query->result_array() as $row) {
+            $this->_stock_status_mode = intVal($row["stock_status_mode"]);
+        }
+
+        return $this->_stock_status_mode;
+    }
+
 
     public function mInventory() {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
         $this->setNav('admin/nav_v', 2);
+        $this->_mainData["stock_status_mode"] = $this->_getStockStatusMode();
         $this->renderMasterPage('admin/master_v', 'admin/motorcycle/list_v', $this->_mainData);
+    }
+
+    public function ajax_set_stock_status_mode($stock_status_mode) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        $this->db->query("Update contact set stock_status_mode = ? where id = 1 limit 1", array($stock_status_mode));
     }
 
     public function minventory_ajax() {
@@ -421,6 +464,7 @@ abstract class Motorcycleadmin extends Firstadmin
             "motorcycle.condition",
             "motorcycle.mileage",
             "motorcycle.source",
+            "motorcycle.stock_status",
             "motorcycle.title"
         );
 
@@ -468,6 +512,7 @@ abstract class Motorcycleadmin extends Firstadmin
                 $p["condition"] == 1 ? "New" : "Used",
                 $p["mileage"],
                 $p["source"],
+                $p["stock_status"],
                 "<span class='nowrap'><a href='#' class='edit-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-edit'></i>&nbsp;Edit</a></span><br/> " ./* edit */ /* delete */ /* active */ /* inactive */
                 "<span class='nowrap'><a href='#' class='remove-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-remove'></i>&nbsp;Remove</a></span><br/> " .
                 ($p["status"] > 0 ? "<span class='nowrap'><a href='#' class='inactive-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-play'></i>&nbsp;Active</a></span><br/> " : "<span class='nowrap'><a href='#' class='active-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-pause'></i>&nbsp;Inactive</a></span><br/> ")

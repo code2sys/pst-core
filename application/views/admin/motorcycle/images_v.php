@@ -67,7 +67,9 @@ $(document).ready(function(){
             "assets" => $assets,
             "id" => @$id,
             "active" => "images",
-            "descriptor" => "Images"
+            "descriptor" => "Images",
+            "source" => @$product["source"],
+            "stock_status" => @$product["stock_status"]
         ), true);
 
         ?>

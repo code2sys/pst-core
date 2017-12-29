@@ -42,6 +42,14 @@
 <!-- END SUCCESS -->
 
 
+<!-- JLB 12-29-17 This is where we put in the status and we include the stock -->
+<?php if (isset($source) && $source != ""): ?>
+<div style="text-align: center; padding-bottom: 0.5em;">
+    <div style="border: 1px solid black; padding: 3px; display: inline-block"><div style="display: inline-block; width: 12em;"><strong>Source:</strong> <?php echo $source; ?></div><div style="display: inline-block; width: 12em;"><strong>Status:</strong> <?php echo $stock_status == "Out Of Stock" ? "<span style='color: red'>Out Of Stock</span>" : "<span style='color: green; '>In Stock</span>"; ?></div></div>
+</div>
+<?php endif; ?>
+
+
 <!-- TABS -->
 <div class="tab">
     <ul>

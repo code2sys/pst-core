@@ -2,6 +2,10 @@
 $new_assets_url = jsite_url("/qatesting/benz_assets/");
 $media_url = jsite_url("/media/");
 
+
+$CI =& get_instance();
+$stock_status_mode = $CI->_getStockStatusMode();
+
 if (@$motorcycles) {
     foreach ($motorcycles as $motorcycle) {
 
@@ -63,6 +67,10 @@ if (@$motorcycles) {
                     <?php if ($motorcycle['engine_type'] != '') { ?>
                         <p>Engine Type :<span><?php echo $motorcycle['engine_type']; ?></span></p>
         <?php } ?>
+                    <?php if (($motorcycle['stock_status'] == 'In Stock' && $stock_status_mode >= 2 ) || ($motorcycle['stock_status'] != 'In Stock' && ($stock_status_mode == 1  || $stock_status_mode == 3))): ?>
+                        <p>availability : <span style="font-weight: bold; color: <?php echo $motorcycle['stock_status'] == 'In Stock' ? 'green' : 'red'; ?>" ><?php echo $motorcycle['stock_status'];?></span></p>
+                    <?php endif; ?>
+
                 </div>
             </div>
             <div class="mid-r-but">
