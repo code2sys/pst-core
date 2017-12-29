@@ -13,6 +13,11 @@ class CronControl extends Master_Controller {
         }
     }
 
+    public function fixPendingLightspeed() {
+        $this->load->model("cron/cronjobhourly");
+        $this->cronjobhourly->fixPendingLightspeed();
+    }
+
     public function encryptPassword($password = "") {
 
         if ($password == "") {
