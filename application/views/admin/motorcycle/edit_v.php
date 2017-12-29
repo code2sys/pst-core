@@ -113,7 +113,7 @@ $cstdata = (array) json_decode($product['data']);
                     <tr>
                         <td style="width:50px;"><b>Stock Status:</b></td>
                         <td>
-                            <?php echo form_dropdown('stock_status', array("In Stock", "Out Of Stock"), $product["stock_status"]); ?>
+                            <?php echo form_dropdown('stock_status', array("In Stock" => "In Stock", "Out of Stock" => "Out Of Stock"), array($product["stock_status"])); ?>
                         </td>
                     </tr>
                     <tr>
