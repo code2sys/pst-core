@@ -48,6 +48,23 @@
             <a href="<?php echo base_url('admin/motorcycle_edit'); ?>" id="button"><i class="fa fa-plus"></i>&nbsp;Add a new Unit</a>
         </div>
 
+        <div class="admin_search_right">
+            <h3>Out-of-Stock Actions:</h3>
+
+            <a href="<?php echo base_url('admin/motorcycle_outofstock_inactive'); ?>" id="button"><i class="fa fa-pause"></i>&nbsp;Make All Out-of-Stock Units Inactive</a>
+            <a href="<?php echo base_url('admin/motorcycle_outofstock_active'); ?>" id="button"><i class="fa fa-play"></i>&nbsp;Make All Out-of-Stock Units Active</a>
+
+            <h3>Store Stock Status Visibility:</h3>
+
+            <form>
+                <label><input type="radio" name="display_status_button" value="3"> Display inventory status on website</label>
+                <label><input type="radio" name="display_status_button" value="2"> Display in-stock status only</label>
+                <label><input type="radio" name="display_status_button" value="1"> Display out-of-stock status only</label>
+                <label><input type="radio" name="display_status_button" value="0"> Do not show stock status</label>
+            </form>
+
+        </div>
+
 
         <div class="pagination"><?php echo @$pagination; ?></div>
         <div class="clear"></div>
