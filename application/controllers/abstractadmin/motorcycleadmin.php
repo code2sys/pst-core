@@ -413,7 +413,7 @@ abstract class Motorcycleadmin extends Firstadmin
 
         // OK, we have to switch them and save them...
         $this->db->query("Update contact set out_of_stock_active = ? where id = 1 limit 1", array($value));
-        $this->db->query("Update motorcycle set active = ? where stock_status = 'Out Of Stock'", array($value));
+        $this->db->query("Update motorcycle set `status` = ? where stock_status = 'Out Of Stock'", array($value));
 
         redirect('admin/mInventory');
     }
