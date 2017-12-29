@@ -70,6 +70,7 @@ class Motorcycle_CI extends Welcome {
 
         }
 
+        $filter["status"] = 1;
         $this->_mainData['vehicles'] = $this->motorcycle_m->getMotorcycleVehicle($filter);
         $this->_mainData['brands'] = $this->motorcycle_m->getMotorcycleMake($filter);
         $this->_mainData['years'] = $this->motorcycle_m->getMotorcycleYear($filter);
