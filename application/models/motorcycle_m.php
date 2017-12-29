@@ -364,7 +364,7 @@ class Motorcycle_M extends Master_M {
     public function enhancedGetMotorcycles($filter = NULL, $orderBy = NULL, $limit = 20, $offset = 0) {
         $this->load->helper("jonathan");
 
-        $where = jonathan_generate_likes(array("motorcycle.title", "motorcycle.make", "motorcycle.model", "motorcycle_category.name", "motorcycle.year", "motorcycle_type.name"), $filter, "WHERE");
+        $where = jonathan_generate_likes(array("motorcycle.title", "motorcycle.make", "motorcycle.model", "motorcycle_category.name", "motorcycle.year", "motorcycle_type.name", "motorcycle.stock_status"), $filter, "WHERE");
 
         $total_count = 0;
         $query = $this->db->query("Select count(*) as cnt from motorcycle");
