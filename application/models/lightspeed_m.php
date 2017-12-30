@@ -201,6 +201,7 @@ class Lightspeed_M extends Master_M {
             'WHITE/BLUE/RED' =>'White/Blue/Red',
             'WHITE/RED' =>'White/Red',
             'YELLOW' =>'Yellow',
+            "LM" => "Lime"
 
         );
 
