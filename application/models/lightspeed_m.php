@@ -362,9 +362,7 @@ class Lightspeed_M extends Master_M {
 
         // JLB 12-29-17
         // At the end of this, we will remove any CRS items that overlap bikes from Lightspeed
-        print "A\n";
         $CI->CRSCron_M->removeExtraCRSBikes();
-        print "B\n";
     }
 
     public function get_parts_xml() {
