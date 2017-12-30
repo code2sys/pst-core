@@ -1,3 +1,12 @@
+<style>
+    #button.show_active_button {
+        color: white;
+        text-shadow: none;
+        background: -webkit-linear-gradient(#00E 1%, #00C 100%);
+        background: -moz-linear-gradient(#00E 0%, #00C 100%);
+        background: -ms-linear-gradient(#00E 0%, #00C 100%);
+    }
+</style>
 <!-- MAIN CONTENT =======================================================================================-->
 <div class="content_wrap">
     <div class="content">
@@ -51,8 +60,8 @@
         <div class="admin_search_right">
             <h3>Out-of-Stock Actions:</h3>
 
-            <a href="<?php echo base_url('admin/motorcycle_outofstock_inactive'); ?>" id="button"><i class="fa fa-pause"></i>&nbsp;Make All Out-of-Stock Units Inactive</a>
-            <a href="<?php echo base_url('admin/motorcycle_outofstock_active'); ?>" id="button"><i class="fa fa-play"></i>&nbsp;Make All Out-of-Stock Units Active</a>
+            <a href="<?php echo base_url('admin/motorcycle_outofstock_inactive'); ?>" id="button" class="<?php if ($out_of_stock_active == 0): ?>show_active_button<?php endif; ?>"><i class="fa fa-pause"></i>&nbsp;Make All Out-of-Stock Units Inactive</a>
+            <a href="<?php echo base_url('admin/motorcycle_outofstock_active'); ?>" id="button" class="<?php if ($out_of_stock_active > 0): ?>show_active_button<?php endif; ?>"><i class="fa fa-play"></i>&nbsp;Make All Out-of-Stock Units Active</a>
 
             <h3>Store Stock Status Visibility:</h3>
 

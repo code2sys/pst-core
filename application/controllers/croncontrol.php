@@ -11,6 +11,14 @@ class CronControl extends Master_Controller {
             print "CLI Only.\n";
             exit();
         }
+
+        @set_time_limit(7200);
+
+    }
+
+    public function fixPendingLightspeed() {
+        $this->load->model("cron/cronjobhourly", "cronjobhourly");
+        $this->cronjobhourly->fixPendingLightspeed();
     }
 
     public function encryptPassword($password = "") {

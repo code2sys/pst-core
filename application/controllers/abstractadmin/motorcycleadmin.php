@@ -433,6 +433,21 @@ abstract class Motorcycleadmin extends Firstadmin
         return $this->_stock_status_mode;
     }
 
+    protected $_out_of_stock_active;
+    protected function _getOutOfStockActive() {
+        if ($this->_out_of_stock_active === 0 || $this->_out_of_stock_active === 1) {
+            return $this->out_of_stock_active;
+        }
+
+        // need to get it..
+        $query = $this->db->query("Select out_of_stock_active from contact where id = 1");
+        foreach ($query->result_array() as $row) {
+            $this->_out_of_stock_active = intVal($row["out_of_stock_active"]);
+        }
+
+        return $this->_out_of_stock_active;
+    }
+
 
     public function mInventory() {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
@@ -440,6 +455,7 @@ abstract class Motorcycleadmin extends Firstadmin
         }
         $this->setNav('admin/nav_v', 2);
         $this->_mainData["stock_status_mode"] = $this->_getStockStatusMode();
+        $this->_mainData["out_of_stock_active"] = $this->_getOutOfStockActive();
         $this->renderMasterPage('admin/master_v', 'admin/motorcycle/list_v', $this->_mainData);
     }
 
