@@ -86,7 +86,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 			</div>
 			<div class="col-md-4 col-sm-5 pull-right bx-rit pdig sect-wdt">
 				<h3><?php echo $motorcycle['title'];?></h3>
-				<?php if( $motorcycle['call_on_price'] == '1' ) { ?>
+				<?php if( $motorcycle['call_on_price'] == '1' ||  ($motorcycle['retail_price'] == 0 && $motorcycle['sale_price'] == 0) ) { ?>
 					<p class="cfp">Call For Price</p>
                 <?php } else {
                     if ($motorcycle['sale_price']>0 && $motorcycle['sale_price'] !== "0.00" && $motorcycle["sale_price"] != $motorcycle["retail_price"]) { ?>
