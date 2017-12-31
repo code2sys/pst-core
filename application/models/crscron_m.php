@@ -150,4 +150,5 @@ class CRSCron_M extends Master_M
             $this->db->query("Delete from motorcycle where id in (" . implode(",", $ids_to_delete) . ")");
         }
     }
+
 }

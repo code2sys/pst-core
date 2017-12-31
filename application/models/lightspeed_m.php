@@ -345,7 +345,27 @@ class Lightspeed_M extends Master_M {
 
                     // refresh it...
                     $CI->CRSCron_M->refreshCRSData($motorcycle_id);
+
+                    // OK, we need to fix the category and we need to fix the type, if we've got it.
+
+                    // Now, we attempt to fix the machine type...
+                    $corrected_category = $this->_getMachineTypeMotoType($vin_match["machine_type"],  $vin_match["offroad"]);
+                    if ($corrected_category > 0) {
+                        $this->db->query("Update motorcycle set vehicle_type = ? where id = ? limit 1", array($corrected_category, $motorcycle_id));
+                    }
+
+                    $corrected_category = 0;
+                    $query2 = $this->dbh->prepare("Select value from motorcyclespec where motorcycle_id = ? and crs_attribute_id = 10011", array($motorcycle_id));
+                    foreach ($query2->result_array() as $disRec) {
+                        $corrected_category = $this->_getStockMotoCategory($disRec["value"]);
+                    }
+
+                    if ($corrected_category > 0) {
+                        $this->db->query("Update motorcycle set category = ? where id = ? limit 1", array($corrected_category, $motorcycle_id));
+                    }
+
                 }
+
 
                 // Todo...
                 // Does this motorcycle have a zero group or a general group of settings? We need to be able to flag the settings group that comes from Lightspeed in some way...
@@ -363,6 +383,59 @@ class Lightspeed_M extends Master_M {
         // JLB 12-29-17
         // At the end of this, we will remove any CRS items that overlap bikes from Lightspeed
         $CI->CRSCron_M->removeExtraCRSBikes();
+    }
+
+    protected $stock_moto_category_cache;
+    protected function _getStockMotoCategory($name = "Dealer") {
+
+        if (!isset($this->stock_moto_category_cache) || !is_array($this->stock_moto_category_cache)) {
+            $this->stock_moto_category_cache = array();
+        }
+
+        if (array_key_exists($name, $this->stock_moto_category_cache)) {
+            return $this->stock_moto_category_cache[$name];
+        }
+
+        $query = $this->db->query("Select * from motorcycle_category where name = ?", array($name));
+        $id = 0;
+        foreach ($query->result_array() as $row) {
+            $id = $row["id"];
+        }
+
+        if ($id == 0) {
+            $this->db->query("Insert into motorcycle_category (name, date_added) values (?, now())", array($name));
+            $id = $this->db->insert_id();
+        }
+
+        $this->stock_moto_category_cache[$name] = $id;
+
+        return $id;
+    }
+
+
+    protected $_preserveMachineMotoType;
+    protected function _getMachineTypeMotoType($machine_type, $offroad_flag) {
+        if (!isset($this->_preserveMachineMotoType)) {
+            $this->_preserveMachineMotoType = array();
+        }
+
+        $key = sprintf("%s-%d", $machine_type, $offroad_flag);
+        if (array_key_exists($key, $this->_preserveMachineMotoType)) {
+            return $this->_preserveMachineMotoType[$key];
+        }
+
+        $type_id = 0;
+        $query = $this->db->query("Select id from motorcycle_type where crs_type = ? and offroad = ?", array($machine_type, $offroad_flag));
+        foreach ($query->result_array() as $row) {
+            $type_id = $row["id"];
+        }
+
+        if ($type_id == 0) {
+            throw new \Exception("Could not find a match for _getMachineTypeMotoType($machine_type, $offroad_flag)");
+        }
+
+        $this->_preserveMachineMotoType[$key] = $type_id;
+        return $type_id;
     }
 
     public function get_parts_xml() {
