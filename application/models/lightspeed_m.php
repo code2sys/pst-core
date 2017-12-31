@@ -359,7 +359,7 @@ class Lightspeed_M extends Master_M {
 
 
                     $corrected_category = 0;
-                    $query2 = $this->db->prepare("Select value from motorcyclespec where motorcycle_id = ? and crs_attribute_id = 10011", array($motorcycle_id));
+                    $query2 = $this->db->query("Select value from motorcyclespec where motorcycle_id = ? and crs_attribute_id = 10011", array($motorcycle_id));
                     foreach ($query2->result_array() as $disRec) {
                         $corrected_category = $this->_getStockMotoCategory($disRec["value"]);
                     }
