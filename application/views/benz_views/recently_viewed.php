@@ -46,7 +46,7 @@ if (!isset($no_fify)) {
                 </a>
                 <a class="<?php if (!$no_fify): ?>fify<?php endif; ?>" href="<?php echo base_url(strtolower($recently['type']) . '/' . $recently['url_title'] . '/' . $recently['sku']); ?>"><h1 class="head-txt"><?php echo $recently['title']; ?></h1></a>
                 <!--<p><?php echo $recently['title']; ?></p>-->
-                <?php if( $recently['call_on_price'] == '1' ) { ?>
+                <?php if( $recently['call_on_price'] == '1' ||  ($motorcycle['retail_price'] == 0 && $motorcycle['sale_price'] == 0) ) { ?>
                     <p class="cfp">Call For Price</p>
                     <?php
                 } else {
