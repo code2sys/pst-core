@@ -27,12 +27,6 @@ if (isset($keywords) &&	$keywords != "") {
         $meta_keywords = $pageRec["keywords"];
 }
 
-
-if (!defined('SEARCH_PLACEHOLDER_WORDING')) {
-    define('SEARCH_PLACEHOLDER_WORDING', 'Search Parts and Apparel');
-}
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -355,14 +349,11 @@ if (!defined('SEARCH_PLACEHOLDER_WORDING')) {
 			</div>
 			<div class="mblacnt-log">
 				<a href="javascript:void(0);" onclick="openLogin();"> <i class="fa fa-user usr" aria-hidden="true"></i> Login/create account</a>
-			</div>	
-			<div class="searchHolder search-one">
-				<form action="<?php echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-					<input id="search" name="search" placeholder="<?php echo SEARCH_PLACEHOLDER_WORDING; ?>" class="search-bx" style="float:left;" />
-					<a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-				</form>
-				<div class="clear"></div>
 			</div>
+            <?php
+            $CI =& get_instance();
+            echo $CI->load->view("search_placeholder", array(), true);
+            ?>
 			<div class="clear"></div>						
 		</div>
             <div class="container_b">

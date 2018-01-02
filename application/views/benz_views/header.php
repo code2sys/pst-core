@@ -10,6 +10,7 @@ $google_conversion_id = $store_name['google_conversion_id'];
 $partsfinder_link = $store_name["partsfinder_link"];
 $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 
+
 	?>
 <head>
     <?php echo jget_store_block("top_header"); ?>
@@ -147,14 +148,11 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 			</div>
 			<div class="mblacnt-log">
 				<a href="javascript:void(0);" onclick="openLogin();"> <i class="fa fa-user usr" aria-hidden="true"></i> Login/create account</a>
-			</div>	
-			<div class="searchHolder search-one">
-				<form action="<?php echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-					<input id="search" name="search" placeholder="Search Parts and Apparel" class="search-bx" style="float:left;" />
-					<a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-				</form>
-				<div class="clear"></div>
 			</div>
+            <?php
+            $CI =& get_instance();
+            echo $CI->load->view("search_placeholder", array(), true);
+            ?>
 			<div class="clear"></div>						
 		</div>
             <div class="container_b">
@@ -207,31 +205,12 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 			</div>
 			<div class="one-fifth">
 				<h3>find us on</h3>
-				<?php if(@$SMSettings['sm_fblink']): ?>
-				<a class="social" href="<?php echo @$SMSettings['sm_fblink']; ?>" target="_blank">
-					<img src="<?php echo $new_assets_url; ?>images/f.png" alt="Benzaitens">
-				</a>
-				<?php endif; ?>
-				<?php if(@$SMSettings['sm_twlink']): ?>
-				<a class="social" href="<?php echo $SMSettings['sm_twlink']; ?>" target="_blank">
-					<img src="<?php echo $new_assets_url; ?>images/t.png" alt="Benzaitens">
-				</a>
-				<?php endif; ?>
-				<?php if(@$SMSettings['sm_ytlink']): ?>
-				<a class="social" href="<?php echo $SMSettings['sm_ytlink']; ?>" target="_blank">
-					<img src="<?php echo $new_assets_url; ?>images/youtube1.png" alt="Benzaitens">
-				</a>
-				<?php endif; ?>
-				<?php if(@$SMSettings['sm_gplink']): ?>
-				<a class="social" href="<?php echo $SMSettings['sm_gplink']; ?>" target="_blank">
-					<img src="<?php echo $new_assets_url; ?>images/g+.png" alt="Benzaitens">
-				</a>
-				<?php endif; ?>
-				<?php if(@$SMSettings['sm_insta']): ?>
-				<a class="social" href="<?php echo $SMSettings['sm_insta']; ?>" target="_blank" style="color:#F00;">
-					<img src="<?php echo $new_assets_url; ?>images/instragram.png" alt="Benzaitens">
-				</a>
-				<?php endif; ?>
+                <?php
+                $CI =& get_instance();
+                echo $CI->load->view("social_link_buttons", array(
+                    "SMSettings" => $SMSettings
+                ), true);
+                ?>
 				<h3 class="nwsltr">newsletter</h3>
 				<form action="" class="form_standard">
 					<input type="text" id="newsletter" name="newsletter">

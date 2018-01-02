@@ -49,6 +49,9 @@
 						<tr><td>Linkedin Link:</td><td><input id="label" name="sm_lilink" value="<?php echo @$SMSettings['sm_lilink']; ?>" class="text large" style="width:400px;" /></td></tr>
 						<tr><td>Pinterest Link:</td><td><input id="label" name="sm_pilink" value="<?php echo @$SMSettings['sm_pilink']; ?>" class="text large" style="width:400px;" /></td></tr>
 						<tr><td>Instragram Link:</td><td><input id="label" name="sm_insta" value="<?php echo @$SMSettings['sm_insta']; ?>" class="text large" style="width:400px;" /></td></tr>
+						<tr><td>Amazon Link:</td><td><input id="label" name="sm_amazon" value="<?php echo @$SMSettings['sm_amazon']; ?>" class="text large" style="width:400px;" /></td></tr>
+						<tr><td>eBay Link:</td><td><input id="label" name="sm_ebay" value="<?php echo @$SMSettings['sm_ebay']; ?>" class="text large" style="width:400px;" /></td></tr>
+                        <tr><td>Display Links:</td><td><label><input type="radio" name="sm_show_upper_link" value="1" <?php if (array_key_exists("sm_show_upper_link", $SMSettings) && $SMSettings["sm_show_upper_link"] == 1): ?>checked="checked"<?php endif; ?> /> Header & Footer</label> <label><input type="radio" name="sm_show_upper_link" value="0" <?php if (!array_key_exists("sm_show_upper_link", $SMSettings) || $SMSettings["sm_show_upper_link"] != 1): ?>checked="checked"<?php endif; ?> /> Footer Only</label> </td></tr>
 					</table>
 				</div>
 				<button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Submit</button>

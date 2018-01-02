@@ -12,3 +12,23 @@
     background: #aaa;
 }
 
+.supper_social {
+    margin-right: 1em;
+    text-align: right;
+}
+
+@media (max-width:1023px) and (min-width:768px) {
+    .container_b .searchHolder.supper_social {
+        margin-top: -32px !important;
+        text-align: left;
+        margin-right: 0 !important;
+    }
+}
+
+@media (max-width:767px) {
+    .container_b .searchHolder.supper_social {
+        width: 100%;
+        margin: 0 !important;
+        text-align: center;
+    }
+}
