@@ -3,8 +3,9 @@ if (!defined('SEARCH_PLACEHOLDER_WORDING')) {
     define('SEARCH_PLACEHOLDER_WORDING', 'Search Parts and Apparel');
 }
 
+$CI =& get_instance();
+
 if (!isset($SMSettings)) {
-    $CI =& get_instance();
     $CI->load->model("admin_m");
     $SMSettings = $CI->admin_m->getSMSettings();
 }
