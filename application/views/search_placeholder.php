@@ -10,13 +10,6 @@ if (!isset($SMSettings)) {
     $SMSettings = $CI->admin_m->getSMSettings();
 }
 
-if (array_key_exists("sm_show_upper_link", $SMSettings) && $SMSettings["sm_show_upper_link"] == 1) {
-    ?>
-<div class="supper_social">
-    <?php echo $CI->load->view("social_link_buttons", array("SMSettings" => $SMSettings), true); ?>
-</div>
-<?php
-}
 
 ?>
 <div class="searchHolder search-one">
@@ -26,3 +19,13 @@ if (array_key_exists("sm_show_upper_link", $SMSettings) && $SMSettings["sm_show_
     </form>
     <div class="clear"></div>
 </div>
+
+<?php
+if (array_key_exists("sm_show_upper_link", $SMSettings) && $SMSettings["sm_show_upper_link"] == 1) {
+    ?>
+    <div class="supper_social searchHolder">
+        <?php echo $CI->load->view("social_link_buttons", array("SMSettings" => $SMSettings), true); ?>
+    </div>
+    <?php
+}
+?>
