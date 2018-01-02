@@ -17,3 +17,10 @@
     text-align: right;
 }
 
+@media (max-width:1023px) and (min-width:768px) {
+    .supper_social {
+        margin-top: -32px !important;
+        text-align: left;
+        margin-right: 0 !important;
+    }
+}
