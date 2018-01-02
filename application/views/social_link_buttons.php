@@ -1,3 +1,11 @@
+<?php
+if (!isset($SMSettings)) {
+    $CI =& get_instance();
+    $CI->load->model("admin_m");
+    $SMSettings = $CI->admin_m->getSMSettings();
+}
+
+?>
 <?php if(@$SMSettings['sm_fblink']): ?>
     <a class="social" href="<?php echo @$SMSettings['sm_fblink']; ?>" target="_blank">
         <img src="/qatesting/benz_assets/images/f.png" alt="Facebook">
