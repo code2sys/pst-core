@@ -346,7 +346,6 @@ class Lightspeed_M extends Master_M {
                     // refresh it...
                     $CI->CRSCron_M->refreshCRSData($motorcycle_id);
 
-                    // OK, we need to fix the category and we need to fix the type, if we've got it.
 
                     // Now, we attempt to fix the machine type...
                     $corrected_category = $this->_getMachineTypeMotoType($vin_match["machine_type"],  $vin_match["offroad"]);
@@ -354,6 +353,7 @@ class Lightspeed_M extends Master_M {
                         $this->db->query("Update motorcycle set vehicle_type = ? where id = ? limit 1", array($corrected_category, $motorcycle_id));
                     }
 
+                    // OK, we need to fix the category and we need to fix the type, if we've got it.
                     $corrected_category = 0;
                     $query2 = $this->db->query("Select value from motorcyclespec where motorcycle_id = ? and crs_attribute_id = 10011", array($motorcycle_id));
                     foreach ($query2->result_array() as $disRec) {
