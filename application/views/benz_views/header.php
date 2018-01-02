@@ -10,6 +10,7 @@ $google_conversion_id = $store_name['google_conversion_id'];
 $partsfinder_link = $store_name["partsfinder_link"];
 $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 
+
 	?>
 <head>
     <?php echo jget_store_block("top_header"); ?>
@@ -146,14 +147,11 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 			</div>
 			<div class="mblacnt-log">
 				<a href="javascript:void(0);" onclick="openLogin();"> <i class="fa fa-user usr" aria-hidden="true"></i> Login/create account</a>
-			</div>	
-			<div class="searchHolder search-one">
-				<form action="<?php echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-					<input id="search" name="search" placeholder="Search Parts and Apparel" class="search-bx" style="float:left;" />
-					<a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-				</form>
-				<div class="clear"></div>
 			</div>
+            <?php
+            $CI =& get_instance();
+            echo $CI->load->view("search_placeholder", array(), true);
+            ?>
 			<div class="clear"></div>						
 		</div>
             <div class="container_b">
