@@ -24,3 +24,11 @@
         margin-right: 0 !important;
     }
 }
+
+@media (max-width:767px) {
+    .container_b .searchHolder.supper_social {
+        width: 100%;
+        margin: 0 !important;
+        text-align: center;
+    }
+}
