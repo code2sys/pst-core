@@ -132,23 +132,23 @@ class Motorcycle_M extends Master_M {
 
     public function getMotorcycleSpecs($id, $retail_price = false) {
         $exclude_attributes = array(20005, 20008);
-//        if (FALSE !== $retail_price) {
-//            // OK, we need to do some excludes, e.g., MSRP
-//            $no_price_match = true;
-//            $query = $this->db->query("Select * from motorcyclespec where motorcycle_id = ? and crs_attribute_id in (20002, 20007)");
-//            foreach ($query->result_array() as $row) {
-//                if (floatVal($row["text_value"]) == $retail_price) {
-//                    $no_price_match = false;
-//                }
-//            }
-//
-//            if ($no_price_match) {
-//                $exclude_attributes[] = 20003;
-//                $exclude_attributes[] = 20006;
-//                $exclude_attributes[] = 20002;
-//                $exclude_attributes[] = 20007;
-//            }
-//        }
+        if (FALSE !== $retail_price) {
+            // OK, we need to do some excludes, e.g., MSRP
+            $no_price_match = true;
+            $query = $this->db->query("Select * from motorcyclespec where motorcycle_id = ? and crs_attribute_id in (20002, 20007)", array($id));
+            foreach ($query->result_array() as $row) {
+                if (floatVal($row["text_value"]) == $retail_price) {
+                    $no_price_match = false;
+                }
+            }
+
+            if ($no_price_match) {
+                $exclude_attributes[] = 20003;
+                $exclude_attributes[] = 20006;
+                $exclude_attributes[] = 20002;
+                $exclude_attributes[] = 20007;
+            }
+        }
 
 
         $query = $this->db->query("Select motorcyclespec.*, motorcyclespecgroup.name as spec_group, motorcyclespecgroup.ordinal as group_ordinal from motorcyclespec join motorcyclespecgroup using (motorcyclespecgroup_id) where motorcyclespec.motorcycle_id = ? and motorcyclespecgroup.hidden = 0 and motorcyclespec.hidden = 0 and (crs_attribute_id is null OR ((crs_attribute_id < 230000) and (crs_attribute_id >= 20000) and crs_attribute_id not in (" . implode(",", $exclude_attributes) . "))) order by motorcyclespecgroup.ordinal, motorcyclespec.ordinal", array($id));
