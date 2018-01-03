@@ -201,8 +201,16 @@ class Lightspeed_M extends Master_M {
             'WHITE/BLUE/RED' =>'White/Blue/Red',
             'WHITE/RED' =>'White/Red',
             'YELLOW' =>'Yellow',
-            "LM" => "Lime"
-
+            "LM" => "Lime",
+"PURE MAGNESUIM METALLIC" => "PURE MAGNESUIM METALLIC",
+"WHITE&CAN-AM RED" => "WHITE&CAN-AM RED",
+"WHITE&BLACK& CAN-AM RED" => "WHITE&BLACK&CAN-AM RED",
+"CARBON  BLACK&CAN-AM RED" => "CARBON BLACK&CAN-AM RED",
+"CAN-AM RED & BLACK" => "CAN-AM RED&BLACK",
+"BLACK &CAN-AM RED" => "BLACK&CAN-AM RED",
+"BLUE" => "BLUE",
+"GRAY/PINK" => "GRAY/PINK",
+"BRIGHT WHITE/INDY RED" => "BRIGHT WHITE/INDY RED"
         );
 
         $color = trim($color);
