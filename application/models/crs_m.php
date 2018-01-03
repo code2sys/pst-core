@@ -84,9 +84,9 @@ class CRS_M extends Master_M
         }
     }
 
-    public function findBestFit($vin, $make, $model, $year, $codeword) {
+    public function findBestFit($vin, $make, $model, $year, $codeword, $msrp = 0) {
         try {
-            return $this->postRequest("findBestFit", array("vin" => $vin, "make" => $make, "year" => $year, "model" => $model, "codeword" => $codeword, "store" => STORE_NAME), "matches");
+            return $this->postRequest("findBestFit", array("vin" => $vin, "make" => $make, "year" => $year, "model" => $model, "codeword" => $codeword, "store" => STORE_NAME, "msrp" => $msrp), "matches");
         } catch (Exception $e) {
             return array();
         }
