@@ -137,7 +137,7 @@ class Motorcycle_M extends Master_M {
             $no_price_match = true;
             $query = $this->db->query("Select * from motorcyclespec where motorcycle_id = ? and crs_attribute_id in (20002, 20007)", array($id));
             foreach ($query->result_array() as $row) {
-                if (floatVal($row["text_value"]) == $retail_price) {
+                if (floatVal($row["final_value"]) == $retail_price) {
                     $no_price_match = false;
                 }
             }
