@@ -324,7 +324,7 @@ class Lightspeed_M extends Master_M {
                 }
 
                 // Now, what is the ID for this motorcycle?
-                $vin_match = $CI->CRS_m->findBestFit($bike->VIN, $bike->Make, $bike->Model, $bike->ModelYear, $bike->CodeName);
+                $vin_match = $CI->CRS_m->findBestFit($bike->VIN, $bike->Make, $bike->Model, $bike->ModelYear, $bike->CodeName, $bike->MSRP);
 
                 if (is_array($vin_match) && count($vin_match) > 0) {
                     $vin_match = $vin_match[0];
