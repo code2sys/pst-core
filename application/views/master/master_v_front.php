@@ -234,7 +234,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 	</div>
 	<?php } ?>
 	<div class="sw brd">
-		<div class="container_b">
+		<div class="container_b" id="our_top_brands">
 			<div class="featured-listings">
 				<h3> OUR TOP BRANDS </h3>
 				<a class="rdrct-lnk" href="<?php echo site_url('Motorcycle_Gear_Brands');?>">Shop all brands </a>
