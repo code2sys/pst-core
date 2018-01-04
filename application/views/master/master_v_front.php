@@ -247,7 +247,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
                                     <img src="<?php echo site_url('media/'.$val['image']);?>">
                                 </div>
                                 <div class="labelbox">
-                                    <span class="bn"><?php echo $val['name'];?></span>
+                                    <span class=""><?php echo $val['name'];?></span>
                                 </div>
 							</a>
 						</li>
