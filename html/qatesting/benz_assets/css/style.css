@@ -451,12 +451,12 @@ a.ftrimg1 {
 }
 .featured-listings .panel-body ul.lstng li a img {
     max-width: 100%;
-    max-height: 65px;
+    max-height: 120px;
 }
 .featured-listings .panel-body ul.lstng li a.brnd-nm {
     width: 100%;
     text-align: center;
-    height: 120px;
+    height: 144px;
 }
 .padg-le {
     padding: 0 10px;
