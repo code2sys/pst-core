@@ -453,17 +453,25 @@ a.ftrimg1 {
     max-width: 100%;
     max-height: 120px;
 }
-#our_top_brands .featured-listings .panel-body ul.lstng li a.brnd-nm {
-    width: 100%;
-    text-align: center;
+#our_top_brands img {
+    max-width: 100%;
+    max-height: 120px;
     position: relative;
     top: 50%;
     transform: translateY(-50%);
     display: block;
 }
-#our_top_brands .featured-listings .panel-body ul.lstng li.ftrdb {
+#our_top_brands .spannerbox {
+    height: 144px;
+    overflow: hidden;
     position: relative;
-    height: 180px;
+    text-align: center;
+}
+#our_top_brands .labelbox {
+    font-weight: bold;
+    font-size: 16px;
+    overflow: hidden;
+    height: 22px;
 }
 .padg-le {
     padding: 0 10px;
