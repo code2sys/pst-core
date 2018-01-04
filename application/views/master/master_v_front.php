@@ -243,7 +243,12 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 					<?php foreach( $featuredBrands as $key => $val ) { ?>
 						<li class="ftrdb">
 							<a class="brnd-nm" href="<?php echo site_url($val['slug']);?>">
-								<img src="<?php echo site_url('media/'.$val['image']);?>"><span class="bn"><?php echo $val['name'];?></span>
+                                <div class="spannerbox">
+                                    <img src="<?php echo site_url('media/'.$val['image']);?>">
+                                </div>
+                                <div class="labelbox">
+                                    <span class="bn"><?php echo $val['name'];?></span>
+                                </div>
 							</a>
 						</li>
 						<?php } ?>
