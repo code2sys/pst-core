@@ -112,6 +112,7 @@ class Motorcycle_M extends Master_M {
         $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number ', 'left');
         $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
         $this->db->where("motorcycle.status", 1, false); // JLB 12-18-17 Show only active ones...
+        $this->db->where("motorcycle.deleted", 0, false); // JLB 01-04-18 Show only undeleted ones...
         $this->db->group_by('motorcycle.id');
         $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name  as type, motorcycleimage.external', FALSE);
         $this->db->limit($limit, $offset);
@@ -157,7 +158,7 @@ class Motorcycle_M extends Master_M {
 
     public function getMotorcycle( $id ){
         $record = array();
-        $query = $this->db->query("select motorcycle.*, motorcycle_category.name as category, motorcycle_type.name as type from motorcycle left join motorcycle_category on motorcycle.category = motorcycle_category.id left join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id where motorcycle.id = ?", array($id));
+        $query = $this->db->query("select motorcycle.*, motorcycle_category.name as category, motorcycle_type.name as type from motorcycle left join motorcycle_category on motorcycle.category = motorcycle_category.id left join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id where motorcycle.id = ? and deleted = 0", array($id));
         foreach ($query->result_array() as $row) {
             $record = $row;
         }
@@ -236,6 +237,7 @@ class Motorcycle_M extends Master_M {
 
     public function getFilterTotal( $filter ) {
         $where = $this->buildWhere($filter);
+        $where["deleted"] = 0;
         $this->db->select('count(id)');
         $record = $this->selectRecord('motorcycle', $where);
         return $record['cnt'];
@@ -244,6 +246,7 @@ class Motorcycle_M extends Master_M {
     public function getMotorcycleCategory($filter = array()) {
         $where = $this->buildWhere($filter, false, false, true);
         $where['motorcycle_category.name != '] = '';
+        $where["motorcycle.deleted"] = 0;
         $this->db->join('motorcycle', 'motorcycle.category = motorcycle_category.id');
         $this->db->select('motorcycle_category.*');
         $this->db->group_by('motorcycle_category.name');
@@ -253,6 +256,7 @@ class Motorcycle_M extends Master_M {
 
     public function getMotorcycleCondition($filter = array()) {
         $where = $this->buildWhere($filter);
+        $where["motorcycle.deleted"] = 0;
         $this->db->select('condition');
         $this->db->group_by('condition');
         $record = $this->selectRecords('motorcycle', $where);
@@ -262,6 +266,7 @@ class Motorcycle_M extends Master_M {
 
     public function getMotorcycleVehicle($filter = array()) {
         $where = $this->buildWhere($filter, false, true);
+        $where["motorcycle.deleted"] = 0;
         $this->db->join('motorcycle', 'motorcycle.vehicle_type = motorcycle_type.id');
         $this->db->select('motorcycle_type.*');
         $this->db->group_by('motorcycle.vehicle_type');
@@ -271,6 +276,7 @@ class Motorcycle_M extends Master_M {
 
     public function getMotorcycleMake($filter = array()) {
         $where = $this->buildWhere($filter);
+        $where["motorcycle.deleted"] = 0;
         $this->db->select('make');
         $this->db->group_by('make');
         $record = $this->selectRecords('motorcycle', $where);
@@ -279,6 +285,7 @@ class Motorcycle_M extends Master_M {
 
     public function getMotorcycleYear($filter = array()) {
         $where = $this->buildWhere($filter, true);
+        $where["motorcycle.deleted"] = 0;
         $this->db->select('year');
         $this->db->group_by('year');
         $record = $this->selectRecords('motorcycle', $where);
@@ -287,7 +294,7 @@ class Motorcycle_M extends Master_M {
 
     public function getFeaturedMonster()
     {
-        $query = "Select motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type, motorcycleimage.external from motorcycle join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id left join (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA on motorcycleimageA.motorcycle_id = motorcycle.id left join motorcycleimage on motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number where motorcycle.featured = 1  group by motorcycle.id";
+        $query = "Select motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type, motorcycleimage.external from motorcycle join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id left join (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA on motorcycleimageA.motorcycle_id = motorcycle.id left join motorcycleimage on motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number where motorcycle.featured = 1 and motorcycle.deleted = 0 group by motorcycle.id";
         $query = $this->db->query($query);
         return $query->result_array();
     }
@@ -295,6 +302,7 @@ class Motorcycle_M extends Master_M {
     public function getReccentlyMotorcycles( $ids ) {
         $where = array();
         $this->db->where_in('motorcycle.id',$ids);
+        $this->db->where("motorcycle.deleted", 0, false);
         //$where = array('motorcycle.featured' => '1' );
         $this->db->_protect_identifiers=false;
         $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
@@ -344,6 +352,7 @@ class Motorcycle_M extends Master_M {
             $this->db->where_in('motorcycle.vehicle_type', $filter['vehicles']);
         }
         $this->db->where("motorcycle.status", 1, FALSE);
+        $this->db->where("motorcycle.deleted", 0, FALSE);
         $this->db->select('count(id) as cnt', FALSE);
         $this->db->limit('6');
         $record = $this->selectRecord('motorcycle', $where);
@@ -353,14 +362,14 @@ class Motorcycle_M extends Master_M {
     // JLB 12-15-17
     // This is the URL title.
     public function getMotorcycleIdByTitle( $title ) {
-        $where = array('trim(url_title)' => $title);
+        $where = array('trim(url_title)' => $title, 'deleted' => 0);
         $this->db->select('id');
         $record = $this->selectRecord('motorcycle', $where);
         return $record['id'];
     }
 
     public function getMotorcycleIdBySKU( $sku ) {
-        $where = array('sku' => trim($sku));
+        $where = array('sku' => trim($sku), 'deleted' => 0);
         $this->db->select('id');
         $record = $this->selectRecord('motorcycle', $where);
         return $record['id'];
@@ -399,11 +408,14 @@ class Motorcycle_M extends Master_M {
         // Now, is there a filter?
         $filtered_count = $total_count;
         if ($where != "") {
+            $where .= " AND motorcycle.deleted = 0 ";
             // $query = $this->db->query("Select count(distinct part_id) as cnt from part left join partpartnumber using (part_id) left join partnumber  using (partnumber_id)  left join (select partvariation.*, concat(distributor.name, ' ', partvariation.part_number) as partlabel from partvariation join distributor using (distributor_id)) zpartvariation using (partnumber_id) left join partimage using (part_id) $where");
             $query = $this->db->query("Select count(distinct motorcycle.id) as cnt from motorcycle join motorcycle_category on motorcycle.category = motorcycle_category.id join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id $where");
             foreach ($query->result_array() as $row) {
                 $filtered_count = $row["cnt"];
             }
+        } else {
+            $where = " WHERE motorcycle.deleted = 0";
         }
 
         // Finally, run it!
