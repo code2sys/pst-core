@@ -453,6 +453,9 @@ a.ftrimg1 {
     max-width: 100%;
     max-height: 120px;
 }
+#our_top_brands a {
+    width: 100%;
+}
 #our_top_brands img {
     max-width: 100%;
     max-height: 120px;
