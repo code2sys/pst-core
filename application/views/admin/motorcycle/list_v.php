@@ -63,6 +63,8 @@
             <a href="<?php echo base_url('admin/motorcycle_outofstock_inactive'); ?>" id="button" class="<?php if ($out_of_stock_active == 0): ?>show_active_button<?php endif; ?>"><i class="fa fa-pause"></i>&nbsp;Make All Out-of-Stock Units Inactive</a>
             <a href="<?php echo base_url('admin/motorcycle_outofstock_active'); ?>" id="button" class="<?php if ($out_of_stock_active > 0): ?>show_active_button<?php endif; ?>"><i class="fa fa-play"></i>&nbsp;Make All Out-of-Stock Units Active</a>
 
+            <div style="clear: both"></div>
+
             <h3>Store Stock Status Visibility:</h3>
 
             <form>
