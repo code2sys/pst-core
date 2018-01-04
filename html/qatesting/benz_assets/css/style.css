@@ -456,6 +456,7 @@ a.ftrimg1 {
 .featured-listings .panel-body ul.lstng li a.brnd-nm {
     width: 100%;
     text-align: center;
+    height: 120px;
 }
 .padg-le {
     padding: 0 10px;
