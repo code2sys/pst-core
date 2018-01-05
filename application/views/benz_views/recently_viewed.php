@@ -51,9 +51,11 @@ if (!isset($no_fify)) {
                     <?php
                 } else {
                     if ($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00" && $recently['sale_price'] != $recently['retail_price']) { ?>
+                        <?php if ($motorcycle['retail_price'] > 0): ?>
                         <p>Retail Price: &nbsp; <span
                                 class="strikethrough">$<?php echo number_format($recently['retail_price'], 2); ?></span>
                         </p>
+                            <?php endif; ?>
                         <p>Sale Price: &nbsp; &nbsp;<span
                                 class="redtext">$<?php echo number_format($recently['sale_price'], 2); ?></span></p>
                     <?php } else { ?>
