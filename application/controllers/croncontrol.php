@@ -316,7 +316,7 @@ class CronControl extends Master_Controller {
             $crs_trim_id = $m["trim_id"];
 
             // Is there one of these?
-            $query = $this->db->query("Select * from motorcycle where `condition` = 1 and crs_trim_id = ?", array($crs_trim_id));
+            $query = $this->db->query("Select * from motorcycle where `condition` = 1 and crs_trim_id = ? and (source = 'PST' or deleted = 0)", array($crs_trim_id));
             $results = $query->result_array();
 
             if (count($results) == 0) {
