@@ -237,7 +237,7 @@ class CronControl extends Master_Controller {
     }
 
     public function getExcludedTrimIDs() {
-        $query = $this->db->query("Select distinct crs_trim_id from motorcycle where source != 'PST' and crs_trim_id > 0");
+        $query = $this->db->query("Select distinct crs_trim_id from motorcycle where source != 'PST' and crs_trim_id > 0 and deleted = 0");
         $trim_LUT = array();
         foreach ($query->result_array() as $row) {
             $trim_LUT[$row["crs_trim_id"]] = true;
