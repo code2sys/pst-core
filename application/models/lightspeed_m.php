@@ -460,7 +460,7 @@ class Lightspeed_M extends Master_M {
             $call = $this->call($string);
             $call = json_decode($call);
             echo "<pre>";
-            var_dump($call);
+            print_r($call);
 
         }
 
@@ -480,7 +480,7 @@ class Lightspeed_M extends Master_M {
             $call = $this->call($string);
             $call = json_decode($call);
             echo "<pre>";
-            var_dump($call);
+            print_r($call);
 
         }
 
