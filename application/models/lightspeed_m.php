@@ -247,6 +247,14 @@ class Lightspeed_M extends Master_M {
             $bikes = json_decode($call);
 
             foreach($bikes as $bike) {
+                if (isset($bike->OnHold) && trim($bike->OnHold) != "") {
+                    continue; // It's on hold for a deal. Not going to put that in tonight!
+                }
+
+                if (isset($bike->UnitStatus) && trim($bike->UnitStatus) == "R") {
+                    continue; // It has been removed.
+                }
+
                 $bike->NewUsed = ($bike->NewUsed=="U")?2:1;
                 $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . ($bike->CodeName != "" ? $bike->CodeName : $bike->Model);
 
@@ -383,8 +391,7 @@ class Lightspeed_M extends Master_M {
         }
 
         if ($valid_count > 0) {
-            $this->db->query("Delete from motorcycle where lightspeed = 1 and lightspeed_flag = 0");
-
+            $this->db->query("Update motorcycle set deleted = 1 where lightspeed = 1 and lightspeed_flag = 0");
         }
 
         // JLB 12-29-17
