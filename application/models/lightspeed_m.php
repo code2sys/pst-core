@@ -586,7 +586,10 @@ class Lightspeed_M extends Master_M {
             $query = $this->db->query("Select * From lightspeedpart where partvariation_id is null and supplier_code in $stock_codes limit 200");
             $rows = $query->result_array();
 
+            print "Query: Select * From lightspeedpart where partvariation_id is null and supplier_code in $stock_codes limit 200 \n";
+
             if (count($rows) > 0) {
+                print "Row count: " .count($rows) ."\n";
                 $progress = true;
 
                 // OK, attempt to do them...
