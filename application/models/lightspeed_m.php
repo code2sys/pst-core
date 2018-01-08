@@ -619,7 +619,7 @@ class Lightspeed_M extends Master_M {
 
                         $CI->admin_m->updateDistributorInventory(array(
                             array(
-                                "distributor_id" => ($row["distributor_id"] = $this->_distributorNameLookup($row["distributor"])),
+                                "distributor_id" => ($row["distributor_id"] = $this->_getDistributorByName($row["distributor"])),
                                 "partnumber" => $row["part_number"],
                                 "cost" => $row["cost"],
                                 "quantity" => $row["on_hand"]
