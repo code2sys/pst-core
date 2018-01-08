@@ -580,7 +580,7 @@ class Lightspeed_M extends Master_M {
         $stock_codes = "('" . implode("', '", array_keys($LightspeedSupplierLookAside)) . "')";
         do {
             // OK, try to get some...we only do batches of 200; this just seems like a good #
-            $query = $this->db->query("Select * From lightspeedpart where on_hand > 0 and partvariation_id is null and supplier_code in $stock_codes limit 200");
+            $query = $this->db->query("Select * From lightspeedpart where on_hand > 0 and partvariation_id is null and supplier_code in $stock_codes and lightspeedpart_id > ? order by lightspeedpart_id limit 200", array($id));
             $rows = $query->result_array();
 
 
@@ -590,6 +590,9 @@ class Lightspeed_M extends Master_M {
 
                 // OK, attempt to do them...
                 foreach ($rows as &$row) {
+                    if ($id < $row["lightspeedpart_id"]) {
+                        $id = $row["lightspeedpart_id"];
+                    }
                     $row["distributor"] = $LightspeedSupplierLookAside[$row["supplier_code"]];
                 }
 
