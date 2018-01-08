@@ -583,10 +583,10 @@ class Lightspeed_M extends Master_M {
         do {
             print "A3\n";
             // OK, try to get some...we only do batches of 200; this just seems like a good #
+            print "Query: Select * From lightspeedpart where partvariation_id is null and supplier_code in $stock_codes limit 200 \n";
             $query = $this->db->query("Select * From lightspeedpart where partvariation_id is null and supplier_code in $stock_codes limit 200");
             $rows = $query->result_array();
 
-            print "Query: Select * From lightspeedpart where partvariation_id is null and supplier_code in $stock_codes limit 200 \n";
 
             if (count($rows) > 0) {
                 print "Row count: " .count($rows) ."\n";
