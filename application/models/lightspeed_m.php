@@ -517,7 +517,7 @@ class Lightspeed_M extends Master_M {
 
                 // We are simply going to do an insert/update on this table..
                 if (!$this->db->query("Insert into lightspeedpart (part_number, supplier_code, description, on_hand, available, on_order, on_order_available, last_sold, last_received, reorder_method, min_qty, max_qty, cost, current_active_price, order_unit, order_unit_qty, last_count_date, superseded_to, upc, bin1, bin2, bin3, category, lightspeed_last_seen, uniqid, lightspeed_present_flag, retail) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , now(), ?, 1, ?) on duplicate key update on_hand = values(on_hand), available = values(available), on_order = values(on_order), on_order_available = values(on_order_available), last_sold = values(last_sold), last_received = values(last_received), reorder_method = values(reorder_method), min_qty = values(min_qty), max_qty = values(max_qty), cost = values(cost), current_active_price = values(current_active_price), order_unit = values(order_unit), description = values(description), order_unit_qty = values(order_unit_qty), last_count_date = values(last_count_date), superseded_to = values(superseded_to), upc = values(upc), bin1 = values(bin1), bin2 = values(bin2), bin3 = values(bin3), category = values(category), lightspeed_last_seen = values(lightspeed_last_seen), uniqid = values(uniqid), lightspeed_present_flag = values(lightspeed_present_flag), retail = values(retail)", array($part->PartNumber, $part->SupplierCode, $part->Description, $part->OnHand, $part->Avail, $part->OnOrder, $part->OnOrderAvail, date("Y-m-d H:i:s", strtotime($part->LastSoldDate)), date("Y-m-d H:i:s", strtotime($part->LastReceivedDate)), $part->ReOrderMethod, $part->MinimumQty, $part->MaximumQty, $part->Cost, $part->CurrentActivePrice, $part->OrderUnit, $part->OrderUnitQty, date("Y-m-d H:i:s", strtotime($part->LastCountDate)), $part->SupersededTo, $part->UPC, $part->Bin1, $part->Bin2, $part->Bin3, $part->category, $uniqid, $part->Retail))) {
-                    print sprintf("Insert into lightspeedpart (part_number, supplier_code, description, on_hand, available, on_order, on_order_available, last_sold, last_received, reorder_method, min_qty, max_qty, cost, current_active_price, order_unit, order_unit_qty, last_count_date, superseded_to, upc, bin1, bin2, bin3, category, lightspeed_last_seen, uniqid, lightspeed_present_flag, retail) values ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' , now(), '%s', 1, '%s') on duplicate key update on_hand = values(on_hand), available = values(available), on_order = values(on_order), on_order_available = values(on_order_available), last_sold = values(last_sold), last_received = values(last_received), reorder_method = values(reorder_method), min_qty = values(min_qty), max_qty = values(max_qty), cost = values(cost), current_active_price = values(current_active_price), order_unit = values(order_unit), description = values(description), order_unit_qty = values(order_unit_qty), last_count_date = values(last_count_date), superseded_to = values(superseded_to), upc = values(upc), bin1 = values(bin1), bin2 = values(bin2), bin3 = values(bin3), category = values(category), lightspeed_last_seen = values(lightspeed_last_seen), uniqid = values(uniqid), lightspeed_present_flag = values(lightspeed_present_flag), retail = values(retail)", $part->PartNumber, $part->SupplierCode, $part->Description, $part->OnHand, $part->Avail, $part->OnOrder, $part->OnOrderAvail, date("Y-m-d H:i:s", strtotime($part->LastSoldDate)), date("Y-m-d H:i:s", strtotime($part->LastReceivedDate)), $part->ReOrderMethod, $part->MinimumQty, $part->MaximumQty, $part->Cost, $part->CurrentActivePrice, $part->OrderUnit, $part->OrderUnitQty, date("Y-m-d H:i:s", strtotime($part->LastCountDate)), $part->SupersededTo, $part->UPC, $part->Bin1, $part->Bin2, $part->Bin3, $part->category, $uniqid, $part->Retail) . "\n";
+                    print sprintf("Insert into lightspeedpart (part_number, supplier_code, description, on_hand, available, on_order, on_order_available, last_sold, last_received, reorder_method, min_qty, max_qty, cost, current_active_price, order_unit, order_unit_qty, last_count_date, superseded_to, upc, bin1, bin2, bin3, category, lightspeed_last_seen, uniqid, lightspeed_present_flag, retail) values ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' , now(), '%s', 1, '%s') on duplicate key update on_hand = values(on_hand), available = values(available), on_order = values(on_order), on_order_available = values(on_order_available), last_sold = values(last_sold), last_received = values(last_received), reorder_method = values(reorder_method), min_qty = values(min_qty), max_qty = values(max_qty), cost = values(cost), current_active_price = values(current_active_price), order_unit = values(order_unit), description = values(description), order_unit_qty = values(order_unit_qty), last_count_date = values(last_count_date), superseded_to = values(superseded_to), upc = values(upc), bin1 = values(bin1), bin2 = values(bin2), bin3 = values(bin3), category = values(category), lightspeed_last_seen = values(lightspeed_last_seen), uniqid = values(uniqid), lightspeed_present_flag = values(lightspeed_present_flag), retail = values(retail)", $part->PartNumber, $part->SupplierCode, $part->Description, $part->OnHand, $part->Avail, $part->OnOrder, $part->OnOrderAvail, date("Y-m-d H:i:s", strtotime($part->LastSoldDate)), date("Y-m-d H:i:s", strtotime($part->LastReceivedDate)), $part->ReOrderMethod, $part->MinimumQty, $part->MaximumQty, $part->Cost, $part->CurrentActivePrice, $part->OrderUnit, $part->OrderUnitQty, date("Y-m-d H:i:s", strtotime($part->LastCountDate)), $part->SupersededTo, $part->UPC, $part->Bin1, $part->Bin2, $part->Bin3, $part->category, $part->Retail) . "\n";
                     print "Database error: \n";
                     print $this->db->_error_number() . " - " . $this->db->_error_message() . "\n";
                     exit();
@@ -530,11 +530,106 @@ class Lightspeed_M extends Master_M {
 
         // OK, now, you should be able to delete the ones you skipped.
         $this->db->query("Delete from lightspeedpart where uniqid = ? and lightspeed_present_flag = 0", array($uniqid));
+
+        // Repair the parts...
+        $this->repair_parts();
     }
 
 
+    protected function propagate_lightspeed_1() {
+        // Step #1: For known items, we need to update the quantity, and the cost, and maybe some other stuff...and we need to ripple it up to the part number object, and we need to then flag tehse as processed.
+        $this->db->query("Update lightspeedpart join partdealervariation using (partvariation_id) set partdealervariation.cost = lightspeedpart.cost, partdealervariation.price = lightspeedpart.current_active_price,  partdealervariation.quantity_available = lightspeedpart.available, partdealervariation.quantity_last_updated = lightspeedpart.lightspeed_last_seen, lightspeedpart.lightspeed_present_flag = 1");
+
+        // Do we have to update the partnumber?
+        $this->db->query("Update partnumber join partdealervariation using (partnumber_id) join lightspeedpart using (partvariation_id) set partnumber.price = partdealervariation.price, partnumber.cost = partdealervariation.cost, partnumber.dealer_sale = partdealervariation.price, partnumber.sale = partdealervariation.price, partnumber.inventory = partdealervairation.quantity_available");
+    }
+
+    protected $_distributorNameLookup;
+    protected function _getDistributorByName($distributor_name) {
+        if (!isset($this->_distributorNameLookup)) {
+            $this->_distributorNameLookup = array();
+        }
+
+        if (array_key_exists($distributor_name, $this->_distributorNameLookup)) {
+            return $this->_distributorNameLookup[$distributor_name];
+        }
+
+        // we have to go get it...
+        $query = $this->db->query("Select distributor_id from distributor where name = ?", array($distributor_name));
+        foreach ($query->result_array() as $row) {
+            $this->_distributorNameLookup[$distributor_name] = $row["distributor_id"];
+        }
+
+        return $this->_distributorNameLookup[$distributor_name];
+    }
+
     // TODO - how do we piece this all together?
     public function repair_parts() {
+        $CI =& get_instance();
+        $CI->load->model("admin_m");
+        $uniqid = uniqid("repair_parts+");
+        $this->db->query("Update lightspeedpart set uniqid = ?, lightspeed_present_flag = 0", array($uniqid));
+
+        $this->propagate_lightspeed_1();
+
+
+        // Step #2: We should attempt to flag them as being eligible for product receiving. This is the easiest, best case: It's just like our regular functionality for product receiving.
+        $progress = false;
+        $id = 0;
+        global $LightspeedSupplierLookAside;
+        $stock_codes = "'" . implode("', '", array_keys($LightspeedSupplierLookAside)) . "'";
+        do {
+            // OK, try to get some...we only do batches of 200; this just seems like a good #
+            $query = $this->db->query("Select * From lightspeedpart where partvariation_id is null and supplier_code in $stock_codes limit 200");
+            $rows = $query->result_array();
+
+            if (count($rows) > 0) {
+                $progress = true;
+
+                // OK, attempt to do them...
+                foreach ($rows as &$row) {
+                    $row["distributor"] = $LightspeedSupplierLookAside[$row["supplier_code"]];
+                }
+
+                // now, post them
+
+                $ch = curl_init("http://" . WS_HOST . "/migrateparts/queryMatchingPart/");
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $data = json_encode($rows));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POST, count($data));
+                $clean_rows = json_decode(curl_exec($ch), true);
+
+                foreach ($clean_rows as $row) {
+                    // attempt to receive it... distributor_id, partnumber, cost, quantity
+                    if ($row["migrate"]) {
+                        $CI->admin_m->updateDistributorInventory(array(
+                            array(
+                                "distributor_id" => ($row["distributor_id"] = $this->_distributorNameLookup($row["distributor"])),
+                                "partnumber" => $row["part_number"],
+                                "cost" => $row["cost"],
+                                "quantity" => $row["on_hand"]
+                            )
+                        ));
+                        $this->db->query("Update lightspeedpart join partvariation set lightspeedpart.partvariation_id = partvariation.partvariation_id where lightspeedpart.lightspeedpart_id = ? and partvariation.distributor_id = ? and partvariation.part_number = ?", array($row["lightspeedpart_id"], $row["distributor_id"], $row["part_number"]));
+                    }
+                }
+            }
+
+        } while($progress);
+
+        // propagate it, again
+        $this->propagate_lightspeed_1();
+
+
+        // Step #3: Now, we look at those ones where there is something known about them from the distributor...We may need a distributor map and some way to find these things...And, in this case, we're going to find ourselves updating the partdealervariation quantity and reprocessing the part...
+
+
+        // You have to queue these parts.
+        $this->db->query("Insert into queued_parts (part_id) select distinct part_id from partpartnumber join partvariation using (partnumber_id) join lightspeedpart using (partvariation_id)");
+
+        // TODO - you really should
+
 
     }
 

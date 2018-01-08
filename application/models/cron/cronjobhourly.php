@@ -43,6 +43,7 @@ class CronJobHourly extends AbstractCronJob
                 try {
                     $this->load->model("Lightspeed_m");
                     $this->Lightspeed_m->get_major_units(); // that should fetch all those things, great.
+                    $this->Lightspeed_m->get_parts(); // that should fetch all those things, great.
                 } catch (Exception $e) {
                     $error_string = $e->getMessage();
                     if ($e->getMessage() != "Lightspeed credentials not found.") {
