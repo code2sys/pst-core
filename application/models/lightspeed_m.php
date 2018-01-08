@@ -565,14 +565,12 @@ class Lightspeed_M extends Master_M {
 
     // TODO - how do we piece this all together?
     public function repair_parts() {
-        print "A1\n";
         $CI =& get_instance();
         $CI->load->model("admin_m");
         $uniqid = uniqid("repair_parts+");
         $this->db->query("Update lightspeedpart set uniqid = ?, lightspeed_present_flag = 0", array($uniqid));
 
         $this->propagate_lightspeed_1();
-        print "A2\n";
 
 
         // Step #2: We should attempt to flag them as being eligible for product receiving. This is the easiest, best case: It's just like our regular functionality for product receiving.
@@ -581,15 +579,12 @@ class Lightspeed_M extends Master_M {
         global $LightspeedSupplierLookAside;
         $stock_codes = "('" . implode("', '", array_keys($LightspeedSupplierLookAside)) . "')";
         do {
-            print "A3\n";
             // OK, try to get some...we only do batches of 200; this just seems like a good #
-            print "Query: Select * From lightspeedpart where partvariation_id is null and supplier_code in $stock_codes limit 200 \n";
-            $query = $this->db->query("Select * From lightspeedpart where partvariation_id is null and supplier_code in $stock_codes limit 200");
+            $query = $this->db->query("Select * From lightspeedpart where on_hand > 0 and partvariation_id is null and supplier_code in $stock_codes limit 200");
             $rows = $query->result_array();
 
 
             if (count($rows) > 0) {
-                print "Row count: " .count($rows) ."\n";
                 $progress = true;
 
                 // OK, attempt to do them...
@@ -598,9 +593,6 @@ class Lightspeed_M extends Master_M {
                 }
 
                 // now, post them
-
-                print "A4 \n";
-
                 $ch = curl_init("http://" . WS_HOST . "/migrateparts/queryMatchingPart/");
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $data = json_encode($rows));
@@ -608,15 +600,9 @@ class Lightspeed_M extends Master_M {
                 curl_setopt($ch, CURLOPT_POST, count($data));
                 $clean_rows = json_decode(curl_exec($ch), true);
 
-                print "A5 \n";
-
-
                 foreach ($clean_rows as $row) {
-                    print "A6 \n";
                     // attempt to receive it... distributor_id, partnumber, cost, quantity
                     if ($row["migrate"]) {
-                        print "A7 \n";
-
                         $CI->admin_m->updateDistributorInventory(array(
                             array(
                                 "distributor_id" => ($row["distributor_id"] = $this->_getDistributorByName($row["distributor"])),
@@ -628,11 +614,7 @@ class Lightspeed_M extends Master_M {
                         $this->db->query("Update lightspeedpart join partvariation set lightspeedpart.partvariation_id = partvariation.partvariation_id where lightspeedpart.lightspeedpart_id = ? and partvariation.distributor_id = ? and partvariation.part_number = ?", array($row["lightspeedpart_id"], $row["distributor_id"], $row["part_number"]));
                     }
                 }
-
-                print "A8 \n";
-
             }
-            print "A9 \n";
 
         } while($progress);
 
