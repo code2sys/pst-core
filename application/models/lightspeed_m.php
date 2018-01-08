@@ -585,6 +585,7 @@ class Lightspeed_M extends Master_M {
 
 
             if (count($rows) > 0) {
+                print "Progress on " . count($rows) . "\n";
                 $progress = true;
 
                 // OK, attempt to do them...
