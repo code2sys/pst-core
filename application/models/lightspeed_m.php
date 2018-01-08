@@ -565,12 +565,14 @@ class Lightspeed_M extends Master_M {
 
     // TODO - how do we piece this all together?
     public function repair_parts() {
+        print "A1\n";
         $CI =& get_instance();
         $CI->load->model("admin_m");
         $uniqid = uniqid("repair_parts+");
         $this->db->query("Update lightspeedpart set uniqid = ?, lightspeed_present_flag = 0", array($uniqid));
 
         $this->propagate_lightspeed_1();
+        print "A2\n";
 
 
         // Step #2: We should attempt to flag them as being eligible for product receiving. This is the easiest, best case: It's just like our regular functionality for product receiving.
@@ -579,6 +581,7 @@ class Lightspeed_M extends Master_M {
         global $LightspeedSupplierLookAside;
         $stock_codes = "'" . implode("', '", array_keys($LightspeedSupplierLookAside)) . "'";
         do {
+            print "A3\n";
             // OK, try to get some...we only do batches of 200; this just seems like a good #
             $query = $this->db->query("Select * From lightspeedpart where partvariation_id is null and supplier_code in $stock_codes limit 200");
             $rows = $query->result_array();
