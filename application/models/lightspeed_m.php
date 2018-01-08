@@ -468,9 +468,7 @@ class Lightspeed_M extends Master_M {
             $call = json_decode($call);
             echo "<pre>";
             print_r($call);
-
         }
-
     }
     public function get_units_xml() {
 
@@ -493,143 +491,45 @@ class Lightspeed_M extends Master_M {
 
     }
 
+    /*
+     * The idea of this one is to simply shore up the import process enough to populate the lightspeed table.
+     * There has to be a second routine that makes those things right. Thus, you can pull these in all you want -
+     * you then have to do the right thing with them.
+     */
     public function get_parts() {
         $string = "Dealer";
         $call = $this->call($string);
         $dealers = json_decode($call);
 
-
+        // flag them all to clear them
+        $uniqid = uniqid("get_parts_");
+        $this->db->query("Update lightspeedpart set uniqid = ?, lightspeed_present_flag = 0", array($uniqid));
 
         foreach($dealers as $dealer) {
-
-            echo "<br>Dealer id: " . $dealer->Cmf;
             $string = "Part/".$dealer->Cmf;
             $call = $this->call($string);
-            //var_dump($call);
             $parts = json_decode($call);
-            echo "parts: " . count($parts);
             foreach($parts as $part) {
-
-                // Check data and tables before proceeding
-
-                if($part->Description==NULL||$part->PartNumber==NULL||$part->UPC==NULL) continue;
-
-                $partnumber_array = array('partnumber' => $part->PartNumber );
-
-                $partnumber = $this->selectRecord('partnumber', $partnumber_array, FALSE);
-
-                //if($partnumber) = continue;
-
-                $part_array = array('name' => $part->Description );
-
-                $part_id = $this->selectRecord('part', $part_array, FALSE);
-
-                //if($part_id) continue;
-
-                $partvariation_array = array( 'manufacturer_part_number' => iconv("UTF-8", "ISO-8859-1", $part->UPC) );
-
-                $partvariation_id = $this->selectRecord('partvariation', $partvariation_array, FALSE);
-
-                //if($partvariation_id) continue;
-
-                if( ( $partnumber || $part_id || $partvariation_id ) ) {
-                    // This is an update
-
-                    // var_dump($partnumber);
-                    // var_dump($part_id);
-                    // var_dump($partvariation_id);
-                    // die();
-                    if($partnumber) echo "#### Partnumber found: ".$part->PartNumber."<br>";
-                    if($part_id) echo "#### Part_id found: ".$part->Description."<br>";
-                    if($partvariation_id) echo "#### Partvariation found: ".$part->UPC."<br>";
-                    echo "#### UPDATE<br>";
-                    $partnumber_array = array('partnumber' => $part->PartNumber,
-                        'sale' => $part->CurrentActivePrice,
-                        'cost' => $part->Cost,
-                        'price' => $part->Retail,
-                        'inventory' => $part->Avail,
-                        'lightspeed_part' => 1);
-
-                    echo "<br><br>Partnumber: ";
-                    var_dump($partnumber);
-
-                    $where = array('partnumber_id' => $partnumber['partnumber_id']);
-
-                    $partnumber_id = $this->updateRecord('partnumber', $partnumber_array, $where, FALSE);
-
-                    echo "<br>Partnumber ".$partnumber['partnumber_id']." updated<br>";
-
-                    $partvariation_array = array('quantityAvailable' => $part->Avail,
-                        'cost' => $part->Cost,
-                        'price' => $part->Retail,
-                        'manufacturer_part_number' => $part->UPC );
-
-                    echo "<br><br>Partvariation: ";
-                    var_dump($partvariation_array);
-
-                    $where = array('partnumber_id' => $partnumber['partnumber_id']);
-
-                    $partvariation_id = $this->updateRecord('partvariation', $partvariation_array, $where, FALSE);
-
-                    echo "<br>Partvariation $partvariation_id updated<br>";
-
-                } else {
-                    // this is a new entry
-
-                    echo "#### INSERT<br>";
-                    $partnumber_array = array('partnumber' => $part->PartNumber,
-                        'sale' => $part->CurrentActivePrice,
-                        'cost' => $part->Cost,
-                        'price' => $part->Retail,
-                        'inventory' => $part->Avail,
-                        'lightspeed_part' => 1);
-
-                    echo "<br><br>";
-                    var_dump($partnumber_array);
-
-                    $partnumber_id = $this->createRecord('partnumber', $partnumber_array, FALSE);
-
-                    echo "<br>Partnumber $partnumber_id created<br>";
-
-                    $partvariation_array = array('partnumber_id' => $partnumber_id,
-                        'quantityAvailable' => $part->Avail,
-                        'cost' => $part->Cost,
-                        'price' => $part->Retail,
-                        'manufacturer_part_number' => $part->UPC );
-
-                    echo "<br><br>";
-                    var_dump($partvariation_array);
-
-                    $partvariation_id = $this->createRecord('partvariation', $partvariation_array, FALSE);
-
-                    echo "<br>Partvariation $partvariation_id created<br>";
-
-
-                    var_dump($partnumber_id);
-
-                    echo "<br><br>";
-                    var_dump($part_array);
-
-                    $part_id = $this->createRecord('part', $part_array, FALSE);
-
-                    echo "<br>Part $part_id created<br>";
-
-                    $partpartnumber_array = array('partnumber_id' => $partnumber_id, 'part_id' => $part_id );
-
-                    echo "<br><br>";
-                    var_dump($partpartnumber_array);
-
-                    $partpartnumber = $this->createRecord('partpartnumber', $partpartnumber_array, FALSE);
-
-                    echo "<br>Partpartnumber $partpartnumber created<br>";
-
+                // David had used Description and UPC as well...
+                if ($part->PartNumber == NULL) {
+                    continue;
                 }
 
+                // We are simply going to do an insert/update on this table..
+                $this->db->query("Insert into lightspeedpart (part_number, supplier_code, description, on_hand, available, on_order, on_order_available, last_sold, last_received, reorder_method, min_qty, max_qty, cost, current_active_price, order_unit, order_unit_qty, last_count_date, superseded_to, upc, bin1, bin2, bin3, category, lightspeed_last_seen, uniqid, lightspeed_present_flag, retail) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , now(), ?, 1, ?) on duplicate key update on_hand = values(on_hand), available = values(available), on_order = values(on_order), on_order_available = values(on_order_available), last_sold = values(last_sold), last_received = values(last_received), reorder_method = values(reorder_method), min_qty = values(min_qty), max_qty = values(max_qty), cost = values(cost), current_active_price = values(current_active_price), order_unit = values(order_unit), description = values(description), order_unit_qty = values(order_unit_qty), last_count_date = values(last_count_date), superseded_to = values(superseded_to), upc = values(upc), bin1 = values(bin1), bin2 = values(bin2), bin3 = values(bin3), category = values(category), lightspeed_last_seen = values(lightspeed_last_seen), uniqid = values(uniqid), lightspeed_present_flag = values(lightspeed_present_flag), retail = values(retail)", array($part->PartNumber, $part->SupplierCode, $part->Description, $part->OnHand, $part->Avail, $part->OnOrder, $part->OnOrderAvail, date("Y-m-d H:i:s", strtotime($part->LastSoldDate)), date("Y-m-d H:i:s", strtotime($part->LastReceivedDate)), $part->ReOrderMethod, $part->MinimumQty, $part->MaximumQty, $part->Cost, $part->CurrentActivePrice, $part->OrderUnit, $part->OrderUnitQty, date("Y-m-d H:i:s", strtotime($part->LastCountDate)), $part->SupersededTo, $part->UPC, $part->Bin1, $part->Bin2, $part->Bin3, $part->category, $part->Retail));
+
+
             }
-            echo "<br>********************";
-
-
         }
+
+        // OK, now, you should be able to delete the ones you skipped.
+        $this->db->query("Delete from lightspeedpart where uniqid = ? and lightspeed_present_flag = 0", array($uniqid));
+    }
+
+
+    // TODO - how do we piece this all together?
+    public function repair_parts() {
+
     }
 
 
