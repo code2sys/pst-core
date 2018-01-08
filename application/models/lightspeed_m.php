@@ -579,7 +579,7 @@ class Lightspeed_M extends Master_M {
         $progress = false;
         $id = 0;
         global $LightspeedSupplierLookAside;
-        $stock_codes = "'" . implode("', '", array_keys($LightspeedSupplierLookAside)) . "'";
+        $stock_codes = "('" . implode("', '", array_keys($LightspeedSupplierLookAside)) . "')";
         do {
             print "A3\n";
             // OK, try to get some...we only do batches of 200; this just seems like a good #
