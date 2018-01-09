@@ -579,6 +579,8 @@ class Lightspeed_M extends Master_M {
         global $LightspeedSupplierLookAside;
         $stock_codes = "('" . implode("', '", array_keys($LightspeedSupplierLookAside)) . "')";
         do {
+            $progress = false;
+
             // OK, try to get some...we only do batches of 200; this just seems like a good #
             $query = $this->db->query("Select * From lightspeedpart where on_hand > 0 and partvariation_id is null and supplier_code in $stock_codes and lightspeedpart_id > ? order by lightspeedpart_id limit 200", array($id));
             $rows = $query->result_array();
