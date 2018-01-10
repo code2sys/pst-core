@@ -981,6 +981,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                 data: {
                     "partnumber" : sku
                 },
+                dataType: "json",
                 success: function(response) {
                     console.log(response);
                     if (response.data.success) {
