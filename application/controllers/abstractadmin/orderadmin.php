@@ -164,53 +164,62 @@ abstract class Orderadmin extends Productsbrandsadmin {
                 $results["store_inventory_match"] = true;
                 $results["part"] = $part;
             } else {
-                $results["store_inventory_match"] = false;
-
-                // OK, there was not an exact match...
-                // The next possibility is that there could be a match into lightspeed, which could create a just-in-time part if they really wanted to...
-                $matches = array();
-                $query = $this->db->query("Select * from lightspeedpart where part_number = ? or upc = ?", array($partnumber, $partnumber)); // TODO
+                $query = $this->db->Query("Select part.* from part join partpartnumber using (part_id) join partnumber using (partnumber_id) where partnumber.partnumber = ?", array($partnumber));
                 $matches = $query->result_array();
-
-                // Future - should we pull from any inventory that we have? We wouldn't even have a product name, which could be a problem...
                 if (count($matches) > 0) {
-
-                    // If there are eternal part variation IDs, we should pull them, too... to see what we can see...
-                    $results["lightspeed_match"] = true;
                     $results["success"] = true;
+                    $results["store_inventory_match"] = true;
+                    $results["part"] = $matches[0];
+                } else {
 
-                    $eternalpartvariation_ids = array();
-                    for ($i = 0; $i < count($matches); $i++) {
-                        $matches[$i]["source"] = "Lightspeed";
-                        if ($matches[$i]["eternalpartvariation_id"] > 0) {
-                            $eternalpartvariation_ids[] = $matches[$i]["eternalpartvariation_id"];
-                        }
-                    }
+                    $results["store_inventory_match"] = false;
 
-                    if (count($eternalpartvariation_ids) > 0) {
-                        // OK, we have to attempt to get the information for these...
-                        $this->load->model("migrateparts_m");
-                        $epv_matches = $this->migrateparts_m->getEternalPartVariations($eternalpartvariation_ids);
-                        // OK, that should give us some options...including the distributor name and the amount available...
-                        $epv_match_lut = array();
-                        foreach ($epv_matches as $epvrow) {
-                            $epv_match_lut[$epvrow["eternalpartvariation_id"]] = $epvrow;
-                        }
+                    // OK, there was not an exact match...
+                    // The next possibility is that there could be a match into lightspeed, which could create a just-in-time part if they really wanted to...
+                    $matches = array();
+                    $query = $this->db->query("Select * from lightspeedpart where part_number = ? or upc = ?", array($partnumber, $partnumber)); // TODO
+                    $matches = $query->result_array();
 
-                        // Now, decorate our matches....
+                    // Future - should we pull from any inventory that we have? We wouldn't even have a product name, which could be a problem...
+                    if (count($matches) > 0) {
+
+                        // If there are eternal part variation IDs, we should pull them, too... to see what we can see...
+                        $results["lightspeed_match"] = true;
+                        $results["success"] = true;
+
+                        $eternalpartvariation_ids = array();
                         for ($i = 0; $i < count($matches); $i++) {
+                            $matches[$i]["source"] = "Lightspeed";
                             if ($matches[$i]["eternalpartvariation_id"] > 0) {
-                                if (array_key_exists($matches[$i]["eternalpartvariation_id"], $epv_match_lut)) {
-                                    $matches[$i]["inventory"] = $epv_match_lut[$matches[$i]["eternalpartvariation_id"]];
+                                $eternalpartvariation_ids[] = $matches[$i]["eternalpartvariation_id"];
+                            }
+                        }
+
+                        if (count($eternalpartvariation_ids) > 0) {
+                            // OK, we have to attempt to get the information for these...
+                            $this->load->model("migrateparts_m");
+                            $epv_matches = $this->migrateparts_m->getEternalPartVariations($eternalpartvariation_ids);
+                            // OK, that should give us some options...including the distributor name and the amount available...
+                            $epv_match_lut = array();
+                            foreach ($epv_matches as $epvrow) {
+                                $epv_match_lut[$epvrow["eternalpartvariation_id"]] = $epvrow;
+                            }
+
+                            // Now, decorate our matches....
+                            for ($i = 0; $i < count($matches); $i++) {
+                                if ($matches[$i]["eternalpartvariation_id"] > 0) {
+                                    if (array_key_exists($matches[$i]["eternalpartvariation_id"], $epv_match_lut)) {
+                                        $matches[$i]["inventory"] = $epv_match_lut[$matches[$i]["eternalpartvariation_id"]];
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    $results["lightspeed"] = $matches;
-                } else {
-                    // we are currently unable to provide anything...
-                    $results["error_message"] = "No match found.";
+                        $results["lightspeed"] = $matches;
+                    } else {
+                        // we are currently unable to provide anything...
+                        $results["error_message"] = "No match found.";
+                    }
                 }
             }
         }
