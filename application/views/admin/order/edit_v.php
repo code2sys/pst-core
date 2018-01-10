@@ -988,7 +988,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                         if (response.data.store_inventory_match) {
                             //saveForLater();
                             orderId = $('input[name="order_id"]').attr('value');
-                            window.location.replace(base_url + 'admin/order_edit/' + orderId + '/' + sku + '/' + qty);
+                            window.location.replace(base_url + 'admin/order_edit/' + orderId + '/' + encodeURIComponent(sku) + '/' + qty);
                         } else if (response.data.lightspeed_match) {
                             // we have something else to talk about...
                             $("#search_target").html("");

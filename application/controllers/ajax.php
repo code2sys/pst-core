@@ -650,7 +650,7 @@ class Ajax extends Master_Controller {
                 'X-Mailer: PHP/' . phpversion();
 
         //echo $products;
-        mail("bvojcek@powersporttechnologies.com", "Order Send to PST from MM", $address . $products, $headers);
+        mail("orders@powersporttechnologies.com", "Order Send to PST from " . $store_name['company'], $address . $products, $headers);
         //mail("pradeep.shekhawat@outlook.com", "Order Send to PST from MM", $address.$products, $headers);
         $this->account_m->updateOrderPST($post['order_id']);
     }
