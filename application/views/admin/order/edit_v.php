@@ -983,7 +983,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                 },
                 success: function(response) {
                     console.log(response);
-                    if (response.success) {
+                    if (response.data.success) {
                         if (response.data.store_inventory_match) {
                             //saveForLater();
                             orderId = $('input[name="order_id"]').attr('value');
