@@ -618,6 +618,9 @@ class Lightspeed_M extends Master_M {
                             )
                         ));
                         $this->db->query("Update lightspeedpart join partvariation set lightspeedpart.partvariation_id = partvariation.partvariation_id where lightspeedpart.lightspeedpart_id = ? and partvariation.distributor_id = ? and partvariation.part_number = ?", array($row["lightspeedpart_id"], $row["distributor_id"], $row["part_number"]));
+                    } elseif ($row["inventory"]) {
+                        // We have found the eternal part variation...
+                        $this->db->query("Update lightspeedpart set eternalpartvariation_id = ? where lightspeedpart_id = ?", array($row["epv"]["eternalpartvariation_id"], $row["lightspeedpart_id"]));
                     }
                 }
             }
@@ -634,9 +637,7 @@ class Lightspeed_M extends Master_M {
         // You have to queue these parts.
         $this->db->query("Insert into queued_parts (part_id) select distinct part_id from partpartnumber join partvariation using (partnumber_id) join lightspeedpart using (partvariation_id)");
 
-        // TODO - you really should
-
-
+        // TODO - you really should chew through that parts queue.
     }
 
 

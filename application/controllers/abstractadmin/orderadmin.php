@@ -10,6 +10,52 @@ require_once(__DIR__ . "/productsbrandsadmin.php");
 
 abstract class Orderadmin extends Productsbrandsadmin {
 
+    public function ajax_query_part() {
+        $partnumber = trim(array_key_exists("partnumber", $_REQUEST) ? $_REQUEST["partnumber"] : "");
+
+        $results = array(
+            "partnumber" => $partnumber,
+            "success" => false,
+            "error_message" => "No part number received.",
+            "store_inventory_match" => false
+        );
+
+        if ($partnumber != "") {
+            // Option 1: Check for an exact match, and, if it exists, we will proceed..
+            $this->load->model('parts_m');
+            $part = $this->order_m->getPartIdByPartNumber($partnumber);
+
+            if (isset($part) && !is_null($part)) {
+                $results["success"] = true;
+                $results["store_inventory_match"] = true;
+                $results["part"] = $part;
+            } else {
+                // OK, there was not an exact match...
+                // The next possibility is that there could be a match into lightspeed, which could create a just-in-time part if they really wanted to...
+                $matches = array();
+                $query = $this->db->query("Select "); // TODO
+
+
+                // Future - should we pull from any inventory that we have? We wouldn't even have a product name, which could be a problem...
+                if (count($matches) > 0) {
+
+                } else {
+                    // we are currently unable to provide anything...
+                    $results["error_message"] = "No match found.";
+                }
+            }
+
+        }
+
+
+        if ($results["success"]) {
+            $this->__printAjaxSuccess($results);
+        } else {
+            $this->_printAjaxError($results["error_message"]);
+        }
+
+    }
+
 
 
     protected function validateShipping() {
