@@ -88,8 +88,6 @@ abstract class Orderadmin extends Productsbrandsadmin {
                 "universalfit" => 1, "protect" => 1
             ));
 
-            // make sure to save it...
-            $this->db->query("Update lightspeedpart set partvariation_id = ? where lightspeedpart_id = ?", array($lightspeedpart["partvariation_id"], $lightspeedpart_id));
 
             // Update price, cost, and the part number
             // Just mark them.
@@ -101,6 +99,8 @@ abstract class Orderadmin extends Productsbrandsadmin {
             $this->db->query("Insert into partdealervariation (part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number) select part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number from partvariation where partvariation_id = ?", array($partvariation_id));
 
             // join them
+            // make sure to save it...
+            $this->db->query("Update lightspeedpart set partvariation_id = ? where lightspeedpart_id = ?", array($lightspeedpart["partvariation_id"], $lightspeedpart_id));
             $this->db->query("Update partvariation set partnumber_id = ? where partvariation_id = ?", array($partnumber_id, $partvariation_id));
             $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?)", array($part_id, $partnumber_id));
 
