@@ -96,7 +96,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
 
 
             // And, at long last, insert this into partdealervariation
-            $this->db->query("Insert into partdealervariation (part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number) select part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number from partvariation where partvariation_id = ?", array($partvariation_id));
+            $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number) select partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number from partvariation where partvariation_id = ?", array($partvariation_id));
 
             // join them
             // make sure to save it...
