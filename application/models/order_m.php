@@ -157,10 +157,15 @@ class Order_M extends Master_M {
             if (@$record['products']) {
                 foreach ($record['products'] as &$prod) {
                     // Get distributor id and partvariation.quantity_available
-                    $where = array('partnumber_id' => $prod['partnumber_id']);
-                    //$prod['distributorRecs'] = $this->selectRecords('partvariation', $where);
-                    $this->db->where("partvariation.from_lightspeed", 0, FALSE);
-                    $prod['distributorRecs'] = $this->selectRecords('partvariation', $where);
+//                    $where = array('partnumber_id' => $prod['partnumber_id']);
+//                    //$prod['distributorRecs'] = $this->selectRecords('partvariation', $where);
+//                    $prod['distributorRecs'] = $this->selectRecords('partvariation', $where);
+
+                    // JLB 01-10-18
+                    // I had to rewrite this so that it would get these records without getting the lightspeed feed
+                    $query = $this->db->query("Select partvariation.* from partvariation join distributor using (distributor_id) where partvariation.partnumber_id = ? and distributor.name != 'Lightspeed Feed'", array($prod['partnumber_id']));
+                    $prod['distributorRecs'] = $query->result_array();
+
                     //echo $this->db->last_query();
                     $where = array('partnumber_id' => $prod['partnumber_id']);
                     $prod['dealerRecs'] = $this->selectRecords('partdealervariation', $where);
