@@ -253,9 +253,11 @@ class Order_M extends Master_M {
         return $couponProducts;
     }
 
+    // JLB 01-10-18
+    // WHY does this not support adding things again and just incrementing the quantity?
     public function addProductToOrder($partNumber, $orderId, $qty, $part_id, $fitment = null) {
         $where = array('order_id' => $orderId, 'product_sku' => $partNumber);
-        if (!$this->recordExists('order_product', $where)) {
+        if (!($matches = $this->recordExists('order_product', $where))) {
             $where = array('partnumber' => $partNumber);
             $partRec = $this->selectRecord('partnumber', $where);
             $data = array('order_id' => $orderId,
@@ -285,29 +287,43 @@ class Order_M extends Master_M {
             
             $this->createRecord('order_product', $data, FALSE);
 
-            $order = $this->selectRecord('order', array('id' => $orderId));
-            $shippingAdd = $this->getOrder($orderId);
-            
-            $where1 = array('order_id' => $orderId);
-            $products = $this->selectRecords('order_product', $where1);
-
-            $grandTotal = 0;
-            foreach( $products as $productData ) {
-                if( $productData['status'] != 'Refunded' ) {
-                    $grandTotal += $productData['price'];
-                }
+        } else {
+            $query = $this->db->query("Select * From order_product where order_id = ? and product_sku = ?", array($orderId, $partNumber));
+            $matches = $query->result_array();
+            $match = $matches[0];
+            // in this instance, we have a match on the product...
+            // I am baffled why I can't just incremnet these things??
+            $data = json_decode($match[0]["distributor"], true);
+            if (array_key_exists("qty", $data)) {
+                $data["qty"] += $qty;
+            } else if (array_key_exists("qty", $data[0])) {
+                $data[0]["qty"] += $qty;
             }
-            if( @$shippingAdd['shipping_state'] && $shippingAdd['shipping_state'] != '' ) {
-                $tax = $this->calculateTax($shippingAdd['shipping_state'], ($grandTotal));
-            } else {
-                $tax = 0;
-            }
-            //$tax = $this->calculateTax($shippingAdd['shipping_state'], ($order['sales_price'] + ($data['price'])));
-            
-            $this->updateRecord('order', array('sales_price' => $grandTotal, 'tax' => $tax), array('id' => $orderId), FALSE);
-
-            return true;
+            $this->db->query("Update order_product set qty = qty + ?, distributor = ? where order_id = ? and product_sku = ?", $qty, json_encode($data));
         }
+
+        $order = $this->selectRecord('order', array('id' => $orderId));
+        $shippingAdd = $this->getOrder($orderId);
+
+        $where1 = array('order_id' => $orderId);
+        $products = $this->selectRecords('order_product', $where1);
+
+        $grandTotal = 0;
+        foreach( $products as $productData ) {
+            if( $productData['status'] != 'Refunded' ) {
+                $grandTotal += $productData['price'];
+            }
+        }
+        if( @$shippingAdd['shipping_state'] && $shippingAdd['shipping_state'] != '' ) {
+            $tax = $this->calculateTax($shippingAdd['shipping_state'], ($grandTotal));
+        } else {
+            $tax = 0;
+        }
+        //$tax = $this->calculateTax($shippingAdd['shipping_state'], ($order['sales_price'] + ($data['price'])));
+
+        $this->updateRecord('order', array('sales_price' => $grandTotal, 'tax' => $tax), array('id' => $orderId), FALSE);
+
+        return true;
     }
 
     public function getPartIdByPartNumber($partNumber) {
