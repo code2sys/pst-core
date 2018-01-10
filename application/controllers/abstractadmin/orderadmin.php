@@ -110,7 +110,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
         $partvariation_id = $lightspeedpart["partvariation_id"];
 
         // now, we should just try to fetch it, like you normally would
-        $query = $this->db->query("Select partpartnumber.part_id, part.name, partnumber.partnumber_id, partvariation.stock_code, partnumber.partnumber from partpartnumber join partnumber using (partnumber_id) join partvariation using (partnumber_id) where partvariation.partvariation_id = ?", array($partvariation_id));
+        $query = $this->db->query("Select partpartnumber.part_id, part.name, partnumber.partnumber_id, partvariation.stock_code, partnumber.partnumber from part join partpartnumber using (part_id) join partnumber using (partnumber_id) join partvariation using (partnumber_id) where partvariation.partvariation_id = ?", array($partvariation_id));
         $part = $query->result_array();
         $part = $part[0];
 

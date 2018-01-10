@@ -996,7 +996,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                             for (var i= 0; i < response.data.lightspeed.length; i++) {
                                 // We have to add a link for each one to really add them...
                                 var m = response.data.lightspeed[i];
-                                $("#search_target").append("<p><strong>" + m.description + "</strong> (Lightspeed Part Feed #" + m.part_number + " - " + m.on_hand + " on hand at $" + m.cost + " cost <a class='add' data-lightspeedpart-id='" + m.lightspeedpart_id + "' data-qty='" + qty + "' href='/admin/add_lightspeed_part/<?php echo $order_id; ?>/" + m.lightspeedpart_id + "/" + qty + "'>+ Add</a>");
+                                $("#search_target").append("<p><strong>" + m.description + "</strong> (Lightspeed Part Feed #" + m.part_number + ") - " + m.on_hand + " on hand at $" + m.cost + " cost <a class='add' data-lightspeedpart-id='" + m.lightspeedpart_id + "' data-qty='" + qty + "' href='/admin/add_lightspeed_part/<?php echo $order_id; ?>/" + m.lightspeedpart_id + "/" + qty + "'>+ Add</a>");
                             }
 
                             // Now, lump them out there...
