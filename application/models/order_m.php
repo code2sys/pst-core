@@ -159,6 +159,7 @@ class Order_M extends Master_M {
                     // Get distributor id and partvariation.quantity_available
                     $where = array('partnumber_id' => $prod['partnumber_id']);
                     //$prod['distributorRecs'] = $this->selectRecords('partvariation', $where);
+                    $this->db->where("partvariation.from_lightspeed", 0, FALSE);
                     $prod['distributorRecs'] = $this->selectRecords('partvariation', $where);
                     //echo $this->db->last_query();
                     $where = array('partnumber_id' => $prod['partnumber_id']);
