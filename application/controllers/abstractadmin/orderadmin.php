@@ -105,6 +105,15 @@ abstract class Orderadmin extends Productsbrandsadmin {
             $this->db->query("Update lightspeedpart set partvariation_id = ? where lightspeedpart_id = ?", array($lightspeedpart["partvariation_id"], $lightspeedpart_id));
             $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?)", array($part_id, $partnumber_id));
 
+            // We must make question and answer for this...
+            $this->db->query("Insert into partquestion (part_id, question) values (?, 'Lightspeed Part') on duplicate key update partquestion_id = last_insert_id(partquestion_id)", array($part_id));
+            $partquestion_id = $this->db->insert_id();
+
+            $this->db->query("Insert into partquestionanswer (partquestion_id, answer) values (?, ?) on duplicate key update partquestionanswer_id = last_insert_id(partquestionanswer_id)", array($partquestion_id, $lightspeedpart["part_number"]));
+
+            // now, we link it..
+            $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key update answer = values(answer)", array($partnumber_id, $partquestion_id, $lightspeedpart["part_number"]));
+
         }
 
         // we should be holding a partvariation_id now...
