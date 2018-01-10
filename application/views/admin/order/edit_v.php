@@ -761,7 +761,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                                 <input name="search_qty" class="text mini" id="search_qty">
                             </div>
                             <div style="float:left; margin-top:11px">
-                                <a href="javascript:void(0);" onclick="addProductNew();" id="button">Go</a>
+                                <a href="javascript:void(0);" onclick="addProductNew(); return false;" id="button">Add To Order</a>
                             </div>
                             <div style="float:left; margin:11px 0 0 20px">
                                 <a href="javascript:void(0);" onclick="searchProducts();" id="button">Find Product</a>
@@ -966,15 +966,38 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
         qty = $('#search_qty').val();
         sku = $('#search_sku').val();
 
-        if (qty == '')
+        if (qty == '') {
             alert('Please enter a Qty');
-        if (sku == '')
+        } else if (sku == '') {
             alert('Please enter a SKU');
-        if ((qty != '') && (sku != ''))
+        } else
         {
-            //saveForLater();
-            orderId = $('input[name="order_id"]').attr('value');
-            window.location.replace(base_url + 'admin/order_edit/' + orderId + '/' + sku + '/' + qty);
+            // JLB 01-10-18
+            // This just stuck it on there, but now we have to query it....
+            $.ajax({
+                type: "POST",
+                url : "/admin/ajax_query_part",
+                data: {
+                    "partnumber" => sku
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response.succes) {
+                        if (response.data.store_inventory_match) {
+                            //saveForLater();
+                            orderId = $('input[name="order_id"]').attr('value');
+                            window.location.replace(base_url + 'admin/order_edit/' + orderId + '/' + sku + '/' + qty);
+                        } else {
+                            // we have something else to talk about...
+                        }
+
+                    } else {
+                        // do something with this error.
+                    }
+
+                }
+            });
+
         }
     }
 

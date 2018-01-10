@@ -567,6 +567,7 @@ class Lightspeed_M extends Master_M {
     public function repair_parts() {
         $CI =& get_instance();
         $CI->load->model("admin_m");
+        $CI->load->model("migrateparts_m");
         $uniqid = uniqid("repair_parts+");
         $this->db->query("Update lightspeedpart set uniqid = ?, lightspeed_present_flag = 0", array($uniqid));
 
@@ -599,12 +600,7 @@ class Lightspeed_M extends Master_M {
                 }
 
                 // now, post them
-                $ch = curl_init("http://" . WS_HOST . "/migrateparts/queryMatchingPart/");
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $data = json_encode($rows));
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_POST, count($data));
-                $clean_rows = json_decode(curl_exec($ch), true);
+                $clean_rows = $this->migrateparts_m->queryMatchingPart($rows);
 
                 foreach ($clean_rows as $row) {
                     // attempt to receive it... distributor_id, partnumber, cost, quantity

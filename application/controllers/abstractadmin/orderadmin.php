@@ -10,6 +10,9 @@ require_once(__DIR__ . "/productsbrandsadmin.php");
 
 abstract class Orderadmin extends Productsbrandsadmin {
 
+    /*
+     * What happens if it matches the MX part number as well as the regular part number?
+     */
     public function ajax_query_part() {
         $partnumber = trim(array_key_exists("partnumber", $_REQUEST) ? $_REQUEST["partnumber"] : "");
 
@@ -30,23 +33,56 @@ abstract class Orderadmin extends Productsbrandsadmin {
                 $results["store_inventory_match"] = true;
                 $results["part"] = $part;
             } else {
+                $results["store_inventory_match"] = false;
+
                 // OK, there was not an exact match...
                 // The next possibility is that there could be a match into lightspeed, which could create a just-in-time part if they really wanted to...
                 $matches = array();
-                $query = $this->db->query("Select "); // TODO
-
+                $query = $this->db->query("Select * from lightspeedpart where part_number = ? or upc = ?", array($partnumber, $partnumber)); // TODO
+                $matches = $query->result_array();
 
                 // Future - should we pull from any inventory that we have? We wouldn't even have a product name, which could be a problem...
                 if (count($matches) > 0) {
 
+                    // If there are eternal part variation IDs, we should pull them, too... to see what we can see...
+                    $results["lightspeed_match"] = true;
+                    $results["success"] = true;
+
+                    $eternalpartvariation_ids = array();
+                    for ($i = 0; $i < count($matches); $i++) {
+                        $matches[$i]["source"] = "Lightspeed";
+                        if ($matches[$i]["eternalpartvariation_id"] > 0) {
+                            $eternalpartvariation_ids[] = $matches[$i]["eternalpartvariation_id"];
+                        }
+                    }
+
+                    if (count($eternalpartvariation_ids) > 0) {
+                        // OK, we have to attempt to get the information for these...
+                        $this->load->model("migrateparts_m");
+                        $epv_matches = $this->migrateparts_m->getEternalPartVariations($eternalpartvariation_ids);
+                        // OK, that should give us some options...including the distributor name and the amount available...
+                        $epv_match_lut = array();
+                        foreach ($epv_matches as $epvrow) {
+                            $epv_match_lut[$epvrow["eternalpartvariation_id"]] = $epvrow;
+                        }
+
+                        // Now, decorate our matches....
+                        for ($i = 0; $i < count($matches); $i++) {
+                            if ($matches[$i]["eternalpartvariation_id"] > 0) {
+                                if (array_key_exists($matches[$i]["eternalpartvariation_id"], $epv_match_lut)) {
+                                    $matches[$i]["inventory"] = $epv_match_lut[$matches[$i]["eternalpartvariation_id"]];
+                                }
+                            }
+                        }
+                    }
+
+                    $results["lightspeed"] = $matches;
                 } else {
                     // we are currently unable to provide anything...
                     $results["error_message"] = "No match found.";
                 }
             }
-
         }
-
 
         if ($results["success"]) {
             $this->__printAjaxSuccess($results);
@@ -196,7 +232,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
 
                     //redirect('admin/order_edit/'.$id);
                 }
-                exit;
+                exit; // JLB 01-10-18 WTF is this???
             }
 
             $result = Braintree_Transaction::sale(['amount' => $this->input->post('amount'),
@@ -228,7 +264,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
                         'locality' => $_POST['state'][1],
                         'postalCode' => $_POST['zip'][1]
                     ],
-                    'channel' => 'MxConnectionLLC_SP_PayPalEC_BT']
+                    'channel' => 'MxConnectionLLC_SP_PayPalEC_BT'] // JLB 01-10-18 WTF is this?
             );
 
             if( @$result->success ) {
@@ -268,6 +304,8 @@ abstract class Orderadmin extends Productsbrandsadmin {
             }
         }
 
+
+        // JLB 01-10-18 This is a great cause of problems; this should be farmed out and it should involve some caching.
         $zip = $this->_mainData['order']['shipping_zip'];
         $grndShippingValue = $this->admin_m->shippingRules($this->_mainData['order']['sales_price'], 'USA', $zip, $weight);
         $shippingValue = $this->admin_m->calculateParcel($zip, 'USA', $grndShippingValue, $weight);
