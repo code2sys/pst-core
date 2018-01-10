@@ -28,4 +28,12 @@ class Migrateparts_m extends CI_Model {
         curl_setopt($ch, CURLOPT_POST, count($data));
         return json_decode(curl_exec($ch), true);
     }
+
+    public function getEternalPartVariation($eternalpartvariation_id) {
+        // now, post them
+        $ch = curl_init("http://" . WS_HOST . "/migrateparts/getEternalPartVariation/" . $eternalpartvariation_id);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        return json_decode(curl_exec($ch), true);
+    }
 }

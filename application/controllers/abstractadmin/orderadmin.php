@@ -11,6 +11,127 @@ require_once(__DIR__ . "/productsbrandsadmin.php");
 abstract class Orderadmin extends Productsbrandsadmin {
 
     /*
+     * This function is supposed to bootstrap placing this order...
+     */
+    public function add_lightspeed_part($id, $lightspeedpart_id, $qty = 1) {
+        $query = $this->db->query("Select * from lightspeedpart where lightspeedpart_id = ?", array($lightspeedpart_id));
+        $lightspeedpart = $query->result_array();
+        $lightspeedpart = $lightspeedpart[0];
+
+        // OK, now, we should be holding it...
+        if ($lightspeedpart["partvariation_id"] ==  0 || is_null($lightspeedpart["partvariation_id"])) {
+
+            $this->load->model("Distributormodel");
+
+            // We will have to find this. Which means we will have to consider making it...
+            if ($lightspeedpart["eternalpartvariation_id"] > 0) {
+                // you have to go get it
+                $this->load->model("migrateparts_m");
+                $eternalpartvariation = $this->migrateparts_m->getEternalPartVariation($lightspeedpart["eternalpartvariation_id"]);
+                $d = $this->Distributormodel->fetchByName($eternalpartvariation["name"]); // that should be the distributor name field...
+                // OK, we are going to insert that into partvariation...
+                $this->db->query("Insert into partvariation (part_number, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, weight, clean_part_number, width, height, length, manufacturer_part_number, protect, from_lightspeed) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1)", array(
+                    $eternalpartvariation["part_number"],
+                    $d["distributor_id"],
+                    $eternalpartvariation["quantity_available"],
+                    $eternalpartvariation["quantity_ten_plus"],
+                    $eternalpartvariation["stock_code"],
+                    $eternalpartvariation["quantity_last_updated"],
+                    $eternalpartvariation["cost"],
+                    $eternalpartvariation["price"],
+                    $eternalpartvariation["weight"],
+                    $eternalpartvariation["clean_part_number"],
+                    $eternalpartvariation["width"],
+                    $eternalpartvariation["height"],
+                    $eternalpartvariation["length"],
+                    $eternalpartvariation["manufacturer_part_number"]
+                ));
+            } else {
+                $d = $this->Distributormodel->fetchByName("Lightspeed Feed");
+                if (!array_key_exists("distributor_id", $d)) {
+                    $distributor_id = $this->Distributormodel->add(array(
+                        "name" => "Lightspeed Feed",
+                        "active" => 1,
+                        "customer_distributor" => 1
+                    ));
+                } else {
+                    $distributor_id = $d["distributor_id"];
+                }
+
+                // We just have to create one...
+                $this->db->query("Insert into partvariation (part_number, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number, protect, from_lightspeed) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1)", array(
+                    $lightspeedpart["part_number"],
+                    $distributor_id,
+                    0,
+                    0,
+                    "Normal",
+                    $lightspeedpart["lightspeed_last_seen"],
+                    $lightspeedpart["cost"],
+                    $lightspeedpart["current_active_price"],
+                    preg_replace("/[^a-z0-9]/i", "", $lightspeedpart["part_number"]),
+                    $lightspeedpart["upc"]
+
+                ));
+            }
+            $partvariation_id = $this->db->insert_id();
+            $lightspeedpart["partvariation_id"] = $partvariation_id;
+
+            // OK, we have created an entry in partvariation...we need to create an entry in partnumber next
+            // We need to add the lightspeed part information into partdealervariation now...
+            $this->load->model("Portalmodel");
+            $part_id = $this->Portalmodel->makePartByName("Lightspeed Part Feed: " . $lightspeedpart["description"], $lightspeedpart["description"]);
+            $this->db->query("Update part set mx = 0, lightspeed = 1 where part_id = ?", array($part_id));
+
+            $this->Portalmodel->queuePart($part_id);
+
+            // we have to glue these things together..with a partnumber entry and a part partnumber.
+            $partnumber_id = $this->Portalmodel->insert("partnumber", "partnumber_id", array(
+                "universalfit" => 1, "protect" => 1
+            ));
+
+            // join them
+            $this->db->query("Update partvariation set partnumber_id = ? where partvariation_id = ?", array($partnumber_id, $partvariation_id));
+            $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?)", array($part_id, $partnumber_id));
+
+
+            // make sure to save it...
+            $this->db->query("Update lightspeedpart set partvariation_id = ? where lightspeedpart_id = ?", array($lightspeedpart["partvariation_id"], $lightspeedpart_id));
+
+            // Update price, cost, and the part number
+            // Just mark them.
+            $this->Portalmodel->update("partnumber", "partnumber_id", $partnumber_id, array("protect" => 1, "price" => $lightspeedpart["current_active_price"], "cost" => $lightspeedpart["cost"], "sale" => $lightspeedpart["current_active_price"], "dealer_sale" => $lightspeedpart["current_active_price"]));
+            $this->db->query("Update partnumber join partvariation using (partnumber_id) join distributor using (distributor_id) set partnumber = concat(distributor.name, '-', partvariation.part_number) where partnumber.partnumber_id = ? and partvariation.partvariation_id = ?", array($partnumber_id, $partvariation_id));
+
+
+            // And, at long last, insert this into partdealervariation
+            $this->db->query("Insert into partdealervariation (part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number) select part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number from partvariation where partvariation_id = ?", array($partvariation_id));
+        }
+
+        // we should be holding a partvariation_id now...
+        $partvariation_id = $lightspeedpart["partvariation_id"];
+
+        // now, we should just try to fetch it, like you normally would
+        $query = $this->db->query("Select partpartnumber.part_id, part.name, partnumber.partnumber_id, partvariation.stock_code, partnumber.partnumber from partpartnumber join partnumber using (partnumber_id) join partvariation using (partnumber_id) where partvariation.partvariation_id = ?", array($partvariation_id));
+        $part = $query->result_array();
+        $part = $part[0];
+
+        $this->load->model('parts_m');
+
+        $questAns = $this->parts_m->getQuestionAnswerByNumber($part['part_id'], $part['partnumber']);
+        if(@$questAns) {
+            $this->order_m->addProductToOrder($part['partnumber'], $id, $qty, $part['part_id']);
+        } else if(!@$questAns && @$part) {
+            $this->load->model('account_m');
+            $this->order_m->addProductToOrder($part['partnumber'], $id, $qty, $part['part_id']);
+        } else {
+            $this->session->set_flashdata('error', 'Product Not Found.');
+        }
+
+        redirect('admin/order_edit/'.$id);
+    }
+
+
+    /*
      * What happens if it matches the MX part number as well as the regular part number?
      */
     public function ajax_query_part() {
@@ -290,6 +411,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
         if ($id != 'new') {
             $this->_mainData['order'] = $this->order_m->getOrder($id);
         }
+        $this->_mainData['order_id'] = $id;
 
         //if($this->_mainData['order']['created_by'] == '1') {
         $weight = 0.00;

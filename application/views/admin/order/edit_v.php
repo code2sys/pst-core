@@ -764,8 +764,9 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                                 <a href="javascript:void(0);" onclick="addProductNew(); return false;" id="button">Add To Order</a>
                             </div>
                             <div style="float:left; margin:11px 0 0 20px">
-                                <a href="javascript:void(0);" onclick="searchProducts();" id="button">Find Product</a>
+                                <a href="javascript:void(0);" onclick="searchProducts(); return false" id="button">Find Product In Store</a>
                             </div>
+                            <div id="search_target" style="clear: both"></div>
                         </td>
                         <td>Subtotal:</td>
                         <td>$<?php
@@ -982,17 +983,27 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                 },
                 success: function(response) {
                     console.log(response);
-                    if (response.succes) {
+                    if (response.success) {
                         if (response.data.store_inventory_match) {
                             //saveForLater();
                             orderId = $('input[name="order_id"]').attr('value');
                             window.location.replace(base_url + 'admin/order_edit/' + orderId + '/' + sku + '/' + qty);
-                        } else {
+                        } else if (response.data.lightspeed_match) {
                             // we have something else to talk about...
+                            $("#search_target").html("");
+
+                            for (var i= 0; i < response.data.lightspeed.length; i++) {
+                                // We have to add a link for each one to really add them...
+                                var m = response.data.lightspeed[i];
+                                $("#search_target").append("<p><strong>" + m.description + "</strong> (Lightspeed Part Feed #" + m.part_number + " - " + m.on_hand + " on hand at $" + m.cost + " cost <a class='add' data-lightspeedpart-id='" + m.lightspeedpart_id + "' data-qty='" + qty + "' href='/admin/add_lightspeed_part/<?php echo $order_id; ?>/" + m.lightspeedpart_id + "/" + qty + "'>+ Add</a>");
+                            }
+
+                            // Now, lump them out there...
                         }
 
                     } else {
                         // do something with this error.
+                        alert("Sorry, that part is not found.");
                     }
 
                 }
@@ -1000,7 +1011,6 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
 
         }
     }
-
 
     function addToBatch()
     {
