@@ -59,7 +59,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
                 }
 
                 // We just have to create one...
-                $this->db->query("Insert into partvariation (part_number, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number, protect, from_lightspeed) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1)", array(
+                $this->db->query("Insert into partvariation (from_lightspeed, protect, part_number, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number) values (1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(
                     $lightspeedpart["part_number"],
                     $distributor_id,
                     0,
