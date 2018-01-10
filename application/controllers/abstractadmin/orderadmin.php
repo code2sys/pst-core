@@ -115,12 +115,12 @@ abstract class Orderadmin extends Productsbrandsadmin {
         $part = $part[0];
 
         $this->load->model('parts_m');
+        $this->load->model('order_m');
 
         $questAns = $this->parts_m->getQuestionAnswerByNumber($part['part_id'], $part['partnumber']);
         if(@$questAns) {
             $this->order_m->addProductToOrder($part['partnumber'], $id, $qty, $part['part_id']);
         } else if(!@$questAns && @$part) {
-            $this->load->model('account_m');
             $this->order_m->addProductToOrder($part['partnumber'], $id, $qty, $part['part_id']);
         } else {
             $this->session->set_flashdata('error', 'Product Not Found.');
