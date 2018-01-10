@@ -29,7 +29,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
             $this->load->model('order_m');
             $part = $this->order_m->getPartIdByPartNumber($partnumber);
 
-            if (isset($part) && !is_null($part)) {
+            if (isset($part) && !is_null($part) && FALSE !== $part) {
                 $results["success"] = true;
                 $results["store_inventory_match"] = true;
                 $results["part"] = $part;
