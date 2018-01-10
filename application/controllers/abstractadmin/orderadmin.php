@@ -94,6 +94,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
             $this->Portalmodel->update("partnumber", "partnumber_id", $partnumber_id, array("protect" => 1, "price" => $lightspeedpart["current_active_price"], "cost" => $lightspeedpart["cost"], "sale" => $lightspeedpart["current_active_price"], "dealer_sale" => $lightspeedpart["current_active_price"]));
             $this->db->query("Update partnumber join partvariation using (partnumber_id) join distributor using (distributor_id) set partnumber = concat(distributor.name, '-', partvariation.part_number) where partnumber.partnumber_id = ? and partvariation.partvariation_id = ?", array($partnumber_id, $partvariation_id));
 
+            $this->db->query("Update partvariation set partnumber_id = ? where partvariation_id = ?", array($partnumber_id, $partvariation_id));
 
             // And, at long last, insert this into partdealervariation
             $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number) select partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number from partvariation where partvariation_id = ?", array($partvariation_id));
@@ -101,7 +102,6 @@ abstract class Orderadmin extends Productsbrandsadmin {
             // join them
             // make sure to save it...
             $this->db->query("Update lightspeedpart set partvariation_id = ? where lightspeedpart_id = ?", array($lightspeedpart["partvariation_id"], $lightspeedpart_id));
-            $this->db->query("Update partvariation set partnumber_id = ? where partvariation_id = ?", array($partnumber_id, $partvariation_id));
             $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?)", array($part_id, $partnumber_id));
 
         }
