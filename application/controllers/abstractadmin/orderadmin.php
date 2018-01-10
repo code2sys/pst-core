@@ -86,7 +86,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
         }
 
         if ($results["success"]) {
-            $this->__printAjaxSuccess($results);
+            $this->_printAjaxSuccess($results);
         } else {
             $this->_printAjaxError($results["error_message"]);
         }
