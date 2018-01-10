@@ -26,6 +26,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
         if ($partnumber != "") {
             // Option 1: Check for an exact match, and, if it exists, we will proceed..
             $this->load->model('parts_m');
+            $this->load->model('order_m');
             $part = $this->order_m->getPartIdByPartNumber($partnumber);
 
             if (isset($part) && !is_null($part)) {
