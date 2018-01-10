@@ -70,7 +70,6 @@ abstract class Orderadmin extends Productsbrandsadmin {
                     $lightspeedpart["current_active_price"],
                     preg_replace("/[^a-z0-9]/i", "", $lightspeedpart["part_number"]),
                     $lightspeedpart["upc"]
-
                 ));
             }
             $partvariation_id = $this->db->insert_id();
