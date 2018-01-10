@@ -978,7 +978,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                 type: "POST",
                 url : "/admin/ajax_query_part",
                 data: {
-                    "partnumber" => sku
+                    "partnumber" : sku
                 },
                 success: function(response) {
                     console.log(response);
