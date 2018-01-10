@@ -34,6 +34,11 @@ class Migrateparts_m extends CI_Model {
         $ch = curl_init("http://" . WS_HOST . "/migrateparts/getEternalPartVariation/" . $eternalpartvariation_id);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        return json_decode(curl_exec($ch), true);
+        $result = json_decode(curl_exec($ch), true);
+        if (is_array($result) && count($result) > 0) {
+            return $result[0];
+        } else {
+            return array();
+        }
     }
 }
