@@ -328,6 +328,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
         if (!$this->checkValidAccess('orders') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
+        $newPartNumber = urldecode($newPartNumber);
         $this->createMonths();
         $this->createYears();
         $this->_mainData['states'] = $this->load_states();
