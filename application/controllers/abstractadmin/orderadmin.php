@@ -88,11 +88,6 @@ abstract class Orderadmin extends Productsbrandsadmin {
                 "universalfit" => 1, "protect" => 1
             ));
 
-            // join them
-            $this->db->query("Update partvariation set partnumber_id = ? where partvariation_id = ?", array($partnumber_id, $partvariation_id));
-            $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?)", array($part_id, $partnumber_id));
-
-
             // make sure to save it...
             $this->db->query("Update lightspeedpart set partvariation_id = ? where lightspeedpart_id = ?", array($lightspeedpart["partvariation_id"], $lightspeedpart_id));
 
@@ -104,6 +99,11 @@ abstract class Orderadmin extends Productsbrandsadmin {
 
             // And, at long last, insert this into partdealervariation
             $this->db->query("Insert into partdealervariation (part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number) select part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number from partvariation where partvariation_id = ?", array($partvariation_id));
+
+            // join them
+            $this->db->query("Update partvariation set partnumber_id = ? where partvariation_id = ?", array($partnumber_id, $partvariation_id));
+            $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?)", array($part_id, $partnumber_id));
+
         }
 
         // we should be holding a partvariation_id now...
