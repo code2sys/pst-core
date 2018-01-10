@@ -257,7 +257,7 @@ class Order_M extends Master_M {
     // WHY does this not support adding things again and just incrementing the quantity?
     public function addProductToOrder($partNumber, $orderId, $qty, $part_id, $fitment = null) {
         $where = array('order_id' => $orderId, 'product_sku' => $partNumber);
-        if (!($matches = $this->recordExists('order_product', $where))) {
+        if (!$this->recordExists('order_product', $where)) {
             $where = array('partnumber' => $partNumber);
             $partRec = $this->selectRecord('partnumber', $where);
             $data = array('order_id' => $orderId,
@@ -299,7 +299,7 @@ class Order_M extends Master_M {
             } else if (array_key_exists("qty", $data[0])) {
                 $data[0]["qty"] += $qty;
             }
-            $this->db->query("Update order_product set qty = qty + ?, distributor = ? where order_id = ? and product_sku = ?", $qty, json_encode($data));
+            $this->db->query("Update order_product set qty = qty + ?, distributor = ? where order_id = ? and product_sku = ?", array($qty, json_encode($data), $orderId, $partNumber));
         }
 
         $order = $this->selectRecord('order', array('id' => $orderId));
