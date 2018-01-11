@@ -834,9 +834,9 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
             </div>
         </div>
         <div style="float:right;">
-            <a href="javascript:void(0);" onclick="$.when(saveForLater()).done(refreshPage());" id="button">Save for Later</a>
+            <a href="javascript:void(0);" onclick="$.when(saveForLater()).done(refreshPage);" id="button">Save for Later</a>
             <!-- <a href="javascript:void(0);" onclick="addToBatch();" id="button">Add to Batch Order</a> -->
-            <a href="javascript:void(0);" onclick="$.when(processOrder()).done(refreshPage());" id="button">Update To Processing</a>
+            <a href="javascript:void(0);" onclick="$.when(processOrder()).done(refreshPage);" id="button">Update To Processing</a>
             <a href="javascript:void(0);" onclick="sendToPST();" id="button">Send To Distributors</a>
         </div>
 
@@ -875,7 +875,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
         $("#shipping_state_display").html($('#shipping_state').val());
         $("#shipping_zip_display").html($('#shipping_zip').val());
         $("#shipping_country_display").html($('#shipping_country').val());
-        $.when(saveForLater()).done(refreshPage());
+        $.when(saveForLater()).done(refreshPage);
     }
 
     function updatePayment()
@@ -1015,12 +1015,12 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
 
     function addToBatch()
     {
-        $.when(saveForLater()).done(updateStatus('Batch Order'));
+        $.when(saveForLater()).done(function() { return updateStatus('Batch Order'); });
     }
 
     function processOrder()
     {
-        $.when(saveForLater()).done(updateStatus('Processing'));
+        $.when(saveForLater()).done(function() { return updateStatus('Processing'); } );
 
     }
 
@@ -1041,7 +1041,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
         } else if( (lngth == ttlDlr && dlrQty > 0) || (ttlDlr == 0 && dlrQty > 0) ) {
             alert('Only items being shipped from distributor stock can be sent to PST.');
         } else {
-            $.when(saveForLater()).done(updateStatusPST('Processing'));
+            $.when(saveForLater()).done(function() { return updateStatusPST('Processing'); });
             //alert();
         }
     }
@@ -1426,7 +1426,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
             $("#shipping_zip_display").html('');
             $("#shipping_country_display").html('');
         }
-        $.when(saveForLater()).done(refreshPage());
+        $.when(saveForLater()).done(refreshPage);
     });
     function refreshPage() {
         var orderId = $('input[name="order_id"]').attr('value');
