@@ -411,8 +411,6 @@ class Order_M extends Master_M {
     }
 
     public function updateStockOnOrder($orderId, $data) {
-        error_log("Call to updateStockOnOrder $orderId");
-        error_log(print_r($data, true));
         foreach ($data as $k => $dt) {
             $where = array('order_id' => $orderId, 'product_sku' => $k);
             $this->updateRecord('order_product', $dt, $where, FALSE);

@@ -147,6 +147,104 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                               'class' => 'text large',
                               'placeholder' => 'Finance Email')); ?></td>
 						</tr>
+                        <tr>
+                            <td style="width:30%;"><b>Store Hours:</b></td>
+                            <td><label>Free-Form <input type="radio" value="1" name="free_form_hours" <?php if($address['free_form_hours']== 1) echo 'checked="checked"'; ?></label> <label>Daily Hours <input type="radio" value="0" name="free_form_hours" <?php if($address['free_form_hours'] != 1) echo 'checked="checked"'; ?></label>
+                            </td>
+                        </tr>
+
+                        <tr class="hours_structured">
+                            <td><b>Monday Hours:</b></td>
+                            <td><?php echo form_input(array('name' => 'monday_hours',
+                                    'value' => @$address['monday_hours'],
+                                    'class' => 'text large',
+                                    'placeholder' => '')); ?></td>
+                        </tr>
+                        <tr class="hours_structured">
+                            <td><b>Tuesday Hours:</b></td>
+                            <td><?php echo form_input(array('name' => 'tuesday_hours',
+                                    'value' => @$address['tuesday_hours'],
+                                    'class' => 'text large',
+                                    'placeholder' => '')); ?></td>
+                        </tr>
+                        <tr class="hours_structured">
+                            <td><b>Wednesday Hours:</b></td>
+                            <td><?php echo form_input(array('name' => 'wednesday_hours',
+                                    'value' => @$address['wednesday_hours'],
+                                    'class' => 'text large',
+                                    'placeholder' => '')); ?></td>
+                        </tr>
+                        <tr class="hours_structured">
+                            <td><b>Thursday Hours:</b></td>
+                            <td><?php echo form_input(array('name' => 'thursday_hours',
+                                    'value' => @$address['thursday_hours'],
+                                    'class' => 'text large',
+                                    'placeholder' => '')); ?></td>
+                        </tr>
+                        <tr class="hours_structured">
+                            <td><b>Friday Hours:</b></td>
+                            <td><?php echo form_input(array('name' => 'friday_hours',
+                                    'value' => @$address['friday_hours'],
+                                    'class' => 'text large',
+                                    'placeholder' => '')); ?></td>
+                        </tr>
+                        <tr class="hours_structured">
+                            <td><b>Saturday Hours:</b></td>
+                            <td><?php echo form_input(array('name' => 'saturday_hours',
+                                    'value' => @$address['saturday_hours'],
+                                    'class' => 'text large',
+                                    'placeholder' => '')); ?></td>
+                        </tr>
+                        <tr class="hours_structured">
+                            <td><b>Sunday Hours:</b></td>
+                            <td><?php echo form_input(array('name' => 'sunday_hours',
+                                    'value' => @$address['sunday_hours'],
+                                    'class' => 'text large',
+                                    'placeholder' => '')); ?></td>
+                        </tr>
+
+
+
+                        <tr class="hours_structured">
+                            <td style="width:30%;"><strong>Additional Hours Note:</strong></td>
+                            <td><?php echo form_textarea(array('name' => 'hours_note',
+                                    'value' => @$address['hours_note'],
+                                    'class' => 'text large',
+                                    'placeholder' => '')); ?></td>
+                        </tr>
+
+                        <tr class="hours_free_form">
+                            <td style="width:30%;"><strong>Store Hours:</strong></td>
+                            <td><?php echo form_textarea(array('name' => 'free_form_hour_blob',
+                                    'value' => @$address['free_form_hour_blob'],
+                                    'class' => 'text large',
+                                    'placeholder' => '')); ?></td>
+                        </tr>
+
+                        <script type="application/javascript">
+                            $(document).on("ready", function() {
+                                // we have to hide and bind these things...
+                                var $show_hide_function = function() {
+                                    if ($("input[name=free_form_hours][value=1]:checked").length > 0) {
+                                        $(".hours_structured").hide();
+                                        $(".hours_free_form").show();
+                                    } else {
+                                        $(".hours_structured").show();
+                                        $(".hours_free_form").hide();
+                                    }
+                                };
+
+                                $("input[name=free_form_hours]").on("change", $show_hide_function);
+                                $show_hide_function();
+
+                            });
+
+
+                        </script>
+
+
+
+
 <!--						<tr>-->
 <!--							<td><strong>Logo:</strong><br/><em>The logo should usually be 200px wide. Please provide as GIF, JPG, or PNG format.</em></td>-->
 <!--							<td>-->
