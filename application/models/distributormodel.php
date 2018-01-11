@@ -17,7 +17,7 @@ class Distributormodel extends CI_Model {
     }
 
     public function getIndex() {
-        $query = $this->db->query("Select * from distributor order by name");
+        $query = $this->db->query("Select * from distributor where name != 'Lightspeed Feed' order by name");
         return $query->result_array();
     }
 
