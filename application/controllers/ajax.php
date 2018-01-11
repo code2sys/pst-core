@@ -445,6 +445,7 @@ class Ajax extends Master_Controller {
     }
 
     public function order_save() {
+        print "ZZZ\n";
         if ($this->validateOrderSave() === TRUE) {
             print "A\n";
             $post = $this->input->post();
