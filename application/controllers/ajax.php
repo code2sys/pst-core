@@ -446,6 +446,7 @@ class Ajax extends Master_Controller {
 
     public function order_save() {
         if ($this->validateOrderSave() === TRUE) {
+            print "A\n";
             $post = $this->input->post();
             $contactInfo[0]['first_name'] = $post['first_name'][0];
             $contactInfo[0]['last_name'] = $post['last_name'][0];
@@ -500,8 +501,10 @@ class Ajax extends Master_Controller {
             //$this->load->model('order_m');
             $this->order_m->updateOrderProductsByOrderId($orderId, $products);
             echo $orderId;
-        } else
+        } else {
+            print "B\n";
             echo validation_errors();
+        }
     }
 
     public function setupProducts($post, &$subtotal) {
