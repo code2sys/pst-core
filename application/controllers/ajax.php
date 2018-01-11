@@ -565,6 +565,7 @@ class Ajax extends Master_Controller {
             }
         }
 
+        $order_id = $post['order_id'];
         $orderDetails = $this->account_m->getOrderDistributorDetails($post['order_id'], $distributor_id);
 
         $distributors = $this->order_m->getDistributors();
@@ -649,8 +650,9 @@ class Ajax extends Master_Controller {
                 'Reply-To: ' . $from . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
 
+        // JLB 01-11-18 Add the order ID and make it more prominent.
         //echo $products;
-        mail("orders@powersporttechnologies.com", "Order Send to PST from " . $store_name['company'], $address . $products, $headers);
+        mail("orders@powersporttechnologies.com", "Order $order_id Sent to PST from " . $store_name['company'], "<h1>Order $order_id</h1>\n\n" . $address . $products, $headers);
         //mail("pradeep.shekhawat@outlook.com", "Order Send to PST from MM", $address.$products, $headers);
         $this->account_m->updateOrderPST($post['order_id']);
     }
