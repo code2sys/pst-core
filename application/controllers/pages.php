@@ -199,6 +199,15 @@ class Pages extends Master_Controller {
 		  		// $block = $this->_mainData['widgetBlock'];
 				$this->load->helper('easy_captcha_helper');
 				$this->_mainData['captcha'] = getCaptchaDisplayElements();
+
+				// JLB 01-11-18
+                // If there are really store hours, we have to show them....
+                $CI =& get_instance();
+                $CI->load->model("admin_m");
+                $store_name = $CI->admin_m->getAdminShippingProfile();
+                $this->_mainData['widgetBlock'] .= $this->load->view('info/store_hours', $store_name, TRUE);
+
+
 				$this->_mainData['widgetBlock'] .= $this->loadGoggleMaps();
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/contact_v', $this->_mainData, TRUE);
 				// $this->_mainData['widgetBlock'] .= $block;
