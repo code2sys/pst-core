@@ -1,9 +1,11 @@
-<?php if ($free_form_hours == 1 && trim($free_form_hours) != ""): ?>
+<?php if ($free_form_hours == 1 && trim($free_form_hour_blob) != ""): ?>
 <h1>Store Hours</h1>
 
     <div class="store_hours">
-        <?php echo $free_form_hours; ?>
+        <?php echo $free_form_hour_blob; ?>
     </div>
+
+    <p>&nbsp;</p>
 
 <?php elseif ($free_form_hours == 0 && ($monday_hours != "" || $tuesday_hours != "" || $wednesday_hours != "" || $thursday_hours != "" || $friday_hours != "" || $saturday_hours != "" || $sunday_hours != "" || trim($hours_note) != "")): ?>
 
@@ -55,4 +57,7 @@
     </div>
 
 
+    <p>&nbsp;</p>
+
 <?php endif; ?>
+
