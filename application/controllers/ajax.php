@@ -445,9 +445,9 @@ class Ajax extends Master_Controller {
     }
 
     public function order_save() {
-        print "ZZZ\n";
+        error_log("A1");
         if ($this->validateOrderSave() === TRUE) {
-            print "A\n";
+            error_log("A2");
             $post = $this->input->post();
             $contactInfo[0]['first_name'] = $post['first_name'][0];
             $contactInfo[0]['last_name'] = $post['last_name'][0];
@@ -485,7 +485,8 @@ class Ajax extends Master_Controller {
             }
             $order['billing_id'] = $this->account_m->updateContact($contactInfo[0], 'billing');
             $order['shipping_id'] = $this->account_m->updateContact($contactInfo[1], 'shipping');
-            
+            error_log("A3");
+
             $this->load->model('order_m');
             $total = $this->order_m->getOrderTotal($post['order_id']);
             if( @$post['state'][1] && $post['state'][1] != '' ) {
@@ -493,7 +494,8 @@ class Ajax extends Master_Controller {
             } else {
                 $order['tax'] = 0;
             }
-            
+
+            error_log("A4");
             $customerArr = array('username' => $post['email'][0], 'billing_id' => $order['billing_id'], 'user_type' => 'guest', 'status' => '1');
             $order['user_id'] = $this->account_m->createGuestCustomer($customerArr, $post['order_id']);
             
@@ -503,7 +505,7 @@ class Ajax extends Master_Controller {
             $this->order_m->updateOrderProductsByOrderId($orderId, $products);
             echo $orderId;
         } else {
-            print "B\n";
+            error_log("B1");
             echo validation_errors();
         }
     }
