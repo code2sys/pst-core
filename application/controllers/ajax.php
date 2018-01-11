@@ -445,8 +445,6 @@ class Ajax extends Master_Controller {
     }
 
     public function order_save() {
-        print "JON\n";
-        exit();
         error_log("A1");
         if ($this->validateOrderSave() === TRUE) {
             error_log("A2");
