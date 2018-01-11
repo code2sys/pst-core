@@ -92,7 +92,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
             // Update price, cost, and the part number
             // Just mark them.
             $this->Portalmodel->update("partnumber", "partnumber_id", $partnumber_id, array("protect" => 1, "price" => $lightspeedpart["current_active_price"], "cost" => $lightspeedpart["cost"], "sale" => $lightspeedpart["current_active_price"], "dealer_sale" => $lightspeedpart["current_active_price"]));
-            $this->db->query("Update partnumber set partnumber = ? where partnumber_id = ?", array("Lightspeed Feed-" . $lightspeedpart["part_number"], $partnumber_id));
+            $this->db->query("Update partnumber set partnumber = ? where partnumber_id = ?", array(preg_replace("/[^a-z0-9\_]+/i", "_", "Lightspeed-" . $lightspeedpart["part_number"]), $partnumber_id));
             $this->db->query("Update partnumber join partvariation using (partnumber_id) join distributor using (distributor_id) set partnumber = concat(distributor.name, '-', partvariation.part_number) where partnumber.partnumber_id = ? and partvariation.partvariation_id = ?", array($partnumber_id, $partvariation_id));
 
             $this->db->query("Update partvariation set partnumber_id = ? where partvariation_id = ?", array($partnumber_id, $partvariation_id));
