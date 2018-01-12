@@ -646,13 +646,24 @@ abstract class Productsbrandsadmin extends Customeradmin {
                 if (empty($err)) {
                     redirect('admin/product_receiving');
                 } else {
+                    $this->_maindata['lightspeed'] = $err['lightspeed'];
                     $this->_mainData['notfound'] = $err['error'];
                     $this->_mainData['found'] = $err['success'];
                 }
             }
         }
+
+        if (count($this->_maindata['lightspeed']) > 0) {
+            if (!array_key_exists("errors", $this->_mainData)) {
+                $this->_mainData["errors"] = array();
+            }
+            $this->_mainData["errors"][] = "Sorry, " . (count($this->_maindata['lightspeed']) > 1 ? "these parts are" : "this part is") . " supplied by your Lightspeed Feed integration. Please update your inventory in lightspeed and it will automatically sync to your site within 24 hours. <ul> <li>" . implode("</li><li>", $this->_maindata['lightspeed']) . "</li></ul>";
+        }
         if (!empty($this->_mainData['notfound'])) {
-            $this->_mainData['errors'] = array('These partnumber not found in the database');
+            if (!array_key_exists("errors", $this->_mainData)) {
+                $this->_mainData["errors"] = array();
+            }
+            $this->_mainData['errors'][] = 'These part numbers were not found in the database:';
         }
 
         $this->setNav('admin/nav_v', 2);

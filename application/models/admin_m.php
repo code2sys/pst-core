@@ -1657,6 +1657,7 @@ class Admin_M extends Master_M {
     public function updateDistributorInventory($arr) {
         $error = array();
         $scs = array();
+        $lightspeed = array();
         $imprt = array();
         foreach ($arr as $k => $v) {
             //$where = array('partnumber_id' => $v['partnumber'], 'distributor_id' => $v['distributor_id']);
@@ -1686,6 +1687,32 @@ class Admin_M extends Master_M {
                 }
             }
 
+            // JLB 01-12-18
+            // This is an emergency breaker. If this is coming from lightspeed, just stop.
+            //// It would be coming from Lightspeed if there was existing dealer inventory...
+            $partvariation_id = 0;
+            if (!empty($distributorInventory) && array_key_exists("partvariation_id", $distributorInventory) && $distributorInventory["partvariation_id"] > 0) {
+                $partvariation_id = $distributorInventory["partvariation_id"];
+            } elseif (!empty($dealerInventory) && array_key_exists("partvariation_id", $dealerInventory) && $dealerInventory["partvariation_id"] > 0) {
+                $partvariation_id = $dealerInventory["partvariation_id"];
+            }
+
+            if ($partvariation_id > 0 ) {
+                // Is this one in lightspeed?
+                $query = $this->db->query("Select count(*) as cnt from lightspeedfeed where partvariation_id = ?", array($partvariation_id));
+                $cnt = $query->result_array();
+                $cnt = $cnt[0];
+
+                if ($cnt > 0) {
+                    $lightspeed[] = $v['partnumber'];
+                    continue; // this should go to the next part, I hope.
+                }
+
+            }
+
+
+
+
             if (empty($dealerInventory) && !empty($distributorInventory)) {
                 $data = $distributorInventory;
                 $data['cost'] = $v['cost'];
@@ -1705,6 +1732,7 @@ class Admin_M extends Master_M {
 
                 $scs[$v['partnumber']] = $v;
             } else if (!empty($dealerInventory)) {
+
                 $data = array('quantity_available' => $dealerInventory["quantity_available"] + $v['quantity']);
                 if ($v['cost'] > 0) {
                     // JLB 07-15-17
@@ -1829,7 +1857,7 @@ class Admin_M extends Master_M {
         // $this->updateRecord('partnumber', $data, $where, FALSE);
         // }
 //exit;
-        $msg = array('success' => $scs, 'error' => $error);
+        $msg = array('success' => $scs, 'error' => $error, "lightspeed" => $lightspeed);
         return $msg;
     }
 

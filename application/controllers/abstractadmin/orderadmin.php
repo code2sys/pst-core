@@ -98,7 +98,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
             $this->db->query("Update partvariation set partnumber_id = ? where partvariation_id = ?", array($partnumber_id, $partvariation_id));
 
             // And, at long last, insert this into partdealervariation
-            $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number) select partvariation_id, part_number, partnumber_id, distributor_id, ?, ?, stock_code, ?, ?, ?, clean_part_number, manufacturer_part_number from partvariation where partvariation_id = ?", array($lightspeedpart["on_hand"], $lightspeedpart["on_hand"] > 9 ? 1: 0, $lightspeedpart["lightspeed_last_seen"], $lightspeedpart["cost"], $lightspeedpart["current_active_price"], $partvariation_id));
+            $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number) select partvariation_id, part_number, partnumber_id, distributor_id, ?, ?, stock_code, ?, ?, ?, clean_part_number, manufacturer_part_number from partvariation where partvariation_id = ?", array($lightspeedpart["available"], $lightspeedpart["available"] > 9 ? 1: 0, $lightspeedpart["lightspeed_last_seen"], $lightspeedpart["cost"], $lightspeedpart["current_active_price"], $partvariation_id));
 
             // join them
             // make sure to save it...

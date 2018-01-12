@@ -583,7 +583,7 @@ class Lightspeed_M extends Master_M {
             $progress = false;
 
             // OK, try to get some...we only do batches of 200; this just seems like a good #
-            $query = $this->db->query("Select * From lightspeedpart where on_hand > 0 and partvariation_id is null and supplier_code in $stock_codes and lightspeedpart_id > ? order by lightspeedpart_id limit 200", array($id));
+            $query = $this->db->query("Select * From lightspeedpart where available > 0 and partvariation_id is null and supplier_code in $stock_codes and lightspeedpart_id > ? order by lightspeedpart_id limit 200", array($id));
             $rows = $query->result_array();
 
 
@@ -610,7 +610,7 @@ class Lightspeed_M extends Master_M {
                                 "distributor_id" => ($row["distributor_id"] = $this->_getDistributorByName($row["distributor"])),
                                 "partnumber" => $row["part_number"],
                                 "cost" => $row["cost"],
-                                "quantity" => $row["on_hand"]
+                                "quantity" => $row["available"]
                             )
                         ));
                         $this->db->query("Update lightspeedpart join partvariation set lightspeedpart.partvariation_id = partvariation.partvariation_id where lightspeedpart.lightspeedpart_id = ? and partvariation.distributor_id = ? and partvariation.part_number = ?", array($row["lightspeedpart_id"], $row["distributor_id"], $row["part_number"]));
