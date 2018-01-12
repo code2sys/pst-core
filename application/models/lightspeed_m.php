@@ -541,7 +541,7 @@ class Lightspeed_M extends Master_M {
         $this->db->query("Update lightspeedpart join partdealervariation using (partvariation_id) set partdealervariation.cost = lightspeedpart.cost, partdealervariation.price = lightspeedpart.current_active_price,  partdealervariation.quantity_available = lightspeedpart.available, partdealervariation.quantity_last_updated = lightspeedpart.lightspeed_last_seen, lightspeedpart.lightspeed_present_flag = 1");
 
         // Do we have to update the partnumber?
-        $this->db->query("Update partnumber join partdealervariation using (partnumber_id) join lightspeedpart using (partvariation_id) set partnumber.price = partdealervariation.price, partnumber.cost = partdealervariation.cost, partnumber.dealer_sale = partdealervariation.price, partnumber.sale = partdealervariation.price, partnumber.inventory = partdealervairation.quantity_available");
+        $this->db->query("Update partnumber join partdealervariation using (partnumber_id) join lightspeedpart using (partvariation_id) set partnumber.price = partdealervariation.price, partnumber.cost = partdealervariation.cost, partnumber.dealer_sale = partdealervariation.price, partnumber.sale = partdealervariation.price, partnumber.inventory = partdealervariation.quantity_available");
     }
 
     protected $_distributorNameLookup;
