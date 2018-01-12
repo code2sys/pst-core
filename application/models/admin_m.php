@@ -1701,7 +1701,7 @@ class Admin_M extends Master_M {
                 // Is this one in lightspeed?
                 $query = $this->db->query("Select count(*) as cnt from lightspeedpart where partvariation_id = ?", array($partvariation_id));
                 $cnt = $query->result_array();
-                $cnt = $cnt[0];
+                $cnt = $cnt[0]["cnt"];
 
                 if ($cnt > 0) {
                     $lightspeed[$v['partnumber']] = $v['partnumber'];
