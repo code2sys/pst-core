@@ -1699,7 +1699,7 @@ class Admin_M extends Master_M {
 
             if ($partvariation_id > 0 ) {
                 // Is this one in lightspeed?
-                $query = $this->db->query("Select count(*) as cnt from lightspeedfeed where partvariation_id = ?", array($partvariation_id));
+                $query = $this->db->query("Select count(*) as cnt from lightspeedpart where partvariation_id = ?", array($partvariation_id));
                 $cnt = $query->result_array();
                 $cnt = $cnt[0];
 
