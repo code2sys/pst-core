@@ -688,7 +688,7 @@ class Portalmodel extends Master_M {
             ));
             $partvariation_id = $this->insert("partvariation", "partvariation_id", array(
                 "part_number" => $part_number, "distributor_id" => $distributor_id,
-                "partnumber_id" => $partnumber_id, "protect" => 1, "clean"
+                "partnumber_id" => $partnumber_id, "protect" => 1
             ));
 
             global $LightspeedSupplierLookAside;
