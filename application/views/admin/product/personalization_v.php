@@ -455,11 +455,11 @@
 </script>
 <script type="text/template" id="PartPersonalizationPartNumberRow">
     <td class="fitmentcell"><em></em> <a href="#" class="fitment">Edit Fitment</a><a href="#" class="hidefitment" style="display: none">Hide Fitment</a></td>
-    <td ><%= obj.distributor_name %></td>
+    <td ><%= obj.distributor_name %><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %> <em>Via Lightspeed</em><% } %></td>
     <td ><%= obj.part_number %></td>
-    <td ><input type="text" name="price" value="<%= obj.price %>" /></td>
-    <td ><input type="text" name="qty_available" value="<%= obj.qty_available %>" /></td>
-    <td ><input type="text" name="cost" value="<%= obj.cost %>" /></td>
+    <td ><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %><%= obj.price %><% } else { %><input type="text" name="price" value="<%= obj.price %>" /><% } %></td>
+    <td ><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %><%= obj.qty_available %><% } else { %><input type="text" name="qty_available" value="<%= obj.qty_available %>" /><% } %></td>
+    <td ><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %><%= obj.cost %><% } else { %><input type="text" name="cost" value="<%= obj.cost %>" /><% } %></td>
     <td align="center"><input type="checkbox" name="stock_code" value="Closeout" <% if (obj.stock_code == 'Closeout') { %>checked='checked'<% } %> /> </td>
     <td ><input type="text" name="weight" value="<%= obj.weight %>" /></td>
     <td ><a href="#" class="removelink">Delete</a></td>
@@ -757,6 +757,7 @@
                         this.model.set("distributor_name", pv.get("distributor_name"));
                         this.model.set("part_number", pv.get("part_number"));
                         this.model.set("stock_code", pv.get("stock_code"));
+                        this.model.set("lightspeedpart_id", pv.get("lightspeedpart_id"));
                         this.pv.bind("change", this.render);
                     }
 
