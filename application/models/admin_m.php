@@ -1704,7 +1704,7 @@ class Admin_M extends Master_M {
                 $cnt = $cnt[0];
 
                 if ($cnt > 0) {
-                    $lightspeed[] = $v['partnumber'];
+                    $lightspeed[$v['partnumber']] = $v['partnumber'];
                     continue; // this should go to the next part, I hope.
                 }
 
@@ -1842,7 +1842,7 @@ class Admin_M extends Master_M {
         }
 
         foreach ($arr as $k => $v) {
-            if (empty($scs[$v['partnumber']])) {
+            if (empty($scs[$v['partnumber']]) && !array_key_exists($v["partnumber"], $lightspeed)) {
                 $error[$v['partnumber']] = $v;
             }
         }
