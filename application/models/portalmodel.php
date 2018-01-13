@@ -704,7 +704,9 @@ class Portalmodel extends Master_M {
                     // OK, well, we have a match here..
                     error_log("Update lightspeedpart set partvariation_id = $partvariation_id where lightspeedpart_id = " . $row["lightspeedpart_id"]);
                     $this->db->query("Update lightspeedpart set partvariation_id = ? where lightspeedpart_id = ?", array($partvariation_id, $row["lightspeedpart_id"]));
-                    $this->db->query("Update lightspeedpart set partvariation_id = $partvariation_id where lightspeedpart_id = " . $row["lightspeedpart_id"]);
+                    if(!$this->db->query("Update lightspeedpart set partvariation_id = $partvariation_id where lightspeedpart_id = " . $row["lightspeedpart_id"])) {
+                        error_log($this->db->_error_message());
+                    }
                 }
             }
         } else {
