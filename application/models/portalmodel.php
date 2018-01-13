@@ -702,7 +702,8 @@ class Portalmodel extends Master_M {
                 if (array_key_exists($sc, $LightspeedSupplierLookAside) && $LightspeedSupplierLookAside[$sc] == $row["distributor_name"]) {
                     error_log("Update it!");
                     // OK, well, we have a match here..
-                    $this->db->query("Update lightspeedpart set partvariation_id = ? where lightspeedpart_id = ? limit 1", array($partvariation_id, $row["lightspeedpart_id"]));
+                    error_log("Update lightspeedpart set partvariation_id = $partvariation_id where lightspeedpart_id = " . $row["lightspeedpart_id"]);
+                    $this->db->query("Update lightspeedpart set partvariation_id = ? where lightspeedpart_id = ?", array($partvariation_id, $row["lightspeedpart_id"]));
                 }
             }
         } else {
