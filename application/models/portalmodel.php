@@ -662,6 +662,7 @@ class Portalmodel extends Master_M {
     }
 
     public function addAnswer($revisionset_id, $partquestion_id, $answer, $distributor_id, $part_number, $fitments) {
+        $saved_lightspeed_query = "";
         /*
          *  First make sure that answer is in there.
          */
@@ -694,19 +695,11 @@ class Portalmodel extends Master_M {
             global $LightspeedSupplierLookAside;
             // JLB 01-12-18 - Is it possible that we just got a lightspeed part? We need to do a just in time lookup, right?
             $query = $this->db->query("Select lightspeedpart_id, distributor.name as distributor_name, supplier_code from lightspeedpart join partvariation on lightspeedpart.part_number = partvariation.part_number OR lightspeedpart.part_number = partvariation.clean_part_number join distributor on partvariation.distributor_id = distributor.distributor_id where partvariation.partvariation_id = ? and lightspeedpart.partvariation_id is null", array($partvariation_id));
-            error_log("Select lightspeedpart_id, distributor.name as distributor_name, supplier_code from lightspeedpart join partvariation on lightspeedpart.part_number = partvariation.part_number OR lightspeedpart.part_number = partvariation.clean_part_number join distributor on partvariation.distributor_id = distributor.distributor_id where partvariation.partvariation_id = $partvariation_id and lightspeedpart.partvariation_id is null");
 
             foreach ($query->result_array() as $row) {
                 $sc = $row["supplier_code"];
-                error_log("Supplier code $sc");
                 if (array_key_exists($sc, $LightspeedSupplierLookAside) && $LightspeedSupplierLookAside[$sc] == $row["distributor_name"]) {
-                    error_log("Update it!");
-                    // OK, well, we have a match here..
-                    error_log("Update lightspeedpart set partvariation_id = $partvariation_id where lightspeedpart_id = " . $row["lightspeedpart_id"]);
-                    $this->db->query("Update lightspeedpart set partvariation_id = ? where lightspeedpart_id = ?", array($partvariation_id, $row["lightspeedpart_id"]));
-                    if(!$this->db->query("Update lightspeedpart set partvariation_id = $partvariation_id where lightspeedpart_id = " . $row["lightspeedpart_id"])) {
-                        error_log($this->db->_error_message());
-                    }
+                    $saved_lightspeed_query = "Update lightspeedpart set partvariation_id = $partvariation_id where lightspeedpart_id = " . $row["lightspeedpart_id"];
                 }
             }
         } else {
@@ -807,6 +800,10 @@ class Portalmodel extends Master_M {
         }
 
         $this->db->query("Insert into queued_parts (part_id) values (?)", array($revisionset_id));
+
+        if ($saved_lightspeed_query != "") {
+            $this->db->query($saved_lightspeed_query);
+        }
 
         return $partquestionanswer_id;
     }
