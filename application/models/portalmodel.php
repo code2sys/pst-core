@@ -729,9 +729,6 @@ class Portalmodel extends Master_M {
         }
 
 
-        // just fix it up, if you must
-        $this->db->query
-
         // Insert into partpartnumber...
         $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?) on duplicate key update partpartnumber_id = last_insert_id(partpartnumber_id)", array($revisionset_id, $partnumber_id));
 
