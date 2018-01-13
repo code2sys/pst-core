@@ -699,7 +699,7 @@ class Portalmodel extends Master_M {
             foreach ($query->result_array() as $row) {
                 $sc = $row["supplier_code"];
                 if (array_key_exists($sc, $LightspeedSupplierLookAside) && $LightspeedSupplierLookAside[$sc] == $row["distributor_name"]) {
-                    $saved_lightspeed_query = "Update lightspeedpart set partvariation_id = $partvariation_id where lightspeedpart_id = " . $row["lightspeedpart_id"];
+                    $this->db->query("Update lightspeedpart set partvariation_id = $partvariation_id where lightspeedpart_id = " . $row["lightspeedpart_id"]);
                 }
             }
         } else {
@@ -725,9 +725,12 @@ class Portalmodel extends Master_M {
             $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, quantity_last_updated, cost, price, clean_part_number, revisionset_id, manufacturer_part_number, weight, stock_code) select partvariation_id, part_number, partnumber_id, distributor_id, ?, ?, now(), ?, ?, clean_part_number, revisionset_id, manufacturer_part_number, ?, ? from partvariation where partvariation_id = ? on duplicate key update quantity_available = values(quantity_available), quantity_ten_plus = values(quantity_ten_plus), quantity_last_updated = now(), cost = values(cost), price = values(price), weight = values(weight), stock_code = values(stock_code)", array($_REQUEST["qty_available"], $_REQUEST["qty_available"] > 9 ? 1 : 0, $_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["weight"], $_REQUEST["stock_code"], $partvariation_id));
         } else {
             // If that thing is in lightspeed, you have to pull it instead.
-            $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, quantity_last_updated, cost, price, clean_part_number, revisionset_id, manufacturer_part_number, weight, stock_code) select partvariation.partvariation_id, partvariation.part_number, partvariation.partnumber_id, partvariation.distributor_id, lightspeedpart.available, If(lightspeedpart.available > 9, 1, 0), now(), lightspeedpart.cost, lightspeedpart.price, partvariation.clean_part_number, partvariation.revisionset_id, partvariation.manufacturer_part_number, partvariation.weight, partvariation.stock_code from partvariation join lightspeedpart on (partvariation_id) where partvariation.partvariation_id = ? on duplicate key update quantity_available = values(quantity_available), quantity_ten_plus = values(quantity_ten_plus), quantity_last_updated = now(), cost = values(cost), price = values(price), weight = values(weight), stock_code = values(stock_code)", array($partvariation_id));
+            $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, quantity_last_updated, cost, price, clean_part_number, revisionset_id, manufacturer_part_number, weight, stock_code) select partvariation.partvariation_id, partvariation.part_number, partvariation.partnumber_id, partvariation.distributor_id, lightspeedpart.available, If(lightspeedpart.available > 9, 1, 0), now(), lightspeedpart.cost, lightspeedpart.current_active_price, partvariation.clean_part_number, partvariation.revisionset_id, partvariation.manufacturer_part_number, partvariation.weight, partvariation.stock_code from partvariation join lightspeedpart using (partvariation_id) where partvariation.partvariation_id = ? on duplicate key update quantity_available = values(quantity_available), quantity_ten_plus = values(quantity_ten_plus), quantity_last_updated = now(), cost = values(cost), price = values(price), weight = values(weight), stock_code = values(stock_code);", array($partvariation_id));
         }
 
+
+        // just fix it up, if you must
+        $this->db->query
 
         // Insert into partpartnumber...
         $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?) on duplicate key update partpartnumber_id = last_insert_id(partpartnumber_id)", array($revisionset_id, $partnumber_id));
@@ -800,10 +803,6 @@ class Portalmodel extends Master_M {
         }
 
         $this->db->query("Insert into queued_parts (part_id) values (?)", array($revisionset_id));
-
-        if ($saved_lightspeed_query != "") {
-            $this->db->query($saved_lightspeed_query);
-        }
 
         return $partquestionanswer_id;
     }
