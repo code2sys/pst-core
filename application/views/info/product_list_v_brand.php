@@ -15,7 +15,7 @@ foreach ($title1 as $k => $v) {
     <div class="cntnr-ttl">
         <div class="brndimg">
             <?php if ($brandImg != '') { ?>
-                <p><img src="<?php echo site_url() . 'media/' . $brandImg; ?>">
+                <p><img src="<?php echo site_url() . 'media/' . $brandImg; ?>"></p>
                 <?php } ?>
             <h1 class='mn'><?php echo trim($headTitle); ?></h1>
             </p>
