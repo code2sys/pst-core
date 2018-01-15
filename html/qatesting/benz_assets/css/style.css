@@ -437,7 +437,7 @@ a.ftrimg1 {
     width: 31%;
 }
 
-.brandpagegrid ul.lstng li a.brand-name,
+#brandpagegrid ul.lstng li a.brand-name,
 .featured-listings .panel-body ul.lstng li a.brnd-nm {
     font-size: 18px;
     color: #9c9c9c;
@@ -445,9 +445,11 @@ a.ftrimg1 {
     float: left;
 	line-height:normal;
 }
+#brandpagegrid ul.lstng li a.brnd-nm:hover ,
 .featured-listings .panel-body ul.lstng li a.brnd-nm:hover {
     color: #9c9c9c !important;
 }
+#brandpagegrid ul.lstng li span.bn ,
 .featured-listings .panel-body ul.lstng li span.bn {
     width: 100%;
     display: block;
@@ -455,6 +457,8 @@ a.ftrimg1 {
     font-size: 15px;
     margin: 15px 0 10px 0;
 }
+
+#brandpagegrid ul.lstng li a img,
 .featured-listings .panel-body ul.lstng li a img {
     max-width: 100%;
     max-height: 120px;
