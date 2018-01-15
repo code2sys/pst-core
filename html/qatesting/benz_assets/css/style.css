@@ -474,7 +474,7 @@ a.ftrimg1 {
     width: 100%;
 }
 
-#brandpagegrid img
+#brandpagegrid img, 
 #our_top_brands img {
     max-width: 100%;
     max-height: 120px;
