@@ -9,19 +9,25 @@
 						<?php echo $textboxes[0]['text'];?>
 					</p>
 				</div>
-				<div class="ftrd-brnds">
+				<div class="ftrd-brnds" id="brandpagegrid">
 					<p>Featured <span>Brands</span></p>
+                    <ul class="lstng">
 					<?php foreach( $featured as $key => $val ) { ?>
-						<a href="<?php echo base_url($val['slug']);?>" onclick="setNamedSearchBrandt(event, 'brand', '<?php echo $key; ?>', '<?php echo addslashes($val['name']); ?>');">
-						  <div class="bx">
+                        <li class="ftrdb"><a class="brand-name" href="<?php echo base_url($val['slug']);?>" onclick="setNamedSearchBrandt(event, 'brand', '<?php echo $key; ?>', '<?php echo addslashes($val['name']); ?>');">
+                            <div class="spannerbox">
                               <?php if ($val['image'] != ''): ?>
 							<img src="/media/<?php echo $val['image'];?>">
                             <?php endif; ?>
-							<b><?php echo $val['name'];?></b>
+                                <div class="labelbox">
+                                    <span class=""><?php echo $val['name'];?></span>
+                                </div>
 						  </div>
-						</a>
-					<?php } ?>
-				</div>
+						</a></li>
+
+                    <?php } ?>
+                    </ul>
+
+                </div>
 				<div class="brnd-list">
 					<div class="lft">
 						<ul>

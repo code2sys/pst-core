@@ -244,7 +244,9 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 						<li class="ftrdb">
 							<a class="brnd-nm" href="<?php echo site_url($val['slug']);?>">
                                 <div class="spannerbox">
+                                    <?php if ($val['image'] != ''): ?>
                                     <img src="<?php echo site_url('media/'.$val['image']);?>">
+                                    <?php endif; ?>
                                 </div>
                                 <div class="labelbox">
                                     <span class=""><?php echo $val['name'];?></span>
