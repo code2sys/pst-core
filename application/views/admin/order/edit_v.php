@@ -761,11 +761,12 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                                 <input name="search_qty" class="text mini" id="search_qty">
                             </div>
                             <div style="float:left; margin-top:11px">
-                                <a href="javascript:void(0);" onclick="addProductNew();" id="button">Go</a>
+                                <a href="javascript:void(0);" onclick="addProductNew(); return false;" id="button">Add To Order</a>
                             </div>
                             <div style="float:left; margin:11px 0 0 20px">
-                                <a href="javascript:void(0);" onclick="searchProducts();" id="button">Find Product</a>
+                                <a href="javascript:void(0);" onclick="searchProducts(); return false" id="button">Find Product In Store</a>
                             </div>
+                            <div id="search_target" style="clear: both"></div>
                         </td>
                         <td>Subtotal:</td>
                         <td>$<?php
@@ -833,9 +834,9 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
             </div>
         </div>
         <div style="float:right;">
-            <a href="javascript:void(0);" onclick="$.when(saveForLater()).done(refreshPage());" id="button">Save for Later</a>
+            <a href="javascript:void(0);" onclick="$.when(saveForLater()).done(refreshPage);" id="button">Save for Later</a>
             <!-- <a href="javascript:void(0);" onclick="addToBatch();" id="button">Add to Batch Order</a> -->
-            <a href="javascript:void(0);" onclick="$.when(processOrder()).done(refreshPage());" id="button">Update To Processing</a>
+            <a href="javascript:void(0);" onclick="$.when(processOrder()).done(refreshPage);" id="button">Update To Processing</a>
             <a href="javascript:void(0);" onclick="sendToPST();" id="button">Send To Distributors</a>
         </div>
 
@@ -874,7 +875,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
         $("#shipping_state_display").html($('#shipping_state').val());
         $("#shipping_zip_display").html($('#shipping_zip').val());
         $("#shipping_country_display").html($('#shipping_country').val());
-        $.when(saveForLater()).done(refreshPage());
+        $.when(saveForLater()).done(refreshPage);
     }
 
     function updatePayment()
@@ -966,27 +967,60 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
         qty = $('#search_qty').val();
         sku = $('#search_sku').val();
 
-        if (qty == '')
+        if (qty == '') {
             alert('Please enter a Qty');
-        if (sku == '')
+        } else if (sku == '') {
             alert('Please enter a SKU');
-        if ((qty != '') && (sku != ''))
+        } else
         {
-            //saveForLater();
-            orderId = $('input[name="order_id"]').attr('value');
-            window.location.replace(base_url + 'admin/order_edit/' + orderId + '/' + sku + '/' + qty);
+            // JLB 01-10-18
+            // This just stuck it on there, but now we have to query it....
+            $.ajax({
+                type: "POST",
+                url : "/admin/ajax_query_part",
+                data: {
+                    "partnumber" : sku
+                },
+                dataType: "json",
+                success: function(response) {
+                    console.log(response);
+                    if (response.data.success) {
+                        if (response.data.store_inventory_match) {
+                            //saveForLater();
+                            orderId = $('input[name="order_id"]').attr('value');
+                            window.location.replace(base_url + 'admin/order_edit/' + orderId + '/' + encodeURIComponent(sku) + '/' + qty);
+                        } else if (response.data.lightspeed_match) {
+                            // we have something else to talk about...
+                            $("#search_target").html("");
+
+                            for (var i= 0; i < response.data.lightspeed.length; i++) {
+                                // We have to add a link for each one to really add them...
+                                var m = response.data.lightspeed[i];
+                                $("#search_target").append("<p><strong>" + m.description + "</strong> (Lightspeed Part Feed #" + m.part_number + ") - " + m.available + " available at $" + m.cost + " cost <a class='add' data-lightspeedpart-id='" + m.lightspeedpart_id + "' data-qty='" + qty + "' href='/admin/add_lightspeed_part/<?php echo $order_id; ?>/" + m.lightspeedpart_id + "/" + qty + "'>+ Add</a>");
+                            }
+
+                            // Now, lump them out there...
+                        }
+
+                    } else {
+                        // do something with this error.
+                        alert("Sorry, that part is not found.");
+                    }
+
+                }
+            });
+
         }
     }
 
-
     function addToBatch()
     {
-        $.when(saveForLater()).done(updateStatus('Batch Order'));
+        $.when(saveForLater()).done(function() { return updateStatus('Batch Order'); });
     }
 
     function processOrder()
     {
-        $.when(saveForLater()).done(updateStatus('Processing'));
+        $.when(saveForLater()).done(function() { return updateStatus('Processing'); } );
 
     }
 
@@ -1007,7 +1041,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
         } else if( (lngth == ttlDlr && dlrQty > 0) || (ttlDlr == 0 && dlrQty > 0) ) {
             alert('Only items being shipped from distributor stock can be sent to PST.');
         } else {
-            $.when(saveForLater()).done(updateStatusPST('Processing'));
+            $.when(saveForLater()).done(function() { return updateStatusPST('Processing'); });
             //alert();
         }
     }
@@ -1392,7 +1426,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
             $("#shipping_zip_display").html('');
             $("#shipping_country_display").html('');
         }
-        $.when(saveForLater()).done(refreshPage());
+        $.when(saveForLater()).done(refreshPage);
     });
     function refreshPage() {
         var orderId = $('input[name="order_id"]').attr('value');

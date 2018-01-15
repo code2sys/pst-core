@@ -448,7 +448,7 @@ class Portalmodel extends Master_M {
     public function _getPartVariationCollection($part_id) {
         $rows = array();
 
-        $query = $this->db->query("Select distinct partvariation.*, distributor.name as distributor_name, partdealervariation.cost, partdealervariation.quantity_available as qty_available, partdealervariation.stock_code, partdealervariation.price from partvariation join distributor using (distributor_id) join partdealervariation using (partvariation_id) join partpartnumber on partvariation.partnumber_id = partpartnumber.partnumber_id where partpartnumber.part_id = ?", array($part_id));
+        $query = $this->db->query("Select distinct partvariation.*, distributor.name as distributor_name, partdealervariation.cost, partdealervariation.quantity_available as qty_available, partdealervariation.stock_code, partdealervariation.price, lightspeedpart.lightspeedpart_id from partvariation join distributor using (distributor_id) join partdealervariation using (partvariation_id) join partpartnumber on partvariation.partnumber_id = partpartnumber.partnumber_id left join lightspeedpart on partvariation.partvariation_id = lightspeedpart.partvariation_id where partpartnumber.part_id = ? group by partvariation.partvariation_id", array($part_id));
 
         foreach ($query->result_array() as $row) {
             $rows[] = $row;
@@ -662,6 +662,7 @@ class Portalmodel extends Master_M {
     }
 
     public function addAnswer($revisionset_id, $partquestion_id, $answer, $distributor_id, $part_number, $fitments) {
+        $saved_lightspeed_query = "";
         /*
          *  First make sure that answer is in there.
          */
@@ -691,6 +692,16 @@ class Portalmodel extends Master_M {
                 "partnumber_id" => $partnumber_id, "protect" => 1
             ));
 
+            global $LightspeedSupplierLookAside;
+            // JLB 01-12-18 - Is it possible that we just got a lightspeed part? We need to do a just in time lookup, right?
+            $query = $this->db->query("Select lightspeedpart_id, distributor.name as distributor_name, supplier_code from lightspeedpart join partvariation on lightspeedpart.part_number = partvariation.part_number OR lightspeedpart.part_number = partvariation.clean_part_number join distributor on partvariation.distributor_id = distributor.distributor_id where partvariation.partvariation_id = ? and lightspeedpart.partvariation_id is null", array($partvariation_id));
+
+            foreach ($query->result_array() as $row) {
+                $sc = $row["supplier_code"];
+                if (array_key_exists($sc, $LightspeedSupplierLookAside) && $LightspeedSupplierLookAside[$sc] == $row["distributor_name"]) {
+                    $this->db->query("Update lightspeedpart set partvariation_id = $partvariation_id where lightspeedpart_id = " . $row["lightspeedpart_id"]);
+                }
+            }
         } else {
             $partvariation_id = $matching_variations[0]["partvariation_id"];
             // fetch that partnumber_id
@@ -704,9 +715,19 @@ class Portalmodel extends Master_M {
         // Fix the label, if required...
         $this->db->query("Update partnumber join partvariation using (partnumber_id) join distributor using (distributor_id) set partnumber = concat(distributor.name, '-', partvariation.part_number) where partnumber.partnumber_id = ? and partvariation.partvariation_id = ?", array($partnumber_id, $partvariation_id));
 
+        // Is this part from Lightspeed?
+        $query = $this->db->query("Select count(*) as cnt from lightspeedpart where partvariation_id = ?", array($partvariation_id));
+        $count = $query->result_array();
+        $count = $count[0]["cnt"];
 
         // Insert into partdealervariation, if quired
-        $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, quantity_last_updated, cost, price, clean_part_number, revisionset_id, manufacturer_part_number, weight, stock_code) select partvariation_id, part_number, partnumber_id, distributor_id, ?, ?, now(), ?, ?, clean_part_number, revisionset_id, manufacturer_part_number, ?, ? from partvariation where partvariation_id = ? on duplicate key update quantity_available = values(quantity_available), quantity_ten_plus = values(quantity_ten_plus), quantity_last_updated = now(), cost = values(cost), price = values(price), weight = values(weight), stock_code = values(stock_code)", array($_REQUEST["qty_available"], $_REQUEST["qty_available"] > 9 ? 1 : 0, $_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["weight"], $_REQUEST["stock_code"], $partvariation_id));
+        if ($count == 0) {
+            $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, quantity_last_updated, cost, price, clean_part_number, revisionset_id, manufacturer_part_number, weight, stock_code) select partvariation_id, part_number, partnumber_id, distributor_id, ?, ?, now(), ?, ?, clean_part_number, revisionset_id, manufacturer_part_number, ?, ? from partvariation where partvariation_id = ? on duplicate key update quantity_available = values(quantity_available), quantity_ten_plus = values(quantity_ten_plus), quantity_last_updated = now(), cost = values(cost), price = values(price), weight = values(weight), stock_code = values(stock_code)", array($_REQUEST["qty_available"], $_REQUEST["qty_available"] > 9 ? 1 : 0, $_REQUEST["cost"], $_REQUEST["price"], $_REQUEST["weight"], $_REQUEST["stock_code"], $partvariation_id));
+        } else {
+            // If that thing is in lightspeed, you have to pull it instead.
+            $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, quantity_last_updated, cost, price, clean_part_number, revisionset_id, manufacturer_part_number, weight, stock_code) select partvariation.partvariation_id, partvariation.part_number, partvariation.partnumber_id, partvariation.distributor_id, lightspeedpart.available, If(lightspeedpart.available > 9, 1, 0), now(), lightspeedpart.cost, lightspeedpart.current_active_price, partvariation.clean_part_number, partvariation.revisionset_id, partvariation.manufacturer_part_number, partvariation.weight, partvariation.stock_code from partvariation join lightspeedpart using (partvariation_id) where partvariation.partvariation_id = ? on duplicate key update quantity_available = values(quantity_available), quantity_ten_plus = values(quantity_ten_plus), quantity_last_updated = now(), cost = values(cost), price = values(price), weight = values(weight), stock_code = values(stock_code);", array($partvariation_id));
+        }
+
 
         // Insert into partpartnumber...
         $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?) on duplicate key update partpartnumber_id = last_insert_id(partpartnumber_id)", array($revisionset_id, $partnumber_id));
