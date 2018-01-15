@@ -453,6 +453,11 @@ a.ftrimg1 {
     max-width: 100%;
     max-height: 120px;
 }
+
+#our_top_brands ul.listing {
+    background-color: white;
+}
+
 #our_top_brands a {
     width: 100%;
 }
