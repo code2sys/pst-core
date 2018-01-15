@@ -43,7 +43,7 @@ $CI =& get_instance();
     <div class="container">
         <?php if (@$brandMain['image']) { ?>
             <div class="brndimg mrgn-tp-mns">
-                <p><img src="<?php echo site_url() . 'media/' .  $brandMain['image']; ?>">
+                <p><img src="<?php echo site_url() . 'media/' .  $brandMain['image']; ?>"></p>
                 <h1 class='mn' id="mn-md"><?php echo $product['name']; ?></h1>
                 </p>
             </div>
