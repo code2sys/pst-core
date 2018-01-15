@@ -14,7 +14,9 @@
 					<?php foreach( $featured as $key => $val ) { ?>
 						<a href="<?php echo base_url($val['slug']);?>" onclick="setNamedSearchBrandt(event, 'brand', '<?php echo $key; ?>', '<?php echo addslashes($val['name']); ?>');">
 						  <div class="bx">
+                              <?php if ($val['image'] != ''): ?>
 							<img src="/media/<?php echo $val['image'];?>">
+                            <?php endif; ?>
 							<b><?php echo $val['name'];?></b>
 						  </div>
 						</a>
