@@ -483,7 +483,7 @@ class Ajax extends Master_Controller {
             }
             $order['billing_id'] = $this->account_m->updateContact($contactInfo[0], 'billing');
             $order['shipping_id'] = $this->account_m->updateContact($contactInfo[1], 'shipping');
-            
+
             $this->load->model('order_m');
             $total = $this->order_m->getOrderTotal($post['order_id']);
             if( @$post['state'][1] && $post['state'][1] != '' ) {
@@ -491,7 +491,7 @@ class Ajax extends Master_Controller {
             } else {
                 $order['tax'] = 0;
             }
-            
+
             $customerArr = array('username' => $post['email'][0], 'billing_id' => $order['billing_id'], 'user_type' => 'guest', 'status' => '1');
             $order['user_id'] = $this->account_m->createGuestCustomer($customerArr, $post['order_id']);
             
@@ -500,8 +500,9 @@ class Ajax extends Master_Controller {
             //$this->load->model('order_m');
             $this->order_m->updateOrderProductsByOrderId($orderId, $products);
             echo $orderId;
-        } else
+        } else {
             echo validation_errors();
+        }
     }
 
     public function setupProducts($post, &$subtotal) {
@@ -565,6 +566,7 @@ class Ajax extends Master_Controller {
             }
         }
 
+        $order_id = $post['order_id'];
         $orderDetails = $this->account_m->getOrderDistributorDetails($post['order_id'], $distributor_id);
 
         $distributors = $this->order_m->getDistributors();
@@ -649,8 +651,9 @@ class Ajax extends Master_Controller {
                 'Reply-To: ' . $from . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
 
+        // JLB 01-11-18 Add the order ID and make it more prominent.
         //echo $products;
-        mail("bvojcek@powersporttechnologies.com", "Order Send to PST from MM", $address . $products, $headers);
+        mail("orders@powersporttechnologies.com", "Order $order_id Sent to PST from " . $store_name['company'], "<h1>Order $order_id</h1>\n\n" . $address . $products, $headers);
         //mail("pradeep.shekhawat@outlook.com", "Order Send to PST from MM", $address.$products, $headers);
         $this->account_m->updateOrderPST($post['order_id']);
     }

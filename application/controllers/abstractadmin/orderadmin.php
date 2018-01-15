@@ -10,6 +10,238 @@ require_once(__DIR__ . "/productsbrandsadmin.php");
 
 abstract class Orderadmin extends Productsbrandsadmin {
 
+    /*
+     * This function is supposed to bootstrap placing this order...
+     */
+    public function add_lightspeed_part($id, $lightspeedpart_id, $qty = 1) {
+        $query = $this->db->query("Select * from lightspeedpart where lightspeedpart_id = ?", array($lightspeedpart_id));
+        $lightspeedpart = $query->result_array();
+        $lightspeedpart = $lightspeedpart[0];
+
+        // OK, now, we should be holding it...
+        if ($lightspeedpart["partvariation_id"] ==  0 || is_null($lightspeedpart["partvariation_id"])) {
+
+            $this->load->model("Distributormodel");
+
+            // We will have to find this. Which means we will have to consider making it...
+            if ($lightspeedpart["eternalpartvariation_id"] > 0) {
+                // you have to go get it
+                $this->load->model("migrateparts_m");
+                $eternalpartvariation = $this->migrateparts_m->getEternalPartVariation($lightspeedpart["eternalpartvariation_id"]);
+                $d = $this->Distributormodel->fetchByName($eternalpartvariation["name"]); // that should be the distributor name field...
+                // OK, we are going to insert that into partvariation...
+                $this->db->query("Insert into partvariation (part_number, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, weight, clean_part_number, width, height, length, manufacturer_part_number, protect, from_lightspeed) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1)", array(
+                    $eternalpartvariation["part_number"],
+                    $d["distributor_id"],
+                    $eternalpartvariation["quantity_available"],
+                    $eternalpartvariation["quantity_ten_plus"],
+                    $eternalpartvariation["stock_code"],
+                    $eternalpartvariation["quantity_last_updated"],
+                    $eternalpartvariation["cost"],
+                    $eternalpartvariation["price"],
+                    $eternalpartvariation["weight"],
+                    $eternalpartvariation["clean_part_number"],
+                    $eternalpartvariation["width"],
+                    $eternalpartvariation["height"],
+                    $eternalpartvariation["length"],
+                    $eternalpartvariation["manufacturer_part_number"]
+                ));
+            } else {
+                $d = $this->Distributormodel->fetchByName("Lightspeed Feed");
+                if (!array_key_exists("distributor_id", $d)) {
+                    $distributor_id = $this->Distributormodel->add(array(
+                        "name" => "Lightspeed Feed",
+                        "active" => 1,
+                        "customer_distributor" => 1
+                    ));
+                } else {
+                    $distributor_id = $d["distributor_id"];
+                }
+
+                // We just have to create one...
+                $this->db->query("Insert into partvariation (from_lightspeed, protect, part_number, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number) values (1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", array(
+                    $lightspeedpart["part_number"],
+                    $distributor_id,
+                    0,
+                    0,
+                    "Normal",
+                    $lightspeedpart["lightspeed_last_seen"],
+                    $lightspeedpart["cost"],
+                    $lightspeedpart["current_active_price"],
+                    preg_replace("/[^a-z0-9]/i", "", $lightspeedpart["part_number"]),
+                    $lightspeedpart["upc"]
+                ));
+            }
+            $partvariation_id = $this->db->insert_id();
+            $lightspeedpart["partvariation_id"] = $partvariation_id;
+
+            // OK, we have created an entry in partvariation...we need to create an entry in partnumber next
+            // We need to add the lightspeed part information into partdealervariation now...
+            $this->load->model("Portalmodel");
+            $part_id = $this->Portalmodel->makePartByName("Lightspeed Part Feed: " . $lightspeedpart["description"], $lightspeedpart["description"]);
+            $this->db->query("Update part set mx = 0, lightspeed = 1 where part_id = ?", array($part_id));
+
+            $this->Portalmodel->queuePart($part_id);
+
+            // we have to glue these things together..with a partnumber entry and a part partnumber.
+            $partnumber_id = $this->Portalmodel->insert("partnumber", "partnumber_id", array(
+                "universalfit" => 1, "protect" => 1
+            ));
+
+
+            // Update price, cost, and the part number
+            // Just mark them.
+            $this->Portalmodel->update("partnumber", "partnumber_id", $partnumber_id, array("protect" => 1, "price" => $lightspeedpart["current_active_price"], "cost" => $lightspeedpart["cost"], "sale" => $lightspeedpart["current_active_price"], "dealer_sale" => $lightspeedpart["current_active_price"]));
+            $this->db->query("Update partnumber set partnumber = ? where partnumber_id = ?", array(preg_replace("/[^a-z0-9\_]+/i", "_", "Lightspeed-" . $lightspeedpart["part_number"]), $partnumber_id));
+            $this->db->query("Update partnumber join partvariation using (partnumber_id) join distributor using (distributor_id) set partnumber = concat(distributor.name, '-', partvariation.part_number) where partnumber.partnumber_id = ? and partvariation.partvariation_id = ?", array($partnumber_id, $partvariation_id));
+
+            $this->db->query("Update partvariation set partnumber_id = ? where partvariation_id = ?", array($partnumber_id, $partvariation_id));
+
+            // And, at long last, insert this into partdealervariation
+            $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, stock_code, quantity_last_updated, cost, price, clean_part_number, manufacturer_part_number) select partvariation_id, part_number, partnumber_id, distributor_id, ?, ?, stock_code, ?, ?, ?, clean_part_number, manufacturer_part_number from partvariation where partvariation_id = ?", array($lightspeedpart["available"], $lightspeedpart["available"] > 9 ? 1: 0, $lightspeedpart["lightspeed_last_seen"], $lightspeedpart["cost"], $lightspeedpart["current_active_price"], $partvariation_id));
+
+            // join them
+            // make sure to save it...
+            $this->db->query("Update lightspeedpart set partvariation_id = ? where lightspeedpart_id = ?", array($lightspeedpart["partvariation_id"], $lightspeedpart_id));
+            $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?)", array($part_id, $partnumber_id));
+
+            // We must make question and answer for this...
+            $this->db->query("Insert into partquestion (part_id, question) values (?, 'Lightspeed Part') on duplicate key update partquestion_id = last_insert_id(partquestion_id)", array($part_id));
+            $partquestion_id = $this->db->insert_id();
+
+            $this->db->query("Insert into partquestionanswer (partquestion_id, answer) values (?, ?) on duplicate key update partquestionanswer_id = last_insert_id(partquestionanswer_id)", array($partquestion_id, $lightspeedpart["part_number"]));
+
+            // now, we link it..
+            $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key update answer = values(answer)", array($partnumber_id, $partquestion_id, $lightspeedpart["part_number"]));
+
+        }
+
+        // we should be holding a partvariation_id now...
+        $partvariation_id = $lightspeedpart["partvariation_id"];
+
+        // now, we should just try to fetch it, like you normally would
+        $query = $this->db->query("Select partpartnumber.part_id, part.name, partnumber.partnumber_id, partvariation.stock_code, partnumber.partnumber from part join partpartnumber using (part_id) join partnumber using (partnumber_id) join partvariation using (partnumber_id) where partvariation.partvariation_id = ?", array($partvariation_id));
+        $part = $query->result_array();
+        $part = $part[0];
+
+        $this->load->model('parts_m');
+        $this->load->model('order_m');
+
+        $questAns = $this->parts_m->getQuestionAnswerByNumber($part['part_id'], $part['partnumber']);
+        if(@$questAns) {
+            $this->order_m->addProductToOrder($part['partnumber'], $id, $qty, $part['part_id']);
+        } else if(!@$questAns && @$part) {
+            $this->order_m->addProductToOrder($part['partnumber'], $id, $qty, $part['part_id']);
+        } else {
+            $this->session->set_flashdata('error', 'Product Not Found.');
+        }
+
+        redirect('admin/order_edit/'.$id);
+    }
+
+
+    /*
+     * What happens if it matches the MX part number as well as the regular part number?
+     */
+    public function ajax_query_part() {
+        $partnumber = trim(array_key_exists("partnumber", $_REQUEST) ? $_REQUEST["partnumber"] : "");
+
+        $results = array(
+            "partnumber" => $partnumber,
+            "success" => false,
+            "error_message" => "No part number received.",
+            "store_inventory_match" => false
+        );
+
+        if ($partnumber != "") {
+            // Option 1: Check for an exact match, and, if it exists, we will proceed..
+            $this->load->model('parts_m');
+            $this->load->model('order_m');
+            $part = $this->order_m->getPartIdByPartNumber($partnumber);
+
+            if (isset($part) && !is_null($part) && FALSE !== $part) {
+                $results["success"] = true;
+                $results["store_inventory_match"] = true;
+                $results["part"] = $part;
+            } else {
+                $query = $this->db->query("Select part.* from part join partpartnumber using (part_id) join partnumber using (partnumber_id) where partnumber.partnumber = ?", array($partnumber));
+                $matches = $query->result_array();
+                if (count($matches) > 0) {
+                    $results["success"] = true;
+                    $results["store_inventory_match"] = true;
+                    $results["part"] = $matches[0];
+                } else {
+
+                    $query = $this->db->query("Select part.* from part join partpartnumber using (part_id) join partnumber using (partnumber_id) join partvariation using (partnumber_id) where partvariation.part_number = ?", array($partnumber));
+                    $matches = $query->result_array();
+                    if (count($matches) > 0) {
+                        $results["success"] = true;
+                        $results["store_inventory_match"] = true;
+                        $results["part"] = $matches[0];
+                    } else {
+
+
+                        $results["store_inventory_match"] = false;
+
+                        // OK, there was not an exact match...
+                        // The next possibility is that there could be a match into lightspeed, which could create a just-in-time part if they really wanted to...
+                        $matches = array();
+                        $query = $this->db->query("Select * from lightspeedpart where part_number = ? or upc = ?", array($partnumber, $partnumber)); // TODO
+                        $matches = $query->result_array();
+
+                        // Future - should we pull from any inventory that we have? We wouldn't even have a product name, which could be a problem...
+                        if (count($matches) > 0) {
+
+                            // If there are eternal part variation IDs, we should pull them, too... to see what we can see...
+                            $results["lightspeed_match"] = true;
+                            $results["success"] = true;
+
+                            $eternalpartvariation_ids = array();
+                            for ($i = 0; $i < count($matches); $i++) {
+                                $matches[$i]["source"] = "Lightspeed";
+                                if ($matches[$i]["eternalpartvariation_id"] > 0) {
+                                    $eternalpartvariation_ids[] = $matches[$i]["eternalpartvariation_id"];
+                                }
+                            }
+
+                            if (count($eternalpartvariation_ids) > 0) {
+                                // OK, we have to attempt to get the information for these...
+                                $this->load->model("migrateparts_m");
+                                $epv_matches = $this->migrateparts_m->getEternalPartVariations($eternalpartvariation_ids);
+                                // OK, that should give us some options...including the distributor name and the amount available...
+                                $epv_match_lut = array();
+                                foreach ($epv_matches as $epvrow) {
+                                    $epv_match_lut[$epvrow["eternalpartvariation_id"]] = $epvrow;
+                                }
+
+                                // Now, decorate our matches....
+                                for ($i = 0; $i < count($matches); $i++) {
+                                    if ($matches[$i]["eternalpartvariation_id"] > 0) {
+                                        if (array_key_exists($matches[$i]["eternalpartvariation_id"], $epv_match_lut)) {
+                                            $matches[$i]["inventory"] = $epv_match_lut[$matches[$i]["eternalpartvariation_id"]];
+                                        }
+                                    }
+                                }
+                            }
+
+                            $results["lightspeed"] = $matches;
+                        } else {
+                            // we are currently unable to provide anything...
+                            $results["error_message"] = "No match found.";
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($results["success"]) {
+            $this->_printAjaxSuccess($results);
+        } else {
+            $this->_printAjaxError($results["error_message"]);
+        }
+
+    }
+
 
 
     protected function validateShipping() {
@@ -96,6 +328,9 @@ abstract class Orderadmin extends Productsbrandsadmin {
         if (!$this->checkValidAccess('orders') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
+        if ($newPartNumber != '' && FALSE !== strpos($newPartNumber, '%')) {
+            $newPartNumber = urldecode($newPartNumber);
+        }
         $this->createMonths();
         $this->createYears();
         $this->_mainData['states'] = $this->load_states();
@@ -150,7 +385,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
 
                     //redirect('admin/order_edit/'.$id);
                 }
-                exit;
+                exit; // JLB 01-10-18 WTF is this???
             }
 
             $result = Braintree_Transaction::sale(['amount' => $this->input->post('amount'),
@@ -182,7 +417,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
                         'locality' => $_POST['state'][1],
                         'postalCode' => $_POST['zip'][1]
                     ],
-                    'channel' => 'MxConnectionLLC_SP_PayPalEC_BT']
+                    'channel' => 'MxConnectionLLC_SP_PayPalEC_BT'] // JLB 01-10-18 WTF is this?
             );
 
             if( @$result->success ) {
@@ -207,6 +442,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
         if ($id != 'new') {
             $this->_mainData['order'] = $this->order_m->getOrder($id);
         }
+        $this->_mainData['order_id'] = $id;
 
         //if($this->_mainData['order']['created_by'] == '1') {
         $weight = 0.00;
@@ -222,6 +458,8 @@ abstract class Orderadmin extends Productsbrandsadmin {
             }
         }
 
+
+        // JLB 01-10-18 This is a great cause of problems; this should be farmed out and it should involve some caching.
         $zip = $this->_mainData['order']['shipping_zip'];
         $grndShippingValue = $this->admin_m->shippingRules($this->_mainData['order']['sales_price'], 'USA', $zip, $weight);
         $shippingValue = $this->admin_m->calculateParcel($zip, 'USA', $grndShippingValue, $weight);

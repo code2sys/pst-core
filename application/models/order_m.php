@@ -157,9 +157,15 @@ class Order_M extends Master_M {
             if (@$record['products']) {
                 foreach ($record['products'] as &$prod) {
                     // Get distributor id and partvariation.quantity_available
-                    $where = array('partnumber_id' => $prod['partnumber_id']);
-                    //$prod['distributorRecs'] = $this->selectRecords('partvariation', $where);
-                    $prod['distributorRecs'] = $this->selectRecords('partvariation', $where);
+//                    $where = array('partnumber_id' => $prod['partnumber_id']);
+//                    //$prod['distributorRecs'] = $this->selectRecords('partvariation', $where);
+//                    $prod['distributorRecs'] = $this->selectRecords('partvariation', $where);
+
+                    // JLB 01-10-18
+                    // I had to rewrite this so that it would get these records without getting the lightspeed feed
+                    $query = $this->db->query("Select partvariation.* from partvariation join distributor using (distributor_id) where partvariation.partnumber_id = ? and distributor.name != 'Lightspeed Feed'", array($prod['partnumber_id']));
+                    $prod['distributorRecs'] = $query->result_array();
+
                     //echo $this->db->last_query();
                     $where = array('partnumber_id' => $prod['partnumber_id']);
                     $prod['dealerRecs'] = $this->selectRecords('partdealervariation', $where);
@@ -253,6 +259,8 @@ class Order_M extends Master_M {
         return $couponProducts;
     }
 
+    // JLB 01-10-18
+    // WHY does this not support adding things again and just incrementing the quantity?
     public function addProductToOrder($partNumber, $orderId, $qty, $part_id, $fitment = null) {
         $where = array('order_id' => $orderId, 'product_sku' => $partNumber);
         if (!$this->recordExists('order_product', $where)) {
@@ -285,29 +293,43 @@ class Order_M extends Master_M {
             
             $this->createRecord('order_product', $data, FALSE);
 
-            $order = $this->selectRecord('order', array('id' => $orderId));
-            $shippingAdd = $this->getOrder($orderId);
-            
-            $where1 = array('order_id' => $orderId);
-            $products = $this->selectRecords('order_product', $where1);
-
-            $grandTotal = 0;
-            foreach( $products as $productData ) {
-                if( $productData['status'] != 'Refunded' ) {
-                    $grandTotal += $productData['price'];
-                }
+        } else {
+            $query = $this->db->query("Select * From order_product where order_id = ? and product_sku = ?", array($orderId, $partNumber));
+            $matches = $query->result_array();
+            $match = $matches[0];
+            // in this instance, we have a match on the product...
+            // I am baffled why I can't just incremnet these things??
+            $data = json_decode($match[0]["distributor"], true);
+            if (array_key_exists("qty", $data)) {
+                $data["qty"] += $qty;
+            } else if (array_key_exists("qty", $data[0])) {
+                $data[0]["qty"] += $qty;
             }
-            if( @$shippingAdd['shipping_state'] && $shippingAdd['shipping_state'] != '' ) {
-                $tax = $this->calculateTax($shippingAdd['shipping_state'], ($grandTotal));
-            } else {
-                $tax = 0;
-            }
-            //$tax = $this->calculateTax($shippingAdd['shipping_state'], ($order['sales_price'] + ($data['price'])));
-            
-            $this->updateRecord('order', array('sales_price' => $grandTotal, 'tax' => $tax), array('id' => $orderId), FALSE);
-
-            return true;
+            $this->db->query("Update order_product set qty = qty + ?, distributor = ? where order_id = ? and product_sku = ?", array($qty, json_encode($data), $orderId, $partNumber));
         }
+
+        $order = $this->selectRecord('order', array('id' => $orderId));
+        $shippingAdd = $this->getOrder($orderId);
+
+        $where1 = array('order_id' => $orderId);
+        $products = $this->selectRecords('order_product', $where1);
+
+        $grandTotal = 0;
+        foreach( $products as $productData ) {
+            if( $productData['status'] != 'Refunded' ) {
+                $grandTotal += $productData['price'];
+            }
+        }
+        if( @$shippingAdd['shipping_state'] && $shippingAdd['shipping_state'] != '' ) {
+            $tax = $this->calculateTax($shippingAdd['shipping_state'], ($grandTotal));
+        } else {
+            $tax = 0;
+        }
+        //$tax = $this->calculateTax($shippingAdd['shipping_state'], ($order['sales_price'] + ($data['price'])));
+
+        $this->updateRecord('order', array('sales_price' => $grandTotal, 'tax' => $tax), array('id' => $orderId), FALSE);
+
+        return true;
     }
 
     public function getPartIdByPartNumber($partNumber) {

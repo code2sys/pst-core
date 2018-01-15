@@ -6,6 +6,7 @@ class CronJobHourly extends AbstractCronJob
 {
 	public function runJob()
 	{
+	    $this->fixLightspeedPartSearch();
         $this->fixVideos();
         $this->fixNullManufacturers();
         $this->fixBrandSlugs();
@@ -14,6 +15,11 @@ class CronJobHourly extends AbstractCronJob
         $this->fixPendingEBay();
 		$this->documentGeneration();
 	}
+
+	public function fixLightspeedPartSearch() {
+        $this->db->query("update partcategory join partpartnumber using (part_id) join partvariation using (partnumber_id)  set partvariation.from_lightspeed = 0;");
+        $this->db->query("update partvariation join lightspeedpart using (partvariation_id) left join partpartnumber using (partnumber_id) left join partcategory using (part_id) set partvariation.from_lightspeed = 1 where partcategory.partcategory_id is null;");
+    }
 
 	public function fixVideos() {
         $tables = array("brand_video","category_video", "motorcycle_video", "part_video", "top_videos");
@@ -43,6 +49,7 @@ class CronJobHourly extends AbstractCronJob
                 try {
                     $this->load->model("Lightspeed_m");
                     $this->Lightspeed_m->get_major_units(); // that should fetch all those things, great.
+                    $this->Lightspeed_m->get_parts(); // that should fetch all those things, great.
                 } catch (Exception $e) {
                     $error_string = $e->getMessage();
                     if ($e->getMessage() != "Lightspeed credentials not found.") {
