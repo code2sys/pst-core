@@ -18,10 +18,10 @@
                               <?php if ($val['image'] != ''): ?>
 							<img src="/media/<?php echo $val['image'];?>">
                             <?php endif; ?>
+                            </div>
                                 <div class="labelbox">
                                     <span class=""><?php echo $val['name'];?></span>
                                 </div>
-						  </div>
 						</a></li>
 
                     <?php } ?>
