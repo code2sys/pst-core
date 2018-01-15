@@ -390,7 +390,7 @@ foreach ($title1 as $k => $v) {
                         <div class="brndimg">
                             <h1 class='mn'>
                 <?php if (@$brandMain['image']): ?>
-                                    <img src="<?php echo jsite_url('/media/' . $brandMain['image']); ?>">
+                                    <img src="<?php echo jsite_url('/media/' . $brandMain['image']); ?>"><br/>
                     <?php endif; ?>
     <?php echo trim($disTitle); ?>
                             </h1>
