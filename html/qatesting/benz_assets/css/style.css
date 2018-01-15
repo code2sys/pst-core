@@ -414,12 +414,16 @@ a.ftrimg1 {
     margin: 2px 0 0px;
     line-height: 30px;
 }
+
+#brandpagegrid ul.lstng,
 .featured-listings .panel-body ul.lstng {
     width: 100%;
     float: left;
     margin: 0;
     padding: 10px 0;
 }
+
+#brandpagegrid ul.lstng li,
 .featured-listings .panel-body ul.lstng li {
     width: 18%;
     padding: 20px 10px;
@@ -432,6 +436,8 @@ a.ftrimg1 {
 .featured-listings .panel-body ul.lstng#top-video li {
     width: 31%;
 }
+
+#brandpagegrid ul.lstng li a.brand-name,
 .featured-listings .panel-body ul.lstng li a.brnd-nm {
     font-size: 18px;
     color: #9c9c9c;
@@ -439,9 +445,11 @@ a.ftrimg1 {
     float: left;
 	line-height:normal;
 }
+#brandpagegrid ul.lstng li a.brnd-nm:hover ,
 .featured-listings .panel-body ul.lstng li a.brnd-nm:hover {
     color: #9c9c9c !important;
 }
+#brandpagegrid ul.lstng li span.bn ,
 .featured-listings .panel-body ul.lstng li span.bn {
     width: 100%;
     display: block;
@@ -449,18 +457,24 @@ a.ftrimg1 {
     font-size: 15px;
     margin: 15px 0 10px 0;
 }
+
+#brandpagegrid ul.lstng li a img,
 .featured-listings .panel-body ul.lstng li a img {
     max-width: 100%;
     max-height: 120px;
 }
 
+#brandpagegrid ul.lstng li.ftrdb,
 #our_top_brands ul.lstng li.ftrdb {
     background-color: white;
 }
 
+#brandpagegrid a,
 #our_top_brands a {
     width: 100%;
 }
+
+#brandpagegrid img, 
 #our_top_brands img {
     max-width: 100%;
     max-height: 120px;
@@ -471,12 +485,16 @@ a.ftrimg1 {
     margin-left: auto;
     margin-right: auto;
 }
+
+#brandpagegrid .spannerbox,
 #our_top_brands .spannerbox {
     height: 120px;
     overflow: hidden;
     position: relative;
     text-align: center;
 }
+
+#brandpagegrid .labelbox,
 #our_top_brands .labelbox {
     font-weight: bold;
     font-size: 16px;
