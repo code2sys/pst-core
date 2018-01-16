@@ -179,7 +179,7 @@
                 // OK, we need to make the table refresh
                 if (data.success) {
                     // we just need to refresh the table
-                    $(".tabular_data table").DataTable().ajax.reload();
+                    $(".tabular_data table").DataTable().ajax.reload(null, false);
                 } else {
                     // throw the error.
                     alert("Error: " + data.error_message);
