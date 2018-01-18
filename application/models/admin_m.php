@@ -748,7 +748,12 @@ class Admin_M extends Master_M {
             }
         }
 
+
         $CI =& get_instance();
+        if (defined("ENABLE_LIGHTSPEED") && ENABLE_LIGHTSPEED) {
+            $this->load->model("lightspeed_m");
+            $this->lightspeed_m->partPriceFix();
+        }
         $this->load->model('cron/cronjobhourly', 'TheCronJob');
         $this->TheCronJob->fixNullManufacturers();
         $this->TheCronJob->fixBrandSlugs();
