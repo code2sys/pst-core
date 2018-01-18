@@ -15,6 +15,14 @@ if (!defined('BASEPATH'))
 
 class Lightspeed_M extends Master_M {
 
+    public function partPriceFix() {
+        // fix the price if there is a current_active_price
+        $this->db->query("update partnumber join partdealervariation using (partnumber_id) join lightspeedpart using (partvariation_id) set partnumber.price = lightspeedpart.current_active_price, partdealervariation.price = lightspeedpart.current_active_price, partnumber.dealer_sale = lightspeedpart.current_active_price where lightspeedpart.current_active_price > 0 and partdealervariation.quantity_available > 0;");
+
+        // fix the cost if there is a cost
+        $this->db->query("update partnumber join partdealervariation using (partnumber_id) join lightspeedpart using (partvariation_id) set partnumber.cost = lightspeedpart.cost, partdealervariation.cost = lightspeedpart.current_active_price where lightspeedpart.cost > 0 and partdealervariation.quantity_available > 0;");
+    }
+
     public $headers = array();
     public $cred = array();
     public $serverUrl = 'https://int.LightspeedADP.com/lsapi/';
