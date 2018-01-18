@@ -3019,6 +3019,11 @@ class Parts_M extends Master_M {
             // print_r($partvariations);
             // echo '</pre>';
         }
+
+        if (defined("ENABLE_LIGHTSPEED") && ENABLE_LIGHTSPEED) {
+            $this->load->model("lightspeed_m");
+            $this->lightspeed_m->partPriceFix();
+        }
     }
 
     public function markCloseoutDate() {
