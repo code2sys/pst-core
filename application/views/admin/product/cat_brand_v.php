@@ -80,10 +80,63 @@ $not_is_new = !isset($new) || !$new;
                                     <button type="button" id="searchbutton"><i class="fa fa-search"></i>&nbsp;Search Available Categories</button>
                                     </td>
                         </tr>
+                        <tr style="display: none" id="category_table_row">
+                                    <td></td>
+                                    <td colspan="2" id="category_table_cell"><table id="category_table" style="width: 100%"></table></td>
+                        </tr>
                     </table>
                     
                 </div>
             </div>
+
+
+<script type="application/javascript">
+(function() {
+    var existingCategories = <?php echo json_encode($existingCategories); ?> 
+    var existingCategoriesArray = null;
+    var categoryIdMap = {};
+
+
+    $("#searchbutton").on("click", function(e) {
+        e.preventDefault();
+        $("#searchbutton").hide();
+        $("#category_table_cell").html('<table id="category_table" style="width: 100%"></table>');
+        $("#category_table_row").show();
+
+        if (null == existingCategoriesArray) {
+            existingCategoriesArray = [];
+            for (var i = 0; i < existingCategories.length; i++) {
+                var id = existingCategories[i].category_id;
+                var long_name = existingCategories[i].long_name;
+                categoryIdMap[id] = long_name;
+                existingCategories.push(["<a href='#' class='addCategoryButton' data-categoryid='" + id + "'><i class='fa fa-plus'></i>&nbsp;Add</a>", long_name]);
+            }
+        }
+
+        // initialize the table...
+        $(".category_table").DataTable({
+            data: existingCategoriesArray,
+            columns : [
+                { title: "Action"},
+                { title: "Category"}
+            ]
+        });
+    });
+
+    $(document).on("click", ".addCategoryButton", function(e) {
+        e.preventDefault();
+
+        // Now, you have to figure out what the category is, and you have to add it...
+        var id = e.target.dataset.categoryid;
+        $("textarea[name='categories']").val($("textarea[name='categories']").val() + "\n" + categoryIdMap[id]);
+
+        // finally, destroy the table and hide this and show the button
+        $("#searchbutton").show();
+        $("#category_table_cell").html("");
+        $("#category_table_row").hide();
+    });
+})();
+</script>
 
 
 
