@@ -102,7 +102,7 @@ $not_is_new = !isset($new) || !$new;
                 var id = existingCategories[i].category_id;
                 var long_name = existingCategories[i].long_name;
                 categoryIdMap[id] = long_name;
-                existingCategories.push(["<a href='#' class='addCategoryButton' data-categoryid='" + id + "'><i class='fa fa-plus'></i>&nbsp;Add</a>", long_name]);
+                existingCategoriesArray.push(["<a href='#' class='addCategoryButton' data-categoryid='" + id + "'><i class='fa fa-plus'></i>&nbsp;Add</a>", long_name]);
             }
 
             // // initialize the table...
