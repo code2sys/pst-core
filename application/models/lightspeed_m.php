@@ -328,7 +328,7 @@ class Lightspeed_M extends Master_M {
                 if($results) {
                     if ($results[0]["customer_set_price"] > 0) {
                         // OK, the customer set the price...so we can't do this...unless it matches exctly
-                        if ($bike->MSRP == $results[0]["retail_price"] && $bik->WebPrice == $results[0]["sale_price"]) {
+                        if ($bike->MSRP == $results[0]["retail_price"] && $bike->WebPrice == $results[0]["sale_price"]) {
                             $update_array["customer_set_price"] = 0;
                         } else {
                             $update_array["retail_price"] = $results[0]["retail_price"];
