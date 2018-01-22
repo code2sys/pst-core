@@ -96,14 +96,7 @@ $not_is_new = !isset($new) || !$new;
     var existingCategoriesArray = null;
     var categoryIdMap = {};
 
-
-    $("#searchbutton").on("click", function(e) {
-        e.preventDefault();
-        $("#searchbutton").hide();
-        $("#category_table_cell").html('<table id="category_table" style="width: 100%"></table>');
-        $("#category_table_row").show();
-
-        if (null == existingCategoriesArray) {
+        $(document).on("ready", function() {
             existingCategoriesArray = [];
             for (var i = 0; i < existingCategories.length; i++) {
                 var id = existingCategories[i].category_id;
@@ -111,17 +104,22 @@ $not_is_new = !isset($new) || !$new;
                 categoryIdMap[id] = long_name;
                 existingCategories.push(["<a href='#' class='addCategoryButton' data-categoryid='" + id + "'><i class='fa fa-plus'></i>&nbsp;Add</a>", long_name]);
             }
-        }
 
-        // initialize the table...
-        $(".category_table").DataTable({
-            data: existingCategoriesArray,
-            deferRender: true,
-            columns : [
-                { title: "Action"},
-                { title: "Category"}
-            ]
+            // initialize the table...
+            $(".category_table").DataTable({
+                data: existingCategoriesArray,
+                deferRender: true,
+                columns : [
+                    { title: "Action"},
+                    { title: "Category"}
+                ]
+            });
         });
+
+    $("#searchbutton").on("click", function(e) {
+        e.preventDefault();
+        $("#searchbutton").hide();
+        $("#category_table_row").show();
     });
 
     $(document).on("click", ".addCategoryButton", function(e) {
@@ -133,7 +131,6 @@ $not_is_new = !isset($new) || !$new;
 
         // finally, destroy the table and hide this and show the button
         $("#searchbutton").show();
-        $("#category_table_cell").html("");
         $("#category_table_row").hide();
     });
 })();
