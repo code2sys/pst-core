@@ -125,6 +125,8 @@ class Motorcycle_CI extends Welcome {
         // echo $id.'<br>';
         // echo $title;exit;
         if ($id == null) {
+            print "Title $title Title 1 $title1 stock code $stock_code id $id \n";
+            exit();
             redirect('welcome/benzProduct');
         }
 
