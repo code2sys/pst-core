@@ -414,9 +414,11 @@ class Adminproduct extends Admin {
                 print_r($categories);
                 foreach ($categories as $c) {
                     $c = trim($c);
-                    $seen[] = strtolower($c);
-                    $c = $this->Portalmodel->getOrCreateCategory($c);
-                    $this->Portalmodel->addPartCategory($id, $c);
+                    if ($c != "") {
+                        $seen[] = strtolower($c);
+                        $c = $this->Portalmodel->getOrCreateCategory($c);
+                        $this->Portalmodel->addPartCategory($id, $c);    
+                    }
                 }
 
                 // now, you have to remove them...
@@ -456,6 +458,8 @@ class Adminproduct extends Admin {
 
         $this->_mainData['product_categories'] = $this->Portalmodel->getPartCategories($id);
         $this->_mainData['product_brand'] = $this->Portalmodel->getPartBrand($id);
+        $query = $this->db->query("Select category_id, long_name from category order by long_name");
+        $this->_mainData['existingCategories'] = $query->result_array();
 
         $this->_mainData["part_id"] = $id;
         $this->setNav('admin/nav_v', 2);
