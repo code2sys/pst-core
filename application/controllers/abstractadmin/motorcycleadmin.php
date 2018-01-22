@@ -81,6 +81,8 @@ abstract class Motorcycleadmin extends Firstadmin
             $post = $this->input->post();
             $was_new = false;
 
+            $post["sku"] = trim($post["sku"]);
+
             if (is_null($id) || $id == 0) {
                 $was_new = true;
                 // we need to assemble the title...
