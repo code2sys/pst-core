@@ -414,9 +414,11 @@ class Adminproduct extends Admin {
                 print_r($categories);
                 foreach ($categories as $c) {
                     $c = trim($c);
-                    $seen[] = strtolower($c);
-                    $c = $this->Portalmodel->getOrCreateCategory($c);
-                    $this->Portalmodel->addPartCategory($id, $c);
+                    if ($c != "") {
+                        $seen[] = strtolower($c);
+                        $c = $this->Portalmodel->getOrCreateCategory($c);
+                        $this->Portalmodel->addPartCategory($id, $c);    
+                    }
                 }
 
                 // now, you have to remove them...
