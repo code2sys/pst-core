@@ -91,30 +91,30 @@ $not_is_new = !isset($new) || !$new;
 
 
 <script type="application/javascript">
+var existingCategories = <?php echo json_encode($existingCategories); ?> 
+var existingCategoriesArray = null;
+var categoryIdMap = {};
+
 (function() {
-    var existingCategories = <?php echo json_encode($existingCategories); ?> 
-    var existingCategoriesArray = null;
-    var categoryIdMap = {};
+    $(document).on("ready", function() {
+        existingCategoriesArray = [];
+        for (var i = 0; i < existingCategories.length; i++) {
+            var id = existingCategories[i].category_id;
+            var long_name = existingCategories[i].long_name;
+            categoryIdMap[id] = long_name;
+            existingCategoriesArray.push(["<a href='#' class='addCategoryButton' data-categoryid='" + id + "'><i class='fa fa-plus'></i>&nbsp;Add</a>", long_name]);
+        }
 
-        $(document).on("ready", function() {
-            existingCategoriesArray = [];
-            for (var i = 0; i < existingCategories.length; i++) {
-                var id = existingCategories[i].category_id;
-                var long_name = existingCategories[i].long_name;
-                categoryIdMap[id] = long_name;
-                existingCategoriesArray.push(["<a href='#' class='addCategoryButton' data-categoryid='" + id + "'><i class='fa fa-plus'></i>&nbsp;Add</a>", long_name]);
-            }
-
-            // initialize the table...
-            $(".category_table").DataTable({
-                data: existingCategoriesArray,
-                deferRender: true,
-                columns : [
-                    { title: "Action"},
-                    { title: "Category"}
-                ]
-            });
+        // initialize the table...
+        $(".category_table").DataTable({
+            data: existingCategoriesArray,
+            deferRender: true,
+            columns : [
+                { title: "Action"},
+                { title: "Category"}
+            ]
         });
+    });
 
     $("#searchbutton").on("click", function(e) {
         e.preventDefault();
