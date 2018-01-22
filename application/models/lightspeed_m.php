@@ -248,7 +248,7 @@ class Lightspeed_M extends Master_M {
         $valid_count = 0;
         $crs_trim_matches = 0;
 
-        $ts = time();
+        $ts = date("Y-m-d H:i:s");
         foreach($dealers as $dealer) {
             $string = "Unit/".$dealer->Cmf;
             $call = $this->call($string);
