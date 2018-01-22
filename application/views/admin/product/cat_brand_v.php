@@ -116,6 +116,7 @@ $not_is_new = !isset($new) || !$new;
         // initialize the table...
         $(".category_table").DataTable({
             data: existingCategoriesArray,
+            deferRender: true,
             columns : [
                 { title: "Action"},
                 { title: "Category"}
