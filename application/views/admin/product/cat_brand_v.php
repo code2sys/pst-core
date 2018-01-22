@@ -105,15 +105,15 @@ $not_is_new = !isset($new) || !$new;
                 existingCategoriesArray.push(["<a href='#' class='addCategoryButton' data-categoryid='" + id + "'><i class='fa fa-plus'></i>&nbsp;Add</a>", long_name]);
             }
 
-            // // initialize the table...
-            // $(".category_table").DataTable({
-            //     data: existingCategoriesArray,
-            //     deferRender: true,
-            //     columns : [
-            //         { title: "Action"},
-            //         { title: "Category"}
-            //     ]
-            // });
+            // initialize the table...
+            $(".category_table").DataTable({
+                data: existingCategoriesArray,
+                deferRender: true,
+                columns : [
+                    { title: "Action"},
+                    { title: "Category"}
+                ]
+            });
         });
 
     $("#searchbutton").on("click", function(e) {

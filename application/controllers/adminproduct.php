@@ -456,7 +456,7 @@ class Adminproduct extends Admin {
 
         $this->_mainData['product_categories'] = $this->Portalmodel->getPartCategories($id);
         $this->_mainData['product_brand'] = $this->Portalmodel->getPartBrand($id);
-        $query = $this->db->query("Select category_id, long_name from category");
+        $query = $this->db->query("Select category_id, long_name from category order by long_name");
         $this->_mainData['existingCategories'] = $query->result_array();
 
         $this->_mainData["part_id"] = $id;
