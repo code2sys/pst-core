@@ -106,7 +106,7 @@ var categoryIdMap = {};
         }
 
         // initialize the table...
-        $(".category_table").DataTable({
+        $("#category_table").DataTable({
             data: existingCategoriesArray,
             deferRender: true,
             columns : [
