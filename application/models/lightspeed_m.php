@@ -248,7 +248,7 @@ class Lightspeed_M extends Master_M {
         $valid_count = 0;
         $crs_trim_matches = 0;
 
-        $ts = time();
+        $ts = date("Y-m-d H:i:s");
         foreach($dealers as $dealer) {
             $string = "Unit/".$dealer->Cmf;
             $call = $this->call($string);
@@ -323,8 +323,19 @@ class Lightspeed_M extends Master_M {
                     "status" => 1
                 );
 
+
                 $results = $this->selectRecords('motorcycle', $where);
                 if($results) {
+                    if ($results[0]["customer_set_price"] > 0) {
+                        // OK, the customer set the price...so we can't do this...unless it matches exctly
+                        if ($bike->MSRP == $results[0]["retail_price"] && $bike->WebPrice == $results[0]["sale_price"]) {
+                            $update_array["customer_set_price"] = 0;
+                        } else {
+                            $update_array["retail_price"] = $results[0]["retail_price"];
+                            $update_array["sale_price"] = $results[0]["sale_price"];
+                        }
+                    }
+
                     $where = array('sku' => $bike->StockNumber);
                     $motorcycle = $this->updateRecord('motorcycle', $update_array, $where, FALSE);
                     $valid_count++;

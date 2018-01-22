@@ -81,10 +81,17 @@ abstract class Motorcycleadmin extends Firstadmin
             $post = $this->input->post();
             $was_new = false;
 
+            $post["sku"] = trim($post["sku"]);
+
             if (is_null($id) || $id == 0) {
                 $was_new = true;
                 // we need to assemble the title...
                 $post["title"] = $post["year"] . " " . $post["make"] . " " . $post["model"] . (array_key_exists("color", $post) ? " " . $post["color"] : "");
+            }
+
+            // We need to get the current price 
+            if ($this->admin_m->isNewPrice($id, $post['retail_price'], $post['sale_price'])) {
+                $post["customer_set_price"] = 1;
             }
 
             $id = $this->admin_m->updateMotorcycle($id, $post);
