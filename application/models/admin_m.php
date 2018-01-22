@@ -2657,6 +2657,21 @@ class Admin_M extends Master_M {
         return $motorcycle_id;
     }
 
+    public function isNewPrice($motorcycle_id, $retail_price, $sale_price) {
+        $query = $this->db->query("Select retail_price, sale_price from motorcycle where id = ?", array($motorcycle_id));
+        $is_new = false;
+        foreach ($query->result_array() as $row) {
+            if ($row["retail_price"] != $retail_price) {
+                $is_new = true;
+            }
+            if ($row["sale_price"] != $sale_price) {
+                $is_new = true;
+            }
+        }
+
+        return $is_new;
+    }
+
     public function updateMotorcycleDesc($id, $post) {
         // echo '<pre>';
         // print_r(htmlentities($post['descr']));

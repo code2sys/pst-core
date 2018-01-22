@@ -87,6 +87,11 @@ abstract class Motorcycleadmin extends Firstadmin
                 $post["title"] = $post["year"] . " " . $post["make"] . " " . $post["model"] . (array_key_exists("color", $post) ? " " . $post["color"] : "");
             }
 
+            // We need to get the current price 
+            if ($this->admin_m->isNewPrice($id, $post['retail_price'], $post['sale_price'])) {
+                $post["customer_set_price"] = 1;
+            }
+
             $id = $this->admin_m->updateMotorcycle($id, $post);
 
             if ($was_new && array_key_exists("crs_trim_id", $_REQUEST) && $_REQUEST["crs_trim_id"] != "") {
