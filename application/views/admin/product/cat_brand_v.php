@@ -55,14 +55,14 @@ $not_is_new = !isset($new) || !$new;
                     <table width="100%" cellpadding="6">
                         <tr>
                             <td><b>Select Brand:</b></td>
-                            <td style="width:85%;"><?php echo form_dropdown('manufacturer', $manufacturers, array_key_exists("name", $product_brand) ? $product_brand["name"] : "", ''); ?></td>
+                            <td colspan=2 style="width:85%;"><?php echo form_dropdown('manufacturer', $manufacturers, array_key_exists("name", $product_brand) ? $product_brand["name"] : "", ''); ?></td>
                         </tr>
                         <tr>
                             <td><b>OR</b></td>
                         </tr>
                         <tr>
                             <td><b>New Brand:</b></td>
-                            <td style="width:85%;"><?php echo form_input(array('name' => 'new_manufacturer',
+                            <td colspan=2 style="width:85%;"><?php echo form_input(array('name' => 'new_manufacturer',
                                     'value' => "",
                                     'class' => 'text large',
                                     'placeholder' => 'New Brand')); ?></td>
@@ -76,8 +76,12 @@ $not_is_new = !isset($new) || !$new;
                                     'cols' => 80,
                                     'rows' => 10,
                                     'placeholder' => 'Product Categories'), '', " style='width: auto;' "); ?></td>
+                                    <td valign="top">
+                                    <button type="button" id="searchbutton"><i class="fa fa-search"></i>&nbsp;Search Available Categories</button>
+                                    </td>
                         </tr>
                     </table>
+                    
                 </div>
             </div>
 
