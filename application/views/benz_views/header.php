@@ -263,6 +263,11 @@ echo $CI->load->view("braintree", array(
 			var ajax_url = "<?php echo site_url('motorcycle_ci/filterMotorcycle');?>";
 			$.post( ajax_url, {'brands':brands,'years':years,'categories':categories,'vehicles':vehicles, 'condition':condition,'page':pg}, function( result ){
 				$('.prdts').html(result);
+				try {
+					$('html,body').animate({scrollTop: $(".mid.prdts").offset().top}, 100);
+				} catch(err) {
+					window.scrollTo(0, 0);
+				}
 				//alert(result);
 			});
 		}

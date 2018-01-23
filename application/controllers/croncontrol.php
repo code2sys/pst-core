@@ -436,7 +436,10 @@ class CronControl extends Master_Controller {
         $this->load->model("Lightspeed_m");
         $this->Lightspeed_m->repair_parts();
     }
-
+    public function getMajorUnits() {
+        $this->load->model("Lightspeed_m");
+        $this->Lightspeed_m->get_major_units();
+    }
 }
 
 /* End of file croncontrol.php */
