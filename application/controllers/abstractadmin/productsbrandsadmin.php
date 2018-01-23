@@ -909,8 +909,8 @@ abstract class Productsbrandsadmin extends Customeradmin {
         foreach ($rows as $p) {
             $new_rows[] = array(
                 $p["part_number"], $p["supplier_code"], $p["description"], $p["available"], $p["current_active_price"],
-                $p["cost"], date("m/d/Y g:i a T", strtotime($p["lightspeed_last_seen"])), $p["parvariation_id"] > 0 ? "Yes" : "No",
-                $p["parvariation_id"] > 0 || $p["eternalpartvariation_id"] > 0 ? "Yes" : "No"
+                $p["cost"], date("m/d/Y g:i a T", strtotime($p["lightspeed_last_seen"])), $p["partvariation_id"] > 0 ? "Yes" : "No",
+                $p["partvariation_id"] > 0 || $p["eternalpartvariation_id"] > 0 ? "Yes" : "No"
             );
         }
 
