@@ -894,7 +894,7 @@ abstract class Productsbrandsadmin extends Customeradmin {
         // Now, is there a filter?
         $filtered_count = $total_count;
         if ($where != "") {
-            $query = $this->db->query("Select count(*) from lightspeedpart) $where");
+            $query = $this->db->query("Select count(*) from lightspeedpart $where");
             foreach ($query->result_array() as $row) {
                 $filtered_count = $row["cnt"];
             }
