@@ -585,8 +585,11 @@ class Lightspeed_M extends Master_M {
         // Step #2: We should attempt to flag them as being eligible for product receiving. This is the easiest, best case: It's just like our regular functionality for product receiving.
         $progress = false;
         $id = 0;
-        global $LightspeedSupplierLookAside;
-        $stock_codes = "('" . implode("', '", array_keys($LightspeedSupplierLookAside)) . "')";
+        $CI =& get_instance();
+        $CI->load->model("Lightspeedsuppliercode_m");
+
+        $stock_codes = "('" . implode("', '", $CI->lightspeedsuppliercode_m->getDistributorSupplierCodes()) . "')";
+
         do {
             $progress = false;
 
@@ -604,7 +607,8 @@ class Lightspeed_M extends Master_M {
                     if ($id < $row["lightspeedpart_id"]) {
                         $id = $row["lightspeedpart_id"];
                     }
-                    $row["distributor"] = $LightspeedSupplierLookAside[$row["supplier_code"]];
+                    $m = $CI->lightspeedsuppliercode_m->query($row["supplier_code"]);
+                    $row["distributor"] = $m["distributor_name"];
                 }
 
                 // now, post them

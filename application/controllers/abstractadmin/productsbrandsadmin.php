@@ -789,4 +789,141 @@ abstract class Productsbrandsadmin extends Customeradmin {
         $this->parts_m->removeFinishedInventory();
     }
 
+
+    /*
+     * JLB 01-23-18
+     * These are for lightspeed.
+     */
+
+    public function products_lightspeedpart() {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        $this->_mainData['pagination'] = $this->load->view('admin/pagination/lightspeedpart_list_v', $this->_mainData, TRUE);
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/product/lightspeedpart_v', $this->_mainData);
+    }
+
+
+
+    public function products_lightspeed_suppliercodes() {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        $this->load->model("Lightspeedsuppliercode_m");
+        $this->_mainData['supplier_code_list'] = $this->Lightspeedsuppliercode_m->getAll();
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/products_lightspeed_suppliercodes_v', $this->_mainData);
+    }
+
+    public function save_products_lightspeed_suppliercodes()
+    {
+        if (!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+    }
+
+
+    /*
+     *                     <th><b>Part Number</b></th>
+                    <th><b>Supplier Code</b></th>
+                    <th><b>Description</b></th>
+                    <th><b># Available</b></th>
+                    <th><b>Price</b></th>
+                    <th><b>Cost</b></th>
+                    <th><b>Last Seen</b></th>
+                    <th><b>Store Product Match</b></th>
+                    <th><b>Distributor Part Match</b></th>
+     */
+
+    public function products_lightspeedpart_ajax() {
+        $columns = array(
+            "part_number",
+            "supplier_code",
+            "description",
+            "available",
+            "current_active_price",
+            "cost",
+            "lightspeed_last_seen",
+            "partvariation_id",
+            "eternalpartvariation_id"
+        );
+
+        $length = array_key_exists("length", $_REQUEST) ? $_REQUEST["length"] : 500;
+        $start = array_key_exists("start", $_REQUEST) ? $_REQUEST["start"] : 0;
+
+        $order_string = "order by part_number asc ";
+
+        if (array_key_exists("order", $_REQUEST) && is_array($_REQUEST["order"]) && count($_REQUEST["order"]) > 0) {
+            // OK, there's a separate order string...
+            $order_string = "order by ";
+            $orderings = $_REQUEST["order"];
+            if (count($orderings) == 0) {
+                $order_string .= " part_number asc";
+            } else {
+                for ($i = 0; $i < count($orderings); $i++) {
+                    if ($i > 0) {
+                        $order_string .= ", ";
+                    }
+
+                    $field = $columns[$orderings[$i]["column"]];
+                    $order_string .=  $field . " " . $orderings[$i]["dir"];
+                }
+            }
+        }
+
+        // Now, we need to do a similar thing for searching lightspeed part table...
+        $filter = (array_key_exists("search", $_REQUEST) && array_key_exists("value", $_REQUEST["search"]) ? $_REQUEST["search"]["value"] : "");
+
+        $this->load->helper("jonathan");
+
+        $where = jonathan_generate_likes(array("part_number",
+            "supplier_code",
+            "description",
+            "available",
+            "current_active_price",
+            "cost"), $filter, "WHERE");
+
+        $total_count = 0;
+        $query = $this->db->query("Select count(*) as cnt from lightspeedpart");
+        foreach ($query->result_array() as $row) {
+            $total_count = $row['cnt'];
+        }
+
+        // Now, is there a filter?
+        $filtered_count = $total_count;
+        if ($where != "") {
+            $query = $this->db->query("Select count(*) from lightspeedpart) $where");
+            foreach ($query->result_array() as $row) {
+                $filtered_count = $row["cnt"];
+            }
+        }
+
+        // Finally, run it!
+        $query = $this->db->query("Select * from lightspeedpart  $where $order_string limit $length offset $start ");
+        $rows = $query->result_array();
+
+        // Now, order them...
+        $new_rows = array();
+        foreach ($rows as $p) {
+            $new_rows[] = array(
+                $p["part_number"], $p["supplier_code"], $p["description"], $p["available"], $p["current_active_price"],
+                $p["cost"], date("m/d/Y g:i a T", strtotime($p["lightspeed_last_seen"])), $p["parvariation_id"] > 0 ? "Yes" : "No",
+                $p["parvariation_id"] > 0 || $p["eternalpartvariation_id"] > 0 ? "Yes" : "No"
+            );
+        }
+
+        print json_encode(array(
+            "data" => $new_rows,
+            "draw" => array_key_exists("draw", $_REQUEST) ? $_REQUEST["draw"] : 0,
+            "recordsTotal" => $total_count,
+            "recordsFiltered" => $filtered_count,
+            "limit" => $length,
+            "offset" => $start,
+            "order_string" => $order_string,
+            "search" => $s
+        ));
+    }
 }
