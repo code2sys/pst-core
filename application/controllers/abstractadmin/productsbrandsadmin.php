@@ -800,7 +800,6 @@ abstract class Productsbrandsadmin extends Customeradmin {
             redirect('');
         }
 
-        $this->_mainData['pagination'] = $this->load->view('admin/pagination/lightspeedpart_list_v', $this->_mainData, TRUE);
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/product/lightspeedpart_v', $this->_mainData);
     }
