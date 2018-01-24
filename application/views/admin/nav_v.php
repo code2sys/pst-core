@@ -78,6 +78,14 @@ if (!is_null($pageIndex) && $pageIndex < 9)
                         <li><a href="<?php echo base_url('/adminvault/vault_images'); ?>" ><i class="fa fa-motorcycle"></i>&nbsp;Vault Gallery</a></li>
                     <?php } ?>
                     <?php endif; ?>
+                    <?php if (defined('ENABLE_LIGHTSPEED') && ENABLE_LIGHTSPEED): ?>
+                        <?php if(in_array('products', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
+                            <li><a href="<?php echo base_url('/admin/products_lightspeedpart'); ?>"><i class="fa fa-cube"></i>&nbsp;Lightspeed Parts</a></li>
+                        <?php } ?>
+                        <?php if(in_array('products', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
+                            <li><a href="<?php echo base_url('/admin/products_lightspeed_suppliercodes'); ?>"><i class="fa fa-cube"></i>&nbsp;Lightspeed Supplier Codes</a></li>
+                        <?php } ?>
+                    <?php endif; ?>
 
                     <!--<li><a href="<?php echo base_url('/admin/wishlists'); ?>" ><i class="fa fa-magic"></i>&nbsp;Wishlist</a></li> -->
                     <!--<li><a href="<?php echo base_url('/admin/closeout_rules'); ?>" ><i class="fa fa-cubes"></i>&nbsp;Closeout Schedule</a></li>-->
