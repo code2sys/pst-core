@@ -46,27 +46,12 @@ if (!isset($no_fify)) {
                 </a>
                 <a class="<?php if (!$no_fify): ?>fify<?php endif; ?>" href="<?php echo base_url(strtolower($recently['type']) . '/' . $recently['url_title'] . '/' . $recently['sku']); ?>"><h1 class="head-txt"><?php echo $recently['title']; ?></h1></a>
                 <!--<p><?php echo $recently['title']; ?></p>-->
-                <?php if( $recently['call_on_price'] == '1' ||  ($motorcycle['retail_price'] == 0 && $motorcycle['sale_price'] == 0) ) { ?>
-                    <p class="cfp">Call For Price</p>
-                    <?php
-                } else {
-                    if ($recently['sale_price'] > 0 && $recently['sale_price'] !== "0.00" && $recently['sale_price'] != $recently['retail_price']) { ?>
-                        <?php if ($motorcycle['retail_price'] > 0): ?>
-                        <p>Retail Price: &nbsp; <span
-                                class="strikethrough">$<?php echo number_format($recently['retail_price'], 2); ?></span>
-                        </p>
-                            <?php endif; ?>
-                        <p>Sale Price: &nbsp; &nbsp;<span
-                                class="redtext">$<?php echo number_format($recently['sale_price'], 2); ?></span></p>
-                    <?php } else { ?>
-                        <p>Retail Price: &nbsp; $<?php echo number_format($recently['retail_price'], 2); ?></p>
-                        <?php
-                    }
-                    if ($recently["destination_charge"]) {
-                        echo "<sub>* Plus Applicable destination charge</sub>";
-                    }
-                }
-                ?>
+                <?php
+					$CI =& get_instance();
+					echo $CI->load->view("benz_views/pricing_widget", array(
+						"motorcycle" => $motorcycle
+					), true);
+				?>
             </div>
         <?php } ?>
     </div>
