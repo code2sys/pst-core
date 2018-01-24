@@ -307,7 +307,7 @@ class Motorcycle_M extends Master_M {
         $time_ordered = array();
         $seen = array();
         $ids = array_values($ids);
-        for ($i = count($ids) - 1; $i >= 0; $i--) {
+        for ($i = count($ids) - 1; $i >= max(0, count($ids) - $display_limit); $i--) {
             $id = $ids[$i];
             if (!array_key_exists($id, $seen)) {
                 $time_ordered[] = $id;
