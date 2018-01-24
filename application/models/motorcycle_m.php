@@ -299,22 +299,47 @@ class Motorcycle_M extends Master_M {
         return $query->result_array();
     }
 
+    // JLB 01-24-18 This typo just grates on me.
     public function getReccentlyMotorcycles( $ids ) {
-        $where = array();
-        $this->db->where_in('motorcycle.id',$ids);
-        $this->db->where("motorcycle.deleted", 0, false);
+        // JLB 01-24-18
+        // Those IDs are a list in time order of what's been viewed...we're just going to take the top 3
+        $display_limit = 3; // because this magic number otherwise is buried in a query...
+        $time_ordered = array();
+        $seen = array();
+        for ($i = count($ids) - 1; $i >= 0; $i--) {
+            $id = $ids[$i];
+            if (!array_key_exists($id, $seen)) {
+                $time_ordered[] = $id;
+                $seen[$id] = true;
+            }
+        }
+
+        if (count($time_ordered) == 0) {
+            return array(); // none!
+        }
+
+        // JLB 01-24-18
+        // I discovered that not only is this not ordered by latest first, it's not even ordered based on how you view things.
+        // Instead, it's ordered based on how new the bikes are....that makes no sense to me.
+
+        $query = $this->db->query("Select motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type, motorcycleimage.external from motorcycle left join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id left join (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA on motorcycleimageA.motorcycle_id = motorcycle.id left join motorcycleimage on motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number where motorcycle.deleted = 0 and motorcycle.id in (" . ($imp = implode(",", $time_ordered)) . ") group by motorcycle.id order by motorcycle.id(" . $imp . ") limit $display_limit" );
+        return $query->result_array();
+
+        // $where = array();
+        // $this->db->where_in('motorcycle.id',$ids);
+        // $this->db->where("motorcycle.deleted", 0, false);
         //$where = array('motorcycle.featured' => '1' );
-        $this->db->_protect_identifiers=false;
-        $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
-        $this->db->join(' (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA', 'motorcycleimageA.motorcycle_id = motorcycle.id', 'left');
-        $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number ', 'left');
-        $this->db->group_by('motorcycle.id');
-        $this->db->limit("3");
-        $this->db->order_by("motorcycle.id","DESC");
-        $this->db->select('motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type, motorcycleimage.external');
-        $this->db->_protect_identifiers=true;
-        $records = $this->selectRecords('motorcycle', $where);
-        return $records;
+//        $this->db->_protect_identifiers=false;
+//        $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
+        // $this->db->join(' (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA', 'motorcycleimageA.motorcycle_id = motorcycle.id', 'left');
+        // $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number ', 'left');
+        // $this->db->group_by('motorcycle.id');
+        // $this->db->limit(display_limit);
+        // $this->db->order_by("motorcycle.id","DESC");
+        // $this->db->select('motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type, motorcycleimage.external');
+        // $this->db->_protect_identifiers=true;
+        // $records = $this->selectRecords('motorcycle', $where);
+        // return $records;
     }
 
     public function saveEnquiry( $data ) {
