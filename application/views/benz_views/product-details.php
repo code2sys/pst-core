@@ -86,22 +86,12 @@ $stock_status_mode = $CI->_getStockStatusMode();
 			</div>
 			<div class="col-md-4 col-sm-5 pull-right bx-rit pdig sect-wdt">
 				<h3><?php echo $motorcycle['title'];?></h3>
-                <?php if( $motorcycle['call_on_price'] == '1' ||  ($motorcycle['retail_price'] == 0 && $motorcycle['sale_price'] == 0) ) { ?>
-                    <p class="cfp">Call For Price</p>
-                <?php } else {
-                    if ($motorcycle['sale_price']>0 && $motorcycle['sale_price'] !== "0.00" && $motorcycle["sale_price"] != $motorcycle["retail_price"]) { ?>
-                        <?php if ($motorcycle['retail_price'] > 0): ?>
-                            <p>Retail Price: &nbsp; <span class="strikethrough">$<?php echo $motorcycle['retail_price'];?></span></p>
-                        <?php endif; ?>
-                        <p>Sale Price: &nbsp; &nbsp;<span class="redtext">$<?php echo $motorcycle['sale_price'];?></span></p>
-                    <?php } else { ?>
-                        <p>Retail Price: &nbsp; $<?php echo $motorcycle['retail_price'];?></p>
-                        <?php
-                    }
-                    if ($motorcycle["destination_charge"]) {
-                        echo "<sub>* Plus Applicable destination charge</sub>";
-                    }
-                } ?>
+				<?php
+					$CI =& get_instance();
+					echo $CI->load->view("benz_views/pricing_widget", array(
+						"motorcycle" => $motorcycle
+					), true);
+				?>
 				<h4>Highlights</h4>
 				<hr>
 				<div class="dtal-txt">
