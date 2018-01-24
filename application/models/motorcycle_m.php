@@ -322,8 +322,8 @@ class Motorcycle_M extends Master_M {
         // JLB 01-24-18
         // I discovered that not only is this not ordered by latest first, it's not even ordered based on how you view things.
         // Instead, it's ordered based on how new the bikes are....that makes no sense to me.
-
-        $query = $this->db->query("Select motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type, motorcycleimage.external from motorcycle left join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id left join (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA on motorcycleimageA.motorcycle_id = motorcycle.id left join motorcycleimage on motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number where motorcycle.deleted = 0 and motorcycle.id in (" . ($imp = implode(",", $time_ordered)) . ") group by motorcycle.id order by motorcycle.id(" . $imp . ") limit $display_limit" );
+        // https://stackoverflow.com/questions/4979424/sql-order-by-sequence-of-in-values-in-query
+        $query = $this->db->query("Select motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type, motorcycleimage.external from motorcycle left join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id left join (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA on motorcycleimageA.motorcycle_id = motorcycle.id left join motorcycleimage on motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number where motorcycle.deleted = 0 and motorcycle.id in (" . ($imp = implode(",", $time_ordered)) . ") group by motorcycle.id order by FIELD(`motorcycle`.`id`, " . $imp . ") limit $display_limit" );
         return $query->result_array();
 
         // $where = array();
