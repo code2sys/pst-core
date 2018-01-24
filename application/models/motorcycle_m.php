@@ -306,6 +306,7 @@ class Motorcycle_M extends Master_M {
         $display_limit = 3; // because this magic number otherwise is buried in a query...
         $time_ordered = array();
         $seen = array();
+        $ids = array_values($ids);
         for ($i = count($ids) - 1; $i >= 0; $i--) {
             $id = $ids[$i];
             if (!array_key_exists($id, $seen)) {

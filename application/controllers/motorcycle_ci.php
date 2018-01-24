@@ -139,6 +139,11 @@ class Motorcycle_CI extends Welcome {
 
         $this->_mainData['motorcycle'] = $this->motorcycle_m->getMotorcycle($id);
         $this->setMasterPageVars('title', @$this->_mainData['motorcycle']['title']);
+        if (array_key_exists("recentlyMotorcycle", $_SESSION)) {
+            $_SESSION["recentlyMotorcycle"] = array_values($_SESSION["recentlyMotorcycle"]);            
+        } else {
+            $_SESSION["recentlyMotorcycle"] = array();
+        }
         $_SESSION['recentlyMotorcycle'][] = $id;
 
 
