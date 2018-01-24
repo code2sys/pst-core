@@ -280,7 +280,7 @@ echo $CI->load->view("braintree", array(
 			   slideSpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 300; ?>,
 			   paginationSpeed : <?php echo defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 400; ?>,
 			   singleItem:true,
-			   autoPlay: true,
+			   autoPlay: <?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_SLIDER_SPEED : 5000; ?>,
 			   autoPlayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_SLIDER_SPEED : 1000; ?>
 		   });
 		  
