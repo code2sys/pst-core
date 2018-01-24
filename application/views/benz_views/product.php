@@ -161,21 +161,12 @@ $stock_status_mode = $CI->_getStockStatusMode();
                         <div class="mid-r-text">
                             <div class="mid-text-left">
                                 <h3><?php echo $motorcycle['title']; ?></h3>
-                                <?php if ($motorcycle['call_on_price'] == '1' || ($motorcycle['retail_price'] == 0 && $motorcycle['sale_price'] == 0) ) { ?>
-                                    <p class="cfp">Call For Price</p>
-                                <?php } else {
-                                    if ($motorcycle['sale_price']>0 && $motorcycle['sale_price']!=="0.00" && $motorcycle["sale_price"] != $motorcycle["retail_price"]) { ?>
-                                        <?php if ($motorcycle["retail_price"] > 0): ?>
-                                            <p>Retail Price: &nbsp; <span class="strikethrough">$<?php echo $motorcycle['retail_price']; ?></span><br>
-                                                <?php endif; ?>
-                                        Sale Price: &nbsp;&nbsp;&nbsp;&nbsp;<span class="redtext">$<?php echo $motorcycle['sale_price']; ?></span></p>
-                                     <?php } else { ?>
-                                        <p>Retail Price: &nbsp; $<?php echo $motorcycle['retail_price']; ?></p><?php
-                                    }
-                                    if ($motorcycle["destination_charge"]) {
-                                        ?><sub>* Plus Applicable destination charge</sub><?php
-                                    }
-                                } ?>
+                                <?php
+                                $CI =& get_instance();
+                                echo $CI->load->view("benz_views/pricing_widget", array(
+                                    "motorcycle" => $motorcycle
+                                ), true);
+                            ?>
                             </div>
                             <div class="mid-text-right">
                                 <p>condition :<span><?php echo $motorcycle['condition'] == '1' ? 'New' : 'Pre-Owned'; ?></span></p>
