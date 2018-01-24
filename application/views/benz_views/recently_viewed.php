@@ -49,7 +49,7 @@ if (!isset($no_fify)) {
                 <?php
 					$CI =& get_instance();
 					echo $CI->load->view("benz_views/pricing_widget", array(
-						"motorcycle" => $motorcycle
+						"motorcycle" => $recently
 					), true);
 				?>
             </div>
