@@ -276,57 +276,20 @@ echo $CI->load->view("braintree", array(
 	
 		$(document).ready(function() {
  
-		$("#owl-demo").owlCarousel({
+			$("#owl-demo").owlCarousel({
+				navigation : true,
+			   slideSpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 300; ?>,
+			   paginationSpeed : <?php echo defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 400; ?>,
+			   singleItem:true,
+			   autoPlay: true,
+			   autoPlayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_SLIDER_SPEED : 1000; ?>
+		   });
+		  
+		 });
 		 
-			  navigation : true,
-			  slideSpeed : 300,
-			  paginationSpeed : 400,
-			  singleItem:true
-		 
-		 
-		  });
-		 
-		});
-		
-		$(".brandsearch").keyup(function () {
-			_this = this;
-			// Show only matching TR, hide rest of them
-			$.each($(".brandsfilter").find(".brandfltr"), function () {
-				//console.log($(this).text());
-				if ($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) == -1)
-					$(this).hide();
-				else
-					$(this).show();
-			});
-		});
-	
-		$(document).ready(function() { 
-		  $("#homes-for-rent").owlCarousel({
-			items : 4,
-			lazyLoad : true,
-			navigation : true
-		  }); 
-		  $("#hotels-flats").owlCarousel({
-			items : 4,
-			lazyLoad : true,
-			navigation : true
-		  }); 
-		 
-		});
-		
-		$(document).ready(function() { 
-		  $("#homes-for-rent-1").owlCarousel({
-			items : 3,
-			lazyLoad : true,
-			navigation : true
-		  }); 
-		  $("#hotels-flats-1").owlCarousel({
-			items : 3,
-			lazyLoad : true,
-			navigation : true
-		  }); 
-		 
-		});
+		 // JLB 01-24-18
+		 // There used to be these references to "homes-for-rent" and "hotel-flats"...I think Benz just copied them in accidentally.
+ 
 	</script>
 	
 	<script type="text/javascript">
