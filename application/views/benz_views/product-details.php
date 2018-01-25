@@ -467,7 +467,8 @@ $stock_status_mode = $CI->_getStockStatusMode();
 			loop:true,
 			onSliderLoad: function() {
 				$('#image-gallery').removeClass('cS-hidden');
-			}
+			}, 
+			pause:<?php echo defined('MAJOR_UNIT_PAUSE_TIME') ? MAJOR_UNIT_PAUSE_TIME : 2000; ?>
 		});
 	});
     function showVideo(vidId, vidTit) {
