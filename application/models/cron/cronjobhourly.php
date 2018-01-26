@@ -6,14 +6,23 @@ class CronJobHourly extends AbstractCronJob
 {
 	public function runJob()
 	{
+        print "1\n";
 	    $this->fixLightspeedPartSearch();
+        print "2\n";
         $this->fixVideos();
+        print "3\n";
         $this->fixNullManufacturers();
+        print "4\n";
         $this->fixBrandSlugs();
+        print "5\n";
         $this->fixBrandLongNames();
+        print "6\n";
         $this->fixPendingLightspeed();
+        print "7\n";
         $this->fixPendingEBay();
+        print "8\n";
 		$this->documentGeneration();
+        print "9\n";
 	}
 
 	public function fixLightspeedPartSearch() {
