@@ -603,7 +603,7 @@ span.glyphicon-filter {
         margin:0 1.5px 2px !important;
         float:left;		
     }
-    .lslide img{
+    .lslide a{
         height:200px;
     }
     .dtal-txt label,
@@ -1305,7 +1305,7 @@ span.glyphicon-filter {
     .prod-ls .nav>li>a {
         margin:0 0 2px;
     }	
-    .lslide img{
+    .lslide a{
         height:200px;
     }
     .dtal-txt label,
@@ -2023,7 +2023,7 @@ span.glyphicon-filter {
         margin:0 0 2px;
     }
 
-    .lslide img{
+    .lslide a{
         height:300px;
     }
     .dtal-txt label,
@@ -2577,7 +2577,7 @@ span.glyphicon-filter {
         width:auto;
         margin-right:5px;
     }
-    .lslide img{
+    .lslide a{
         height:300px;
     }
     .dtal-txt label,
@@ -3264,7 +3264,7 @@ span.glyphicon-filter {
         width:auto;
         margin-right:5px;
     }
-    .lslide img{
+    .lslide a{
         height:300px;
     }
     .dtal-txt label,
