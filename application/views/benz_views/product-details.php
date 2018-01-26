@@ -461,7 +461,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 		var thumbItem = 9;
 		var screen_width = $(document).width();
 		
-		if (screen_width < 480 {
+		if (screen_width < 480) {
 			// mobile screen
 			thumbItem = 4;
 		} else if (screen_width < 640) {
