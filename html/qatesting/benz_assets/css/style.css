@@ -1270,7 +1270,7 @@ img.powerlogo-a {
 
 .lslide img {
 	/*width:100%;*/
-	max-height:484px;
+	max-height:389px; /* JLB 01-26-18: WHY is the box only 389px yet this was 484px??? */
     max-width: 100%;
     width: auto;
     height: auto;
