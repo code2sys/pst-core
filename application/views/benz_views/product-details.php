@@ -478,6 +478,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 		$('#image-gallery').lightSlider({
 			gallery:true,
 			item:1,
+			galleryMargin: 10,
 			thumbItem:thumbItem,
 			slideMargin: 0,
 			speed:500,
