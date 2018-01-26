@@ -457,10 +457,28 @@ $stock_status_mode = $CI->_getStockStatusMode();
 //			loop:true,
 //			keyPress:true
 //		});
+
+		var thumbItem = 9;
+		var screen_width = $(document).width();
+		
+		if (screen_width < 480 {
+			// mobile screen
+			thumbItem = 4;
+		} else if (screen_width < 640) {
+			// phablet
+			thumbItem = 5;
+		 } else if (screen_width < 768) {
+			 // tablet
+			 thumbItem = 6;
+		 } else if (screen_width < 1024) {
+			 // I don't know why
+			 thumbItem = 8;
+		 }
+
 		$('#image-gallery').lightSlider({
 			gallery:true,
 			item:1,
-			thumbItem:9,
+			thumbItem:thumbItem,
 			slideMargin: 0,
 			speed:500,
 			auto:true,
