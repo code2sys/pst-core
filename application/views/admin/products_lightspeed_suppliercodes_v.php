@@ -140,8 +140,22 @@ $success = $CI->session->flashdata("success");
         // We have to assemble that form..
         var $t = $("#supplier_codes_table tbody");
         for (var i = 0; i < supplierCodeList.length; i++) {
-            $t.append("<tr data-lightspeedsuppliercodeid='" + supplierCodeList[i].lightspeed_suppliercode_id + "'><td valign='top'>" + supplierCodeList[i].supplier_code + "</td><td valign='top'><select name='type_" + supplierCodeList[i].lightspeed_suppliercode_id + "' data-lightspeedsuppliercodeid='" + supplierCodeList[i].lightspeed_suppliercode_id + "'><option>Unmatched</option><option>Distributor</option><option>Brand</option></select><div class='brand_selector'>Brand: <select name='brand_id_" + supplierCodeList[i].lightspeed_suppliercode_id + "'>" + brand_option_string + "</select></div><div class='distributor_selector'>Distributor: <select name='distributor_id_" + supplierCodeList[i].lightspeed_suppliercode_id + "'>" + distributor_option_string + "</select></div></td></tr>");
+            $t.append("<tr data-lightspeedsuppliercodeid='" + supplierCodeList[i].lightspeed_suppliercode_id + "'><td valign='top'>" + supplierCodeList[i].supplier_code + "</td><td valign='top'><select name='type_" + supplierCodeList[i].lightspeed_suppliercode_id + "' data-lightspeedsuppliercodeid='" + supplierCodeList[i].lightspeed_suppliercode_id + "'><option>Unmatched</option><option>Distributor</option><option>Brand</option></select><div class='brand_selector for"+ supplierCodeList[i].lightspeed_suppliercode_id +"'>Brand: <select name='brand_id_" + supplierCodeList[i].lightspeed_suppliercode_id + "'>" + brand_option_string + "</select></div><div class='distributor_selector for"+ supplierCodeList[i].lightspeed_suppliercode_id +"'>Distributor: <select name='distributor_id_" + supplierCodeList[i].lightspeed_suppliercode_id + "'>" + distributor_option_string + "</select></div></td></tr>");
+            if (supplierCodeList[i].type == "Distributor") {
+                $(".brand_selector.for" + supplierCodeList[i].lightspeed_suppliercode_id).hide();
+                $("select[name='type_" + supplierCodeList[i].lightspeed_suppliercode_id + "'] option[value='Distributor").prop("selected", true);
+                $("select[name='distributor_id_" + supplierCodeList[i].lightspeed_suppliercode_id + "'] option[value='" + supplierCodeList[i].distributor_id + "']").prop("selected", true);
+            } else if (supplierCodeList[i].type == "Brand") {
+                $(".distributor_selector.for" + supplierCodeList[i].lightspeed_suppliercode_id).hide();
+                $("select[name='type_" + supplierCodeList[i].lightspeed_suppliercode_id + "'] option[value='Brand']").prop("selected", true);
+                $("select[name='brand_id_" + supplierCodeList[i].lightspeed_suppliercode_id + "'] option[value='" + supplierCodeList[i].brand_id + "']").prop("selected", true);
+            } else {
+                $(".distributor_selector.for" + supplierCodeList[i].lightspeed_suppliercode_id).hide();
+                $(".brand_selector.for" + supplierCodeList[i].lightspeed_suppliercode_id).hide();
+            }
         }
+
+
 
         // Bind something for the events...
 
