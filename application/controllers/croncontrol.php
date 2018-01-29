@@ -200,7 +200,7 @@ class CronControl extends Master_Controller {
     /*
      * This is to check for CRS migration
      */
-    public function checkForCRSMigration() {
+    public function checkForCRSMigration($debug = 0) {
         // Is there anything pending?
         $query = $this->db->query("select * from crspull_feed_log where status = 0");
         $results = $query->result_array();
@@ -221,6 +221,9 @@ class CronControl extends Master_Controller {
 
             // Now, you have to add each of those, in order...
             foreach ($crs_struct as $c) {
+                if ($debug > 0) {
+                    print "Requesting product line: " . $c["crs_machinetype"] . ", " . $c["crs_make_id"] . ", " . $c["year"] . "\n";
+                }
                 $this->addProductLine($c["crs_machinetype"], $c["crs_make_id"], "N", $c["year"], $c["year"]);
             }
 
