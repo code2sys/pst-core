@@ -57,21 +57,21 @@ class Motorcycle_CI extends Welcome {
         $this->renderMasterPage('benz_views/header.php', 'benz_views/index.php', $this->_mainData);
     }
 
-    public function benzProductSort($sort_number) {
+    public function benzProductSort($sort_number, $pre = 0) {
         if (!in_array($sort_number, array(1,2,3,4))) {
             $sort_number = 1;
         }
         $_SESSION["bikeControlSort"] = $sort_number;
-        header("Location: /Motorcycle_List");
+        header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
 
     }
 
-    public function benzProductShow($show_number) {
+    public function benzProductShow($show_number, $pre = 0) {
         if (!in_array($show_number, array(5, 10, 25, 50))) {
             $show_number = 5;
         }
         $_SESSION["bikeControlShow"] = $show_number;
-        header("Location: /Motorcycle_List");
+        header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
     }
 
     /*

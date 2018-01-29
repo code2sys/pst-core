@@ -49,11 +49,11 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
 -->
 <script type="application/javascript">
     $(document).on("change", "select[name='bikeControlShow']", function(e) {
-        window.location.href = "/Motorcycle_Show/" + $("select[name='bikeControlShow']").val();
+        window.location.href = "/Motorcycle_Show/" + $("select[name='bikeControlShow']").val() + <?php echo array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned" ? "'/1'" : "''"; ?>;
     });
 
     $(document).on("change", "select[name='bikeControlSort']", function(e) {
-        window.location.href = "/Motorcycle_Sort/" + $("select[name='bikeControlSort']").val();
+        window.location.href = "/Motorcycle_Sort/" + $("select[name='bikeControlSort']").val() + <?php echo array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned" ? "'/1'" : "''"; ?>;
     });
 
 </script>
