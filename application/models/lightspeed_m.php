@@ -300,7 +300,7 @@ class Lightspeed_M extends Master_M {
                     "lightspeed" => 1,
                     "lightspeed_flag" => 1,
                     "source" => "Lightspeed",
-                    "status" => 1
+                    "status" => $this->activeOnAdd() ? 1 : 0
                 );
 
                 $update_array = array(
@@ -319,8 +319,7 @@ class Lightspeed_M extends Master_M {
                     "destination_charge" => ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
                     "lightspeed" => 1,
                     "lightspeed_flag" => 1,
-                    "source" => "Lightspeed",
-                    "status" => 1
+                    "source" => "Lightspeed"
                 );
 
 
