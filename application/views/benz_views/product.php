@@ -48,12 +48,12 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
 
 -->
 <script type="application/javascript">
-    $(document).on("change", "select.bikeControlShow", function(e) {
-        window.location.href = "/Motorcycle_Show/" + $("select.bikeControlShow").val();
+    $(document).on("change", "select[name='bikeControlShow']", function(e) {
+        window.location.href = "/Motorcycle_Show/" + $("select[name='bikeControlShow']").val();
     });
 
-    $(document).on("change", "select.bikeControlSort", function(e) {
-        window.location.href = "/Motorcycle_Sort/" + $("select.bikeControlSort").val();
+    $(document).on("change", "select[name='bikeControlSort']", function(e) {
+        window.location.href = "/Motorcycle_Sort/" + $("select[name='bikeControlSort']").val();
     });
 
 </script>
