@@ -814,10 +814,25 @@ abstract class Productsbrandsadmin extends Customeradmin {
         // We need some settings - e.g., we have to have a lightspeed login set, lightspeed has to be enabled, and then we need a little control for the mode when lightspeed parts come in as active or inactive by default....
 
 
+
         $this->load->model("Lightspeedsuppliercode_m");
         $this->_mainData['supplier_code_list'] = $this->Lightspeedsuppliercode_m->getAll();
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/products_lightspeed_suppliercodes_v', $this->_mainData);
+    }
+
+    public function save_products_lightspeed_settings() {
+        if (!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        // There is exactly one setting right now...
+        $this->load->model("Lightspeed_m");
+        $this->Lightspeed_m->setActiveOnAdd($_REQUEST["lightspeed_active_load"]);
+        $this->session->Set_flashdata("success", "Settings updated successfully.");
+
+        // Redirect it...
+        header("Location: /admin/products_lightspeed_suppliercodes");
     }
 
     public function save_products_lightspeed_suppliercodes()

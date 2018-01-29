@@ -300,7 +300,7 @@ class Lightspeed_M extends Master_M {
                     "lightspeed" => 1,
                     "lightspeed_flag" => 1,
                     "source" => "Lightspeed",
-                    "status" => 1
+                    "status" => $this->activeOnAdd() ? 1 : 0
                 );
 
                 $update_array = array(
@@ -319,8 +319,7 @@ class Lightspeed_M extends Master_M {
                     "destination_charge" => ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
                     "lightspeed" => 1,
                     "lightspeed_flag" => 1,
-                    "source" => "Lightspeed",
-                    "status" => 1
+                    "source" => "Lightspeed"
                 );
 
 
@@ -741,5 +740,20 @@ class Lightspeed_M extends Master_M {
             "user" => $this->cred['Setting']['user'],
             "pass" => $this->cred['Setting']['pass']
         );
+    }
+
+    public function activeOnAdd() {
+        $query = $this->db->query("Select lightspeed_active_load from contact where id = 1");
+        $lightspeed_active_load = 0;
+
+        foreach ($query->result_array() as $row) {
+            $lightspeed_active_load = $row["lightspeed_active_load"];
+        }
+
+        return $lightspeed_active_load > 0;
+    }
+
+    public function setActiveOnAdd($setting = 0) {
+        $this->db->query("Update contact set lightspeed_active_load = ? where id = 1", array($setting));
     }
 }
