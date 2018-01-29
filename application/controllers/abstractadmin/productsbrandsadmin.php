@@ -844,6 +844,39 @@ abstract class Productsbrandsadmin extends Customeradmin {
             redirect('');
         }
 
+        $current_codes = $this->Lightspeedsuppliercode_m->getAll();
+
+        // Just loop and update them...
+        foreach ($current_codes as $c) {
+            $type = $_REQUEST["type_" . $c["lightspeed_suppliercode_id"]];
+            $brand_id = $_REQUEST["brand_id_" . $c["lightspeed_suppliercode_id"]];
+            $distributor_id = $_REQUEST["distributor_id_" . $c["lightspeed_suppliercode_id"]];
+
+            if ($brand_id == 0) {
+                $brand_id = null;
+            }
+            if ($distributor_id == 0) {
+                $distributor_id = null;
+            }
+
+            if (is_null($brand_id) && is_null($distributor_id)) {
+                $type = "Unmatched";
+            } else if ($type == "Brand" && is_null($brand_id)) {
+                $type = "Unmatched";
+            } else if ($type == "Distributor" && is_null($distributor_id)) {
+                $type = "Unmatched";
+            }
+
+            $this->db->query("Update lightspeed_suppliercode set type = ?, brand_id = ?, distributor_id = ? where lightspeed_suppliercode_id = ? limit 1", array($type, $brand_id, $distributor_id, $c["lightspeed_suppliercode_id"]));
+
+
+        }
+
+        $this->session->set_flashdata("success", "Supplier codes updated successfully.");
+
+        // Redirect it...
+        header("Location: /admin/products_lightspeed_suppliercodes");
+
     }
 
 
