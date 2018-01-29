@@ -2684,10 +2684,16 @@ class Admin_M extends Master_M {
     }
 
     public function updateMotorcycleDesc($id, $post) {
+
         // echo '<pre>';
         // print_r(htmlentities($post['descr']));
         // echo '</pre>';exit;
         $data = array('description' => $post['descr']);
+
+        if ($this->isNewDescription($id, $post["descr"])) {
+            $data["customer_set_description"] = 1;
+        }
+
         $where = array('id' => $id);
         $this->updateRecord('motorcycle', $data, $where, FALSE);
     }
