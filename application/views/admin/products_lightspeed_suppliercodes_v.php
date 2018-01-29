@@ -24,7 +24,7 @@ $success = $CI->session->flashdata("success");
             <h1><i class="fa fa-cubes"></i>&nbsp;Lightspeed Controls</h1>
         </div>
 
-        <br>
+        <div class="clear"></div>
 
         <!-- ERROR -->
         <?php if (@$error): ?>
