@@ -140,7 +140,7 @@ $success = $CI->session->flashdata("success");
         // We have to assemble that form..
         var $t = $("#supplier_codes_table tbody");
         for (var i = 0; i < supplierCodeList.length; i++) {
-            $t.append("<tr data-lightspeedsuppliercodeid='" + supplierCodeList[i].lightspeed_suppliercode_id + "'><td  style='border: 1px solid #ccc'  valign='top'>" + supplierCodeList[i].supplier_code + "</td><td style='border: 1px solid #ccc' valign='top'><select name='type_" + supplierCodeList[i].lightspeed_suppliercode_id + "' data-lightspeedsuppliercodeid='" + supplierCodeList[i].lightspeed_suppliercode_id + "'><option value='Unmatched'>Unmatched</option><option value='Distributor'>Distributor</option><option value='Brand'>Brand</option></select><div class='brand_selector for"+ supplierCodeList[i].lightspeed_suppliercode_id +"'>Brand: <select name='brand_id_" + supplierCodeList[i].lightspeed_suppliercode_id + "'>" + brand_option_string + "</select></div><div class='distributor_selector for"+ supplierCodeList[i].lightspeed_suppliercode_id +"'>Distributor: <select name='distributor_id_" + supplierCodeList[i].lightspeed_suppliercode_id + "'>" + distributor_option_string + "</select></div></td></tr>");
+            $t.append("<tr data-lightspeedsuppliercodeid='" + supplierCodeList[i].lightspeed_suppliercode_id + "'><td  style='border: 1px solid #ccc'  valign='top'>" + supplierCodeList[i].supplier_code + "</td><td style='border: 1px solid #ccc' valign='top'><select class='type_selector' name='type_" + supplierCodeList[i].lightspeed_suppliercode_id + "' data-lightspeedsuppliercodeid='" + supplierCodeList[i].lightspeed_suppliercode_id + "'><option value='Unmatched'>Unmatched</option><option value='Distributor'>Distributor</option><option value='Brand'>Brand</option></select><div class='brand_selector for"+ supplierCodeList[i].lightspeed_suppliercode_id +"'>Brand: <select name='brand_id_" + supplierCodeList[i].lightspeed_suppliercode_id + "'>" + brand_option_string + "</select></div><div class='distributor_selector for"+ supplierCodeList[i].lightspeed_suppliercode_id +"'>Distributor: <select name='distributor_id_" + supplierCodeList[i].lightspeed_suppliercode_id + "'>" + distributor_option_string + "</select></div></td></tr>");
             if (supplierCodeList[i].type == "Distributor") {
                 $(".brand_selector.for" + supplierCodeList[i].lightspeed_suppliercode_id).hide();
                 $("select[name='type_" + supplierCodeList[i].lightspeed_suppliercode_id + "'] option[value='Distributor").prop("selected", true);
@@ -155,7 +155,22 @@ $success = $CI->session->flashdata("success");
             }
         }
 
+        $(document).on("change", "select.type_selector", function(e) {
+            var lightspeed_suppliercode_id = e.target.dataset.lightspeedsuppliercodeid;
+            var value = $(e.targeT).val();
 
+            if (value == "Distributor") {
+                $(".distributor_selector.for" + lightspeed_suppliercode_id).show();
+                $(".brand_selector.for" + lightspeed_suppliercode_id).hide();
+            } else if (value == "Brand") {
+                $(".distributor_selector.for" + lightspeed_suppliercode_id).hide();
+                $(".brand_selector.for" + lightspeed_suppliercode_id).show();
+            } else {
+                $(".distributor_selector.for" + lightspeed_suppliercode_id).hide();
+                $(".brand_selector.for" + lightspeed_suppliercode_id).hide();
+            }
+
+        });
 
         // Bind something for the events...
 
