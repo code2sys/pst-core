@@ -105,7 +105,7 @@ class Motorcycle_M extends Master_M {
 //        return $records;
 //    }
 
-    public function getMotorcycles( $filter = array() , $limit = 6, $offset = 0) {
+    public function getMotorcycles( $filter = array() , $limit = 5, $offset = 0, $sort_order = 1) {
         $where = $this->buildWhere($filter);
         $this->db->_protect_identifiers=false;
         $this->db->join(' (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA', 'motorcycleimageA.motorcycle_id = motorcycle.id', 'left');
@@ -116,6 +116,31 @@ class Motorcycle_M extends Master_M {
         $this->db->group_by('motorcycle.id');
         $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name  as type, motorcycleimage.external', FALSE);
         $this->db->limit($limit, $offset);
+
+        switch($sort_order) {
+            case 1:
+                // Price High to Low
+                $this->db->order_by('If(sale_price = 0, retail_price, sale_price) desc');
+
+                break;
+
+            case 2:
+                // Price Low to High
+                $this->db->order_by('If(sale_price = 0, retail_price, sale_price) asc');
+
+                break;
+
+            case 3:
+                // Year New to Old
+                $this->db->order_by("motorcycle.year desc");
+                break;
+
+            case 4:
+                // Year Old to New
+                $this->db->order_by("motorcycle.year asc");
+                break;
+        }
+
         $records = $this->selectRecords('motorcycle', $where);
         $this->db->_protect_identifiers=true;
         return $records;
@@ -380,7 +405,7 @@ class Motorcycle_M extends Master_M {
         $this->db->where("motorcycle.status", 1, FALSE);
         $this->db->where("motorcycle.deleted", 0, FALSE);
         $this->db->select('count(id) as cnt', FALSE);
-        $this->db->limit('6');
+        // $this->db->limit('6');
         $record = $this->selectRecord('motorcycle', $where);
         return $record['cnt'];
     }
