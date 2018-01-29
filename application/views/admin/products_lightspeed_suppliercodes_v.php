@@ -157,7 +157,7 @@ $success = $CI->session->flashdata("success");
 
         $(document).on("change", "select.type_selector", function(e) {
             var lightspeed_suppliercode_id = e.target.dataset.lightspeedsuppliercodeid;
-            var value = $(e.targeT).val();
+            var value = $(e.target).val();
 
             if (value == "Distributor") {
                 $(".distributor_selector.for" + lightspeed_suppliercode_id).show();
