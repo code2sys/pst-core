@@ -60,4 +60,13 @@ class LightSpeedSupplierCode_M extends CI_Model {
             return $x["supplier_code"];
         }, $query->result_array());
     }
+
+    public function getBrands() {
+        return $this->db->query("Select brand_id, name from brand order by name")->result_array();
+    }
+
+    public function getDistributors() {
+        return $this->db->query("Select distributor_id, name from distributor where name != 'Lightspeed Feed' order by name")->result_array();
+    }
+
 }
