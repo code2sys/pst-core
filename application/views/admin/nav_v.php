@@ -80,10 +80,10 @@ if (!is_null($pageIndex) && $pageIndex < 9)
                     <?php endif; ?>
                     <?php if (defined('ENABLE_LIGHTSPEED') && ENABLE_LIGHTSPEED): ?>
                         <?php if(in_array('products', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
-                            <!-- <li><a href="<?php echo base_url('/admin/products_lightspeedpart'); ?>"><i class="fa fa-cube"></i>&nbsp;Lightspeed Parts</a></li> -->
+                             <li><a href="<?php echo base_url('/admin/products_lightspeedpart'); ?>"><i class="fa fa-cube"></i>&nbsp;Lightspeed Parts</a></li>
                         <?php } ?>
                         <?php if(in_array('products', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
-                            <!-- <li><a href="<?php echo base_url('/admin/products_lightspeed_suppliercodes'); ?>"><i class="fa fa-cube"></i>&nbsp;Lightspeed Supplier Codes</a></li> -->
+<!--                             <li><a href="--><?php //echo base_url('/admin/products_lightspeed_suppliercodes'); ?><!--"><i class="fa fa-cube"></i>&nbsp;Lightspeed Controls</a></li>-->
                         <?php } ?>
                     <?php endif; ?>
 

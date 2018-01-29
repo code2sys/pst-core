@@ -94,6 +94,10 @@ abstract class Motorcycleadmin extends Firstadmin
                 $post["customer_set_price"] = 1;
             }
 
+            if ($this->admin_m->isNewDescription($id, $post["description"])) {
+                $post["customer_set_description"] = 1;
+            }
+
             $id = $this->admin_m->updateMotorcycle($id, $post);
 
             if ($was_new && array_key_exists("crs_trim_id", $_REQUEST) && $_REQUEST["crs_trim_id"] != "") {

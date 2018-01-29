@@ -57,10 +57,34 @@ class Motorcycle_CI extends Welcome {
         $this->renderMasterPage('benz_views/header.php', 'benz_views/index.php', $this->_mainData);
     }
 
+    public function benzProductSort($sort_number, $pre = 0) {
+        if (!in_array($sort_number, array(1,2,3,4))) {
+            $sort_number = 1;
+        }
+        $_SESSION["bikeControlSort"] = $sort_number;
+        header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
+
+    }
+
+    public function benzProductShow($show_number, $pre = 0) {
+        if (!in_array($show_number, array(5, 10, 25, 50))) {
+            $show_number = 5;
+        }
+        $_SESSION["bikeControlShow"] = $show_number;
+        header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
+    }
+
     /*
      * This is the main Motorcycle_List page.
      */
     public function benzProduct() {
+        if (!array_key_exists("bikeControlSort", $_SESSION)) {
+            $_SESSION["bikeControlSort"] = 1;
+        }
+        if (!array_key_exists("bikeControlShow", $_SESSION)) {
+            $_SESSION["bikeControlShow"] = 5;
+        }
+
         // JLB 11-27-17
         // I think this is a problem with a default.
         if (!array_key_exists("fltr", $_REQUEST) && !array_key_exists("fltr", $_GET)) {
@@ -90,10 +114,10 @@ class Motorcycle_CI extends Welcome {
         $this->_mainData['brands'] = $this->motorcycle_m->getMotorcycleMake($filter);
         $this->_mainData['years'] = $this->motorcycle_m->getMotorcycleYear($filter);
         $this->_mainData['categories'] = $this->motorcycle_m->getMotorcycleCategory($filter);
-        $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter);
+        $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], 0, $_SESSION["bikeControlSort"]);
 
         $total = $this->motorcycle_m->getTotal($filter);
-        $this->_mainData['pages'] = ceil($total / 6);
+        $this->_mainData['pages'] = ceil($total / $_SESSION["bikeControlShow"]);
         $this->_mainData['fpages'] = $this->pages_m->getPages(1, 'footer');
         $recently = $_SESSION['recentlyMotorcycle'];
         $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
@@ -163,20 +187,27 @@ class Motorcycle_CI extends Welcome {
      * This is for the AJAX controller. It fetches things.
      */
     public function filterMotorcycle() {
+        if (!array_key_exists("bikeControlSort", $_SESSION)) {
+            $_SESSION["bikeControlSort"] = 1;
+        }
+        if (!array_key_exists("bikeControlShow", $_SESSION)) {
+            $_SESSION["bikeControlShow"] = 5;
+        }
+
         $this->load->model('motorcycle_m');
         $curPage = intVal($this->input->post("page") ? $this->input->post("page") : 0);
-        $offset = ($curPage * 6);
+        $offset = ($curPage * $_SESSION["bikeControlShow"]);
 
         $filter = $this->motorcycle_m->assembleFilterFromRequest(true);
 
         unset($filter['page']);
         // JLB 06-04-17
         // Why was there a separate one for getFilterMotorcycles?? As far as I can tell, it was to separate off the limit vs. offset.
-        $motorcycles['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, 6, $offset);
+        $motorcycles['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], $offset, $_SESSION["bikeControlSort"]);
 
 
         $total = $this->motorcycle_m->getTotal($filter);
-        $motorcycles['pages'] = ceil($total / 6);
+        $motorcycles['pages'] = ceil($total / $_SESSION["bikeControlShow"]);
         $motorcycles['page'] = $curPage + 1;
 
         $filteredProducts = $this->load->view('benz_views/filter-product.php', $motorcycles, true);

@@ -39,9 +39,25 @@ $stock_status_mode = $CI->_getStockStatusMode();
 
 <!--
 
-<?php print_r($filter); ?>
+<?php print_r($filter);
+
+$bikeControlShow = $_SESSION["bikeControlShow"];
+$bikeControlSort = $_SESSION["bikeControlSort"];
+
+?>
 
 -->
+<script type="application/javascript">
+    $(document).on("change", "select[name='bikeControlShow']", function(e) {
+        window.location.href = "/Motorcycle_Show/" + $("select[name='bikeControlShow']").val() + <?php echo array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned" ? "'/1'" : "'/0'"; ?>;
+    });
+
+    $(document).on("change", "select[name='bikeControlSort']", function(e) {
+        window.location.href = "/Motorcycle_Sort/" + $("select[name='bikeControlSort']").val() + <?php echo array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned" ? "'/1'" : "'/0'"; ?>;
+    });
+
+</script>
+
 
 <div class="sw filbar-bx">
     <div class="container_b">
@@ -133,6 +149,12 @@ $stock_status_mode = $CI->_getStockStatusMode();
         </div>			
         <!--here -->
         <div class="next">
+            <div class="bikeControlRow row">
+                <div class="col-md-6">Show <select name="bikeControlShow"><option <?php if ($bikeControlShow == 5): ?>selected="selected"<?php endif; ?>>5</option><option <?php if ($bikeControlShow == 10): ?>selected="selected"<?php endif; ?>>10</option><option <?php if ($bikeControlShow == 25): ?>selected="selected"<?php endif; ?>>25</option><option <?php if ($bikeControlShow == 50): ?>selected="selected"<?php endif; ?>>50</option></select> Results</div>
+                <div class="col-md-6">Sort By: <select name="bikeControlSort"><option value="1"  <?php if ($bikeControlSort == 1): ?>selected="selected"<?php endif; ?>>Price (High to Low)</option><option value="2" <?php if ($bikeControlSort == 2): ?>selected="selected"<?php endif; ?>>Price (Low to High)</option><option value="3" <?php if ($bikeControlSort == 3): ?>selected="selected"<?php endif; ?>>Year (New to Old)</option><option value="4" <?php if ($bikeControlSort == 4): ?>selected="selected"<?php endif; ?>>Year (Old to New)</option></select></div>
+            </div>
+
+
             <div class="mid prdts">
                 <?php foreach ($motorcycles as $motorcycle) {
 
