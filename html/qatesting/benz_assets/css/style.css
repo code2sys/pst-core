@@ -2091,3 +2091,7 @@ p.creditCar_b.loct a i{
     border: 1px solid #ccc;
 }
 
+.bikeControlRow.row {
+    margin: 0;
+}
+
