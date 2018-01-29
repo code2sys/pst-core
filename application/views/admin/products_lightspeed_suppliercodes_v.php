@@ -61,7 +61,7 @@ $success = $CI->session->flashdata("success");
                     <table width="100%" cellpadding="6">
 
                         <tr>
-                            <td><b>Initial Status for Imported Unites:</b></td>
+                            <td width="30%"><b>Initial Status for Imported Units:</b></td>
                             <td>
                                 <label><input type="radio" name="lightspeed_active_load" value="0" <?php if (!($c = $CI->Lightspeed_m->activeOnAdd())): ?>checked="checked"<?php endif; ?> /> Inactive</label>
                                 <label><input type="radio" name="lightspeed_active_load" value="1" <?php if ($c): ?>checked="checked"<?php endif; ?> /> Active</label>
