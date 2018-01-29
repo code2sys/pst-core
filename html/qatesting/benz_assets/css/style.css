@@ -2080,3 +2080,14 @@ p.creditCar_b.loct a i{
 .mypagination ul li.active a {
     background: #aaa;
 }
+
+.bikeControlRow {
+    background: #eee;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 0.25em;
+    font-size: 85%;
+    font-weight: bold;
+    border: 1px solid #ccc;
+}
+

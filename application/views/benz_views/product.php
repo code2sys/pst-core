@@ -133,6 +133,12 @@ $stock_status_mode = $CI->_getStockStatusMode();
         </div>			
         <!--here -->
         <div class="next">
+            <div class="bikeControlRow row">
+                <div class="col-md-6">Show <select name="bikeControlShow"><option>5</option><option>10</option><option>25</option><option>50</option></select> Results</div>
+                <div class="col-md-6">Sort By: <select name="bikeControlSort"><option value="1">Price (High to Low)</option><option value="2">Price (Low to High)</option><option value="3">Year (New to Old)</option><option value="4">Year (Old to New)</option></select></div>
+            </div>
+
+
             <div class="mid prdts">
                 <?php foreach ($motorcycles as $motorcycle) {
 
