@@ -814,10 +814,28 @@ abstract class Productsbrandsadmin extends Customeradmin {
         // We need some settings - e.g., we have to have a lightspeed login set, lightspeed has to be enabled, and then we need a little control for the mode when lightspeed parts come in as active or inactive by default....
 
 
+
         $this->load->model("Lightspeedsuppliercode_m");
         $this->_mainData['supplier_code_list'] = $this->Lightspeedsuppliercode_m->getAll();
+        $this->_mainData["brands"] = $this->Lightspeedsuppliercode_m->getBrands();
+        $this->_mainData["distributors"] = $this->Lightspeedsuppliercode_m->getDistributors();
+
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/products_lightspeed_suppliercodes_v', $this->_mainData);
+    }
+
+    public function save_products_lightspeed_settings() {
+        if (!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        // There is exactly one setting right now...
+        $this->load->model("Lightspeed_m");
+        $this->Lightspeed_m->setActiveOnAdd($_REQUEST["lightspeed_active_load"]);
+        $this->session->Set_flashdata("success", "Settings updated successfully.");
+
+        // Redirect it...
+        header("Location: /admin/products_lightspeed_suppliercodes");
     }
 
     public function save_products_lightspeed_suppliercodes()
@@ -825,6 +843,40 @@ abstract class Productsbrandsadmin extends Customeradmin {
         if (!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
+
+        $this->load->model("Lightspeedsuppliercode_m");
+        $current_codes = $this->Lightspeedsuppliercode_m->getAll();
+
+        // Just loop and update them...
+        foreach ($current_codes as $c) {
+            $type = $_REQUEST["type_" . $c["lightspeed_suppliercode_id"]];
+            $brand_id = $_REQUEST["brand_id_" . $c["lightspeed_suppliercode_id"]];
+            $distributor_id = $_REQUEST["distributor_id_" . $c["lightspeed_suppliercode_id"]];
+
+            if ($brand_id == 0) {
+                $brand_id = null;
+            }
+            if ($distributor_id == 0) {
+                $distributor_id = null;
+            }
+
+            if (is_null($brand_id) && is_null($distributor_id)) {
+                $type = "Unmatched";
+            } else if ($type == "Brand" && is_null($brand_id)) {
+                $type = "Unmatched";
+            } else if ($type == "Distributor" && is_null($distributor_id)) {
+                $type = "Unmatched";
+            }
+
+            $this->db->query("Update lightspeed_suppliercode set type = ?, brand_id = ?, distributor_id = ? where lightspeed_suppliercode_id = ? limit 1", array($type, $brand_id, $distributor_id, $c["lightspeed_suppliercode_id"]));
+
+
+        }
+
+        $this->session->set_flashdata("success", "Supplier codes updated successfully.");
+
+        // Redirect it...
+        header("Location: /admin/products_lightspeed_suppliercodes");
 
     }
 
