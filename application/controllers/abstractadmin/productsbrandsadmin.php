@@ -844,6 +844,7 @@ abstract class Productsbrandsadmin extends Customeradmin {
             redirect('');
         }
 
+        $this->load->model("Lightspeedsuppliercode_m");
         $current_codes = $this->Lightspeedsuppliercode_m->getAll();
 
         // Just loop and update them...
