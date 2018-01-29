@@ -817,6 +817,9 @@ abstract class Productsbrandsadmin extends Customeradmin {
 
         $this->load->model("Lightspeedsuppliercode_m");
         $this->_mainData['supplier_code_list'] = $this->Lightspeedsuppliercode_m->getAll();
+        $this->_mainData["brands"] = $this->Lightspeedsuppliercode_m->getBrands();
+        $this->_mainData["distributors"] = $this->Lightspeedsuppliercode_m->getDistributors();
+
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/products_lightspeed_suppliercodes_v', $this->_mainData);
     }
