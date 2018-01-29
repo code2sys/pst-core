@@ -742,4 +742,19 @@ class Lightspeed_M extends Master_M {
             "pass" => $this->cred['Setting']['pass']
         );
     }
+
+    public function activeOnAdd() {
+        $query = $this->db->query("Select lightspeed_active_load from contact where id = 1");
+        $lightspeed_active_load = 0;
+
+        foreach ($query->result_array() as $row) {
+            $lightspeed_active_load = $row["lightspeed_active_load"];
+        }
+
+        return $lightspeed_active_load > 0;
+    }
+
+    public function setActiveOnAdd($setting = 0) {
+        $this->db->query("Update contact set lightspeed_active_load = ? where id = 1", array($setting));
+    }
 }
