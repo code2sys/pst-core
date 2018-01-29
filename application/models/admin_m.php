@@ -2672,11 +2672,28 @@ class Admin_M extends Master_M {
         return $is_new;
     }
 
+    public function isNewDescription($motorcycle_id, $description) {
+        $query = $this->db->query("Select description from motorcycle where id = ?", array($motorcycle_id));
+        $is_new = false;
+        foreach ($query->result_array() as $row) {
+            if ($row["description"] != $description) {
+                $is_new = true;
+            }
+        }
+        return $is_new;
+    }
+
     public function updateMotorcycleDesc($id, $post) {
+
         // echo '<pre>';
         // print_r(htmlentities($post['descr']));
         // echo '</pre>';exit;
         $data = array('description' => $post['descr']);
+
+        if ($this->isNewDescription($id, $post["descr"])) {
+            $data["customer_set_description"] = 1;
+        }
+
         $where = array('id' => $id);
         $this->updateRecord('motorcycle', $data, $where, FALSE);
     }

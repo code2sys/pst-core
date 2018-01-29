@@ -336,6 +336,15 @@ class Lightspeed_M extends Master_M {
                         }
                     }
 
+                    if ($results[0]["customer_set_description"] > 0) {
+                        // OK, the customer changed the description...
+                        if ($bike->WebDescription == $results[0]["description"]) {
+                            $update_array["customer_set_description"] = 0;
+                        } else {
+                            $update_array["description"] = $results[0]["description"];
+                        }
+                    }
+
                     $where = array('sku' => $bike->StockNumber);
                     $motorcycle = $this->updateRecord('motorcycle', $update_array, $where, FALSE);
                     $valid_count++;
