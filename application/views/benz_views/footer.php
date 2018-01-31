@@ -67,11 +67,11 @@ echo $CI->load->view("braintree", array(
 
             console.log("Jon 1");
             $("#hotels-flats").owlCarousel({
-//                items : 4,
-//                lazyLoad : true,
-//                navigation : true,
-//                autoPlay: true,
-//                autoPlayTimeout:3000
+                items : 4,
+                lazyLoad : true,
+                navigation : true,
+                autoPlay: true,
+                autoPlayTimeout:3000
             });
 
 		 });
