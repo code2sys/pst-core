@@ -68,6 +68,12 @@ echo $CI->load->view("braintree", array(
                    autoPlayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 1000; ?>
               });
 
+
+
+
+        });
+
+		$(document).on("ready", function() {
             $("#hotels-flats").owlCarousel({
 //                items : 4,
 //                lazyLoad : true,
@@ -75,9 +81,8 @@ echo $CI->load->view("braintree", array(
 //                autoPlay: true,
 //                autoPlayTimeout:3000
             });
-
-
         });
+
         // JLB 01-24-18
         // There used to be these references to "homes-for-rent" and "hotel-flats"...I think Benz just copied them in accidentally.
         // JLB 01-31-18
