@@ -69,28 +69,41 @@ echo $CI->load->view("braintree", array(
 		  });
 		 
 		});
+        // JLB 01-24-18
+        // There used to be these references to "homes-for-rent" and "hotel-flats"...I think Benz just copied them in accidentally.
+        // JLB 01-31-18
+        // The delightful people from Benz use HORRIBLE NAMES.
+        $(document).ready(function() {
+            $("#homes-for-rent").owlCarousel({
+                items : 4,
+                lazyLoad : true,
+                navigation : true
+            });
+            $("#hotels-flats").owlCarousel({
+                items : 4,
+                lazyLoad : true,
+                navigation : true,
+                autoPlay: true,
+                autoPlayTimeout:3000
+            });
 
-		$("#hotel-flats").owlCarousel({
-		 	  navigation : true,
-			   slideSpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 500; ?>,
-			   paginationSpeed : <?php echo defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_PAGINATION_SPEED : 500; ?>,
-			   singleItem:true,
-			   autoPlay: <?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000; ?>,
-			   autoPlayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 1000; ?>
-		  });
-		$("#hotel-flats-1").owlCarousel({
-		 	  navigation : true,
-			   slideSpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 500; ?>,
-			   paginationSpeed : <?php echo defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_PAGINATION_SPEED : 500; ?>,
-			   singleItem:true,
-			   autoPlay: <?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000; ?>,
-			   autoPlayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 1000; ?>
-		  });
+        });
 
-		});
+        $(document).ready(function() {
+            $("#homes-for-rent-1").owlCarousel({
+                items : 3,
+                lazyLoad : true,
+                navigation : true
+            });
+            $("#hotels-flats-1").owlCarousel({
+                items : 3,
+                lazyLoad : true,
+                navigation : true
+            });
 
-		// JLB 01-24-18
-		// There used to be these references to "homes-for-rent" and "hotel-flats"...I think Benz just copied them in accidentally.
+        });
+
+
 	</script>
 	
 	<script type="text/javascript">
