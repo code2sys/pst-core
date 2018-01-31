@@ -289,8 +289,45 @@ echo $CI->load->view("braintree", array(
 		 
 		 // JLB 01-24-18
 		 // There used to be these references to "homes-for-rent" and "hotel-flats"...I think Benz just copied them in accidentally.
- 
-	</script>
+    $(document).on("ready", function() {
+        console.log("Jon 1");
+        setTimeout(function() { $("#hotels-flats").owlCarousel({
+//                items : 4,
+//                lazyLoad : true,
+//                navigation : true,
+//                autoPlay: true,
+//                autoPlayTimeout:3000
+        }); });
+    });
+
+    // JLB 01-24-18
+    // There used to be these references to "homes-for-rent" and "hotel-flats"...I think Benz just copied them in accidentally.
+    // JLB 01-31-18
+    // The delightful people from Benz use HORRIBLE NAMES.
+    //        $(document).ready(function() {
+    //            $("#homes-for-rent").owlCarousel({
+    //                items : 4,
+    //                lazyLoad : true,
+    //                navigation : true
+    //            });
+    //
+    //        });
+    //
+    //        $(document).ready(function() {
+    //            $("#homes-for-rent-1").owlCarousel({
+    //                items : 3,
+    //                lazyLoad : true,
+    //                navigation : true
+    //            });
+    //            $("#hotels-flats-1").owlCarousel({
+    //                items : 3,
+    //                lazyLoad : true,
+    //                navigation : true
+    //            });
+    //
+    //        });
+
+    </script>
 	
 	<script type="text/javascript">
   /* Submit on Enter */
