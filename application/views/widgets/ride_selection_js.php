@@ -168,75 +168,91 @@ $base_url_string = (isset($secure) && $secure) ? "s_base_url" : "base_url";
     }
 
     function executeYear() {
-        $("#year").selectbox({
-            onChange: function (val, inst)
-            {
-                if(val != '')
-                {
-                    year_val = val;
-                    $.ajax(
-                        {
-                            async: false,
-                            type: 'POST',
-                            url: <?php echo $base_url_string; ?> + 'ajax/getNewModel/',
-                            data : {
-                                'year' :  val, // $("#update_garage_form [name=year] option:selected").text(),
-                                'makeId' : make_val,
-                                <?php if(@$product['part_id']): ?>
-                                'partId' : '<?php echo $product['part_id']; ?>',
-                                <?php endif; ?>
-                                'ajax' : true
-                            },
-                            success: function(encodeResponse)
+        try {
+
+            $("#year").selectbox({
+                onChange: function (val, inst) {
+                    if (val != '') {
+                        year_val = val;
+                        $.ajax(
                             {
-                                responseData = JSON.parse(encodeResponse);
+                                async: false,
+                                type: 'POST',
+                                url: <?php echo $base_url_string; ?> +'ajax/getNewModel/',
+                                data: {
+                                    'year': val, // $("#update_garage_form [name=year] option:selected").text(),
+                                    'makeId': make_val,
+                                    <?php if(@$product['part_id']): ?>
+                                    'partId': '<?php echo $product['part_id']; ?>',
+                                    <?php endif; ?>
+                                    'ajax': true
+                                },
+                                success: function (encodeResponse) {
+                                    responseData = JSON.parse(encodeResponse);
 
-                                var arr = [];
-                                var reverseMap = {};
+                                    var arr = [];
+                                    var reverseMap = {};
 
-                                for(var x in responseData){
-                                    arr.push(responseData[x]);
-                                    reverseMap[responseData[x]] = x;
+                                    for (var x in responseData) {
+                                        arr.push(responseData[x]);
+                                        reverseMap[responseData[x]] = x;
+                                    }
+
+                                    arr.sort(function (a, b) {
+                                        a = a.toLowerCase();
+                                        b = b.toLowerCase();
+                                        if (a < b) {
+                                            return -1
+                                        } else if (a > b) {
+                                            return 1;
+                                        } else {
+                                            return 0;
+                                        }
+                                    });
+                                    $('#model').selectbox("detach");
+                                    var mySelect = $('#model');
+                                    mySelect.html($('<option></option>').val('').html('-- Select Model --'));
+                                    for (var i = 0; i < arr.length; i++) {
+                                        var text = arr[i];
+                                        var val = reverseMap[text];
+                                        mySelect.append(
+                                            $('<option></option>').val(val).html(text)
+                                        );
+                                    }
+                                    executeModel();
+                                    $('#model').selectbox("attach");
                                 }
+                            });
+                    }
+                    else {
+                        $('#model').selectbox("detach");
+                        $('#model').html($('<option></option>').val('').html('-- Year --'));
+                        executeModel();
+                        $('#model').selectbox("attach");
+                    }
+                    $('#add').attr('class', 'button_no');
 
-                                arr.sort(function(a, b){a = a.toLowerCase(); b = b.toLowerCase(); if (a < b) { return -1} else if (a > b) { return 1; } else { return 0; }});
-                                $('#model').selectbox("detach");
-                                var mySelect = $('#model');
-                                mySelect.html($('<option></option>').val('').html('-- Select Model --'));
-                                for (var i = 0; i < arr.length; i++) {
-                                    var text = arr[i];
-                                    var val = reverseMap[text];
-                                    mySelect.append(
-                                        $('<option></option>').val(val).html(text)
-                                    );
-                                }
-                                executeModel();
-                                $('#model').selectbox("attach");
-                            }
-                        });
                 }
-                else
-                {
-                    $('#model').selectbox("detach");
-                    $('#model').html($('<option></option>').val('').html('-- Year --'));
-                    executeModel();
-                    $('#model').selectbox("attach");
-                }
-                $('#add').attr('class', 'button_no' );
-
-            }
-        });
+            });
+        } catch(err) {
+            console.log("Error executeYear: " + err);
+        }
     }
 
     function executeModel()
     {
-        $("#model").selectbox({
-            onChange: function (val, inst)
-            {
-                displayAdd(val);
-                updateGarage();
-            }
-        });
+        try {
+
+            $("#model").selectbox({
+                onChange: function (val, inst) {
+                    displayAdd(val);
+                    updateGarage();
+                }
+            });
+
+        } catch(err) {
+            console.log("Error executeModel: " + err);
+        }
     }
 
 
