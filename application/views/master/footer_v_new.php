@@ -56,7 +56,7 @@ echo $CI->load->view("braintree", array(
 ), true);
 ?>
 		
-	<script>		
+	<script type="application/javascript">
 		$(document).ready(function() {
             // This is the main slider
             $("#owl-demo").owlCarousel({
