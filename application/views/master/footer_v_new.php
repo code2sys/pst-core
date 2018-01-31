@@ -74,6 +74,7 @@ echo $CI->load->view("braintree", array(
         });
 
 		$(document).on("ready", function() {
+		    console.log("Jon 1");
             setTimeout(function() { $("#hotels-flats").owlCarousel({
 //                items : 4,
 //                lazyLoad : true,
