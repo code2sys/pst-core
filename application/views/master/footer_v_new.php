@@ -58,17 +58,26 @@ echo $CI->load->view("braintree", array(
 		
 	<script>		
 		$(document).ready(function() {
- 
-		$("#owl-demo").owlCarousel({
-		 	  navigation : true,
-			   slideSpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 500; ?>,
-			   paginationSpeed : <?php echo defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_PAGINATION_SPEED : 500; ?>,
-			   singleItem:true,
-			   autoPlay: <?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000; ?>,
-			   autoPlayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 1000; ?>
-		  });
-		 
-		});
+            // This is the main slider
+            $("#owl-demo").owlCarousel({
+                  navigation : true,
+                   slideSpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 500; ?>,
+                   paginationSpeed : <?php echo defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_PAGINATION_SPEED : 500; ?>,
+                   singleItem:true,
+                   autoPlay: <?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000; ?>,
+                   autoPlayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 1000; ?>
+              });
+
+            $("#hotels-flats").owlCarousel({
+                items : 4,
+                lazyLoad : true,
+                navigation : true,
+                autoPlay: true,
+                autoPlayTimeout:3000
+            });
+
+
+        });
         // JLB 01-24-18
         // There used to be these references to "homes-for-rent" and "hotel-flats"...I think Benz just copied them in accidentally.
         // JLB 01-31-18
@@ -78,13 +87,6 @@ echo $CI->load->view("braintree", array(
 //                items : 4,
 //                lazyLoad : true,
 //                navigation : true
-//            });
-//            $("#hotels-flats").owlCarousel({
-//                items : 4,
-//                lazyLoad : true,
-//                navigation : true,
-//                autoPlay: true,
-//                autoPlayTimeout:3000
 //            });
 //
 //        });
