@@ -74,13 +74,13 @@ echo $CI->load->view("braintree", array(
         });
 
 		$(document).on("ready", function() {
-            $("#hotels-flats").owlCarousel({
+            setTimeout(function() { $("#hotels-flats").owlCarousel({
 //                items : 4,
 //                lazyLoad : true,
 //                navigation : true,
 //                autoPlay: true,
 //                autoPlayTimeout:3000
-            });
+            }); });
         });
 
         // JLB 01-24-18
