@@ -283,51 +283,38 @@ echo $CI->load->view("braintree", array(
 			   autoPlay: <?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000; ?>,
 			   autoPlayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 1000; ?>
 		   });
-
-            console.log("Jon 1");
+            <?php
+            // JLB 01-31-18
+            // The BENZ guys just cannot make good names. I don't know which ones of these are live, but they all appear to exist somewhere.
+            // Really, a clusterfuck of bad design on this page...and it's duplicated in header.php and in a few other spots.
+            ?>
             $("#hotels-flats").owlCarousel({
-//                items : 4,
-//                lazyLoad : true,
-//                navigation : true,
-//                autoPlay: true,
-//                autoPlayTimeout:3000
+                items : 4,
+                lazyLoad : true,
+                navigation : true,
+                autoPlay: true,
+                autoPlayTimeout:3000
+            });
+
+            $("#homes-for-rent").owlCarousel({
+                items : 4,
+                lazyLoad : true,
+                navigation : true
+            });
+            $("#homes-for-rent-1").owlCarousel({
+                items : 3,
+                lazyLoad : true,
+                navigation : true
+            });
+            $("#hotels-flats-1").owlCarousel({
+                items : 3,
+                lazyLoad : true,
+                navigation : true
             });
 
 
         });
 		 
-		 // JLB 01-24-18
-		 // There used to be these references to "homes-for-rent" and "hotel-flats"...I think Benz just copied them in accidentally.
-    $(document).on("ready", function() {
-    });
-
-    // JLB 01-24-18
-    // There used to be these references to "homes-for-rent" and "hotel-flats"...I think Benz just copied them in accidentally.
-    // JLB 01-31-18
-    // The delightful people from Benz use HORRIBLE NAMES.
-    //        $(document).ready(function() {
-    //            $("#homes-for-rent").owlCarousel({
-    //                items : 4,
-    //                lazyLoad : true,
-    //                navigation : true
-    //            });
-    //
-    //        });
-    //
-    //        $(document).ready(function() {
-    //            $("#homes-for-rent-1").owlCarousel({
-    //                items : 3,
-    //                lazyLoad : true,
-    //                navigation : true
-    //            });
-    //            $("#hotels-flats-1").owlCarousel({
-    //                items : 3,
-    //                lazyLoad : true,
-    //                navigation : true
-    //            });
-    //
-    //        });
-
     </script>
 	
 	<script type="text/javascript">
