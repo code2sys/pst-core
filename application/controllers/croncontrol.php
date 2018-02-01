@@ -443,6 +443,30 @@ class CronControl extends Master_Controller {
         $this->load->model("Lightspeed_m");
         $this->Lightspeed_m->get_major_units();
     }
+
+    public function dailyLightspeedUnits() {
+        // JLB 12-18-17
+        // Lightspeed, if you have it...
+        if (defined('ENABLE_LIGHTSPEED') && ENABLE_LIGHTSPEED) {
+            // insert into the table to log this..
+            $this->db->query("Insert into lightspeed_feed_log (status, processing_start, run_by) values (1, now(), 'cron')");
+
+            // OK, we should attempt to pull the major unit lightspeed parts..
+            $error_string = "";
+            try {
+                $this->load->model("Lightspeed_m");
+                $this->Lightspeed_m->get_major_units(); // that should fetch all those things, great.
+            } catch(Exception $e) {
+                $error_string = $e->getMessage();
+                if ($e->getMessage() != "Lightspeed credentials not found.") {
+                    print "Lightspeed error: " . $e->getMessage() . "\n";
+                }
+            }
+
+            // and update it...
+            $this->db->query("Update lightspeed_feed_log set status = 2, processing_end = now(), error_string = ? where run_by = 'cron' and status = 1", array($error_string));
+        }
+    }
 }
 
 /* End of file croncontrol.php */
