@@ -14,11 +14,19 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 	?>
 <head>
     <?php echo jget_store_block("top_header"); ?>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <?php if (isset($title)): ?>
+	<?php if (isset($title)): ?>
     <title><?php echo $title; ?></title>
     <?php endif; ?>
+    <?php
+    $CI =& get_instance();
+    echo $CI->load->view("master/top_header", array(
+        "store_name" => $store_name,
+        "meta_description" => $meta_description,
+        "meta_keywords" => $meta_keywords
+    ));
+
+    ?>
+
 	<?php echo @$metatag; ?>
 	
 	<!--Motercycle Content Start-->
@@ -37,12 +45,6 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 	<link rel="stylesheet" href="<?php echo jsite_url('/custom.css'); ?>" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/jquery.fancybox.css" />
 
-
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lucida+Sans:400,500,600,700,900,800,300" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica:400,500,600,700,900,800,300%22%20/%3E" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300%22%20/%3E">
-	
-	
 	<script src="<?php echo $CI->config->item("base_scheme"); ?>://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/bootstrap.min.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/owl.carousel.js"></script>	
