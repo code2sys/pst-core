@@ -400,7 +400,7 @@ class Reporting_M extends Master_M {
     }
 
     public function get_motercycle_image($moter_cycle_id) {
-        $sql = "SELECT motorcycleimage.image_name  from motorcycleimage WHERE motorcycleimage.motorcycle_id = '" . $moter_cycle_id . "'";
+        $sql = "SELECT motorcycleimage.image_name, motorcycleimage.external  from motorcycleimage WHERE motorcycleimage.motorcycle_id = '" . $moter_cycle_id . "' and disable = 0";
         $query = $this->db->query($sql);
         $motorcycleimages = $query->result_array();
         if (!empty($motorcycleimages)) {
