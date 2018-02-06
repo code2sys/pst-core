@@ -400,7 +400,7 @@ class Reporting_M extends Master_M {
     }
 
     public function get_motercycle_image($moter_cycle_id) {
-        $sql = "SELECT motorcycleimage.image_name  from motorcycleimage WHERE motorcycleimage.motorcycle_id = '" . $moter_cycle_id . "'";
+        $sql = "SELECT motorcycleimage.image_name, motorcycleimage.external  from motorcycleimage WHERE motorcycleimage.motorcycle_id = '" . $moter_cycle_id . "' and disable = 0";
         $query = $this->db->query($sql);
         $motorcycleimages = $query->result_array();
         if (!empty($motorcycleimages)) {
@@ -490,7 +490,7 @@ class Reporting_M extends Master_M {
             $data['dealerurl'] = base_url();
             for ($x = 1; $x <= 25; $x++) {
                 if (isset($motercycle_images[$x - 1]) && !empty($motercycle_images[$x - 1])) {
-                    $data['Photo_' . $x] = base_url('media' . '/' . $motercycle_images[$x - 1]['image_name']);
+                    $data['Photo_' . $x] = $motercycle_images[$x - 1]['external'] > 0 ? $motercycle_images[$x - 1]['image_name'] : base_url('media' . '/' . $motercycle_images[$x - 1]['image_name']);
                 } else {
                     $data['Photo_' . $x] = '';
                 }
