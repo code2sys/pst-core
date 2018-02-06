@@ -411,7 +411,7 @@ class Reporting_M extends Master_M {
     }
 
     public function getProductForcycletrader() {
-        $sql = "SELECT motorcycle.*  from motorcycle where cycletrader_feed_status =" . TRUE;
+        $sql = "SELECT motorcycle.*  from motorcycle where deleted = 0 and cycletrader_feed_status =" . TRUE;
         $query = $this->db->query($sql);
         $allmotorcycle = $query->result_array();
         $header = 'uniqueadindentifier|classid|categoryname|manufacturer|model|year|price|newused|itemurl|miles|engine|weight|primarycolor|secondarycolor|stocknumber|description|dealername|dealerlocalphone|adlocation|dealercity|dealerstate|dealerpostalcode|dealerareacode|dealerurl|photo1|photo2|photo3|photo4|photo5|photo6|photo7|photo8|photo9|photo10|photo11|photo12|photo13|photo14|photo15|photo16|photo17|photo18|photo19|photo20|photo21|photo22|photo23|photo24|photo25';
