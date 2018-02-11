@@ -1150,7 +1150,20 @@
 				<input style="float: inherit;background:#3f51b5;color:white;font-weight: normal;padding: 20px 90px 20px 90px;border-radius: 0;" type="submit" value="APPLY NOW" class="input_button">
 			</div>
 			</form>
-	<script>
+	<script type="application/javascript">
+        (function() {
+            var jointShowHide = function(e) {
+                if ($("input[name='joint'][value=1]:checked").length > 0) {
+                    $(".joint-row").show();
+                } else {
+                    $(".joint-row").hide();
+                }
+            };
+
+            $("input[name='joint']").on("click", jointShowHide);
+            jointShowHide();
+        })();
+
 		$(document).ready(function(){
 			var success = '<?php echo @$success; ?>';
 			//alert(success);
@@ -1161,16 +1174,7 @@
 				$(".input_button").val('APPLY NOW');
 			}
 
-			var jointShowHide = function(e) {
-			    if ($("input[name='joint'][value=1]:checked").length > 0) {
-                    $(".joint-row").show();
-                } else {
-			        $(".joint-row").hide();
-                }
-            }
 
-            $("input[name='joint']").on("click", jointShowHide);
-			jointShowHide();
 
 		});
 	</script>
