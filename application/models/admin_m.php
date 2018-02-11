@@ -2830,7 +2830,7 @@ class Admin_M extends Master_M {
         $filtered_count = $total_count;
         if ($where != "") {
             // $query = $this->db->query("Select count(distinct part_id) as cnt from part left join partpartnumber using (part_id) left join partnumber  using (partnumber_id)  left join (select partvariation.*, concat(distributor.name, ' ', partvariation.part_number) as partlabel from partvariation join distributor using (distributor_id)) zpartvariation using (partnumber_id) left join partimage using (part_id) $where");
-            $query = $this->db->query("Select count(distinct id.id) as cnt from finance_applications $where");
+            $query = $this->db->query("Select count(distinct id) as cnt from finance_applications $where");
             foreach ($query->result_array() as $row) {
                 $filtered_count = $row["cnt"];
             }
