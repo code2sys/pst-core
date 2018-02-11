@@ -188,8 +188,6 @@ if ($credit["joint"] > 0) {
     Cell(90, 6, '', 0, 1, 'L', 0);
 }
 	
-	AddPage();
-	
 	SetFont('Times','B',14);
 	SetTextColor(255,255 ,255 );
 	Cell(190,6, 'Applicant Banking Information',0,1,'L',1);
