@@ -558,7 +558,7 @@
 
 						<tr class="joint-row">
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Housing Information:</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Housing Information:</b></p>
 							</td>
 						</tr>
 						<tr class="joint-row">
