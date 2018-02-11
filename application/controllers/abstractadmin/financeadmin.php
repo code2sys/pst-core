@@ -14,11 +14,97 @@ abstract class Financeadmin extends Motorcycleadmin {
         if (!$this->checkValidAccess('finance') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
-        $this->_mainData['applications'] = $this->admin_m->getCreditApplications();
+//        $this->_mainData['applications'] = $this->admin_m->getCreditApplications();
 
         $this->setNav('admin/nav_v', 5);
         $this->renderMasterPage('admin/master_v', 'admin/finance/list_v', $this->_mainData);
     }
+
+    public function credit_applications_ajax() {
+        if (!$this->checkValidAccess('finance') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        $columns = array(
+            "joint",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "co_first_name",
+            "co_last_name",
+            "co_email",
+            "co_phone",
+            "year",
+            "make",
+            "model",
+            "application_status",
+            "application_date"
+        );
+
+        $length = array_key_exists("length", $_REQUEST) ? $_REQUEST["length"] : 500;
+        $start = array_key_exists("start", $_REQUEST) ? $_REQUEST["start"] : 0;
+
+        $order_string = "order by application_date desc ";
+
+        if (array_key_exists("order", $_REQUEST) && is_array($_REQUEST["order"]) && count($_REQUEST["order"]) > 0) {
+            // OK, there's a separate order string...
+            $order_string = "order by ";
+            $orderings = $_REQUEST["order"];
+            if (count($orderings) == 0) {
+                $order_string .= " motorcycle.title asc";
+            } else {
+                for ($i = 0; $i < count($orderings); $i++) {
+                    if ($i > 0) {
+                        $order_string .= ", ";
+                    }
+
+                    $field = $columns[$orderings[$i]["column"]];
+                    $order_string .=  $field . " " . $orderings[$i]["dir"];
+                }
+            }
+        }
+
+        $this->load->model("Motorcycle_m");
+
+        // How do we shove through the restrictor from the upper right?
+        list($products, $total_count, $filtered_count) = $this->admin_m->enhancedGetCreditApplications($s = (array_key_exists("search", $_REQUEST) && array_key_exists("value", $_REQUEST["search"]) ? $_REQUEST["search"]["value"] : ""), $order_string, $length, $start);
+
+        // Now, order them...
+        $rows = array();
+        foreach ($products as $p) {
+            $contact_info = json_decode($p["contact_info"]);
+            if ($p['joint'] > 0) {
+                $co_phone = json_decode($p["co_contact_info"])->rphone;
+            } else {
+                $co_phone = "";
+            }
+
+            $rows[] = array(
+                $p['joint'] > 0 ? 'Joint' : 'Individual',
+                $p['first_name'], $p['last_name'], $p['email'], $contact_info->rphone,
+                $p['co_first_name'], $p['co_last_name'], $p['co_email'], $co_phone,
+                $p['year'], $p['make'], $p['model'],
+                $p['application_status'], $p['application_date'],
+
+                '<a href="/admin/finance_edit/' . $p['id'] . '"><i class="fa fa-edit"></i>&nbsp;<b>Edit</b></a>' .
+                ' | <a href="/admin/finance_delete/' . $p['id'] .'" onclick="return confirm(\'Are you sure you would like to delete this credit application\')"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a>'
+
+            );
+        }
+
+        print json_encode(array(
+            "data" => $rows,
+            "draw" => array_key_exists("draw", $_REQUEST) ? $_REQUEST["draw"] : 0,
+            "recordsTotal" => $total_count,
+            "recordsFiltered" => $filtered_count,
+            "limit" => $length,
+            "offset" => $start,
+            "order_string" => $order_string,
+            "search" => $s
+        ));
+    }
+
 
     public function finance_pdf($id = null) {
         if (!$this->checkValidAccess('finance') && !@$_SESSION['userRecord']['admin']) {

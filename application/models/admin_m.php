@@ -2815,6 +2815,34 @@ class Admin_M extends Master_M {
         return $return;
     }
 
+    public function enhancedGetCreditApplications($filter = NULL, $orderBy = NULL, $limit = 20, $offset = 0) {
+        $this->load->helper("jonathan");
+
+        $where = jonathan_generate_likes(array("first_name", "last_name", "email", "co_first_name", "co_last_name", "co_email", "year", "make", "model", "application_status"), $filter, "WHERE");
+
+        $total_count = 0;
+        $query = $this->db->query("Select count(*) as cnt from finance_applications");
+        foreach ($query->result_array() as $row) {
+            $total_count = $row['cnt'];
+        }
+
+        // Now, is there a filter?
+        $filtered_count = $total_count;
+        if ($where != "") {
+            // $query = $this->db->query("Select count(distinct part_id) as cnt from part left join partpartnumber using (part_id) left join partnumber  using (partnumber_id)  left join (select partvariation.*, concat(distributor.name, ' ', partvariation.part_number) as partlabel from partvariation join distributor using (distributor_id)) zpartvariation using (partnumber_id) left join partimage using (part_id) $where");
+            $query = $this->db->query("Select count(distinct id.id) as cnt from finance_applications $where");
+            foreach ($query->result_array() as $row) {
+                $filtered_count = $row["cnt"];
+            }
+        }
+
+        // Finally, run it!
+        $query = $this->db->query("Select * from finance_applications  $where $orderBy limit $limit offset $offset ");
+        $rows = $query->result_array();
+
+        return array($rows, $total_count, $filtered_count);
+    }
+
     public function getCreditApplications() {
         $this->db->order_by('application_date', 'DESC');
         $records = $this->selectRecords('finance_applications');
