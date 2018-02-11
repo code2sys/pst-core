@@ -41,7 +41,7 @@
         <!-- PRODUCT LIST -->
         <div class="tabular_data">
 
-			<table width="100%" cellpadding="10">
+			<table width="100%" cellpadding="10" id="admin_finance_list">
 				<tr class="head_row">
 					<td><b>Application Type</b></td>
 					<td><b>First Name</b></td>
@@ -87,6 +87,8 @@
             "paging" : true,
             "info" : true,
             "stateSave" : true,
+            "table_id" : "credit_applications",
+            "id" : "credit_applications",
             "columns" : [
                 null,
                 null,
