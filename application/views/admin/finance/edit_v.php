@@ -374,9 +374,12 @@ if ($application['joint'] > 0) {
 							</td>
 						</tr>
 						
+                        
+                        
+                        
 						<tr>
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Physical Address Information:</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Physical Address Information:</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -474,25 +477,144 @@ if ($application['joint'] > 0) {
 								<label for="time" >Time at Current Residence</label>
 							</td>
 							<td>
+                                <select name="housing_info[years]">
+                                    <option value="">Years</option>
+                                    <?php for($y=0;$y<=100;$y++) { ?>
+                                        <option value="<?php echo $y;?>" <?php echo $housing_info->years==$y?'selected':'';?>><?php echo $y;?></option>
+                                    <?php } ?>
+                                </select>Years
 								<select name="housing_info[months]">
 									<option value="">Months</option>
 									<?php for($m=0;$m<=12;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $housing_info->months==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Months
-								<select name="housing_info[years]">
-									<option value="">Years</option>
-									<?php for($y=0;$y<=100;$y++) { ?>
-									<option value="<?php echo $y;?>" <?php echo $housing_info->years==$y?'selected':'';?>><?php echo $y;?></option>
-									<?php } ?>
-								</select>Years
 								<span><b>*</b></span>
 							</td>
 						</tr>
 						
+                        
+						<tr class='joint-row'>
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Physical Address Information:</b></p>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_paddress" >Physical Address</label>
+							</td>
+							<td>
+								<input name="co_physical_address[paddress]" placeholder="" value="<?php echo $co_physical_address->paddress;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_city" >City</label>
+							</td>
+							<td>
+								<input name="co_physical_address[city]" placeholder="" value="<?php echo $co_physical_address->city;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_state" >State</label>
+							</td>
+							<td>
+								<?php echo form_dropdown('co_physical_address[state]', $states, $co_physical_address->state, 'id="co_billing_state"'); ?>
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_zip" >Zip</label>
+							</td>
+							<td>
+								<input name="co_physical_address[zip]" placeholder="" value="<?php echo $co_physical_address->zip;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_country" >Country</label>
+							</td>
+							<td>
+								<input name="co_physical_address[country]" placeholder="" value="<?php echo $co_physical_address->country;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						
+						<tr class='joint-row'>
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Housing Information:</b></p>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_owns" >Do you rent or own your home, or other ?</label>
+							</td>
+							<td>
+								<select name="co_housing_info[owns]">
+									<option value="">Choose</option>
+									<option value="Rent" <?php echo $co_housing_info->owns=='Rent'?'selected':'';?>>Rent</option>
+									<option value="Own" <?php echo $co_housing_info->owns=='Own'?'selected':'';?>>Own</option>
+									<option value="Other" <?php echo $co_housing_info->owns=='Other'?'selected':'';?>>Other</option>
+								</select>
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="landlord" >Landlord / Mortgage</label>
+							</td>
+							<td>
+								<input name="co_housing_info[landlord]" placeholder="" value="<?php echo $co_housing_info->landlord;?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_rent" >Rent / Mortgage Monthly Amount</label>
+							</td>
+							<td>
+								<input name="co_housing_info[rent]" placeholder="" value="<?php echo $co_housing_info->rent;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_mort_balance" >Mortgage Balance</label>
+							</td>
+							<td>
+								<input name="co_housing_info[mort_balance]" placeholder="" value="<?php echo $co_housing_info->mort_balance;?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_time" >Time at Current Residence</label>
+							</td>
+							<td>
+                                <select name="co_housing_info[years]">
+                                    <option value="">Years</option>
+                                    <?php for($y=0;$y<=100;$y++) { ?>
+                                        <option value="<?php echo $y;?>" <?php echo $co_housing_info->years==$y?'selected':'';?>><?php echo $y;?></option>
+                                    <?php } ?>
+                                </select>Years
+								<select name="co_housing_info[months]">
+									<option value="">Months</option>
+									<?php for($m=0;$m<=12;$m++) { ?>
+									<option value="<?php echo $m;?>" <?php echo $co_housing_info->months==$m?'selected':'';?>><?php echo $m;?></option>
+									<?php } ?>
+								</select>Months
+								<span><b>*</b></span>
+							</td>
+						</tr>
+
+
+
 						<tr>
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Banking Information:</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Banking Information:</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -527,10 +649,50 @@ if ($application['joint'] > 0) {
 								<input name="banking_info[ac_type1]" placeholder="" value="<?php echo $banking_info->ac_type1;?>" />
 							</td>
 						</tr>
-						
+
+						<tr class='joint-row'>
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Banking Information:</b></p>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_bank_name" >Name of Bank</label>
+							</td>
+							<td>
+								<input name="co_banking_info[bank_name]" placeholder="" value="<?php echo $co_banking_info->bank_name;?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_ac_type" >Account Types</label>
+							</td>
+							<td>
+								<input name="co_banking_info[ac_type]" placeholder="" value="<?php echo $co_banking_info->ac_type;?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_bank_name1" >Name of Bank</label>
+							</td>
+							<td>
+								<input name="co_banking_info[bank_name1]" placeholder="" value="<?php echo $co_banking_info->bank_name1;?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_ac_type1" >Account Types</label>
+							</td>
+							<td>
+								<input name="co_banking_info[ac_type1]" placeholder="" value="<?php echo $co_banking_info->ac_type1;?>" />
+							</td>
+						</tr>
+
+
+                        
 						<tr>
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Previous Residence (If less then 5 years at current address..)</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Previous Residence (If less then 5 years at current address..)</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -571,24 +733,83 @@ if ($application['joint'] > 0) {
 								<label for="how_long" >How long at previous address ?</label>
 							</td>
 							<td>
+                                <select name="previous_add[years]">
+                                    <option value="">Years</option>
+                                    <?php for($m=0;$m<=100;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo $previous_add->years==$m?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Years
 								<select name="previous_add[months]">
 									<option value="">Months</option>
 									<?php for($m=0;$m<=12;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $previous_add->months==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Months
-								<select name="previous_add[years]">
-									<option value="">Years</option>
-									<?php for($m=0;$m<=100;$m++) { ?>
-									<option value="<?php echo $m;?>" <?php echo $previous_add->years==$m?'selected':'';?>><?php echo $m;?></option>
-									<?php } ?>
-								</select>Years
 							</td>
 						</tr>
 						
+						<tr class='joint-row'>
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Previous Residence (If less then 5 years at current address..)</b></p>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_address1" >Address</label>
+							</td>
+							<td>
+								<input name="co_previous_add[address]" placeholder="" value="<?php echo $co_previous_add->address;?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_city" >City</label>
+							</td>
+							<td>
+								<input name="co_previous_add[city]" placeholder="" value="<?php echo $co_previous_add->city;?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_st_zip" >State</label>
+							</td>
+							<td>
+								<?php echo form_dropdown('co_previous_add[state]', $states, $co_previous_add->state, 'id="co_billing_state"'); ?>
+								<!--<input name="previous_add[state]" placeholder="" value="<?php echo $co_previous_add->state;?>" />-->
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_st_zip" >Zip</label>
+							</td>
+							<td>
+								<input name="co_previous_add[zip]" placeholder="" value="<?php echo $co_previous_add->zip;?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_how_long" >How long at previous address ?</label>
+							</td>
+							<td>
+                                <select name="co_previous_add[years]">
+                                    <option value="">Years</option>
+                                    <?php for($m=0;$m<=100;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo $co_previous_add->years==$m?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Years
+								<select name="co_previous_add[months]">
+									<option value="">Months</option>
+									<?php for($m=0;$m<=12;$m++) { ?>
+									<option value="<?php echo $m;?>" <?php echo $co_previous_add->months==$m?'selected':'';?>><?php echo $m;?></option>
+									<?php } ?>
+								</select>Months
+							</td>
+						</tr>
+
+                        
 						<tr>
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Employer Information:</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Employer Information:</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -669,18 +890,18 @@ if ($application['joint'] > 0) {
 								<label for="emp_time" >Time at Employer</label>
 							</td>
 							<td>
+                                <select name="employer_info[year]">
+                                    <option value="">Years</option>
+                                    <?php for($m=0;$m<=100;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo $employer_info->year==$m?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Years
 								<select name="employer_info[month]">
 									<option value="">Months</option>
 									<?php for($m=0;$m<=12;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo $employer_info->month==$m?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Months
-								<select name="employer_info[year]">
-									<option value="">Years</option>
-									<?php for($m=0;$m<=100;$m++) { ?>
-									<option value="<?php echo $m;?>" <?php echo $employer_info->year==$m?'selected':'';?>><?php echo $m;?></option>
-									<?php } ?>
-								</select>Years
 								<span><b>*</b></span>
 							</td>
 						</tr>
@@ -715,6 +936,137 @@ if ($application['joint'] > 0) {
 							</td>
 							<td>
 								<textarea name="employer_info[comments]" placeholder="" value="" ><?php echo $employer_info->comments;?></textarea>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Employer Information:</b></p>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_occupation" >Occupation</label>
+							</td>
+							<td>
+								<input name="co_employer_info[occupation]" placeholder="" value="<?php echo $co_employer_info->occupation;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_emp_name" >Employer Name</label>
+							</td>
+							<td>
+								<input name="co_employer_info[emp_name]" placeholder="" value="<?php echo $co_employer_info->emp_name;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_emp_addr" >Employer Address</label>
+							</td>
+							<td>
+								<input name="co_employer_info[emp_addr]" placeholder="" value="<?php echo $co_employer_info->emp_addr;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_emp_city" >Employer City</label>
+							</td>
+							<td>
+								<input name="co_employer_info[emp_city]" placeholder="" value="<?php echo $co_employer_info->emp_city;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_emp_state" >Employer State</label>
+							</td>
+							<td>
+								<?php echo form_dropdown('co_employer_info[state]', $states, $co_employer_info->state, 'id="co_billing_state"'); ?>
+								<!--<input name="employer_info[emp_state]" placeholder="" value="<?php echo $employer_info->emp_state;?>" />-->
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_emp_zip" >Employer Zip</label>
+							</td>
+							<td>
+								<input name="co_employer_info[emp_zip]" placeholder="" value="<?php echo $co_employer_info->emp_zip;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_emp_phone" >Employer Phone</label>
+							</td>
+							<td>
+								<input name="co_employer_info[emp_phone]" placeholder="" value="<?php echo $co_employer_info->emp_phone;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_salary" >Salary(Annually Gross)</label>
+							</td>
+							<td>
+								<input name="co_employer_info[salary]" placeholder="" value="<?php echo $co_employer_info->salary;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_emp_time" >Time at Employer</label>
+							</td>
+							<td>
+                                <select name="co_employer_info[year]">
+                                    <option value="">Years</option>
+                                    <?php for($m=0;$m<=100;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo $co_employer_info->year==$m?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Years
+								<select name="co_employer_info[month]">
+									<option value="">Months</option>
+									<?php for($m=0;$m<=12;$m++) { ?>
+									<option value="<?php echo $m;?>" <?php echo $co_employer_info->month==$m?'selected':'';?>><?php echo $m;?></option>
+									<?php } ?>
+								</select>Months
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label>Type of Employment</label>
+							</td>
+							<td>
+								<input type="radio" id="co_full" name="co_employer_info[emp_type]" placeholder="" value="Full" <?php echo $co_employer_info->emp_type == 'Full' ? 'checked' : '';?>/>Full
+								<input type="radio" id="co_part" name="co_employer_info[emp_type]" placeholder="" value="Part-Time" <?php echo $co_employer_info->emp_type == 'Part-Time' ? 'checked' : '';?>/>Part-Time
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_other_income" >Other Income</label>
+							</td>
+							<td>
+								<input name="co_employer_info[other_income]" placeholder="" value="<?php echo $co_employer_info->other_income;?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_income_frequency" >Other Income Frequency</label>
+							</td>
+							<td>
+								<input name="co_employer_info[income_frequency]" placeholder="" value="<?php echo $co_employer_info->income_frequency;?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_comments" >Additional Comments<br/>Please include any information that you feel may help us process your application</label>
+							</td>
+							<td>
+								<textarea name="co_employer_info[comments]" placeholder="" value="" ><?php echo $co_employer_info->comments;?></textarea>
 							</td>
 						</tr>
 					</table>
