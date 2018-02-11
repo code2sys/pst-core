@@ -75,7 +75,7 @@ if ($application['joint'] > 0) {
                                 <strong>Application Type</strong>
                             </td>
                             <td>
-                            <td><label><input type="radio" name="joint" value="0" <?php if ($application['joint'] != 1): ?>checked="checked" <?php endif;?> /> Individual</label><label><input type="radio"  name="joint" value="1" <?php if ($application['joint'] == 1): ?>checked="checked" <?php endif;?> /> Joint</label></td>
+                            <label><input type="radio" name="joint" value="0" <?php if ($application['joint'] != 1): ?>checked="checked" <?php endif;?> /> Individual</label><label><input type="radio"  name="joint" value="1" <?php if ($application['joint'] == 1): ?>checked="checked" <?php endif;?> /> Joint</label>
                             </td>
                         </tr>
 						<tr>
