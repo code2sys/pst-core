@@ -43,21 +43,23 @@
 
 			<table width="100%" cellpadding="10" id="admin_finance_list">
 				<tr class="head_row">
-					<td><b>Application Type</b></td>
-					<td><b>First Name</b></td>
-					<td><b>Last Name</b></td>
-					<td><b>Email</b></td>
-					<td><b>Phone</b></td>
-					<td><b>Co-Applicant First Name</b></td>
-					<td><b>Co-Applicant Last Name</b></td>
-					<td><b>Co-Applicant Email</b></td>
-					<td><b>Co-Applicant Phone</b></td>
-					<td><b>Year</b></td>
-					<td><b>Make</b></td>
-					<td><b>Model</b></td>
-					<td><b>Status</b></td>
-					<td><b>Application Date</b></td>
-					<td><b>Action</b></td>
+                    <thead>
+					<th><b>Application Type</b></th>
+					<th><b>First Name</b></th>
+					<th><b>Last Name</b></th>
+					<th><b>Email</b></th>
+					<th><b>Phone</b></th>
+					<th><b>Co-Applicant First Name</b></th>
+					<th><b>Co-Applicant Last Name</b></th>
+					<th><b>Co-Applicant Email</b></th>
+					<th><b>Co-Applicant Phone</b></th>
+					<th><b>Year</b></th>
+					<th><b>Make</b></th>
+					<th><b>Model</b></th>
+					<th><b>Status</b></th>
+					<th><b>Application Date</b></th>
+					<th><b>Action</b></th>
+                    </thead>
 				</tr>
 
 			</table>
