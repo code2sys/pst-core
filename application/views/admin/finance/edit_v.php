@@ -7,6 +7,16 @@ $previous_add = json_decode($application['previous_add']);
 $employer_info = json_decode($application['employer_info']);
 $reference = json_decode($application['reference']);
 
+if ($application['joint'] > 0) {
+    $co_contact_info = json_decode($application['co_contact_info']);
+    $co_physical_address = json_decode($application['co_physical_address']);
+    $co_housing_info = json_decode($application['co_housing_info']);
+    $co_banking_info = json_decode($application['co_banking_info']);
+    $co_previous_add = json_decode($application['co_previous_add']);
+    $co_employer_info = json_decode($application['co_employer_info']);
+
+}
+
 ?>
 <!-- MAIN CONTENT =======================================================================================-->
 <div class="content_wrap">
@@ -65,6 +75,17 @@ $reference = json_decode($application['reference']);
 								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Vehicle Information:</b></p>
 							</td>
 						</tr>
+                        <tr>
+                            <td>
+                                <strong>Application Type</strong>
+                            </td>
+                            <td>
+                                <select name="joint">
+                                    <option value="0" <?php if ($application["joint"] == 0): ?>checked="checked"<?php endif; ?> >Individual</option>
+                                    <option value="1" <?php if ($application["joint"] == 1): ?>checked="checked"<?php endif; ?> >Joint</option>
+                                </select>
+                            </td>
+                        </tr>
 						<tr>
 							<td>
 								<label for="type" >Type</label>
@@ -141,7 +162,7 @@ $reference = json_decode($application['reference']);
 						
 						<tr>
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Your Contact Information:</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Contact Information:</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -243,6 +264,115 @@ $reference = json_decode($application['reference']);
 							</td>
 							<td>
 								<input type="date" name='contact_info[dob]' value="<?php echo $contact_info->dob;?>">
+								<span><b>*</b></span>
+							</td>
+						</tr>
+												
+                        
+                        <tr class='joint-row'>
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Contact Information:</b></p>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_fname" >First Name</label>
+							</td>
+							<td>
+								<input name="co_fname" placeholder="" value="<?php echo $application['co_first_name'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_mname" >Middle Name</label>
+							</td>
+							<td>
+								<input name="co_contact_info[mname]" placeholder="" value="<?php echo $co_contact_info->mname;?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_lname" >Last Name</label>
+							</td>
+							<td>
+								<input name="co_lname" placeholder="" value="<?php echo $application['co_last_name'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_dl" >Driver's License</label>
+							</td>
+							<td>
+								<input name="co_dl" placeholder="" value="<?php echo $application['co_driver_licence'];?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_wphone" >Work Phone</label>
+							</td>
+							<td>
+								<input name="co_contact_info[wphone]" placeholder="" value="<?php echo $co_contact_info->wphone;?>" />
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_rphone" >Residence Phone</label>
+							</td>
+							<td>
+								<input name="co_contact_info[rphone]" placeholder="" value="<?php echo $co_contact_info->rphone;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_email" >E-mail</label>
+							</td>
+							<td>
+								<input name="co_email" placeholder="" value="<?php echo $application['co_email'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_ssno" >Social Security Number</label>
+							</td>
+							<td>
+								<input name="co_contact_info[ssno]" placeholder="" value="<?php echo $co_contact_info->ssno;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_marital_status" >Marital Status</label>
+							</td>
+							<td>
+								<select name="co_contact_info[marital_status]">
+									<option value="">Please Select</option>
+									<option value="single" <?php echo $co_contact_info->marital_status == 'single' ? 'selected' : '';?>>Single</option>
+									<option value="married" <?php echo $co_contact_info->marital_status == 'married' ? 'selected' : '';?>>Married</option>
+								</select>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="gender" >Male/Female</label>
+							</td>
+							<td>
+								<select name="co_contact_info[gender]">
+									<option value="">Please Select</option>
+									<option value="male"<?php echo $co_contact_info->gender == 'male' ? 'selected' : '';?>>Male</option>
+									<option value="female" <?php echo $co_contact_info->gender == 'female' ? 'selected' : '';?>>Female</option>
+								</select>
+							</td>
+						</tr>
+						<tr class='joint-row'>
+							<td>
+								<label for="co_dob" >Date of Birth</label>
+							</td>
+							<td>
+								<input type="date" name='co_contact_info[dob]' value="<?php echo $co_contact_info->dob;?>">
 								<span><b>*</b></span>
 							</td>
 						</tr>
@@ -763,6 +893,19 @@ $reference = json_decode($application['reference']);
     {
         $(this).remove();
     }
+
+    (function() {
+        var jointShowHide = function(e) {
+            if ($("input[name='joint'][value=1]:checked").length > 0) {
+                $(".joint-row").show();
+            } else {
+                $(".joint-row").hide();
+            }
+        };
+
+        $("input[name='joint']").on("click", jointShowHide);
+        jointShowHide();
+    })();
 
 </script>
 
