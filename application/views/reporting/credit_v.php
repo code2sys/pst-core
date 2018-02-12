@@ -5,6 +5,7 @@ $housing_info = json_decode($credit['housing_info']);
 $banking_info = json_decode($credit['banking_info']);
 $previous_add = json_decode($credit['previous_add']);
 $employer_info = json_decode($credit['employer_info']);
+$prior_employer_info = json_decode($credit['prior_employer_info']);
 $reference = json_decode($credit['reference']);
 
 if ($credit['joint'] > 0) {
@@ -14,6 +15,7 @@ if ($credit['joint'] > 0) {
     $co_banking_info = json_decode($credit['co_banking_info']);
     $co_previous_add = json_decode($credit['co_previous_add']);
     $co_employer_info = json_decode($credit['co_employer_info']);
+    $co_prior_employer_info = json_decode($credit['co_prior_employer_info']);
 
 }
 
@@ -64,6 +66,8 @@ Cell(90,6, $credit['joint'] > 0 ? "Joint" : "Individual",0,1,'L',0);
 	Cell(90,6, $credit['last_name'],0,1,'L',0);
 	Cell(90,6, "Driver's License :-",0,0,'L',0);
 	Cell(90,6, $credit['driver_licence'],0,1,'L',0);
+	Cell(90,6, "Driver's License Expiration :-",0,0,'L',0);
+	Cell(90,6, $credit['driver_licence_expiration'],0,1,'L',0);
 	Cell(90,6, 'Work Phone :-',0,0,'L',0);
 	Cell(90,6, $contact_info->wphone,0,1,'L',0);
 	Cell(90,6, 'Residence Phone :-',0,0,'L',0);
@@ -95,6 +99,8 @@ Cell(90,6, $credit['joint'] > 0 ? "Joint" : "Individual",0,1,'L',0);
         Cell(90, 6, $credit['co_last_name'], 0, 1, 'L', 0);
         Cell(90, 6, "Driver's License :-", 0, 0, 'L', 0);
         Cell(90, 6, $credit['co_driver_licence'], 0, 1, 'L', 0);
+        Cell(90, 6, "Driver's License Expiration:-", 0, 0, 'L', 0);
+        Cell(90, 6, $credit['co_driver_licence_expiration'], 0, 1, 'L', 0);
         Cell(90, 6, 'Work Phone :-', 0, 0, 'L', 0);
         Cell(90, 6, $co_contact_info->wphone, 0, 1, 'L', 0);
         Cell(90, 6, 'Residence Phone :-', 0, 0, 'L', 0);
@@ -165,8 +171,28 @@ if ($credit["joint"] > 0) {
 	Cell(90,6, 'Mortgage Balance :-',0,0,'L',0);
 	Cell(90,6, $housing_info->mort_balance,0,1,'L',0);
 	Cell(90,6, 'Time at Current Residence :-',0,0,'L',0);
-	Cell(90,6, $housing_info->months.' Months ,'.$housing_info->years.' Years',0,1,'L',0);
+	Cell(90,6, $housing_info->years.' Years, '.$housing_info->months.' Months',0,1,'L',0);
 	Cell(90,6, '',0,1,'L',0);
+
+	if ($housing_info->years < 2) {
+        SetFont('Times', 'B', 14);
+        SetTextColor(255, 255, 255);
+        Cell(190, 6, 'Applicant Previous Residence', 0, 1, 'L', 1);
+        SetFont('Times', '', 12);
+        SetTextColor(0, 0, 0);
+        Cell(90, 6, '', 0, 1, 'L', 0);
+        Cell(90, 6, 'Address :-', 0, 0, 'L', 0);
+        Cell(90, 6, $previous_add->address, 0, 1, 'L', 0);
+        Cell(90, 6, 'City :-', 0, 0, 'L', 0);
+        Cell(90, 6, $previous_add->city, 0, 1, 'L', 0);
+        Cell(90, 6, 'State :-', 0, 0, 'L', 0);
+        Cell(90, 6, $previous_add->state, 0, 1, 'L', 0);
+        Cell(90, 6, 'Zip :-', 0, 0, 'L', 0);
+        Cell(90, 6, $previous_add->zip, 0, 1, 'L', 0);
+        Cell(90, 6, 'How long at previous address ? :-', 0, 0, 'L', 0);
+        Cell(90, 6, $previous_add->years . ' Years, ' . $previous_add->months . ' Months', 0, 1, 'L', 0);
+        Cell(90, 6, '', 0, 1, 'L', 0);
+    }
 
 if ($credit["joint"] > 0) {
     SetFont('Times', 'B', 14);
@@ -184,8 +210,28 @@ if ($credit["joint"] > 0) {
     Cell(90, 6, 'Mortgage Balance :-', 0, 0, 'L', 0);
     Cell(90, 6, $co_housing_info->mort_balance, 0, 1, 'L', 0);
     Cell(90, 6, 'Time at Current Residence :-', 0, 0, 'L', 0);
-    Cell(90, 6, $co_housing_info->months . ' Months ,' . $co_housing_info->years . ' Years', 0, 1, 'L', 0);
+    Cell(90, 6, $co_housing_info->years . ' Years, ' . $co_housing_info->months . ' Months', 0, 1, 'L', 0);
     Cell(90, 6, '', 0, 1, 'L', 0);
+
+    if ($co_housing_info->years < 2) {
+        SetFont('Times', 'B', 14);
+        SetTextColor(255, 255, 255);
+        Cell(190, 6, 'Co-Applicant Previous Residence (If less then 5 years at current address..)', 0, 1, 'L', 1);
+        SetFont('Times', '', 12);
+        SetTextColor(0, 0, 0);
+        Cell(90, 6, '', 0, 1, 'L', 0);
+        Cell(90, 6, 'Address :-', 0, 0, 'L', 0);
+        Cell(90, 6, $co_previous_add->address, 0, 1, 'L', 0);
+        Cell(90, 6, 'City :-', 0, 0, 'L', 0);
+        Cell(90, 6, $co_previous_add->city, 0, 1, 'L', 0);
+        Cell(90, 6, 'State :-', 0, 0, 'L', 0);
+        Cell(90, 6, $co_previous_add->state, 0, 1, 'L', 0);
+        Cell(90, 6, 'Zip :-', 0, 0, 'L', 0);
+        Cell(90, 6, $co_previous_add->zip, 0, 1, 'L', 0);
+        Cell(90, 6, 'How long at previous address ? :-', 0, 0, 'L', 0);
+        Cell(90, 6, $co_previous_add->years . ' Years, ' . $co_previous_add->months . ' Months', 0, 1, 'L', 0);
+        Cell(90, 6, '', 0, 1, 'L', 0);
+    }
 }
 	
 	SetFont('Times','B',14);
@@ -222,44 +268,6 @@ if ($credit["joint"] > 0) {
     Cell(90, 6, '', 0, 1, 'L', 0);
 }
 
-	SetFont('Times','B',14);
-	SetTextColor(255,255 ,255 );
-	Cell(190,6, 'Applicant Previous Residence (If less then 5 years at current address..)',0,1,'L',1);
-	SetFont('Times','',12);
-	SetTextColor(0,0,0 );
-	Cell(90,6, '',0,1,'L',0);
-	Cell(90,6, 'Address :-',0,0,'L',0);
-	Cell(90,6, $previous_add->address,0,1,'L',0);
-	Cell(90,6, 'City :-',0,0,'L',0);
-	Cell(90,6, $previous_add->city,0,1,'L',0);
-	Cell(90,6, 'State :-',0,0,'L',0);
-	Cell(90,6, $previous_add->state,0,1,'L',0);
-	Cell(90,6, 'Zip :-',0,0,'L',0);
-	Cell(90,6, $previous_add->zip,0,1,'L',0);
-	Cell(90,6, 'How long at previous address ? :-',0,0,'L',0);
-	Cell(90,6, $previous_add->months.' Months ,'.$previous_add->years.' Years',0,1,'L',0);
-	Cell(90,6, '',0,1,'L',0);
-
-if ($credit["joint"] > 0) {
-    SetFont('Times', 'B', 14);
-    SetTextColor(255, 255, 255);
-    Cell(190, 6, 'Co-Applicant Previous Residence (If less then 5 years at current address..)', 0, 1, 'L', 1);
-    SetFont('Times', '', 12);
-    SetTextColor(0, 0, 0);
-    Cell(90, 6, '', 0, 1, 'L', 0);
-    Cell(90, 6, 'Address :-', 0, 0, 'L', 0);
-    Cell(90, 6, $co_previous_add->address, 0, 1, 'L', 0);
-    Cell(90, 6, 'City :-', 0, 0, 'L', 0);
-    Cell(90, 6, $co_previous_add->city, 0, 1, 'L', 0);
-    Cell(90, 6, 'State :-', 0, 0, 'L', 0);
-    Cell(90, 6, $co_previous_add->state, 0, 1, 'L', 0);
-    Cell(90, 6, 'Zip :-', 0, 0, 'L', 0);
-    Cell(90, 6, $co_previous_add->zip, 0, 1, 'L', 0);
-    Cell(90, 6, 'How long at previous address ? :-', 0, 0, 'L', 0);
-    Cell(90, 6, $co_previous_add->months . ' Months ,' . $co_previous_add->years . ' Years', 0, 1, 'L', 0);
-    Cell(90, 6, '', 0, 1, 'L', 0);
-}
-
 
 	SetFont('Times','B',14);
 	SetTextColor(255,255 ,255 );
@@ -284,7 +292,7 @@ if ($credit["joint"] > 0) {
 	Cell(90,6, 'Salary(Annually Gross) :-',0,0,'L',0);
 	Cell(90,6, $employer_info->salary,0,1,'L',0);
 	Cell(90,6, 'Time at Employer :-',0,0,'L',0);
-	Cell(90,6, $employer_info->month.' Months ,'.$employer_info->year.' Years',0,1,'L',0);
+	Cell(90,6, $employer_info->year.' Years, '.$employer_info->month.' Months',0,1,'L',0);
 	//Cell(90,6, 'Type of Employment :-',0,0,'L',0);
 	//Cell(90,6, $employer_info->address,0,1,'L',0);
 	Cell(90,6, 'Other Income :-',0,0,'L',0);
@@ -294,6 +302,36 @@ if ($credit["joint"] > 0) {
 	Cell(90,6, 'Additional Comments  :-',0,0,'L',0);
 	Cell(90,6, $employer_info->comments,0,1,'L',0);
 	Cell(90,6, '',0,1,'L',0);
+
+	if (isset($prior_employer_info->occupation)) {
+        SetFont('Times','B',14);
+        SetTextColor(255,255 ,255 );
+        Cell(190,6, 'Applicant Previous Employer Information',0,1,'L',1);
+        SetFont('Times','',12);
+        SetTextColor(0,0,0 );
+        Cell(90,6, '',0,1,'L',0);
+        Cell(90,6, 'Occupation :-',0,0,'L',0);
+        Cell(90,6, $prior_employer_info->occupation,0,1,'L',0);
+        Cell(90,6, 'Employer Name :-',0,0,'L',0);
+        Cell(90,6, $prior_employer_info->emp_name,0,1,'L',0);
+        Cell(90,6, 'Employer Address :-',0,0,'L',0);
+        Cell(90,6, $prior_employer_info->emp_addr,0,1,'L',0);
+        Cell(90,6, 'Employer City :-',0,0,'L',0);
+        Cell(90,6, $prior_employer_info->emp_city,0,1,'L',0);
+        Cell(90,6, 'Employer State :-',0,0,'L',0);
+        Cell(90,6, $prior_employer_info->state,0,1,'L',0);
+        Cell(90,6, 'Employer Zip :-',0,0,'L',0);
+        Cell(90,6, $prior_employer_info->emp_zip,0,1,'L',0);
+        Cell(90,6, 'Employer Phone :-',0,0,'L',0);
+        Cell(90,6, $prior_employer_info->emp_phone,0,1,'L',0);
+        Cell(90,6, 'Salary(Annually Gross) :-',0,0,'L',0);
+        Cell(90,6, $prior_employer_info->salary,0,1,'L',0);
+        Cell(90,6, 'Time at Employer :-',0,0,'L',0);
+        Cell(90,6, $prior_employer_info->year.' Years, '.$prior_employer_info->month.' Months',0,1,'L',0);
+        //Cell(90,6, 'Type of Employment :-',0,0,'L',0);
+        //Cell(90,6, $prior_employer_info->address,0,1,'L',0);
+    }
+
 
 if ($credit["joint"] > 0) {
     SetFont('Times', 'B', 14);
@@ -319,7 +357,7 @@ if ($credit["joint"] > 0) {
     Cell(90, 6, 'Salary(Annually Gross) :-', 0, 0, 'L', 0);
     Cell(90, 6, $co_employer_info->salary, 0, 1, 'L', 0);
     Cell(90, 6, 'Time at Employer :-', 0, 0, 'L', 0);
-    Cell(90, 6, $co_employer_info->month . ' Months ,' . $co_employer_info->year . ' Years', 0, 1, 'L', 0);
+    Cell(90, 6, $co_employer_info->year . ' Years, ' . $co_employer_info->month . ' Months', 0, 1, 'L', 0);
     //Cell(90,6, 'Type of Employment :-',0,0,'L',0);
     //Cell(90,6, $employer_info->address,0,1,'L',0);
     Cell(90, 6, 'Other Income :-', 0, 0, 'L', 0);
@@ -329,6 +367,35 @@ if ($credit["joint"] > 0) {
     Cell(90, 6, 'Additional Comments  :-', 0, 0, 'L', 0);
     Cell(90, 6, $co_employer_info->comments, 0, 1, 'L', 0);
     Cell(90, 6, '', 0, 1, 'L', 0);
+
+
+    if (isset($co_prior_employer_info->occupation)) {
+        SetFont('Times','B',14);
+        SetTextColor(255,255 ,255 );
+        Cell(190,6, 'Co-Applicant Previous Employer Information',0,1,'L',1);
+        SetFont('Times','',12);
+        SetTextColor(0,0,0 );
+        Cell(90,6, '',0,1,'L',0);
+        Cell(90,6, 'Occupation :-',0,0,'L',0);
+        Cell(90,6, $co_prior_employer_info->occupation,0,1,'L',0);
+        Cell(90,6, 'Employer Name :-',0,0,'L',0);
+        Cell(90,6, $co_prior_employer_info->emp_name,0,1,'L',0);
+        Cell(90,6, 'Employer Address :-',0,0,'L',0);
+        Cell(90,6, $co_prior_employer_info->emp_addr,0,1,'L',0);
+        Cell(90,6, 'Employer City :-',0,0,'L',0);
+        Cell(90,6, $co_prior_employer_info->emp_city,0,1,'L',0);
+        Cell(90,6, 'Employer State :-',0,0,'L',0);
+        Cell(90,6, $co_prior_employer_info->state,0,1,'L',0);
+        Cell(90,6, 'Employer Zip :-',0,0,'L',0);
+        Cell(90,6, $co_prior_employer_info->emp_zip,0,1,'L',0);
+        Cell(90,6, 'Employer Phone :-',0,0,'L',0);
+        Cell(90,6, $co_prior_employer_info->emp_phone,0,1,'L',0);
+        Cell(90,6, 'Salary(Annually Gross) :-',0,0,'L',0);
+        Cell(90,6, $co_prior_employer_info->salary,0,1,'L',0);
+        Cell(90,6, 'Time at Employer :-',0,0,'L',0);
+        Cell(90,6, $co_prior_employer_info->year.' Years ,'.$co_prior_employer_info->month.' Months',0,1,'L',0);
+        //Cell(90,6, 'Type of Employment :-',0,0,'L',0);
+    }
 }
 
 	SetFont('Times','B',14);
