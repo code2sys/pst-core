@@ -121,9 +121,13 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('employer_info[month]', 'Time at Employer(Month)', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[year]', 'Time at Employer(Year)', 'required|xss_clean');
 
+		print "<!-- ";
+		print_r($_REQUEST);
+		print " -->";
+
 		// If they've been there for less than 2 years, it's required
-        if (intVal($_REQUEST['housing_info[years]']) < 2) {
-            $this->form_validation->set_rules('previous_add[address]', 'Previous Residence Address (Under 2 years at current address)' . intVal($_REQUEST['housing_info[years]']), 'required|xss_clean');
+        if (intVal($_POST['housing_info[years]']) < 2) {
+            $this->form_validation->set_rules('previous_add[address]', 'Previous Residence Address (Under 2 years at current address)' . intVal($_POST['housing_info[years]']), 'required|xss_clean');
             $this->form_validation->set_rules('previous_add[city]', 'Previous Residence City (Under 2 years at current address)', 'required|xss_clean');
             $this->form_validation->set_rules('previous_add[state]', 'Previous Residence State (Under 2 years at current address)', 'required|xss_clean');
             $this->form_validation->set_rules('previous_add[zip]', 'Previous Residence Zip  (Under 2 years at current address)', 'required|xss_clean');
