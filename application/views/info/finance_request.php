@@ -563,6 +563,11 @@
 								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Housing Information:</b></p>
 							</td>
 						</tr>
+                        <tr class="joint-row">
+                            <td colspan="2">
+                                <em>If you are married and filing a joint credit application, you and your spouse must have the same address.</em>
+                            </td>
+                        </tr>
 						<tr class="joint-row">
 							<td>
 								<label for="co_housing_info[owns]" >Do you rent or own your home, or other ?</label>
