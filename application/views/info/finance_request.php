@@ -201,6 +201,15 @@
 						</tr>
 						<tr>
 							<td>
+								<label for="dl" >Driver's License Expiration</label>
+							</td>
+							<td>
+								<input name="driver_licence_expiration" type="date" placeholder="" value="<?php echo $_POST['driver_licence_expiration'];?>" />
+                                <span><b>*</b></span>
+							</td>
+						</tr>
+						<tr>
+							<td>
 								<label for="wphone" >Work Phone</label>
 							</td>
 							<td>
@@ -307,6 +316,15 @@
 							</td>
 							<td>
 								<input name="co_dl" placeholder="" value="<?php echo $_POST['co_dl'];?>" />
+                                <span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_dl" >Driver's License Expiration</label>
+							</td>
+							<td>
+								<input name="co_driver_licence_expiration" type="date" placeholder="" value="<?php echo $_POST['co_driver_licence_expiration'];?>" />
                                 <span><b>*</b></span>
 							</td>
 						</tr>
