@@ -126,8 +126,8 @@ class Pages extends Master_Controller {
 		print " -->";
 
 		// If they've been there for less than 2 years, it's required
-        if (intVal($_POST['housing_info[years]']) < 2) {
-            $this->form_validation->set_rules('previous_add[address]', 'Previous Residence Address (Under 2 years at current address)' . intVal($_POST['housing_info[years]']), 'required|xss_clean');
+        if (intVal($_REQUEST['housing_info']['years']) < 2) {
+            $this->form_validation->set_rules('previous_add[address]', 'Previous Residence Address (Under 2 years at current address)', 'required|xss_clean');
             $this->form_validation->set_rules('previous_add[city]', 'Previous Residence City (Under 2 years at current address)', 'required|xss_clean');
             $this->form_validation->set_rules('previous_add[state]', 'Previous Residence State (Under 2 years at current address)', 'required|xss_clean');
             $this->form_validation->set_rules('previous_add[zip]', 'Previous Residence Zip  (Under 2 years at current address)', 'required|xss_clean');
@@ -164,7 +164,7 @@ class Pages extends Master_Controller {
 //            $this->form_validation->set_rules('co_employer_info[month]', 'Co-Applicant Time at Employer(Month)', 'required|xss_clean');
 //            $this->form_validation->set_rules('co_employer_info[year]', 'Co-Applicant Time at Employer(Year)', 'required|xss_clean');
 
-            if ($_REQUEST['co_housing_info[years]'] < 2) {
+            if ($_REQUEST['co_housing_info']['years'] < 2) {
                 $this->form_validation->set_rules('co_previous_add[address]', 'Co-Applicant Previous Residence Address (Under 2 years at current address)', 'required|xss_clean');
                 $this->form_validation->set_rules('co_previous_add[city]', 'Co-Applicant Previous Residence City (Under 2 years at current address)', 'required|xss_clean');
                 $this->form_validation->set_rules('co_previous_add[state]', 'Co-Applicant Previous Residence State (Under 2 years at current address)', 'required|xss_clean');
