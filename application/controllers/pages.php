@@ -94,6 +94,7 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('year', 'Year', 'required|xss_clean');
 		$this->form_validation->set_rules('email', 'Email', 'required|valid_email|xss_clean');
 		$this->form_validation->set_rules('initial', 'Initial', 'required|xss_clean');
+		$this->form_validation->set_rules('dl', 'Driver\s License', 'required|xss_clean');
 		$this->form_validation->set_rules('type', 'Type', 'required|xss_clean');
 		$this->form_validation->set_rules('condition', 'Condition', 'required|xss_clean');
 		$this->form_validation->set_rules('down_payment', 'Down Payment', 'required|xss_clean');
@@ -125,6 +126,7 @@ class Pages extends Master_Controller {
             $this->form_validation->set_rules('co_fname', 'Co-Applicant First Name', 'required|xss_clean');
             $this->form_validation->set_rules('co_lname', 'Co-Applicant Last Name', 'required|xss_clean');
             $this->form_validation->set_rules('co_email', 'Co-Applicant Email', 'required|valid_email|xss_clean');
+            $this->form_validation->set_rules('co_dl', 'Co-Applicant Driver\s License', 'required|xss_clean');
             $this->form_validation->set_rules('co_initial', 'Co-Applicant Initial', 'required|xss_clean');
             $this->form_validation->set_rules('co_contact_info[rphone]', 'Co-Applicant Residence Phone', 'required|xss_clean');
             $this->form_validation->set_rules('co_contact_info[ssno]', 'Co-Applicant Social Security Number', 'required|xss_clean');

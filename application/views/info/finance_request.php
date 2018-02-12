@@ -196,6 +196,7 @@
 							</td>
 							<td>
 								<input name="dl" placeholder="" value="<?php echo $_POST['dl'];?>" />
+                                <span><b>*</b></span>
 							</td>
 						</tr>
 						<tr>
@@ -306,6 +307,7 @@
 							</td>
 							<td>
 								<input name="co_dl" placeholder="" value="<?php echo $_POST['co_dl'];?>" />
+                                <span><b>*</b></span>
 							</td>
 						</tr>
 						<tr class="joint-row">
