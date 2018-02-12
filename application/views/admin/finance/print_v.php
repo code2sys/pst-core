@@ -125,7 +125,14 @@ if ($application['joint'] > 0) {
 								<label for="dl" >Driver's License</label>
 							</td>
 							<td>
-								<?php echo $application['dl'];?>
+								<?php echo $application['driver_licence'];?>
+							</td>
+						</tr>						<tr>
+							<td>
+								<label for="dl" >Driver's License Expiration</label>
+							</td>
+							<td>
+								<?php echo $application['driver_licence_expiration'];?>
 							</td>
 						</tr>
 						<tr>
@@ -220,7 +227,15 @@ if ($application['joint'] > 0) {
 								<label for="dl" >Driver's License</label>
 							</td>
 							<td>
-								<?php echo $application['co_dl'];?>
+								<?php echo $application['co_driver_licence'];?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label for="dl" >Driver's License Expiration</label>
+							</td>
+							<td>
+								<?php echo $application['co_driver_licence_expiration'];?>
 							</td>
 						</tr>
 						<tr>
