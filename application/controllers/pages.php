@@ -384,7 +384,7 @@ class Pages extends Master_Controller {
 			$data['reference'] = json_encode($post['reference']);
 			$data['application_date'] = date('Y-m-d H:i:s');
 
-			if ($post["employer_info"]["years"] < 2) {
+			if ($post["employer_info"]["year"] < 2) {
 			    $data["prior_employer_info"] = json_encode($post['prior_employer_info']);
             } else {
 			    $data["prior_employer_info"] = "{}";
@@ -405,7 +405,7 @@ class Pages extends Master_Controller {
                 $data['co_previous_add'] = json_encode($post['co_previous_add']);
                 $data['co_employer_info'] = json_encode($post['co_employer_info']);
 
-                if ($post["co_employer_info"]["years"] < 2) {
+                if ($post["co_employer_info"]["year"] < 2) {
                     $data["co_prior_employer_info"] = json_encode($post['co_prior_employer_info']);
                 } else {
                     $data["co_prior_employer_info"] = "{}";
