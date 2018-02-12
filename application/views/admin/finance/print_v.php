@@ -417,7 +417,7 @@ if ($application['joint'] > 0) {
 								<label for="time" >Time at Current Residence</label>
 							</td>
 							<td>
-								<?php echo $housing_info->months.' Months && '.$housing_info->years.' Years';?>
+								<?php echo $housing_info->years.' Years, '.$housing_info->months.' Months';?>
 							</td>
 						</tr>
 
@@ -456,7 +456,7 @@ if ($application['joint'] > 0) {
                                     <label for="how_long" >How long at previous address ?</label>
                                 </td>
                                 <td>
-                                    <?php echo $previous_add->months.' Months && '.$previous_add->years.' Years';?>
+                                    <?php echo $previous_add->years.' Years, '.$previous_add->months.' Months';?>
                                 </td>
                             </tr>
                         <?php endif; ?>
@@ -506,7 +506,7 @@ if ($application['joint'] > 0) {
 								<label for="time" >Time at Current Residence</label>
 							</td>
 							<td>
-								<?php echo $co_housing_info->months.' Months && '.$co_housing_info->years.' Years';?>
+								<?php echo $co_housing_info->years.' Years, '.$co_housing_info->months.' Months';?>
 							</td>
 						</tr>
 
@@ -545,7 +545,7 @@ if ($application['joint'] > 0) {
                                         <label for="how_long" >How long at previous address ?</label>
                                     </td>
                                     <td>
-                                        <?php echo $co_previous_add->months.' Months && '.$co_previous_add->years.' Years';?>
+                                        <?php echo $co_previous_add->years.' Years, '.$co_previous_add->months.' Months';?>
                                     </td>
                                 </tr>
                             <?php endif; ?>
@@ -706,7 +706,7 @@ if ($application['joint'] > 0) {
 								<label for="emp_time" >Time at Employer</label>
 							</td>
 							<td>
-								<?php echo $employer_info->month.' Months && '.$employer_info->year.' Years';?>
+								<?php echo $employer_info->year.' Years, '.$employer_info->month.' Months';?>
 							</td>
 						</tr>
 						<tr>
@@ -818,7 +818,7 @@ if ($application['joint'] > 0) {
                                     <label for="emp_time" >Time at Employer</label>
                                 </td>
                                 <td>
-                                    <?php echo $prior_employer_info->month.' Months && '.$prior_employer_info->year.' Years';?>
+                                    <?php echo $prior_employer_info->year.' Years, '.$prior_employer_info->month.' Months';?>
                                 </td>
                             </tr>
                             <tr>
@@ -908,7 +908,7 @@ if ($application['joint'] > 0) {
 								<label for="emp_time" >Time at Employer</label>
 							</td>
 							<td>
-								<?php echo $co_employer_info->month.' Months && '.$co_employer_info->year.' Years';?>
+								<?php echo $co_employer_info->year.' Years, '.$co_employer_info->month.' Months';?>
 							</td>
 						</tr>
 						<tr>
@@ -1021,7 +1021,7 @@ if ($application['joint'] > 0) {
                                         <label for="emp_time" >Time at Employer</label>
                                     </td>
                                     <td>
-                                        <?php echo $co_prior_employer_info->month.' Months && '.$co_prior_employer_info->year.' Years';?>
+                                        <?php echo $co_prior_employer_info->year.' Years, '.$co_prior_employer_info->month.' Months';?>
                                     </td>
                                 </tr>
                                 <tr>
