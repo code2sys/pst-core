@@ -167,7 +167,7 @@ if ($credit["joint"] > 0) {
 	Cell(90,6, 'Mortgage Balance :-',0,0,'L',0);
 	Cell(90,6, $housing_info->mort_balance,0,1,'L',0);
 	Cell(90,6, 'Time at Current Residence :-',0,0,'L',0);
-	Cell(90,6, $housing_info->months.' Months ,'.$housing_info->years.' Years',0,1,'L',0);
+	Cell(90,6, $housing_info->years.' Years, '.$housing_info->months.' Months',0,1,'L',0);
 	Cell(90,6, '',0,1,'L',0);
 
 	if ($housing_info->years < 2) {
@@ -186,7 +186,7 @@ if ($credit["joint"] > 0) {
         Cell(90, 6, 'Zip :-', 0, 0, 'L', 0);
         Cell(90, 6, $previous_add->zip, 0, 1, 'L', 0);
         Cell(90, 6, 'How long at previous address ? :-', 0, 0, 'L', 0);
-        Cell(90, 6, $previous_add->months . ' Months ,' . $previous_add->years . ' Years', 0, 1, 'L', 0);
+        Cell(90, 6, $previous_add->years . ' Years, ' . $previous_add->months . ' Months', 0, 1, 'L', 0);
         Cell(90, 6, '', 0, 1, 'L', 0);
     }
 
@@ -206,7 +206,7 @@ if ($credit["joint"] > 0) {
     Cell(90, 6, 'Mortgage Balance :-', 0, 0, 'L', 0);
     Cell(90, 6, $co_housing_info->mort_balance, 0, 1, 'L', 0);
     Cell(90, 6, 'Time at Current Residence :-', 0, 0, 'L', 0);
-    Cell(90, 6, $co_housing_info->months . ' Months ,' . $co_housing_info->years . ' Years', 0, 1, 'L', 0);
+    Cell(90, 6, $co_housing_info->years . ' Years, ' . $co_housing_info->months . ' Months', 0, 1, 'L', 0);
     Cell(90, 6, '', 0, 1, 'L', 0);
 
     if ($co_housing_info->years < 2) {
@@ -225,7 +225,7 @@ if ($credit["joint"] > 0) {
         Cell(90, 6, 'Zip :-', 0, 0, 'L', 0);
         Cell(90, 6, $co_previous_add->zip, 0, 1, 'L', 0);
         Cell(90, 6, 'How long at previous address ? :-', 0, 0, 'L', 0);
-        Cell(90, 6, $co_previous_add->months . ' Months ,' . $co_previous_add->years . ' Years', 0, 1, 'L', 0);
+        Cell(90, 6, $co_previous_add->years . ' Years, ' . $co_previous_add->months . ' Months', 0, 1, 'L', 0);
         Cell(90, 6, '', 0, 1, 'L', 0);
     }
 }
@@ -288,7 +288,7 @@ if ($credit["joint"] > 0) {
 	Cell(90,6, 'Salary(Annually Gross) :-',0,0,'L',0);
 	Cell(90,6, $employer_info->salary,0,1,'L',0);
 	Cell(90,6, 'Time at Employer :-',0,0,'L',0);
-	Cell(90,6, $employer_info->month.' Months ,'.$employer_info->year.' Years',0,1,'L',0);
+	Cell(90,6, $employer_info->year.' Years, '.$employer_info->month.' Months',0,1,'L',0);
 	//Cell(90,6, 'Type of Employment :-',0,0,'L',0);
 	//Cell(90,6, $employer_info->address,0,1,'L',0);
 	Cell(90,6, 'Other Income :-',0,0,'L',0);
@@ -323,16 +323,9 @@ if ($credit["joint"] > 0) {
         Cell(90,6, 'Salary(Annually Gross) :-',0,0,'L',0);
         Cell(90,6, $prior_employer_info->salary,0,1,'L',0);
         Cell(90,6, 'Time at Employer :-',0,0,'L',0);
-        Cell(90,6, $prior_employer_info->month.' Months ,'.$prior_employer_info->year.' Years',0,1,'L',0);
+        Cell(90,6, $prior_employer_info->year.' Years, '.$prior_employer_info->month.' Months',0,1,'L',0);
         //Cell(90,6, 'Type of Employment :-',0,0,'L',0);
         //Cell(90,6, $prior_employer_info->address,0,1,'L',0);
-        Cell(90,6, 'Other Income :-',0,0,'L',0);
-        Cell(90,6, $prior_employer_info->other_income,0,1,'L',0);
-        Cell(90,6, 'Other Income Frequency :-',0,0,'L',0);
-        Cell(90,6, $prior_employer_info->income_frequency,0,1,'L',0);
-        Cell(90,6, 'Additional Comments  :-',0,0,'L',0);
-        Cell(90,6, $prior_employer_info->comments,0,1,'L',0);
-        Cell(90,6, '',0,1,'L',0);
     }
 
 
@@ -360,7 +353,7 @@ if ($credit["joint"] > 0) {
     Cell(90, 6, 'Salary(Annually Gross) :-', 0, 0, 'L', 0);
     Cell(90, 6, $co_employer_info->salary, 0, 1, 'L', 0);
     Cell(90, 6, 'Time at Employer :-', 0, 0, 'L', 0);
-    Cell(90, 6, $co_employer_info->month . ' Months ,' . $co_employer_info->year . ' Years', 0, 1, 'L', 0);
+    Cell(90, 6, $co_employer_info->year . ' Years, ' . $co_employer_info->month . ' Months', 0, 1, 'L', 0);
     //Cell(90,6, 'Type of Employment :-',0,0,'L',0);
     //Cell(90,6, $employer_info->address,0,1,'L',0);
     Cell(90, 6, 'Other Income :-', 0, 0, 'L', 0);
@@ -396,16 +389,8 @@ if ($credit["joint"] > 0) {
         Cell(90,6, 'Salary(Annually Gross) :-',0,0,'L',0);
         Cell(90,6, $co_prior_employer_info->salary,0,1,'L',0);
         Cell(90,6, 'Time at Employer :-',0,0,'L',0);
-        Cell(90,6, $co_prior_employer_info->month.' Months ,'.$co_prior_employer_info->year.' Years',0,1,'L',0);
+        Cell(90,6, $co_prior_employer_info->year.' Years ,'.$co_prior_employer_info->month.' Months',0,1,'L',0);
         //Cell(90,6, 'Type of Employment :-',0,0,'L',0);
-        //Cell(90,6, $co_prior_employer_info->address,0,1,'L',0);
-        Cell(90,6, 'Other Income :-',0,0,'L',0);
-        Cell(90,6, $co_prior_employer_info->other_income,0,1,'L',0);
-        Cell(90,6, 'Other Income Frequency :-',0,0,'L',0);
-        Cell(90,6, $co_prior_employer_info->income_frequency,0,1,'L',0);
-        Cell(90,6, 'Additional Comments  :-',0,0,'L',0);
-        Cell(90,6, $co_prior_employer_info->comments,0,1,'L',0);
-        Cell(90,6, '',0,1,'L',0);
     }
 }
 
