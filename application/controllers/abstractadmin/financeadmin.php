@@ -147,10 +147,12 @@ abstract class Financeadmin extends Motorcycleadmin {
             $data['first_name'] = $post['fname'];
             $data['last_name'] = $post['lname'];
             $data['driver_licence'] = $post['dl'];
+            $data['driver_licence_expiration'] = $post['driver_licence_expiration'];
             $data['email'] = $post['email'];
             $data['co_first_name'] = $post['co_fname'];
             $data['co_last_name'] = $post['co_lname'];
             $data['co_driver_licence'] = $post['co_dl'];
+            $data['co_driver_licence_expiration'] = $post['co_driver_licence_expiration'];
             $data['co_email'] = $post['co_email'];
             $data['application_status'] = $post['application_status'];
             $data['contact_info'] = json_encode($post['contact_info']);
@@ -159,12 +161,14 @@ abstract class Financeadmin extends Motorcycleadmin {
             $data['banking_info'] = json_encode($post['banking_info']);
             $data['previous_add'] = json_encode($post['previous_add']);
             $data['employer_info'] = json_encode($post['employer_info']);
+            $data['prior_employer_info'] = json_encode($post['employer_info']);
             $data['co_contact_info'] = json_encode($post['co_contact_info']);
             $data['co_physical_address'] = json_encode($post['co_physical_address']);
             $data['co_housing_info'] = json_encode($post['co_housing_info']);
             $data['co_banking_info'] = json_encode($post['co_banking_info']);
             $data['co_previous_add'] = json_encode($post['co_previous_add']);
             $data['co_employer_info'] = json_encode($post['co_employer_info']);
+            $data['co_prior_employer_info'] = json_encode($post['co_employer_info']);
             $data['reference'] = json_encode($post['reference']);
             $this->admin_m->update_finance($id, $data);
             $this->_mainData['success'] = TRUE;

@@ -5,6 +5,7 @@ $housing_info = json_decode($application['housing_info']);
 $banking_info = json_decode($application['banking_info']);
 $previous_add = json_decode($application['previous_add']);
 $employer_info = json_decode($application['employer_info']);
+$prior_employer_info = json_decode($application['prior_employer_info']);
 $reference = json_decode($application['reference']);
 
 if ($application['joint'] > 0) {
@@ -14,7 +15,7 @@ if ($application['joint'] > 0) {
     $co_banking_info = json_decode($application['co_banking_info']);
     $co_previous_add = json_decode($application['co_previous_add']);
     $co_employer_info = json_decode($application['co_employer_info']);
-
+    $co_prior_employer_info = json_decode($application['co_prior_employer_info']);
 }
 
 ?>
@@ -196,6 +197,14 @@ if ($application['joint'] > 0) {
 								<input name="dl" placeholder="" value="<?php echo $application['driver_licence'];?>" />
 							</td>
 						</tr>
+                        <tr>
+							<td>
+								<label for="driver_licence_expiration" >Driver's License Expiration</label>
+							</td>
+							<td>
+								<input name="driver_licence_expiration" type="date" placeholder="" value="<?php echo $application['driver_licence_expiration'];?>" />
+							</td>
+						</tr>
 						<tr>
 							<td>
 								<label for="wphone" >Work Phone</label>
@@ -305,6 +314,14 @@ if ($application['joint'] > 0) {
 								<input name="co_dl" placeholder="" value="<?php echo $application['co_driver_licence'];?>" />
 							</td>
 						</tr>
+                        <trclass='joint-row'>
+                            <td>
+                                <label for="co_driver_licence_expiration" >Driver's License Expiration</label>
+                            </td>
+                            <td>
+                                <input name="co_driver_licence_expiration" type="date" placeholder="" value="<?php echo $application['co_driver_licence_expiration'];?>" />
+                            </td>
+                        </tr>
 						<tr class='joint-row'>
 							<td>
 								<label for="co_wphone" >Work Phone</label>
@@ -492,9 +509,72 @@ if ($application['joint'] > 0) {
 								<span><b>*</b></span>
 							</td>
 						</tr>
-						
-                        
-						<tr class='joint-row'>
+
+
+
+                        <tr class="applicant_previous_resident">
+                            <td colspan="2">
+                                <p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Previous Residence (If less then 5 years at current address..)</b></p>
+                            </td>
+                        </tr>
+                        <tr class="applicant_previous_resident">
+                            <td>
+                                <label for="address1" >Address</label>
+                            </td>
+                            <td>
+                                <input name="previous_add[address]" placeholder="" value="<?php echo $previous_add->address;?>" />
+                            </td>
+                        </tr>
+                        <tr class="applicant_previous_resident">
+                            <td>
+                                <label for="city" >City</label>
+                            </td>
+                            <td>
+                                <input name="previous_add[city]" placeholder="" value="<?php echo $previous_add->city;?>" />
+                            </td>
+                        </tr>
+                        <tr class="applicant_previous_resident">
+                            <td>
+                                <label for="st_zip" >State</label>
+                            </td>
+                            <td>
+                                <?php echo form_dropdown('previous_add[state]', $states, $previous_add->state, 'id="billing_state"'); ?>
+                                <!--<input name="previous_add[state]" placeholder="" value="<?php echo $previous_add->state;?>" />-->
+                            </td>
+                        </tr>
+                        <tr class="applicant_previous_resident">
+                            <td>
+                                <label for="st_zip" >Zip</label>
+                            </td>
+                            <td>
+                                <input name="previous_add[zip]" placeholder="" value="<?php echo $previous_add->zip;?>" />
+                            </td>
+                        </tr>
+                        <tr class="applicant_previous_resident">
+                            <td>
+                                <label for="how_long" >How long at previous address ?</label>
+                            </td>
+                            <td>
+                                <select name="previous_add[years]">
+                                    <option value="">Years</option>
+                                    <?php for($m=0;$m<=100;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo $previous_add->years==$m?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Years
+                                <select name="previous_add[months]">
+                                    <option value="">Months</option>
+                                    <?php for($m=0;$m<=12;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo $previous_add->months==$m?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Months
+                            </td>
+                        </tr>
+
+
+
+
+
+                        <tr class='joint-row'>
 							<td colspan="2">
 								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Physical Address Information:</b></p>
 							</td>
@@ -611,6 +691,65 @@ if ($application['joint'] > 0) {
 						</tr>
 
 
+                        <tr class='joint-row co_applicant_previous_residence'>
+                            <td colspan="2">
+                                <p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Previous Residence (If less then 5 years at current address..)</b></p>
+                            </td>
+                        </tr>
+                        <tr class='joint-row co_applicant_previous_residence'>
+                            <td>
+                                <label for="co_address1" >Address</label>
+                            </td>
+                            <td>
+                                <input name="co_previous_add[address]" placeholder="" value="<?php echo $co_previous_add->address;?>" />
+                            </td>
+                        </tr>
+                        <tr class='joint-row co_applicant_previous_residence'>
+                            <td>
+                                <label for="co_city" >City</label>
+                            </td>
+                            <td>
+                                <input name="co_previous_add[city]" placeholder="" value="<?php echo $co_previous_add->city;?>" />
+                            </td>
+                        </tr>
+                        <tr class='joint-row co_applicant_previous_residence'>
+                            <td>
+                                <label for="co_st_zip" >State</label>
+                            </td>
+                            <td>
+                                <?php echo form_dropdown('co_previous_add[state]', $states, $co_previous_add->state, 'id="co_billing_state"'); ?>
+                                <!--<input name="previous_add[state]" placeholder="" value="<?php echo $co_previous_add->state;?>" />-->
+                            </td>
+                        </tr>
+                        <tr class='joint-row co_applicant_previous_residence'>
+                            <td>
+                                <label for="co_st_zip" >Zip</label>
+                            </td>
+                            <td>
+                                <input name="co_previous_add[zip]" placeholder="" value="<?php echo $co_previous_add->zip;?>" />
+                            </td>
+                        </tr>
+                        <tr class='joint-row co_applicant_previous_residence'>
+                            <td>
+                                <label for="co_how_long" >How long at previous address ?</label>
+                            </td>
+                            <td>
+                                <select name="co_previous_add[years]">
+                                    <option value="">Years</option>
+                                    <?php for($m=0;$m<=100;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo $co_previous_add->years==$m?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Years
+                                <select name="co_previous_add[months]">
+                                    <option value="">Months</option>
+                                    <?php for($m=0;$m<=12;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo $co_previous_add->months==$m?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Months
+                            </td>
+                        </tr>
+
+
 
 						<tr>
 							<td colspan="2">
@@ -689,122 +828,8 @@ if ($application['joint'] > 0) {
 						</tr>
 
 
+
                         
-						<tr>
-							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Previous Residence (If less then 5 years at current address..)</b></p>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="address1" >Address</label>
-							</td>
-							<td>
-								<input name="previous_add[address]" placeholder="" value="<?php echo $previous_add->address;?>" />
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="city" >City</label>
-							</td>
-							<td>
-								<input name="previous_add[city]" placeholder="" value="<?php echo $previous_add->city;?>" />
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="st_zip" >State</label>
-							</td>
-							<td>
-								<?php echo form_dropdown('previous_add[state]', $states, $previous_add->state, 'id="billing_state"'); ?>
-								<!--<input name="previous_add[state]" placeholder="" value="<?php echo $previous_add->state;?>" />-->
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="st_zip" >Zip</label>
-							</td>
-							<td>
-								<input name="previous_add[zip]" placeholder="" value="<?php echo $previous_add->zip;?>" />
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="how_long" >How long at previous address ?</label>
-							</td>
-							<td>
-                                <select name="previous_add[years]">
-                                    <option value="">Years</option>
-                                    <?php for($m=0;$m<=100;$m++) { ?>
-                                        <option value="<?php echo $m;?>" <?php echo $previous_add->years==$m?'selected':'';?>><?php echo $m;?></option>
-                                    <?php } ?>
-                                </select>Years
-								<select name="previous_add[months]">
-									<option value="">Months</option>
-									<?php for($m=0;$m<=12;$m++) { ?>
-									<option value="<?php echo $m;?>" <?php echo $previous_add->months==$m?'selected':'';?>><?php echo $m;?></option>
-									<?php } ?>
-								</select>Months
-							</td>
-						</tr>
-						
-						<tr class='joint-row'>
-							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Previous Residence (If less then 5 years at current address..)</b></p>
-							</td>
-						</tr>
-						<tr class='joint-row'>
-							<td>
-								<label for="co_address1" >Address</label>
-							</td>
-							<td>
-								<input name="co_previous_add[address]" placeholder="" value="<?php echo $co_previous_add->address;?>" />
-							</td>
-						</tr>
-						<tr class='joint-row'>
-							<td>
-								<label for="co_city" >City</label>
-							</td>
-							<td>
-								<input name="co_previous_add[city]" placeholder="" value="<?php echo $co_previous_add->city;?>" />
-							</td>
-						</tr>
-						<tr class='joint-row'>
-							<td>
-								<label for="co_st_zip" >State</label>
-							</td>
-							<td>
-								<?php echo form_dropdown('co_previous_add[state]', $states, $co_previous_add->state, 'id="co_billing_state"'); ?>
-								<!--<input name="previous_add[state]" placeholder="" value="<?php echo $co_previous_add->state;?>" />-->
-							</td>
-						</tr>
-						<tr class='joint-row'>
-							<td>
-								<label for="co_st_zip" >Zip</label>
-							</td>
-							<td>
-								<input name="co_previous_add[zip]" placeholder="" value="<?php echo $co_previous_add->zip;?>" />
-							</td>
-						</tr>
-						<tr class='joint-row'>
-							<td>
-								<label for="co_how_long" >How long at previous address ?</label>
-							</td>
-							<td>
-                                <select name="co_previous_add[years]">
-                                    <option value="">Years</option>
-                                    <?php for($m=0;$m<=100;$m++) { ?>
-                                        <option value="<?php echo $m;?>" <?php echo $co_previous_add->years==$m?'selected':'';?>><?php echo $m;?></option>
-                                    <?php } ?>
-                                </select>Years
-								<select name="co_previous_add[months]">
-									<option value="">Months</option>
-									<?php for($m=0;$m<=12;$m++) { ?>
-									<option value="<?php echo $m;?>" <?php echo $co_previous_add->months==$m?'selected':'';?>><?php echo $m;?></option>
-									<?php } ?>
-								</select>Months
-							</td>
-						</tr>
 
                         
 						<tr>
@@ -938,6 +963,124 @@ if ($application['joint'] > 0) {
 								<textarea name="employer_info[comments]" placeholder="" value="" ><?php echo $employer_info->comments;?></textarea>
 							</td>
 						</tr>
+                        
+                        
+                        
+                        
+                        
+						<tr class="prior_employment_history">
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Previous Employer Information:</b></p>
+							</td>
+						</tr>
+						<tr class="prior_employment_history">
+							<td>
+								<label for="prior_occupation" >Occupation</label>
+							</td>
+							<td>
+								<input name="prior_employer_info[occupation]" placeholder="" value="<?php echo $prior_employer_info->occupation;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="prior_employment_history">
+							<td>
+								<label for="prior_emp_name" >Employer Name</label>
+							</td>
+							<td>
+								<input name="prior_employer_info[emp_name]" placeholder="" value="<?php echo $prior_employer_info->emp_name;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="prior_employment_history">
+							<td>
+								<label for="prior_emp_addr" >Employer Address</label>
+							</td>
+							<td>
+								<input name="prior_employer_info[emp_addr]" placeholder="" value="<?php echo $prior_employer_info->emp_addr;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="prior_employment_history">
+							<td>
+								<label for="prior_emp_city" >Employer City</label>
+							</td>
+							<td>
+								<input name="prior_employer_info[emp_city]" placeholder="" value="<?php echo $prior_employer_info->emp_city;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="prior_employment_history">
+							<td>
+								<label for="prior_emp_state" >Employer State</label>
+							</td>
+							<td>
+								<?php echo form_dropdown('prior_employer_info[state]', $states, $prior_employer_info->state, 'id="prior_billing_state"'); ?>
+								<!--<input name="employer_info[emp_state]" placeholder="" value="<?php echo $prior_employer_info->emp_state;?>" />-->
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="prior_employment_history">
+							<td>
+								<label for="prior_emp_zip" >Employer Zip</label>
+							</td>
+							<td>
+								<input name="prior_employer_info[emp_zip]" placeholder="" value="<?php echo $prior_employer_info->emp_zip;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="prior_employment_history">
+							<td>
+								<label for="prior_emp_phone" >Employer Phone</label>
+							</td>
+							<td>
+								<input name="prior_employer_info[emp_phone]" placeholder="" value="<?php echo $prior_employer_info->emp_phone;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="prior_employment_history">
+							<td>
+								<label for="prior_salary" >Salary(Annually Gross)</label>
+							</td>
+							<td>
+								<input name="prior_employer_info[salary]" placeholder="" value="<?php echo $prior_employer_info->salary;?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="prior_employment_history">
+							<td>
+								<label for="prior_emp_time" >Time at Employer</label>
+							</td>
+							<td>
+                                <select name="prior_employer_info[year]">
+                                    <option value="">Years</option>
+                                    <?php for($m=0;$m<=100;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo $prior_employer_info->year==$m?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Years
+								<select name="prior_employer_info[month]">
+									<option value="">Months</option>
+									<?php for($m=0;$m<=12;$m++) { ?>
+									<option value="<?php echo $m;?>" <?php echo $prior_employer_info->month==$m?'selected':'';?>><?php echo $m;?></option>
+									<?php } ?>
+								</select>Months
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="prior_employment_history">
+							<td>
+								<label>Type of Employment</label>
+							</td>
+							<td>
+								<input type="radio" id="prior_full" name="prior_employer_info[emp_type]" placeholder="" value="Full" <?php echo $prior_employer_info->emp_type == 'Full' ? 'checked' : '';?>/>Full
+								<input type="radio" id="prior_part" name="prior_employer_info[emp_type]" placeholder="" value="Part-Time" <?php echo $prior_employer_info->emp_type == 'Part-Time' ? 'checked' : '';?>/>Part-Time
+							</td>
+						</tr>
+                       
+                        
+                        
+                        
+                        
+                        
 						<tr class='joint-row'>
 							<td colspan="2">
 								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Employer Information:</b></p>
@@ -1069,7 +1212,121 @@ if ($application['joint'] > 0) {
 								<textarea name="co_employer_info[comments]" placeholder="" value="" ><?php echo $co_employer_info->comments;?></textarea>
 							</td>
 						</tr>
-					</table>
+
+
+
+
+                        <tr class="joint-row co_prior_employment_history">
+                            <td colspan="2">
+                                <p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Previous Employer Information:</b></p>
+                            </td>
+                        </tr>
+                        <tr class="joint-row co_prior_employment_history">
+                            <td>
+                                <label for="co_prior_occupation" >Occupation</label>
+                            </td>
+                            <td>
+                                <input name="co_prior_employer_info[occupation]" placeholder="" value="<?php echo $co_prior_employer_info->occupation;?>" />
+                                <span><b>*</b></span>
+                            </td>
+                        </tr>
+                        <tr class="joint-row co_prior_employment_history">
+                            <td>
+                                <label for="co_prior_emp_name" >Employer Name</label>
+                            </td>
+                            <td>
+                                <input name="co_prior_employer_info[emp_name]" placeholder="" value="<?php echo $co_prior_employer_info->emp_name;?>" />
+                                <span><b>*</b></span>
+                            </td>
+                        </tr>
+                        <tr class="joint-row co_prior_employment_history">
+                            <td>
+                                <label for="co_prior_emp_addr" >Employer Address</label>
+                            </td>
+                            <td>
+                                <input name="co_prior_employer_info[emp_addr]" placeholder="" value="<?php echo $co_prior_employer_info->emp_addr;?>" />
+                                <span><b>*</b></span>
+                            </td>
+                        </tr>
+                        <tr class="joint-row co_prior_employment_history">
+                            <td>
+                                <label for="co_prior_emp_city" >Employer City</label>
+                            </td>
+                            <td>
+                                <input name="co_prior_employer_info[emp_city]" placeholder="" value="<?php echo $co_prior_employer_info->emp_city;?>" />
+                                <span><b>*</b></span>
+                            </td>
+                        </tr>
+                        <tr class="joint-row co_prior_employment_history">
+                            <td>
+                                <label for="co_prior_emp_state" >Employer State</label>
+                            </td>
+                            <td>
+                                <?php echo form_dropdown('co_prior_employer_info[state]', $states, $co_prior_employer_info->state, 'id="co_prior_billing_state"'); ?>
+                                <!--<input name="employer_info[emp_state]" placeholder="" value="<?php echo $employer_info->emp_state;?>" />-->
+                                <span><b>*</b></span>
+                            </td>
+                        </tr>
+                        <tr class="joint-row co_prior_employment_history">
+                            <td>
+                                <label for="co_prior_emp_zip" >Employer Zip</label>
+                            </td>
+                            <td>
+                                <input name="co_prior_employer_info[emp_zip]" placeholder="" value="<?php echo $co_prior_employer_info->emp_zip;?>" />
+                                <span><b>*</b></span>
+                            </td>
+                        </tr>
+                        <tr class="joint-row co_prior_employment_history">
+                            <td>
+                                <label for="co_prior_emp_phone" >Employer Phone</label>
+                            </td>
+                            <td>
+                                <input name="co_prior_employer_info[emp_phone]" placeholder="" value="<?php echo $co_prior_employer_info->emp_phone;?>" />
+                                <span><b>*</b></span>
+                            </td>
+                        </tr>
+                        <tr class="joint-row co_prior_employment_history">
+                            <td>
+                                <label for="co_prior_salary" >Salary(Annually Gross)</label>
+                            </td>
+                            <td>
+                                <input name="co_prior_employer_info[salary]" placeholder="" value="<?php echo $co_prior_employer_info->salary;?>" />
+                                <span><b>*</b></span>
+                            </td>
+                        </tr>
+                        <tr class="joint-row co_prior_employment_history">
+                            <td>
+                                <label for="co_prior_emp_time" >Time at Employer</label>
+                            </td>
+                            <td>
+                                <select name="co_prior_employer_info[year]">
+                                    <option value="">Years</option>
+                                    <?php for($m=0;$m<=100;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo $co_prior_employer_info->year==$m?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Years
+                                <select name="co_prior_employer_info[month]">
+                                    <option value="">Months</option>
+                                    <?php for($m=0;$m<=12;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo $co_prior_employer_info->month==$m?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Months
+                                <span><b>*</b></span>
+                            </td>
+                        </tr>
+                        <tr class="joint-row co_prior_employment_history">
+                            <td>
+                                <label>Type of Employment</label>
+                            </td>
+                            <td>
+                                <input type="radio" id="co_prior_full" name="co_prior_employer_info[emp_type]" placeholder="" value="Full" <?php echo $co_prior_employer_info->emp_type == 'Full' ? 'checked' : '';?>/>Full
+                                <input type="radio" id="co_prior_part" name="co_prior_employer_info[emp_type]" placeholder="" value="Part-Time" <?php echo $co_prior_employer_info->emp_type == 'Part-Time' ? 'checked' : '';?>/>Part-Time
+                            </td>
+                        </tr>
+
+
+
+                    </table>
 					<table cellpadding="5">
 						<tr>
 							<td colspan="8">
@@ -1244,16 +1501,77 @@ if ($application['joint'] > 0) {
     }
 
     (function() {
-        var jointShowHide = function(e) {
-            if ($("input[name='joint'][value=1]:checked").length > 0) {
-                $(".joint-row").show();
-            } else {
-                $(".joint-row").hide();
-            }
-        };
+        (function() {
+            // This next bit is supposed to address the four "under 2 year" situations
+            // {applicant, co-applicant} x {employment, housing}
+            var applicant_housing_show_hide = function() {
+                if (parseInt($("select[name='housing_info[years]']").val(), 10) < 2) {
+                    // Then we must show the other one
+                    $(".applicant_previous_resident").show();
+                } else {
+                    // Then we hide the other one...
+                    $(".applicant_previous_resident").hide();
+                }
+            };
 
-        $("input[name='joint']").on("click", jointShowHide);
-        jointShowHide();
+            $("select[name='housing_info[years]']").on("change", applicant_housing_show_hide);
+            applicant_housing_show_hide();
+
+            var co_applicant_housing_show_hide = function() {
+                if (parseInt($("select[name='co_housing_info[years]']").val(), 10) < 2) {
+                    // Then we must show the other one
+                    $(".co_applicant_previous_residence").show();
+                } else {
+                    // Then we hide the other one...
+                    $(".co_applicant_previous_residence").hide();
+                }
+            };
+
+            $("select[name='co_housing_info[years]']").on("change", co_applicant_housing_show_hide);
+            co_applicant_housing_show_hide();
+
+
+            // Now for employment...
+            var applicant_employment_show_hide = function() {
+                if (parseInt($("select[name='employer_info[year]']").val(), 10) < 2) {
+                    // Then we must show the other one
+                    $(".prior_employment_history").show();
+                } else {
+                    // Then we hide the other one...
+                    $(".prior_employment_history").hide();
+                }
+            };
+
+            $("select[name='employer_info[year]']").on("change", applicant_employment_show_hide);
+            applicant_employment_show_hide();
+
+            var co_applicant_employment_show_hide = function() {
+                if (parseInt($("select[name='co_employer_info[year]']").val(), 10) < 2) {
+                    // Then we must show the other one
+                    $(".co_prior_employment_history").show();
+                } else {
+                    // Then we hide the other one...
+                    $(".co_prior_employment_history").hide();
+                }
+            };
+
+            $("select[name='co_employer_info[year]']").on("change", co_applicant_employment_show_hide);
+            co_applicant_employment_show_hide();
+
+
+            var jointShowHide = function(e) {
+                if ($("input[name='joint'][value=1]:checked").length > 0) {
+                    $(".joint-row").show();
+                    co_applicant_employment_show_hide();
+                    co_applicant_housing_show_hide();
+                } else {
+                    $(".joint-row").hide();
+                }
+            };
+
+            $("input[name='joint']").on("click", jointShowHide);
+            jointShowHide();
+        })();
     })();
 
 </script>
