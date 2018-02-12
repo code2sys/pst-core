@@ -1443,6 +1443,7 @@
 
             $("select[name='employer_info[year]']").on("change", applicant_employment_show_hide);
             applicant_employment_show_hide();
+
             var co_applicant_employment_show_hide = function() {
                 if (parseInt($("select[name='co_employer_info[year]']").val(), 10) < 2) {
                     // Then we must show the other one
@@ -1461,7 +1462,7 @@
                 if ($("input[name='joint'][value=1]:checked").length > 0) {
                     $(".joint-row").show();
                     co_applicant_employment_show_hide();
-                    co_applicant_employment_show_hide();
+                    co_applicant_housing_show_hide();
                 } else {
                     $(".joint-row").hide();
                 }
