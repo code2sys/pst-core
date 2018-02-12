@@ -56,12 +56,26 @@
 								<br/><br/>
 							</td>
 						</tr>
+                        <tr>
+                            <td><strong>Application Type</strong></td>
+                            <td><label><input type="radio" name="joint" value="0" <?php if ($_REQUEST['joint'] != 1): ?>checked="checked" <?php endif;?> /> Individual</label><label><input type="radio"  name="joint" value="1" <?php if ($_REQUEST['joint'] == 1): ?>checked="checked" <?php endif;?> /> Joint</label></td>
+
+                        </tr>
 						<tr>
 							<td>
 								<label for="initial">(Initial Here)</label>
 							</td>
 							<td>
 								<input name="initial" placeholder="" value="<?php echo set_value('initial');?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="initial">(Co-Application Initial Here)</label>
+							</td>
+							<td>
+								<input name="co_initial" placeholder="" value="<?php echo set_value('co_initial');?>" />
 								<span><b>*</b></span>
 							</td>
 						</tr>
@@ -147,7 +161,7 @@
 						
 						<tr>
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Your Contact Information:</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Contact Information:</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -182,6 +196,7 @@
 							</td>
 							<td>
 								<input name="dl" placeholder="" value="<?php echo $_POST['dl'];?>" />
+                                <span><b>*</b></span>
 							</td>
 						</tr>
 						<tr>
@@ -252,10 +267,124 @@
 								<span><b>*</b></span>
 							</td>
 						</tr>
+                        
+                        
+                        
+						<tr class="joint-row">
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Contact Information:</b></p>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_fname" >First Name</label>
+							</td>
+							<td>
+								<input name="co_fname" placeholder="" value="<?php echo set_value('co_fname');?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_mname" >Middle Name</label>
+							</td>
+							<td>
+								<input name="co_contact_info[mname]" placeholder="" value="<?php echo $_POST['co_contact_info']['mname'];?>" />
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_lname" >Last Name</label>
+							</td>
+							<td>
+								<input name="co_lname" placeholder="" value="<?php echo set_value('co_lname');?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_dl" >Driver's License</label>
+							</td>
+							<td>
+								<input name="co_dl" placeholder="" value="<?php echo $_POST['co_dl'];?>" />
+                                <span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_contact_info[wphone]" >Work Phone</label>
+							</td>
+							<td>
+								<input name="co_contact_info[wphone]" placeholder="" value="<?php echo $_POST['co_contact_info']['wphone'];?>" />
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_contact_info[rphone]" >Residence Phone</label>
+							</td>
+							<td>
+								<input name="co_contact_info[rphone]" placeholder="" value="<?php echo $_POST['co_contact_info']['rphone'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_email" >E-mail</label>
+							</td>
+							<td>
+								<input name="co_email" placeholder="" value="<?php echo $_POST['co_email'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_contact_info[ssno]" >Social Security Number</label>
+							</td>
+							<td>
+								<input name="co_contact_info[ssno]" placeholder="" value="<?php echo $_POST['co_contact_info']['ssno'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_contact_info[marital_status]" >Marital Status</label>
+							</td>
+							<td>
+								<select name="co_contact_info[marital_status]">
+									<option value="">Please Select</option>
+									<option value="single" <?php echo $_POST['co_contact_info']['marital_status'] == 'single' ? 'selected' : '';?>>Single</option>
+									<option value="married" <?php echo $_POST['co_contact_info']['marital_status'] == 'married' ? 'selected' : '';?>>Married</option>
+								</select>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_contact_info[gender]" >Male/Female</label>
+							</td>
+							<td>
+								<select name="co_contact_info[gender]">
+									<option value="">Please Select</option>
+									<option value="male" <?php echo $_POST['co_contact_info']['gender'] == 'male'?'selected':'';?>>Male</option>
+									<option value="female" <?php echo $_POST['co_contact_info']['gender']=='female'?'selected':'';?>>Female</option>
+								</select>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_contact_info[dob]" >Date of Birth</label>
+							</td>
+							<td>
+								<input type="date" name='co_contact_info[dob]' value="<?php echo $_POST['co_contact_info']['dob'];?>">
+								<span><b>*</b></span>
+							</td>
+						</tr>
 						
+                        
+
+
 						<tr>
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Physical Address Information:</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Physical Address:</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -303,10 +432,66 @@
 								<span><b>*</b></span>
 							</td>
 						</tr>
-						
+
+
+
+						<tr class="joint-row">
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Physical Address:</b></p>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_physical_address[paddress]" >Physical Address</label>
+							</td>
+							<td>
+								<input name="co_physical_address[paddress]" placeholder="" value="<?php echo $_POST['co_physical_address']['paddress'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_physical_address[city]" >City</label>
+							</td>
+							<td>
+								<input name="co_physical_address[city]" placeholder="" value="<?php echo $_POST['co_physical_address']['city'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_physical_address[state]" >State</label>
+							</td>
+							<td>
+								<?php echo form_dropdown('co_physical_address[state]', $states, $_POST['co_physical_address']['state'], 'id="billing_state"'); ?>
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_physical_address[zip]" >Zip</label>
+							</td>
+							<td>
+								<input name="co_physical_address[zip]" placeholder="" value="<?php echo $_POST['co_physical_address']['zip'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_physical_address[country]" >Country</label>
+							</td>
+							<td>
+								<input name="co_physical_address[country]" placeholder="" value="<?php echo $_POST['co_physical_address']['country'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+
+
+
+
 						<tr>
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Housing Information:</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Housing Information:</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -353,25 +538,103 @@
 								<label for="time" >Time at Current Residence</label>
 							</td>
 							<td>
+                                <select name="housing_info[years]">
+                                    <option value="">Years</option>
+                                    <?php for($y=0;$y<=100;$y++) { ?>
+                                        <option value="<?php echo $y;?>" <?php echo ($_POST['housing_info']['years']==$y  && !is_null($_POST['housing_info']['years']) && $_POST['housing_info']['years'] !== "") ?'selected':'';?>><?php echo $y;?></option>
+                                    <?php } ?>
+                                </select>Years
 								<select name="housing_info[months]">
 									<option value="">Months</option>
 									<?php for($m=0;$m<=12;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo ($_POST['housing_info']['months']==$m && !is_null($_POST['housing_info']['months']) && $_POST['housing_info']['months'] !== "")?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Months
-								<select name="housing_info[years]">
-									<option value="">Years</option>
-									<?php for($y=0;$y<=100;$y++) { ?>
-									<option value="<?php echo $y;?>" <?php echo ($_POST['housing_info']['years']==$y  && !is_null($_POST['housing_info']['years']) && $_POST['housing_info']['years'] !== "") ?'selected':'';?>><?php echo $y;?></option>
-									<?php } ?>
-								</select>Years
+
 								<span><b>*</b></span>
 							</td>
 						</tr>
-						
+
+
+
+
+						<tr class="joint-row">
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Housing Information:</b></p>
+							</td>
+						</tr>
+                        <tr class="joint-row">
+                            <td colspan="2">
+                                <em>If you are married and filing a joint credit application, you and your spouse must have the same address.</em>
+                            </td>
+                        </tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_housing_info[owns]" >Do you rent or own your home, or other ?</label>
+							</td>
+							<td>
+								<select name="co_housing_info[owns]">
+									<option value="">Choose</option>
+									<option value="Rent" <?php echo $_POST['co_housing_info']['owns']=='Rent'?'selected':'';?>>Rent</option>
+									<option value="Own" <?php echo $_POST['co_housing_info']['owns']=='Own'?'selected':'';?>>Own</option>
+									<option value="Other" <?php echo $_POST['co_housing_info']['owns']=='Other'?'selected':'';?>>Other</option>
+								</select>
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_housing_info[landlord]" >Landlord / Mortgage</label>
+							</td>
+							<td>
+								<input name="co_housing_info[landlord]" placeholder="" value="<?php echo $_POST['co_housing_info']['landlord'];?>" />
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_housing_info[rent]" >Rent / Mortgage Monthly Amount</label>
+							</td>
+							<td>
+								<input name="co_housing_info[rent]" placeholder="" value="<?php echo $_POST['co_housing_info']['rent'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_housing_info[mort_balance]" >Mortgage Balance</label>
+							</td>
+							<td>
+								<input name="co_housing_info[mort_balance]" placeholder="" value="<?php echo $_POST['co_housing_info']['mort_balance'];?>" />
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_housing_info[months" >Time at Current Residence</label>
+							</td>
+							<td>
+                                <select name="co_housing_info[years]">
+                                    <option value="">Years</option>
+                                    <?php for($y=0;$y<=100;$y++) { ?>
+                                        <option value="<?php echo $y;?>" <?php echo ($_POST['co_housing_info']['years']==$y  && !is_null($_POST['co_housing_info']['years']) && $_POST['co_housing_info']['years'] !== "") ?'selected':'';?>><?php echo $y;?></option>
+                                    <?php } ?>
+                                </select>Years
+								<select name="co_housing_info[months]">
+									<option value="">Months</option>
+									<?php for($m=0;$m<=12;$m++) { ?>
+									<option value="<?php echo $m;?>" <?php echo ($_POST['co_housing_info']['months']==$m && !is_null($_POST['co_housing_info']['months']) && $_POST['co_housing_info']['months'] !== "")?'selected':'';?>><?php echo $m;?></option>
+									<?php } ?>
+								</select>Months
+								<span><b>*</b></span>
+							</td>
+						</tr>
+
+
+
+
+
 						<tr>
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Banking Information:</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Banking Information:</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -407,9 +670,53 @@
 							</td>
 						</tr>
 						
+                        
+                        
+						<tr class="joint-row">
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Banking Information:</b></p>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_banking_info[bank_name]" >Name of Bank</label>
+							</td>
+							<td>
+								<input name="co_banking_info[bank_name]" placeholder="" value="<?php echo $_POST['co_banking_info']['bank_name'];?>" />
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_banking_info[ac_type]" >Account Types</label>
+							</td>
+							<td>
+								<input name="co_banking_info[ac_type]" placeholder="" value="<?php echo $_POST['co_banking_info']['ac_type'];?>" />
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_banking_info[bank_name1]" >Name of Bank</label>
+							</td>
+							<td>
+								<input name="co_banking_info[bank_name1]" placeholder="" value="<?php echo $_POST['co_banking_info']['bank_name1'];?>" />
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_banking_info[ac_type1]" >Account Types</label>
+							</td>
+							<td>
+								<input name="co_banking_info[ac_type1]" placeholder="" value="<?php echo $_POST['co_banking_info']['ac_type1'];?>" />
+							</td>
+						</tr>
+						
+                        
+                        
+                        
+                        
 						<tr>
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Previous Residence (If less then 5 years at current address..)</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Previous Residence: (Required if less than 2 years at current address.)</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -450,24 +757,96 @@
 								<label for="how_long" >How long at previous address ?</label>
 							</td>
 							<td>
+                                <select name="previous_add[years]">
+                                    <option value="">Years</option>
+                                    <?php for($m=0;$m<=100;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo ($_POST['previous_add']['years']==$m && !is_null($_POST['previous_add']['years']) && $_POST['previous_add']['years'] !== "")?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Years
 								<select name="previous_add[months]">
 									<option value="">Months</option>
 									<?php for($m=0;$m<=12;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo ($_POST['previous_add']['months']==$m && !is_null($_POST['previous_add']['months']) && $_POST['previous_add']['months'] !== "")?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Months
-								<select name="previous_add[years]">
-									<option value="">Years</option>
-									<?php for($m=0;$m<=100;$m++) { ?>
-									<option value="<?php echo $m;?>" <?php echo ($_POST['previous_add']['years']==$m && !is_null($_POST['previous_add']['years']) && $_POST['previous_add']['years'] !== "")?'selected':'';?>><?php echo $m;?></option>
+
+							</td>
+						</tr>
+                        
+                        
+						<tr class="joint-row">
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Previous Residence: (Required if less than 2 years at current address.)</b></p>
+							</td>
+						</tr>
+
+                        <tr class="joint-row">
+                            <td colspan="2">
+                                <em>If you are married and filing a joint credit application, you and your spouse must have the same address.</em>
+                            </td>
+                        </tr>
+
+
+                        <tr class="joint-row">
+							<td>
+								<label for="co_previous_add[address]" >Address</label>
+							</td>
+							<td>
+								<input name="co_previous_add[address]" placeholder="" value="<?php echo $_POST['co_previous_add']['address'];?>" />
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_previous_add[city]" >City</label>
+							</td>
+							<td>
+								<input name="co_previous_add[city]" placeholder="" value="<?php echo $_POST['co_previous_add']['city'];?>" />
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_previous_add[state]" >State</label>
+							</td>
+							<td>
+								<?php echo form_dropdown('co_previous_add[state]', $states, $_POST['co_previous_add']['state'], 'id="co_billing_state"'); ?>
+
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_previous_add[zip]" >Zip</label>
+							</td>
+							<td>
+								<input name="co_previous_add[zip]" placeholder="" value="<?php echo $_POST['co_previous_add']['zip'];?>" />
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_previous_add[years]" >How long at previous address ?</label>
+							</td>
+							<td>
+                                <select name="co_previous_add[years]">
+                                    <option value="">Years</option>
+                                    <?php for($m=0;$m<=100;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo ($_POST['co_previous_add']['years']==$m && !is_null($_POST['co_previous_add']['years']) && $_POST['co_previous_add']['years'] !== "")?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Years
+								<select name="co_previous_add[months]">
+									<option value="">Months</option>
+									<?php for($m=0;$m<=12;$m++) { ?>
+									<option value="<?php echo $m;?>" <?php echo ($_POST['co_previous_add']['months']==$m && !is_null($_POST['co_previous_add']['months']) && $_POST['co_previous_add']['months'] !== "")?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
-								</select>Years
+								</select>Months
+
 							</td>
 						</tr>
 						
+                        
+                        
+                        
 						<tr>
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Employer Information:</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Employer Information:</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -547,18 +926,18 @@
 								<label for="emp_time" >Time at Employer</label>
 							</td>
 							<td>
+                                <select name="employer_info[year]">
+                                    <option value="">Years</option>
+                                    <?php for($m=0;$m<=100;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo ($_POST['employer_info']['year']==$m && !is_null($_POST['employer_info']['year']) && $_POST['employer_info']['year'] !== "")?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Years
 								<select name="employer_info[month]">
 									<option value="">Months</option>
 									<?php for($m=0;$m<=12;$m++) { ?>
 									<option value="<?php echo $m;?>" <?php echo ($_POST['employer_info']['month']==$m && !is_null($_POST['employer_info']['month']) && $_POST['employer_info']['month'] !== "")?'selected':'';?>><?php echo $m;?></option>
 									<?php } ?>
 								</select>Months
-								<select name="employer_info[year]">
-									<option value="">Years</option>
-									<?php for($m=0;$m<=100;$m++) { ?>
-									<option value="<?php echo $m;?>" <?php echo ($_POST['employer_info']['year']==$m && !is_null($_POST['employer_info']['year']) && $_POST['employer_info']['year'] !== "")?'selected':'';?>><?php echo $m;?></option>
-									<?php } ?>
-								</select>Years
 								<span><b>*</b></span>
 							</td>
 						</tr>
@@ -595,6 +974,139 @@
 								<textarea name="employer_info[comments]" placeholder="" value="" ><?php echo $_POST['employer_info']['comments'];?></textarea>
 							</td>
 						</tr>
+                        
+                        
+                        
+						<tr class="joint-row">
+							<td colspan="2">
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Employer Information:</b></p>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_employer_info[occupation]" >Occupation</label>
+							</td>
+							<td>
+								<input name="co_employer_info[occupation]" placeholder="" value="<?php echo $_POST['co_employer_info']['occupation'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_employer_info[emp_name]" >Employer Name</label>
+							</td>
+							<td>
+								<input name="co_employer_info[emp_name]" placeholder="" value="<?php echo $_POST['co_employer_info']['emp_name'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_employer_info[emp_addr]" >Employer Address</label>
+							</td>
+							<td>
+								<input name="co_employer_info[emp_addr]" placeholder="" value="<?php echo $_POST['co_employer_info']['emp_addr'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_employer_info[emp_city]" >Employer City</label>
+							</td>
+							<td>
+								<input name="co_employer_info[emp_city]" placeholder="" value="<?php echo $_POST['co_employer_info']['emp_city'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_employer_info[state]" >Employer State</label>
+							</td>
+							<td>
+								<?php echo form_dropdown('co_employer_info[state]', $states, $_POST['co_employer_info']['state'], 'id="co_billing_state"'); ?>
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_employer_info[emp_zip]" >Employer Zip</label>
+							</td>
+							<td>
+								<input name="co_employer_info[emp_zip]" placeholder="" value="<?php echo $_POST['co_employer_info']['emp_zip'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_employer_info[emp_phone]" >Employer Phone</label>
+							</td>
+							<td>
+								<input name="co_employer_info[emp_phone]" placeholder="" value="<?php echo $_POST['co_employer_info']['emp_phone'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_employer_info[salary]" >Salary(Annually Gross)</label>
+							</td>
+							<td>
+								<input name="co_employer_info[salary]" placeholder="" value="<?php echo $_POST['co_employer_info']['salary'];?>" />
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_employer_info[year]" >Time at Employer</label>
+							</td>
+							<td>
+                                <select name="co_employer_info[year]">
+                                    <option value="">Years</option>
+                                    <?php for($m=0;$m<=100;$m++) { ?>
+                                        <option value="<?php echo $m;?>" <?php echo ($_POST['co_employer_info']['year']==$m && !is_null($_POST['co_employer_info']['year']) && $_POST['co_employer_info']['year'] !== "")?'selected':'';?>><?php echo $m;?></option>
+                                    <?php } ?>
+                                </select>Years
+								<select name="co_employer_info[month]">
+									<option value="">Months</option>
+									<?php for($m=0;$m<=12;$m++) { ?>
+									<option value="<?php echo $m;?>" <?php echo ($_POST['co_employer_info']['month']==$m && !is_null($_POST['co_employer_info']['month']) && $_POST['co_employer_info']['month'] !== "")?'selected':'';?>><?php echo $m;?></option>
+									<?php } ?>
+								</select>Months
+								<span><b>*</b></span>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label>Type of Employment</label>
+							</td>
+							<td>
+								<input type="radio" id="co_full" name="co_employer_info[emp_type]" placeholder="" value="Full" <?php echo $_POST['co_employer_info']['emp_type']=='full'?'selected':'';?>/><label for="co_full">Full</label>
+								<input type="radio" id="co_part" name="co_employer_info[emp_type]" placeholder="" value="Part-Time" <?php echo $_POST['co_employer_info']['emp_type']=='Part-Time'?'selected':'';?>/><label for="co_part">Part-Time</label>
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_employer_info[other_income]" >Other Income</label>
+							</td>
+							<td>
+								<input name="co_employer_info[other_income]" placeholder="" value="<?php echo $_POST['co_employer_info']['other_income'];?>" />
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_employer_info[income_frequency]" >Other Income Frequency</label>
+							</td>
+							<td>
+								<input name="co_employer_info[income_frequency]" placeholder="" value="<?php echo $_POST['co_employer_info']['income_frequency'];?>" />
+							</td>
+						</tr>
+						<tr class="joint-row">
+							<td>
+								<label for="co_employer_info[comments]" >Additional Comments<br/>Please include any information that you feel may help us process your application</label>
+							</td>
+							<td>
+								<textarea name="co_employer_info[comments]" placeholder="" value="" ><?php echo $_POST['co_employer_info']['comments'];?></textarea>
+							</td>
+						</tr>
 					</table>
 					<table cellpadding="5">
 						<tr>
@@ -604,13 +1116,13 @@
 						</tr>
 						<tr>
 							<td><label for="name1" >Name</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[name1]" placeholder="" value="<?php echo $_POST['reference']['name1'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[name1]" placeholder="" value="<?php echo $_POST['reference']['name1'];?>" /><span><b>*</b></span></td>
 							<td><label for="phone1" >Phone</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[phone1]" placeholder="" value="<?php echo $_POST['reference']['phone1'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[phone1]" placeholder="" value="<?php echo $_POST['reference']['phone1'];?>" /><span><b>*</b></span></td>
 							<td><label for="city1" >City</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[city1]" placeholder="" value="<?php echo $_POST['reference']['city1'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[city1]" placeholder="" value="<?php echo $_POST['reference']['city1'];?>" /><span><b>*</b></span></td>
 							<td><label for="state1" >State</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[state1]" placeholder="" value="<?php echo $_POST['reference']['state1'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[state1]" placeholder="" value="<?php echo $_POST['reference']['state1'];?>" /><span><b>*</b></span></td>
 						</tr>
 						<tr>
 							<td><label for="name1" >Name</label></td>
@@ -653,7 +1165,20 @@
 				<input style="float: inherit;background:#3f51b5;color:white;font-weight: normal;padding: 20px 90px 20px 90px;border-radius: 0;" type="submit" value="APPLY NOW" class="input_button">
 			</div>
 			</form>
-	<script>
+	<script type="application/javascript">
+        (function() {
+            var jointShowHide = function(e) {
+                if ($("input[name='joint'][value=1]:checked").length > 0) {
+                    $(".joint-row").show();
+                } else {
+                    $(".joint-row").hide();
+                }
+            };
+
+            $("input[name='joint']").on("click", jointShowHide);
+            jointShowHide();
+        })();
+
 		$(document).ready(function(){
 			var success = '<?php echo @$success; ?>';
 			//alert(success);
@@ -663,5 +1188,8 @@
 				$(":input").val('');
 				$(".input_button").val('APPLY NOW');
 			}
+
+
+
 		});
 	</script>

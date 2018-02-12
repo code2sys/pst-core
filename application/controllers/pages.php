@@ -86,6 +86,7 @@ class Pages extends Master_Controller {
 	public function validateFinanceForm()
 	{
 		$this->load->library('form_validation');
+
 		$this->form_validation->set_rules('fname', 'First Name', 'required|xss_clean');
 		$this->form_validation->set_rules('lname', 'Last Name', 'required|xss_clean');
 		$this->form_validation->set_rules('make', 'Make', 'required|xss_clean');
@@ -93,6 +94,7 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('year', 'Year', 'required|xss_clean');
 		$this->form_validation->set_rules('email', 'Email', 'required|valid_email|xss_clean');
 		$this->form_validation->set_rules('initial', 'Initial', 'required|xss_clean');
+		$this->form_validation->set_rules('dl', 'Driver\'s License', 'required|xss_clean');
 		$this->form_validation->set_rules('type', 'Type', 'required|xss_clean');
 		$this->form_validation->set_rules('condition', 'Condition', 'required|xss_clean');
 		$this->form_validation->set_rules('down_payment', 'Down Payment', 'required|xss_clean');
@@ -118,6 +120,64 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('employer_info[salary]', 'Salary(Annually Gross)', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[month]', 'Time at Employer(Month)', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[year]', 'Time at Employer(Year)', 'required|xss_clean');
+
+		print "<!-- ";
+		print_r($_REQUEST);
+		print " -->";
+
+		// If they've been there for less than 2 years, it's required
+        if (intVal($_REQUEST['housing_info']['years']) < 2) {
+            $this->form_validation->set_rules('previous_add[address]', 'Previous Residence Address (Under 2 years at current address)', 'required|xss_clean');
+            $this->form_validation->set_rules('previous_add[city]', 'Previous Residence City (Under 2 years at current address)', 'required|xss_clean');
+            $this->form_validation->set_rules('previous_add[state]', 'Previous Residence State (Under 2 years at current address)', 'required|xss_clean');
+            $this->form_validation->set_rules('previous_add[zip]', 'Previous Residence Zip  (Under 2 years at current address)', 'required|xss_clean');
+        }
+
+
+        if (array_key_exists("joint", $_REQUEST) && $_REQUEST["joint"] > 0) {
+            // We have to add these for the joint application as well..
+            $this->form_validation->set_rules('co_fname', 'Co-Applicant First Name', 'required|xss_clean');
+            $this->form_validation->set_rules('co_lname', 'Co-Applicant Last Name', 'required|xss_clean');
+            $this->form_validation->set_rules('co_email', 'Co-Applicant Email', 'required|valid_email|xss_clean');
+            $this->form_validation->set_rules('co_dl', 'Co-Applicant Driver\'s License', 'required|xss_clean');
+            $this->form_validation->set_rules('co_initial', 'Co-Applicant Initial', 'required|xss_clean');
+            $this->form_validation->set_rules('co_contact_info[rphone]', 'Co-Applicant Residence Phone', 'required|xss_clean');
+            $this->form_validation->set_rules('co_contact_info[ssno]', 'Co-Applicant Social Security Number', 'required|xss_clean');
+            $this->form_validation->set_rules('co_contact_info[dob]', 'Co-Applicant Date of Birth', 'required|xss_clean');
+            $this->form_validation->set_rules('co_physical_address[paddress]', 'Co-Applicant Physical Address', 'required|xss_clean');
+            $this->form_validation->set_rules('co_physical_address[city]', 'Co-Applicant City', 'required|xss_clean');
+            $this->form_validation->set_rules('co_physical_address[state]', 'Co-Applicant State', 'required|xss_clean');
+            $this->form_validation->set_rules('co_physical_address[zip]', 'Co-Applicant Zip', 'required|xss_clean');
+            $this->form_validation->set_rules('co_physical_address[country]', 'Co-Applicant Country', 'required|xss_clean');
+            $this->form_validation->set_rules('co_housing_info[owns]', 'Co-Applicant Do you rent or own your home, or other ?', 'required|xss_clean');
+            $this->form_validation->set_rules('co_housing_info[rent]', 'Co-Applicant Rent / Mortgage Monthly Amount', 'required|xss_clean');
+            $this->form_validation->set_rules('co_housing_info[months]', 'Co-Applicant Time at Current Residence(Month)', 'required|xss_clean');
+            $this->form_validation->set_rules('co_housing_info[years]', 'Co-Applicant Time at Current Residence(Year)', 'required|xss_clean');
+//            $this->form_validation->set_rules('co_employer_info[occupation]', 'Co-Applicant Occupation', 'required|xss_clean');
+//            $this->form_validation->set_rules('co_employer_info[emp_name]', 'Co-Applicant Employer Name', 'required|xss_clean');
+//            $this->form_validation->set_rules('co_employer_info[emp_addr]', 'Co-Applicant Employer Address', 'required|xss_clean');
+//            $this->form_validation->set_rules('co_employer_info[emp_city]', 'Co-Applicant Employer City', 'required|xss_clean');
+//            $this->form_validation->set_rules('co_employer_info[state]', 'Co-Applicant Employer State', 'required|xss_clean');
+//            $this->form_validation->set_rules('co_employer_info[emp_zip]', 'Co-Applicant Employer Zip', 'required|xss_clean');
+//            $this->form_validation->set_rules('co_employer_info[emp_phone]', 'Co-Applicant Employer Phone', 'required|xss_clean');
+//            $this->form_validation->set_rules('co_employer_info[salary]', 'Co-Applicant Salary(Annually Gross)', 'required|xss_clean');
+//            $this->form_validation->set_rules('co_employer_info[month]', 'Co-Applicant Time at Employer(Month)', 'required|xss_clean');
+//            $this->form_validation->set_rules('co_employer_info[year]', 'Co-Applicant Time at Employer(Year)', 'required|xss_clean');
+
+            if ($_REQUEST['co_housing_info']['years'] < 2) {
+                $this->form_validation->set_rules('co_previous_add[address]', 'Co-Applicant Previous Residence Address (Under 2 years at current address)', 'required|xss_clean');
+                $this->form_validation->set_rules('co_previous_add[city]', 'Co-Applicant Previous Residence City (Under 2 years at current address)', 'required|xss_clean');
+                $this->form_validation->set_rules('co_previous_add[state]', 'Co-Applicant Previous Residence State (Under 2 years at current address)', 'required|xss_clean');
+                $this->form_validation->set_rules('co_previous_add[zip]', 'Co-Applicant Previous Residence Zip  (Under 2 years at current address)', 'required|xss_clean');
+            }
+        }
+
+        // At least one reference is required
+        $this->form_validation->set_rules('reference[name1]', 'Reference Name', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[phone1]', 'Reference Name', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[city1]', 'Reference Name', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[state1]', 'Reference Name', 'required|xss_clean');
+
 		return $this->form_validation->run();
 	}
 	
@@ -271,7 +331,8 @@ class Pages extends Master_Controller {
 			$this->load->model("account_m");
 			$post = $this->input->post();
 			$data = array();
-			
+
+			$data['joint'] = $post['joint'];
 			$data['initial'] = $post['initial'];
 			$data['type'] = $post['type'];
 			$data['condition'] = $post['condition'];
@@ -291,6 +352,23 @@ class Pages extends Master_Controller {
 			$data['employer_info'] = json_encode($post['employer_info']);
 			$data['reference'] = json_encode($post['reference']);
 			$data['application_date'] = date('Y-m-d H:i:s');
+
+			if ($post['joint'] > 0) {
+			    // we need to include co-applicant information as well
+                $data['co_initial'] = $post['co_initial'];
+                $data['co_first_name'] = $post['co_fname'];
+                $data['co_last_name'] = $post['co_lname'];
+                $data['co_driver_licence'] = $post['co_dl'];
+                $data['co_email'] = $post['co_email'];
+                $data['co_contact_info'] = json_encode($post['co_contact_info']);
+                $data['co_physical_address'] = json_encode($post['co_physical_address']);
+                $data['co_housing_info'] = json_encode($post['co_housing_info']);
+                $data['co_banking_info'] = json_encode($post['co_banking_info']);
+                $data['co_previous_add'] = json_encode($post['co_previous_add']);
+                $data['co_employer_info'] = json_encode($post['co_employer_info']);
+            }
+
+
 			$this->account_m->creditApplication($data);
 			//redirect(base_url('pages/index/financerequest'));
 
@@ -312,6 +390,7 @@ class Pages extends Master_Controller {
 			$templateData['emailFooterImg'] = site_url('assets/email_images/email_footer.png');
 			$templateData['emailHeadImg'] = site_url('assets/email_images/email_head.jpg');
 			$templateData['emailShadowImg'] = site_url('assets/email_images/email_shadow.png');
+
 			$this->load->model('mail_gen_m');
 			$this->_mainData['success'] = $this->mail_gen_m->generateFromView($mailData, $templateData, $htmlTemplate, $textTemplate);
 		}
