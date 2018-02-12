@@ -1103,13 +1103,13 @@
 						</tr>
 						<tr>
 							<td><label for="name1" >Name</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[name1]" placeholder="" value="<?php echo $_POST['reference']['name1'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[name1]" placeholder="" value="<?php echo $_POST['reference']['name1'];?>" /><span><b>*</b></span></td>
 							<td><label for="phone1" >Phone</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[phone1]" placeholder="" value="<?php echo $_POST['reference']['phone1'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[phone1]" placeholder="" value="<?php echo $_POST['reference']['phone1'];?>" /><span><b>*</b></span></td>
 							<td><label for="city1" >City</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[city1]" placeholder="" value="<?php echo $_POST['reference']['city1'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[city1]" placeholder="" value="<?php echo $_POST['reference']['city1'];?>" /><span><b>*</b></span></td>
 							<td><label for="state1" >State</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[state1]" placeholder="" value="<?php echo $_POST['reference']['state1'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[state1]" placeholder="" value="<?php echo $_POST['reference']['state1'];?>" /><span><b>*</b></span></td>
 						</tr>
 						<tr>
 							<td><label for="name1" >Name</label></td>
