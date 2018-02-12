@@ -1454,7 +1454,7 @@
                 }
             };
 
-            $("select[name='employer_info[year]']").on("change", co_applicant_employment_show_hide);
+            $("select[name='co_employer_info[year]']").on("change", co_applicant_employment_show_hide);
             co_applicant_employment_show_hide();
 
 
