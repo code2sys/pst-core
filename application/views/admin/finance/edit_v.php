@@ -1503,10 +1503,10 @@ if ($application['joint'] > 0) {
         var co_applicant_housing_show_hide = function() {
             if (parseInt($("select[name='co_housing_info[years]']").val(), 10) < 2) {
                 // Then we must show the other one
-                $(".co_applicant_previous_resident").show();
+                $(".co_applicant_previous_residence").show();
             } else {
                 // Then we hide the other one...
-                $(".co_applicant_previous_resident").hide();
+                $(".co_applicant_previous_residence").hide();
             }
         };
 
