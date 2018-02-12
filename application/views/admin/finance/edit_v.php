@@ -197,6 +197,14 @@ if ($application['joint'] > 0) {
 								<input name="dl" placeholder="" value="<?php echo $application['driver_licence'];?>" />
 							</td>
 						</tr>
+                        <tr>
+							<td>
+								<label for="driver_licence_expiration" >Driver's License Expiration</label>
+							</td>
+							<td>
+								<input name="driver_licence_expiration" type="date" placeholder="" value="<?php echo $application['driver_licence_expiration'];?>" />
+							</td>
+						</tr>
 						<tr>
 							<td>
 								<label for="wphone" >Work Phone</label>
@@ -306,6 +314,14 @@ if ($application['joint'] > 0) {
 								<input name="co_dl" placeholder="" value="<?php echo $application['co_driver_licence'];?>" />
 							</td>
 						</tr>
+                        <trclass='joint-row'>
+                            <td>
+                                <label for="co_driver_licence_expiration" >Driver's License Expiration</label>
+                            </td>
+                            <td>
+                                <input name="co_driver_licence_expiration" type="date" placeholder="" value="<?php echo $application['co_driver_licence_expiration'];?>" />
+                            </td>
+                        </tr>
 						<tr class='joint-row'>
 							<td>
 								<label for="co_wphone" >Work Phone</label>

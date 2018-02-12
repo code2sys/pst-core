@@ -147,10 +147,12 @@ abstract class Financeadmin extends Motorcycleadmin {
             $data['first_name'] = $post['fname'];
             $data['last_name'] = $post['lname'];
             $data['driver_licence'] = $post['dl'];
+            $data['driver_licence_expiration'] = $post['driver_licence_expiration'];
             $data['email'] = $post['email'];
             $data['co_first_name'] = $post['co_fname'];
             $data['co_last_name'] = $post['co_lname'];
             $data['co_driver_licence'] = $post['co_dl'];
+            $data['co_driver_licence_expiration'] = $post['co_driver_licence_expiration'];
             $data['co_email'] = $post['co_email'];
             $data['application_status'] = $post['application_status'];
             $data['contact_info'] = json_encode($post['contact_info']);

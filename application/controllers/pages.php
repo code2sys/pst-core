@@ -95,6 +95,7 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('email', 'Email', 'required|valid_email|xss_clean');
 		$this->form_validation->set_rules('initial', 'Initial', 'required|xss_clean');
 		$this->form_validation->set_rules('dl', 'Driver\'s License', 'required|xss_clean');
+		$this->form_validation->set_rules('driver_licence_expiration', 'Driver\'s License Expiration', 'required|xss_clean');
 		$this->form_validation->set_rules('type', 'Type', 'required|xss_clean');
 		$this->form_validation->set_rules('condition', 'Condition', 'required|xss_clean');
 		$this->form_validation->set_rules('down_payment', 'Down Payment', 'required|xss_clean');
@@ -149,6 +150,7 @@ class Pages extends Master_Controller {
             $this->form_validation->set_rules('co_lname', 'Co-Applicant Last Name', 'required|xss_clean');
             $this->form_validation->set_rules('co_email', 'Co-Applicant Email', 'required|valid_email|xss_clean');
             $this->form_validation->set_rules('co_dl', 'Co-Applicant Driver\'s License', 'required|xss_clean');
+            $this->form_validation->set_rules('co_driver_licence_expiration', 'Co-Applicant Driver\'s License Expiration', 'required|xss_clean');
             $this->form_validation->set_rules('co_initial', 'Co-Applicant Initial', 'required|xss_clean');
             $this->form_validation->set_rules('co_contact_info[rphone]', 'Co-Applicant Residence Phone', 'required|xss_clean');
             $this->form_validation->set_rules('co_contact_info[ssno]', 'Co-Applicant Social Security Number', 'required|xss_clean');
@@ -371,6 +373,7 @@ class Pages extends Master_Controller {
 			$data['first_name'] = $post['fname'];
 			$data['last_name'] = $post['lname'];
 			$data['driver_licence'] = $post['dl'];
+			$data['driver_licence_expiration'] = $post['driver_licence_expiration'];
 			$data['email'] = $post['email'];
 			$data['contact_info'] = json_encode($post['contact_info']);
 			$data['physical_address'] = json_encode($post['physical_address']);
@@ -393,6 +396,7 @@ class Pages extends Master_Controller {
                 $data['co_first_name'] = $post['co_fname'];
                 $data['co_last_name'] = $post['co_lname'];
                 $data['co_driver_licence'] = $post['co_dl'];
+                $data['co_driver_licence_expiration'] = $post['co_driver_licence_expiration'];
                 $data['co_email'] = $post['co_email'];
                 $data['co_contact_info'] = json_encode($post['co_contact_info']);
                 $data['co_physical_address'] = json_encode($post['co_physical_address']);
