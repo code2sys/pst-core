@@ -1202,7 +1202,7 @@ if ($application['joint'] > 0) {
 
                         <tr class="joint-row prior_employment_history">
                             <td colspan="2">
-                                <p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Previous Employer Information:</b></p>
+                                <p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Previous Employer Information:</b></p>
                             </td>
                         </tr>
                         <tr class="joint-row prior_employment_history">
