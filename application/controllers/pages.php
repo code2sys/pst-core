@@ -131,7 +131,7 @@ class Pages extends Master_Controller {
         }
 
         // If they've worked there less than 2 years,it/s required to give an additional record...
-        if ($_REQUEST['employer_info']['years'] < 2) {
+        if ($_REQUEST['employer_info']['year'] < 2) {
             $this->form_validation->set_rules('prior_employer_info[occupation]', 'Previous Occupation (Under 2 years at current position)', 'required|xss_clean');
             $this->form_validation->set_rules('prior_employer_info[emp_name]', 'Previous Employer Name (Under 2 years at current position)', 'required|xss_clean');
             $this->form_validation->set_rules('prior_employer_info[emp_addr]', 'Previous Employer Address (Under 2 years at current position)', 'required|xss_clean');
@@ -183,7 +183,7 @@ class Pages extends Master_Controller {
                 $this->form_validation->set_rules('co_previous_add[zip]', 'Co-Applicant Previous Residence Zip  (Under 2 years at current address)', 'required|xss_clean');
             }
 
-            if ($_REQUEST['co_employer_info']['years'] < 2) {
+            if ($_REQUEST['co_employer_info']['year'] < 2) {
                 $this->form_validation->set_rules('co_prior_employer_info[occupation]', 'Co-Applicant Previous Occupation (Under 2 years at current position)', 'required|xss_clean');
                 $this->form_validation->set_rules('co_prior_employer_info[emp_name]', 'Co-Applicant Previous Employer Name (Under 2 years at current position)', 'required|xss_clean');
                 $this->form_validation->set_rules('co_prior_employer_info[emp_addr]', 'Co-Applicant Previous Employer Address (Under 2 years at current position)', 'required|xss_clean');
