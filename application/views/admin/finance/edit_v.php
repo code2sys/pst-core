@@ -1200,12 +1200,12 @@ if ($application['joint'] > 0) {
 
 
 
-                        <tr class="joint-row prior_employment_history">
+                        <tr class="joint-row co_prior_employment_history">
                             <td colspan="2">
                                 <p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Previous Employer Information:</b></p>
                             </td>
                         </tr>
-                        <tr class="joint-row prior_employment_history">
+                        <tr class="joint-row co_prior_employment_history">
                             <td>
                                 <label for="co_prior_occupation" >Occupation</label>
                             </td>
@@ -1214,7 +1214,7 @@ if ($application['joint'] > 0) {
                                 <span><b>*</b></span>
                             </td>
                         </tr>
-                        <tr class="joint-row prior_employment_history">
+                        <tr class="joint-row co_prior_employment_history">
                             <td>
                                 <label for="co_prior_emp_name" >Employer Name</label>
                             </td>
@@ -1223,7 +1223,7 @@ if ($application['joint'] > 0) {
                                 <span><b>*</b></span>
                             </td>
                         </tr>
-                        <tr class="joint-row prior_employment_history">
+                        <tr class="joint-row co_prior_employment_history">
                             <td>
                                 <label for="co_prior_emp_addr" >Employer Address</label>
                             </td>
@@ -1232,7 +1232,7 @@ if ($application['joint'] > 0) {
                                 <span><b>*</b></span>
                             </td>
                         </tr>
-                        <tr class="joint-row prior_employment_history">
+                        <tr class="joint-row co_prior_employment_history">
                             <td>
                                 <label for="co_prior_emp_city" >Employer City</label>
                             </td>
@@ -1241,7 +1241,7 @@ if ($application['joint'] > 0) {
                                 <span><b>*</b></span>
                             </td>
                         </tr>
-                        <tr class="joint-row prior_employment_history">
+                        <tr class="joint-row co_prior_employment_history">
                             <td>
                                 <label for="co_prior_emp_state" >Employer State</label>
                             </td>
@@ -1251,7 +1251,7 @@ if ($application['joint'] > 0) {
                                 <span><b>*</b></span>
                             </td>
                         </tr>
-                        <tr class="joint-row prior_employment_history">
+                        <tr class="joint-row co_prior_employment_history">
                             <td>
                                 <label for="co_prior_emp_zip" >Employer Zip</label>
                             </td>
@@ -1260,7 +1260,7 @@ if ($application['joint'] > 0) {
                                 <span><b>*</b></span>
                             </td>
                         </tr>
-                        <tr class="joint-row prior_employment_history">
+                        <tr class="joint-row co_prior_employment_history">
                             <td>
                                 <label for="co_prior_emp_phone" >Employer Phone</label>
                             </td>
@@ -1269,7 +1269,7 @@ if ($application['joint'] > 0) {
                                 <span><b>*</b></span>
                             </td>
                         </tr>
-                        <tr class="joint-row prior_employment_history">
+                        <tr class="joint-row co_prior_employment_history">
                             <td>
                                 <label for="co_prior_salary" >Salary(Annually Gross)</label>
                             </td>
@@ -1278,7 +1278,7 @@ if ($application['joint'] > 0) {
                                 <span><b>*</b></span>
                             </td>
                         </tr>
-                        <tr class="joint-row prior_employment_history">
+                        <tr class="joint-row co_prior_employment_history">
                             <td>
                                 <label for="co_prior_emp_time" >Time at Employer</label>
                             </td>
@@ -1298,7 +1298,7 @@ if ($application['joint'] > 0) {
                                 <span><b>*</b></span>
                             </td>
                         </tr>
-                        <tr class="joint-row prior_employment_history">
+                        <tr class="joint-row co_prior_employment_history">
                             <td>
                                 <label>Type of Employment</label>
                             </td>
