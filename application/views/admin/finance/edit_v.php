@@ -5,7 +5,7 @@ $housing_info = json_decode($application['housing_info']);
 $banking_info = json_decode($application['banking_info']);
 $previous_add = json_decode($application['previous_add']);
 $employer_info = json_decode($application['employer_info']);
-$prior_employer_info = json_decode($credit['prior_employer_info']);
+$prior_employer_info = json_decode($application['prior_employer_info']);
 $reference = json_decode($application['reference']);
 
 if ($application['joint'] > 0) {
@@ -15,7 +15,7 @@ if ($application['joint'] > 0) {
     $co_banking_info = json_decode($application['co_banking_info']);
     $co_previous_add = json_decode($application['co_previous_add']);
     $co_employer_info = json_decode($application['co_employer_info']);
-    $co_prior_employer_info = json_decode($credit['co_prior_employer_info']);
+    $co_prior_employer_info = json_decode($application['co_prior_employer_info']);
 }
 
 ?>
