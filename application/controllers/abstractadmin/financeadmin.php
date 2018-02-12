@@ -159,12 +159,14 @@ abstract class Financeadmin extends Motorcycleadmin {
             $data['banking_info'] = json_encode($post['banking_info']);
             $data['previous_add'] = json_encode($post['previous_add']);
             $data['employer_info'] = json_encode($post['employer_info']);
+            $data['prior_employer_info'] = json_encode($post['employer_info']);
             $data['co_contact_info'] = json_encode($post['co_contact_info']);
             $data['co_physical_address'] = json_encode($post['co_physical_address']);
             $data['co_housing_info'] = json_encode($post['co_housing_info']);
             $data['co_banking_info'] = json_encode($post['co_banking_info']);
             $data['co_previous_add'] = json_encode($post['co_previous_add']);
             $data['co_employer_info'] = json_encode($post['co_employer_info']);
+            $data['co_prior_employer_info'] = json_encode($post['co_employer_info']);
             $data['reference'] = json_encode($post['reference']);
             $this->admin_m->update_finance($id, $data);
             $this->_mainData['success'] = TRUE;

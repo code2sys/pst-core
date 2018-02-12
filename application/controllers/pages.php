@@ -121,10 +121,6 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('employer_info[month]', 'Time at Employer(Month)', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[year]', 'Time at Employer(Year)', 'required|xss_clean');
 
-		print "<!-- ";
-		print_r($_REQUEST);
-		print " -->";
-
 		// If they've been there for less than 2 years, it's required
         if (intVal($_REQUEST['housing_info']['years']) < 2) {
             $this->form_validation->set_rules('previous_add[address]', 'Previous Residence Address (Under 2 years at current address)', 'required|xss_clean');
@@ -133,6 +129,19 @@ class Pages extends Master_Controller {
             $this->form_validation->set_rules('previous_add[zip]', 'Previous Residence Zip  (Under 2 years at current address)', 'required|xss_clean');
         }
 
+        // If they've worked there less than 2 years,it/s required to give an additional record...
+        if ($_REQUEST['employer_info']['years'] < 2) {
+            $this->form_validation->set_rules('prior_employer_info[occupation]', 'Previous Occupation (Under 2 years at current position)', 'required|xss_clean');
+            $this->form_validation->set_rules('prior_employer_info[emp_name]', 'Previous Employer Name (Under 2 years at current position)', 'required|xss_clean');
+            $this->form_validation->set_rules('prior_employer_info[emp_addr]', 'Previous Employer Address (Under 2 years at current position)', 'required|xss_clean');
+            $this->form_validation->set_rules('prior_employer_info[emp_city]', 'Previous Employer City (Under 2 years at current position)', 'required|xss_clean');
+            $this->form_validation->set_rules('prior_employer_info[state]', 'Previous Employer State (Under 2 years at current position)', 'required|xss_clean');
+            $this->form_validation->set_rules('prior_employer_info[emp_zip]', 'Previous Employer Zip (Under 2 years at current position)', 'required|xss_clean');
+            $this->form_validation->set_rules('prior_employer_info[emp_phone]', 'Previous Employer Phone (Under 2 years at current position)', 'required|xss_clean');
+            $this->form_validation->set_rules('prior_employer_info[salary]', 'Previous Salary(Annually Gross) (Under 2 years at current position)', 'required|xss_clean');
+            $this->form_validation->set_rules('prior_employer_info[month]', 'Previous Time at Employer(Month) (Under 2 years at current position)', 'required|xss_clean');
+            $this->form_validation->set_rules('prior_employer_info[year]', 'Previous Time at Employer(Year) (Under 2 years at current position)', 'required|xss_clean');
+        }
 
         if (array_key_exists("joint", $_REQUEST) && $_REQUEST["joint"] > 0) {
             // We have to add these for the joint application as well..
@@ -153,16 +162,17 @@ class Pages extends Master_Controller {
             $this->form_validation->set_rules('co_housing_info[rent]', 'Co-Applicant Rent / Mortgage Monthly Amount', 'required|xss_clean');
             $this->form_validation->set_rules('co_housing_info[months]', 'Co-Applicant Time at Current Residence(Month)', 'required|xss_clean');
             $this->form_validation->set_rules('co_housing_info[years]', 'Co-Applicant Time at Current Residence(Year)', 'required|xss_clean');
-//            $this->form_validation->set_rules('co_employer_info[occupation]', 'Co-Applicant Occupation', 'required|xss_clean');
-//            $this->form_validation->set_rules('co_employer_info[emp_name]', 'Co-Applicant Employer Name', 'required|xss_clean');
-//            $this->form_validation->set_rules('co_employer_info[emp_addr]', 'Co-Applicant Employer Address', 'required|xss_clean');
-//            $this->form_validation->set_rules('co_employer_info[emp_city]', 'Co-Applicant Employer City', 'required|xss_clean');
-//            $this->form_validation->set_rules('co_employer_info[state]', 'Co-Applicant Employer State', 'required|xss_clean');
-//            $this->form_validation->set_rules('co_employer_info[emp_zip]', 'Co-Applicant Employer Zip', 'required|xss_clean');
-//            $this->form_validation->set_rules('co_employer_info[emp_phone]', 'Co-Applicant Employer Phone', 'required|xss_clean');
-//            $this->form_validation->set_rules('co_employer_info[salary]', 'Co-Applicant Salary(Annually Gross)', 'required|xss_clean');
-//            $this->form_validation->set_rules('co_employer_info[month]', 'Co-Applicant Time at Employer(Month)', 'required|xss_clean');
-//            $this->form_validation->set_rules('co_employer_info[year]', 'Co-Applicant Time at Employer(Year)', 'required|xss_clean');
+            // Brandt said yes emlpoyer is required for both.
+            $this->form_validation->set_rules('co_employer_info[occupation]', 'Co-Applicant Occupation', 'required|xss_clean');
+            $this->form_validation->set_rules('co_employer_info[emp_name]', 'Co-Applicant Employer Name', 'required|xss_clean');
+            $this->form_validation->set_rules('co_employer_info[emp_addr]', 'Co-Applicant Employer Address', 'required|xss_clean');
+            $this->form_validation->set_rules('co_employer_info[emp_city]', 'Co-Applicant Employer City', 'required|xss_clean');
+            $this->form_validation->set_rules('co_employer_info[state]', 'Co-Applicant Employer State', 'required|xss_clean');
+            $this->form_validation->set_rules('co_employer_info[emp_zip]', 'Co-Applicant Employer Zip', 'required|xss_clean');
+            $this->form_validation->set_rules('co_employer_info[emp_phone]', 'Co-Applicant Employer Phone', 'required|xss_clean');
+            $this->form_validation->set_rules('co_employer_info[salary]', 'Co-Applicant Salary(Annually Gross)', 'required|xss_clean');
+            $this->form_validation->set_rules('co_employer_info[month]', 'Co-Applicant Time at Employer(Month)', 'required|xss_clean');
+            $this->form_validation->set_rules('co_employer_info[year]', 'Co-Applicant Time at Employer(Year)', 'required|xss_clean');
 
             if ($_REQUEST['co_housing_info']['years'] < 2) {
                 $this->form_validation->set_rules('co_previous_add[address]', 'Co-Applicant Previous Residence Address (Under 2 years at current address)', 'required|xss_clean');
@@ -170,13 +180,31 @@ class Pages extends Master_Controller {
                 $this->form_validation->set_rules('co_previous_add[state]', 'Co-Applicant Previous Residence State (Under 2 years at current address)', 'required|xss_clean');
                 $this->form_validation->set_rules('co_previous_add[zip]', 'Co-Applicant Previous Residence Zip  (Under 2 years at current address)', 'required|xss_clean');
             }
+
+            if ($_REQUEST['co_employer_info']['years'] < 2) {
+                $this->form_validation->set_rules('co_prior_employer_info[occupation]', 'Co-Applicant Previous Occupation (Under 2 years at current position)', 'required|xss_clean');
+                $this->form_validation->set_rules('co_prior_employer_info[emp_name]', 'Co-Applicant Previous Employer Name (Under 2 years at current position)', 'required|xss_clean');
+                $this->form_validation->set_rules('co_prior_employer_info[emp_addr]', 'Co-Applicant Previous Employer Address (Under 2 years at current position)', 'required|xss_clean');
+                $this->form_validation->set_rules('co_prior_employer_info[emp_city]', 'Co-Applicant Previous Employer City (Under 2 years at current position)', 'required|xss_clean');
+                $this->form_validation->set_rules('co_prior_employer_info[state]', 'Co-Applicant Previous Employer State (Under 2 years at current position)', 'required|xss_clean');
+                $this->form_validation->set_rules('co_prior_employer_info[emp_zip]', 'Co-Applicant Previous Employer Zip (Under 2 years at current position)', 'required|xss_clean');
+                $this->form_validation->set_rules('co_prior_employer_info[emp_phone]', 'Co-Applicant Previous Employer Phone (Under 2 years at current position)', 'required|xss_clean');
+                $this->form_validation->set_rules('co_prior_employer_info[salary]', 'Co-Applicant Previous Salary(Annually Gross) (Under 2 years at current position)', 'required|xss_clean');
+                $this->form_validation->set_rules('co_prior_employer_info[month]', 'Co-Applicant Previous Time at Employer(Month) (Under 2 years at current position)', 'required|xss_clean');
+                $this->form_validation->set_rules('co_prior_employer_info[year]', 'Co-Applicant Previous Time at Employer(Year) (Under 2 years at current position)', 'required|xss_clean');
+            }
+
         }
 
         // At least one reference is required
-        $this->form_validation->set_rules('reference[name1]', 'Reference Name', 'required|xss_clean');
-        $this->form_validation->set_rules('reference[phone1]', 'Reference Name', 'required|xss_clean');
-        $this->form_validation->set_rules('reference[city1]', 'Reference Name', 'required|xss_clean');
-        $this->form_validation->set_rules('reference[state1]', 'Reference Name', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[name1]', 'Reference Name (At least one reference is required; more are preferred.)', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[phone1]', 'Reference Phone (At least one reference is required; more are preferred.)', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[city1]', 'Reference City (At least one reference is required; more are preferred.)', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[state1]', 'Reference State (At least one reference is required; more are preferred.)', 'required|xss_clean');
+
+        // They must specify a bank...
+        $this->form_validation->set_rules('banking_info[bank_name]', 'Bank Name', 'required|xss_clean');
+        $this->form_validation->set_rules('banking_info[ac_type]', 'Bank Account Types', 'required|xss_clean');
 
 		return $this->form_validation->run();
 	}
@@ -353,6 +381,12 @@ class Pages extends Master_Controller {
 			$data['reference'] = json_encode($post['reference']);
 			$data['application_date'] = date('Y-m-d H:i:s');
 
+			if ($post["employer_info"]["years"] < 2) {
+			    $data["prior_employer_info"] = json_encode($post['prior_employer_info']);
+            } else {
+			    $data["prior_employer_info"] = "{}";
+            }
+
 			if ($post['joint'] > 0) {
 			    // we need to include co-applicant information as well
                 $data['co_initial'] = $post['co_initial'];
@@ -366,8 +400,13 @@ class Pages extends Master_Controller {
                 $data['co_banking_info'] = json_encode($post['co_banking_info']);
                 $data['co_previous_add'] = json_encode($post['co_previous_add']);
                 $data['co_employer_info'] = json_encode($post['co_employer_info']);
-            }
 
+                if ($post["co_employer_info"]["years"] < 2) {
+                    $data["co_prior_employer_info"] = json_encode($post['co_prior_employer_info']);
+                } else {
+                    $data["co_prior_employer_info"] = "{}";
+                }
+            }
 
 			$this->account_m->creditApplication($data);
 			//redirect(base_url('pages/index/financerequest'));

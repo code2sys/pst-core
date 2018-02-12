@@ -5,6 +5,8 @@ $housing_info = json_decode($application['housing_info']);
 $banking_info = json_decode($application['banking_info']);
 $previous_add = json_decode($application['previous_add']);
 $employer_info = json_decode($application['employer_info']);
+
+$prior_employer_info = json_decode($credit['prior_employer_info']);
 $reference = json_decode($application['reference']);
 
 if ($application['joint'] > 0) {
@@ -14,6 +16,7 @@ if ($application['joint'] > 0) {
     $co_banking_info = json_decode($application['co_banking_info']);
     $co_previous_add = json_decode($application['co_previous_add']);
     $co_employer_info = json_decode($application['co_employer_info']);
+    $co_prior_employer_info = json_decode($credit['co_prior_employer_info']);
 
 }
 
@@ -418,6 +421,46 @@ if ($application['joint'] > 0) {
 							</td>
 						</tr>
 
+                        <?php if ($housing_info->years < 2) : ?>
+                            <tr>
+                                <td colspan="2">
+                                    <p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Previous Residence</b></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="address1" >Address</label>
+                                </td>
+                                <td>
+                                    <?php echo $previous_add->address;?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="city" >City</label>
+                                </td>
+                                <td>
+                                    <?php echo $previous_add->city;?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="st_zip" >State, Zip</label>
+                                </td>
+                                <td>
+                                    <?php echo $previous_add->state.', '.$previous_add->zip;?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="how_long" >How long at previous address ?</label>
+                                </td>
+                                <td>
+                                    <?php echo $previous_add->months.' Months && '.$previous_add->years.' Years';?>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+
 
                         <?php if ($application["joint"] > 0): ?>
 
@@ -466,6 +509,47 @@ if ($application['joint'] > 0) {
 								<?php echo $co_housing_info->months.' Months && '.$co_housing_info->years.' Years';?>
 							</td>
 						</tr>
+
+                            <?php if ($co_housing_info->years < 2): ?>
+                                <tr>
+                                    <td colspan="2">
+                                        <p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Previous Residence</b></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="address1" >Address</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_previous_add->address;?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="city" >City</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_previous_add->city;?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="st_zip" >State, Zip</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_previous_add->state.', '.$co_previous_add->zip;?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="how_long" >How long at previous address ?</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_previous_add->months.' Months && '.$co_previous_add->years.' Years';?>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+
                         <?php endif; ?>
 
 
@@ -547,88 +631,6 @@ if ($application['joint'] > 0) {
 							</td>
 						</tr>
 						<?php endif; ?>
-
-
-						<tr>
-							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Previous Residence (If less then 5 years at current address..)</b></p>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="address1" >Address</label>
-							</td>
-							<td>
-								<?php echo $previous_add->address;?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="city" >City</label>
-							</td>
-							<td>
-								<?php echo $previous_add->city;?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="st_zip" >State, Zip</label>
-							</td>
-							<td>
-								<?php echo $previous_add->state.', '.$previous_add->zip;?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="how_long" >How long at previous address ?</label>
-							</td>
-							<td>
-								<?php echo $previous_add->months.' Months && '.$previous_add->years.' Years';?>
-							</td>
-						</tr>
-
-
-                        <?php if ($application["joint"] > 0): ?>
-                        <tr>
-							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Previous Residence (If less then 5 years at current address..)</b></p>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="address1" >Address</label>
-							</td>
-							<td>
-								<?php echo $co_previous_add->address;?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="city" >City</label>
-							</td>
-							<td>
-								<?php echo $co_previous_add->city;?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="st_zip" >State, Zip</label>
-							</td>
-							<td>
-								<?php echo $co_previous_add->state.', '.$co_previous_add->zip;?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="how_long" >How long at previous address ?</label>
-							</td>
-							<td>
-								<?php echo $co_previous_add->months.' Months && '.$co_previous_add->years.' Years';?>
-							</td>
-						</tr>
-						<?php endif; ?>
-
-
 
 						<tr>
 							<td colspan="2">
@@ -739,6 +741,95 @@ if ($application['joint'] > 0) {
 								<?php echo $employer_info->comments;?>
 							</td>
 						</tr>
+
+                        <?php if ($employer_info->year < 2): ?>
+
+                            <tr>
+                                <td colspan="2">
+                                    <p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Previous Employer Information:</b></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="occupation" >Occupation</label>
+                                </td>
+                                <td>
+                                    <?php echo $prior_employer_info->occupation;?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="emp_name" >Employer Name</label>
+                                </td>
+                                <td>
+                                    <?php echo $prior_employer_info->emp_name;?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="emp_addr" >Employer Address</label>
+                                </td>
+                                <td>
+                                    <?php echo $prior_employer_info->emp_addr;?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="emp_city" >Employer City</label>
+                                </td>
+                                <td>
+                                    <?php echo $prior_employer_info->emp_city;?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="emp_state" >Employer State</label>
+                                </td>
+                                <td>
+                                    <?php echo $prior_employer_info->emp_state;?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="emp_zip" >Employer Zip</label>
+                                </td>
+                                <td>
+                                    <?php echo $prior_employer_info->emp_zip;?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="emp_phone" >Employer Phone</label>
+                                </td>
+                                <td>
+                                    <?php echo $prior_employer_info->emp_phone;?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="salary" >Salary(Annually Gross)</label>
+                                </td>
+                                <td>
+                                    <?php echo $prior_employer_info->salary;?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="emp_time" >Time at Employer</label>
+                                </td>
+                                <td>
+                                    <?php echo $prior_employer_info->month.' Months && '.$prior_employer_info->year.' Years';?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label>Type of Employment</label>
+                                </td>
+                                <td>
+                                    <?php echo $prior_employer_info->emp_type;?>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
 
 
                         <?php if ($application["joint"] > 0): ?>
@@ -852,6 +943,98 @@ if ($application['joint'] > 0) {
 								<?php echo $co_employer_info->comments;?>
 							</td>
 						</tr>
+
+
+                            <?php if ($co_employer_info->year < 2): ?>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Previous Employer Information:</b></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="occupation" >Occupation</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_prior_employer_info->occupation;?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="emp_name" >Employer Name</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_prior_employer_info->emp_name;?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="emp_addr" >Employer Address</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_prior_employer_info->emp_addr;?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="emp_city" >Employer City</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_prior_employer_info->emp_city;?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="emp_state" >Employer State</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_prior_employer_info->emp_state;?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="emp_zip" >Employer Zip</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_prior_employer_info->emp_zip;?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="emp_phone" >Employer Phone</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_prior_employer_info->emp_phone;?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="salary" >Salary(Annually Gross)</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_prior_employer_info->salary;?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="emp_time" >Time at Employer</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_prior_employer_info->month.' Months && '.$co_prior_employer_info->year.' Years';?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>Type of Employment</label>
+                                    </td>
+                                    <td>
+                                        <?php echo $co_prior_employer_info->emp_type;?>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                            
+                            
                         <?php endif; ?>
 					</table>
 					<table cellpadding="5">
