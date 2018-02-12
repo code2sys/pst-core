@@ -716,7 +716,7 @@
                         
 						<tr>
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Previous Residence (If less then 5 years at current address..)</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Previous Residence (If less then 2 years at current address..)</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -776,10 +776,18 @@
                         
 						<tr class="joint-row">
 							<td colspan="2">
-								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Previous Residence (If less then 5 years at current address..)</b></p>
+								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Previous Residence (If less then 2 years at current address..)</b></p>
 							</td>
 						</tr>
-						<tr class="joint-row">
+
+                        <tr class="joint-row">
+                            <td colspan="2">
+                                <em>If you are married and filing a joint credit application, you and your spouse must have the same address.</em>
+                            </td>
+                        </tr>
+
+
+                        <tr class="joint-row">
 							<td>
 								<label for="co_previous_add[address]" >Address</label>
 							</td>
