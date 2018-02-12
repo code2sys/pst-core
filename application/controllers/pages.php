@@ -153,6 +153,12 @@ class Pages extends Master_Controller {
 
         }
 
+        // At least one reference is required
+        $this->form_validation->set_rules('reference[name1]', 'Reference Name', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[phone1]', 'Reference Name', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[city1]', 'Reference Name', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[state1]', 'Reference Name', 'required|xss_clean');
+
 		return $this->form_validation->run();
 	}
 	
