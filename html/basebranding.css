@@ -36,3 +36,7 @@
 .bikefront .header_b {
     margin-bottom: 10px;
 }
+
+.simplified_mu_nav .searchHolder.search-one {
+    display:none;
+}
