@@ -183,7 +183,7 @@ echo $CI->load->view("master/widgets/motorcycles", array(
 ?>
 
 
-<div class="sw slider">
+<div class="sw slider" style="clear: both">
     <div id="owl-demo" class="owl-carousel owl-theme">
         <?php foreach( $bannerImages as $image ) { ?>
             <div class="item"><a href="<?php echo $image['banner_link'];?>"><img src="/media/<?php echo $image['image']; ?>"></a></div>
