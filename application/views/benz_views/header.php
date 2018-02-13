@@ -10,6 +10,11 @@ $google_conversion_id = $store_name['google_conversion_id'];
 $partsfinder_link = $store_name["partsfinder_link"];
 $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 
+if (!defined('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS')) {
+    define('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS', false);
+}
+
+$SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
 
 	?>
 <head>
@@ -85,7 +90,7 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 
 </head>
 
-<body>
+<body <?php if ($SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS): ?>class="simplified_mu_nav"<?php endif; ?>>
 <?php echo jget_store_block("top_body"); ?>
 	<div class="topBar_b">
 		<div class="container_b">
@@ -156,12 +161,14 @@ $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
             ?>
 			<div class="clear"></div>						
 		</div>
+                    <?php if (!$SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS): ?>
             <div class="container_b">
 			<div class="vehicleCategory">
 				<?php require(__DIR__ . "/../navigation_fragment.php"); ?>
 			</div>
 			<div class="clear"></div>
 		</div>
+                    <?php endif; ?>
 	</div>
 
 	
