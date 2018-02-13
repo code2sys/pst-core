@@ -1,0 +1,27 @@
+{{^DISABLE_FRONT_MOTORCYCLE_NAV}}
+{{^MOTORCYCLE_SHOP_DISABLE}}
+{{#ShowFeaturedModels}}
+<div class="sw filterBar" id="featuredMotorcycleModelSlider">
+    <div class="container_b">
+        <h1 class="head-txt"> featured models: <span> <a href="/Motorcycle_List">shop more</a> </span></h1>
+        <div id="hotels-flats" class="owl-carousel">
+            {{#FeaturedModels}}
+            <div class="item">
+                <div class="item-box">
+                    <a href="{{link}}">
+                        <img class="lazyOwl" data-src="{{image_name}}" alt="Motorcycle Image">
+                        <p>{{original_title}}</p>
+                        {{{price}}}
+                    </a>
+                    {{#destination_charge}}
+                    <sub>* Plus Applicable destination charge</sub>
+                    {{/destination_charge}}
+                </div>
+            </div>
+            {{/FeaturedModels}}
+        </div>
+    </div>
+</div>
+{{/ShowFeaturedModels}}
+{{/MOTORCYCLE_SHOP_DISABLE}}
+{{/DISABLE_FRONT_MOTORCYCLE_NAV}}
