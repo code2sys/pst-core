@@ -207,7 +207,7 @@ echo $CI->load->view("master/widgets/motorcycles", array(
 
 
 <div class="vehicleNavHomeContainer" style="clear: both;">
-    <div class="vehicleCategory container_b">
+    <div class="vehicleCategory container_b" style="float: none">
         <?php require(__DIR__ . "/../navigation_fragment.php"); ?>
     </div>
     <div class="clear"></div>
