@@ -27,6 +27,8 @@ mustache_tmpl_set($template, "s_baseURL", $s_baseURL);
 //}
 
 // We have to dump out some more navigation items here in a list...
-mustache_tmpl_set($template, "active_primary_navigation", $active_primary_navigation);
+if (!isset($SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS) || !$SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS) {
+    mustache_tmpl_set($template, "active_primary_navigation", $active_primary_navigation);
+}
 
 echo mustache_tmpl_parse($template);
