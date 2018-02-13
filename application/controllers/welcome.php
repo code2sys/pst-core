@@ -298,7 +298,10 @@ class Welcome extends Master_Controller {
         $this->setNav('master/navigation_v', 0);
         $this->load->model('motorcycle_m');
         $this->_mainData['featured'] = $this->motorcycle_m->getFeaturedMonster();
-        $this->renderMasterPage('master/master_v_front', 'info/storefront_v', $this->_mainData);
+        if (!defined('HOMEPAGE_VIEW')) {
+            define('HOMEPAGE_VIEW', 'master/master_v_front');
+        }
+        $this->renderMasterPage(HOMEPAGE_VIEW, 'info/storefront_v', $this->_mainData);
     }
 
     public function benz() {
