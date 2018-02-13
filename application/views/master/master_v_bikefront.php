@@ -206,7 +206,7 @@ echo $CI->load->view("master/widgets/motorcycles", array(
 
 
 
-<div class="container_b vehicleNavHomeContainer">
+<div class="vehicleNavHomeContainer">
     <div class="vehicleCategory">
         <?php require(__DIR__ . "/../navigation_fragment.php"); ?>
     </div>
