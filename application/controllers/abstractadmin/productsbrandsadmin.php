@@ -869,7 +869,7 @@ abstract class Productsbrandsadmin extends Customeradmin {
         foreach ($rows as $p) {
             $output_rows[] = array(
                 $p["supplier_code"], $p['type'], $p["distributor_name"], $p["brand_name"],
-                "<span class='nowrap'><a href='#' class='view-button' data-lightspeed-suppliercode-id='" . $row["lightspeed_suppliercode_id"] . "'><i class='fa fa-search'></i>&nbsp;Edit</a></span><br/> "
+                "<span class='nowrap'><a href='/admin/products_lightspeed_suppliercodes_edit/" . $row["lightspeed_suppliercode_id"] . "' class='view-button' data-lightspeed-suppliercode-id='" . $row["lightspeed_suppliercode_id"] . "'><i class='fa fa-search'></i>&nbsp;Edit</a></span><br/> "
             );
         }
 
@@ -883,6 +883,84 @@ abstract class Productsbrandsadmin extends Customeradmin {
             "order_string" => $order_string,
             "search" => $s
         ));
+    }
+
+    // get it and stuff it into a view
+    public function products_lightspeed_suppliercodes_edit($lightspeed_suppliercode_id) {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        $query = $this->db->query("Select * From lightspeed_suppliercode where lightspeed_suppliercode_id = ?", array($lightspeed_suppliercode_id));
+        $row = $query->result_array();
+
+        if (count($row) > 0) {
+            $row = $row[0];
+            $this->setNav('admin/nav_v', 2);
+            $this->_mainData["row"] = $row;
+            $this->_mainData["brands"] = $this->Lightspeedsuppliercode_m->getBrands();
+            $this->_mainData["distributors"] = $this->Lightspeedsuppliercode_m->getDistributors();
+
+            // get the distributors
+
+            // get the brands...
+            $this->renderMasterPage('admin/master_v', 'admin/product/lightspeed_suppliercodes_edit_v', $this->_mainData);
+        } else {
+            // redirect on error...
+            $this->session->set_flashdata("error", "Sorry, supplier code not found.");
+
+            header("Location: /admin/products_lightspeed_suppliercodes");
+        }
+    }
+
+    // check that things are valid
+    public function products_lightspeed_suppliercodes_save($lightspeed_suppliercode_id) {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        $type = $_REQUEST["type"];
+        $distributor_id = $_REQUEST["distributor_id"];
+        $brand_id = $_REQUEST["brand_id"];
+
+        if ($distributor_id == 0) {
+            $distributor_id = null;
+        }
+
+        if ($brand_id == 0) {
+            $brand_id = null;
+        }
+
+
+        switch ($type) {
+            case "Distributor":
+                if (is_null($distributor_id)) {
+                    $type = "Unmatched";
+                }
+                $brand_id = null;
+                break;
+
+            case "Brand":
+                if (is_null($brand_id)) {
+                    $type = "Unmatched";
+                }
+                $distributor_id = null;
+                break;
+
+            case "Unmatched":
+                $distributor_id = null;
+                $brand_id = null;
+                break;
+        }
+
+
+        $this->db->query("Update lightspeed_suppliercode set type = ?, distributor_id = ?, brand_id = ? where lightspeed_suppliercode_id = ? limit 1", array($type, $distributor_id, $brand_id, $lightspeed_suppliercode_id));
+
+        // now, set some sort of success flag...
+        $this->session->set_flashdata("success", "Supplier code updated successfully.");
+
+        // redirect..
+        header("Location: /admin/products_lightspeed_suppliercodes");
     }
 
     public function products_lightspeed_suppliercodes() {
@@ -899,6 +977,8 @@ abstract class Productsbrandsadmin extends Customeradmin {
         $this->_mainData['supplier_code_list'] = $this->Lightspeedsuppliercode_m->getAll();
         $this->_mainData["brands"] = $this->Lightspeedsuppliercode_m->getBrands();
         $this->_mainData["distributors"] = $this->Lightspeedsuppliercode_m->getDistributors();
+        $this->_mainData["success"] = $this->session->flashdata("success");
+        $this->_mainData["error"] = $this->session->flashdata("error");
 
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/products_lightspeed_suppliercodes_v', $this->_mainData);
