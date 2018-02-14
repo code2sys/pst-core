@@ -50,7 +50,7 @@
                         <td>
                             <select name="distributor_id">
                                 <option value="0">-- Select Distributor --</option>
-                                <?php foreach ($distributor as $d): ?>
+                                <?php foreach ($distributors as $d): ?>
                                 <option value="<?php echo $d["distributor_id"]; ?>" <?php if ($d["distributor_id"] == $row["distributor_id"]): ?>selected="selected"<?php endif; ?> ><?php echo $d["name"]; ?></option>
                                 <?php endforeach; ?>
                             </select>
@@ -61,7 +61,7 @@
                         <td>
                             <select name="brand_id">
                                 <option value="0">-- Select Brand --</option>
-                                <?php foreach ($brand as $d): ?>
+                                <?php foreach ($brands as $d): ?>
                                 <option value="<?php echo $d["brand_id"]; ?>" <?php if ($d["brand_id"] == $row["brand_id"]): ?>selected="selected"<?php endif; ?> ><?php echo $d["name"]; ?></option>
                                 <?php endforeach; ?>
                             </select>
