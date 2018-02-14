@@ -868,7 +868,8 @@ abstract class Productsbrandsadmin extends Customeradmin {
         $output_rows = array();
         foreach ($rows as $p) {
             $output_rows[] = array(
-                $p["supplier_code"], $p['type'], $p["distributor_name"], $p["brand_name"]
+                $p["supplier_code"], $p['type'], $p["distributor_name"], $p["brand_name"],
+                "<span class='nowrap'><a href='#' class='view-button' data-lightspeed-suppliercode-id='" . $row["lightspeed_suppliercode_id"] . "'><i class='fa fa-search'></i>&nbsp;Edit</a></span><br/> "
             );
         }
 

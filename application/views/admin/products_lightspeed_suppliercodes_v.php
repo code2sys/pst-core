@@ -95,6 +95,7 @@ $success = $CI->session->flashdata("success");
                         <th><b>Assignment</b></th>
                         <th><b>Distributor</b></th>
                         <th><b>Brand</b></th>
+                        <th><b>Actions</b></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -130,6 +131,7 @@ $success = $CI->session->flashdata("success");
             "info" : true,
             "stateSave" : true,
             "columns" : [
+                null,
                 null,
                 null,
                 null,
