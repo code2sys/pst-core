@@ -891,6 +891,8 @@ abstract class Productsbrandsadmin extends Customeradmin {
             redirect('');
         }
 
+        $this->load->model("Lightspeedsuppliercode_m");
+
         $query = $this->db->query("Select * From lightspeed_suppliercode where lightspeed_suppliercode_id = ?", array($lightspeed_suppliercode_id));
         $row = $query->result_array();
 
