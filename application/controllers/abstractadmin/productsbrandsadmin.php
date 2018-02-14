@@ -806,6 +806,84 @@ abstract class Productsbrandsadmin extends Customeradmin {
 
 
 
+    public function products_lightspeed_suppliercodes_ajax()
+    {
+        if (!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        $columns = array(
+            "lightspeed_suppliercode.supplier_code",
+            "lightspeed_suppliercode.type",
+            "distributor.name",
+            "brand.name"
+        );
+
+        $length = array_key_exists("length", $_REQUEST) ? $_REQUEST["length"] : 500;
+        $start = array_key_exists("start", $_REQUEST) ? $_REQUEST["start"] : 0;
+
+        $order_string = "order by lightspeed_suppliercode.supplier_code asc ";
+
+        if (array_key_exists("order", $_REQUEST) && is_array($_REQUEST["order"]) && count($_REQUEST["order"]) > 0) {
+            // OK, there's a separate order string...
+            $order_string = "order by ";
+            $orderings = $_REQUEST["order"];
+            if (count($orderings) == 0) {
+                $order_string .= " lightspeed_suppliercode.supplier_code asc";
+            } else {
+                for ($i = 0; $i < count($orderings); $i++) {
+                    if ($i > 0) {
+                        $order_string .= ", ";
+                    }
+
+                    $field = $columns[$orderings[$i]["column"]];
+                    $order_string .=  $field . " " . $orderings[$i]["dir"];
+                }
+            }
+        }
+
+        // How do we shove through the restrictor from the upper right?
+
+        $this->load->helper("jonathan");
+
+        $where = jonathan_generate_likes($columns, $s = (array_key_exists("search", $_REQUEST) && array_key_exists("value", $_REQUEST["search"]) ? $_REQUEST["search"]["value"] : ""), "WHERE");
+
+        // get total count
+        $query = $this->db->query("Select count(*) as cnt from lightspeed_suppliercode");
+        $total_count = 0;
+        foreach ($query->result_array() as $row) {
+            $total_count = $row['cnt'];
+        }
+
+        $query = $this->db->query("Select count(*) as cnt from lightspeed_suppliercode $where");
+        $filtered_count = 0;
+        foreach ($query->result_array() as $row) {
+            $filtered_count = $row['cnt'];
+        }
+
+        $query = $this->db->query("Select lightspeed_suppliercode.*, brand.name as brand_name, distributor.name as distributor_name from lightspeed_suppliercode left join brand using (brand_id) left join distributor using (distributor_id) $where $order_string limit $length offset $start  ");
+        $rows = $query->result_array();
+
+        // Now, order them...
+        $output_rows = array();
+        foreach ($rows as $p) {
+            $output_rows[] = array(
+                $p["supplier_code"], $p['type'], $p["distributor_name"], $p["brand_name"]
+            );
+        }
+
+        print json_encode(array(
+            "data" => $output_rows,
+            "draw" => array_key_exists("draw", $_REQUEST) ? $_REQUEST["draw"] : 0,
+            "recordsTotal" => $total_count,
+            "recordsFiltered" => $filtered_count,
+            "limit" => $length,
+            "offset" => $start,
+            "order_string" => $order_string,
+            "search" => $s
+        ));
+    }
+
     public function products_lightspeed_suppliercodes() {
         if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
