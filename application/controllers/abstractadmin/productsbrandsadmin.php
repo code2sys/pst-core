@@ -994,6 +994,7 @@ abstract class Productsbrandsadmin extends Customeradmin {
         // There is exactly one setting right now...
         $this->load->model("Lightspeed_m");
         $this->Lightspeed_m->setActiveOnAdd($_REQUEST["lightspeed_active_load"]);
+        $this->Lightspeed_m->setUnitCycleTraderDefault($_REQUEST["unitCycleTraderDefault"]);
         $this->session->Set_flashdata("success", "Settings updated successfully.");
 
         // Redirect it...

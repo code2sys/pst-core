@@ -68,6 +68,14 @@ $success = $CI->session->flashdata("success");
                             </td>
                         </tr>
 
+                        <tr>
+                            <td width="30%"><b>Include Units in Cycle Trader Feed by Default:</b></td>
+                            <td>
+                                <label><input type="radio" name="unitCycleTraderDefault" value="0" <?php if (!($c = $CI->Lightspeed_m->unitCycleTraderDefault())): ?>checked="checked"<?php endif; ?> /> No, imported units must be manually added to Cycle Trader Feed</label>
+                                <label><input type="radio" name="unitCycleTraderDefault" value="1" <?php if ($c): ?>checked="checked"<?php endif; ?> /> Yes, include for Cycle Trader Feed by default</label>
+                            </td>
+                        </tr>
+
                     </table>
 
                     <!-- SUBMIT PRODUCT -->
