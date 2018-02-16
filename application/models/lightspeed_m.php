@@ -354,7 +354,7 @@ class Lightspeed_M extends Master_M {
                     $motorcycle_array["margin"] = $bike->WebPrice > 0 ?  round(($bike->WebPrice - $bike->totalCost) / $bike->WebPrice, 2) : 0;
                     $motorcycle_array["profit"] = $bike->WebPrice > 0 ? $bike->WebPrice - $bike->totalCost : 0;
                     $motorcycle_array["craigslist_feed_status"] = 0;
-                    $motorcycle_array["cycletrader_feed_status"] = 0;
+                    $motorcycle_array["cycletrader_feed_status"] = $this->unitCycleTraderDefault() ? 1 : 0;
 
                     $motorcycle = $this->createRecord('motorcycle', $motorcycle_array, FALSE);
                     $valid_count++;
@@ -743,17 +743,34 @@ class Lightspeed_M extends Master_M {
     }
 
     public function activeOnAdd() {
-        $query = $this->db->query("Select lightspeed_active_load from contact where id = 1");
-        $lightspeed_active_load = 0;
-
-        foreach ($query->result_array() as $row) {
-            $lightspeed_active_load = $row["lightspeed_active_load"];
-        }
-
-        return $lightspeed_active_load > 0;
+        return $this->_subContactFetch("lightspeed_active_load") > 0;
     }
 
     public function setActiveOnAdd($setting = 0) {
-        $this->db->query("Update contact set lightspeed_active_load = ? where id = 1", array($setting));
+        $this->_subContactSet("lightspeed_active_load", $setting);
     }
+
+    public function unitCycleTraderDefault() {
+        return $this->_subContactFetch("lightspeed_cycletrader_load") > 0;
+    }
+
+    public function setUnitCycleTraderDefault($value = 0) {
+        $this->_subContactSet("lightspeed_cycletrader_load", $value);
+    }
+
+    protected function _subContactSet($key, $value) {
+        $this->db->query("Update contact set $key = ? where id = 1", array($value));
+    }
+
+    protected function _subContactFetch($key) {
+        $query = $this->db->query("Select $key from contact where id = 1");
+        $lightspeed_active_load = 0;
+
+        foreach ($query->result_array() as $row) {
+            $lightspeed_active_load = $row["$key"];
+        }
+
+        return $lightspeed_active_load;
+    }
+
 }
