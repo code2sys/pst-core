@@ -364,6 +364,7 @@ $CI =& get_instance();
             <?php if (@$sizeChart  || $part_sizechart): ?>
                 <a style="padding:10px 10px 8px 10px;" href="javascript:void(0);" onclick="changeTabs('sizechart')" id="sizechart"><img style="vertical-align:middle; margin:0 6px 0 0;" src="<?php echo base_url('assets/images/measuring-tape.png'); ?>">&nbsp;Size Chart</a>
             <?php endif; ?>
+            <a style="padding:10px 10px 8px 10px;" href="javascript:void(0);" onclick="changeTabs('partnumbers')" id="partnumbers">Part Numbers</a>
         </div>
         <div class="desDetailTxt" id="tab_stuff">
             <?php if ($mainVideo != '') { ?>
@@ -541,6 +542,10 @@ $CI =& get_instance();
         if ($('#sizechart').length)
         {
             $('#sizechart').removeClass('active');
+        }
+        if ($('#partnumbers').length)
+        {
+            $('#partnumbers').removeClass('active');
         }
         $('#reviews').removeClass('active');
         $('#' + tab).addClass('active');

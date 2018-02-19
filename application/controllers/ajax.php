@@ -286,13 +286,24 @@ class Ajax extends Master_Controller {
     }
 
     public function getActiveSection() {
-        $sections = array('description' => 1, 'reviews' => 2, 'fitment' => 3, 'video' => 4, 'sizechart' => 5);
+        //JLB 02-19-18
+        // This is the most assinine way to do this as well...we have these strings, we're going to convert them to numbers?
+        $sections = array('description' => 1, 'reviews' => 2, 'fitment' => 3, 'video' => 4, 'sizechart' => 5, 'partnumbers' => 6);
         if (@$sections[@$_POST['activeSection']] && is_numeric($_POST['part_id'])) {
             $post = $_POST;
             $this->load->model('parts_m');
             $new_assets_url = jsite_url("/qatesting/newassets/");
             $new_assets_url1 = jsite_url("/qatesting/benz_assets/");
             switch ($sections[@$_POST['activeSection']]) {
+                case 6:
+                    // we're going to generate a block of HTML that lists out the part numbers for this part and their status...
+                    $partvariations = $this->parts_m->getPartNumberScreen($_POST['part_id']); // TODO - limit to fitment??
+                    $block = $this->load->view("ajax_getActive_partnumbers", array(
+                        "partvariations" => $partvariations
+                    ), true);
+                    break;
+
+
                 case 1:
                     $product = $this->parts_m->getProduct($post['part_id'], NULL);
                     $productVideo = $this->admin_m->getProductVideos($post['part_id']);

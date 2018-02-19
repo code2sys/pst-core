@@ -3083,4 +3083,12 @@ class Parts_M extends Master_M {
         }
     }
 
+    // JLB 02-19-18
+    // This model is so fucking long.
+    //
+    // This function is added to get the data required to spit out the new "Part Number" screen.
+    public function getPartNumberScreen($part_id) {
+        $query = $this->db->query("select partnumberpartquestion.answer , partvariation.part_number , partvariation.manufacturer_part_number , If(partdealervariation.quantity_available + partvariation.quantity_available > 0, 1, 0) as in_stock, partvariation.stock_code  from partvariation join partnumber using (partnumber_id) join partnumberpartquestion using (partnumber_id) join partpartnumber using (partnumber_id) left join partdealervariation on partvariation.partvariation_id = partdealervariation.partvariation_id where partpartnumber.part_id = ? group by partvariation.partvariation_id;", array($part_id));
+        return $query->result_array();
+    }
 }
