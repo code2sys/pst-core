@@ -22,6 +22,7 @@ class Pages extends Master_Controller {
                 $this->form_validation->set_rules('metatags', 'Metatags', 'xss_clean');
                 $this->form_validation->set_rules('widget', 'Widgets', 'xss_clean');
                 $this->form_validation->set_rules('icon', 'Icon', 'xss_clean');
+                $this->form_validation->set_rules('title', 'Meta Title', 'required|xss_clean');
 
                 break;
 
@@ -38,7 +39,6 @@ class Pages extends Master_Controller {
                 break;
         }
 
-	  	$this->form_validation->set_rules('title', 'Meta Title', 'required|xss_clean');
 	  	$this->form_validation->set_rules('location', 'location', 'xss_clean');
 		if ($this->form_validation->run()) {
             // OK, did they request a tag?
