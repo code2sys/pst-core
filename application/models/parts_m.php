@@ -1781,6 +1781,8 @@ class Parts_M extends Master_M {
         }
 
         $this->db->group_by('part.part_id');
+        $this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
+        $this->db->where("partvariation.from_lightspeed", 0, FALSE);
 
         $records = $this->selectRecords('partnumber');
         $count = count($records);
