@@ -35,8 +35,16 @@
 			<button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Submit</button>
 			<div class="clear"></div>
 				<div class="hidden_table">	
-					<table width="100%" cellpadding="6">
-						<tr><td>Active</td><td>Page Name</td><td>Actions</td></tr>
+					<table width="100%" cellpadding="6" style="border-collapse: collapse">
+                        <thead>
+                            <tr style="border-bottom: 1px solid black; ">
+                                <td style="border-bottom: 1px solid black; "><strong>Active</strong></td>
+                                <td style="border-bottom: 1px solid black; "><strong>Page Name</strong></td>
+                                <td style="border-bottom: 1px solid black; "><strong>Page Type</strong></td>
+                                <td style="border-bottom: 1px solid black; "><strong>Actions</strong></td>
+                            </tr>
+                        </thead>
+                        <tbody>
 						<?php if($pages): foreach($pages as $page): ?>
 							<tr>
 								<td>
@@ -49,6 +57,9 @@
 								<td>
 									<?php echo $page['label']; ?>
 								</td>
+                                <td>
+									<?php echo $page['type']; ?>
+								</td>
 								<td>
 									<a href="<?php echo base_url('pages/edit/'.$page['id']); ?>">Edit</a>
 									<?php if($page['delete']): ?> | 
@@ -57,6 +68,7 @@
 								</td>
 							</tr>
 						<?php endforeach; endif; ?>
+                        </tbody>
 					</table>
 				</div>
 			</form>
