@@ -704,7 +704,9 @@ class Pages extends Master_Controller {
 
         if($this->validateTextBox() === TRUE)
 	    {
-	      $this->pages_m->updateTextBox($this->input->post());
+	        $post = $this->input->post();
+	        $post["text"] = $_REQUEST["text"];
+	      $this->pages_m->updateTextBox($post);
 	    }
         redirect('pages/edit/'.$this->input->post('pageId'));
   	}
