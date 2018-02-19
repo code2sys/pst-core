@@ -15,7 +15,7 @@ foreach ($partvariations as $p) {
             <?php if ($answers): ?>
                 <th>Product Option</th>
             <?php endif; ?>
-            <th>Distributor Part #</th>
+            <th>Internal Part #</th>
             <th>Manufacturer Part #</th>
             <th>Stock Status</th>
         </tr>
