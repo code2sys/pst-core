@@ -311,7 +311,7 @@ class Ajax extends Master_Controller {
                         }
                     }
 
-                    $activeMachine = array_key_exists("activeMachine", $_SESSION) ? $_SESSION["activeMachine"] : null;
+                    $activeMachine = ($garageNeeded && array_key_exists("activeMachine", $_SESSION)) ? $_SESSION["activeMachine"] : null;
 
                     // we're going to generate a block of HTML that lists out the part numbers for this part and their status...
                     $partvariations = $this->parts_m->getPartNumberScreen($_POST['part_id'], $activeMachine); // TODO - limit to fitment??
