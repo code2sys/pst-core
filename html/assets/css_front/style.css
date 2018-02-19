@@ -213,4 +213,7 @@ a.social img{width:30px; height:30px;}
 .prodSec{min-height:240px; position:relative;}
 .prodSec .clsout{position:absolute; left:0px; top:0px; width:110px;}
 .prodSec .base_image{min-height:240px;}
->>>>>>> 46be02b5a1d4c6b930758edec3faa851334eb2a5
+
+#part_ajax_getActive_partnumbers {
+    overflow-x: auto;
+}
