@@ -202,6 +202,7 @@ a.social img{width:30px; height:30px;}
 .desDetailTxt table tr{}
 .desDetailTxt table tr th{background:black; color:white; padding:8px 6px; font-size:17px;}
 .desDetailTxt table tr td{background:rgba(192, 192, 192, 0.32); color:gray; padding:8px 6px; }
+.desDetailTxt table tr:nth-child(odd) td{background:white; color:black;  }
 .fl-wdh .rulerimg{}
 .fl-wdh .rulerimg a{color:rgba(0, 20, 255, 0.82);}
 .fl-wdh .rulerimg a:hover{text-decoration:none; color:grey;}
