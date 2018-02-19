@@ -195,4 +195,19 @@ function jget_store_block($block_name) {
 }
 
 
+// serves a file
+function jserve_file($source_file_path, $filename, $mime_type) {
+    header('Content-Description: File Transfer');
+    header("Content-Type: " . $mime_type);
+    header('Content-Transfer-Encoding: binary');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($source_file_path));
+    header('Content-Disposition: attachment; filename="' . str_replace("'", "",$filename) . '"');
+    flush();
+    readfile($source_file_path);
+}
+
+
 

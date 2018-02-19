@@ -13,11 +13,32 @@ class Pages extends Master_Controller {
 	{
 		$this->load->library('form_validation');
 	  	$this->form_validation->set_rules('label', 'Page Name', 'required|xss_clean');
+
+	  	$type = array_key_exists("type", $_REQUEST) ? $_REQUEST["type"] : "Managed Page";
+
+	  	switch ($type) {
+            case "Managed Page":
+                $this->form_validation->set_rules('keywords', 'Keywords', 'xss_clean');
+                $this->form_validation->set_rules('metatags', 'Metatags', 'xss_clean');
+                $this->form_validation->set_rules('widget', 'Widgets', 'xss_clean');
+                $this->form_validation->set_rules('icon', 'Icon', 'xss_clean');
+
+                break;
+
+            case "External Link":
+                $this->form_validation->set_rules('external_url', 'External Link', 'required|xss_clean');
+
+                break;
+
+            case "File Attachment":
+                // check that the file exists...
+                if (!array_key_exists("upload", $_FILES) || $_FILES["upload"]["size"] == 0) {
+                    $this->form_validation->set_message("upload", "Sorry, no file received.");
+                }
+                break;
+        }
+
 	  	$this->form_validation->set_rules('title', 'Meta Title', 'required|xss_clean');
-	  	$this->form_validation->set_rules('keywords', 'Keywords', 'xss_clean');
-	  	$this->form_validation->set_rules('metatags', 'Metatags', 'xss_clean');
-	  	$this->form_validation->set_rules('widget', 'Widgets', 'xss_clean');
-	  	$this->form_validation->set_rules('icon', 'Icon', 'xss_clean');
 	  	$this->form_validation->set_rules('location', 'location', 'xss_clean');
 		if ($this->form_validation->run()) {
             // OK, did they request a tag?
@@ -237,7 +258,7 @@ class Pages extends Master_Controller {
 		}
 		return FALSE;
 	}
-  	
+
   	public function index($pageTag = NULL)
   	{
 		$this->_mainData['showNotice'] = false;
@@ -245,6 +266,18 @@ class Pages extends Master_Controller {
   		if($this->validateTag($pageTag))
   		{
 	  		$this->_mainData['pageRec'] = $this->pages_m->getPageRecByTag($pageTag);
+
+	  		// Handle links and file download...
+            if ($this->_mainData['pageRec']['type'] == 'External Link') {
+                // just redirect it.
+                header("Location: " . $this->_mainData['pageRec']['external_url']);
+                exit();
+            } else if ($this->_mainData['pageRec']['type'] == 'File Attachment') {
+                // serve the file
+                jserve_file(STORE_DIRECTORY . '/attachments/' . $this->_mainData['pageRec']['attachment_filename'], $this->_mainData['pageRec']['original_filename'], $this->_mainData['pageRec']['attachment_mime_type']);
+            }
+
+
 			// echo "<pre>";
 			// print_r($this->_mainData['pageRec']);exit;
 			// echo "</pre>";
@@ -540,7 +573,15 @@ class Pages extends Master_Controller {
   		
 		}
   	}
-  	
+
+  	public function admindownload($pageId) {
+        $this->enforceAdmin("pages");
+        // get the page info...
+        $this->_mainData['pageRec'] = $this->pages_m->getPageRec($pageId);
+        // now, shove it down...
+        jserve_file(STORE_DIRECTORY . '/attachments/' . $this->_mainData['pageRec']['attachment_filename'], $this->_mainData['pageRec']['original_filename'], $this->_mainData['pageRec']['attachment_mime_type']);
+    }
+
   	public function edit($pageId = NULL)
   	{
         $this->enforceAdmin("pages");
@@ -555,6 +596,38 @@ class Pages extends Master_Controller {
   		if($this->validatePage() === TRUE)
   		{
   			$post = $this->input->post();
+
+  			// we have to filter based on type for a few of these...
+            switch($post["type"]) {
+                case 'Managed Page':
+                    $post["external_url"] = "";
+                    $post["external_link"] = 0;
+                    $post["original_filename"] = "";
+                    $post["attachment_filename"] = "";
+                    $post["attachment_mime_type"] = "";
+                    break;
+
+                case 'External Link':
+                    // this only has some of these...
+                    $post["original_filename"] = "";
+                    $post["attachment_filename"] = "";
+                    $post["attachment_mime_type"] = "";
+                    break;
+
+                case 'File Attachment':
+                    // You have to put the file somewhere...
+                    $upload = $_FILES["upload"];
+                    $post['original_filename'] = $upload['name'];
+                    // create a new filename
+                    $tmp_file = tempnam(STORE_DIRECTORY . "/attachments", "file_attachments");
+                    move_uploaded_file($upload['tmp_name'], $tmp_file);
+                    $post['attachment_filename'] = basename($tmp_file);
+                    $post['attachment_mime_type'] = $upload['type'];
+
+                    $post["external_url"] = "";
+                    $post["external_link"] = 0;
+                    break;
+            }
 
 			if ($pageId == NULL) {
 				$post["active"] = 1;
