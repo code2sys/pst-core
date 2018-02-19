@@ -2918,7 +2918,7 @@ class Parts_M extends Master_M {
         }
 
         // Look it up
-        $query = $this->db->query("Select max(retail_price) as use_retail_price from part join partpartnumber using (part_id) join partvariation using (partnumber_id) where partvariatoin_id = ?", array($partvariation_id));
+        $query = $this->db->query("Select max(retail_price) as use_retail_price from part join partpartnumber using (part_id) join partvariation using (partnumber_id) where partvariation_id = ?", array($partvariation_id));
         $retail = false;
         foreach ($query->result_array() as $row) {
             $retail = $row["use_retail_price"] > 0;
