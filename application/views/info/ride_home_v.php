@@ -21,7 +21,13 @@
 					<h3><?php echo @$notice; ?></h3>			
 				</div>
 			<?php endif; ?>		
-	
+
+            <?php if (isset($pageRec) && is_array($pageRec) && array_key_exists("page_custom_js", $pageRec) && $pageRec["page_custom_js"] != ""): ?>
+            <script type="application/javascript">
+            <?php echo $pageRec["page_custom_js"]; ?>
+            </script>
+            <?php endif; ?>
+
 		</div>
 		<!-- END MAIN CONTENT -->
 		
