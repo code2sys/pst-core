@@ -219,7 +219,7 @@ class Pages extends Master_Controller {
   			
   		$this->_mainData['location'] = array('footer' => 'Footer', 'comp_info' => 'Company Info');
   		$this->_mainData['widgets'] = $this->pages_m->getWidgets();
-  		$js = '<script type="text/javascript" src="' . $this->_mainData['assets'] . '/js/ckeditor/ckeditor.js"></script>';
+  		$js = '<script type="text/javascript" src="' . $this->_mainData['assets'] . '/ckeditor4/ckeditor.js"></script>';
   		$this->loadJS($js);
   		$this->_mainData['edit_config'] = $this->_mainData['assets'] . '/js/htmleditor.js';
   		

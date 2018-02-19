@@ -59,7 +59,7 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->_mainData['id'] = $id;
         $this->setNav('admin/nav_v', 2);
 
-        $js = '<script type="text/javascript" src="' . $this->_mainData['assets'] . '/js/ckeditor/ckeditor.js"></script>';
+        $js = '<script type="text/javascript" src="' . $this->_mainData['assets'] . '/ckeditor4/ckeditor.js"></script>';
         $this->loadJS($js);
         $this->_mainData['edit_config'] = $this->_mainData['assets'] . '/js/htmleditor.js';
 

@@ -232,6 +232,8 @@ class Master_Controller extends CI_Controller {
             redirect('');
             exit();
         }
+        $_SESSION["adminuser"] = 1;
+        $_SESSION["ckeditor_session"] = "345u3guiohjgktru";
     }
 
 }
