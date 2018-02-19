@@ -110,7 +110,7 @@
 						</tr>
 						<?php if(@$pageRec['id'] != 12): ?>
 						<?php if(@$pageRec['delete']): ?>
-						<tr class="typeSpecific showManagedPage">
+						<tr class="">
 							<td>Icon</td><td><span style="font-size:10px;">*Font-Awesome icons must be used.</span>&nbsp;&nbsp; <br />
 															  <span style="font-size:10px;">Current Icon: </span><i class="fa <?php echo @$pageRec['icon']; ?>"></i><br />
 															  <input id="icon" name="icon" value="<?php echo @$pageRec['icon']; ?>" class="text large" /></td>
