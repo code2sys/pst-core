@@ -2134,7 +2134,7 @@ class Parts_M extends Master_M {
                 //$custom_where .= ' part.name like "%'.strtoupper(trim($search)).'%" OR';
                 //$this->db->like('part.name',strtoupper(trim($search)));
                 //}
-                $custom_where = rtrim($custom_where, 'OR') . ')';
+                $custom_where = rtrim($custom_where, 'OR ') . ')';
                 $this->db->where($custom_where);
                 //$this->db->order_by($field);
             }
