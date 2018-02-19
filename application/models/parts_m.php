@@ -2092,8 +2092,8 @@ class Parts_M extends Master_M {
                 //$field = " FIELD(`ord`,".implode(',',$filterArr['search']).')';
                 $srchTrm = explode(' ', $filterArr['search'][0]);
 
-                $custom_where .= "parvariation.part_number = '" . implode("' OR parvariation.part_number = '", array_map("addslashes", $srchTrm)) . "' OR";
-                $custom_where .= "parvariation.manufacturer_part_number = '" . implode("' OR parvariation.manufacturer_part_number = '", array_map("addslashes", $srchTrm)) . "' OR";
+                $custom_where .= "partvariation.part_number = '" . implode("' OR partvariation.part_number = '", array_map("addslashes", $srchTrm)) . "' OR ";
+                $custom_where .= "partvariation.manufacturer_part_number = '" . implode("' OR partvariation.manufacturer_part_number = '", array_map("addslashes", $srchTrm)) . "' OR ";
 
 
                 $searchTerm = '';
@@ -2122,7 +2122,7 @@ class Parts_M extends Master_M {
                 if (strlen(trim($searchTerm)) < 5 || strpos(trim($searchTerm), '-') !== false) {
                     $custom_where .= " part.name like '%" . trim(jonathan_escape_for_likes($searchTerm1, "=")) . "%' ESCAPE '=' OR ";
                 } else {
-                    $custom_where .= ' MATCH(part.name) AGAINST("' . addslashes(trim(str_replace('-', ' ', $searchTerm))) . '") OR';
+                    $custom_where .= ' MATCH(part.name) AGAINST("' . addslashes(trim(str_replace('-', ' ', $searchTerm))) . '") OR ';
                 }
                 if (strpos($searchTerm1, '-') !== false) {
                     //$srchTrm1 = explode(' ', $filterArr['search'][0]);
