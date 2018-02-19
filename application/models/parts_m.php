@@ -3087,8 +3087,20 @@ class Parts_M extends Master_M {
     // This model is so fucking long.
     //
     // This function is added to get the data required to spit out the new "Part Number" screen.
-    public function getPartNumberScreen($part_id) {
-        $query = $this->db->query("select group_concat(distinct partnumberpartquestion.answer order by partnumberpartquestion.answer separator '/') as answer , partvariation.part_number , partvariation.manufacturer_part_number , If(IfNull(partdealervariation.quantity_available, 0) + IfNull(partvariation.quantity_available, 0) > 0, 1, 0) as in_stock, partvariation.stock_code  from partvariation join partnumber using (partnumber_id) join partnumberpartquestion using (partnumber_id) join partpartnumber using (partnumber_id) left join partdealervariation on partvariation.partvariation_id = partdealervariation.partvariation_id where partpartnumber.part_id = ? group by partvariation.partvariation_id;", array($part_id));
+    public function getPartNumberScreen($part_id, $activeMachine = NULL) {
+        $extra_join = "";
+        $extra_values = array();
+        $extra_where = "";
+
+        if (!is_null($activeMachine)) {
+            $extra_join = " join partnumbermodel on partpartnumber.partnumber_id = partnumbermodel.partnumber_id ";
+            $extra_where = " AND partnumbermodel.year = ? and partnumbermodel.model_id = ? ";
+            $extra_values[] = $activeMachine["year"];
+            $extra_values[] = $activeMachine["model"]["model_id"];
+        }
+
+        array_unshift($extra_values, $part_id);
+        $query = $this->db->query("select group_concat(distinct partnumberpartquestion.answer order by partnumberpartquestion.answer separator '/') as answer , partvariation.part_number , partvariation.manufacturer_part_number , If(IfNull(partdealervariation.quantity_available, 0) + IfNull(partvariation.quantity_available, 0) > 0, 1, 0) as in_stock, partvariation.stock_code  from partvariation join partnumber using (partnumber_id) join partnumberpartquestion using (partnumber_id) join partpartnumber using (partnumber_id) left join partdealervariation on partvariation.partvariation_id = partdealervariation.partvariation_id $extra_join where partpartnumber.part_id = ? $extra_where group by partvariation.partvariation_id;", $extra_values);
         return $query->result_array();
     }
 }
