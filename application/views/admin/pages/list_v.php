@@ -36,7 +36,15 @@
 			<div class="clear"></div>
 				<div class="hidden_table">	
 					<table width="100%" cellpadding="6">
-						<tr><td>Active</td><td>Page Name</td><td>Actions</td></tr>
+                        <thead>
+                            <tr style="border-bottom: 1px solid black; ">
+                                <td><strong>Active</strong></td>
+                                <td><strong>Page Name</strong></td>
+                                <td><strong>Page Type</strong></td>
+                                <td><strong>Actions</strong></td>
+                                </tr>
+                        </thead>
+                        <tbody>
 						<?php if($pages): foreach($pages as $page): ?>
 							<tr>
 								<td>
@@ -49,6 +57,9 @@
 								<td>
 									<?php echo $page['label']; ?>
 								</td>
+                                <td>
+									<?php echo $page['type']; ?>
+								</td>
 								<td>
 									<a href="<?php echo base_url('pages/edit/'.$page['id']); ?>">Edit</a>
 									<?php if($page['delete']): ?> | 
@@ -57,6 +68,7 @@
 								</td>
 							</tr>
 						<?php endforeach; endif; ?>
+                        </tbody>
 					</table>
 				</div>
 			</form>
