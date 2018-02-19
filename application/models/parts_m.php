@@ -2091,7 +2091,15 @@ class Parts_M extends Master_M {
                 $custom_where = "(";
                 //$field = " FIELD(`ord`,".implode(',',$filterArr['search']).')';
                 $srchTrm = explode(' ', $filterArr['search'][0]);
+
+                $custom_where .= "parvariation.part_number = '" . implode("' OR parvariation.part_number = '", array_map("addslashes", $srchTrm)) . "' OR";
+                $custom_where .= "parvariation.manufacturer_part_number = '" . implode("' OR parvariation.manufacturer_part_number = '", array_map("addslashes", $srchTrm)) . "' OR";
+
+
                 $searchTerm = '';
+
+                // JLB 02-19-18
+                // I admit I have no idea why they are doing this. It looks like they're dancing around plural or not plural.
                 $end = end($srchTrm);
                 unset($srchTrm[count($srchTrm) - 1]);
                 $end1 = trim($end, 's');
@@ -2105,13 +2113,16 @@ class Parts_M extends Master_M {
                 //foreach($filterArr['search'] as $search)
                 //{
                 //echo strlen(trim($searchTerm));
-                if (strpos(trim($searchTerm), 'cl-17') !== false || strpos(trim($searchTerm), 'cl 17') !== false) {
-                    $searchTerm = 'hjc 2015 cl-17';
-                    $custom_where .= " part.name like '%" . trim($searchTerm) . "%' OR";
-                } else if (strlen(trim($searchTerm)) < 5 || strpos(trim($searchTerm), '-') !== false) {
-                    $custom_where .= " part.name like '%" . trim($searchTerm1) . "%' OR";
+                // JLB 02-19-18 WTF is the point of this first one? I assume that this was something that they hardcoded to get past testing?
+//                if (strpos(trim($searchTerm), 'cl-17') !== false || strpos(trim($searchTerm), 'cl 17') !== false) {
+//                    $searchTerm = 'hjc 2015 cl-17';
+//                    $custom_where .= " part.name like '%" . trim($searchTerm) . "%' OR";
+//                } else\
+                $this->load->helper("jonathan");
+                if (strlen(trim($searchTerm)) < 5 || strpos(trim($searchTerm), '-') !== false) {
+                    $custom_where .= " part.name like '%" . trim(jonathan_escape_for_likes($searchTerm1, "=")) . "%' ESCAPE '=' OR ";
                 } else {
-                    $custom_where .= ' MATCH(part.name) AGAINST("' . trim(str_replace('-', ' ', $searchTerm)) . '") OR';
+                    $custom_where .= ' MATCH(part.name) AGAINST("' . addslashes(trim(str_replace('-', ' ', $searchTerm))) . '") OR';
                 }
                 if (strpos($searchTerm1, '-') !== false) {
                     //$srchTrm1 = explode(' ', $filterArr['search'][0]);
