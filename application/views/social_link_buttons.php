@@ -41,3 +41,9 @@ if (!isset($SMSettings)) {
         <img src="/qatesting/benz_assets/images/ebay.png" alt="eBay">
     </a>
 <?php endif; ?>
+
+<?php if(@$SMSettings['sm_snapchat']): ?>
+    <a class="social" href="<?php echo $SMSettings['sm_snapchat']; ?>" target="_blank" style="color:#F00;">
+        <img src="/qatesting/benz_assets/images/snapchat.png" alt="Snapchat">
+    </a>
+<?php endif; ?>
