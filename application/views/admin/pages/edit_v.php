@@ -25,8 +25,35 @@
 		    <p><div id="login_success_message"></div></p>
 			</div>
 			<!-- END SUCCESS MESSAGE -->
+
+            <script type="application/javascript">
+                $(document).on("ready", function() {
+                    var checkTypes = function() {
+                        var value = $("input[name='type']:checked").val();
+
+                        $(".typeSpecific").hide();
+                        switch (value) {
+                            case "Managed Page":
+                                $(".typeSpecific.showManagedPage").show();
+                                break;
+
+                            case "External Link":
+                                $(".typeSpecific.showExternalLink").show();
+                                break;
+
+                            case "File Attachment":
+                                $(".typeSpecific.showFileAttachment").show();
+                                break;
+                        }
+
+                    };
+
+                    $("input[name='type']").on("change", checkTypes);
+                    checkTypes();
+                });
+            </script>
 						
-			<form action="<?php echo base_url('pages/edit/'.@$pageRec['id']); ?>" method="post" id="form_example" class="form_standard">
+			<form action="<?php echo base_url('pages/edit/'.@$pageRec['id']); ?>" method="post" id="form_example" class="form_standard" enctype="multipart/form-data">
 			<?php echo form_hidden('id', @$pageRec['id']); ?>
 			
 				<div class="hidden_table">	
@@ -40,24 +67,55 @@
 						<tr>
 							<td>Page Name</td><td><input id="label" name="label" value="<?php echo @$pageRec['label']; ?>" class="text large" /></td>
 						</tr>
+                        <?php
+                        $type_value = array_key_exists("type", $pageRec) ? $pageRec["type"] : "Managed Page";
+
+                        ?>
 						<tr>
+							<td>Page Type</td><td>
+                                <label><input type="radio" name="type" value="Managed Page" <?php if ($type_value == "Managed Page"): ?>checked="checked" <?php endif; ?> /><strong>Managed Page:</strong> Use content-management tools to manage text, video, and slider content.</label><br/>
+                                <label><input type="radio" name="type" value="External Link" <?php if ($type_value == "External Link"): ?>checked="checked" <?php endif; ?> /><strong>External Link:</strong> Page links to an external URL that opens in a new window.</label><br/>
+                                <label><input type="radio" name="type" value="File Attachment" <?php if ($type_value == "File Attachment"): ?>checked="checked" <?php endif; ?> /><strong>File Attachment:</strong> Upload a file that is downloaded by the website visitor when they click the link.</label><br/>
+						</tr>
+
+                        <tr class="typeSpecific showExternalLink">
+                            <td>External Link</td><td><input id="external_url" type="text" name="external_url" value="<?php echo @$pageRec['external_url']; ?>" class="text large" /></td>
+                        </tr>
+
+
+
+                        <?php if (array_key_exists("original_filename", $pageRec) && $pageRec["original_filename"] != ""): ?>
+                            <tr class="typeSpecific showFileAttachment">
+                                <td>Existing File</td><td><?php echo $pageRec["original_filename"]; ?> <a href="/pages/admindownload/<?php echo $pageRec["id"]; ?>">Download</a></td>
+                            </tr>
+
+                        <?php endif; ?>
+
+
+                        <tr class="typeSpecific showFileAttachment">
+                            <td>New File</td><td><input id="upload" name="upload" type="file" class="text large" /></td>
+                        </tr>
+
+
+
+						<tr class="typeSpecific showManagedPage">
 							<td>Meta Title</td><td><input id="title" name="title" value="<?php echo @$pageRec['title']; ?>" class="text large" /></td>
 						</tr>
 						
-						<tr>
+						<tr class="typeSpecific showManagedPage">
 							<td>Meta KeyWords</td><td><input id="keywords" name="keywords" value="<?php echo @$pageRec['keywords']; ?>" class="text large" /></td>
 						</tr>
-						<tr>
+						<tr class="typeSpecific showManagedPage">
 							<td>Meta Description</td><td><input id="metatags" name="metatags" value="<?php echo @$pageRec['metatags']; ?>" class="text large" /></td>
 						</tr>
 						<?php if(@$pageRec['id'] != 12): ?>
 						<?php if(@$pageRec['delete']): ?>
-						<tr>
+						<tr class="">
 							<td>Icon</td><td><span style="font-size:10px;">*Font-Awesome icons must be used.</span>&nbsp;&nbsp; <br />
 															  <span style="font-size:10px;">Current Icon: </span><i class="fa <?php echo @$pageRec['icon']; ?>"></i><br />
 															  <input id="icon" name="icon" value="<?php echo @$pageRec['icon']; ?>" class="text large" /></td>
 						</tr>
-						<tr>
+						<tr class="">
 							<td>Location</td><td><span style="font-size:10px;">*Limit <?php echo FOOTER_PAGE_LIMIT; ?> pages for Footer.</span><br />
 																	<?php if(@$location): foreach($location as $key => $loc): ?>
 																		<?php echo form_checkbox('location[]', $key, is_numeric(array_search($key, $pageRec['location'])) );  ?> <?php echo $loc; ?><br />
@@ -65,10 +123,10 @@
 															  </td>
 						</tr>
 						<?php endif; ?>
-						<tr>
+						<tr class="typeSpecific showManagedPage">
 							<td>TextBox Widget</td><td></td>
 						</tr>
-						<tr>
+						<tr class="typeSpecific showManagedPage">
 							<td colspan="2">
 							<p> Make changes to the number and order of the widgets below and then submit to edit the content in the sections below.</p>
 								<div class="dragcontainer">
@@ -112,7 +170,7 @@
 								case '1' :
 									++$slider;
 			 ?>
-			 	<div class="divider"></div>
+			 	<div class="divider  typeSpecific showManagedPage""></div>
 			 		<h2>Slider <?php echo $slider; ?></h2>
 					<?php echo form_open_multipart('pages/addImages/', array('class' => 'form_standard', 'id' => 'admin_banner_form')); ?>  
 						<?php echo form_hidden('page', $pageRec['id']); ?>
@@ -202,6 +260,7 @@
 								++$textedit;
 					?>
 						<div class="divider"></div>
+                                <div  class="typeSpecific showManagedPage">
 						<h2>TextBox <?php echo $textedit; ?></h2>
 						<p>
 							You can use this like a word processor.  When you click submit, the data will be saved and rendered onto your webpage.
@@ -233,9 +292,11 @@
 			
 						<input type="submit" value="Save & Publish TextBox" class="button">
 						</form>
+                                </div>
 					<?php break; ?>
                                         <?php case 3: ?>
                                         <div class="divider"></div>
+        <div  class="typeSpecific showManagedPage">
                                                 <h2>Videos</h2>
                                                     <?php echo form_open_multipart('pages/addTopVideos/', array('class' => 'form_standard', 'id' => 'admin_brand_form')); ?>
                                                             <?php echo form_hidden('pageId', $pageRec['id']); ?>
@@ -286,6 +347,7 @@
                                                     </div>
                                             </div>
                                                     </form>
+        </div>
                                         <?php break; ?>
 			<?php endswitch; endforeach; endif; ?>
 			

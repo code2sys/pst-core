@@ -169,7 +169,7 @@ function jprint_interactive_footer($pages) {
         <?php
         foreach ($pages as $p) {
         ?>
-            <?php if ($p['external_link'] > 0): ?>
+            <?php if ($p['type'] == 'External Link'): ?>
         <li><a href="<?php echo $p['external_url']; ?>" target="_blank"><?php echo $p['label']; ?></a></li>
                 <?php else: ?>
         <li><a href="<?php echo site_url('pages/index/' . $p['tag']); ?>"><?php echo $p['label']; ?></a></li>
@@ -192,6 +192,21 @@ function jget_store_block($block_name) {
     } else {
         return "";
     }
+}
+
+
+// serves a file
+function jserve_file($source_file_path, $filename, $mime_type) {
+    header('Content-Description: File Transfer');
+    header("Content-Type: " . $mime_type);
+    header('Content-Transfer-Encoding: binary');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($source_file_path));
+    header('Content-Disposition: attachment; filename="' . str_replace("'", "",$filename) . '"');
+    flush();
+    readfile($source_file_path);
 }
 
 
