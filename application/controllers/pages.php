@@ -612,6 +612,12 @@ class Pages extends Master_Controller {
                     $post["original_filename"] = "";
                     $post["attachment_filename"] = "";
                     $post["attachment_mime_type"] = "";
+
+                    if (!preg_match("/^[a-z0-9]+:/", $post["external_url"])) {
+                        // put an http:// on the front of it
+                        $post["external_url"] = "http://" . $post["external_url"];
+                    }
+
                     break;
 
                 case 'File Attachment':
