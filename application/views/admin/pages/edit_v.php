@@ -34,15 +34,15 @@
                         $(".typeSpecific").hide();
                         switch (value) {
                             case "Managed Page":
-                                $(".typeSpecific .showManagedPage").show();
+                                $(".typeSpecific.showManagedPage").show();
                                 break;
 
                             case "External Link":
-                                $(".typeSpecific .showExternalLink").show();
+                                $(".typeSpecific.showExternalLink").show();
                                 break;
 
                             case "File Attachment":
-                                $(".typeSpecific .showFileAttachment").show();
+                                $(".typeSpecific.showFileAttachment").show();
                                 break;
                         }
 
