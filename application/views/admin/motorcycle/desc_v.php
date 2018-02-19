@@ -1,4 +1,4 @@
-<script type="text/javascript" src="/assets/js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="/assets/ckeditor4/ckeditor.js"></script>
 
 <!-- MAIN CONTENT =======================================================================================-->
 <div class="content_wrap">
