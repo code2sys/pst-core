@@ -1700,6 +1700,10 @@ class Parts_M extends Master_M {
     /*
      * JLB 10-04-17
      * You know what's insane? This looks so much like getSearchResults... Why couldn't some or any of this have been put in a single funciton? This sort of crap always bites us in the end.
+     *
+     * JLB 02-19-18
+     * I remind you; whoever did this was a dumb fuck, let me tell you. Why are these so similar but different?
+     *
      */
     public function getSearchCount($filterArr = NULL, $activeMachine = NULL) {
         // BEGIN DEAL -  Must get this before buidling Search SQL in case it is needed.
@@ -1760,20 +1764,11 @@ class Parts_M extends Master_M {
 
         if (@$filterArr['search']) {
             if (is_array($filterArr['search'])) {
-                $custom_where = "(";
-                $srchTrm = explode(' ', $filterArr['search'][0]);
-                $searchTerm = '';
-                $end = end($srchTrm);
-                unset($srchTrm[count($srchTrm) - 1]);
-                $end1 = trim($end, 's');
-                if ($end1 == $end) {
-                    $end1 == '';
-                }
-                $searchTerm = implode(' ', $srchTrm) . " (" . $end . " " . $end1 . ")";
-                $custom_where .= ' MATCH(part.name) AGAINST("' . trim($searchTerm) . '") OR';
-                $custom_where = rtrim($custom_where, 'OR') . ')';
+                // JLB 02-19-18
+                // I am fairly certain the geniuses who made this were using
+                // a different search in both cases...
+                $custom_where = $this->_searchCustomWhere($filterArr);
                 $this->db->where($custom_where);
-
             }
         }
 
@@ -1786,6 +1781,8 @@ class Parts_M extends Master_M {
         }
 
         $this->db->group_by('part.part_id');
+        $this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
+        $this->db->where("partvariation.from_lightspeed", 0, FALSE);
 
         $records = $this->selectRecords('partnumber');
         $count = count($records);
@@ -2005,6 +2002,57 @@ class Parts_M extends Master_M {
             return array('question', $question['question'], $question['answer']);
         }
     }
+    
+    protected function _searchCustomWhere($filterArr) {
+        $custom_where = "(";
+        //$field = " FIELD(`ord`,".implode(',',$filterArr['search']).')';
+        $srchTrm = explode(' ', $filterArr['search'][0]);
+
+        $custom_where .= "partvariation.part_number = '" . implode("' OR partvariation.part_number = '", array_map("addslashes", $srchTrm)) . "' OR ";
+        $custom_where .= "partvariation.manufacturer_part_number = '" . implode("' OR partvariation.manufacturer_part_number = '", array_map("addslashes", $srchTrm)) . "' OR ";
+
+
+        $searchTerm = '';
+
+        // JLB 02-19-18
+        // I admit I have no idea why they are doing this. It looks like they're dancing around plural or not plural.
+        $end = end($srchTrm);
+        unset($srchTrm[count($srchTrm) - 1]);
+        $end1 = trim($end, 's');
+        if ($end1 == $end) {
+            $end1 = '';
+        }
+        $searchTerm = implode(' ', $srchTrm) . " " . $end . " " . $end1;
+        $searchTerm1 = implode(' ', $srchTrm) . " " . $end . " " . $end1;
+        //echo $searchTerm;exit;
+        //$srchField = implode(' ', $filterArr['search']);
+        //foreach($filterArr['search'] as $search)
+        //{
+        //echo strlen(trim($searchTerm));
+        // JLB 02-19-18 WTF is the point of this first one? I assume that this was something that they hardcoded to get past testing?
+//                if (strpos(trim($searchTerm), 'cl-17') !== false || strpos(trim($searchTerm), 'cl 17') !== false) {
+//                    $searchTerm = 'hjc 2015 cl-17';
+//                    $custom_where .= " part.name like '%" . trim($searchTerm) . "%' OR";
+//                } else\
+        $this->load->helper("jonathan");
+        if (strlen(trim($searchTerm)) < 5 || strpos(trim($searchTerm), '-') !== false) {
+            $custom_where .= " part.name like '%" . trim(jonathan_escape_for_likes($searchTerm1, "=")) . "%' ESCAPE '=' OR ";
+        } else {
+            $custom_where .= ' MATCH(part.name) AGAINST("' . addslashes(trim(str_replace('-', ' ', $searchTerm))) . '") OR ';
+        }
+        if (strpos($searchTerm1, '-') !== false) {
+            //$srchTrm1 = explode(' ', $filterArr['search'][0]);
+            //foreach($srchTrm1 as $k => $v) {
+            //$custom_where .= " part.name like '%".$searchTerm1."%' OR";
+            //}
+        }
+
+        //$custom_where .= ' part.name like "%'.strtoupper(trim($search)).'%" OR';
+        //$this->db->like('part.name',strtoupper(trim($search)));
+        //}
+        $custom_where = rtrim($custom_where, 'OR ') . ')';
+        return $custom_where;
+    }
 
     // JLB 10-03-17 I added this active machine parameter...why is it not here?
     public function getSearchResults($filterArr = NULL, $activeMachine = null, $limit = 20, $offset = 0) {
@@ -2088,42 +2136,8 @@ class Parts_M extends Master_M {
 
         if (@$filterArr['search']) {
             if (is_array($filterArr['search'])) {
-                $custom_where = "(";
-                //$field = " FIELD(`ord`,".implode(',',$filterArr['search']).')';
-                $srchTrm = explode(' ', $filterArr['search'][0]);
-                $searchTerm = '';
-                $end = end($srchTrm);
-                unset($srchTrm[count($srchTrm) - 1]);
-                $end1 = trim($end, 's');
-                if ($end1 == $end) {
-                    $end1 = '';
-                }
-                $searchTerm = implode(' ', $srchTrm) . " " . $end . " " . $end1;
-                $searchTerm1 = implode(' ', $srchTrm) . " " . $end . " " . $end1;
-                //echo $searchTerm;exit;
-                //$srchField = implode(' ', $filterArr['search']);
-                //foreach($filterArr['search'] as $search)
-                //{
-                //echo strlen(trim($searchTerm));
-                if (strpos(trim($searchTerm), 'cl-17') !== false || strpos(trim($searchTerm), 'cl 17') !== false) {
-                    $searchTerm = 'hjc 2015 cl-17';
-                    $custom_where .= " part.name like '%" . trim($searchTerm) . "%' OR";
-                } else if (strlen(trim($searchTerm)) < 5 || strpos(trim($searchTerm), '-') !== false) {
-                    $custom_where .= " part.name like '%" . trim($searchTerm1) . "%' OR";
-                } else {
-                    $custom_where .= ' MATCH(part.name) AGAINST("' . trim(str_replace('-', ' ', $searchTerm)) . '") OR';
-                }
-                if (strpos($searchTerm1, '-') !== false) {
-                    //$srchTrm1 = explode(' ', $filterArr['search'][0]);
-                    //foreach($srchTrm1 as $k => $v) {
-                    //$custom_where .= " part.name like '%".$searchTerm1."%' OR";
-                    //}
-                }
+                $custom_where = $this->_searchCustomWhere($filterArr);
 
-                //$custom_where .= ' part.name like "%'.strtoupper(trim($search)).'%" OR';
-                //$this->db->like('part.name',strtoupper(trim($search)));
-                //}
-                $custom_where = rtrim($custom_where, 'OR') . ')';
                 $this->db->where($custom_where);
                 //$this->db->order_by($field);
             }
@@ -3069,4 +3083,24 @@ class Parts_M extends Master_M {
         }
     }
 
+    // JLB 02-19-18
+    // This model is so fucking long.
+    //
+    // This function is added to get the data required to spit out the new "Part Number" screen.
+    public function getPartNumberScreen($part_id, $activeMachine = NULL) {
+        $extra_join = "";
+        $extra_values = array();
+        $extra_where = "";
+
+        if (!is_null($activeMachine)) {
+            $extra_join = " join partnumbermodel on partpartnumber.partnumber_id = partnumbermodel.partnumber_id ";
+            $extra_where = " AND partnumbermodel.year = ? and partnumbermodel.model_id = ? ";
+            $extra_values[] = $activeMachine["year"];
+            $extra_values[] = $activeMachine["model"]["model_id"];
+        }
+
+        array_unshift($extra_values, $part_id);
+        $query = $this->db->query("select group_concat(distinct partnumberpartquestion.answer order by partnumberpartquestion.answer separator '/') as answer , partvariation.part_number , partvariation.manufacturer_part_number , If(IfNull(partdealervariation.quantity_available, 0) + IfNull(partvariation.quantity_available, 0) > 0, 1, 0) as in_stock, partvariation.stock_code  from partvariation join partnumber using (partnumber_id) join partnumberpartquestion using (partnumber_id)  join partpartnumber using (partnumber_id) left join partdealervariation on partvariation.partvariation_id = partdealervariation.partvariation_id join partquestion on partnumberpartquestion.partquestion_id = partquestion.partquestion_id $extra_join where partpartnumber.part_id = ? and partquestion.part_id = partpartnumber.part_id $extra_where group by partvariation.partvariation_id;", $extra_values);
+        return $query->result_array();
+    }
 }

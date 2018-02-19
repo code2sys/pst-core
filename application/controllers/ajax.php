@@ -286,13 +286,41 @@ class Ajax extends Master_Controller {
     }
 
     public function getActiveSection() {
-        $sections = array('description' => 1, 'reviews' => 2, 'fitment' => 3, 'video' => 4, 'sizechart' => 5);
+        //JLB 02-19-18
+        // This is the most assinine way to do this as well...we have these strings, we're going to convert them to numbers?
+        $sections = array('description' => 1, 'reviews' => 2, 'fitment' => 3, 'video' => 4, 'sizechart' => 5, 'partnumbers' => 6);
         if (@$sections[@$_POST['activeSection']] && is_numeric($_POST['part_id'])) {
             $post = $_POST;
             $this->load->model('parts_m');
             $new_assets_url = jsite_url("/qatesting/newassets/");
             $new_assets_url1 = jsite_url("/qatesting/benz_assets/");
             switch ($sections[@$_POST['activeSection']]) {
+                case 6:
+                    $garageNeeded = $this->parts_m->validMachines($_POST['part_id']);
+                    if ($garageNeeded) {
+                        // If Ride is needed assume the activeMachine is not the right one.
+                        $this->_mainData['garageNeeded'] = TRUE;
+                        $this->_mainData['validRide'] = FALSE;
+                        if (!empty($_SESSION['garage']) && !empty($_SESSION['activeMachine'])) {
+                            foreach ($garageNeeded as $ride) {
+                                if (($ride['model_id'] == $_SESSION['activeMachine']['model']['model_id']) && ($ride['year'] == $_SESSION['activeMachine']['year'])) {
+                                    $this->_mainData['validRide'] = TRUE;  // Active Machine has been verified
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    $activeMachine = ($garageNeeded && array_key_exists("activeMachine", $_SESSION)) ? $_SESSION["activeMachine"] : null;
+
+                    // we're going to generate a block of HTML that lists out the part numbers for this part and their status...
+                    $partvariations = $this->parts_m->getPartNumberScreen($_POST['part_id'], $activeMachine); // TODO - limit to fitment??
+                    $block = $this->load->view("ajax_getActive_partnumbers", array(
+                        "partvariations" => $partvariations
+                    ), true);
+                    break;
+
+
                 case 1:
                     $product = $this->parts_m->getProduct($post['part_id'], NULL);
                     $productVideo = $this->admin_m->getProductVideos($post['part_id']);
