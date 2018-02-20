@@ -1749,9 +1749,11 @@ class Parts_M extends Master_M {
             $this->db->where('partbrand.brand_id = ' . $filterArr['brand']);
         }
 
+        $partvariation_joined = false;
         if (@$filterArr['extra']) {
             if ($filterArr['extra'] == 'closeout') {
                 $this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
+                $partvariation_joined = true;
                 $this->db->where("partvariation.stock_code = 'Closeout'");
             } else if ($filterArr['extra'] == 'featured') {
                 $this->db->where("part.featured = '1'");
@@ -1781,7 +1783,9 @@ class Parts_M extends Master_M {
         }
 
         $this->db->group_by('part.part_id');
-        $this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
+        if (!$partvariation_joined) {
+            $this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
+        }
         $this->db->where("partvariation.from_lightspeed", 0, FALSE);
 
         $records = $this->selectRecords('partnumber');
