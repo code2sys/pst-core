@@ -1684,13 +1684,11 @@ class Admin_M extends Master_M {
                 }
 
                 if (empty($output)) {
-                    error_log("Migrate A");
                     $imprt[] = $v;
                     $imported = true;
                     $where = array('part_number' => $v['partnumber'], 'distributor_id' => $v['distributor_id']);
                     $distributorInventory = $this->selectRecord('partvariation', $where);
                     $scs[$v['partnumber']] = $v;
-                    error_log("Migrate B");
                 }
             }
 
@@ -1700,33 +1698,23 @@ class Admin_M extends Master_M {
             $partvariation_id = 0;
             if (!empty($distributorInventory) && array_key_exists("partvariation_id", $distributorInventory) && $distributorInventory["partvariation_id"] > 0) {
                 $partvariation_id = $distributorInventory["partvariation_id"];
-                error_log("Migrate C");
             } elseif (!empty($dealerInventory) && array_key_exists("partvariation_id", $dealerInventory) && $dealerInventory["partvariation_id"] > 0) {
                 $partvariation_id = $dealerInventory["partvariation_id"];
-                error_log("Migrate D");
-
             }
 
             if ($partvariation_id > 0 ) {
-                error_log("Migrate E");
                 // Is this one in lightspeed?
                 $query = $this->db->query("Select count(*) as cnt from lightspeedpart where partvariation_id = ?", array($partvariation_id));
                 $cnt = $query->result_array();
                 $cnt = $cnt[0]["cnt"];
 
                 if ($cnt > 0) {
-                    error_log("Migrate F");
                     $lightspeed[$v['partnumber']] = $v['partnumber'];
                     continue; // this should go to the next part, I hope.
                 }
-
             }
 
-
-
-
             if (empty($dealerInventory) && !empty($distributorInventory)) {
-                error_log("Migrate G");
                 $data = $distributorInventory;
                 $data['cost'] = $v['cost'];
                 $data['quantity_available'] = $v['quantity'];
@@ -1737,9 +1725,6 @@ class Admin_M extends Master_M {
                 unset($data['from_lightspeed']);
                 $this->db->insert('partdealervariation', $data);
 
-                error_log("Insert into partdealervariation: " . print_r($data, true));
-                error_log("Migrate H");
-
                 $dt = array('protect' => 1);
                 $cwhere = array('partvariation_id' => $data['partvariation_id']);
                 $this->updateRecord('partvariation', $dt, $cwhere, FALSE);
@@ -1747,35 +1732,26 @@ class Admin_M extends Master_M {
                 $where = array('part_number' => $v['partnumber'], 'distributor_id' => $v['distributor_id']);
                 $dealerInventory = $this->selectRecord('partdealervariation', $where);
 
-                error_log("Migrate I");
-
                 $scs[$v['partnumber']] = $v;
             } else if (!empty($dealerInventory)) {
-
-                error_log("Migrate J");
-
                 $data = array('quantity_available' => $dealerInventory["quantity_available"] + $v['quantity']);
                 if ($v['cost'] > 0) {
                     // JLB 07-15-17
                     // Brandt told me that Pardy should not have done this, that the price should never be assigned to the cost, and that this is crazy.
 //                    $data['price'] = $v['cost'];
                     $data['cost'] = $v['cost'];
-                    error_log("Migrate K");
                 }
                 $success = $this->updateRecord('partdealervariation', $data, $where, FALSE);
                 $dt = array('protect' => 1);
                 $cwhere = array('partvariation_id' => $data['partvariation_id']);
                 $this->updateRecord('partvariation', $dt, $cwhere, FALSE);
                 $scs[$v['partnumber']] = $v;
-                error_log("Migrate L");
             }
 
             $where = array('partpartnumber.partnumber_id' => $dealerInventory['partnumber_id'], 'partnumber.price > ' => 0);
             $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id ');
             $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
             $partnumbers = $this->selectRecord('partnumber', $where);
-
-            error_log("Migrate M");
 
             // $this->db->select('MIN(category.mark_up) as markup');
             // $where = array('partcategory.part_id' => $partnumbers['part_id'], 'category.mark_up > ' => 0);
@@ -1786,9 +1762,6 @@ class Admin_M extends Master_M {
             foreach ($category as $cat) {
                 $category_markup[] = $cat['id'];
             }
-
-            error_log("Migrate N");
-
 
             $this->db->select('MIN(category.mark_up) as markup');
             $where = array('category.mark_up > ' => 0);
@@ -1815,9 +1788,6 @@ class Admin_M extends Master_M {
             $categoryMarkUp = is_numeric(@$categories['markup']) ? $categories['markup'] : 0;
             $brandMarkUp = is_numeric(@$brand_markup['markup']) ? $brand_markup['markup'] : 0;
             $brandMAPPercent = (array_key_exists("map_percent", $brand_map_percent) && !is_null($brand_map_percent["map_percent"]) && is_numeric(@$brand_map_percent['map_percent'])) ? $brand_map_percent['map_percent'] : NULL;
-
-            error_log("Migrate O");
-
 
             if ($partnumbers) {
                 foreach ($partnumbers as $rec) {
@@ -1871,9 +1841,6 @@ class Admin_M extends Master_M {
             }
         }
 
-        error_log("Migrate P");
-
-
         foreach ($arr as $k => $v) {
             if (empty($scs[$v['partnumber']]) && !array_key_exists($v["partnumber"], $lightspeed)) {
                 $error[$v['partnumber']] = $v;
@@ -1890,8 +1857,6 @@ class Admin_M extends Master_M {
         // $this->updateRecord('partnumber', $data, $where, FALSE);
         // }
 //exit;
-        error_log("Migrate Q");
-
         $msg = array('success' => $scs, 'error' => $error, "lightspeed" => $lightspeed);
         return $msg;
     }
