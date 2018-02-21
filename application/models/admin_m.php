@@ -1736,6 +1736,7 @@ class Admin_M extends Master_M {
                 unset($data['customerdistributor_id']);
                 $this->db->insert('partdealervariation', $data);
 
+                error_log("Insert into partdealervariation: " . print_r($data, true));
                 error_log("Migrate H");
 
                 $dt = array('protect' => 1);
