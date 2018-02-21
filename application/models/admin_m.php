@@ -1734,6 +1734,7 @@ class Admin_M extends Master_M {
                 unset($data['ext_partvariation_id']);
                 unset($data['protect']);
                 unset($data['customerdistributor_id']);
+                unset($data['from_lightspeed']);
                 $this->db->insert('partdealervariation', $data);
 
                 error_log("Insert into partdealervariation: " . print_r($data, true));
