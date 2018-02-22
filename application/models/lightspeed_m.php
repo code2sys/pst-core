@@ -624,10 +624,12 @@ class Lightspeed_M extends Master_M {
             $query = $this->db->query("Select * From lightspeedpart where available > 0 and partvariation_id is null and supplier_code in $stock_codes and lightspeedpart_id > ? order by lightspeedpart_id limit 200", array($id));
             $rows = $query->result_array();
 
+            print "E\n";
 
             if (count($rows) > 0) {
                 print "Progress on " . count($rows) . "\n";
                 $progress = true;
+                print "F\n";
 
                 // OK, attempt to do them...
                 foreach ($rows as &$row) {
@@ -637,13 +639,17 @@ class Lightspeed_M extends Master_M {
                     $m = $CI->lightspeedsuppliercode_m->query($row["supplier_code"]);
                     $row["distributor"] = $m["distributor_name"];
                 }
+                print "G\n";
 
                 // now, post them
                 $clean_rows = $this->migrateparts_m->queryMatchingPart($rows);
+                print "H\n";
 
                 foreach ($clean_rows as $row) {
+                    print "I\n";
                     // attempt to receive it... distributor_id, partnumber, cost, quantity
                     if ($row["migrate"]) {
+                        print "J\n";
                         $CI->admin_m->updateDistributorInventory(array(
                             array(
                                 "distributor_id" => ($row["distributor_id"] = $this->_getDistributorByName($row["distributor"])),
@@ -652,12 +658,17 @@ class Lightspeed_M extends Master_M {
                                 "quantity" => $row["available"]
                             )
                         ));
+                        print "K\n";
                         $this->db->query("Update lightspeedpart join partvariation set lightspeedpart.partvariation_id = partvariation.partvariation_id where lightspeedpart.lightspeedpart_id = ? and partvariation.distributor_id = ? and partvariation.part_number = ?", array($row["lightspeedpart_id"], $row["distributor_id"], $row["part_number"]));
                     } elseif ($row["inventory"]) {
                         // We have found the eternal part variation...
+                        print "L\n";
                         $this->db->query("Update lightspeedpart set eternalpartvariation_id = ? where lightspeedpart_id = ?", array($row["epv"]["eternalpartvariation_id"], $row["lightspeedpart_id"]));
                     }
+                    print "M\n";
+
                 }
+                print "N\n";
             }
 
         } while($progress);
