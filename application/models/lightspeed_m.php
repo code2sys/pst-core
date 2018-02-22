@@ -611,7 +611,7 @@ class Lightspeed_M extends Master_M {
         $CI->load->model("Lightspeedsuppliercode_m");
         print "C\n";
 
-        $stock_codes = "('" . implode("', '", $CI->lightspeedsuppliercode_m->getDistributorSupplierCodes()) . "')";
+        $stock_codes = "('" . implode("', '", $CI->Lightspeedsuppliercode_m->getDistributorSupplierCodes()) . "')";
 
         print "Stock codes: $stock_codes \n";
         print "D\n";
