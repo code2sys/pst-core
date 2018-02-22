@@ -617,6 +617,7 @@ class Lightspeed_M extends Master_M {
         print "D\n";
 
         do {
+            print "Top of loop id is $id \n";
             $progress = false;
 
             // OK, try to get some...we only do batches of 200; this just seems like a good #
