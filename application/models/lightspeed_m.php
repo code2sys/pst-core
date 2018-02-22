@@ -592,11 +592,14 @@ class Lightspeed_M extends Master_M {
 
     // TODO - how do we piece this all together?
     public function repair_parts() {
+        print "A\n";
         $CI =& get_instance();
         $CI->load->model("admin_m");
         $CI->load->model("migrateparts_m");
         $uniqid = uniqid("repair_parts+");
         $this->db->query("Update lightspeedpart set uniqid = ?, lightspeed_present_flag = 0", array($uniqid));
+
+        print "B\n";
 
         $this->propagate_lightspeed_1();
 
@@ -606,6 +609,7 @@ class Lightspeed_M extends Master_M {
         $id = 0;
         $CI =& get_instance();
         $CI->load->model("Lightspeedsuppliercode_m");
+        print "C\n";
 
         $stock_codes = "('" . implode("', '", $CI->lightspeedsuppliercode_m->getDistributorSupplierCodes()) . "')";
 
