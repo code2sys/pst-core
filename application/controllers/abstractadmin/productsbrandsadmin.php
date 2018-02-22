@@ -849,13 +849,13 @@ abstract class Productsbrandsadmin extends Customeradmin {
         $where = jonathan_generate_likes($columns, $s = (array_key_exists("search", $_REQUEST) && array_key_exists("value", $_REQUEST["search"]) ? $_REQUEST["search"]["value"] : ""), "WHERE");
 
         // get total count
-        $query = $this->db->query("Select count(*) as cnt from lightspeed_suppliercode");
+        $query = $this->db->query("Select count(*) as cnt from lightspeed_suppliercode  left join brand using (brand_id) left join distributor using (distributor_id) ");
         $total_count = 0;
         foreach ($query->result_array() as $row) {
             $total_count = $row['cnt'];
         }
 
-        $query = $this->db->query("Select count(*) as cnt from lightspeed_suppliercode $where");
+        $query = $this->db->query("Select count(*) as cnt from lightspeed_suppliercode  left join brand using (brand_id) left join distributor using (distributor_id)  $where");
         $filtered_count = 0;
         foreach ($query->result_array() as $row) {
             $filtered_count = $row['cnt'];
