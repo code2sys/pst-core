@@ -636,7 +636,7 @@ class Lightspeed_M extends Master_M {
                     if ($id < $row["lightspeedpart_id"]) {
                         $id = $row["lightspeedpart_id"];
                     }
-                    $m = $CI->lightspeedsuppliercode_m->query($row["supplier_code"]);
+                    $m = $CI->Lightspeedsuppliercode_m->query($row["supplier_code"]);
                     $row["distributor"] = $m["distributor_name"];
                 }
                 print "G\n";
