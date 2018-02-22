@@ -614,6 +614,7 @@ class Lightspeed_M extends Master_M {
         $stock_codes = "('" . implode("', '", $CI->lightspeedsuppliercode_m->getDistributorSupplierCodes()) . "')";
 
         print "Stock codes: $stock_codes \n";
+        print "D\n";
 
         do {
             $progress = false;
