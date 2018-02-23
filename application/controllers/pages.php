@@ -466,7 +466,7 @@ class Pages extends Master_Controller {
 			$templateData['emailFooterImg'] = site_url('assets/email_images/email_footer.png');
 			$templateData['emailHeadImg'] = site_url('assets/email_images/email_head.jpg');
 			$templateData['emailShadowImg'] = site_url('assets/email_images/email_shadow.png');
-			$templateData["name"] = $this->input->post("name");
+			$templateData["name"] = $data['first_name'] . " " . $data['last_name'];
 			$templateData["email"] = $this->input->post("email");
 
 			$this->load->model('mail_gen_m');
