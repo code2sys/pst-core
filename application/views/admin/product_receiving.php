@@ -55,6 +55,20 @@
             </tr>
             <tr>
                 <td colspan="2">
+                    <p><strong>Part Number Format</strong><br/>Distributors often have a characteristic part number format. Please enter the part number following the usual template for that distributor so as to maximize matching with inventory updates. Common formats (0 = numeric digit):</p>
+
+                    <ul>
+                        <li>Bell: 00000000</li>
+                        <li>Helmet House: 0000-0000-00</li>
+                        <li>Oneal: 0000-000</li>
+                        <li>Sullivans: 0000-0000</li>
+                        <li>Tucker Rocky: 00-0000</li>
+                        <li>Western PowerSport: 000-0000 or 00-0000</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
                     <table width="100%" class="add-mr" cellpadding="6">
                         <thead>
                             <tr>

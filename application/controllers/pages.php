@@ -453,8 +453,8 @@ class Pages extends Master_Controller {
 			
 			$mailData = array('toEmailAddress' => $financeEmail,
   	                    'subject' => 'You Have a new Credit Application',
-  	                    'fromEmailAddress' => $this->input->post('email'),
-  	                    'fromName' => $this->input->post('name'),
+  	                    'fromEmailAddress' => "noreply@powersporttechnologies.com",
+  	                    'fromName' => "Credit Apps Form",
   	                    'replyToEmailAddress' => $this->input->post('email'),
   	                    'replyToName' => $this->config->item('replyToName'));
 			$templateData = $post;
@@ -466,12 +466,14 @@ class Pages extends Master_Controller {
 			$templateData['emailFooterImg'] = site_url('assets/email_images/email_footer.png');
 			$templateData['emailHeadImg'] = site_url('assets/email_images/email_head.jpg');
 			$templateData['emailShadowImg'] = site_url('assets/email_images/email_shadow.png');
+			$templateData["name"] = $data['first_name'] . " " . $data['last_name'];
+			$templateData["email"] = $this->input->post("email");
 
 			$this->load->model('mail_gen_m');
 			$this->_mainData['success'] = $this->mail_gen_m->generateFromView($mailData, $templateData, $htmlTemplate, $textTemplate);
 		}
 	}
-	
+
 	private function processServiceForm()
   	{
 	  	if ($this->validateServiceForm() === TRUE)
