@@ -38,7 +38,7 @@
 						<tr>
 							<td>
 								<h1 style="margin:5px 0px;color:#006eac;font:24px 'Helvetica', sans-serif;">
-									A Credit Application has been requested.
+                                    We received a credit application from <?php echo $name; ?> (email: <?php echo $email; ?>).
 								</h1>
 								<br>
 							</td>
