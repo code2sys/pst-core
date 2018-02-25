@@ -651,7 +651,7 @@ abstract class Motorcycleadmin extends Firstadmin
             $this->_printAjaxError("Sorry, you do not have access to this feature.");
         }
 
-        $this->db->query("Update motorcycle set deleted = 1 where id = ?", array($id));
+        $this->db->query("Update motorcycle set deleted = 1, customer_deleted = 1 where id = ?", array($id));
         $this->_printAjaxSuccess();
     }
 

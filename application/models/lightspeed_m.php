@@ -418,7 +418,8 @@ class Lightspeed_M extends Master_M {
         }
 
         if ($valid_count > 0) {
-            $this->db->query("Update motorcycle set deleted = 1 where lightspeed = 1 and lightspeed_flag = 0");
+            $this->db->query("Update motorcycle set deleted = 1, lightspeed_deleted = 1 where lightspeed = 1 and lightspeed_flag = 0");
+            $this->db->query("Update motorcycle set deleted = 0 where lightspeed_deleted = 1 and customer_deleted = 0 and lightspeed = 1 and lightspeed_flag = 1");
         }
 
         // JLB 12-29-17
