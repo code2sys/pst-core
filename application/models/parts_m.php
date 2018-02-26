@@ -1392,7 +1392,7 @@ class Parts_M extends Master_M {
         $returnArr['products'] = $this->selectRecords('partnumber', $where);
         // Finish up necessary fields
         if (!empty($returnArr['products'])) {
-            $returnArr['label'] = 'Monster Deals';
+            $returnArr['label'] = 'Top Deals';
             $returnArr['page'] = 'shopping/productlist/deal/' . $categoryId . '/category/' . $categoryId . '/';
             foreach ($returnArr['products'] as &$product) {
                 $product['activeRide'] = FALSE;
