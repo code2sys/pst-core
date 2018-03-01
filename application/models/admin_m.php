@@ -2287,6 +2287,12 @@ class Admin_M extends Master_M {
         $userData['cc_permission'] = $data['cc_permission'] == 1 ? 1 : 0;
         $userData['admin'] = $data['admin'] == 1 ? 1 : 0;
         $userData['status'] = $data['status'] == 1 ? 1 : 0;
+        if (array_key_exists("username", $data)) {
+            $userData["username"] = $data["username"];
+        }
+        if (array_key_exists("email", $data)) {
+            $userData["lost_password_email"] = $data["email"];
+        }
         $where = array('id' => $data['id']);
         $this->updateRecord('user', $userData, $where, FALSE);
 
