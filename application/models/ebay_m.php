@@ -1934,7 +1934,7 @@ class Ebay_M extends Master_M {
      * @access private
      * @author Anik Goel
      */
-    private function sub_getEbayAuthSettingsFromDb() {
+    public function sub_getEbayAuthSettingsFromDb() {
         $sql = "SELECT ebay_app_id, ebay_cert_id, ebay_dev_id, ebay_user_token, ebay_environment  
 				FROM contact 
 				WHERE id = 1";
