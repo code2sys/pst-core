@@ -1059,12 +1059,23 @@ class Welcome extends Master_Controller {
         $message .= "Questions : " . $post['questions'] . '<br>';
         $message .= "Motorcycle : " . $post['motorcycle'] . '<br>';
 
-        $header = "From: noreply@powersporttechnologies.com\r\n";
-        $header.= "MIME-Version: 1.0\r\n";
-        $header.= "Content-Type: text/html; charset=utf-8\r\n";
-//        $header.= "X-Priority: 1\r\n";
+        $this->load->model("mail_gen_m");
 
-        mail($toEmail, "New Motorcycle Enquiry", $message, $header);
+        $this->mail_gen_m->queueEmail(array(
+            "toEmailAddress" => $toEmail,
+            "replyToEmailAddress" => $post['email'],
+            "replyToName" => $post['firstName'] . " " . $post['lastName'],
+            "fromEmailAddress" => "noreply@powersporttechnologies.com",
+            "fromName" => "Major Unit Inquiry",
+            "subject" => "New Motorcycle Inquiry",
+            "message" => $message
+        ));
+        
+//        $header = "From: noreply@powersporttechnologies.com\r\n";
+//        $header.= "MIME-Version: 1.0\r\n";
+//        $header.= "Content-Type: text/html; charset=utf-8\r\n";
+//        $header.= "X-Priority: 1\r\n";
+//        mail($toEmail, "New Motorcycle Enquiry", $message, $header);
         redirect('welcome/benzDetails/' . $post['product_id']);
     }
 
