@@ -687,7 +687,17 @@ class Lightspeed_M extends Master_M {
 
                 if ($debug) {
                     print "Clean rows return: \n";
-                    print_r($clean_rows);
+                    print count($clean_rows) . " total rows \n";
+                    $pv = $epv = 0;
+                    foreach ($clean_rows as $cr) {
+                        if ($cr["migrate"]) {
+                            $pv++;
+                        } else if ($cr["epv"]["eternalpartvariation_id"] > 0) {
+                            $epv++;
+                        }
+                    }
+                    print "PV: $pv \n";
+                    print "EPV: $epv \n";
                 }
 
                 foreach ($clean_rows as $row) {
