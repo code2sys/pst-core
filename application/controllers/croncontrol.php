@@ -435,9 +435,9 @@ class CronControl extends Master_Controller {
         $this->load->model("Lightspeed_m");
         $this->Lightspeed_m->get_parts();
     }
-    public function repairLightspeedParts() {
+    public function repairLightspeedParts($debug = 0) {
         $this->load->model("Lightspeed_m");
-        $this->Lightspeed_m->repair_parts();
+        $this->Lightspeed_m->repair_parts($debug);
     }
     public function getMajorUnits() {
         $this->load->model("Lightspeed_m");
