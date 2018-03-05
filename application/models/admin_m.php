@@ -10,6 +10,7 @@ class Admin_M extends Master_M {
 
     function __construct() {
         parent::__construct();
+        $this->load->model("lightspeed_m");
     }
 
     public function getAdminAddress() {
@@ -528,7 +529,12 @@ class Admin_M extends Master_M {
                             print_r($rec);
                         }
 
-                        if ($use_retail_price) {
+                        if ($this->lightspeed_m->partNumberIsLightspeed($rec['partnumber_id'])) {
+                            $finalSalesPrice = $this->lightspeed_m->lightspeedPrice($rec['partnumber_id']);
+                            if ($debug) {
+                                print "Use Lightspeed: Final sales price: $finalSalesPrice \n";
+                            }
+                        } elseif ($use_retail_price) {
                             $finalSalesPrice = $rec['price']; // JLB 07-15-17 New override.
                             if ($debug) {
                                 print "Use retail: Final sales price: $finalSalesPrice \n";
@@ -600,7 +606,7 @@ class Admin_M extends Master_M {
                             }
                         }
 
-                        if ($finalSalesPrice > $rec['price']) {
+                        if ($finalSalesPrice > $rec['price'] && !$this->lightspeed_m->partNumberIsLightspeed($rec['partnumber_id'])) {
                             $finalSalesPrice = $rec['price'];
                             if ($debug) {
                                 print "Final sales price too big using price $finalSalesPrice\n";
@@ -635,7 +641,12 @@ class Admin_M extends Master_M {
                             print_r($rec);
                         }
 
-                        if ($use_retail_price) {
+                        if ($this->lightspeed_m->partNumberIsLightspeed($rec['partnumber_id'])) {
+                            $finalSalesPrice = $this->lightspeed_m->lightspeedPrice($rec['partnumber_id']);
+                            if ($debug) {
+                                print "Use Lightspeed: Final sales price: $finalSalesPrice \n";
+                            }
+                        } else if ($use_retail_price) {
                             $finalSalesPrice = $rec['price'];
                             if ($debug) {
                                 print "Use retail: Final sales price: $finalSalesPrice \n";
@@ -704,7 +715,7 @@ class Admin_M extends Master_M {
                             }
                         }
 
-                        if ($finalSalesPrice > $rec['price']) {
+                        if ($finalSalesPrice > $rec['price'] && !$this->lightspeed_m->partNumberIsLightspeed($rec['partnumber_id'])) {
                             $finalSalesPrice = $rec['price'];
                             if ($debug) {
                                 print "Final sales price too big using price $finalSalesPrice\n";
@@ -751,7 +762,6 @@ class Admin_M extends Master_M {
 
         $CI =& get_instance();
         if (defined("ENABLE_LIGHTSPEED") && ENABLE_LIGHTSPEED) {
-            $this->load->model("lightspeed_m");
             $this->lightspeed_m->partPriceFix();
         }
         $this->load->model('cron/cronjobhourly', 'TheCronJob');
@@ -832,7 +842,9 @@ class Admin_M extends Master_M {
                         $finalMarkUp = 0;
                         $productMarkUp = $rec['markup'];
 
-                        if ($productMarkUp > 0) { // Product Markup Trumps everything
+                        if ($this->lightspeed_m->partNumberIsLightspeed($rec['partnumber_id'])) {
+                        $finalSalesPrice = $this->lightspeed_m->lightspeedPrice($rec['partnumber_id']);
+                        } elseif ($productMarkUp > 0) { // Product Markup Trumps everything
                             $finalSalesPrice = ($rec['cost'] * $productMarkUp / 100) + $rec['cost'];
                         } else {
                             // Calculate category and Brand Percent Mark up
@@ -868,7 +880,7 @@ class Admin_M extends Master_M {
                             $finalSalesPrice = $rec['price'];
                         }
 
-                        if ($finalSalesPrice > $rec['price']) {
+                        if ($finalSalesPrice > $rec['price'] && !$this->lightspeed_m->partNumberIsLightspeed($rec['partnumber_id'])) {
                             $finalSalesPrice = $rec['price'];
                         }
 
@@ -1794,7 +1806,9 @@ class Admin_M extends Master_M {
                     $finalMarkUp = 0;
                     $productMarkUp = $rec['markup'];
 
-                    if ($productMarkUp > 0) { // Product Markup Trumps everything
+                    if ($this->lightspeed_m->partNumberIsLightspeed($rec['partnumber_id'])) {
+                        $finalSalesPrice = $this->lightspeed_m->lightspeedPrice($rec['partnumber_id']);
+                    } elseif ($productMarkUp > 0) { // Product Markup Trumps everything
                         $finalSalesPrice = ($rec['cost'] * $productMarkUp / 100) + $rec['cost'];
                         //echo 'product Markup : '.$productMarkUp.' : '.$finalSalesPrice.'<br>';
                     } else {

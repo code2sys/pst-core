@@ -995,6 +995,7 @@ abstract class Productsbrandsadmin extends Customeradmin {
         $this->load->model("Lightspeed_m");
         $this->Lightspeed_m->setActiveOnAdd($_REQUEST["lightspeed_active_load"]);
         $this->Lightspeed_m->setUnitCycleTraderDefault($_REQUEST["unitCycleTraderDefault"]);
+        $this->Lightspeed_m->setLightSpeedPartPricingRule($_REQUEST["lightSpeedPartPricingRule"]);
         $this->session->Set_flashdata("success", "Settings updated successfully.");
 
         // Redirect it...

@@ -75,6 +75,13 @@ $success = $CI->session->flashdata("success");
                                 <label><input type="radio" name="unitCycleTraderDefault" value="1" <?php if ($c): ?>checked="checked"<?php endif; ?> /> Yes, include for Cycle Trader Feed by default</label>
                             </td>
                         </tr>
+                        <tr>
+                            <td width="30%"><b>Part Pricing Method:</b></td>
+                            <td>
+                                <label><input type="radio" name="lightSpeedPartPricingRule" value="0" <?php if (!($c = $CI->Lightspeed_m->lightSpeedPartPricingRule())): ?>checked="checked"<?php endif; ?> /> Use Pricing Algorithm</label>
+                                <label><input type="radio" name="lightSpeedPartPricingRule" value="1" <?php if ($c): ?>checked="checked"<?php endif; ?> /> Use LightSpeed Part Price</label>
+                            </td>
+                        </tr>
 
                     </table>
 
