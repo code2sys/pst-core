@@ -664,7 +664,7 @@ class Lightspeed_M extends Master_M {
             $progress = false;
 
             // OK, try to get some...we only do batches of 200; this just seems like a good #
-            $query = $this->db->query("Select * From lightspeedpart where available > 0 and partvariation_id is null and supplier_code in $stock_codes and lightspeedpart_id > ? order by lightspeedpart_id limit 1000", array($id));
+            $query = $this->db->query("Select * From lightspeedpart where available > 0 and partvariation_id is null and supplier_code in $stock_codes and lightspeedpart_id > ? order by lightspeedpart_id limit 10", array($id));
             $rows = $query->result_array();
 
             if (count($rows) > 0) {
