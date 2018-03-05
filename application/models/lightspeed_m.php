@@ -44,7 +44,9 @@ class Lightspeed_M extends Master_M {
             "ruv" => "RUV",
             "generators" => "Generators",
             "lawn and garden" => "Lawn and Garden",
-            "dirt bike" => "Off-Road"
+            "dirt bike" => "Off-Road",
+            "trailer" => "Trailer",
+            "snowmobile" => "Snowmobile"
         );
 
         if (array_key_exists(strtolower($category_name), $lookup_table)) {
@@ -86,6 +88,11 @@ class Lightspeed_M extends Master_M {
     }
 
     public function cleanColors($color) {
+        global $recentlyNewColor;
+        if (!isset($recentlyNewColor)) {
+            $recentlyNewColor = array();
+        }
+
         $lut = array(
             // This came from Modesto
             "BK" => "Black",
@@ -218,13 +225,24 @@ class Lightspeed_M extends Master_M {
 "BLACK &CAN-AM RED" => "BLACK&CAN-AM RED",
 "BLUE" => "BLUE",
 "GRAY/PINK" => "GRAY/PINK",
-"BRIGHT WHITE/INDY RED" => "BRIGHT WHITE/INDY RED"
+"BRIGHT WHITE/INDY RED" => "BRIGHT WHITE/INDY RED",
+            "BRN" => "Brown",
+            "MATTE RED" => "Matte Red",
+            "GRAY MATRIX CAMO" => "Gray Matrix Camo",
+            "SILVER" => "Silver",
+            "WHITE/BLACK" => "White/Black",
+            "BLUE/BLACK" => "Blue/Black",
+            "MATTE BLACK" => "Matte Black",
+            "BLUE/WHITE" => "Blue/White",
+            "ORANGE/BLACK" => "Orange/Black",
+            "Sunset Red" => "Sunset Red"
         );
 
         $color = trim($color);
         if (array_key_exists($color, $lut)) {
             $color = $lut[$color];
-        } else {
+        } else if (!in_array($color, $recentlyNewColor)) {
+            $recentlyNewColor[] = $color;
             print "UNRECOGNIZED COLOR: $color \n";
         }
         return $color;
@@ -593,14 +611,11 @@ class Lightspeed_M extends Master_M {
 
     // TODO - how do we piece this all together?
     public function repair_parts() {
-        print "A\n";
         $CI =& get_instance();
         $CI->load->model("admin_m");
         $CI->load->model("migrateparts_m");
         $uniqid = uniqid("repair_parts+");
         $this->db->query("Update lightspeedpart set uniqid = ?, lightspeed_present_flag = 0", array($uniqid));
-
-        print "B\n";
 
         $this->propagate_lightspeed_1();
 
@@ -610,27 +625,18 @@ class Lightspeed_M extends Master_M {
         $id = 0;
         $CI =& get_instance();
         $CI->load->model("Lightspeedsuppliercode_m");
-        print "C\n";
 
         $stock_codes = "('" . implode("', '", $CI->Lightspeedsuppliercode_m->getDistributorSupplierCodes()) . "')";
 
-        print "Stock codes: $stock_codes \n";
-        print "D\n";
-
         do {
-            print "Top of loop id is $id \n";
             $progress = false;
 
             // OK, try to get some...we only do batches of 200; this just seems like a good #
             $query = $this->db->query("Select * From lightspeedpart where available > 0 and partvariation_id is null and supplier_code in $stock_codes and lightspeedpart_id > ? order by lightspeedpart_id limit 200", array($id));
             $rows = $query->result_array();
 
-            print "E\n";
-
             if (count($rows) > 0) {
-                print "Progress on " . count($rows) . "\n";
                 $progress = true;
-                print "F\n";
 
                 // OK, attempt to do them...
                 foreach ($rows as &$row) {
@@ -640,17 +646,13 @@ class Lightspeed_M extends Master_M {
                     $m = $CI->Lightspeedsuppliercode_m->query($row["supplier_code"]);
                     $row["distributor"] = $m["distributor_name"];
                 }
-                print "G\n";
 
                 // now, post them
                 $clean_rows = $this->migrateparts_m->queryMatchingPart($rows);
-                print "H\n";
 
                 foreach ($clean_rows as $row) {
-                    print "I\n";
                     // attempt to receive it... distributor_id, partnumber, cost, quantity
                     if ($row["migrate"]) {
-                        print "J\n";
                         $CI->admin_m->updateDistributorInventory(array(
                             array(
                                 "distributor_id" => ($row["distributor_id"] = $this->_getDistributorByName($row["distributor"])),
@@ -659,17 +661,12 @@ class Lightspeed_M extends Master_M {
                                 "quantity" => $row["available"]
                             )
                         ));
-                        print "K\n";
                         $this->db->query("Update lightspeedpart join partvariation set lightspeedpart.partvariation_id = partvariation.partvariation_id where lightspeedpart.lightspeedpart_id = ? and partvariation.distributor_id = ? and partvariation.part_number = ?", array($row["lightspeedpart_id"], $row["distributor_id"], $row["part_number"]));
                     } elseif ($row["inventory"]) {
                         // We have found the eternal part variation...
-                        print "L\n";
                         $this->db->query("Update lightspeedpart set eternalpartvariation_id = ? where lightspeedpart_id = ?", array($row["epv"]["eternalpartvariation_id"], $row["lightspeedpart_id"]));
                     }
-                    print "M\n";
-
                 }
-                print "N\n";
             }
 
         } while($progress);
