@@ -703,15 +703,36 @@ class Lightspeed_M extends Master_M {
                 foreach ($clean_rows as $row) {
                     // attempt to receive it... distributor_id, partnumber, cost, quantity
                     if ($row["migrate"]) {
-                        $CI->admin_m->updateDistributorInventory(array(
-                            array(
-                                "distributor_id" => ($row["distributor_id"] = $this->_getDistributorByName($row["distributor"])),
-                                "partnumber" => $row["part_number"],
-                                "cost" => $row["cost"],
-                                "quantity" => $row["available"]
-                            )
-                        ));
-                        $this->db->query("Update lightspeedpart join partvariation set lightspeedpart.partvariation_id = partvariation.partvariation_id where lightspeedpart.lightspeedpart_id = ? and partvariation.distributor_id = ? and partvariation.part_number = ?", array($row["lightspeedpart_id"], $row["distributor_id"], $row["part_number"]));
+                        // JLB 03-05-18
+                        // We expect and eternal partvariation id, and so we just have to fetch it and then add to local inventory.
+                        $query = $this->db->query("Select * From partvariation where ext_partvariation_id = ?", array($row["ext_partvariation_id"]));
+                        foreach ($query->result_array() as $zrow) {
+                            // JLB 03-05-18
+                            // I can't unwind the code around line 1730 in admin_m, but this is the same thing...yuck.
+                            $data = $zrow;
+                            $data['cost'] = $row["cost"];
+                            $data['price'] = $row["current_active_price"];
+                            $data['quantity_available'] = $row["available"];
+                            unset($data['bulk_insert_round']);
+                            unset($data['ext_partvariation_id']);
+                            unset($data['protect']);
+                            unset($data['customerdistributor_id']);
+                            unset($data['from_lightspeed']);
+                            $this->db->insert('partdealervariation', $data);
+
+
+                            $this->db->query("Update lightspeedpart set lightspeedpart.partvariation_id = ? where lightspeedpart.lightspeedpart_id = ? ", array($zrow["partvariation_id"], $row["lightspeedpart_id"]));
+                        }
+//                        $CI->admin_m->updateDistributorInventory(array(
+//                            array(
+//                                "distributor_id" => ($row["distributor_id"] = $this->_getDistributorByName($row["distributor"])),
+//                                "partnumber" => $row["part_number"],
+//                                "price" => $row["current_active_price"],
+//                                "cost" => $row["cost"],
+//                                "quantity" => $row["available"]
+//                            )
+//                        ));
+
                     } elseif ($row["inventory"]) {
                         // We have found the eternal part variation...
                         $this->db->query("Update lightspeedpart set eternalpartvariation_id = ? where lightspeedpart_id = ?", array($row["epv"]["eternalpartvariation_id"], $row["lightspeedpart_id"]));
