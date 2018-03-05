@@ -235,7 +235,7 @@ final class Mail_gen_m extends Master_M
 	 * @param datetime $sendDateTime optional - when to send the email (scheduled)
 	 * @return boolean - SUCCESS or FAILURE
 	 */
-	private function queueEmail($mailData=NULL, $attachments=NULL, $sendDateTime=NULL)
+	public function queueEmail($mailData=NULL, $attachments=NULL, $sendDateTime=NULL)
 	{
 		// Validate & prep email data
 	  if (!$this->validate($mailData, 'EMAIL'))

@@ -1070,7 +1070,7 @@ class Welcome extends Master_Controller {
             "subject" => "New Motorcycle Inquiry",
             "message" => $message
         ));
-        
+
 //        $header = "From: noreply@powersporttechnologies.com\r\n";
 //        $header.= "MIME-Version: 1.0\r\n";
 //        $header.= "Content-Type: text/html; charset=utf-8\r\n";
