@@ -721,7 +721,7 @@ class Lightspeed_M extends Master_M {
                             $this->db->insert('partdealervariation', $data);
 
 
-                            $this->db->query("Update lightspeedpart set lightspeedpart.partvariation_id = ? where lightspeedpart.lightspeedpart_id = ? ", array($zrow["partvariation_id"], $row["lightspeedpart_id"]));
+                            $this->db->query("Update lightspeedpart set lightspeedpart.partvariation_id = ?, lightspeed_present_flag = 1 where lightspeedpart.lightspeedpart_id = ? ", array($zrow["partvariation_id"], $row["lightspeedpart_id"]));
                         }
 //                        $CI->admin_m->updateDistributorInventory(array(
 //                            array(
@@ -735,7 +735,7 @@ class Lightspeed_M extends Master_M {
 
                     } elseif ($row["inventory"]) {
                         // We have found the eternal part variation...
-                        $this->db->query("Update lightspeedpart set eternalpartvariation_id = ? where lightspeedpart_id = ?", array($row["epv"]["eternalpartvariation_id"], $row["lightspeedpart_id"]));
+                        $this->db->query("Update lightspeedpart set eternalpartvariation_id = ?, lightspeed_present_flag = 1 where lightspeedpart_id = ?", array($row["epv"]["eternalpartvariation_id"], $row["lightspeedpart_id"]));
                     }
                 }
             }

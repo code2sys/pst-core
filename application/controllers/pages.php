@@ -487,8 +487,8 @@ class Pages extends Master_Controller {
 			
 			$mailData = array('toEmailAddress' => $serviceEmail,
   	                    'subject' => 'Service Schedule Request',
-  	                    'fromEmailAddress' => $this->input->post('email'),
-  	                    'fromName' => $this->input->post('name'),
+  	                    'fromEmailAddress' => "noreply@powersporttechnologies.com",
+  	                    'fromName' => "Service Request",
   	                    'replyToEmailAddress' => $this->input->post('email'),
   	                    'replyToName' => $this->config->item('replyToName'));
 			$templateData = array(
@@ -551,8 +551,8 @@ class Pages extends Master_Controller {
 
             $mailData = array('toEmailAddress' => $store_name["email"],
   	                    'subject' => $this->input->post('subject'),
-  	                    'fromEmailAddress' => $this->input->post('email'),
-  	                    'fromName' => $this->input->post('name'),
+  	                    'fromEmailAddress' => "noreply@powersporttechnologies.com",
+  	                    'fromName' => "Contact Form",
   	                    'replyToEmailAddress' => $this->input->post('email'),
   	                    'replyToName' => $this->config->item('replyToName'));
 			$templateData = array(
