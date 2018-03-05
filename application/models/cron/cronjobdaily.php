@@ -21,10 +21,12 @@ class CronJobDaily extends AbstractCronJob
         sub_googleSalesXMLNew();
         // And now, generate the eBay feed
         $this->load->model("ebay_m");
-        $csv = $this->ebay_m->generateEbayFeed(0, 1);
-        $data = array('run_by' => 'cron', 'status' => '1');
-        $this->ebay_m->update_ebay_feeds_log($data);
-
+        $credentials = $this->ebay_m->sub_getEbayAuthSettingsFromDb();
+        if (array_key_exists("ebay_app_id", $credentials) && $credentials["ebay_app_id"] != "") {
+            $csv = $this->ebay_m->generateEbayFeed(0, 1);
+            $data = array('run_by' => 'cron', 'status' => '1');
+            $this->ebay_m->update_ebay_feeds_log($data);
+        }
 	}
 	
 	private function priceToSaleCleanUp()
