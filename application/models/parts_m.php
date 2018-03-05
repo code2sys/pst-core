@@ -44,6 +44,7 @@ class Parts_M extends Master_M {
         $this->cache_partIsRetail = array();
         $this->cache_partNumberIsRetail = array();
         $this->cache_partVariationIsRetail = array();
+        $this->load->model("lightspeed_m");
     }
 
     public function getProduct($id, $activeMachine = NULL) {
@@ -2978,7 +2979,11 @@ class Parts_M extends Master_M {
                         $finalMarkUp = 0;
                         $productMarkUp = $rec['markup'];
 
-                        if ($this->partNumberIsRetailOnly($rec['partnumber_id'])) {
+                        // JLB 03-05-18
+                        // This overrides everything and forces a price in line with lightspeed
+                        if ($this->lightspeed_m->partNumberIsLightspeed($rec['partnumber_id'])) {
+                            $finalSalesPrice = $this->lightspeed_m->lightspeedPrice($rec['partnumber_id']);
+                        } else if ($this->partNumberIsRetailOnly($rec['partnumber_id'])) {
                             // JLB 07-15-17
                             // This overrides the price and forces it to be
                             $finalSalesPrice = $rec["price"];
@@ -3039,7 +3044,6 @@ class Parts_M extends Master_M {
         }
 
         if (defined("ENABLE_LIGHTSPEED") && ENABLE_LIGHTSPEED) {
-            $this->load->model("lightspeed_m");
             $this->lightspeed_m->partPriceFix();
         }
     }

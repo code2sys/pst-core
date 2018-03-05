@@ -15,12 +15,37 @@ if (!defined('BASEPATH'))
 
 class Lightspeed_M extends Master_M {
 
-    public function partPriceFix() {
-        // fix the price if there is a current_active_price
-        $this->db->query("update partnumber join partdealervariation using (partnumber_id) join lightspeedpart using (partvariation_id) set partnumber.price = lightspeedpart.current_active_price, partdealervariation.price = lightspeedpart.current_active_price, partnumber.dealer_sale = lightspeedpart.current_active_price where lightspeedpart.current_active_price > 0 and partdealervariation.quantity_available > 0;");
+    public function partNumberIsLightspeed($partnumber_id) {
+        if (!$this->lightSpeedPartPricingRule()) {
+            return false;
+        }
 
-        // fix the cost if there is a cost
-        $this->db->query("update partnumber join partdealervariation using (partnumber_id) join lightspeedpart using (partvariation_id) set partnumber.cost = lightspeedpart.cost, partdealervariation.cost = lightspeedpart.current_active_price where lightspeedpart.cost > 0 and partdealervariation.quantity_available > 0;");
+        $query = $this->db->query("Select count(*) as cnt from partdealervariation join lightspeedpart using (partvariation_id) where partdealervariation.partnumber_id = ?", array($partnumber_id));
+        $cnt = 0;
+        foreach ($query->result_array() as $row) {
+            $cnt = $row["cnt"];
+        }
+        return $cnt > 0;
+    }
+
+    public function lightspeedPrice($partnumber_id) {
+        // OK, we need to get the price of this guy
+        $query = $this->db->query("Select current_active_price from partdealervariation join lightspeedpart using (partvariation_id) where partdealervariation.partnumber_id = ?", array($partnumber_id));
+        $cnt = 0;
+        foreach ($query->result_array() as $row) {
+            $cnt = $row["current_active_price"];
+        }
+        return $cnt;
+    }
+
+    public function partPriceFix() {
+        if ($this->lightSpeedPartPricingRule()) {
+            // fix the price if there is a current_active_price
+            $this->db->query("update partnumber join partdealervariation using (partnumber_id) join lightspeedpart using (partvariation_id) set partnumber.price = lightspeedpart.current_active_price, partdealervariation.price = lightspeedpart.current_active_price, partnumber.dealer_sale = lightspeedpart.current_active_price where lightspeedpart.current_active_price > 0 and partdealervariation.quantity_available > 0;");
+
+            // fix the cost if there is a cost
+            $this->db->query("update partnumber join partdealervariation using (partnumber_id) join lightspeedpart using (partvariation_id) set partnumber.cost = lightspeedpart.cost, partdealervariation.cost = lightspeedpart.cost where lightspeedpart.cost > 0 and partdealervariation.quantity_available > 0;");
+        }
     }
 
     public $headers = array();
@@ -587,7 +612,9 @@ class Lightspeed_M extends Master_M {
         $this->db->query("Update lightspeedpart join partdealervariation using (partvariation_id) set partdealervariation.cost = lightspeedpart.cost, partdealervariation.price = lightspeedpart.current_active_price,  partdealervariation.quantity_available = lightspeedpart.available, partdealervariation.quantity_last_updated = lightspeedpart.lightspeed_last_seen, lightspeedpart.lightspeed_present_flag = 1");
 
         // Do we have to update the partnumber?
-        $this->db->query("Update partnumber join partdealervariation using (partnumber_id) join lightspeedpart using (partvariation_id) set partnumber.price = partdealervariation.price, partnumber.cost = partdealervariation.cost, partnumber.dealer_sale = partdealervariation.price, partnumber.sale = partdealervariation.price, partnumber.inventory = partdealervariation.quantity_available");
+        if ($this->lightSpeedPartPricingRule()) {
+            $this->db->query("Update partnumber join partdealervariation using (partnumber_id) join lightspeedpart using (partvariation_id) set partnumber.price = partdealervariation.price, partnumber.cost = partdealervariation.cost, partnumber.dealer_sale = partdealervariation.price, partnumber.sale = partdealervariation.price, partnumber.inventory = partdealervariation.quantity_available");
+        }
     }
 
     protected $_distributorNameLookup;
@@ -773,6 +800,15 @@ class Lightspeed_M extends Master_M {
 
     public function setUnitCycleTraderDefault($value = 0) {
         $this->_subContactSet("lightspeed_cycletrader_load", $value);
+    }
+
+
+    public function lightSpeedPartPricingRule() {
+        return $this->_subContactFetch("lightspeed_override_parts_pricing") > 0;
+    }
+
+    public function setLightSpeedPartPricingRule($value = 0) {
+        $this->_subContactSet("lightspeed_override_parts_pricing", $value);
     }
 
     protected function _subContactSet($key, $value) {
