@@ -104,8 +104,6 @@ class CronJobHourly extends AbstractCronJob
         foreach ($query->result_array() as $row) {
             $manufacturer = $row["name"];
 
-            print "Manufacturer missing brand: " . $row["manufacturer_id"] . " " . $manufacturer . "\n";
-
             // you have to make a brand...
             $this->db->query("Insert into brand (name, long_name, slug, title, active, mx, meta_tag) values (?, ?, ?, ?, 1, ?, ?)", array($manufacturer, $manufacturer, $this->Portalmodel->makeBrandSlug($manufacturer), $manufacturer, $row["ext_manufacturer_id"] > 0 ? 1 : 0, $manufacturer));
             $brand_id = $this->db->insert_id();
