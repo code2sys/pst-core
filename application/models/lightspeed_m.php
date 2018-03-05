@@ -637,7 +637,8 @@ class Lightspeed_M extends Master_M {
     }
 
     // TODO - how do we piece this all together?
-    public function repair_parts() {
+    public function repair_parts($debug = 0) {
+        $debug = $debug > 0;
         $CI =& get_instance();
         $CI->load->model("admin_m");
         $CI->load->model("migrateparts_m");
@@ -655,14 +656,21 @@ class Lightspeed_M extends Master_M {
 
         $stock_codes = "('" . implode("', '", $CI->Lightspeedsuppliercode_m->getDistributorSupplierCodes()) . "')";
 
+        if ($debug) {
+            print "Stock codes: $stock_codes \n";
+        }
+
         do {
             $progress = false;
 
             // OK, try to get some...we only do batches of 200; this just seems like a good #
-            $query = $this->db->query("Select * From lightspeedpart where available > 0 and partvariation_id is null and supplier_code in $stock_codes and lightspeedpart_id > ? order by lightspeedpart_id limit 200", array($id));
+            $query = $this->db->query("Select * From lightspeedpart where available > 0 and partvariation_id is null and supplier_code in $stock_codes and lightspeedpart_id > ? order by lightspeedpart_id limit 1000", array($id));
             $rows = $query->result_array();
 
             if (count($rows) > 0) {
+                if ($debug) {
+                    print "Considering " . count($rows) . " rows \n";
+                }
                 $progress = true;
 
                 // OK, attempt to do them...
@@ -676,6 +684,11 @@ class Lightspeed_M extends Master_M {
 
                 // now, post them
                 $clean_rows = $this->migrateparts_m->queryMatchingPart($rows);
+
+                if ($debug) {
+                    print "Clean rows return: \n";
+                    print_r($clean_rows);
+                }
 
                 foreach ($clean_rows as $row) {
                     // attempt to receive it... distributor_id, partnumber, cost, quantity
