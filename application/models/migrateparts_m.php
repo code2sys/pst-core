@@ -11,7 +11,7 @@ class Migrateparts_m extends CI_Model {
     // This wraps the call from lightspeed_m
     public function queryMatchingPart($rows) {
         // now, post them
-        $ch = curl_init("http://" . WS_HOST . "/migrateparts/queryMatchingPart/");
+        $ch = curl_init("http://" . WS_HOST . "/migrateparts/queryMatchingPart/" . STORE_NAME);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data = json_encode($rows));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -31,7 +31,7 @@ class Migrateparts_m extends CI_Model {
 
     public function getEternalPartVariation($eternalpartvariation_id) {
         // now, post them
-        $ch = curl_init("http://" . WS_HOST . "/migrateparts/getEternalPartVariation/" . $eternalpartvariation_id);
+        $ch = curl_init("http://" . WS_HOST . "/migrateparts/getEternalPartVariation/" . $eternalpartvariation_id );
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = json_decode(curl_exec($ch), true);
