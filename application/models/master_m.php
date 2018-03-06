@@ -170,7 +170,6 @@ class Master_M extends CI_Model
 	 * @param mixed $where
 	 * @param boolean $formSafe - update only those fields that have a
 	 *                            rule set in form validation
-	 * @return void
 	 */
 	public function updateRecord($table, $data, $where, $formSafe=TRUE)
 	{

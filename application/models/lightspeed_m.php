@@ -389,6 +389,9 @@ class Lightspeed_M extends Master_M {
 
                     $where = array('sku' => $bike->StockNumber);
                     $motorcycle = $this->updateRecord('motorcycle', $update_array, $where, FALSE);
+                    if ($motorcycle === FALSE) {
+                        print "Could not update: " . print_r($update_array, true) . "\n";
+                    }
                     $valid_count++;
                 } else {
                     // we have to set some nulls. I think this is stupid, too.
@@ -400,6 +403,10 @@ class Lightspeed_M extends Master_M {
                     $motorcycle_array["cycletrader_feed_status"] = $this->unitCycleTraderDefault() ? 1 : 0;
 
                     $motorcycle = $this->createRecord('motorcycle', $motorcycle_array, FALSE);
+                    if ($motorcycle === FALSE) {
+                        print "Could not add: " . print_r($motorcycle_array, true) . "\n";
+                    }
+
                     $valid_count++;
                 }
 
