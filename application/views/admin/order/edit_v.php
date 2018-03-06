@@ -813,7 +813,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                         <td style="width: 250px;">
                             $<input type="text" value="<?php echo ($order['product_cost'] > 0) ? $order['product_cost'] : array_sum($product_cost);?>" name="product_cost" style="width: 100px;">
                             <span>
-                                    <input type="checkbox" name="product_cost_lock" value="1" style="top: 3px; position: relative;" <?php echo ($order['product_cost'] > 0) ? 'checked' : '';?>/> Lock Product Cost
+                                    <input type="checkbox" name="product_cost_lock" value="1" style="top: 3px; position: relative;" <?php echo ($order['product_cost'] > 0) ? 'checked' : '';?>/> Lock Cost
                                 </span>
                         </td>
                     </tr>
@@ -822,7 +822,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                         <td style="width: 250px;">
                             $<input type="text" value="<?php echo ($order['shipping_cost'] > 0) ? $order['shipping_cost'] : '12.5';?>" name="shipping_cost" style="width: 100px;">
                             <span>
-                                    <input type="checkbox" name="shipping_cost_lock" value="1" style="top: 3px; position: relative;" <?php echo ($order['shipping_cost'] > 0) ? 'checked' : '';?>/> Lock Shipping Cost
+                                    <input type="checkbox" name="shipping_cost_lock" value="1" style="top: 3px; position: relative;" <?php echo ($order['shipping_cost'] > 0) ? 'checked' : '';?>/> Lock Cost
                                 </span>
                         </td>
                     </tr>
