@@ -1049,7 +1049,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
     function saveForLater()
     {
         var data = $('#order_info').serialize();
-        $.post(base_url + 'ajax/order_save/',
+        return $.post(base_url + 'ajax/order_save/',
             data,
             function (orderId)
             {
