@@ -298,6 +298,7 @@ class Lightspeed_M extends Master_M {
             $bikes = json_decode($call);
 
             foreach($bikes as $bike) {
+                print "Considering bike: " . $bike->StockNumber . "\n";
                 if (isset($bike->OnHold) && trim($bike->OnHold) != "") {
                     continue; // It's on hold for a deal. Not going to put that in tonight!
                 }
@@ -391,6 +392,8 @@ class Lightspeed_M extends Master_M {
                     $motorcycle = $this->updateRecord('motorcycle', $update_array, $where, FALSE);
                     if ($motorcycle === FALSE) {
                         print "Could not update: " . print_r($update_array, true) . "\n";
+                    } else {
+                        print "Updated " . $update_array["sku"] . "\n";
                     }
                     $valid_count++;
                 } else {
@@ -404,7 +407,9 @@ class Lightspeed_M extends Master_M {
 
                     $motorcycle = $this->createRecord('motorcycle', $motorcycle_array, FALSE);
                     if ($motorcycle === FALSE) {
-                        print "Could not add: " . print_r($motorcycle_array, true) . "\n";
+                        print "Could not update: " . print_r($motorcycle_array, true) . "\n";
+                    } else {
+                        print "Updated: " . $motorcycle_array["sku"] . "\n";
                     }
 
                     $valid_count++;
