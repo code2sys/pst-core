@@ -99,7 +99,7 @@ class CRSCron_M extends Master_M
         }
 
         // Now, we need to get the photos...
-        $query = $this->db->query("Select motorcycle.id as motorcycle_id, crs_trim_id, IfNull(max(motorcycleimage.version_number), 0) as version_number, IfNull(max(motorcycleimage.priority_number), 0) as ordinal from motorcycle left join (select * from motorcycleimage where crs_thumbnail = 0) motorcycleimage on motorcycle.id = motorcycleimage.motorcycle_id where crs_trim_id > 0 group by motorcycle.id");
+        $query = $this->db->query("Select motorcycle.id as motorcycle_id, crs_trim_id, IfNull(max(motorcycleimage.version_number), 0) as version_number, IfNull(max(motorcycleimage.priority_number), 0) as ordinal from motorcycle left join (select * from motorcycleimage where crs_thumbnail = 0) motorcycleimage on motorcycle.id = motorcycleimage.motorcycle_id where crs_trim_id > 0 $where group by motorcycle.id");
 
         $matching_motorcycles = $query->result_array();
 
