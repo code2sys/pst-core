@@ -214,6 +214,7 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
                             </div>
                         </div>
                         <?php
+                        $CI->load->helper("mustache_helper");
                         $motorcycle_action_buttons = mustache_tmpl_open("motorcycle_action_buttons.html");
                         tmpl_set($motorcycle_action_buttons, "motorcycle_id", $motorcycle['id']);
                         tmpl_set($motorcycle_action_buttons, "new_assets_url", $new_assets_url);
