@@ -213,17 +213,17 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
 
                             </div>
                         </div>
-                        <div class="mid-r-but">
-                            <a href="#"  data-toggle="modal" data-target="#myModal<?php echo $motorcycle['id']; ?>"><img src="<?php echo $new_assets_url; ?>images/message.png" width="20px" height="22px;"/><span class="mid-cen">GET a quote</span></a>
-                            <a href="#"  data-toggle="modal" data-target="#myModal<?php echo $motorcycle['id']; ?>"><img src="<?php echo $new_assets_url; ?>images/outgoing.png" width="20px" height="24px;"/>value your <span>trade</span></a>
-                            <a href="/pages/index/financerequest"><img src="<?php echo $new_assets_url; ?>images/doll.png" width="10px" height="20px;"/><span class="mid-cen"><?php
-                                    if (!defined('GET_FINANCING_WORDING')) {
-                                        define('GET_FINANCING_WORDING', 'GET FINANCING');
-                                    }
-                                    echo GET_FINANCING_WORDING;
-                                    ?></span></a>
-                            <a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']); ?>"><img src="<?php echo $new_assets_url; ?>images/list.png" width="15px" height="20px;"/>VIEW DETAILS</a>
-                        </div>
+                        <?php
+                        $motorcycle_action_buttons = mustache_tmpl_open("motorcycle_action_buttons.html");
+                        tmpl_set($motorcycle_action_buttons, "motorcycle_id", $motorcycle['id']);
+                        tmpl_set($motorcycle_action_buttons, "new_assets_url", $new_assets_url);
+                        if (!defined('GET_FINANCING_WORDING')) {
+                            define('GET_FINANCING_WORDING', 'GET FINANCING');
+                        }
+                        tmpl_set($motorcycle_action_buttons, "get_financing_wording", GET_FINANCING_WORDING);
+                        tmpl_set($motorcycle_action_buttons, "view_url", base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']));
+                        echo mustache_tmpl_parse($motorcycle_action_buttons);
+                        ?>
                     </div>
 
                     <div class="modal fade pop" id="myModal<?php echo $motorcycle['id']; ?>">
