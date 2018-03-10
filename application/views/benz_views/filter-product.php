@@ -67,13 +67,13 @@ if (@$motorcycles) {
             <?php
             $CI->load->helper("mustache_helper");
             $motorcycle_action_buttons = mustache_tmpl_open("motorcycle_action_buttons.html");
-            tmpl_set($motorcycle_action_buttons, "motorcycle_id", $motorcycle['id']);
-            tmpl_set($motorcycle_action_buttons, "new_assets_url", $new_assets_url);
+            mustache_tmpl_set($motorcycle_action_buttons, "motorcycle_id", $motorcycle['id']);
+            mustache_tmpl_set($motorcycle_action_buttons, "new_assets_url", $new_assets_url);
             if (!defined('GET_FINANCING_WORDING')) {
                 define('GET_FINANCING_WORDING', 'GET FINANCING');
             }
-            tmpl_set($motorcycle_action_buttons, "get_financing_wording", GET_FINANCING_WORDING);
-            tmpl_set($motorcycle_action_buttons, "view_url", base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']));
+            mustache_tmpl_set($motorcycle_action_buttons, "get_financing_wording", GET_FINANCING_WORDING);
+            mustache_tmpl_set($motorcycle_action_buttons, "view_url", base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']));
             echo mustache_tmpl_parse($motorcycle_action_buttons);
             ?>
         </div>
