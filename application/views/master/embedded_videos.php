@@ -23,6 +23,7 @@ if (!defined("YOUTUBE_CHANNEL")) {
 }
 
 $mainVideo_word = isset($mainVideo_word) ? $mainVideo_word : "mainVideo";
+$id_extra = isset($id_extra) ? $id_extra : "";
 
 ?>
 <script src="https://apis.google.com/js/platform.js"></script>
@@ -44,13 +45,13 @@ $mainVideo_word = isset($mainVideo_word) ? $mainVideo_word : "mainVideo";
 </div>
 <div class="<?php if (isset($rltdvdo_class)) { echo $rltdvdo_class; } else { ?>rty<?php } ?>">
     <ul >
-        <li onClick="showVideo('<?php echo $mainVideo; ?>', '<?php echo $mainTitle; ?>', '<?php echo $mainVideo_word; ?>');" id="<?php echo $mainVideo; ?>" style="display:none;">
+        <li onClick="showVideo('<?php echo $mainVideo; ?>', '<?php echo $mainTitle; ?>', '<?php echo $mainVideo_word; ?>', 'vdottl', '<?php echo $id_extra; ?>');" id="<?php echo $mainVideo . $id_extra; ?>" style="display:none;">
             <img class="ply" src="/qatesting/newassets/images/play.png">
             <img src="<?php echo $CI->config->item("base_scheme"); ?>://img.youtube.com/vi/<?php echo $mainVideo; ?>/default.jpg" class="active">
             <p><?php echo $mainTitle; ?></p>
         </li>
         <?php foreach ($video as $k => $v) { ?>
-            <li onClick="showVideo('<?php echo $v['video_url']; ?>', '<?php echo $v['title']; ?>', '<?php echo $mainVideo_word; ?>');" id="<?php echo $v['video_url']; ?>">
+            <li onClick="showVideo('<?php echo $v['video_url']; ?>', '<?php echo $v['title']; ?>', '<?php echo $mainVideo_word; ?>', 'vdottle', '<?php echo $id_extra; ?>');" id="<?php echo $v['video_url']; ?><?php echo $id_extra; ?>">
                 <img class="ply" src="/qatesting/newassets/images/play.png">
                 <img src="<?php echo $CI->config->item("base_scheme"); ?>://img.youtube.com/vi/<?php echo $v['video_url']; ?>/default.jpg" class="active">
                 <p><?php echo $v['title']; ?></p>
