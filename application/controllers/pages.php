@@ -684,7 +684,7 @@ class Pages extends Master_Controller {
                         break;
 
                     case "Slider":
-                        $section["sliders"] = $this->pages_m->getSliderImages($pageId, $section["page_section_id"]);
+                        $section["sliders"] = $this->admin_m->getSliderImages($pageId, $section["page_section_id"]);
                         break;
                 }
             }
