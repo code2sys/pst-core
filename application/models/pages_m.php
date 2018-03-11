@@ -100,6 +100,27 @@ class Pages_M extends Master_M
         return $count == 0;
     }
 
+    public function updatePageSectionOrdinals($page_id, $page_section_ids) {
+        $query = $this->db->query("Select page_section_id from page_section where page_id = ?", array($page_id));
+        $prior_sections = $query->result_array();
+        $seen_sections = array();
+
+        $ordinal = 0;
+        foreach ($page_section_ids as $psid) {
+            $ordinal++;
+            $seen_sections[] = $psid;
+            $this->db->query("Update page_section set ordinal = ? where page_section_id = ? limit 1", array($ordinal, $psid));
+        }
+
+        // now, delete the junk ones
+        foreach ($prior_sections as $rec) {
+            $psid = $rec["page_section_id"];
+            if (!in_array($psid, $seen_sections)) {
+                $this->db->query("Delete from page_section where page_id = ? and page_section_id = ? limit 1", array($page_id, $psid));
+            }
+        }
+    }
+
 	public function editPage($post)
 	{
 		if($post['id'] == 12) {
