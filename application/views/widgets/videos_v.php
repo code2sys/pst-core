@@ -10,7 +10,8 @@
                 "video" => $video,
                 "rltdvdo_class" => "rltv-vdo",
                 "autoplay" => true,
-                "mainVideo_word" => $mainVideo_word
+                "mainVideo_word" => $mainVideo_word,
+                "id_extra" => $id_extra
             ), true);
             ?>
             <?php } ?>

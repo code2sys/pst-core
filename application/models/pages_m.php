@@ -204,6 +204,7 @@ class Pages_M extends Master_M
                         $data1['mainTitle'] = $mainTitle;
                         $data1['video'] = $topVideo;
                         $data1["mainVideo_word"] = "widget-video-" . $page_section_id;
+                        $data1["id_extra"] = "-id-extra-" . $page_section_id;
                         $widgetBlock .= $this->load->view('widgets/videos_v', $data1, TRUE);
                     }
                     break;
