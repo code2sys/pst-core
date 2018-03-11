@@ -335,7 +335,7 @@
                     </tr>
                     <tr>
                         <td colspan='3'>
-                            <table width='100%' id="sortableBanner">
+                            <table width='100%' id="sortableBanner<?php echo $slider; ?>" class="sortableBannerTable">
                                 <?php if ($section["sliders"]): $bannerImages = $section["sliders"]; foreach ($bannerImages as $img): ?>
                                     <tr id="<?php echo $img['id'] ?>" class="ui-state-default">
                                         <td valign="top" style="width:130px;"><b>Banner <?php echo $img['order']; ?>:</b></td>
@@ -356,7 +356,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <input type="hidden" name="ordering" id="orderSort"/>                                                                                                <button type="submit" id="button" name="submit" value="saveLink">Submit</button>
+                            <input type="hidden" name="ordering" id="orderSort<?php echo $slider; ?>"/>                                                                                                <button type="submit" id="button" name="submit" value="saveLink">Submit</button>
                         </td>
                     </tr>
                 </table>
@@ -366,6 +366,45 @@
         <script type="application/javascript">
             jQuery('.banner-library<?php echo $slider; ?>').click(function () {
                 jQuery('.slider-banners<?php echo $slider; ?>').toggle('slow');
+            });
+        </script>
+        <script type="application/javascript">
+            $(function () {
+                $("#sortableBanner<?php echo $slider; ?> tbody").sortable();
+                $("#sortableBanner<?php echo $slider; ?> tbody").disableSelection();
+                var data = "";
+
+                $("#sortableBanner<?php echo $slider; ?> tbody tr").each(function(i, el){
+                    //alert(i);
+                    //alert($(el).attr('id'));
+                    var p = $(el).text().toLowerCase().replace(" ", "_");
+                    //alert(p);
+                    data += $(el).attr('id')+"="+$(el).index()+",";
+
+                });
+
+                var dta = data.slice(0, -1);
+                $("#orderSort<?php echo $slider; ?>").val(dta);
+            });
+            $(document).ready(function(){
+                $("#sortableBanner<?php echo $slider; ?> tbody").sortable({
+                    stop: function(event, ui) {
+                        var data = "";
+
+                        $("#sortableBanner<?php echo $slider; ?> tbody tr").each(function(i, el){
+                            //alert(i);
+                            //alert($(el).attr('id'));
+                            var p = $(el).text().toLowerCase().replace(" ", "_");
+                            //alert(p);
+                            data += $(el).attr('id')+"="+$(el).index()+",";
+
+                        });
+
+                        var dta = data.slice(0, -1);
+                        $("#orderSort<?php echo $slider; ?>").val(dta);
+
+                    }
+                });
             });
         </script>
         <?php
@@ -418,55 +457,9 @@
     </script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
-    $(function () {
-        $("#sortableBanner tbody").sortable();
-        $("#sortableBanner tbody").disableSelection();
-	var data = "";
 
-	$("#sortableBanner tbody tr").each(function(i, el){
-		//alert(i);
-		//alert($(el).attr('id'));
-		var p = $(el).text().toLowerCase().replace(" ", "_");
-		//alert(p);
-		data += $(el).attr('id')+"="+$(el).index()+",";
-		
-	});
-	
-	var dta = data.slice(0, -1);
-	$("#orderSort").val(dta);
-    });
-$(document).ready(function(){
-	$("#sortableBanner tbody").sortable({
-		stop: function(event, ui) {
-			var data = "";
-
-			$("#sortableBanner tbody tr").each(function(i, el){
-				//alert(i);
-				//alert($(el).attr('id'));
-				var p = $(el).text().toLowerCase().replace(" ", "_");
-				//alert(p);
-				data += $(el).attr('id')+"="+$(el).index()+",";
-				
-			});
-			
-			var dta = data.slice(0, -1);
-			$("#orderSort").val(dta);
-			// $.ajax(function(){
-				// type : "POST",
-				// url : "<?php echo base_url('admin/ajaxOrderSet') ?>",
-				// data : { action:"",data: dta },
-				// success : function(res){
-					// alert(res);
-				// }
-			// });
-			//alert(data.slice(0, -1));
-		}
-	});
-});
-</script>
 <style>
-    #sortableBanner{
+    .sortableBannerTable{
         width:120%;
         height:auto;
         padding:30px;
