@@ -224,7 +224,7 @@
             <?php echo form_hidden('page_section_id', $section['page_section_id']); ?>
             <div class="tab_content">
                 <div class="hidden_table">
-                    <table width="100%" cellpadding="6">
+                    <table width="100%" cellpadding="6" class="video_table_<?php echo $videos; ?>">
                         <tr>
                             <td colspan="2" class="add-row">Add New</td>
                         </tr>
@@ -270,6 +270,12 @@
             </div>
             </form>
         </div>
+                            <script type="application/javascript">
+                                $(document).on('click','.video_table_<?php echo $videos; ?> .add-row',function(e){
+                                    var str = "<tr><td><input type='text' name='video_url[]' value='' class='text large' placeholder='Enter video URL' style='height:30px;width:100%;'></td><td><input id='title' name='title[]' value='' class='text large' placeholder='Enter video Title' class='text medium' style='height:30px;width:100%;'/></td><td><input type='number' value='' name='ordering[]' class='text small' placeholder='Ordering' min='1' style='height:30px;width:100%;'</td></tr>";
+                                    $('.video_table_<?php echo $videos; ?> .tbdy').append( str );
+                                });
+                            </script>
         <?php
 
                             break;
@@ -449,10 +455,7 @@
 	{
 		$(item).parent().remove();
 	}
-	$(document).on('click','.add-row',function(e){
-		var str = "<tr><td><input type='text' name='video_url[]' value='' class='text large' placeholder='Enter video URL' style='height:30px;width:100%;'></td><td><input id='title' name='title[]' value='' class='text large' placeholder='Enter video Title' class='text medium' style='height:30px;width:100%;'/></td><td><input type='number' value='' name='ordering[]' class='text small' placeholder='Ordering' min='1' style='height:30px;width:100%;'</td></tr>";
-		$('.tbdy').append( str );
-	});
+
 
 
     </script>
