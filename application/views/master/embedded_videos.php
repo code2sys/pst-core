@@ -44,13 +44,13 @@ $mainVideo_word = isset($mainVideo_word) ? $mainVideo_word : "mainVideo";
 </div>
 <div class="<?php if (isset($rltdvdo_class)) { echo $rltdvdo_class; } else { ?>rty<?php } ?>">
     <ul >
-        <li onClick="showVideo('<?php echo $mainVideo; ?>', '<?php echo $mainTitle; ?>', '<?php echo $mainVideo; ?>');" id="<?php echo $mainVideo; ?>" style="display:none;">
+        <li onClick="showVideo('<?php echo $mainVideo; ?>', '<?php echo $mainTitle; ?>', '<?php echo $mainVideo_word; ?>');" id="<?php echo $mainVideo; ?>" style="display:none;">
             <img class="ply" src="/qatesting/newassets/images/play.png">
             <img src="<?php echo $CI->config->item("base_scheme"); ?>://img.youtube.com/vi/<?php echo $mainVideo; ?>/default.jpg" class="active">
             <p><?php echo $mainTitle; ?></p>
         </li>
         <?php foreach ($video as $k => $v) { ?>
-            <li onClick="showVideo('<?php echo $v['video_url']; ?>', '<?php echo $v['title']; ?>', '<?php echo $mainVideo; ?>');" id="<?php echo $v['video_url']; ?>">
+            <li onClick="showVideo('<?php echo $v['video_url']; ?>', '<?php echo $v['title']; ?>', '<?php echo $mainVideo_word; ?>');" id="<?php echo $v['video_url']; ?>">
                 <img class="ply" src="/qatesting/newassets/images/play.png">
                 <img src="<?php echo $CI->config->item("base_scheme"); ?>://img.youtube.com/vi/<?php echo $v['video_url']; ?>/default.jpg" class="active">
                 <p><?php echo $v['title']; ?></p>
