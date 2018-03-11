@@ -328,7 +328,7 @@
                             } ?>
                         </td>
                     </tr>
-                    <tr class="slider-banners" style="display: none;">
+                    <tr class="slider-banners<?php echo $slider; ?>" style="display: none;">
                         <td colspan="3">
                             <button type="submit" id="button" name="submit" value="addBanner">Add Banner</button>
                         </td>

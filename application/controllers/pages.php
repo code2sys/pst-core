@@ -789,7 +789,7 @@ class Pages extends Master_Controller {
              * How is it getting an ordinal?
              *
              */
-            if(@$_POST['banner'] && $_POST['submit'] == 'addBanner') {
+            if(array_key_exists("banner", $_POST) && $_POST['banner'] && $_POST['submit'] == 'addBanner') {
                 foreach( $_POST['banner'] as $banner ) {
                     // Pardy's Original Code:
                     //$bnrExt = explode('.', $banner);
