@@ -669,10 +669,7 @@ class Pages extends Master_Controller {
 	  		$this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
 	  		$this->_mainData['pageRec']['location'] = explode(',', $this->_mainData['pageRec']['location']);
 	  		$this->_mainData['pageRec']['widgets'] = json_decode($this->_mainData['pageRec']['widgets'], TRUE);
-	  		$this->_mainData['bannerImages'] = $this->admin_m->getSliderImages($pageId);
-	  		$this->_mainData['textboxes'] = $this->pages_m->getTextBoxes($pageId);
-            $this->_mainData['topVideo'] = $this->pages_m->getTopVideos($pageId);
-            $this->_mainData['page_sections'] = $this->pages_m->getPageSections($pageId);
+	  		$this->_mainData['page_sections'] = $this->pages_m->getPageSections($pageId);
             foreach ($this->_mainData['page_sections'] as &$section) {
                 switch($section["type"]) {
                     case "Textbox":
