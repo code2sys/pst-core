@@ -663,7 +663,7 @@ class Pages extends Master_Controller {
   			$newId = $this->pages_m->editPage($post);
 
 			// update page section ordinals
-            $this->pages_m->updatePageSectionOrdinals($newId, $page_section_ids);
+            $this->pages_m->updatePageSectionOrdinals($newId > 1 ? $newId : $pageId, $page_section_ids);
 
   			if(is_numeric($pageId) && ($newId > 1))
   				$pageId = $newId;
