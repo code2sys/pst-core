@@ -672,6 +672,22 @@ class Pages extends Master_Controller {
 	  		$this->_mainData['bannerImages'] = $this->admin_m->getSliderImages($pageId);
 	  		$this->_mainData['textboxes'] = $this->pages_m->getTextBoxes($pageId);
             $this->_mainData['topVideo'] = $this->pages_m->getTopVideos($pageId);
+            $this->_mainData['page_sections'] = $this->pages_m->getPageSections($pageId);
+            foreach ($this->_mainData['page_sections'] as &$section) {
+                switch($section["type"]) {
+                    case "Textbox":
+                        $section["textboxes"] = $this->pages_m->getTextBoxes($pageId, $section["page_section_id"]);
+                        break;
+
+                    case "Video":
+                        $section["videos"] = $this->pages_m->getTopVideos($pageId, $section["page_section_id"]);
+                        break;
+
+                    case "Slider":
+                        $section["sliders"] = $this->pages_m->getSliderImages($pageId, $section["page_section_id"]);
+                        break;
+                }
+            }
   		}
   		if(is_array(@$_SESSION['errors']))
   		{

@@ -152,17 +152,21 @@ class Pages_M extends Master_M
 			$success = $this->createRecord('textbox', $post, FALSE);
 		}
 	}
+
+	public function getPageSections($pageId) {
+        $query = $this->db->query("Select * from page_section where page_id = ? order by ordinal", array($pageId));
+        return $query->result_array();
+    }
 	
 	public function widgetCreator($pageId, $pageRec)
 	{
         // JLB 07-07-17
         // JLB - I am going to short-circuit this into a simpler thing to implement EXACTLY what Brandt said, as I think he said it,
         // because, ultimately, this widgets array, seems pointless.
-        $query = $this->db->query("Select * from page_section where page_id = ? order by ordinal", array($pageId));
 
         $widgetBlock = '';
 
-        foreach ($query->result_array() as $section) {
+        foreach ($this->getPageSections($pageId) as $section) {
             $page_section_id = $section["page_section_id"];
 
             switch($section["type"]) {
