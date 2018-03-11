@@ -19,7 +19,7 @@
         $('#' + override_id).data('id', vidId);
         //$('.shwVidHalf').show();
         $('#' + vidId + id_extra).hide();
-        $('#' + mainVideo).show();
+        $('#' + mainVideo + id_extra).show();
         //$("#mainVideo")[0].src = "https://www.youtube.com/embed/"+vidId+"?rel=0&autoplay=1";
     }
 </script>
