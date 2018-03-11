@@ -130,13 +130,14 @@
 							<td colspan="2">
 							<p> Make changes to the number and order of the widgets below and then submit to edit the content in the sections below.</p>
 								<div class="dragcontainer">
-									<?php if(@$widgets): ?>
 									<ul id="draggable_list">
-										<?php foreach($widgets as $wid): ?>
-									   		<li class="draggable ui-state-highlight"><?php echo form_hidden('widgets[]', @$wid['id']); ?><?php echo $wid['label'] ; ?><a href="javascript:void(0);" onclick="removeWidget(this);" class="dragRemove">x</a></li><p><?php echo  $wid['text']; ?></p>
-										<?php endforeach; ?>
+                                        <li class="draggable ui-state-highlight"><input type="hidden" name="page_section_ids[]" value="Textbox">Text Box<a href="javascript:void(0);" onclick="removeWidget(this);" class="dragRemove">x</a><p>A place to put updates and announcements.</p></li>
+
+                                        <li class="draggable ui-state-highlight"><input type="hidden" name="page_section_ids[]" value="Video">Our Top Videos<a href="javascript:void(0);" onclick="removeWidget(this);" class="dragRemove">x</a><p>Show our top videos on pages.</p></li>
+
+                                        <li class="draggable ui-state-highlight"><input type="hidden" name="page_section_ids[]" value="Slider">Slider<a href="javascript:void(0);" onclick="removeWidget(this);" class="dragRemove">x</a><p>Large image slider with 1024x400px images.</p></li>
+
 									</ul>
-									<?php endif; ?>
 									<ul id="sortable">
                                         <?php
                                         if (isset($page_sections) && is_array($page_sections) && count($page_sections) > 0) {
