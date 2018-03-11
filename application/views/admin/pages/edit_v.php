@@ -220,7 +220,7 @@
                                                 <h2>Videos <?php echo $videos; ?></h2>
                                                     <?php echo form_open_multipart('pages/addTopVideos/', array('class' => 'form_standard', 'id' => 'admin_brand_form')); ?>
             <?php echo form_hidden('page', $pageRec['id']); ?>
-            <?php echo form_hidden('page_section', $section['page_section_id']); ?>
+            <?php echo form_hidden('page_section_id', $section['page_section_id']); ?>
             <div class="tab_content">
                 <div class="hidden_table">
                     <table width="100%" cellpadding="6">
@@ -280,7 +280,7 @@
         <h2>Slider <?php echo $slider; ?></h2>
         <?php echo form_open_multipart('pages/addImages/', array('class' => 'form_standard', 'id' => 'admin_banner_form')); ?>
         <?php echo form_hidden('page', $pageRec['id']); ?>
-        <?php echo form_hidden('page_section', $section['page_section_id']); ?>
+        <?php echo form_hidden('page_section_id', $section['page_section_id']); ?>
         <?php echo form_hidden('order', $slider); ?>
         <div class="tab_content">
             <div class="hidden_table">
@@ -289,10 +289,10 @@
                         <td colspan="3">Images must be 1024px wide by 400px high.<br /><br />
                             <?php echo form_upload(array('name' => 'image', 'value' => set_value('main'), 'maxlength' => 50, 'class' => '')); ?><br />
                             <button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Upload New Banner</button>
-                            <button type="button" id="button" class="banner-library">Banner Library</button>
+                            <button type="button" id="button" class="banner-library<?php echo $slider; ?>">Banner Library</button>
                         </td>
                     </tr>
-                    <tr class="slider-banners" style="display: none;">
+                    <tr class="slider-banners<?php echo $slider; ?>" style="display: none;">
                         <td colspan="3">
                             <?php
                             // JLB 07-07-17
@@ -361,6 +361,11 @@
             </div>
         </div>
         </form>
+        <script type="application/javascript">
+            jQuery('.banner-library<?php echo $slider; ?>').click(function () {
+                jQuery('.slider-banners<?php echo $slider; ?>').toggle('slow');
+            });
+        </script>
         <?php
 
 
@@ -407,9 +412,7 @@
 		$('.tbdy').append( str );
 	});
 
-        jQuery('.banner-library').click(function () {
-            jQuery('.slider-banners').toggle('slow');
-        });
+
     </script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
