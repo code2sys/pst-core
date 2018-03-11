@@ -116,6 +116,7 @@ class Pages_M extends Master_M
         foreach ($prior_sections as $rec) {
             $psid = $rec["page_section_id"];
             if (!in_array($psid, $seen_sections)) {
+                print "Not seen $psid <br/>";
                 $this->db->query("Delete from page_section where page_id = ? and page_section_id = ? limit 1", array($page_id, $psid));
             }
         }
