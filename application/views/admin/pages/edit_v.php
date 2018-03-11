@@ -185,7 +185,7 @@
                                 <form action="<?php echo base_url('pages/addTextBox'); ?>" method="post" id="form_example" class="form_standard">
                                     <?php echo form_hidden('pageId', $pageRec['id']); ?>
                                     <?php echo form_hidden('order', $textedit); ?>
-                                    <?php echo form_hidden('page_section', $section['page_section_id']); $textboxes = $section["textboxes"]; ?>
+                                    <?php echo form_hidden('page_section_id', $section['page_section_id']); $textboxes = $section["textboxes"]; ?>
 
                                     <?php $text = ""; if(!is_null($textboxes) && is_array($textboxes) && count($textboxes) > 0) {
                                         for ($i = 0; $i < count($textboxes); $i++) {
