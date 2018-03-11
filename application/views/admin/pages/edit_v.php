@@ -190,10 +190,8 @@
                                     <?php $text = ""; if(!is_null($textboxes) && is_array($textboxes) && count($textboxes) > 0) {
                                         for ($i = 0; $i < count($textboxes); $i++) {
                                             $textbox = $textboxes[$i];
-                                            if ($textbox['order'] == $textedit) {
-                                                $text = $textbox['text'];
-                                                echo form_hidden('id', $textbox['id']);
-                                            }
+                                            $text = $textbox['text'];
+                                            echo form_hidden('id', $textbox['id']);
                                         }
                                     }
 
