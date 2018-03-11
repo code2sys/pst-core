@@ -276,8 +276,8 @@ class Pages_M extends Master_M
         return $records;
     }
 
-    public function updateTopVideos($id, $arr) {
-        $this->db->delete('top_videos', array('page_id' => $id));
+    public function updateTopVideos($id, $page_section_id, $arr) {
+        $this->db->delete('top_videos', array('page_id' => $id, "page_section_id" => $page_section_id));
         if (!empty($arr)) {
             $this->db->insert_batch('top_videos', $arr);
         }

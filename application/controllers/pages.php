@@ -850,6 +850,7 @@ class Pages extends Master_Controller {
         $video_url = $_REQUEST["video_url"];
         $title = $_REQUEST["title"];
         $ordering = $_REQUEST["ordering"];
+        $page_section_id = $_REQUEST["page_section_id"];
 
         $arr = array();
 
@@ -860,7 +861,8 @@ class Pages extends Master_Controller {
                     "video_url" => $url,
                     "ordering" => $ordering[$i],
                     "title" => $title[$i],
-                    "page_id" => $_REQUEST["pageId"]
+                    "page_id" => $_REQUEST["pageId"],
+                    "page_section_id" => $page_section_id
                 );
             }
         }
@@ -879,7 +881,7 @@ class Pages extends Master_Controller {
             }
         }
         */
-        $this->pages_m->updateTopVideos($this->input->post('pageId'), $arr);
+        $this->pages_m->updateTopVideos($this->input->post('pageId'), $page_section_id, $arr);
         redirect('pages/edit/' . $this->input->post('pageId'));
     }
 
