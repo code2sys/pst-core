@@ -662,6 +662,11 @@ class Pages extends Master_Controller {
 			// echo "</pre>";
   			$newId = $this->pages_m->editPage($post);
 
+  			// There are three things on the front. They usually throw it all off.
+  			array_unshift($page_section_ids);
+  			array_unshift($page_section_ids);
+  			array_unshift($page_section_ids);
+
 			// update page section ordinals
             $this->pages_m->updatePageSectionOrdinals($newId > 1 ? $newId : $pageId, $page_section_ids);
 
