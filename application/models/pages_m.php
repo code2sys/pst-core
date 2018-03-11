@@ -101,6 +101,7 @@ class Pages_M extends Master_M
     }
 
     public function updatePageSectionOrdinals($page_id, $page_section_ids) {
+  	    print "Page: $page_id <br/>";
         $query = $this->db->query("Select page_section_id from page_section where page_id = ?", array($page_id));
         $prior_sections = $query->result_array();
         print_r($prior_sections);
