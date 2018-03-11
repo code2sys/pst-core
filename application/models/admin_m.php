@@ -2795,9 +2795,10 @@ class Admin_M extends Master_M {
     }
 
     public function updateSliderOrder($id, $ord) {
-        $where = array('id' => $id);
-        $data = array('order' => $ord);
-        $this->updateRecord('slider', $data, $where, FALSE);
+        $this->db->query("Update slider set `order` = ? where id = ?", array($ord, $id));
+//        $where = array('id' => $id);
+//        $data = array('order' => $ord);
+//        $this->updateRecord('slider', $data, $where, FALSE);
     }
 
     public function deleteMotorcycle($prod_id) {
