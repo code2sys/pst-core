@@ -729,8 +729,8 @@ class Pages extends Master_Controller {
         redirect('pages/edit/'.$this->input->post('pageId'));
   	}
 
-  	protected function fixSliderOrder($id, $page_id) {
-        $query = $this->db->query("select max(`order`) as max_order from slider where pageId = ? and id < ?", array($page_id, $id));
+  	protected function fixSliderOrder($id, $page_id, $page_section_id) {
+        $query = $this->db->query("select max(`order`) as max_order from slider where pageId = ? and page_section_id = ? and id < ?", array($page_id, $page_section_id, $id));
         $ordinal = 0;
         foreach ($query->result_array() as $row) {
             $ordinal = $row["max_order"];
@@ -761,9 +761,10 @@ class Pages extends Master_Controller {
 					$uploadData['image'] = $data['file_name'];
 					$uploadData['pageId'] = $this->input->post('page');
 					$uploadData['order'] = $this->input->post('order');
+					$uploadData['page_section_id'] = $this->input_post("page_section_id");
 					$slider_id = $this->admin_m->updateSlider($uploadData);
                     // fix the slider ordinal...
-                    $this->fixSliderOrder($slider_id, $uploadData['pageId']);
+                    $this->fixSliderOrder($slider_id, $uploadData['pageId'], $uploadData['page_section_id']);
 					redirect('pages/edit/'.$this->input->post('page'));
 				}	
 	  		}
@@ -778,7 +779,7 @@ class Pages extends Master_Controller {
                 foreach ($rr as $k => $v) {
                     $img = $v[0];
                     $ord = $v[1];
-                    $this->admin_m->updateSliderOrder($img, $ord);
+                    $this->admin_m->updateSliderOrder($img, $ord, $this->input_post("page_section_id"));
                 }
                 redirect('pages/edit/' . $this->input->post('page'));
             }
@@ -808,9 +809,10 @@ class Pages extends Master_Controller {
                         $uploadData['image'] = $bannerName;
                         $uploadData['pageId'] = $this->input->post('page');
                         $uploadData['order'] = $this->input->post('order');
+                        $uploadData['page_section_id'] = $this->input_post("page_section_id");
                         $slider_id = $this->admin_m->updateSlider($uploadData);
                         // fix the slider ordinal...
-                        $this->fixSliderOrder($slider_id, $uploadData['pageId']);
+                        $this->fixSliderOrder($slider_id, $uploadData['pageId'], $uploadData['page_section_id']);
                     }
                 }
                 redirect('pages/edit/' . $this->input->post('page'));
