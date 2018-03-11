@@ -316,7 +316,7 @@
                                 foreach ($dir_contents as $file) {
                                     $file_type = explode('.', $file);
                                     // $file_type = end($file_type);
-                                    $file_type = strtolower($file_type);
+                                    $file_type = strtolower($file_type[count($file_type) - 1]);
 
                                     if ($file !== '.' && $file !== '..' && in_array($file_type, $file_display) == true) { ?>
                                         <div class="banner-container">
