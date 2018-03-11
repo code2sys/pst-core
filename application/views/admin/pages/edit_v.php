@@ -220,6 +220,7 @@
                                                 <h2>Videos <?php echo $videos; ?></h2>
                                                     <?php echo form_open_multipart('pages/addTopVideos/', array('class' => 'form_standard', 'id' => 'admin_brand_form')); ?>
             <?php echo form_hidden('page', $pageRec['id']); ?>
+            <?php echo form_hidden('pageId', $pageRec['id']); ?>
             <?php echo form_hidden('page_section_id', $section['page_section_id']); ?>
             <div class="tab_content">
                 <div class="hidden_table">
