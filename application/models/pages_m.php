@@ -203,6 +203,7 @@ class Pages_M extends Master_M
                         $data1['mainVideo'] = $mainVideo;
                         $data1['mainTitle'] = $mainTitle;
                         $data1['video'] = $topVideo;
+                        $data1["mainVideo_word"] = "widget-video-" . $page_section_id;
                         $widgetBlock .= $this->load->view('widgets/videos_v', $data1, TRUE);
                     }
                     break;
@@ -233,100 +234,7 @@ class Pages_M extends Master_M
 
         }
 
-
-
-
-
         return $widgetBlock;
-
-		$widgets = json_decode($pageRec['widgets'], TRUE);
-
-  		$allWidgets = $this->getWidgets();
-		$widgetBlock = '';
-		$slider = 0;
-		$textbox = 0;
-
-        // JLB 07-07-17
-        // I am trying to make sense of this.
-
-        // So, this sorting part - this is sorting by Our Top Videos, Slider, and then textblocks.
-                $sortingArr = array(3,1,2);
-        
-                $result = array(); // result array
-                foreach($sortingArr as $val){ // loop
-                    if(array_search($val, $widgets)) {
-                        $result[array_search($val, $widgets)] = $val; // adding values
-                    }
-                }
-                $widgets = $result;
-
-		if(!empty($widgets))
-		{
-	
-			foreach($widgets as $wid)
-			{
-				switch($wid)
-				{
-					case '1' :
-						++$slider;
-						$bannerImages = $this->admin_m->getSliderImages($pageId);
-						if(@$bannerImages)
-						{ 
-							foreach($bannerImages as $img)
-							{
-								//if($img['order'] == $slider)
-								//{
-									$data['sliderImages'][$img['order']] = $img;
-								//} 
-								} 
-							if(@$data)
-							{
-								$widgetBlock .= $this->load->view('widgets/slider_v', $data, TRUE);
-								$widgetBlock .='<br />';
-							}
-						}
-						break;
-					case '2' :
-						++$textbox;
-						$textboxes = $this->pages_m->getTextBoxes($pageId);
-						if(@$textboxes)
-						{
-							foreach($textboxes as $text)
-							{
-                                                                if ($text['order'] == $textbox && $text['text'] != '') {
-                                                                    $widgetBlock .= '<div class="content_section">';
-                                                                    $widgetBlock .= '<h3>'.$text['text'].'</h3>';
-                                                                    $widgetBlock .= '</div>';
-                                                                    //$widgetBlock .= '<br />';
-								}
-							}
-						}
-
-						break;
-                                                case '3' :
-                                                    $topVideo = $this->getTopVideos($pageId);
-                                                    $mainVideo = $mainTitle = '';
-                                                    foreach ($topVideo as $key => $val) {
-                                                        if ($val['ordering'] == 1) {
-                                                            $mainVideo = $val['video_url'];
-                                                            $mainTitle = $val['title'];
-                                                            unset($topVideo[$key]);
-                                                            break;
-                                                            }
-                                                    }
-                                                    if ($mainVideo == '') {
-                                                        $mainVideo = $categoryVideo[0];
-                                                        unset($topVideo[0]);
-                                                    }
-                                                    $data1['mainVideo'] = $mainVideo;
-                                                    $data1['mainTitle'] = $mainTitle;
-                                                    $data1['video'] = $topVideo;
-                                                    $widgetBlock .= $this->load->view('widgets/videos_v', $data1, TRUE);
-                                                break;
-				}
-			}
-		}
-		return $widgetBlock;
 	}
 	
 	public function deletePage($pageId)
