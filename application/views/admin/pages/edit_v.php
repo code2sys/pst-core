@@ -490,6 +490,11 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <style>
+    .ui-sortable-placeholder {
+        border: 2px dashed yellow;
+        background-color: #ffeeee;
+    }
+
     .sortableBannerTable{
         width:120%;
         height:auto;
