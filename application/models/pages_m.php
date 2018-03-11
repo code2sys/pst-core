@@ -112,6 +112,9 @@ class Pages_M extends Master_M
             $this->db->query("Update page_section set ordinal = ? where page_section_id = ? limit 1", array($ordinal, $psid));
         }
 
+        print "Seen sections: <br/>";
+        print_r($seen_sections);
+
         // now, delete the junk ones
         foreach ($prior_sections as $rec) {
             $psid = $rec["page_section_id"];
