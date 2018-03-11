@@ -688,7 +688,7 @@ class Pages extends Master_Controller {
                         break;
                 }
             }
-            error_log($this->_mainData['page_sections']);
+            print_r($this->_mainData['page_sections']);
   		}
   		if(is_array(@$_SESSION['errors']))
   		{
