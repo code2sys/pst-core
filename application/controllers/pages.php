@@ -653,6 +653,7 @@ class Pages extends Master_Controller {
 			if (array_key_exists("page_section_ids", $post)) {
 			    unset($post["page_section_ids"]);
             }
+            print_r($page_section_ids);
 
 			//$post['widgets'] = array_unique($post['widgets']);
 			// echo "<pre>";
