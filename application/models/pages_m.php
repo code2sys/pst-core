@@ -110,8 +110,19 @@ class Pages_M extends Master_M
         $ordinal = 0;
         foreach ($page_section_ids as $psid) {
             $ordinal++;
-            $seen_sections[] = $psid;
-            $this->db->query("Update page_section set ordinal = ? where page_section_id = ? limit 1", array($ordinal, $psid));
+            if ($psid == "Textbox" || $psid == "Video" || $psid == "Slider") {
+                // Insert it!
+                $this->db->query("Insert into page_section (page_id, ordinal, type) values (?, ?, ?)", array($page_id, $ordinal, $psid));
+                $real_psid = $this->db->insert_id();
+
+                if ($psid == "Textbox") {
+                    $this->db->query("Insert into textbox (pageId, `order`, text, page_section_id) values (?, ?, '', ?)", array($page_id, $ordinal, $real_psid));
+                }
+
+            } else {
+                $seen_sections[] = $psid;
+                $this->db->query("Update page_section set ordinal = ? where page_section_id = ? limit 1", array($ordinal, $psid));
+            }
         }
 
         print "Seen sections: <br/>";
