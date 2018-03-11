@@ -19,8 +19,8 @@ class Admin_M extends Master_M {
         return $record;
     }
 
-    public function getSliderImages($pageId) {
-        $where = array('pageId' => $pageId);
+    public function getSliderImages($pageId, $page_section_id) {
+        $where = array('pageId' => $pageId, "page_section_id" => $page_section_id);
         $this->db->order_by('order ASC');
         $records = $this->selectRecords('slider', $where);
         return $records;

@@ -132,9 +132,9 @@ class Pages_M extends Master_M
 		return $success;
 	}
 	
-	public function getTextBoxes($pageId)
+	public function getTextBoxes($pageId, $page_section_id)
 	{
-		$where = array('pageId' => $pageId);
+		$where = array('pageId' => $pageId, "page_section_id" => $page_section_id);
 		$this->db->order_by('order ASC');
 		$records = $this->selectRecords('textbox', $where);
 		return $records;
@@ -158,62 +158,84 @@ class Pages_M extends Master_M
         // JLB 07-07-17
         // JLB - I am going to short-circuit this into a simpler thing to implement EXACTLY what Brandt said, as I think he said it,
         // because, ultimately, this widgets array, seems pointless.
+        $query = $this->db->query("Select * from page_section where page_id = ? order by ordinal", array($pageId));
 
-        //
         $widgetBlock = '';
 
-        // videos
-        $topVideo = $this->getTopVideos($pageId);
-        if (!is_null($topVideo) && is_array($topVideo) && count($topVideo) > 0) {
-            $mainVideo = $mainTitle = '';
-            foreach ($topVideo as $key => $val) {
-                if ($val['ordering'] == 1) {
-                    $mainVideo = $val['video_url'];
-                    $mainTitle = $val['title'];
-                    unset($topVideo[$key]);
+        foreach ($query->result_array() as $section) {
+            $page_section_id = $section["page_section_id"];
+
+            switch($section["type"]) {
+                case "Textbox":
+                    // textblocks
+                    $textboxes = $this->getTextBoxes($pageId, $page_section_id);
+                    if(!is_null($textboxes) && is_array($textboxes) && count($textboxes) > 0)
+                    {
+                        usort($textboxes, function($a, $b) {
+                            return ($a["order"] < $b["order"] ? -1 : ($a["order"] > $b["order"] ? 1 : 0));
+                        });
+
+                        foreach($textboxes as $text)
+                        {
+                            if (trim($text['text']) != "") {
+                                $widgetBlock .= '<div class="content_section">';
+                                $widgetBlock .= '<h3>' . $text['text'] . '</h3>';
+                                $widgetBlock .= '</div>';
+                            }
+                        }
+                    }
                     break;
-                }
+
+                case "Video":
+                    // videos
+                    $topVideo = $this->getTopVideos($pageId, $page_section_id);
+                    if (!is_null($topVideo) && is_array($topVideo) && count($topVideo) > 0) {
+                        $mainVideo = $mainTitle = '';
+                        foreach ($topVideo as $key => $val) {
+                            if ($val['ordering'] == 1) {
+                                $mainVideo = $val['video_url'];
+                                $mainTitle = $val['title'];
+                                unset($topVideo[$key]);
+                                break;
+                            }
+                        }
+                        // Note that below there is a category video that is, well, undefined.
+                        $data1['mainVideo'] = $mainVideo;
+                        $data1['mainTitle'] = $mainTitle;
+                        $data1['video'] = $topVideo;
+                        $widgetBlock .= $this->load->view('widgets/videos_v', $data1, TRUE);
+                    }
+                    break;
+
+
+                case "Slider":
+
+                    // slider
+                    $bannerImages = $this->admin_m->getSliderImages($pageId, $page_section_id);
+                    $data = array();
+                    if(!is_null($bannerImages) && is_array($bannerImages) && count($bannerImages) > 0)
+                    {
+                        // There was a significant problem with the ordinals.
+                        $correct_ordinal = 0;
+                        foreach($bannerImages as $img)
+                        {
+                            $correct_ordinal++;
+                            $data['sliderImages'][$correct_ordinal] = $img;
+                        }
+                        $widgetBlock .= $this->load->view('widgets/slider_v', $data, TRUE);
+                        $widgetBlock .='<br />';
+                    }
+                    break;
             }
-            // Note that below there is a category video that is, well, undefined.
-            $data1['mainVideo'] = $mainVideo;
-            $data1['mainTitle'] = $mainTitle;
-            $data1['video'] = $topVideo;
-            $widgetBlock .= $this->load->view('widgets/videos_v', $data1, TRUE);
+
+
+
+
         }
 
-        // slider
-        $bannerImages = $this->admin_m->getSliderImages($pageId);
-        $data = array();
-        if(!is_null($bannerImages) && is_array($bannerImages) && count($bannerImages) > 0)
-        {
-            // There was a significant problem with the ordinals.
-            $correct_ordinal = 0;
-            foreach($bannerImages as $img)
-            {
-                $correct_ordinal++;
-                $data['sliderImages'][$correct_ordinal] = $img;
-            }
-            $widgetBlock .= $this->load->view('widgets/slider_v', $data, TRUE);
-            $widgetBlock .='<br />';
-        }
 
-        // textblocks
-        $textboxes = $this->pages_m->getTextBoxes($pageId);
-        if(!is_null($textboxes) && is_array($textboxes) && count($textboxes) > 0)
-        {
-            usort($textboxes, function($a, $b) {
-               return ($a["order"] < $b["order"] ? -1 : ($a["order"] > $b["order"] ? 1 : 0));
-            });
 
-            foreach($textboxes as $text)
-            {
-                if (trim($text['text']) != "") {
-                    $widgetBlock .= '<div class="content_section">';
-                    $widgetBlock .= '<h3>' . $text['text'] . '</h3>';
-                    $widgetBlock .= '</div>';
-                }
-            }
-        }
+
 
         return $widgetBlock;
 
@@ -334,11 +356,12 @@ class Pages_M extends Master_M
 		return $record['finance_email'];
 	}
 
-        public function getTopVideos($pageId) {
-            $this->db->where('page_id', $pageId);
-            $records = $this->selectRecords('top_videos');
-            return $records;
-}
+    public function getTopVideos($pageId, $page_section_id) {
+        $this->db->where('page_id', $pageId);
+        $this->db->where('page_section_id', $page_section_id);
+        $records = $this->selectRecords('top_videos');
+        return $records;
+    }
 
     public function updateTopVideos($id, $arr) {
         $this->db->delete('top_videos', array('page_id' => $id));

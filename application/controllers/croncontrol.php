@@ -2,6 +2,55 @@
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
 
+    // We have to just migrate it
+    public function migratePagesIssue80() {
+        $query = $this->db->query("Select * from pages");
+        foreach ($query->result_array() as $page) {
+            $page_id = $page["id"];
+
+            $ordinal = 1;
+
+            // are there any videos?
+            $video_query = $this->db->query("Select id from top_videos where page_id = ?", array($page_id));
+            $videos = $video_query->result_array();
+
+            if (count($videos) > 0) {
+                $this->db->query("insert into page_section (page_id, ordinal, type) values (?, ?, 'Video')", array($page_id, $ordinal));
+                $ordinal++;
+                $page_section_id = $this->db->insert_id();
+
+                // now, update them...
+                $this->db->query("Update top_videos set page_section_id = ? where page_id = ?", array($page_section_id, $page_id));
+            }
+
+            // are there any sliders?
+            $slider_query = $this->db->query("Select id from slider where pageId = ?", array($page_id));
+            $sliders = $slider_query->result_array();
+
+            if (count($sliders) > 0) {
+                $this->db->query("insert into page_section (page_id, ordinal, type) values (?, ?, 'Slider')", array($page_id, $ordinal));
+                $ordinal++;
+                $page_section_id = $this->db->insert_id();
+
+                // now, update them...
+                $this->db->query("Update slider set page_section_id = ? where pageId = ?", array($page_section_id, $page_id));
+            }
+
+
+            // Finally, do the textboxes...
+            $textbox_query = $this->db->query("Select id from textbox where pageId = ? order by `order`", array($page_id));
+            foreach ($textbox_query->result_array() as $textbox) {
+                $this->db->query("insert into page_section (page_id, ordinal, type) values (?, ?, 'Textbox')", array($page_id, $ordinal));
+                $ordinal++;
+                $page_section_id = $this->db->insert_id();
+
+                // now, update them...
+                $this->db->query("Update textbox set page_section_id = ? where id = ?", array($page_section_id, $textbox["id"]));
+
+            }
+        }
+    }
+
     function __construct()
     {
         parent::__construct();
