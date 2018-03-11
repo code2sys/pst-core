@@ -761,7 +761,7 @@ class Pages extends Master_Controller {
 					$uploadData['image'] = $data['file_name'];
 					$uploadData['pageId'] = $this->input->post('page');
 					$uploadData['order'] = $this->input->post('order');
-					$uploadData['page_section_id'] = $this->input_post("page_section_id");
+					$uploadData['page_section_id'] = $this->input->post("page_section_id");
 					$slider_id = $this->admin_m->updateSlider($uploadData);
                     // fix the slider ordinal...
                     $this->fixSliderOrder($slider_id, $uploadData['pageId'], $uploadData['page_section_id']);
@@ -779,7 +779,7 @@ class Pages extends Master_Controller {
                 foreach ($rr as $k => $v) {
                     $img = $v[0];
                     $ord = $v[1];
-                    $this->admin_m->updateSliderOrder($img, $ord, $this->input_post("page_section_id"));
+                    $this->admin_m->updateSliderOrder($img, $ord, $this->input->post("page_section_id"));
                 }
                 redirect('pages/edit/' . $this->input->post('page'));
             }
@@ -809,7 +809,7 @@ class Pages extends Master_Controller {
                         $uploadData['image'] = $bannerName;
                         $uploadData['pageId'] = $this->input->post('page');
                         $uploadData['order'] = $this->input->post('order');
-                        $uploadData['page_section_id'] = $this->input_post("page_section_id");
+                        $uploadData['page_section_id'] = $this->input->post("page_section_id");
                         $slider_id = $this->admin_m->updateSlider($uploadData);
                         // fix the slider ordinal...
                         $this->fixSliderOrder($slider_id, $uploadData['pageId'], $uploadData['page_section_id']);
