@@ -138,13 +138,39 @@
 									</ul>
 									<?php endif; ?>
 									<ul id="sortable">
-										<?php if(@$pageRec['widgets']): ?>
-												<?php foreach($pageRec['widgets'] as $wid): ?>
-													<li class="draggable ui-state-highlight ui-draggable ui-draggable-handle" style="display: list-item;">
-														<input type="hidden" value="<?php echo $wid; ?>" name="widgets[]">
-														<?php echo $widgets[$wid]['label']; ?><a class="dragRemove" onclick="removeWidget(this);" href="javascript:void(0);" style="display: inline;">x</a>
-													</li>
-											<?php endforeach; endif; ?>
+                                        <?php
+                                        if (isset($page_sections) && is_array($page_sections) && count($page_sections) > 0) {
+                                            $slider = 0;
+                                            $videos = 0;
+                                            $textedit = 0;
+                                            foreach ($page_sections as $section) {
+                                                switch ($section["type"]) {
+                                                    case "Textbox":
+
+                                                        ++$textedit;
+                                                        $label = $section["type"] . " " . $textedit;
+                                                        break;
+
+                                                    case "Video":
+                                                        $videos++;
+                                                        $label = $section["type"] . " " . $videos;
+                                                        break;
+
+                                                    case "Slider":
+                                                        $slider++;
+                                                        $label = $section["type"] . " " . $slider;
+                                                        break;
+                                                }
+                                                ?>
+                                                <li class="draggable ui-state-highlight ui-draggable ui-draggable-handle" style="display: list-item;">
+                                                    <input type="hidden" value="<?php echo $section["page_section_id"]; ?>" name="page_section_ids[]">
+                                                    <?php echo $label; ?><a class="dragRemove" onclick="removeWidget(this);" href="javascript:void(0);" style="display: inline;">x</a>
+                                                </li>
+                                        <?php
+                                            }
+                                        }
+
+                                        ?>
 									</ul>
 								
 								</div>
