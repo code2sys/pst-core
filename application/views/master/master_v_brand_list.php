@@ -711,20 +711,11 @@ echo $CI->load->view("widgets/ride_selection_js", array(
 
 ), true);
 ?>
+<?php
+$CI =& get_instance();
+echo $CI->load->view("showvideo_function", array(), false);
+?>
 
-<script>
-	//showVideo
-	function showVideo(vidId, vidTit) {
-		var mainVideo = $('#mainVideo').data('id');
-		//var mainTitle = $('.vdottl').html();
-		$('.vdottl').html(vidTit);
-		$("#mainVideo")[0].src = "https://www.youtube.com/embed/"+vidId+"?rel=0&autoplay=1";
-		$('#mainVideo').data('id', vidId);
-		//$('.shwVidHalf').show();
-		$('#'+vidId).hide();
-		$('#'+mainVideo).show();
-	}
-</script>
         <script>
 (function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];

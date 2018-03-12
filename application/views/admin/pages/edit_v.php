@@ -130,21 +130,48 @@
 							<td colspan="2">
 							<p> Make changes to the number and order of the widgets below and then submit to edit the content in the sections below.</p>
 								<div class="dragcontainer">
-									<?php if(@$widgets): ?>
 									<ul id="draggable_list">
-										<?php foreach($widgets as $wid): ?>
-									   		<li class="draggable ui-state-highlight"><?php echo form_hidden('widgets[]', @$wid['id']); ?><?php echo $wid['label'] ; ?><a href="javascript:void(0);" onclick="removeWidget(this);" class="dragRemove">x</a></li><p><?php echo  $wid['text']; ?></p>
-										<?php endforeach; ?>
+                                        <li ><strong>Text Box</strong> <a href="javascript:void(0);" onclick="addWidget('Textbox');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>A place to put updates and announcements.</p>
+
+                                        <li ><strong>Our Top Videos</strong> <a href="javascript:void(0);" onclick="addWidget('Video');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Show our top videos on pages.</p>
+
+                                        <li ><strong>Slider</strong> <a href="javascript:void(0);" onclick="addWidget('Slider');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Large image slider with 1024x400px images.</p>
+
 									</ul>
-									<?php endif; ?>
 									<ul id="sortable">
-										<?php if(@$pageRec['widgets']): ?>
-												<?php foreach($pageRec['widgets'] as $wid): ?>
-													<li class="draggable ui-state-highlight ui-draggable ui-draggable-handle" style="display: list-item;">
-														<input type="hidden" value="<?php echo $wid; ?>" name="widgets[]">
-														<?php echo $widgets[$wid]['label']; ?><a class="dragRemove" onclick="removeWidget(this);" href="javascript:void(0);" style="display: inline;">x</a>
-													</li>
-											<?php endforeach; endif; ?>
+                                        <?php
+                                        if (isset($page_sections) && is_array($page_sections) && count($page_sections) > 0) {
+                                            $slider = 0;
+                                            $videos = 0;
+                                            $textedit = 0;
+                                            foreach ($page_sections as $section) {
+                                                switch ($section["type"]) {
+                                                    case "Textbox":
+
+                                                        ++$textedit;
+                                                        $label = $section["type"] . " " . $textedit;
+                                                        break;
+
+                                                    case "Video":
+                                                        $videos++;
+                                                        $label = $section["type"] . " " . $videos;
+                                                        break;
+
+                                                    case "Slider":
+                                                        $slider++;
+                                                        $label = $section["type"] . " " . $slider;
+                                                        break;
+                                                }
+                                                ?>
+                                                <li class="draggable ui-state-highlight ui-draggable ui-draggable-handle" style="display: list-item;">
+                                                    <input type="hidden" value="<?php echo $section["page_section_id"]; ?>" name="page_section_ids[]">
+                                                    <?php echo $label; ?><a class="dragRemove" onclick="removeWidget(this);" href="javascript:void(0);" style="display: inline;">x</a>
+                                                </li>
+                                        <?php
+                                            }
+                                        }
+
+                                        ?>
 									</ul>
 								
 								</div>
@@ -163,194 +190,269 @@
 			</form>
 			<div class="clear"></div>
 			<br /><br />
-			
-			<?php if(@$pageRec['widgets']): $slider = 0; $textedit = 0; ?>
-				<?php foreach($pageRec['widgets'] as $wid): ?>
-				<?php switch($wid):
-								case '1' :
-									++$slider;
-			 ?>
-			 	<div class="divider  typeSpecific showManagedPage""></div>
-			 		<h2>Slider <?php echo $slider; ?></h2>
-					<?php echo form_open_multipart('pages/addImages/', array('class' => 'form_standard', 'id' => 'admin_banner_form')); ?>  
-						<?php echo form_hidden('page', $pageRec['id']); ?>
-						<?php echo form_hidden('order', $slider); ?>
-								<div class="tab_content">
-									<div class="hidden_table">
-										<table width="auto" cellpadding="12">
-											<tr>
-												<td colspan="3">Images must be 1024px wide by 400px high.<br /><br />
-													<?php echo form_upload(array('name' => 'image', 'value' => set_value('main'), 'maxlength' => 50, 'class' => '')); ?><br />
-													<button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Upload New Banner</button>
-													<button type="button" id="button" class="banner-library">Banner Library</button>
-												</td>
-											</tr>
-                                                                                        <tr class="slider-banners" style="display: none;">
-                                                                                            <td colspan="3">
-                                                                                                <?php
-																								// JLB 07-07-17
-																								// This is the only place that Pardy used the constant
-																								// STORE_BANNER_LIBRARY
-																								// It makes no sense to perpetuate it in one way in one spot,
-																								// and then to just assume it/s html/bannerlibrary elsewhere.
-                                                                                                $dir = STORE_DIRECTORY . '/html/bannerlibrary/';
-                                                                                                $file_display = array(
-                                                                                                    'jpg',
-                                                                                                    'jpeg',
-                                                                                                    'png',
-                                                                                                    'gif'
-                                                                                                );
+            <?php
+            if (isset($page_sections) && is_array($page_sections) && count($page_sections) > 0) {
+                $slider = 0;
+                $videos = 0;
+                $textedit = 0;
+                foreach ($page_sections as $section) {
+                    switch($section["type"]) {
+                        case "Textbox":
 
-                                                                                                if (file_exists($dir) == false) {
-                                                                                                    echo 'Directory \'', $dir, '\' not found!';
-                                                                                                } else {
-                                                                                                    $dir_contents = scandir($dir);
+                            ++$textedit;
+                            ?>
+                            <div class="divider"></div>
+                            <div  class="typeSpecific showManagedPage">
+                                <h2>TextBox <?php echo $textedit; ?></h2>
+                                <p>
+                                    You can use this like a word processor.  When you click submit, the data will be saved and rendered onto your webpage.
+                                </p>
 
-                                                                                                    foreach ($dir_contents as $file) {
-                                                                                                        $file_type = strtolower(end(explode('.', $file)));
+                                <br>
+                                <form action="<?php echo base_url('pages/addTextBox'); ?>" method="post" id="form_example" class="form_standard">
+                                    <?php echo form_hidden('pageId', $pageRec['id']); ?>
+                                    <?php echo form_hidden('order', $textedit); ?>
+                                    <?php echo form_hidden('page_section_id', $section['page_section_id']); $textboxes = $section["textboxes"]; ?>
 
-                                                                                                        if ($file !== '.' && $file !== '..' && in_array($file_type, $file_display) == true) { ?>
-                                                                                                            <div class="banner-container">
-                                                                                                                <img src='<?php echo jsite_url("/bannerlibrary/".$file); ?>' width='200px' height="100px;"/>
-                                                                                                                <input type="checkbox" value="<?php echo $file; ?>" class="check-box" name="banner[]" id="check1" />
-                                                                                                            </div>
-                                                                                                        <?php }
-                                                                                                    }
-                                                                                                } ?>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr class="slider-banners" style="display: none;">
-                                                                                            <td colspan="3">
-                                                                                                <button type="submit" id="button" name="submit" value="addBanner">Add Banner</button>
-                                                                                            </td>
-                                                                                        </tr>
-											<tr>
-                                                                                            <td colspan='3'>
-                                                                                                <table width='100%' id="sortableBanner">
-                                                                                                    <?php if (@$bannerImages): foreach ($bannerImages as $img): ?>
-                                                                                                                <tr id="<?php echo $img['id'] ?>" class="ui-state-default">
-                                                                                                                    <td valign="top" style="width:130px;"><b>Banner <?php echo $img['order']; ?>:</b></td>
-                                                                                                                    <td>
-                                                                                                                        <img src="<?php echo base_url($media); ?>/<?php echo $img['image']; ?>" width="200px">
-                                                                                                                        <input type="text" name="banner_link[<?php echo $img['id'];?>]" value="<?php echo $img['banner_link'];?>" placeholder="Enter URL" class="sortbannerCls text middle">
-                                                                                                                    </td>
-												<td valign="top">
-                                                                                                                        <b><a href="<?php echo base_url('pages/remove_image/' . $img['id'] . '/' . $pageRec['id']); ?>">Remove Image</a></b>
-												</td>
-											</tr>
-                                                                                                                <?php
-                                                                                                        endforeach;
-                                                                                                    endif;
-                                                                                                    ?>
-										</table>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>
-                                                                                                <input type="hidden" name="ordering" id="orderSort"/>                                                                                                <button type="submit" id="button" name="submit" value="saveLink">Submit</button>
-                                                                                            </td>
-                                                                                        </tr>
-										</table>
-									</div>
-								</div>
-							</form>
-					<?php break; 
-						
-							case '2':
-								++$textedit;
-					?>
-						<div class="divider"></div>
-                                <div  class="typeSpecific showManagedPage">
-						<h2>TextBox <?php echo $textedit; ?></h2>
-						<p>
-							You can use this like a word processor.  When you click submit, the data will be saved and rendered onto your webpage.
-						</p>
+                                    <?php $text = ""; if(!is_null($textboxes) && is_array($textboxes) && count($textboxes) > 0) {
+                                        for ($i = 0; $i < count($textboxes); $i++) {
+                                            $textbox = $textboxes[$i];
+                                            $text = $textbox['text'];
+                                            echo form_hidden('id', $textbox['id']);
+                                        }
+                                    }
 
-						<br>
-						<form action="<?php echo base_url('pages/addTextBox'); ?>" method="post" id="form_example" class="form_standard">
-						<?php echo form_hidden('pageId', $pageRec['id']); ?>
-						<?php echo form_hidden('order', $textedit); ?>
-						
-						<?php $text = ""; if(!is_null($textboxes) && is_array($textboxes) && count($textboxes) > 0) {
-							for ($i = 0; $i < count($textboxes); $i++) {
-								$textbox = $textboxes[$i];
-								if ($textbox['order'] == $textedit) {
-									$text = $textbox['text'];
-									echo form_hidden('id', $textbox['id']);
-								}
-							}
-						}
-						
-						echo form_textarea(array('name' => 'text', 'value' => set_value('text', $text), 'id' => 'editor'.$textedit));
-						?>
-						<script type="text/javascript">
-			
-							// LOAD THE CUSTOM CONFIGURATION FOR THIS INSTANCE
-							CKEDITOR.replace( 'editor<?php echo $textedit; ?>', { customConfig : '<?php echo $edit_config; ?>' } );
-			
-						</script>
-			
-						<input type="submit" value="Save & Publish TextBox" class="button">
-						</form>
-                                </div>
-					<?php break; ?>
-                                        <?php case 3: ?>
-                                        <div class="divider"></div>
+                                    echo form_textarea(array('name' => 'text', 'value' => set_value('text', $text), 'id' => 'editor'.$textedit));
+                                    ?>
+                                    <script type="text/javascript">
+
+                                        // LOAD THE CUSTOM CONFIGURATION FOR THIS INSTANCE
+                                        CKEDITOR.replace( 'editor<?php echo $textedit; ?>', { customConfig : '<?php echo $edit_config; ?>' } );
+
+                                    </script>
+
+                                    <input type="submit" value="Save & Publish TextBox" class="button">
+                                </form>
+                            </div>
+                            <?php
+
+                            break;
+
+
+                        case "Video":
+                            $videos++;
+                            ?>
+            <div class="divider"></div>
         <div  class="typeSpecific showManagedPage">
-                                                <h2>Videos</h2>
+                                                <h2>Videos <?php echo $videos; ?></h2>
                                                     <?php echo form_open_multipart('pages/addTopVideos/', array('class' => 'form_standard', 'id' => 'admin_brand_form')); ?>
-                                                            <?php echo form_hidden('pageId', $pageRec['id']); ?>
-                                            <div class="tab_content">
-                                                    <div class="hidden_table">
-                                                            <table width="100%" cellpadding="6">
-                                                                    <tr>
-                                                                            <td colspan="2" class="add-row">Add New</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                            <th>URL</th>
-                                                                            <th>Title</th>
-                                                                            <th>Ordering</th>
-                                                                    </tr>
-                                                                    <tbody class="tbdy">
-                                                            <?php foreach( $topVideo as $key => $val ) { ?>
-                                                                    <tr>
-                                                                            <td>
-                                                                                    <input id="video_url" name="video_url[<?php echo $key;?>]" value="<?php echo 'https://www.youtube.com/watch?v='.$val['video_url'];?>" class="text small" placeholder="Enter video URL" class="text small" style='height:30px;width:100%;'/>
-                                                                            </td>
-                                                                            <td>
-                                                                                    <input id="title" name="title[<?php echo $key;?>]" value="<?php echo $val['title'];?>" class="text small" placeholder="Enter video Title" class="text small" style='height:30px;width:100%;'/>
-                                                                            </td>
-                                                                            <td>
-                                                                                    <input id="ordering" name="ordering[<?php echo $key;?>]" value="<?php echo $val['ordering'];?>" class="text small" placeholder="Ordering" class="text small" type='number' min='1' style='height:30px;width:100%;'/>
-                                                                            </td>
-                                                                    </tr>
-                                                            <?php } ?>
-                                                                    <tr>
-                                                                            <td>
-                                                                                    <?php echo form_hidden('category_id', $id); ?>
-                                                                                    <input id="video_url" name="video_url[]" value="" class="text small" placeholder="Enter video URL" style='height:30px;width:100%;'/>
-                                                                            </td>
-                                                                            <td>
-                                                                                    <input id="title" name="title[]" value="" class="text small" placeholder="Enter video Title" style='height:30px;width:100%;'/>
-                                                                            </td>
-                                                                            <td>
-                                                                                    <input id="ordering" name="ordering[]" value="" class="text small" placeholder="Ordering" type='number' min='1' style='height:30px;width:100%;'/>
-                                                                            </td>
-                                                                    </tr>
-                                                                    </tbody>
-                                                                    <tr>
-                                                                            <td colspan="2">
-                                                                                    <button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Save Category Video</button>
-                                                                            </td>
-                                                                    </tr>
-                                                            </table>
-                                                    </div>
-                                            </div>
-                                                    </form>
+            <?php echo form_hidden('page', $pageRec['id']); ?>
+            <?php echo form_hidden('pageId', $pageRec['id']); ?>
+            <?php echo form_hidden('page_section_id', $section['page_section_id']); ?>
+            <div class="tab_content">
+                <div class="hidden_table">
+                    <table width="100%" cellpadding="6" class="video_table_<?php echo $videos; ?>">
+                        <tr>
+                            <td colspan="2" class="add-row">Add New</td>
+                        </tr>
+                        <tr>
+                            <th>URL</th>
+                            <th>Title</th>
+                            <th>Ordering</th>
+                        </tr>
+                        <tbody class="tbdy">
+                        <?php foreach( $section["videos"] as $key => $val ) { ?>
+                            <tr>
+                                <td>
+                                    <input id="video_url" name="video_url[<?php echo $key;?>]" value="<?php echo 'https://www.youtube.com/watch?v='.$val['video_url'];?>" class="text small" placeholder="Enter video URL" class="text small" style='height:30px;width:100%;'/>
+                                </td>
+                                <td>
+                                    <input id="title" name="title[<?php echo $key;?>]" value="<?php echo $val['title'];?>" class="text small" placeholder="Enter video Title" class="text small" style='height:30px;width:100%;'/>
+                                </td>
+                                <td>
+                                    <input id="ordering" name="ordering[<?php echo $key;?>]" value="<?php echo $val['ordering'];?>" class="text small" placeholder="Ordering" class="text small" type='number' min='1' style='height:30px;width:100%;'/>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        <tr>
+                            <td>
+                                <?php echo form_hidden('category_id', $id); ?>
+                                <input id="video_url" name="video_url[]" value="" class="text small" placeholder="Enter video URL" style='height:30px;width:100%;'/>
+                            </td>
+                            <td>
+                                <input id="title" name="title[]" value="" class="text small" placeholder="Enter video Title" style='height:30px;width:100%;'/>
+                            </td>
+                            <td>
+                                <input id="ordering" name="ordering[]" value="" class="text small" placeholder="Ordering" type='number' min='1' style='height:30px;width:100%;'/>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tr>
+                            <td colspan="2">
+                                <button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Save Category Video</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            </form>
         </div>
-                                        <?php break; ?>
-			<?php endswitch; endforeach; endif; ?>
-			
+                            <script type="application/javascript">
+                                $(document).on('click','.video_table_<?php echo $videos; ?> .add-row',function(e){
+                                    var str = "<tr><td><input type='text' name='video_url[]' value='' class='text large' placeholder='Enter video URL' style='height:30px;width:100%;'></td><td><input id='title' name='title[]' value='' class='text large' placeholder='Enter video Title' class='text medium' style='height:30px;width:100%;'/></td><td><input type='number' value='' name='ordering[]' class='text small' placeholder='Ordering' min='1' style='height:30px;width:100%;'</td></tr>";
+                                    $('.video_table_<?php echo $videos; ?> .tbdy').append( str );
+                                });
+                            </script>
+        <?php
+
+                            break;
+
+                        case "Slider":
+                            $slider++;
+            ?>
+            <div class="divider  typeSpecific showManagedPage""></div>
+        <h2>Slider <?php echo $slider; ?></h2>
+        <?php echo form_open_multipart('pages/addImages/', array('class' => 'form_standard', 'id' => 'admin_banner_form')); ?>
+        <?php echo form_hidden('page', $pageRec['id']); ?>
+        <?php echo form_hidden('page_section_id', $section['page_section_id']); ?>
+        <?php echo form_hidden('order', $slider); ?>
+        <div class="tab_content">
+            <div class="hidden_table">
+                <table width="auto" cellpadding="12">
+                    <tr>
+                        <td colspan="3">Images must be 1024px wide by 400px high.<br /><br />
+                            <?php echo form_upload(array('name' => 'image', 'value' => set_value('main'), 'maxlength' => 50, 'class' => '')); ?><br />
+                            <button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Upload New Banner</button>
+                            <button type="button" id="button" class="banner-library<?php echo $slider; ?>">Banner Library</button>
+                        </td>
+                    </tr>
+                    <tr class="slider-banners<?php echo $slider; ?>" style="display: none;">
+                        <td colspan="3">
+                            <?php
+                            // JLB 07-07-17
+                            // This is the only place that Pardy used the constant
+                            // STORE_BANNER_LIBRARY
+                            // It makes no sense to perpetuate it in one way in one spot,
+                            // and then to just assume it/s html/bannerlibrary elsewhere.
+                            $dir = STORE_DIRECTORY . '/html/bannerlibrary/';
+                            $file_display = array(
+                                'jpg',
+                                'jpeg',
+                                'png',
+                                'gif'
+                            );
+
+                            if (file_exists($dir) == false) {
+                                echo 'Directory \'', $dir, '\' not found!';
+                            } else {
+                                $dir_contents = scandir($dir);
+
+                                foreach ($dir_contents as $file) {
+                                    $file_type = explode('.', $file);
+                                    // $file_type = end($file_type);
+                                    $file_type = strtolower($file_type[count($file_type) - 1]);
+
+                                    if ($file !== '.' && $file !== '..' && in_array($file_type, $file_display) == true) { ?>
+                                        <div class="banner-container">
+                                            <img src='<?php echo jsite_url("/bannerlibrary/".$file); ?>' width='200px' height="100px;"/>
+                                            <input type="checkbox" value="<?php echo $file; ?>" class="check-box" name="banner[]" id="check1" />
+                                        </div>
+                                    <?php }
+                                }
+                            } ?>
+                        </td>
+                    </tr>
+                    <tr class="slider-banners<?php echo $slider; ?>" style="display: none;">
+                        <td colspan="3">
+                            <button type="submit" id="button" name="submit" value="addBanner">Add Banner</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan='3'>
+                            <table width='100%' id="sortableBanner<?php echo $slider; ?>" class="sortableBannerTable">
+                                <?php if ($section["sliders"]): $bannerImages = $section["sliders"]; foreach ($bannerImages as $img): ?>
+                                    <tr id="<?php echo $img['id'] ?>" class="ui-state-default">
+                                        <td valign="top" style="width:130px;"><b>Banner <?php echo $img['order']; ?>:</b></td>
+                                        <td>
+                                            <img src="<?php echo base_url($media); ?>/<?php echo $img['image']; ?>" width="200px">
+                                            <input type="text" name="banner_link[<?php echo $img['id'];?>]" value="<?php echo $img['banner_link'];?>" placeholder="Enter URL" class="sortbannerCls text middle">
+                                        </td>
+                                        <td valign="top">
+                                            <b><a href="<?php echo base_url('pages/remove_image/' . $img['id'] . '/' . $pageRec['id']); ?>">Remove Image</a></b>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                endforeach;
+                                endif;
+                                ?>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="hidden" name="ordering" id="orderSort<?php echo $slider; ?>"/>                                                                                                <button type="submit" id="button" name="submit" value="saveLink">Submit</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        </form>
+        <script type="application/javascript">
+            jQuery('.banner-library<?php echo $slider; ?>').click(function () {
+                jQuery('.slider-banners<?php echo $slider; ?>').toggle('slow');
+            });
+        </script>
+        <script type="application/javascript">
+            $(function () {
+                $("#sortableBanner<?php echo $slider; ?> tbody").sortable();
+                $("#sortableBanner<?php echo $slider; ?> tbody").disableSelection();
+                var data = "";
+
+                $("#sortableBanner<?php echo $slider; ?> tbody tr").each(function(i, el){
+                    //alert(i);
+                    //alert($(el).attr('id'));
+                    var p = $(el).text().toLowerCase().replace(" ", "_");
+                    //alert(p);
+                    data += $(el).attr('id')+"="+$(el).index()+",";
+
+                });
+
+                var dta = data.slice(0, -1);
+                $("#orderSort<?php echo $slider; ?>").val(dta);
+            });
+            $(document).ready(function(){
+                $("#sortableBanner<?php echo $slider; ?> tbody").sortable({
+                    stop: function(event, ui) {
+                        var data = "";
+
+                        $("#sortableBanner<?php echo $slider; ?> tbody tr").each(function(i, el){
+                            //alert(i);
+                            //alert($(el).attr('id'));
+                            var p = $(el).text().toLowerCase().replace(" ", "_");
+                            //alert(p);
+                            data += $(el).attr('id')+"="+$(el).index()+",";
+
+                        });
+
+                        var dta = data.slice(0, -1);
+                        $("#orderSort<?php echo $slider; ?>").val(dta);
+
+                    }
+                });
+            });
+        </script>
+        <?php
+
+
+        break;
+
+                    }
+                }
+            }
+
+
+            ?>
+
 		</div>
 	</div>
 	
@@ -368,11 +470,11 @@
 	           $( "ul#sortable" ).find('.dragRemove').css( "display", "inline" );
 	        }
 	}).droppable({ });
-		$(".draggable").draggable({
-		    connectToSortable: '#sortable',
-		    helper: 'clone',
-		    revert: 'invalid'
-		});
+//		$(".draggable").draggable({
+//		    connectToSortable: '#sortable',
+//		    helper: 'clone',
+//		    revert: 'invalid'
+//		});
 	
 	$("ul, li").disableSelection();    
 	
@@ -380,66 +482,24 @@
 	{
 		$(item).parent().remove();
 	}
-	$(document).on('click','.add-row',function(e){
-		var str = "<tr><td><input type='text' name='video_url[]' value='' class='text large' placeholder='Enter video URL' style='height:30px;width:100%;'></td><td><input id='title' name='title[]' value='' class='text large' placeholder='Enter video Title' class='text medium' style='height:30px;width:100%;'/></td><td><input type='number' value='' name='ordering[]' class='text small' placeholder='Ordering' min='1' style='height:30px;width:100%;'</td></tr>";
-		$('.tbdy').append( str );
-	});
 
-        jQuery('.banner-library').click(function () {
-            jQuery('.slider-banners').toggle('slow');
-        });
+	function addWidget(type) {
+	    $("#sortable").append('<li class="draggable ui-state-highlight ui-draggable ui-draggable-handle" style="display: list-item;"><input type="hidden" value="' + type + '" name="page_section_ids[]">New ' + type + '<a class="dragRemove" onclick="removeWidget(this);" href="javascript:void(0);" style="display: inline;">x</a>');
+    }
+
+
+
     </script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
-    $(function () {
-        $("#sortableBanner tbody").sortable();
-        $("#sortableBanner tbody").disableSelection();
-	var data = "";
 
-	$("#sortableBanner tbody tr").each(function(i, el){
-		//alert(i);
-		//alert($(el).attr('id'));
-		var p = $(el).text().toLowerCase().replace(" ", "_");
-		//alert(p);
-		data += $(el).attr('id')+"="+$(el).index()+",";
-		
-	});
-	
-	var dta = data.slice(0, -1);
-	$("#orderSort").val(dta);
-    });
-$(document).ready(function(){
-	$("#sortableBanner tbody").sortable({
-		stop: function(event, ui) {
-			var data = "";
-
-			$("#sortableBanner tbody tr").each(function(i, el){
-				//alert(i);
-				//alert($(el).attr('id'));
-				var p = $(el).text().toLowerCase().replace(" ", "_");
-				//alert(p);
-				data += $(el).attr('id')+"="+$(el).index()+",";
-				
-			});
-			
-			var dta = data.slice(0, -1);
-			$("#orderSort").val(dta);
-			// $.ajax(function(){
-				// type : "POST",
-				// url : "<?php echo base_url('admin/ajaxOrderSet') ?>",
-				// data : { action:"",data: dta },
-				// success : function(res){
-					// alert(res);
-				// }
-			// });
-			//alert(data.slice(0, -1));
-		}
-	});
-});
-</script>
 <style>
-    #sortableBanner{
+    .ui-sortable-placeholder {
+        border: 2px dashed yellow;
+        background-color: #ffeeee;
+    }
+
+    .sortableBannerTable{
         width:120%;
         height:auto;
         padding:30px;
