@@ -483,6 +483,10 @@
 		$(item).parent().remove();
 	}
 
+	function addWidget(type) {
+	    $("#sortable").append('<li class="draggable ui-state-highlight ui-draggable ui-draggable-handle" style="display: list-item;"><input type="hidden" value="' + type + '" name="page_section_ids[]">New ' + type + '<a class="dragRemove" onclick="removeWidget(this);" href="javascript:void(0);" style="display: inline;">x</a>');
+    }
+
 
 
     </script>
