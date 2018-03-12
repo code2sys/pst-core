@@ -162,7 +162,7 @@
                                                         $label = $section["type"] . " " . $slider;
                                                         break;
                                                 }
-                                                
+
                                                 ?>
                                                 <li class="draggable ui-state-highlight ui-draggable ui-draggable-handle" style="display: list-item;">
                                                     <input type="hidden" value="<?php echo $section["page_section_id"]; ?>" name="page_section_ids[]">

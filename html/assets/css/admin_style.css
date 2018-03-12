@@ -318,7 +318,7 @@ a:active {
 	.dragcontainer li { 
 		margin: 5px; 
 		padding: 5px; 
-		width: 150px; 
+		/*width: 150px; */
 	}
 	
 	.dragRemove {
