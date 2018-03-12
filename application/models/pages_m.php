@@ -166,20 +166,17 @@ class Pages_M extends Master_M
 	
 	public function getTextBoxes($pageId, $page_section_id = 0)
 	{
-//	    $values = $page_section_id > 0 ? array($pageId, $page_section_id) : array($pageId);
-//	    $query = "Select textbox.* from textbox join page_section using (page_section_id) where textbox.pageId = ? " . ($page_section_id > 0 ? " and page_section.page_section_id = ? " : "") . " order by page_section.order ";
-//	    $query = $this->db->query($query, $values);
-//	    return $query->result_array();
-//
-//	    if ($page_section_id > 0) {
-            $where = array('pageId' => $pageId, "page_section_id" => $page_section_id);
-//        } else {
-//            $where = array('pageId' => $pageId);
-//        }
-//        $this->db->join("page_section", "page_section_id");
-		$this->db->order_by('order ASC');
-		$records = $this->selectRecords('textbox', $where);
-		return $records;
+	    if ($page_section_id > 0) {
+	        $values = array($pageId, $page_section_id);
+            $query = "Select textbox.* from textbox join page_section on textbox.pageId = page_section.page_id and textbox.page_section_id = page_section.page_section_id where textbox.pageId = ? and textbox.page_section_id = ? order by page_section.ordinal";
+        } else {
+	        $values = array($pageId);
+            $query = "Select textbox.* from textbox join page_section on textbox.pageId = page_section.page_id and textbox.page_section_id = page_section.page_section_id where textbox.pageId = ? order by page_section.ordinal";
+        }
+
+	    $query = $this->db->query($query, $values);
+	    return $query->result_array();
+
 	}
 	
 	public function updateTextBox($post)
