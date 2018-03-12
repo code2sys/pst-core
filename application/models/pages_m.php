@@ -164,10 +164,15 @@ class Pages_M extends Master_M
 		return $success;
 	}
 	
-	public function getTextBoxes($pageId, $page_section_id)
+	public function getTextBoxes($pageId, $page_section_id = 0)
 	{
-		$where = array('pageId' => $pageId, "page_section_id" => $page_section_id);
-		$this->db->order_by('order ASC');
+	    if ($page_section_id > 0) {
+            $where = array('pageId' => $pageId, "page_section_id" => $page_section_id);
+        } else {
+            $where = array('pageId' => $pageId);
+        }
+        $this->db->join("page_section", "page_section_id");
+		$this->db->order_by('page_section.order ASC');
 		$records = $this->selectRecords('textbox', $where);
 		return $records;
 	}
