@@ -22,7 +22,7 @@ $slider_count++;
             <script>
                 $(document).ready(function(){
                     $('.bxslider-<?php echo $slider_count; ?>').bxSlider({
-                        auto: <?php if (count($sliderImages) > 0): ?>true<?php else: ?>false<?php endif; ?>,
+                        auto: <?php if (count($sliderImages) > 1): ?>true<?php else: ?>false<?php endif; ?>,
                         pause: 5000,
                         randomStart: <?php if (count($sliderImages) > 0): ?>true<?php else: ?>false<?php endif; ?>
                     });
