@@ -130,7 +130,7 @@
 							<td colspan="2">
 							<p> Make changes to the number and order of the widgets below and then submit to edit the content in the sections below.</p>
 								<div class="dragcontainer">
-									<ul id="draggable_list">
+									<ul >
                                         <li ><strong>Text Box</strong> <a href="javascript:void(0);" onclick="addWidget('Textbox');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>A place to put updates and announcements.</p>
 
                                         <li ><strong>Our Top Videos</strong> <a href="javascript:void(0);" onclick="addWidget('Video');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Show our top videos on pages.</p>
