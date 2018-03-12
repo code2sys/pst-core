@@ -131,7 +131,7 @@
 							<p> Make changes to the number and order of the widgets below and then submit to edit the content in the sections below.</p>
 								<div class="dragcontainer">
 									<ul id="draggable_list">
-                                        <li class="draggable ui-state-highlight"><input type="hidden" name="page_section_ids[]" value="Textbox">Text Box<a href="javascript:void(0);" onclick="removeWidget(this);" class="dragRemove">x</a></li><p>A place to put updates and announcements.</p>
+                                        <li ><strong>Text Box</strong> <a href="javascript:void(0);" onclick="addWidget(this);" class="">Add</a></li><p>A place to put updates and announcements.</p>
 
                                         <li class="draggable ui-state-highlight"><input type="hidden" name="page_section_ids[]" value="Video">Our Top Videos<a href="javascript:void(0);" onclick="removeWidget(this);" class="dragRemove">x</a></li><p>Show our top videos on pages.</p>
 
