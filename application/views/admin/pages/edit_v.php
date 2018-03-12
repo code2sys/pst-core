@@ -327,7 +327,7 @@
                     </tr>
                     <tr >
                         <td colspan="3">
-                            <button type="submit" id="updateSliderTime" name="submit" value="updateSliderTime">Update Display Time</button>
+                            <button type="submit" id="button" name="submit" value="updateSliderTime">Update Display Time</button>
                         </td>
                     </tr>
 
