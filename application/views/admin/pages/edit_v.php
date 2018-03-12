@@ -131,11 +131,11 @@
 							<p> Make changes to the number and order of the widgets below and then submit to edit the content in the sections below.</p>
 								<div class="dragcontainer">
 									<ul id="draggable_list">
-                                        <li ><strong>Text Box</strong> <a href="javascript:void(0);" onclick="addWidget('Textbox');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>A place to put updates and announcements.</p>
+                                        <li ><strong>Text Box Widget</strong> <a href="javascript:void(0);" onclick="addWidget('Textbox');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>A place to put updates and announcements.</p>
 
-                                        <li ><strong>Videos</strong> <a href="javascript:void(0);" onclick="addWidget('Video');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Embed YouTube videos on a page.</p>
+                                        <li ><strong>Video Widget</strong> <a href="javascript:void(0);" onclick="addWidget('Video');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Embed YouTube videos on a page.</p>
 
-                                        <li ><strong>Slider</strong> <a href="javascript:void(0);" onclick="addWidget('Slider');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Large image slider with 1024x400px images.</p>
+                                        <li ><strong>Slider Widget</strong> <a href="javascript:void(0);" onclick="addWidget('Slider');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Large image slider with 1024x400px images.</p>
 
 									</ul>
 									<ul id="sortable">
@@ -162,6 +162,7 @@
                                                         $label = $section["type"] . " " . $slider;
                                                         break;
                                                 }
+                                                
                                                 ?>
                                                 <li class="draggable ui-state-highlight ui-draggable ui-draggable-handle" style="display: list-item;">
                                                     <input type="hidden" value="<?php echo $section["page_section_id"]; ?>" name="page_section_ids[]">
