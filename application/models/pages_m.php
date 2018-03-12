@@ -267,6 +267,7 @@ class Pages_M extends Master_M
                             $correct_ordinal++;
                             $data['sliderImages'][$correct_ordinal] = $img;
                         }
+                        $data["slider_seconds"] = intVal(1000 * $section["slider_seconds"]);
                         $widgetBlock .= $this->load->view('widgets/slider_v', $data, TRUE);
                         $widgetBlock .='<br />';
                     }
