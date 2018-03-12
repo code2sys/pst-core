@@ -752,8 +752,15 @@ class Pages extends Master_Controller {
   	{
         $this->enforceAdmin("pages");
 
+        if (array_key_exists("submit", $_POST) && $_POST["submit"] == "updateSliderTime") {
+            $value = floatVal($_POST["slider_seconds"]);
 
-        if($this->validateSliderImageSettingsForm() === TRUE)
+            if ($value > 0) {
+                $this->db->query("Update page_section set slider_seconds = ? where page_id = ? and page_section_id = ?", array($value, $this->input->post('page'), $this->input->post("page_section_id")));
+            } else {
+                $_SESSION['errors'][] = "Sorry, the time must be greater than zero.";
+            }
+        } else if($this->validateSliderImageSettingsForm() === TRUE)
   		{
 		  	if(@$_FILES['image']['name'])
 			{

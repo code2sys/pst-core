@@ -6,6 +6,10 @@ if (!isset($slider_count)) {
 }
 $slider_count++;
 
+if (!isset($slider_transition_time)) {
+    $slider_transition_time = 5000;
+}
+
 ?>
 			<?php if(@$sliderImages): ?>
 			<!-- PAGE HEADER/SLIDER -->
@@ -23,7 +27,7 @@ $slider_count++;
                 $(document).ready(function(){
                     $('.bxslider-<?php echo $slider_count; ?>').bxSlider({
                         auto: <?php if (count($sliderImages) > 1): ?>true<?php else: ?>false<?php endif; ?>,
-                        pause: 5000,
+                        pause: <?php echo intVal($slider_transition_time); ?>,
                         randomStart: <?php if (count($sliderImages) > 0): ?>true<?php else: ?>false<?php endif; ?>
                     });
                 });
