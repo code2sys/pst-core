@@ -92,15 +92,7 @@
 	
 	<!-- bxSlider Javascript file -->
 	<script src="<?php echo $assets; ?>/js/jquery.bxslider.min.js"></script>
-	<script>
-		$(document).ready(function(){
-			$('.bxslider').bxSlider({
-  			auto: true,
-  			pause: 5000,
-  			randomStart: true
-			});
-		});
-	</script>
+
 	
 	
 	<!-- Flexisel JS -->
