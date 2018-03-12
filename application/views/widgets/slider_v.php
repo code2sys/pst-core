@@ -2,8 +2,9 @@
 
 global $slider_count;
 if (!isset($slider_count)) {
-    $slider_count++;
+    $slider_count = 0;
 }
+$slider_count++;
 
 ?>
 			<?php if(@$sliderImages): ?>
