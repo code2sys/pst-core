@@ -101,10 +101,8 @@ class Pages_M extends Master_M
     }
 
     public function updatePageSectionOrdinals($page_id, $page_section_ids) {
-  	    print "Page: $page_id <br/>";
         $query = $this->db->query("Select page_section_id from page_section where page_id = ?", array($page_id));
         $prior_sections = $query->result_array();
-        print_r($prior_sections);
         $seen_sections = array();
 
         $ordinal = 0;
@@ -125,17 +123,11 @@ class Pages_M extends Master_M
             }
         }
 
-        print "Seen sections: <br/>";
-        print_r($seen_sections);
-
         // now, delete the junk ones
         foreach ($prior_sections as $rec) {
             $psid = $rec["page_section_id"];
             if (!in_array($psid, $seen_sections)) {
-                print "Not seen $psid <br/>";
                 $this->db->query("Delete from page_section where page_id = ? and page_section_id = ? limit 1", array($page_id, $psid));
-            } else {
-                "In seen: $psid \n";
             }
         }
     }
