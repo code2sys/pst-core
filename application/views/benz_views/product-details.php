@@ -490,18 +490,14 @@ $stock_status_mode = $CI->_getStockStatusMode();
 			pause:<?php echo defined('MAJOR_UNIT_PAUSE_TIME') ? MAJOR_UNIT_PAUSE_TIME : 2000; ?>
 		});
 	});
-    function showVideo(vidId, vidTit) {
-        var mainVideo = $('#mainVideo').data('id');
-        //var mainTitle = $('.vdottl').html();
-        $('.vdottl').html(vidTit);
-        $("#mainVideo")[0].src = "https://www.youtube.com/embed/" + vidId + "?rel=0&autoplay=1";
-        $('#mainVideo').data('id', vidId);
-        //$('.shwVidHalf').show();
-        $('#' + vidId).hide();
-        $('#' + mainVideo).show();
-        //$("#mainVideo")[0].src = "https://www.youtube.com/embed/"+vidId+"?rel=0&autoplay=1";
-    }
+
 </script>
+
+<?php
+$CI =& get_instance();
+echo $CI->load->view("showvideo_function", array(), false);
+?>
+
 
 <script>
 	$(document).ready(function() {

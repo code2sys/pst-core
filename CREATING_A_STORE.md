@@ -27,7 +27,7 @@ Creating a Store
 7. Create an apache virtual host configuration.
 8. Set up the cron jobs.
 9. Put the site name in html/site.txt.
-
+10. You have to run croncontrol/migratePagesIssue80 on the store.
 
 Boostrap The Database Commands
 -------------------------------

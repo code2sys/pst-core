@@ -650,13 +650,11 @@ echo $CI->load->view("widgets/ride_selection_js", array(
 ), true);
 ?>
 
+<?php
+$CI =& get_instance();
+echo $CI->load->view("showvideo_function", array(), false);
+?>
 
-<script>
-    //showVideo
-    function showVideo(vidId) {
-        $("#mainVideo")[0].src = "https://www.youtube.com/embed/"+vidId+"?rel=0&autoplay=1";
-    }
-</script>
 <script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
 
 
