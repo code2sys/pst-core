@@ -470,11 +470,11 @@
 	           $( "ul#sortable" ).find('.dragRemove').css( "display", "inline" );
 	        }
 	}).droppable({ });
-		$(".draggable").draggable({
-		    connectToSortable: '#sortable',
-		    helper: 'clone',
-		    revert: 'invalid'
-		});
+//		$(".draggable").draggable({
+//		    connectToSortable: '#sortable',
+//		    helper: 'clone',
+//		    revert: 'invalid'
+//		});
 	
 	$("ul, li").disableSelection();    
 	
