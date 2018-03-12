@@ -298,7 +298,7 @@ a:active {
 	
 	#sortable { 
 		width: 170px; 
-		height: 225px; 
+		min-height: 225px;
 		padding: 0.5em; 
 		float: left; 
 		margin: 10px; 
@@ -318,7 +318,7 @@ a:active {
 	.dragcontainer li { 
 		margin: 5px; 
 		padding: 5px; 
-		width: 150px; 
+		/*width: 150px; */
 	}
 	
 	.dragRemove {

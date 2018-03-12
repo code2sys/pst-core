@@ -649,12 +649,23 @@ class Pages extends Master_Controller {
 			for($i = 0; $i < $count; $i++)
 				unset($post['widgets'][$i]);
 
+			$page_section_ids = $_REQUEST["page_section_ids"];
+			if (array_key_exists("page_section_ids", $post)) {
+			    unset($post["page_section_ids"]);
+            }
+
 			//$post['widgets'] = array_unique($post['widgets']);
 			// echo "<pre>";
 			// echo $count;
 			// print_r($post);exit;
 			// echo "</pre>";
   			$newId = $this->pages_m->editPage($post);
+
+  			// There are three things on the front. They usually throw it all off.
+
+			// update page section ordinals
+            $this->pages_m->updatePageSectionOrdinals($newId > 1 ? $newId : $pageId, $page_section_ids);
+
   			if(is_numeric($pageId) && ($newId > 1))
   				$pageId = $newId;
   			elseif($newId > 1)
@@ -669,9 +680,22 @@ class Pages extends Master_Controller {
 	  		$this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
 	  		$this->_mainData['pageRec']['location'] = explode(',', $this->_mainData['pageRec']['location']);
 	  		$this->_mainData['pageRec']['widgets'] = json_decode($this->_mainData['pageRec']['widgets'], TRUE);
-	  		$this->_mainData['bannerImages'] = $this->admin_m->getSliderImages($pageId);
-	  		$this->_mainData['textboxes'] = $this->pages_m->getTextBoxes($pageId);
-            $this->_mainData['topVideo'] = $this->pages_m->getTopVideos($pageId);
+	  		$this->_mainData['page_sections'] = $this->pages_m->getPageSections($pageId);
+            foreach ($this->_mainData['page_sections'] as &$section) {
+                switch($section["type"]) {
+                    case "Textbox":
+                        $section["textboxes"] = $this->pages_m->getTextBoxes($pageId, $section["page_section_id"]);
+                        break;
+
+                    case "Video":
+                        $section["videos"] = $this->pages_m->getTopVideos($pageId, $section["page_section_id"]);
+                        break;
+
+                    case "Slider":
+                        $section["sliders"] = $this->admin_m->getSliderImages($pageId, $section["page_section_id"]);
+                        break;
+                }
+            }
   		}
   		if(is_array(@$_SESSION['errors']))
   		{
@@ -713,8 +737,8 @@ class Pages extends Master_Controller {
         redirect('pages/edit/'.$this->input->post('pageId'));
   	}
 
-  	protected function fixSliderOrder($id, $page_id) {
-        $query = $this->db->query("select max(`order`) as max_order from slider where pageId = ? and id < ?", array($page_id, $id));
+  	protected function fixSliderOrder($id, $page_id, $page_section_id) {
+        $query = $this->db->query("select max(`order`) as max_order from slider where pageId = ? and page_section_id = ? and id < ?", array($page_id, $page_section_id, $id));
         $ordinal = 0;
         foreach ($query->result_array() as $row) {
             $ordinal = $row["max_order"];
@@ -745,9 +769,10 @@ class Pages extends Master_Controller {
 					$uploadData['image'] = $data['file_name'];
 					$uploadData['pageId'] = $this->input->post('page');
 					$uploadData['order'] = $this->input->post('order');
+					$uploadData['page_section_id'] = $this->input->post("page_section_id");
 					$slider_id = $this->admin_m->updateSlider($uploadData);
                     // fix the slider ordinal...
-                    $this->fixSliderOrder($slider_id, $uploadData['pageId']);
+                    $this->fixSliderOrder($slider_id, $uploadData['pageId'], $uploadData['page_section_id']);
 					redirect('pages/edit/'.$this->input->post('page'));
 				}	
 	  		}
@@ -762,7 +787,7 @@ class Pages extends Master_Controller {
                 foreach ($rr as $k => $v) {
                     $img = $v[0];
                     $ord = $v[1];
-                    $this->admin_m->updateSliderOrder($img, $ord);
+                    $this->admin_m->updateSliderOrder($img, $ord, $this->input->post("page_section_id"));
                 }
                 redirect('pages/edit/' . $this->input->post('page'));
             }
@@ -775,7 +800,7 @@ class Pages extends Master_Controller {
              * How is it getting an ordinal?
              *
              */
-            if(@$_POST['banner'] && $_POST['submit'] == 'addBanner') {
+            if(array_key_exists("banner", $_POST) && $_POST['banner'] && $_POST['submit'] == 'addBanner') {
                 foreach( $_POST['banner'] as $banner ) {
                     // Pardy's Original Code:
                     //$bnrExt = explode('.', $banner);
@@ -792,9 +817,10 @@ class Pages extends Master_Controller {
                         $uploadData['image'] = $bannerName;
                         $uploadData['pageId'] = $this->input->post('page');
                         $uploadData['order'] = $this->input->post('order');
+                        $uploadData['page_section_id'] = $this->input->post("page_section_id");
                         $slider_id = $this->admin_m->updateSlider($uploadData);
                         // fix the slider ordinal...
-                        $this->fixSliderOrder($slider_id, $uploadData['pageId']);
+                        $this->fixSliderOrder($slider_id, $uploadData['pageId'], $uploadData['page_section_id']);
                     }
                 }
                 redirect('pages/edit/' . $this->input->post('page'));
@@ -835,6 +861,7 @@ class Pages extends Master_Controller {
         $video_url = $_REQUEST["video_url"];
         $title = $_REQUEST["title"];
         $ordering = $_REQUEST["ordering"];
+        $page_section_id = $_REQUEST["page_section_id"];
 
         $arr = array();
 
@@ -845,7 +872,8 @@ class Pages extends Master_Controller {
                     "video_url" => $url,
                     "ordering" => $ordering[$i],
                     "title" => $title[$i],
-                    "page_id" => $_REQUEST["pageId"]
+                    "page_id" => $_REQUEST["pageId"],
+                    "page_section_id" => $page_section_id
                 );
             }
         }
@@ -864,7 +892,7 @@ class Pages extends Master_Controller {
             }
         }
         */
-        $this->pages_m->updateTopVideos($this->input->post('pageId'), $arr);
+        $this->pages_m->updateTopVideos($this->input->post('pageId'), $page_section_id, $arr);
         redirect('pages/edit/' . $this->input->post('pageId'));
     }
 

@@ -402,9 +402,7 @@ $(window).load(function() {
 
 ?>
 
-<script>
-	//showVideo
-	function showVideo(vidId) {
-		$("#mainVideo")[0].src = "https://www.youtube.com/embed/"+vidId+"?rel=0&autoplay=1";
-	}
-</script>
+<?php
+$CI =& get_instance();
+echo $CI->load->view("showvideo_function", array(), false);
+?>

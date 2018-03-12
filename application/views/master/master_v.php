@@ -133,15 +133,6 @@ if (isset($keywords) && $keywords != "") {
 
         <!-- bxSlider Javascript file -->
         <script src="<?php echo $assets; ?>/js/jquery.bxslider.min.js"></script>
-        <script>
-            $(document).ready(function(){
-                $('.bxslider').bxSlider({
-                    auto: true,
-                    pause: 5000,
-                    randomStart: false
-                });
-            });
-        </script>
 
         <!-- NAVIGATION JS -->
         <script>
@@ -607,19 +598,12 @@ echo $CI->load->view("master/tracking", array(
         ), true);
         ?>
 
+    <?php
+    $CI =& get_instance();
+    echo $CI->load->view("showvideo_function", array(), false);
+    ?>
 
         <script>
-            //showVideo
-            function showVideo(vidId, vidTit) {
-                var mainVideo = $('#mainVideo').data('id');
-                //var mainTitle = $('.vdottl').html();
-                $('.vdottl').html(vidTit);
-                $("#mainVideo")[0].src = "https://www.youtube.com/embed/"+vidId+"?rel=0&autoplay=1";
-                $('#mainVideo').data('id', vidId);
-                //$('.shwVidHalf').show();
-                $('#'+vidId).hide();
-                $('#'+mainVideo).show();
-            }
             //cntnr-ttl
             //if( "<?php echo $this->router->fetch_method(); ?>" == "index" ) {
             $('.grghdng').html($('.cntnr-ttl').html());
