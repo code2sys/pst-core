@@ -321,6 +321,17 @@
             <div class="hidden_table">
                 <table width="auto" cellpadding="12">
                     <tr>
+                        <td colspan="3">
+                            <strong>Banner Display Time:</strong> <input type="text" name="slider_seconds" value="<?php echo $section['slider_seconds']; ?>" /> seconds
+                        </td>
+                    </tr>
+                    <tr >
+                        <td colspan="3">
+                            <button type="submit" id="updateSliderTime" name="submit" value="updateSliderTime">Update Display Time</button>
+                        </td>
+                    </tr>
+
+                    <tr>
                         <td colspan="3">Images must be 1024px wide by 400px high.<br /><br />
                             <?php echo form_upload(array('name' => 'image', 'value' => set_value('main'), 'maxlength' => 50, 'class' => '')); ?><br />
                             <button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Upload New Banner</button>
