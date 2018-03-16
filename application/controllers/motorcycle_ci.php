@@ -85,6 +85,20 @@ class Motorcycle_CI extends Welcome {
     /*
      * This is the main Motorcycle_List page.
      */
+    public function featuredNewProducts() {
+        $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
+        $_REQUEST["fltr"] = "new";
+        $_GET["fltr"] = "new";
+        $this->benzProduct();
+    }
+
+    public function featuredUsedProducts() {
+        $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
+        $_REQUEST["fltr"] = "pre-owned";
+        $_GET["fltr"] = "pre-owned";
+        $this->benzProduct();
+    }
+
     public function benzProduct() {
         if (!array_key_exists("bikeControlSort", $_SESSION)) {
             $_SESSION["bikeControlSort"] = 1;

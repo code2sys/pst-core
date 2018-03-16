@@ -401,7 +401,17 @@ echo $CI->load->view("braintree", array(
 		
 		//var url1 = cndn+"&brands="+brnd+"&categories="+ctgr+"&years="+yrs+"&vehicles="+vhcl;
 		//alert(url1);
-		var url = "<?php echo site_url('Motorcycle_List');?>?"+url1;
+		var url = "<?php
+            if (array_key_exists("major_units_featured_only", $_SESSION) && $_SESSION["major_units_featured_only"] > 0) {
+                if (array_key_exists('fltr', $_GET) && $_GET['fltr'] == "pre-owned") {
+                    echo site_url('Motorcycle_List/featured_preowned');
+                } else {
+                    echo site_url('Motorcycle_List/featured');
+                }
+            } else {
+                echo site_url('Motorcycle_List');
+            }
+            ?>?"+url1;
 		window.location.href = url;
 		
 		// var ajax_url = "<?php echo site_url('welcome/filterMotorcycle');?>";
