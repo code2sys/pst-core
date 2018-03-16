@@ -247,7 +247,7 @@ require(__DIR__ . "/../braintree_clienttoken.php");
 
 </script>
 
-<script src="/assets/insourced/jquery-2.1.1.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
 <script src="https://js.braintreegateway.com/web/3.7.0/js/client.min.js"></script>
 <script src="https://js.braintreegateway.com/web/3.7.0/js/hosted-fields.min.js"></script>
 <script src="https://js.braintreegateway.com/web/3.7.0/js/data-collector.min.js"></script>
