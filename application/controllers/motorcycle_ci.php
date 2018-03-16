@@ -57,6 +57,14 @@ class Motorcycle_CI extends Welcome {
         $this->renderMasterPage('benz_views/header.php', 'benz_views/index.php', $this->_mainData);
     }
 
+    public function benzProductFeatured($featured, $pre = 0) {
+        if ($featured != 1) {
+            $featured = 0;
+        }
+        $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = $featured;
+        header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
+    }
+
     public function benzProductSort($sort_number, $pre = 0) {
         if (!in_array($sort_number, array(1,2,3,4))) {
             $sort_number = 1;
@@ -110,13 +118,18 @@ class Motorcycle_CI extends Welcome {
         }
 
         $filter["status"] = 1;
-        $this->_mainData['vehicles'] = $this->motorcycle_m->getMotorcycleVehicle($filter);
-        $this->_mainData['brands'] = $this->motorcycle_m->getMotorcycleMake($filter);
-        $this->_mainData['years'] = $this->motorcycle_m->getMotorcycleYear($filter);
-        $this->_mainData['categories'] = $this->motorcycle_m->getMotorcycleCategory($filter);
-        $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], 0, $_SESSION["bikeControlSort"]);
+        $this->_mainData['vehicles'] = $this->motorcycle_m->getMotorcycleVehicle($filter, $_SESSION["major_units_featured_only"]);
+        $this->_mainData['brands'] = $this->motorcycle_m->getMotorcycleMake($filter, $_SESSION["major_units_featured_only"]);
+        $this->_mainData['years'] = $this->motorcycle_m->getMotorcycleYear($filter, $_SESSION["major_units_featured_only"]);
+        $this->_mainData['categories'] = $this->motorcycle_m->getMotorcycleCategory($filter, $_SESSION["major_units_featured_only"]);
 
-        $total = $this->motorcycle_m->getTotal($filter);
+        if (!array_key_exists("major_units_featured_only", $_SESSION)) {
+            $_SESSION["major_units_featured_only"] = 0;
+        }
+
+        $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], 0, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
+
+        $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
         $this->_mainData['pages'] = ceil($total / $_SESSION["bikeControlShow"]);
         $this->_mainData['fpages'] = $this->pages_m->getPages(1, 'footer');
         $recently = $_SESSION['recentlyMotorcycle'];
@@ -203,10 +216,10 @@ class Motorcycle_CI extends Welcome {
         unset($filter['page']);
         // JLB 06-04-17
         // Why was there a separate one for getFilterMotorcycles?? As far as I can tell, it was to separate off the limit vs. offset.
-        $motorcycles['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], $offset, $_SESSION["bikeControlSort"]);
+        $motorcycles['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], $offset, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
 
 
-        $total = $this->motorcycle_m->getTotal($filter);
+        $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
         $motorcycles['pages'] = ceil($total / $_SESSION["bikeControlShow"]);
         $motorcycles['page'] = $curPage + 1;
 
