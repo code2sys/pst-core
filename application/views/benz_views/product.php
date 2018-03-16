@@ -57,7 +57,16 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
     });
 
     $(document).on("change", "input[name='major_units_featured_only']", function() {
-        window.location.href = "/Motorcycle_Featured/" + ($("input[name='major_units_featured_only']:checked").length > 0 ? 1 : 0) + <?php echo array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned" ? "'/1'" : "'/0'"; ?>;
+        if ($("input[name='major_units_featured_only']:checked").length > 0) {
+            <?php if (array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned"): ?>
+            window.location.href = "/Motorcycle_List/featured_preowned";
+            <?php else:?>
+            window.location.href = "/Motorcycle_List/featured";
+            <?php endif; ?>
+        } else {
+            window.location.href = "/Motorcycle_Featured/0" + <?php echo array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned" ? "'/1'" : "'/0'"; ?>;
+        }
+
     });
 
 </script>
