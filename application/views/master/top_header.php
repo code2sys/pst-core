@@ -26,11 +26,11 @@ if (isset($store_name)) {
 <meta name="keywords" content="<?php echo htmlentities($meta_keywords, ENT_QUOTES | ENT_COMPAT); ?>">
 
 
-<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
-<script src="https://js.braintreegateway.com/v2/braintree.js"></script>
-<script src="https://js.braintreegateway.com/js/braintree-2.30.0.min.js"></script>
-<script src="https://js.braintreegateway.com/web/3.6.3/js/client.min.js"></script>
-<script src="https://js.braintreegateway.com/web/3.6.3/js/paypal.min.js"></script>
+<script src="/assets/insourced/jquery-2.1.1.js"></script>
+<script src="/assets/insourced/braintree/braintree.js"></script>
+<script src="/assets/insourced/braintree/braintree-2.30.0.min.js"></script>
+<script src="/assets/insourced/braintree/client.min.js"></script>
+<script src="/assets/insourced/braintree/paypal.min.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lucida+Sans:400,500,600,700,900,800,300" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Helvetica:400,500,600,700,900,800,300" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,500,600,700,900,800,300" />

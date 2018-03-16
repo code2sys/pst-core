@@ -28,9 +28,8 @@
 	    <link href="<?php echo $assets; ?>/wdCalendar/css/dp.css" rel="stylesheet" type="text/css" />
   <!-- <script src="<?php echo $assets; ?>/js/jquery-1.7.2.js"></script> -->
 	<script
-		src="https://code.jquery.com/jquery-1.9.1.min.js"
-		integrity="sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ="
-		crossorigin="anonymous"></script>
+		src="/assets/insourced/https://code.jquery.com/jquery-1.9.1.min.js"
+></script>
   <script src="<?php echo $assets; ?>/wdCalendar/src/Plugins/datepicker_lang_US.js" type="text/javascript"></script>
   <script src="<?php echo $assets; ?>/wdCalendar/src/Plugins/jquery.datepicker.js"></script>
   <script src="<?php echo $assets; ?>/js/jquery-ui-1.10.4.js"></script>
