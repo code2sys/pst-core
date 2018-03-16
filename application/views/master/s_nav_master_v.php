@@ -409,24 +409,29 @@ $(document).ready(function() {
 	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
  		$("body").css("display","table");
 	}
-	
-	$('.popup-gallery').magnificPopup({
-		delegate: 'a',
-		type: 'image',
-		tLoading: 'Loading image #%curr%...',
-		mainClass: 'mfp-img-mobile',
-		gallery: {
-			enabled: true,
-			navigateByImgClick: false,
-			preload: [0,1] // Will preload 0 - before current, and 1 after the current image
-		},
-		image: {
-			tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
-			titleSrc: function(item) {
-				return item.el.attr('title') + '<small><?php echo WEBSITE_NAME; ?>&trade;</small>';
-			}
-		}
-	});
+
+	try {
+        $('.popup-gallery').magnificPopup({
+            delegate: 'a',
+            type: 'image',
+            tLoading: 'Loading image #%curr%...',
+            mainClass: 'mfp-img-mobile',
+            gallery: {
+                enabled: true,
+                navigateByImgClick: false,
+                preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+            },
+            image: {
+                tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
+                titleSrc: function(item) {
+                    return item.el.attr('title') + '<small><?php echo WEBSITE_NAME; ?>&trade;</small>';
+                }
+            }
+        });
+
+    } catch(err) {
+	    console.log("Error with magnificPopup AGAIN: " + err);
+    }
 });
 </script>
 
