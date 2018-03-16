@@ -400,7 +400,7 @@ class Motorcycle_M extends Master_M {
         return $record['sales_email'];
     }
 
-    public function getTotal( $filter ) {
+    public function getTotal( $filter , $major_units_featured_only = 0) {
         $where = array();
         if( !empty($filter['condition']) ) {
             $where['condition'] = $filter['condition'];
@@ -422,6 +422,9 @@ class Motorcycle_M extends Master_M {
         }
         if (@$filter['vehicles']) {
             $this->db->where_in('motorcycle.vehicle_type', $filter['vehicles']);
+        }
+        if ($major_units_featured_only > 0) {
+            $where["motorcycle.featured"] = 1;
         }
         $this->db->where("motorcycle.status", 1, FALSE);
         $this->db->where("motorcycle.deleted", 0, FALSE);
