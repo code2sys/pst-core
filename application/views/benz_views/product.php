@@ -57,7 +57,16 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
     });
 
     $(document).on("change", "input[name='major_units_featured_only']", function() {
-        window.location.href = "/Motorcycle_Featured/" + ($("input[name='major_units_featured_only']:checked").length > 0 ? 1 : 0) + <?php echo array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned" ? "'/1'" : "'/0'"; ?>;
+        if ($("input[name='major_units_featured_only']:checked").length > 0) {
+            <?php if (array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned"): ?>
+            window.location.href = "/Motorcycle_List/featured_preowned";
+            <?php else:?>
+            window.location.href = "/Motorcycle_List/featured";
+            <?php endif; ?>
+        } else {
+            window.location.href = "/Motorcycle_Featured/0" + <?php echo array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned" ? "'/1'" : "'/0'"; ?>;
+        }
+
     });
 
 </script>
@@ -74,9 +83,9 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
                 <fieldset style="position:relative">
                     <div class="up-buttons">
                         <?php if (MOTORCYCLE_SHOP_NEW): ?>
-                            <a href="?fltr=new" class="benz_views-product up-buttons-2 <?php echo $_GET['fltr'] == 'new' ? 'active' : ''; ?>">new</a>
+                            <a href="<?php if (array_key_exists("major_units_featured_only", $_SESSION) && $_SESSION["major_units_featured_only"] > 0): ?>/Motorcycle_List/featured<?php else: ?>/Motorcycle_List<?php endif; ?>?fltr=new" class="benz_views-product up-buttons-2 <?php echo $_GET['fltr'] == 'new' ? 'active' : ''; ?>">new</a>
                         <?php endif; ?>
-                        <a href="?fltr=pre-owned" class="benz_views-product up-buttons-2 <?php echo $_GET['fltr'] == 'pre-owned' ? 'active' : ''; ?>">Pre-Owned</a>
+                        <a href="<?php if (array_key_exists("major_units_featured_only", $_SESSION) && $_SESSION["major_units_featured_only"] > 0): ?>/Motorcycle_List/featured_preowned<?php else: ?>/Motorcycle_List<?php endif; ?>?fltr=pre-owned" class="benz_views-product up-buttons-2 <?php echo $_GET['fltr'] == 'pre-owned' ? 'active' : ''; ?>">Pre-Owned</a>
                     </div>
                     <!--<span class="glyphicon glyphicon-search search-icon"></span>-->
                     <!--<input type="text" class="brandsearch sd-input it-4 js-searchable-box" placeholder="Search by Brand">-->
