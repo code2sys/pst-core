@@ -359,8 +359,12 @@ if (isset($keywords) &&	$keywords != "") {
 		
 		<div class="clear"></div>
 		
-		<?php echo @$footer; ?>	
+		<?php echo @$footer; ?>
 
+<?php
+$CI =& get_instance();
+echo $CI->load->view("master/widgets/flexiselect", array(), true);
+?>
 
 <script type="application/javascript">
 function showSubNav( from ){
@@ -424,23 +428,30 @@ $(document).ready(function() {
 	});
 
 
-	$('.popup-gallery').magnificPopup({
-		delegate: 'a',
-		type: 'image',
-		tLoading: 'Loading image #%curr%...',
-		mainClass: 'mfp-img-mobile',
-		gallery: {
-			enabled: true,
-			navigateByImgClick: false,
-			preload: [0,1] // Will preload 0 - before current, and 1 after the current image
-		},
-		image: {
-			tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
-			titleSrc: function(item) {
-				return item.el.attr('title') + '<small><?php echo WEBSITE_NAME; ?>&trade;</small>';
-			}
-		}
-	});
+    try {
+
+        $('.popup-gallery').magnificPopup({
+            delegate: 'a',
+            type: 'image',
+            tLoading: 'Loading image #%curr%...',
+            mainClass: 'mfp-img-mobile',
+            gallery: {
+                enabled: true,
+                navigateByImgClick: false,
+                preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+            },
+            image: {
+                tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
+                titleSrc: function(item) {
+                    return item.el.attr('title') + '<small><?php echo WEBSITE_NAME; ?>&trade;</small>';
+                }
+            }
+        });
+    } catch(err) {
+        console.log("Error with magnificPopup AGAIN: " + err);
+    }
+
+
 	
 	/* Submit on Enter */
     $('#search').keydown(function(e){
@@ -454,56 +465,6 @@ $(document).ready(function() {
    
 });
 
-$(window).load(function() {
-    $("#flexiselDemo1").flexisel();
-    $("#flexiselDemo2").flexisel({
-        enableResponsiveBreakpoints: true,
-        responsiveBreakpoints: { 
-            portrait: { 
-                changePoint:480,
-                visibleItems: 1
-            }, 
-            landscape: { 
-                changePoint:640,
-                visibleItems: 2
-            },
-            tablet: { 
-                changePoint:768,
-                visibleItems: 3
-            }
-        }
-    });
-
-    $("#flexiselDemo3").flexisel({
-        visibleItems: 5,
-        animationSpeed: 1000,
-        autoPlay: true,
-        autoPlaySpeed: 3000,            
-        pauseOnHover: true,
-        enableResponsiveBreakpoints: true,
-        responsiveBreakpoints: { 
-            portrait: { 
-                changePoint:480,
-                visibleItems: 3
-            }, 
-            landscape: { 
-                changePoint:640,
-                visibleItems: 4
-            },
-            tablet: { 
-                changePoint:768,
-                visibleItems: 5
-            }
-        }
-    });
-
-    $("#flexiselDemo4").flexisel({
-        clone:false
-    });
-    
-});
-
-  
    
    function setMainSearch(event, section, id)
    {
