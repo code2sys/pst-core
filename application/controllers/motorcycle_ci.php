@@ -216,10 +216,10 @@ class Motorcycle_CI extends Welcome {
         unset($filter['page']);
         // JLB 06-04-17
         // Why was there a separate one for getFilterMotorcycles?? As far as I can tell, it was to separate off the limit vs. offset.
-        $motorcycles['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], $offset, $_SESSION["bikeControlSort"]);
+        $motorcycles['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], $offset, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
 
 
-        $total = $this->motorcycle_m->getTotal($filter);
+        $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
         $motorcycles['pages'] = ceil($total / $_SESSION["bikeControlShow"]);
         $motorcycles['page'] = $curPage + 1;
 
