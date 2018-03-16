@@ -1,5 +1,5 @@
 <script type="application/javascript">
-    function createUrl(type, number) {
+    function createURL(type, number) {
         console.log("Call to function createUrl with arguments: " + type + "," + number);
     }
 
