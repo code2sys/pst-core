@@ -41,6 +41,7 @@
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';  
 $route['Motorcycle_Gear_Brands'] = 'shopping/brands';
+$route['Motorcycle_List'] = 'motorcycle_ci/benzProduct';
 $route['Motorcycle_List/featured'] = 'motorcycle_ci/featuredNewProducts';
 $route['Motorcycle_List/featured_preowned'] = 'motorcycle_ci/featuredUsedProducts';
 $route['Motorcycle_Sort/([0-9]+)/([0-9]+)'] = 'motorcycle_ci/benzProductSort/$1/$2';
