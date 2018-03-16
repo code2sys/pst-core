@@ -1,3 +1,9 @@
+<script type="application/javascript">
+    function createURL(type, number) {
+        console.log("Call to function createUrl with arguments: " + type + "," + number);
+    }
+
+</script>
 <?php if(is_array(@$breadcrumbs['category'])): end($breadcrumbs['category']); $category_id = key($breadcrumbs['category']);  $count =  count($breadcrumbs['category']); $array = array_keys($breadcrumbs['category']); endif;?>
 <?php  if(@$category): ?>
 
