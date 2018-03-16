@@ -105,7 +105,7 @@ class Motorcycle_M extends Master_M {
 //        return $records;
 //    }
 
-    public function getMotorcycles( $filter = array() , $limit = 5, $offset = 0, $sort_order = 1) {
+    public function getMotorcycles( $filter = array() , $limit = 5, $offset = 0, $sort_order = 1, $major_units_featured_only = 0) {
         $where = $this->buildWhere($filter);
         $this->db->_protect_identifiers=false;
         $this->db->join(' (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA', 'motorcycleimageA.motorcycle_id = motorcycle.id', 'left');
@@ -113,6 +113,9 @@ class Motorcycle_M extends Master_M {
         $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
         $this->db->where("motorcycle.status", 1, false); // JLB 12-18-17 Show only active ones...
         $this->db->where("motorcycle.deleted", 0, false); // JLB 01-04-18 Show only undeleted ones...
+        if ($major_units_featured_only > 0) {
+            $this->db->where("motorcycle.featured", 1, false); // JLB 03-15-18 Show only the featured ones if selected
+        }
         $this->db->group_by('motorcycle.id');
         $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name  as type, motorcycleimage.external', FALSE);
         $this->db->limit($limit, $offset);
@@ -260,18 +263,24 @@ class Motorcycle_M extends Master_M {
 //		return $records;
 //	}
 
-    public function getFilterTotal( $filter ) {
+    public function getFilterTotal( $filter , $major_units_featured_only = 0) {
         $where = $this->buildWhere($filter);
         $where["deleted"] = 0;
+        if ($major_units_featured_only > 0) {
+            $where["featured"] = 1;
+        }
         $this->db->select('count(id)');
         $record = $this->selectRecord('motorcycle', $where);
         return $record['cnt'];
     }
 
-    public function getMotorcycleCategory($filter = array()) {
+    public function getMotorcycleCategory($filter = array(), $major_units_featured_only = 0) {
         $where = $this->buildWhere($filter, false, false, true);
         $where['motorcycle_category.name != '] = '';
         $where["motorcycle.deleted"] = 0;
+        if ($major_units_featured_only > 0) {
+            $where["motorcycle.featured"] = 1;
+        }
         $this->db->join('motorcycle', 'motorcycle.category = motorcycle_category.id');
         $this->db->select('motorcycle_category.*');
         $this->db->group_by('motorcycle_category.name');
@@ -279,9 +288,12 @@ class Motorcycle_M extends Master_M {
         return $record;
     }
 
-    public function getMotorcycleCondition($filter = array()) {
+    public function getMotorcycleCondition($filter = array(), $major_units_featured_only = 0) {
         $where = $this->buildWhere($filter);
         $where["motorcycle.deleted"] = 0;
+        if ($major_units_featured_only > 0) {
+            $where["motorcycle.featured"] = 1;
+        }
         $this->db->select('condition');
         $this->db->group_by('condition');
         $record = $this->selectRecords('motorcycle', $where);
@@ -289,9 +301,12 @@ class Motorcycle_M extends Master_M {
         return $record;
     }
 
-    public function getMotorcycleVehicle($filter = array()) {
+    public function getMotorcycleVehicle($filter = array(), $major_units_featured_only = 0) {
         $where = $this->buildWhere($filter, false, true);
         $where["motorcycle.deleted"] = 0;
+        if ($major_units_featured_only > 0) {
+            $where["motorcycle.featured"] = 1;
+        }
         $this->db->join('motorcycle', 'motorcycle.vehicle_type = motorcycle_type.id');
         $this->db->select('motorcycle_type.*');
         $this->db->group_by('motorcycle.vehicle_type');
@@ -299,18 +314,24 @@ class Motorcycle_M extends Master_M {
         return $record;
     }
 
-    public function getMotorcycleMake($filter = array()) {
+    public function getMotorcycleMake($filter = array(), $major_units_featured_only = 0) {
         $where = $this->buildWhere($filter);
         $where["motorcycle.deleted"] = 0;
+        if ($major_units_featured_only > 0) {
+            $where["motorcycle.featured"] = 1;
+        }
         $this->db->select('make');
         $this->db->group_by('make');
         $record = $this->selectRecords('motorcycle', $where);
         return $record;
     }
 
-    public function getMotorcycleYear($filter = array()) {
+    public function getMotorcycleYear($filter = array(), $major_units_featured_only = 0) {
         $where = $this->buildWhere($filter, true);
         $where["motorcycle.deleted"] = 0;
+        if ($major_units_featured_only > 0) {
+            $where["motorcycle.featured"] = 1;
+        }
         $this->db->select('year');
         $this->db->group_by('year');
         $record = $this->selectRecords('motorcycle', $where);
@@ -379,7 +400,7 @@ class Motorcycle_M extends Master_M {
         return $record['sales_email'];
     }
 
-    public function getTotal( $filter ) {
+    public function getTotal( $filter , $major_units_featured_only = 0) {
         $where = array();
         if( !empty($filter['condition']) ) {
             $where['condition'] = $filter['condition'];
@@ -401,6 +422,9 @@ class Motorcycle_M extends Master_M {
         }
         if (@$filter['vehicles']) {
             $this->db->where_in('motorcycle.vehicle_type', $filter['vehicles']);
+        }
+        if ($major_units_featured_only > 0) {
+            $where["motorcycle.featured"] = 1;
         }
         $this->db->where("motorcycle.status", 1, FALSE);
         $this->db->where("motorcycle.deleted", 0, FALSE);
