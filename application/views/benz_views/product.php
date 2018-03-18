@@ -93,7 +93,7 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
                 <div class="filter-inner">
                     <p class="parg-txt">Search</p>
                     <form method="post">
-                        <input type="text" size="30" name="search_keywords" value="<?php echo htmlentities(array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : ""); ?>" /><br/>
+                        <input type="text" size="30" name="search_keywords" value="<?php echo htmlentities(array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : ""); ?>" class="search-bx major_unit_searchbox"/><br/>
                         <input type="submit" name="search_action" value="Search" />
                         <input type="submit" name="search_action" value="Clear" />
                     </form>

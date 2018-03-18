@@ -40,3 +40,7 @@
 .simplified_mu_nav .searchHolder.search-one {
     display:none;
 }
+
+.major_unit_searchbox {
+    width: 95% !important;
+}
