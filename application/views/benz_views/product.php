@@ -90,6 +90,15 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
                     <!--<span class="glyphicon glyphicon-search search-icon"></span>-->
                     <!--<input type="text" class="brandsearch sd-input it-4 js-searchable-box" placeholder="Search by Brand">-->
                 </fieldset>
+                <div class="filter-inner">
+                    <p class="parg-txt">Search</p>
+                    <form method="post" class="major_unit_search">
+                        <input type="text" size="30" name="search_keywords" value="<?php echo htmlentities(array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : ""); ?>" class="search-bx major_unit_searchbox"/><br/>
+                        <input type="submit" name="search_action" value="Search" class="bluebutton_b" />
+                        <input type="submit" name="search_action" value="Clear" class="bluebutton_b" />
+                    </form>
+                </div>
+
                 <div class="filter-inner brandsfilter">
                     <p class="parg-txt">Brand</p>
                     <?php
@@ -164,7 +173,7 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
         <div class="next">
             <div class="bikeControlRow row">
                 <div class="col-md-4">Show <select name="bikeControlShow"><option <?php if ($bikeControlShow == 5): ?>selected="selected"<?php endif; ?>>5</option><option <?php if ($bikeControlShow == 10): ?>selected="selected"<?php endif; ?>>10</option><option <?php if ($bikeControlShow == 25): ?>selected="selected"<?php endif; ?>>25</option><option <?php if ($bikeControlShow == 50): ?>selected="selected"<?php endif; ?>>50</option></select> Results</div>
-                <div class="col-md-4" style="text-align: center">Sort By: <select name="bikeControlSort"><option value="1"  <?php if ($bikeControlSort == 1): ?>selected="selected"<?php endif; ?>>Price (High to Low)</option><option value="2" <?php if ($bikeControlSort == 2): ?>selected="selected"<?php endif; ?>>Price (Low to High)</option><option value="3" <?php if ($bikeControlSort == 3): ?>selected="selected"<?php endif; ?>>Year (New to Old)</option><option value="4" <?php if ($bikeControlSort == 4): ?>selected="selected"<?php endif; ?>>Year (Old to New)</option></select></div>
+                <div class="col-md-4" style="text-align: center">Sort By: <select name="bikeControlSort"><option value="0"  <?php if ($bikeControlSort == 0): ?>selected="selected"<?php endif; ?>>Relevance</option><option value="1"  <?php if ($bikeControlSort == 1): ?>selected="selected"<?php endif; ?>>Price (High to Low)</option><option value="2" <?php if ($bikeControlSort == 2): ?>selected="selected"<?php endif; ?>>Price (Low to High)</option><option value="3" <?php if ($bikeControlSort == 3): ?>selected="selected"<?php endif; ?>>Year (New to Old)</option><option value="4" <?php if ($bikeControlSort == 4): ?>selected="selected"<?php endif; ?>>Year (Old to New)</option></select></div>
 
                 <div class="col-md-4" style="text-align: right">
                     <label><input type="checkbox" name="major_units_featured_only" value="1" <?php if (array_key_exists("major_units_featured_only", $_SESSION) && $_SESSION["major_units_featured_only"] > 0): ?>checked="checked"<?php endif; ?> /> Featured Only</label>
