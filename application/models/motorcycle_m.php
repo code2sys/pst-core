@@ -113,14 +113,17 @@ class Motorcycle_M extends Master_M {
         $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
         $this->db->where("motorcycle.status", 1, false); // JLB 12-18-17 Show only active ones...
         $this->db->where("motorcycle.deleted", 0, false); // JLB 01-04-18 Show only undeleted ones...
+        $relevance_search_extra = "";
         if ($major_units_featured_only > 0) {
             $this->db->where("motorcycle.featured", 1, false); // JLB 03-15-18 Show only the featured ones if selected
         }
         if (array_key_exists("major_unit_search_keywords", $_SESSION) && $_SESSION["major_unit_search_keywords"] != "") {
-            $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+            $this->db->where('MATCH AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+            $relevance_search_extra = " , MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) relevance ";
+            $this->db->order_by(" relevance desc ");
         }
         $this->db->group_by('motorcycle.id');
-        $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name  as type, motorcycleimage.external', FALSE);
+        $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name  as type, motorcycleimage.external $relevance_search_extra ', FALSE);
         $this->db->limit($limit, $offset);
 
         switch($sort_order) {
