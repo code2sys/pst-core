@@ -92,10 +92,10 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
                 </fieldset>
                 <div class="filter-inner">
                     <p class="parg-txt">Search</p>
-                    <form method="post">
+                    <form method="post" class="major_unit_search">
                         <input type="text" size="30" name="search_keywords" value="<?php echo htmlentities(array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : ""); ?>" class="search-bx major_unit_searchbox"/><br/>
-                        <input type="submit" name="search_action" value="Search" />
-                        <input type="submit" name="search_action" value="Clear" />
+                        <input type="submit" name="search_action" value="Search" class="bluebutton_b" />
+                        <input type="submit" name="search_action" value="Clear" class="bluebutton_b" />
                     </form>
                 </div>
 
