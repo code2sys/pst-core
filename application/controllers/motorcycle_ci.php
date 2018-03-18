@@ -100,6 +100,14 @@ class Motorcycle_CI extends Welcome {
     }
 
     public function benzProduct() {
+        if (!array_key_exists("search_keywords", $_REQUEST)) {
+            if (!array_key_exists("major_unit_search_keywords", $_SESSION)) {
+                $_SESSION["major_unit_search_keywords"] = "";
+            }
+        } else {
+            $_SESSION["major_unit_search_keywords"] = trim($_REQUEST["search_keywords"]);
+        }
+
         if (!array_key_exists("bikeControlSort", $_SESSION)) {
             $_SESSION["bikeControlSort"] = 1;
         }
