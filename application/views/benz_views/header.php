@@ -157,7 +157,7 @@ $SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
 			</div>
             <?php
             $CI =& get_instance();
-            // echo $CI->load->view("search_placeholder", array(), true);
+            echo $CI->load->view("search_placeholder", array("hide_search" => true), true);
             ?>
 			<div class="clear"></div>						
 		</div>
