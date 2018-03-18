@@ -112,6 +112,12 @@ class Motorcycle_CI extends Welcome {
             $_SESSION["major_unit_search_keywords"] = trim($_REQUEST["search_keywords"]);
         }
 
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            header("Location: " . $actual_link);
+            exit();
+        }
+
         if (!array_key_exists("bikeControlSort", $_SESSION)) {
             $_SESSION["bikeControlSort"] = 1;
         }
