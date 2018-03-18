@@ -145,6 +145,10 @@ class Motorcycle_M extends Master_M {
                 // Year Old to New
                 $this->db->order_by("motorcycle.year asc");
                 break;
+
+            default:
+                // Relevance should be the default...
+
         }
 
         $records = $this->selectRecords('motorcycle', $where);

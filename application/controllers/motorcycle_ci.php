@@ -119,7 +119,7 @@ class Motorcycle_CI extends Welcome {
         }
 
         if (!array_key_exists("bikeControlSort", $_SESSION)) {
-            $_SESSION["bikeControlSort"] = 1;
+            $_SESSION["bikeControlSort"] = 0;
         }
         if (!array_key_exists("bikeControlShow", $_SESSION)) {
             $_SESSION["bikeControlShow"] = 5;
@@ -233,7 +233,7 @@ class Motorcycle_CI extends Welcome {
      */
     public function filterMotorcycle() {
         if (!array_key_exists("bikeControlSort", $_SESSION)) {
-            $_SESSION["bikeControlSort"] = 1;
+            $_SESSION["bikeControlSort"] = 0;
         }
         if (!array_key_exists("bikeControlShow", $_SESSION)) {
             $_SESSION["bikeControlShow"] = 5;
