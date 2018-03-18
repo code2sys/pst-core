@@ -118,8 +118,7 @@ class Motorcycle_M extends Master_M {
             $this->db->where("motorcycle.featured", 1, false); // JLB 03-15-18 Show only the featured ones if selected
         }
         if (array_key_exists("major_unit_search_keywords", $_SESSION) && $_SESSION["major_unit_search_keywords"] != "") {
-            $this->db->where('MATCH AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
-            $relevance_search_extra = " , MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) as relevance ";
+            $relevance_search_extra = ' , MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')") as relevance ';
             $this->db->order_by(" relevance desc ");
         }
         $this->db->group_by('motorcycle.id');
