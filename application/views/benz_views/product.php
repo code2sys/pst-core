@@ -90,6 +90,15 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
                     <!--<span class="glyphicon glyphicon-search search-icon"></span>-->
                     <!--<input type="text" class="brandsearch sd-input it-4 js-searchable-box" placeholder="Search by Brand">-->
                 </fieldset>
+                <div class="filter-inner">
+                    <p class="parg-txt">Search</p>
+                    <form method="post">
+                        <input type="text" size="30" name="search_keywords" value="<?php echo htmlentities(array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : ""); ?>" /><br/>
+                        <input type="submit" name="search_action" value="Search" />
+                        <input type="submit" name="search_action" value="Clear" />
+                    </form>
+                </div>
+
                 <div class="filter-inner brandsfilter">
                     <p class="parg-txt">Brand</p>
                     <?php
