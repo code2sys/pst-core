@@ -10,13 +10,18 @@ if (!isset($SMSettings)) {
     $SMSettings = $CI->admin_m->getSMSettings();
 }
 
+if (!isset($hide_search)) {
+    $hide_search = false;
+}
 
 ?>
 <div class="searchHolder search-one">
+    <?php if (!$hide_search): ?>
     <form action="<?php echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
         <input id="search" name="search" placeholder="<?php echo SEARCH_PLACEHOLDER_WORDING; ?>" class="search-bx" style="float:left;" />
         <a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
     </form>
+    <?php endif; ?>
     <div class="clear"></div>
 </div>
 

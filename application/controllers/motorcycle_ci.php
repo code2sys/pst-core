@@ -67,7 +67,7 @@ class Motorcycle_CI extends Welcome {
 
     public function benzProductSort($sort_number, $pre = 0) {
         if (!in_array($sort_number, array(1,2,3,4))) {
-            $sort_number = 1;
+            $sort_number = 0;
         }
         $_SESSION["bikeControlSort"] = $sort_number;
         header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
@@ -100,8 +100,26 @@ class Motorcycle_CI extends Welcome {
     }
 
     public function benzProduct() {
+        if (array_key_exists("search_action", $_REQUEST) && $_REQUEST["search_action"] == "Clear") {
+            $_REQUEST["search_keywords"] = "";
+        }
+
+        if (!array_key_exists("search_keywords", $_REQUEST)) {
+            if (!array_key_exists("major_unit_search_keywords", $_SESSION)) {
+                $_SESSION["major_unit_search_keywords"] = "";
+            }
+        } else {
+            $_SESSION["major_unit_search_keywords"] = trim($_REQUEST["search_keywords"]);
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            header("Location: " . $actual_link);
+            exit();
+        }
+
         if (!array_key_exists("bikeControlSort", $_SESSION)) {
-            $_SESSION["bikeControlSort"] = 1;
+            $_SESSION["bikeControlSort"] = 0;
         }
         if (!array_key_exists("bikeControlShow", $_SESSION)) {
             $_SESSION["bikeControlShow"] = 5;
@@ -215,7 +233,7 @@ class Motorcycle_CI extends Welcome {
      */
     public function filterMotorcycle() {
         if (!array_key_exists("bikeControlSort", $_SESSION)) {
-            $_SESSION["bikeControlSort"] = 1;
+            $_SESSION["bikeControlSort"] = 0;
         }
         if (!array_key_exists("bikeControlShow", $_SESSION)) {
             $_SESSION["bikeControlShow"] = 5;
