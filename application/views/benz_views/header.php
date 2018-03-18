@@ -11,7 +11,7 @@ $partsfinder_link = $store_name["partsfinder_link"];
 $number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 
 if (!defined('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS')) {
-    define('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS', false);
+    define('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS', true);
 }
 
 $SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
