@@ -37,9 +37,9 @@ class Master_Controller extends CI_Controller {
 		  session_start();
 		date_default_timezone_set ( 'America/New_York' );
 		
-		if(@$_SESSION['userRecord']) { 
-			if(time() - $_SESSION['userRecord']['timestamp'] > 900) { //subtract new timestamp from the old one
-				echo"<script>alert('15 Minutes over!');</script>";
+		if(@$_SESSION['userRecord']) {
+		    // JLB 03-28-18 - Change it to 2 hours instead of 15 minutes for a timeout.
+			if(time() - $_SESSION['userRecord']['timestamp'] > 2 * 60 * 60) { //subtract new timestamp from the old one
 				unset($_SESSION['userRecord']);
 				redirect();
 				exit;
