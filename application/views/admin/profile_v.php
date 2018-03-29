@@ -298,7 +298,7 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 
                                     <tr>
                                         <td style="width:30%;"><b>Enable:</b></td>
-                                        <td><label><input type="radio" name="store_header_banner_enable" value="1" <?php if ($store_header_banner_enable == 1): ?>checked="checked"<?php endif; ?>/> Yes</label> <label><input type="radio" name="store_header_banner_enable" value="0" <?php if ($store_header_banner_enable != 1): ?>checked="checked"<?php endif; ?>/> Yes</label></td>
+                                        <td><label><input type="radio" name="store_header_banner_enable" value="1" <?php if ($store_header_banner_enable == 1): ?>checked="checked"<?php endif; ?>/> Yes</label> <label><input type="radio" name="store_header_banner_enable" value="0" <?php if ($store_header_banner_enable != 1): ?>checked="checked"<?php endif; ?>/> No</label></td>
                                     </tr>
 
                                     <!-- Contents - can we get an editor ?  store_header_banner_contents -->
@@ -307,26 +307,6 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                         <td><textarea id="store_header_banner_contents" name="store_header_banner_contents" rows="10" cols="80"><?php echo htmlentities($store_header_banner_contents); ?></textarea></td>
                                     </tr>
 
-                                    <script type="text/javascript">
-
-                                        // LOAD THE CUSTOM CONFIGURATION FOR THIS INSTANCE
-                                        (function() {
-                                            CKEDITOR.replace( 'store_header_banner_contents', { customConfig : '<?php echo $edit_config; ?>' } );
-
-                                            var showHeaderBannerParts = function() {
-                                                if ($("input[name='store_header_banner_enable'][value=1]:checked").length > 0) {
-                                                    $(".store_header_banner_enable_1").show();
-                                                } else {
-                                                    $(".store_header_banner_enable_1").hide();
-                                                }
-                                            };
-
-                                            $(document).on("change", "input[name='store_header_banner_enable']", showHeaderBannerParts);
-                                            showHeaderBannerParts();
-
-                                        })();
-
-                                    </script>
 
 
                                     <!-- background color store_header_banner_bgcolor -->
@@ -339,6 +319,28 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                             </td>
 
                         </tr>
+
+
+                        <script type="text/javascript">
+
+                            // LOAD THE CUSTOM CONFIGURATION FOR THIS INSTANCE
+                            (function() {
+                                CKEDITOR.replace( 'store_header_banner_contents', { customConfig : '<?php echo $edit_config; ?>' } );
+
+                                var showHeaderBannerParts = function() {
+                                    if ($("input[name='store_header_banner_enable'][value=1]:checked").length > 0) {
+                                        $(".store_header_banner_enable_1").show();
+                                    } else {
+                                        $(".store_header_banner_enable_1").hide();
+                                    }
+                                };
+
+                                $(document).on("change", "input[name='store_header_banner_enable']", showHeaderBannerParts);
+                                showHeaderBannerParts();
+
+                            })();
+
+                        </script>
 
 						<tr>
 							<td colspan="2">
