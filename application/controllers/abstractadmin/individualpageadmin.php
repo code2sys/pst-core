@@ -149,7 +149,7 @@ abstract class Individualpageadmin extends Employeeadmin
             $data = $this->input->post();
 
             foreach (array_keys($store_header_banner) as $key) {
-                $val = $data[$key];
+                $$key = $val = $data[$key];
                 unset($data[$key]);
                 $this->db->query("insert into `config` (`key`, `value`) values (?, ?) on duplicate key update `value` = values(`value`)", array($key, $val));
             }
@@ -175,6 +175,19 @@ abstract class Individualpageadmin extends Employeeadmin
                 // generate a PNG
 
             }
+
+            // JLB 3-29-18
+            // We have to write a file...
+            if ($store_header_banner_enable > 0) {
+                $contents_of_banner = $this->load->view("store_header_banner", array(
+                    "store_header_banner_contents" => $store_header_banner_contents,
+                    "store_header_banner_bgcolor" => $store_header_banner_bgcolor
+                ), true);
+            } else {
+                $contents_of_banner = "";
+            }
+
+            file_put_contents(STORE_DIRECTORY . "/override_templates/store_header_banner.html", $contents_of_banner);
         }
 
 
