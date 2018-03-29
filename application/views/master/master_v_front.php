@@ -172,9 +172,15 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 			<div class="clear"></div>
 		</div>
 	</div>
-        
+<?php
+$CI =& get_instance();
+$CI->load->helper("mustache_helper");
+$motorcycle_action_buttons = mustache_tmpl_open("store_header_banner.html");
+echo mustache_tmpl_parse($motorcycle_action_buttons);
+?>
 
-	<div class="sw slider">
+
+<div class="sw slider">
 		<div id="owl-demo" class="owl-carousel owl-theme">
 			<?php foreach( $bannerImages as $image ) { ?>
                     <div class="item"><a href="<?php echo $image['banner_link'];?>"><img src="/media/<?php echo $image['image']; ?>"></a></div>

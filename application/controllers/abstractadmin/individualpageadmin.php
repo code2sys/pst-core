@@ -134,11 +134,30 @@ abstract class Individualpageadmin extends Employeeadmin
 
 
     public function profile() {
+        // JLB 03-29-18
+        // These are just three new config settings
+        $store_header_banner = array(
+            "store_header_banner_enable" => 0,
+            "store_header_banner_contents" => "",
+            "store_header_banner_bgcolor" => "#ffffff"
+        );
+
         if (!$this->checkValidAccess('profile') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
         if ($this->validateProfile() !== FALSE) { // Display Form
+            $data = $this->input->post();
+
+            foreach (array_keys($store_header_banner) as $key) {
+                $val = $data[$key];
+                unset($data[$key]);
+                $this->db->query("insert into `config` (`key`, `value`) values (?, ?) on duplicate key update `value` = values(`value`)", array($key, $val));
+            }
+
             $this->admin_m->updateAdminShippingProfile($this->input->post());
+
+            // update config;
+
             $this->_mainData['success'] = TRUE;
 
 
@@ -158,13 +177,7 @@ abstract class Individualpageadmin extends Employeeadmin
             }
         }
 
-        // JLB 03-29-18
-        // These are just three new config settings
-        $store_header_banner = array(
-            "store_header_banner_enable" => 0,
-            "store_header_banner_contents" => "",
-            "store_header_banner_bgcolor" => "#ffffff"
-        );
+
         foreach (array_keys($store_header_banner) as $key) {
             $query = $this->db->query("Select * from config where `key` = ?", array($key));
             $record = $query->result_array();
