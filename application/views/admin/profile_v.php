@@ -281,6 +281,41 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 <!--								<input type="file" accept="image/*" name="favicon"/>-->
 <!--							</td>-->
 <!--						</tr>-->
+                        <tr>
+                            <td colspan="2">
+                                <table width="100%" style="background-color:white;">
+                                    <tr>
+                                        <td colspan="2">
+                                            <h2>Store Header Banner</h2>
+                                        </td>
+                                        <td colspan="2">
+                                            <p><em>The banner appears on all pages, immediately below the header.</em></p>
+                                        </td>
+                                    </tr>
+                                    <!-- Radio yes/no  store_header_banner_enable 0|1 -->
+
+                                    <tr>
+                                        <td style="width:30%;"><b>Enable:</b></td>
+                                        <td><label><input type="radio" name="store_header_banner_enable" value="1" <?php if ($store_header_banner_enable == 1): ?>checked="checked"<?php endif; ?>/> Yes</label> <label><input type="radio" name="store_header_banner_enable" value="0" <?php if ($store_header_banner_enable != 1): ?>checked="checked"<?php endif; ?>/> Yes</label></td>
+                                    </tr>
+
+                                    <!-- Contents - can we get an editor ?  store_header_banner_contents -->
+                                    <tr class="store_header_banner_enable_1">
+                                        <td style="width:30%;"><b>Contents:</b></td>
+                                        <td><textarea name="store_header_banner_contents" rows="10" cols="80"><?php echo htmlentities($store_header_banner_contents); ?></textarea></td>
+                                    </tr>
+
+
+                                    <!-- background color store_header_banner_bgcolor -->
+                                    <tr class="store_header_banner_enable_1">
+                                        <td style="width:30%;"><b>Background Color:</b></td>
+                                        <td><input type="text" name="store_header_banner_bgcolor" size="16" value="<?php echo htmlentities($store_header_banner_contents); ?>"/></td>
+                                    </tr>
+
+                                </table>
+                            </td>
+
+                        </tr>
 
 						<tr>
 							<td colspan="2">

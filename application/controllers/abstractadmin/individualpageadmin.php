@@ -157,6 +157,24 @@ abstract class Individualpageadmin extends Employeeadmin
 
             }
         }
+
+        // JLB 03-29-18
+        // These are just three new config settings
+        $store_header_banner = array(
+            "store_header_banner_enable" => 0,
+            "store_header_banner_contents" => "",
+            "store_header_banner_bgcolor" => "#ffffff"
+        );
+        foreach (array_keys($store_header_banner) as $key) {
+            $where = array('key' => $key);
+            $record = $this->selectRecord('config', $where);
+            if (!is_null($record) && is_array($record)) {
+                $this->_mainData[$key] = $record["value"];
+            } else {
+                $this->_mainData[$key] = $store_header_banner[$key];
+            }
+        }
+
         $this->_mainData['address'] = $this->admin_m->getAdminShippingProfile();
         $this->_mainData['dealPercentage'] = $this->admin_m->getDealPercentage();
         $this->_mainData['states'] = $this->load_states();
