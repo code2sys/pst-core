@@ -9,8 +9,8 @@
     .storeHeaderBanner h1,
     .storeHeaderBanner h2,
     .storeHeaderBanner h3 {
-        margin-top: 0px;
-        margin-bottom: 0px;
+        margin-top: 3px;
+        margin-bottom: 3px;
     }
 
 </style>
