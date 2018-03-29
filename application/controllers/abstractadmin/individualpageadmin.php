@@ -175,6 +175,12 @@ abstract class Individualpageadmin extends Employeeadmin
             }
         }
 
+
+        $js = '<script type="text/javascript" src="' . $this->_mainData['assets'] . '/ckeditor4/ckeditor.js"></script>';
+        $this->loadJS($js);
+        $this->_mainData['edit_config'] = $this->_mainData['assets'] . '/js/htmleditor.js';
+
+
         $this->_mainData['address'] = $this->admin_m->getAdminShippingProfile();
         $this->_mainData['dealPercentage'] = $this->admin_m->getDealPercentage();
         $this->_mainData['states'] = $this->load_states();
