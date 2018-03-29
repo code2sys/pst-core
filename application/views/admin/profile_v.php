@@ -309,7 +309,7 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                     <!-- background color store_header_banner_bgcolor -->
                                     <tr class="store_header_banner_enable_1">
                                         <td style="width:30%;"><b>Background Color:</b></td>
-                                        <td><input type="text" name="store_header_banner_bgcolor" size="16" value="<?php echo htmlentities($store_header_banner_contents); ?>"/></td>
+                                        <td><input type="text" name="store_header_banner_bgcolor" size="16" value="<?php echo htmlentities($store_header_banner_bgcolor); ?>"/></td>
                                     </tr>
 
                                 </table>
