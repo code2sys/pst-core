@@ -325,7 +325,7 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 
                             // LOAD THE CUSTOM CONFIGURATION FOR THIS INSTANCE
                             (function() {
-                                CKEDITOR.replace( 'store_header_banner_contents', { customConfig : '<?php echo $edit_config; ?>' } );
+                                CKEDITOR.replace( 'store_header_banner_contents' );
 
                                 var showHeaderBannerParts = function() {
                                     if ($("input[name='store_header_banner_enable'][value=1]:checked").length > 0) {
