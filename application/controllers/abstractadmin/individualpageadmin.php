@@ -166,10 +166,10 @@ abstract class Individualpageadmin extends Employeeadmin
             "store_header_banner_bgcolor" => "#ffffff"
         );
         foreach (array_keys($store_header_banner) as $key) {
-            $where = array('key' => $key);
-            $record = $this->selectRecord('config', $where);
-            if (!is_null($record) && is_array($record)) {
-                $this->_mainData[$key] = $record["value"];
+            $query = $this->db->query("Select * from config where `key` = ?", array($key));
+            $record = $query->result_array();
+            if (count($record) > 0) {
+                $this->_mainData[$key] = $record[0]["value"];
             } else {
                 $this->_mainData[$key] = $store_header_banner[$key];
             }
