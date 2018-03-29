@@ -288,6 +288,8 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                         <td colspan="2">
                                             <h2>Store Header Banner</h2>
                                         </td>
+                                    </tr>
+                                    <tr>
                                         <td colspan="2">
                                             <p><em>The banner appears on all pages, immediately below the header.</em></p>
                                         </td>
