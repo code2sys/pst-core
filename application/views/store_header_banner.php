@@ -4,6 +4,7 @@
         margin-top: 6px;
         padding-top: 3px;
         padding-bottom: 3px;
+        margin-bottom: 10px;
     }
 
 </style>
