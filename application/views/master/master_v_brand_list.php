@@ -355,8 +355,15 @@ if (isset($keywords) &&	$keywords != "") {
 			<div class="clear"></div>
 		</div>
 	</div>
+        <?php
+        $CI =& get_instance();
+        $CI->load->helper("mustache_helper");
+        $motorcycle_action_buttons = mustache_tmpl_open("store_header_banner.html");
+        echo mustache_tmpl_parse($motorcycle_action_buttons);
+        ?>
 
-		<?php if( !isset($cat_header) ){?>
+
+        <?php if( !isset($cat_header) ){?>
 			<div class="clear"></div>
 		<?php }else{?>
 			

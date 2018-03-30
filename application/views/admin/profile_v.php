@@ -4,6 +4,15 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 	define("ENABLE_OEMPARTS_BUTTON", false);
 }
 ?>
+<link rel="stylesheet" href="/assets/jqwidgets/styles/jqx.base.css" type="text/css" />
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxcore.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxcolorpicker.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxradiobutton.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxdropdownbutton.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxscrollview.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxbuttons.js"></script>
+
+
 	<!-- CONTENT WRAP =========================================================================-->
 	<div class="content_wrap">
 		
@@ -281,6 +290,100 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 <!--								<input type="file" accept="image/*" name="favicon"/>-->
 <!--							</td>-->
 <!--						</tr>-->
+                        <tr>
+                            <td colspan="2">
+                                <table width="100%" style="background-color:white;">
+                                    <tr>
+                                        <td colspan="2">
+                                            <h2>Store Header Banner</h2>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <p><em>The banner appears on all pages, immediately below the header.</em></p>
+                                        </td>
+                                    </tr>
+                                    <!-- Radio yes/no  store_header_banner_enable 0|1 -->
+
+                                    <tr>
+                                        <td style="width:30%;"><b>Enable:</b></td>
+                                        <td><label><input type="radio" name="store_header_banner_enable" value="1" <?php if ($store_header_banner_enable == 1): ?>checked="checked"<?php endif; ?>/> Yes</label> <label><input type="radio" name="store_header_banner_enable" value="0" <?php if ($store_header_banner_enable != 1): ?>checked="checked"<?php endif; ?>/> No</label></td>
+                                    </tr>
+
+                                    <!-- Contents - can we get an editor ?  store_header_banner_contents -->
+                                    <tr class="store_header_banner_enable_1">
+                                        <td style="width:30%;"><b>Contents:</b></td>
+                                        <td><textarea id="store_header_banner_contents" name="store_header_banner_contents" rows="10" cols="80"><?php echo htmlentities($store_header_banner_contents); ?></textarea></td>
+                                    </tr>
+
+
+
+                                    <!-- background color store_header_banner_bgcolor -->
+                                    <tr class="store_header_banner_enable_1">
+                                        <td style="width:30%;"><b>Background Color:</b></td>
+                                        <td><input type="text" id="store_header_banner_bgcolor" name="store_header_banner_bgcolor" size="16" value="<?php echo htmlentities($store_header_banner_bgcolor); ?>" style="display: none"/>
+                                            <div style="margin: 3px; float: left;" id="dropDownButton">
+                                                <div style="padding: 3px;">
+                                                    <div id="store_header_banner_bgcolor_div">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </td>
+
+                        </tr>
+
+
+                        <script type="text/javascript">
+                            function getTextElementByColor(color) {
+                                if (color == 'transparent' || color.hex == "") {
+                                    return $("<div style='text-shadow: none; position: relative; padding-bottom: 2px; margin-top: 2px;'>transparent</div>");
+                                }
+                                var element = $("<div style='text-shadow: none; position: relative; padding-bottom: 2px; margin-top: 2px;'>#" + color.hex + "</div>");
+                                var nThreshold = 105;
+                                var bgDelta = (color.r * 0.299) + (color.g * 0.587) + (color.b * 0.114);
+                                var foreColor = (255 - bgDelta < nThreshold) ? 'Black' : 'White';
+                                element.css('color', foreColor);
+                                element.css('background', "#" + color.hex);
+                                element.addClass('jqx-rc-all');
+                                return element;
+                            }
+
+                            $(document).ready(function () {
+
+                                CKEDITOR.replace( 'store_header_banner_contents' );
+
+                                var showHeaderBannerParts = function() {
+                                    if ($("input[name='store_header_banner_enable'][value=1]:checked").length > 0) {
+                                        $(".store_header_banner_enable_1").show();
+                                    } else {
+                                        $(".store_header_banner_enable_1").hide();
+                                    }
+                                };
+
+                                $(document).on("change", "input[name='store_header_banner_enable']", showHeaderBannerParts);
+                                showHeaderBannerParts();
+
+
+                                $("#store_header_banner_bgcolor_div").jqxColorPicker({ width: 200, height: 200 });
+                                $('#store_header_banner_bgcolor_div').bind('colorchange', function (event)
+                                {
+                                    var color = event.args.color;
+                                    $("#store_header_banner_bgcolor").val('#' + color.hex);
+
+                                    $("#dropDownButton").jqxDropDownButton('setContent', getTextElementByColor(event.args.color));
+
+                                });
+
+                                $("#dropDownButton").jqxDropDownButton({ width: 150, height: 22});
+                                $("#dropDownButton").jqxDropDownButton('setContent', getTextElementByColor(new $.jqx.color({ hex: "<?php echo htmlentities($store_header_banner_bgcolor); ?>" })));
+
+                            });
+
+                        </script>
 
 						<tr>
 							<td colspan="2">

@@ -134,11 +134,30 @@ abstract class Individualpageadmin extends Employeeadmin
 
 
     public function profile() {
+        // JLB 03-29-18
+        // These are just three new config settings
+        $store_header_banner = array(
+            "store_header_banner_enable" => 0,
+            "store_header_banner_contents" => "",
+            "store_header_banner_bgcolor" => "#ffffff"
+        );
+
         if (!$this->checkValidAccess('profile') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
         if ($this->validateProfile() !== FALSE) { // Display Form
+            $data = $this->input->post();
+
+            foreach (array_keys($store_header_banner) as $key) {
+                $$key = $val = $data[$key];
+                unset($data[$key]);
+                $this->db->query("insert into `config` (`key`, `value`) values (?, ?) on duplicate key update `value` = values(`value`)", array($key, $val));
+            }
+
             $this->admin_m->updateAdminShippingProfile($this->input->post());
+
+            // update config;
+
             $this->_mainData['success'] = TRUE;
 
 
@@ -156,7 +175,38 @@ abstract class Individualpageadmin extends Employeeadmin
                 // generate a PNG
 
             }
+
+            // JLB 3-29-18
+            // We have to write a file...
+            if ($store_header_banner_enable > 0) {
+                $contents_of_banner = $this->load->view("store_header_banner", array(
+                    "store_header_banner_contents" => $store_header_banner_contents,
+                    "store_header_banner_bgcolor" => $store_header_banner_bgcolor
+                ), true);
+            } else {
+                $contents_of_banner = "";
+            }
+
+            file_put_contents(STORE_DIRECTORY . "/override_templates/store_header_banner.html", $contents_of_banner);
         }
+
+
+        foreach (array_keys($store_header_banner) as $key) {
+            $query = $this->db->query("Select * from config where `key` = ?", array($key));
+            $record = $query->result_array();
+            if (count($record) > 0) {
+                $this->_mainData[$key] = $record[0]["value"];
+            } else {
+                $this->_mainData[$key] = $store_header_banner[$key];
+            }
+        }
+
+
+        $js = '<script type="text/javascript" src="' . $this->_mainData['assets'] . '/ckeditor4/ckeditor.js"></script>';
+        $this->loadJS($js);
+        $this->_mainData['edit_config'] = $this->_mainData['assets'] . '/js/htmleditor.js';
+
+
         $this->_mainData['address'] = $this->admin_m->getAdminShippingProfile();
         $this->_mainData['dealPercentage'] = $this->admin_m->getDealPercentage();
         $this->_mainData['states'] = $this->load_states();
