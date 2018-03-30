@@ -299,6 +299,14 @@ if (isset($keywords) &&	$keywords != "") {
 		</div>
 	</div>
 
+<?php
+$CI =& get_instance();
+$CI->load->helper("mustache_helper");
+$motorcycle_action_buttons = mustache_tmpl_open("store_header_banner.html");
+echo mustache_tmpl_parse($motorcycle_action_buttons);
+?>
+
+
 
 <div class="productNav">
   <div class="productNavCont">
