@@ -5,8 +5,8 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 }
 ?>
 <link rel="stylesheet" href="/assets/jqwidgets/styles/jqx.base.css" type="text/css" />
-<script type="text/javascript" src="/assets/jqwidgets/jqxcore.js"></script>
-<script type="text/javascript" src="/assets/jqwidgets/jqxcolorpicker.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxcore.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxcolorpicker.js"></script>
 
 
 	<!-- CONTENT WRAP =========================================================================-->
