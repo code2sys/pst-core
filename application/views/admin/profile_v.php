@@ -324,7 +324,7 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                         <td><input type="text" id="store_header_banner_bgcolor" name="store_header_banner_bgcolor" size="16" value="<?php echo htmlentities($store_header_banner_bgcolor); ?>" style="display: none"/>
                                             <div style="margin: 3px; float: left;" id="dropDownButton">
                                                 <div style="padding: 3px;">
-                                                    <div id="store_header_banner_bgcolor">
+                                                    <div id="store_header_banner_bgcolor_div">
                                                     </div>
                                                 </div>
                                             </div>
@@ -368,8 +368,8 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                 showHeaderBannerParts();
 
 
-                                $("#store_header_banner_bgcolor").jqxColorPicker({ width: 200, height: 200 });
-                                $('#store_header_banner_bgcolor').bind('colorchange', function (event)
+                                $("#store_header_banner_bgcolor_div").jqxColorPicker({ width: 200, height: 200 });
+                                $('#store_header_banner_bgcolor_div').bind('colorchange', function (event)
                                 {
                                     var color = event.args;
                                     $("#store_header_banner_bgcolor").val(color);
