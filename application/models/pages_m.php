@@ -309,9 +309,12 @@ class Pages_M extends Master_M
 		return $record['finance_email'];
 	}
 
-    public function getTopVideos($pageId, $page_section_id) {
+	// FALSE reverts back to our old favorite functionality.
+    public function getTopVideos($pageId, $page_section_id = FALSE) {
         $this->db->where('page_id', $pageId);
-        $this->db->where('page_section_id', $page_section_id);
+        if (FALSE !== $page_section_id) {
+            $this->db->where('page_section_id', $page_section_id);
+        }
         $records = $this->selectRecords('top_videos');
         return $records;
     }
