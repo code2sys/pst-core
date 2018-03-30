@@ -325,8 +325,8 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                             <div style="margin: 3px; float: left;" id="dropDownButton">
                                                 <div id="store_header_banner_bgcolor">
                                             </div>
-                                            </div>div>
-                                            </td>
+                                            </div>
+                                        </td>
                                     </tr>
 
                                 </table>
