@@ -323,8 +323,10 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                         <td style="width:30%;"><b>Background Color:</b></td>
                                         <td><input type="text" id="store_header_banner_bgcolor" name="store_header_banner_bgcolor" size="16" value="<?php echo htmlentities($store_header_banner_bgcolor); ?>" style="display: none"/>
                                             <div style="margin: 3px; float: left;" id="dropDownButton">
-                                                <div id="store_header_banner_bgcolor">
-                                            </div>
+                                                <div style="padding: 3px;">
+                                                    <div id="store_header_banner_bgcolor">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
