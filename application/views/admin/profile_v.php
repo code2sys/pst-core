@@ -7,6 +7,10 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 <link rel="stylesheet" href="/assets/jqwidgets/styles/jqx.base.css" type="text/css" />
 <script type="text/javascript" src="/assets/jqwidgets/js/jqxcore.js"></script>
 <script type="text/javascript" src="/assets/jqwidgets/js/jqxcolorpicker.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxradiobutton.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxdropdownbutton.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxscrollview.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxbuttons.js"></script>
 
 
 	<!-- CONTENT WRAP =========================================================================-->
@@ -318,8 +322,10 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                     <tr class="store_header_banner_enable_1">
                                         <td style="width:30%;"><b>Background Color:</b></td>
                                         <td><input type="text" id="store_header_banner_bgcolor" name="store_header_banner_bgcolor" size="16" value="<?php echo htmlentities($store_header_banner_bgcolor); ?>" style="display: none"/>
-                                            <div id="store_header_banner_bgcolor">
+                                            <div style="margin: 3px; float: left;" id="dropDownButton">
+                                                <div id="store_header_banner_bgcolor">
                                             </div>
+                                            </div>div>
                                             </td>
                                     </tr>
 
@@ -346,12 +352,16 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                 showHeaderBannerParts();
 
 
-                                $("#store_header_banner_bgcolor").jqxColorPicker({ width: 350, height: 350 });
+                                $("#store_header_banner_bgcolor").jqxColorPicker({ width: 200, height: 200 });
                                 $('#store_header_banner_bgcolor').bind('colorchange', function (event)
                                 {
                                     var color = event.args;
                                     $("#store_header_banner_bgcolor").val(color);
                                 });
+
+                                $("#dropDownButton").jqxDropDownButton({ width: 150, height: 22});
+                                // $("#dropDownButton").jqxDropDownButton('setContent', getTextElementByColor(new $.jqx.color({ hex: "ffaabb" })));
+
                             });
 
                         </script>
