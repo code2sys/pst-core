@@ -218,7 +218,7 @@ class Motorcycle_CI extends Welcome {
 
         if (@$this->_mainData['motorcycle']['images'][0]['image_name']) {
             //$metaTag = '<meta property="og:image" content="'.$this->_mainData['motorcycle']['images'][0]['image_name'].'"/>';
-            $metaTag = '<meta property="og:image" content="' . ($this->_mainData['motorcycle']['images'][0]["external"] > ? $this->_mainData['motorcycle']['images'][0]["image_name" : (jsite_url('/media/') . $this->_mainData['motorcycle']['images'][0]['image_name'])) . '"/>';
+            $metaTag = '<meta property="og:image" content="' . ($this->_mainData['motorcycle']['images'][0]["external"] > 0 ? $this->_mainData['motorcycle']['images'][0]["image_name" : (jsite_url('/media/') . $this->_mainData['motorcycle']['images'][0]['image_name'])) . '"/>';
             $this->setMasterPageVars('metatag', $metaTag);
         }
 
