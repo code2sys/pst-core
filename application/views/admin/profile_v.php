@@ -369,6 +369,7 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 
 
                                 $("#store_header_banner_bgcolor_div").jqxColorPicker({ width: 200, height: 200 });
+                                $("#store_header_banner_bgcolor_div").jqxColorPicker("setColor", "<?php echo substr($store_header_banner_bgcolor, 1); ?>");
                                 $('#store_header_banner_bgcolor_div').bind('colorchange', function (event)
                                 {
                                     var color = event.args.color;
