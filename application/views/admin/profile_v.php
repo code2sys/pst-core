@@ -336,6 +336,20 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 
 
                         <script type="text/javascript">
+                            function getTextElementByColor(color) {
+                                if (color == 'transparent' || color.hex == "") {
+                                    return $("<div style='text-shadow: none; position: relative; padding-bottom: 2px; margin-top: 2px;'>transparent</div>");
+                                }
+                                var element = $("<div style='text-shadow: none; position: relative; padding-bottom: 2px; margin-top: 2px;'>#" + color.hex + "</div>");
+                                var nThreshold = 105;
+                                var bgDelta = (color.r * 0.299) + (color.g * 0.587) + (color.b * 0.114);
+                                var foreColor = (255 - bgDelta < nThreshold) ? 'Black' : 'White';
+                                element.css('color', foreColor);
+                                element.css('background', "#" + color.hex);
+                                element.addClass('jqx-rc-all');
+                                return element;
+                            }
+
                             $(document).ready(function () {
 
                                 CKEDITOR.replace( 'store_header_banner_contents' );
@@ -357,10 +371,13 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                 {
                                     var color = event.args;
                                     $("#store_header_banner_bgcolor").val(color);
+
+                                    $("#dropDownButton").jqxDropDownButton('setContent', getTextElementByColor(event.args.color));
+
                                 });
 
                                 $("#dropDownButton").jqxDropDownButton({ width: 150, height: 22});
-                                // $("#dropDownButton").jqxDropDownButton('setContent', getTextElementByColor(new $.jqx.color({ hex: "ffaabb" })));
+                                $("#dropDownButton").jqxDropDownButton('setContent', getTextElementByColor(new $.jqx.color({ hex: "<?php echo htmlentities($store_header_banner_bgcolor); ?>" })));
 
                             });
 
