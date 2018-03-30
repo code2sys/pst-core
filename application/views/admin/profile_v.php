@@ -372,7 +372,7 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                 $('#store_header_banner_bgcolor_div').bind('colorchange', function (event)
                                 {
                                     var color = event.args;
-                                    $("#store_header_banner_bgcolor").val(color.hex);
+                                    $("#store_header_banner_bgcolor").val('#' + color.hex);
 
                                     $("#dropDownButton").jqxDropDownButton('setContent', getTextElementByColor(event.args.color));
 
