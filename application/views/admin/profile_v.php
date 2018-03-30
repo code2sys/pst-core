@@ -4,6 +4,11 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 	define("ENABLE_OEMPARTS_BUTTON", false);
 }
 ?>
+<link rel="stylesheet" href="/assets/jqwidgets/styles/jqx.base.css" type="text/css" />
+<script type="text/javascript" src="/assets/jqwidgets/jqxcore.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/jqxcolorpicker.js"></script>
+
+
 	<!-- CONTENT WRAP =========================================================================-->
 	<div class="content_wrap">
 		
@@ -312,7 +317,10 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                     <!-- background color store_header_banner_bgcolor -->
                                     <tr class="store_header_banner_enable_1">
                                         <td style="width:30%;"><b>Background Color:</b></td>
-                                        <td><input type="text" name="store_header_banner_bgcolor" size="16" value="<?php echo htmlentities($store_header_banner_bgcolor); ?>"/></td>
+                                        <td><input type="text" id="store_header_banner_bgcolor" name="store_header_banner_bgcolor" size="16" value="<?php echo htmlentities($store_header_banner_bgcolor); ?>" style="display: none"/>
+                                            <div id="store_header_banner_bgcolor">
+                                            </div>
+                                            </td>
                                     </tr>
 
                                 </table>
@@ -322,9 +330,8 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 
 
                         <script type="text/javascript">
+                            $(document).ready(function () {
 
-                            // LOAD THE CUSTOM CONFIGURATION FOR THIS INSTANCE
-                            (function() {
                                 CKEDITOR.replace( 'store_header_banner_contents' );
 
                                 var showHeaderBannerParts = function() {
@@ -338,7 +345,14 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                 $(document).on("change", "input[name='store_header_banner_enable']", showHeaderBannerParts);
                                 showHeaderBannerParts();
 
-                            })();
+
+                                $("#store_header_banner_bgcolor").jqxColorPicker({ width: 350, height: 350 });
+                                $('#store_header_banner_bgcolor').bind('colorchange', function (event)
+                                {
+                                    var color = event.args;
+                                    $("#store_header_banner_bgcolor").val(color);
+                                });
+                            });
 
                         </script>
 
