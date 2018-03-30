@@ -189,9 +189,13 @@ $stock_status_mode = $CI->_getStockStatusMode();
 					<a href="javascript:tweetCurrentPage()" target="_blank" alt="Tweet this page" class="twitter">
 						<span class="fa fa-twitter"></span>
 					</a>
-					<a href="mailto:?subject=Checkout this Part&amp;body=Check out this site <?php echo base_url('welcome/benzDetail/'.$motorcycle['id']);?>." title="Share by Email" class="mail">
-						<span class="glyphicon glyphicon-envelope"></span>
-					</a>
+                    <script type="application/javascript">
+                        /*
+                        JLB 03-30-18 - Why not Zoidberg? Why not do them all the same?
+                         */
+                        document.write('<a href="mailto:?subject=Checkout this Part&amp;body=Check out this site ' + window.location.href + '." title="Share by Email" class="mail"><span class="glyphicon glyphicon-envelope"></span></a>');
+                    </script>
+
 					<a href="javascript:googleCurrentPage()" target="_blank" class="plus">
 						<span class="fa fa-google-plus"></span>
 					</a>
