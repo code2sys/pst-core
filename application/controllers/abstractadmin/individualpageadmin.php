@@ -139,7 +139,10 @@ abstract class Individualpageadmin extends Employeeadmin
         $store_header_banner = array(
             "store_header_banner_enable" => 0,
             "store_header_banner_contents" => "",
-            "store_header_banner_bgcolor" => "#ffffff"
+            "store_header_banner_bgcolor" => "#ffffff",
+            "store_header_marquee_enable" => 0,
+            "store_header_marquee_contents" => "",
+            "store_header_marquee_color" => "#ffffff",
         );
 
         if (!$this->checkValidAccess('profile') && !@$_SESSION['userRecord']['admin']) {
@@ -188,6 +191,18 @@ abstract class Individualpageadmin extends Employeeadmin
             }
 
             file_put_contents(STORE_DIRECTORY . "/override_templates/store_header_banner.html", $contents_of_banner);
+
+            if ($store_header_marquee_enable > 0) {
+                $contents_of_banner = $this->load->view("store_header_marquee", array(
+                    "store_header_marquee_contents" => $store_header_marquee_contents,
+                    "store_header_marquee_color" => $store_header_marquee_color
+                ), true);
+            } else {
+                $contents_of_banner = "";
+            }
+
+            file_put_contents(STORE_DIRECTORY . "/override_templates/store_header_marquee.html", $contents_of_banner);
+
         }
 
 
