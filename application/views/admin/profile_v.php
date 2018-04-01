@@ -336,6 +336,52 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 
                         </tr>
 
+                        <tr>
+                            <td colspan="2">
+                                <table width="100%" style="background-color:white;">
+                                    <tr>
+                                        <td colspan="2">
+                                            <h2>Header Marquee</h2>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <p><em>The marquee is a rotating text message that appears across the header of your store.</em></p>
+                                        </td>
+                                    </tr>
+                                    <!-- Radio yes/no  store_header_banner_enable 0|1 -->
+
+                                    <tr>
+                                        <td style="width:30%;"><b>Enable:</b></td>
+                                        <td><label><input type="radio" name="store_header_marquee_enable" value="1" <?php if ($store_header_marquee_enable == 1): ?>checked="checked"<?php endif; ?>/> Yes</label> <label><input type="radio" name="store_header_marquee_enable" value="0" <?php if ($store_header_marquee_enable != 1): ?>checked="checked"<?php endif; ?>/> No</label></td>
+                                    </tr>
+
+                                    <!-- Contents - can we get an editor ?  store_header_banner_contents -->
+                                    <tr class="store_header_marquee_enable_1">
+                                        <td style="width:30%;"><b>Contents:</b></td>
+                                        <td><textarea id="store_header_banner_contents" name="store_header_marquee_contents" rows="10" cols="80"><?php echo htmlentities($store_header_marquee_contents); ?></textarea></td>
+                                    </tr>
+
+
+
+                                    <!-- background color store_header_banner_bgcolor -->
+                                    <tr class="store_header_marquee_enable_1">
+                                        <td style="width:30%;"><b>Text Color:</b></td>
+                                        <td><input type="text" id="store_header_marquee_color" name="store_header_marquee_color" size="16" value="<?php echo htmlentities($store_header_marquee_color); ?>" style="display: none"/>
+                                            <div style="margin: 3px; float: left;" id="store_header_marquee_color_dropDownButton">
+                                                <div style="padding: 3px;">
+                                                    <div id="store_header_marquee_color_div">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </td>
+
+                        </tr>
+
 
                         <script type="text/javascript">
                             function getTextElementByColor(color) {
@@ -368,6 +414,18 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                 showHeaderBannerParts();
 
 
+                                var showMarqueeParts = function() {
+                                    if ($("input[name='store_header_marquee_enable'][value=1]:checked").length > 0) {
+                                        $(".store_header_marquee_enable_1").show();
+                                    } else {
+                                        $(".store_header_marquee_enable_1").hide();
+                                    }
+                                };
+
+                                $(document).on("change", "input[name='store_header_marquee_enable']", showMarqueeParts);
+                                showMarqueeParts();
+
+
                                 $("#store_header_banner_bgcolor_div").jqxColorPicker({ width: 200, height: 200 });
                                 $("#store_header_banner_bgcolor_div").jqxColorPicker("setColor", "<?php echo substr($store_header_banner_bgcolor, 1); ?>");
                                 $('#store_header_banner_bgcolor_div').bind('colorchange', function (event)
@@ -381,6 +439,20 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 
                                 $("#dropDownButton").jqxDropDownButton({ width: 150, height: 22});
                                 $("#dropDownButton").jqxDropDownButton('setContent', getTextElementByColor(new $.jqx.color({ hex: "<?php echo substr($store_header_banner_bgcolor, 1); ?>" })));
+
+                                $("#store_header_marquee_color_div").jqxColorPicker({ width: 200, height: 200 });
+                                $("#store_header_marquee_color_div").jqxColorPicker("setColor", "<?php echo substr($store_header_marquee_color, 1); ?>");
+                                $('#store_header_marquee_color_div').bind('colorchange', function (event)
+                                {
+                                    var color = event.args.color;
+                                    $("#store_header_marquee_color").val('#' + color.hex);
+
+                                    $("#store_header_marquee_color_dropDownButton").jqxDropDownButton('setContent', getTextElementByColor(event.args.color));
+
+                                });
+
+                                $("#store_header_marquee_color_dropDownButton").jqxDropDownButton({ width: 150, height: 22});
+                                $("#store_header_marquee_color_dropDownButton").jqxDropDownButton('setContent', getTextElementByColor(new $.jqx.color({ hex: "<?php echo substr($store_header_marquee_color, 1); ?>" })));
 
                             });
 
