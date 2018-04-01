@@ -452,7 +452,7 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                                 });
 
                                 $("#store_header_marquee_color_dropDownButton").jqxDropDownButton({ width: 150, height: 22});
-                                $("#store_header_marquee_color_dropDownButton").jqxDropDownButton('setContent', getTextElementByColor(new $.jqx.color({ hex: "<?php echo substr($store_header_banner_bgcolor, 1); ?>" })));
+                                $("#store_header_marquee_color_dropDownButton").jqxDropDownButton('setContent', getTextElementByColor(new $.jqx.color({ hex: "<?php echo substr($store_header_marquee_color, 1); ?>" })));
 
                             });
 
