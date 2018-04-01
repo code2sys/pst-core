@@ -190,6 +190,8 @@ abstract class Individualpageadmin extends Employeeadmin
                 $contents_of_banner = "";
             }
 
+            file_put_contents(STORE_DIRECTORY . "/override_templates/store_header_banner.html", $contents_of_banner);
+
             if ($store_header_marquee_enable > 0) {
                 $contents_of_banner = $this->load->view("store_header_marquee", array(
                     "store_header_marquee_contents" => $store_header_marquee_contents,
@@ -199,7 +201,8 @@ abstract class Individualpageadmin extends Employeeadmin
                 $contents_of_banner = "";
             }
 
-            file_put_contents(STORE_DIRECTORY . "/override_templates/store_header_banner.html", $contents_of_banner);
+            file_put_contents(STORE_DIRECTORY . "/override_templates/store_header_marquee.html", $contents_of_banner);
+
         }
 
 
