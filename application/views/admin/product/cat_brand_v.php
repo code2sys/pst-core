@@ -159,7 +159,6 @@ var categoryIdMap = {};
             <p><strong>Filter Questions</strong></p>
 
             <?php foreach ($product_questions as $pq): ?>
-            <p>&nbsp;</p>
                 <p><em><?php echo htmlentities($pq["question"]); ?></em></p>
 
                 <table>
@@ -182,6 +181,7 @@ var categoryIdMap = {};
                     <?php endforeach; ?>
                     </tbody>
                 </table>
+                    <p>&nbsp;</p>
 
             <?php endforeach?>
 
