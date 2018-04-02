@@ -8,6 +8,28 @@
 
 class Portalmodel extends Master_M {
 
+    public function getFilterQuestions($part_id) {
+        $query = $this->db->query("select partquestion.*, partnumberpartquestion.*, partvariation.part_number , partvariation.manufacturer_part_number , distributor.name , partnumberpartquestion.answer from partquestion join partnumberpartquestion using (partquestion_id) join partvariation using (partnumber_id) join distributor using (distributor_id) where partquestion.part_id = ? and partquestion.productquestion > 0 order by partquestion.question, partnumberpartquestion.answer, distributor.name, partvariation.part_number", array($part_id));
+
+        $results = array();
+
+        foreach ($query->result_array() as $row) {
+            $partquestion_id = $row["partquestion_id"];
+
+            if (!array_key_exists($partquestion_id, $results)) {
+                $results[$partquestion_id] = array(
+                    "partquestion_id" => $row["partquestion_id"],
+                    "question" => $row["question"],
+                    "partvariations" => array()
+                );
+            }
+
+            $results[$partquestion_id]["partvariations"][] = $row;
+        }
+
+        return $results;
+    }
+
     /*
      * This is copied over from the old admin_m model, but without the DIE statement....
      */

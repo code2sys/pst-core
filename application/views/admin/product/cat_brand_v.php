@@ -154,6 +154,41 @@ var categoryIdMap = {};
                 <li><?php echo $c["long_name"]; ?></li>
                 <?php endforeach; ?>
             </ul>
+
+            <?php if (count($product_questions) > 0): ?>
+            <p><strong>Filter Questions</strong></p>
+
+            <?php foreach ($product_questions as $pq): ?>
+            <p>&nbsp;</p>
+                <p><em><?php echo htmlentities($pq["question"]); ?></em></p>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Answer</th>
+                        <th>Distributor</th>
+                        <th>Part Number</th>
+                        <th>Manufacturer Part Number</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($pq["partvariations"] as $pv): ?>
+                    <tr>
+                        <td><?php echo $pv["answer"]; ?></td>
+                        <td><?php echo $pv["name"]; ?></td>
+                        <td><?php echo $pv["part_number"]; ?></td>
+                        <td><?php echo $pv["manufacturer_part_number"]; ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+
+            <?php endforeach?>
+
+            <?php endif; ?>
+
+
+
         </div>
             <?php endif;?>
 
