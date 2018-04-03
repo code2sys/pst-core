@@ -74,13 +74,13 @@
 
             </div>
 
-                <button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Update Dealer Inventory and Costs</button>
+                <button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Update Dealer Inventory and Costs</button><div style="clear: both"></div><br/>
             </form>
 
         </div>
         <!-- END TAB CONTENT -->
         <br>
-        <div style="clear: both"></div><br/>
+
 
 
     </div>
