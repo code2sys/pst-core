@@ -6,9 +6,28 @@
 
         <?php if ($product["mx"] == 0): ?>
             <h2>Dealer-Inventory Product</h2>
-
-            <p><em>Fitments can be edited under the &quot;SKUs, Quantities, &amp; Personalizations&quot; tab.</em></p>
         <?php endif; ?>
+
+        <!-- ERROR -->
+        <?php if (@$error): ?>
+            <div class="error">
+                <h1><span style="color:#C90;"><i class="fa fa-warning"></i></span>&nbsp;Error</h1>
+                <div style="clear: both"></div>
+                <p><?php echo $error; ?></p>
+            </div>
+        <?php endif; ?>
+        <!-- END ERROR -->
+
+        <!-- SUCCESS -->
+        <?php if (@$success): ?>
+            <div class="success">
+                <h1><span style="color:#090;"><i class="fa fa-check"></i></span>&nbsp;Success</h1>
+                <div style="clear: both"></div>
+                <p><?php echo $success; ?></p>
+            </div>
+        <?php endif; ?>
+        <!-- END SUCCESS -->
+
 
         <br>
 
@@ -62,7 +81,7 @@
         </div>
         <!-- END TAB CONTENT -->
         <br>
-
+        <div style="clear: both"></div><br/>
 
 
     </div>

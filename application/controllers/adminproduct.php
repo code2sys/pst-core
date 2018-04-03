@@ -1242,6 +1242,11 @@ class Adminproduct extends Admin {
             $this->_mainData['product'] = $this->admin_m->getAdminProduct($id);
         }
 
+        $this->_mainData["success"] = $_SESSION["dealerinventory_success"];
+        $this->_mainData["error"] = $_SESSION["dealerinventory_error"];
+        $_SESSION["dealerinventory_success"] = "";
+        $_SESSION["dealerinventory_error"] = "";
+
         // You have to go get the part numbers, too....
         $this->_mainData['dealerinventory'] = $this->Portalmodel->getQuickDealerInventory($id);
 
@@ -1254,17 +1259,19 @@ class Adminproduct extends Admin {
         if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
-        if (is_null($id)) {
-            $this->_mainData['new'] = TRUE;
-        } else {
-            $this->_mainData['product'] = $this->admin_m->getAdminProduct($id);
-        }
 
         // You have to go get the part numbers, too....
-        $this->_mainData['dealerinventory'] = $this->Portalmodel->getQuickDealerInventory($id);
+        $dealer_inventory = $this->Portalmodel->getQuickDealerInventory($id);
 
-        $this->_mainData['part_id'] = $id;
-        $this->setNav('admin/nav_v', 2);
-        $this->renderMasterPage('admin/master_v', 'admin/product/dealerinventory_v', $this->_mainData);
+        $this->load->model("admin_m");
+
+        foreach ($dealer_inventory as $di) {
+            $this->admin_m->setDistributorInventory($di["partvariation_id"], $_REQUEST["quantity_available_" . $di["partvariation_id"]], $_REQUEST["cost_" . $di["partvariation_id"]]);
+        }
+
+        $this->db->query("Insert into queued_parts (part_id) values (?)", array($id));
+        $this->admin_m->processParts(5); // I move a little bit along, but hope this processes this part.
+
+        header("Location: /adminproduct/dealerinventory/$id");
     }
 }
