@@ -17,7 +17,7 @@
         $CI =& get_instance();
         echo $CI->load->view("admin/product/edit_tab_subnav", array(
             "part_id" => $part_id,
-            "tag" => "fitments"
+            "tag" => "dealerinventory"
         ), true);
         ?>
         <!-- END TABS -->
