@@ -8,6 +8,11 @@
 
 class Portalmodel extends Master_M {
 
+    public function getQuickFitment($part_id) {
+        $query = $this->db->query("select partnumber.partnumber, partvariation.part_number , distributor.name, partvariation.manufacturer_part_number , partnumber.universalfit , machinetype.name as machinetype, make.name as make, model.name as model, partnumbermodel.year, group_concat(partnumberpartquestion.question order by partnumberpartquestion.partquestion_id separator ';') as question, group_concat(partnumberpartquestion.answer order by partnumberpartquestion.partquestion_id  separator ';') as answer from partpartnumber join partnumber using (partnumber_id) join partvariation using (partnumber_id) join distributor using (distributor_id)  left join partnumbermodel using (partnumber_id) left join model using (model_id) left join make using (make_id) left join machinetype using (machinetype_id) left join (select partquestion.question, partnumberpartquestion.* from partquestion join partnumberpartquestion using (partquestion_id) where partquestion.productquestion = 0) partnumberpartquestion  on partnumber.partnumber_id = partnumberpartquestion.partnumber_id where partpartnumber.part_id = ? group by partvariation.partvariation_id, partnumbermodel.partnumbermodel_id;", array($part_id));
+        return $query->result_array();
+    }
+
     public function getFilterQuestions($part_id) {
         $query = $this->db->query("select partquestion.*, partnumberpartquestion.*, partvariation.part_number , partvariation.manufacturer_part_number , distributor.name , partnumberpartquestion.answer from partquestion join partnumberpartquestion using (partquestion_id) join partvariation using (partnumber_id) join distributor using (distributor_id) where partquestion.part_id = ? and partquestion.productquestion > 0 order by partquestion.question, partnumberpartquestion.answer, distributor.name, partvariation.part_number", array($part_id));
 

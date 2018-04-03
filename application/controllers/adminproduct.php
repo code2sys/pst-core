@@ -1209,4 +1209,24 @@ class Adminproduct extends Admin {
         $this->Statusmodel->outputStatus();
     }
 
+
+    // JLB 2018-04-03
+    // Issue #94 - Adding a Fitment Tab that is searchable to see all this stuff
+    public function fitments($id) {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($id)) {
+            $this->_mainData['new'] = TRUE;
+        } else {
+            $this->_mainData['product'] = $this->admin_m->getAdminProduct($id);
+        }
+
+        // You have to go get the part numbers, too....
+        $this->_mainData['fitments'] = $this->Portalmodel->getQuickFitment($id);
+
+        $this->_mainData['part_id'] = $id;
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/product/fitments_v', $this->_mainData);
+    }
 }
