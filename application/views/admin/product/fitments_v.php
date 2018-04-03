@@ -40,6 +40,8 @@
                         <th><b>Make</b></th>
                         <th><b>Model</b></th>
                         <th><b>Year</b></th>
+                        <th><b>Optional Question</b></th>
+                        <th><b>Answer</b></th>
                         </thead>
                     </tr>
 
@@ -84,7 +86,9 @@
                 {data: "machinetype"},
                 {data: "make"},
                 {data: "model"},
-                {data: "year"}
+                {data: "year"},
+                {data: "question"},
+                {data: "answer"}
             ]
         });
 
