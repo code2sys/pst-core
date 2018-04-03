@@ -1229,4 +1229,42 @@ class Adminproduct extends Admin {
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/product/fitments_v', $this->_mainData);
     }
+
+    // JLB 2018-04-03
+    // Issue #95 - Adding a page about dealer inventory
+    public function dealerinventory($id) {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($id)) {
+            $this->_mainData['new'] = TRUE;
+        } else {
+            $this->_mainData['product'] = $this->admin_m->getAdminProduct($id);
+        }
+
+        // You have to go get the part numbers, too....
+        $this->_mainData['fitments'] = $this->Portalmodel->getQuickFitment($id);
+
+        $this->_mainData['part_id'] = $id;
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/product/fitments_v', $this->_mainData);
+    }
+
+    public function save_dealerinventory($id) {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($id)) {
+            $this->_mainData['new'] = TRUE;
+        } else {
+            $this->_mainData['product'] = $this->admin_m->getAdminProduct($id);
+        }
+
+        // You have to go get the part numbers, too....
+        $this->_mainData['dealerinventory'] = $this->Portalmodel->getQuickDealerInventory($id);
+
+        $this->_mainData['part_id'] = $id;
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/product/dealerinventory_v', $this->_mainData);
+    }
 }

@@ -2,12 +2,12 @@
 <div class="content_wrap">
     <div class="content">
 
-        <h1><i class="fa fa-gears"></i>&nbsp;Fitments for <?php echo $product['name']; ?></h1>
+        <h1><i class="fa fa-clipboard"></i>&nbsp;Dealer Inventory for <?php echo $product['name']; ?></h1>
 
         <?php if ($product["mx"] == 0): ?>
             <h2>Dealer-Inventory Product</h2>
 
-        <p><em>Fitments can be edited under the &quot;SKUs, Quantities, &amp; Personalizations&quot; tab.</em></p>
+            <p><em>Fitments can be edited under the &quot;SKUs, Quantities, &amp; Personalizations&quot; tab.</em></p>
         <?php endif; ?>
 
         <br>
