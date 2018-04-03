@@ -22,7 +22,6 @@
         ?>
         <!-- END TABS -->
 
-        <?php echo form_open('adminproduct/part_update/' . $part_id, array('class' => 'form_standard')); ?>
         <!-- TAB CONTENT -->
         <div class="tab_content">
 
