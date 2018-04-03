@@ -25,29 +25,39 @@
         <?php echo form_open('adminproduct/part_update/' . $part_id, array('class' => 'form_standard')); ?>
         <!-- TAB CONTENT -->
         <div class="tab_content">
+            <form method="post" action="/adminproduct/save_dealerinventory/<?php echo $post_id; ?>">
 
             <div class="tabular_data">
 
-                <table width="100%" cellpadding="10" id="adminproduct_fitments_v">
+                <table width="100%" cellpadding="10" id="adminproduct_dealerinventory_v">
+                    <thead>
                     <tr class="head_row">
-                        <thead>
                         <th><b>PST Part #</b></th>
                         <th><b>Distributor</b></th>
                         <th><b>Distributor Part #</b></th>
-                        <th><b>Manufactuer Part #</b></th>
-                        <th><b>Universal Fit?</b></th>
-                        <th><b>Machine Type</b></th>
-                        <th><b>Make</b></th>
-                        <th><b>Model</b></th>
-                        <th><b>Year</b></th>
-                        <th><b>Optional Question</b></th>
-                        <th><b>Answer</b></th>
-                        </thead>
+                        <th><b>Manufacturer Part #</b></th>
+                        <th><b>Quantity Available</b></th>
+                        <th><b>Product Cost</b></th>
                     </tr>
-
+                    </thead>
+                    <tbody>
+                    <?php foreach ($dealerinventory as $row): ?>
+                    <tr>
+                        <td><?php echo $row["partnumber"]; ?></td>
+                        <td><?php echo $row["name"]; ?></td>
+                        <td><?php echo $row["part_number"]; ?></td>
+                        <td><?php echo $row["manufacturer_part_number"]; ?></td>
+                        <td><input type="text" size="16" name="quantity_available_<?php echo $row["partvariation_id"]; ?>" value="<?php echo $row["quantity_available"]; ?>" /></td>
+                        <td><input type="text" size="16" name="cost_<?php echo $row["partvariation_id"]; ?>" value="<?php echo $row["cost"]; ?>" /></td>
+                    </tr>
+                    <?php endforeach; ?>
+                    </tbody>
                 </table>
 
             </div>
+
+                <button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Update Dealer Inventory and Costs</button>
+            </form>
 
         </div>
         <!-- END TAB CONTENT -->
@@ -62,35 +72,3 @@
 
 
 </div>
-<!-- END WRAPPER =========================================================================================-->
-<script type="application/javascript">
-    $(window).load(function() {
-        var fitments = <?php echo json_encode($fitments); ?>;
-
-        for (var i= 0; i < fitments.length; i++) {
-            fitments[i]["universalfit"] = fitments[i]["universalfit"] > 0 ? "Yes" : "No";
-        }
-
-        $("#adminproduct_fitments_v").dataTable({
-            "processing" : true,
-            "data" : fitments,
-            "paging" : true,
-            "info" : true,
-            "stateSave" : true,
-            "columns" : [
-                {data: "partnumber"},
-                {data: "name"},
-                {data: "part_number"},
-                {data: "manufacturer_part_number"},
-                {data: "universalfit"},
-                {data: "machinetype"},
-                {data: "make"},
-                {data: "model"},
-                {data: "year"},
-                {data: "question"},
-                {data: "answer"}
-            ]
-        });
-
-    });
-</script>
