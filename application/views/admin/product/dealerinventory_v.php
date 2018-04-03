@@ -58,7 +58,7 @@
                         <th><b>Distributor Cost</b></th>
                         <th><b>Distributor Stock Status</b></th>
                         <th><b>Dealer Inventory Available</b></th>
-                        <th><b>Dealer Cost</b></th>p
+                        <th><b>Dealer Cost</b></th>
                     </tr>
                     </thead>
                     <tbody>
