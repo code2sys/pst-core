@@ -1269,6 +1269,8 @@ class Adminproduct extends Admin {
             $this->admin_m->setDistributorInventory($di["partvariation_id"], $_REQUEST["quantity_available_" . $di["partvariation_id"]], $_REQUEST["cost_" . $di["partvariation_id"]]);
         }
 
+        $_SESSION["dealerinventory_success"] = count($dealer_inventory) . " quantities/costs updated successfully.";
+
         $this->db->query("Insert into queued_parts (part_id) values (?)", array($id));
         $this->admin_m->processParts(5); // I move a little bit along, but hope this processes this part.
 
