@@ -437,6 +437,73 @@ class Adminproduct extends Admin {
         header("Location: " . base_url("adminproduct/product_category_brand/$id"));
     }
 
+    /*
+     * JLB 04-02-18
+     * These five functions support an ajax edit interface for product questions for store parts.
+     */
+
+    public function ajax_product_question_remove($part_id, $partquestion_id) {
+        $result = array(
+            "success" => 0,
+            "error_message" => "Uninitialized"
+        );
+
+
+
+
+        print json_encode($result);
+    }
+
+    public function ajax_product_question_update($part_id, $partquestion_id) {
+        $result = array(
+            "success" => 0,
+            "error_message" => "Uninitialized"
+        );
+
+
+
+
+        print json_encode($result);
+    }
+
+    public function ajax_product_question_answer_remove($part_id, $partquestion_id, $partnumberpartquestion_id) {
+        $result = array(
+            "success" => 0,
+            "error_message" => "Uninitialized"
+        );
+
+
+
+
+        print json_encode($result);
+    }
+
+    public function ajax_product_question_answer_update($part_id, $partquestion_id, $partnumberpartquestion_id) {
+        $result = array(
+            "success" => 0,
+            "error_message" => "Uninitialized"
+        );
+
+
+
+
+        print json_encode($result);
+    }
+
+    public function ajax_product_question_answer_add($part_id) {
+        $result = array(
+            "success" => 0,
+            "error_message" => "Uninitialized"
+        );
+
+
+
+
+        print json_encode($result);
+    }
+
+
+
     public function product_category_brand($id = NULL) {
         $this->_mainData['product'] = $this->admin_m->getAdminProduct($id);
 

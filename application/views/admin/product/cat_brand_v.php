@@ -3,6 +3,333 @@
 $not_is_new = !isset($new) || !$new;
 
 ?>
+<?php if ($not_is_new && $product["mx"] == 0): ?>
+    <!-- Gritter -->
+    <link rel="stylesheet"
+          href="/assets/Gritter/css/jquery.gritter.css" />
+    <!--<link rel="stylesheet" href="/assets/newjs/jquery-ui.structure.min.css" />-->
+    <link rel="stylesheet" href="/assets/newjs/jquery-ui.min.css" />
+
+    <script type="text/javascript"
+            src="/assets/Gritter/js/jquery.gritter.min.js"></script>
+
+    <script type="application/javascript" src="/assets/underscore/underscore-min.js" ></script>
+    <script type="application/javascript" src="/assets/backbone/backbone-min.js" ></script>
+    <script type="application/javascript" src="/assets/dropzone/dropzone.js" ></script>
+    <script type="application/javascript" src="/assets/newjs/jquery-ui.min.js" ></script>
+
+<script type="text/template" id="QuestionView">
+
+</script>
+<script type="text/template" id="AnswerView">
+
+
+</script>
+<script type="text/template" id="AddView">
+
+</script>
+<script type="application/javascript">
+
+    var QuestionViewIndex = {};
+
+    window.registerNewQuestionView = function(partquestion_id, question, partnumberpartquestion_id, answer, part_number, manufacturer_part_number, name) {
+
+    };
+
+    /*
+        This is a little widget that looks for the question, answer, and then part. You have to choose the part from a drop-down, so we are going to need to have a list of available part variations.
+     */
+    window.AddView = Backbone.View.extend({
+        template: _.template($("#AddView")),
+        className: "AddView",
+        initialize : function(options) {
+            this.options = options || {};
+            _.bindAll(this, "render", "addFunction");
+        },
+        render: function() {
+            $(this.el).html(this.template({}));
+            return this;
+        },
+        events: {
+            "click .addFunction" : "addFunction"
+        },
+        addFunction: function(e) {
+            if (e) {
+                e.stopEvent();
+                e.preventPropagation();
+            }
+
+            var question = this.$("input[name='question']").val();
+            if (question == '') {
+                alert('Please provide a question.');
+                return;
+            }
+
+            var answer = this.$("input[name='answer']").val();
+            if (answer == '') {
+                alert('Please provide an answer.');
+                return;
+            }
+
+            var partvariation_id = this.$("select[name=partvariation_id]").val();
+            if (partvariation_id == '') {
+                alert('Please select a distributor part number.');
+                return;
+            }
+
+            // now, we need to create a function that registers it locally
+            $.ajax({
+                type: "POST",
+                url : "/admin/ajax_product_question_answer_add/<?php echo $part_id; ?>",
+                data: {
+                    "question" : question,
+                    "answer" : answer,
+                    "partvariation_id" : partvariation_id
+                },
+                dataType: "json",
+                success: _.bind(function(response) {
+                    console.log(response);
+                    if (response.data.success) {
+                        // add it!
+                        registerNewQuestionView(response.data.partquestion_id, response.data.question, response.data.partnumberpartquestion_id, response.data.answer, response.data.part_number, response.data.manufacturer_part_number, response.data.name);
+                    } else {
+                        // do something with this error.
+                        alert(response.data.error_message);
+                        window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
+                    }
+                }, this),
+                error: function() {
+                    alert("An error occurred; reloading page.");
+                    window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
+                }
+            });
+        }
+    });
+
+
+    /*
+        This is a row - it has edit and remove functionality - it shows the answer (which is the editable part), part number, distributor, and manufacturer part #
+     */
+    window.AnswerView = Backbone.View.extend({
+        template: _.template($("#AnswerView")),
+        className: "AddView",
+        initialize : function(options) {
+            this.options = options || {};
+            _.bindAll(this, "render", "editButton", "cancelButton", "saveButton", "removeButton");
+        },
+        render: function() {
+            $(this.el).html(this.template(this.options.answer));
+            return this;
+        },
+        events: {
+            "click .editButton" : "editButton",
+            "click .cancelButton" : "cancelButton",
+            "click .saveButton" : "saveButton",
+            "click .removeButton" : "removeButton"
+        },
+        editButton: function(e) {
+            if (e) {
+                e.stopEvent();
+                e.preventPropagation();
+            }
+
+            this.$("input[type=text]").val(this.options.answer.answer);
+            this.$(".edit").show();
+            this.$(".noedit").hide();
+        },
+        cancelButton: function(e) {
+            if (e) {
+                e.stopEvent();
+                e.preventPropagation();
+            }
+
+            this.$(".noedit").show();
+            this.$(".edit").hide();
+        },
+        saveButton: function(e) {
+            if (e) {
+                e.stopEvent();
+                e.preventPropagation();
+            }
+
+            this.options.answer.answer = this.$("input[type-text]").val();
+
+            $.ajax({
+                type: "POST",
+                url : "/admin/ajax_product_question_answer_update/<?php echo $part_id; ?>/" + this.options.answer.partquestion_id + "/" + this.options.answer.partnumberpartquestion_id,
+                data: {
+                    "answer" : this.options.answer.answer
+                },
+                dataType: "json",
+                success: _.bind(function(response) {
+                    console.log(response);
+                    if (response.data.success) {
+                        this.$("span.answer").text = this.options.answer.answer;
+                    } else {
+                        // do something with this error.
+                        alert(response.data.error_message);
+                        window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
+                    }
+                }, this),
+                error: function() {
+                    alert("An error occurred; reloading page.");
+                    window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
+                }
+            });
+
+        },
+        removeButton: function(e) {
+            if (e) {
+                e.stopEvent();
+                e.preventPropagation();
+            }
+
+            $.ajax({
+                type: "POST",
+                url : "/admin/ajax_product_question_answer_remove/<?php echo $part_id; ?>/" + this.options.answer.partquestion_id + "/" + this.options.answer.partnumberpartquestion_id,
+                data: {
+                },
+                dataType: "json",
+                success: _.bind(function(response) {
+                    console.log(response);
+                    if (response.data.success) {
+                        $(this.el).remove();
+                        this.cancelButton();
+                    } else {
+                        // do something with this error.
+                        alert(response.data.error_message);
+                        window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
+                    }
+                }, this),
+                error: function() {
+                    alert("An error occurred; reloading page.");
+                    window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
+                }
+            });
+
+        }
+    });
+
+
+    /*
+    This is the question - it has edit and remove functionality - and it has a list of rows
+     */
+    window.QuestionView = Backbone.View.extend({
+        template: _.template($("#QuestionView")),
+        className: "AddView",
+        initialize : function(options) {
+            this.options = options || {};
+            _.bindAll(this, "render", "editButton", "cancelButton", "saveButton", "removeButton", "addAnswerView");
+        },
+        render: function() {
+            $(this.el).html(this.template(this.options.question));
+            return this;
+        },
+        addAnswerView: function(v) {
+            this.(".answers").append(v.render().el);
+        },
+        events: {
+            "click .editButton" : "editButton",
+            "click .cancelButton" : "cancelButton",
+            "click .saveButton" : "saveButton",
+            "click .removeButton" : "removeButton"
+        },
+        editButton: function(e) {
+            if (e) {
+                e.stopEvent();
+                e.preventPropagation();
+            }
+
+            this.$("input[type=text]").val(this.options.question.question);
+            this.$(".edit").show();
+            this.$(".noedit").hide();
+        },
+        cancelButton: function(e) {
+            if (e) {
+                e.stopEvent();
+                e.preventPropagation();
+            }
+
+            if (e) {
+                e.stopEvent();
+                e.preventPropagation();
+            }
+
+            this.$(".noedit").show();
+            this.$(".edit").hide();
+        },
+        saveButton: function(e) {
+            if (e) {
+                e.stopEvent();
+                e.preventPropagation();
+            }
+
+
+            var question = this.$("input[name='question']").val();
+            if (question == '') {
+                alert('Please provide a question.');
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url : "/admin/ajax_product_question_remove/<?php echo $part_id; ?>/" + this.options.question.partquestion_id,
+                data: {
+                    question: question
+                },
+                dataType: "json",
+                success: _.bind(function(response) {
+                    console.log(response);
+                    if (response.data.success) {
+                        this.options.question.question = question;
+                        this.cancelButton();
+                    } else {
+                        // do something with this error.
+                        alert(response.data.error_message);
+                        window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
+                    }
+                }, this),
+                error: function() {
+                    alert("An error occurred; reloading page.");
+                    window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
+                }
+            });
+
+        },
+        removeButton: function(e) {
+            if (e) {
+                e.stopEvent();
+                e.preventPropagation();
+            }
+
+            $.ajax({
+                type: "POST",
+                url : "/admin/ajax_product_question_remove/<?php echo $part_id; ?>/" + this.options.question.partquestion_id,
+                data: {
+                },
+                dataType: "json",
+                success: _.bind(function(response) {
+                    console.log(response);
+                    if (response.data.success) {
+                        $(this.el).remove();
+                    } else {
+                        // do something with this error.
+                        alert(response.data.error_message);
+                        window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
+                    }
+                }, this),
+                error: function() {
+                    alert("An error occurred; reloading page.");
+                    window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
+                }
+            });
+        }
+    });
+
+
+</script>
+
+<?php endif; ?>
 <!-- MAIN CONTENT =======================================================================================-->
 <div class="content_wrap">
     <div class="content">
@@ -144,6 +471,12 @@ var categoryIdMap = {};
                 <button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Update Categories and Brand</button>
 
         </form>
+
+            <p><strong>Filter Questions</strong></p>
+
+
+
+
 
             <?php else: ?>
         <div class="tab_content">
