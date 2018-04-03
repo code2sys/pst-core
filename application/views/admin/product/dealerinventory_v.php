@@ -44,7 +44,7 @@
         <?php echo form_open('adminproduct/part_update/' . $part_id, array('class' => 'form_standard')); ?>
         <!-- TAB CONTENT -->
         <div class="tab_content">
-            <form method="post" action="/adminproduct/save_dealerinventory/<?php echo $post_id; ?>">
+            <form method="post" action="/adminproduct/save_dealerinventory/<?php echo $part_id; ?>">
 
             <div class="tabular_data">
 
