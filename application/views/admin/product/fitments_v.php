@@ -2,7 +2,7 @@
 <div class="content_wrap">
     <div class="content">
 
-        <h1><i class="fa fa-cube"></i>&nbsp;Fitments for <?php echo $product['name']; ?></h1>
+        <h1><i class="fa fa-gears"></i>&nbsp;Fitments for <?php echo $product['name']; ?></h1>
 
         <?php if ($product["mx"] == 0): ?>
             <h2>Dealer-Inventory Product</h2>
@@ -22,7 +22,6 @@
         ?>
         <!-- END TABS -->
 
-        <?php echo form_open('adminproduct/part_update/' . $part_id, array('class' => 'form_standard')); ?>
         <!-- TAB CONTENT -->
         <div class="tab_content">
 
