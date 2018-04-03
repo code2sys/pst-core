@@ -9,7 +9,7 @@
 class Portalmodel extends Master_M {
 
     public function getQuickDealerInventory($part_id) {
-        $query = $this->db->query("select partvariation.partvariation_id, partnumber.partnumber, partvariation.part_number, distributor.name, partvariation.manufacturer_part_number, partdealervariation.cost, partdealervariation.quantity_available from partpartnumber join partnumber using (partnumber_id) join partvariation using (partnumber_id) join distributor using (distributor_id) left join partdealervariation using (partvariation_id) where partpartnumber.part_id = ?", array($part_id));
+        $query = $this->db->query("select partvariation.quantity_available as distributor_quantity_available,partvariation.cost as distributor_cost, partvariation.stock_code, partvariation.partvariation_id, partnumber.partnumber, partvariation.part_number, distributor.name, partvariation.manufacturer_part_number, partdealervariation.cost, partdealervariation.quantity_available from partpartnumber join partnumber using (partnumber_id) join partvariation using (partnumber_id) join distributor using (distributor_id) left join partdealervariation using (partvariation_id) where partpartnumber.part_id = ?", array($part_id));
         return $query->result_array();
     }
 

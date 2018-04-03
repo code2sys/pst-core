@@ -2,7 +2,7 @@
 <div class="content_wrap">
     <div class="content">
 
-        <h1><i class="fa fa-clipboard"></i>&nbsp;Dealer Inventory for <?php echo $product['name']; ?></h1>
+        <h1><i class="fa fa-clipboard"></i>&nbsp Inventory for <?php echo $product['name']; ?></h1>
 
         <?php if ($product["mx"] == 0): ?>
             <h2>Dealer-Inventory Product</h2>
@@ -54,8 +54,11 @@
                         <th><b>Distributor</b></th>
                         <th><b>Distributor Part #</b></th>
                         <th><b>Manufacturer Part #</b></th>
-                        <th><b>Quantity Available</b></th>
-                        <th><b>Product Cost</b></th>
+                        <th><b>Distributor Inventory Available</b></th>
+                        <th><b>Distributor Cost</b></th>
+                        <th><b>Distributor Stock Status</b></th>
+                        <th><b>Dealer Inventory Available</b></th>
+                        <th><b>Dealer Cost</b></th>p
                     </tr>
                     </thead>
                     <tbody>
@@ -65,6 +68,9 @@
                         <td><?php echo $row["name"]; ?></td>
                         <td><?php echo $row["part_number"]; ?></td>
                         <td><?php echo $row["manufacturer_part_number"]; ?></td>
+                        <td><?php echo $row["distributor_quantity_available"]; ?></td>
+                        <td><?php echo $row["distributor_cost"]; ?></td>
+                        <td><?php echo $row["stock_code"]; ?></td>
                         <td><input type="text" size="16" name="quantity_available_<?php echo $row["partvariation_id"]; ?>" value="<?php echo $row["quantity_available"]; ?>" /></td>
                         <td><input type="text" size="16" name="cost_<?php echo $row["partvariation_id"]; ?>" value="<?php echo $row["cost"]; ?>" /></td>
                     </tr>

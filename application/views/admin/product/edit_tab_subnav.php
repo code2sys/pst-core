@@ -19,7 +19,7 @@ $product = $CI->admin_m->getAdminProduct($part_id);
         <!-- <li><a href="<?php echo base_url('admin/product_reviews/' . $part_id); ?>" class="<?php echo ($tag == "product_reviews") ? "active" : ""; ?>"><i class="fa fa-image"></i>&nbsp;Reviews</a></li> -->
         <li><a href="<?php echo base_url('adminproduct/product_video/' . $part_id); ?>" class="<?php echo ($tag == "product_video") ? "active" : ""; ?>"><i class="fa fa-image"></i>&nbsp;Videos</a></li>
         <li><a href="<?php echo base_url('adminproduct/product_sizechart/' . $part_id); ?>" class="<?php echo ($tag == "product_sizechart") ? "active" : ""; ?>"><i class="fa fa-image"></i>&nbsp;Size Chart</a></li>
-        <li><a href="<?php echo base_url('adminproduct/dealerinventory/' . $part_id); ?>" class="<?php echo ($tag == "dealerinventory") ? "active" : ""; ?>"><i class="fa fa-clipboard"></i>&nbsp;Dealer Inventory</a></li>
+        <li><a href="<?php echo base_url('adminproduct/dealerinventory/' . $part_id); ?>" class="<?php echo ($tag == "dealerinventory") ? "active" : ""; ?>"><i class="fa fa-clipboard"></i>&nbsp;Inventory</a></li>
         <div class="clear"></div>
     </ul>
 </div>
