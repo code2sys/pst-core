@@ -63,8 +63,9 @@ error_log("a1");
         error_log("a8");
         // OK, we have to just insert it and update it if there's already there
         $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key set partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id), answer = values(answer)", array($partnumber_id, $partquestion_id, $answer));
-        $partnumberpartquestion_id = $this->db->insert_id();
         error_log("a9");
+        $partnumberpartquestion_id = $this->db->insert_id();
+        error_log("a10");
 
         return true;
     }
