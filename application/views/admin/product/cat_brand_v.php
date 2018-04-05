@@ -534,6 +534,22 @@ $not_is_new = !isset($new) || !$new;
                     </table>
                     
                 </div>
+
+
+                <br>
+                <!-- SUBMIT PRODUCT -->
+                <button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Update Categories and Brand</button>
+
+        </form>
+
+        <p><strong>Filter Questions</strong></p>
+
+
+        <div class="filterquestionholder"></div>
+
+
+
+        <div style="clear: both"></div>
             </div>
 
 
@@ -597,20 +613,6 @@ var categoryIdMap = {};
 
 
 
-            <br>
-            <!-- SUBMIT PRODUCT -->
-                <button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Update Categories and Brand</button>
-
-        </form>
-
-            <p><strong>Filter Questions</strong></p>
-
-
-            <div class="filterquestionholder"></div>
-
-
-
-            <div style="clear: both"></div>
 
             <?php else: ?>
         <div class="tab_content">
