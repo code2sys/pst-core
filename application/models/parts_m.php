@@ -2312,9 +2312,12 @@ class Parts_M extends Master_M {
                         $finalPriceArr['sale_max'] += $pa['sale_max'];
                     }
 
+
+                    print "Call to calculateMarkup with input " . implode(", ", array($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup'])) . "\n";
                     $rec['price'] = $this->calculateMarkup($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup']);
                 } else
                 //partNumberRec
+                    print "Call to lower calculateMarkup with input " . implode(", ", array($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup'])) . "\n";
                     $rec['price'] = $this->calculateMarkup($partNumberRec['price_min'], $partNumberRec['price_max'], $partNumberRec['sale_min'], $partNumberRec['sale_max'], @$_SESSION['userRecord']['markup']);
 
                 //$rec['price'] = $this->calculateMarkup($rec['price_min'], $rec['price_max'], $rec['sale_min'], $rec['sale_max'], @$_SESSION['userRecord']['markup'], $rec['dealer_sale_min'], $rec['dealer_sale_max'], $rec['cnt']);
