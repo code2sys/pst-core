@@ -73,6 +73,7 @@ class Portalmodel extends Master_M {
             $productquestion_id = $this->db->insert_id();
             error_log("Retrieved productquestion $productquestion_id");
             $this->db->update("Update partquestion set productquestion_id = ? where partquestion_id = ?", array($productquestion_id, $partquestion_id));
+            error_log("Update partquestion set productquestion_id = ? where partquestion_id = ? $productquestion_id, $partquestion_id");
         }
 
         // OK, we have to just insert it and update it if there's already there
