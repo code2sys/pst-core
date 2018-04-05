@@ -159,7 +159,7 @@ $not_is_new = !isset($new) || !$new;
                     console.log(response);
                     if (response.success) {
                         // add it!
-                        registerNewQuestionView(response.data,partquestion_id, question, response.data.partnumberpartquestion_id, answer, DistributorPartIndex[partnumber_id].part_number, DistributorPartIndex[partnumber_id].manufacturer_part_number, DistributorPartIndex[partnumber_id].name);
+                        registerNewQuestionView(response.data.partquestion_id, question, response.data.partnumberpartquestion_id, answer, DistributorPartIndex[partnumber_id].part_number, DistributorPartIndex[partnumber_id].manufacturer_part_number, DistributorPartIndex[partnumber_id].name);
                     } else {
                         // do something with this error.
                         alert(response.error_message);
