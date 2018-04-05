@@ -136,7 +136,7 @@ $not_is_new = !isset($new) || !$new;
             // now, we need to create a function that registers it locally
             $.ajax({
                 type: "POST",
-                url : "/admin/ajax_product_question_answer_add/<?php echo $part_id; ?>",
+                url : "/admin/adminproduct/ajax_product_question_answer_add/<?php echo $part_id; ?>",
                 data: {
                     "question" : question,
                     "answer" : answer,
@@ -219,7 +219,7 @@ $not_is_new = !isset($new) || !$new;
 
             $.ajax({
                 type: "POST",
-                url : "/admin/ajax_product_question_answer_update/<?php echo $part_id; ?>/" + this.options.answer.partquestion_id + "/" + this.options.answer.partnumberpartquestion_id,
+                url : "/admin/adminproduct/ajax_product_question_answer_update/<?php echo $part_id; ?>/" + this.options.answer.partquestion_id + "/" + this.options.answer.partnumberpartquestion_id,
                 data: {
                     "answer" : this.options.answer.answer
                 },
@@ -251,7 +251,7 @@ $not_is_new = !isset($new) || !$new;
             if (confirm('Really remove this answer?')) {
                 $.ajax({
                     type: "POST",
-                    url: "/admin/ajax_product_question_answer_remove/<?php echo $part_id; ?>/" + this.options.answer.partquestion_id + "/" + this.options.answer.partnumberpartquestion_id,
+                    url: "/admin/adminproduct/ajax_product_question_answer_remove/<?php echo $part_id; ?>/" + this.options.answer.partquestion_id + "/" + this.options.answer.partnumberpartquestion_id,
                     data: {},
                     dataType: "json",
                     success: _.bind(function (response) {
@@ -288,6 +288,7 @@ $not_is_new = !isset($new) || !$new;
         },
         render: function() {
             $(this.el).html(this.template(this.options.question));
+            this.cancelButton();
             return this;
         },
         addAnswerView: function(v) {
@@ -338,7 +339,7 @@ $not_is_new = !isset($new) || !$new;
 
             $.ajax({
                 type: "POST",
-                url : "/admin/ajax_product_question_remove/<?php echo $part_id; ?>/" + this.options.question.partquestion_id,
+                url : "/admin/adminproduct/ajax_product_question_remove/<?php echo $part_id; ?>/" + this.options.question.partquestion_id,
                 data: {
                     question: question
                 },
@@ -370,7 +371,7 @@ $not_is_new = !isset($new) || !$new;
 
             $.ajax({
                 type: "POST",
-                url : "/admin/ajax_product_question_remove/<?php echo $part_id; ?>/" + this.options.question.partquestion_id,
+                url : "/admin/adminproduct/ajax_product_question_remove/<?php echo $part_id; ?>/" + this.options.question.partquestion_id,
                 data: {
                 },
                 dataType: "json",
