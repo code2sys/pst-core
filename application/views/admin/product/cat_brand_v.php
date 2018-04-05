@@ -70,7 +70,7 @@ $not_is_new = !isset($new) || !$new;
     <tr>
         <td><strong>Distributor Part:</strong></td>
         <td><select name="partnumber_id">
-                <?php if (count($distributor_part) > 0): ?>
+                <?php if (count($distributor_part) > 1): ?>
                 <option value="">-- Select Distributor Part --</option>
                 <?php endif; ?>
                 <?php foreach ($distributor_part as $part): ?>
