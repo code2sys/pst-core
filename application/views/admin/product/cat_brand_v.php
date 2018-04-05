@@ -110,8 +110,8 @@ $not_is_new = !isset($new) || !$new;
             "click .addFunction" : "addFunction"
         },
         addFunction: function(e) {
+            console.log(e);
             if (e) {
-                ;
                 e.preventPropagation();
             }
 
