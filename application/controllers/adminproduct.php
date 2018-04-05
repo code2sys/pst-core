@@ -443,66 +443,95 @@ class Adminproduct extends Admin {
      */
 
     public function ajax_product_question_remove($part_id, $partquestion_id) {
-        $result = array(
-            "success" => 0,
-            "error_message" => "Uninitialized"
-        );
+        $part = $this->admin_m->getAdminProduct($part_id);
 
+        if ($part["mx"] == 0) {
+            $this->Statusmodel->setError("Sorry, that is not an editable part number.");
+        } else {
+            $this->Portalmodel->removePartProductQuestion($part_id, $partquestion_id);
+            $this->Statusmodel->setSuccess("Question removed.");
 
-
-
-        print json_encode($result);
+        }
+        $this->Statusmodel->outputStatus();
     }
 
     public function ajax_product_question_update($part_id, $partquestion_id) {
-        $result = array(
-            "success" => 0,
-            "error_message" => "Uninitialized"
-        );
+        $part = $this->admin_m->getAdminProduct($part_id);
 
-
-
-
-        print json_encode($result);
+        if ($part["mx"] == 0) {
+            $this->Statusmodel->setError("Sorry, that is not an editable part number.");
+        } else {
+            $question = array_key_exists("question", $_REQUEST) ? $_REQUEST["question"] : "";
+            if ($question == "") {
+                $this->Statusmodel->setError("Sorry, no question text received.");
+            } else {
+                $this->Portalmodel->updatePartProductQuestion($part_id, $partquestion_id, $question);
+                $this->Statusmodel->setSuccess("Question updated.");
+            }
+        }
+        $this->Statusmodel->outputStatus();
     }
 
     public function ajax_product_question_answer_remove($part_id, $partquestion_id, $partnumberpartquestion_id) {
-        $result = array(
-            "success" => 0,
-            "error_message" => "Uninitialized"
-        );
+        $part = $this->admin_m->getAdminProduct($part_id);
 
+        if ($part["mx"] == 0) {
+            $this->Statusmodel->setError("Sorry, that is not an editable part number.");
+        } else {
+            $this->Portalmodel->removePartProductAnswer($part_id, $partquestion_id, $partnumberpartquestion_id);
+            $this->Statusmodel->setSuccess("Answer removed.");
 
-
-
-        print json_encode($result);
+        }
+        $this->Statusmodel->outputStatus();
     }
 
     public function ajax_product_question_answer_update($part_id, $partquestion_id, $partnumberpartquestion_id) {
-        $result = array(
-            "success" => 0,
-            "error_message" => "Uninitialized"
-        );
+        $part = $this->admin_m->getAdminProduct($part_id);
 
-
-
-
-        print json_encode($result);
+        if ($part["mx"] == 0) {
+            $this->Statusmodel->setError("Sorry, that is not an editable part number.");
+        } else {
+            $answer = array_key_exists("answer", $_REQUEST) ? $_REQUEST["answer"] : "";
+            if ($answer == "") {
+                $this->Statusmodel->setError("Sorry, no answer text received.");
+            } else {
+                $this->Portalmodel->updatePartProductAnswer($part_id, $partquestion_id, $partnumberpartquestion_id, $answer);
+                $this->Statusmodel->setSuccess("Answer updated.");
+            }
+        }
+        $this->Statusmodel->outputStatus();
     }
 
     public function ajax_product_question_answer_add($part_id) {
-        $result = array(
-            "success" => 0,
-            "error_message" => "Uninitialized"
-        );
+        $part = $this->admin_m->getAdminProduct($part_id);
 
+        if ($part["mx"] == 0) {
+            $this->Statusmodel->setError("Sorry, that is not an editable part number.");
+        } else {
+            $answer = array_key_exists("answer", $_REQUEST) ? $_REQUEST["answer"] : "";
+            $question = array_key_exists("question", $_REQUEST) ? $_REQUEST["question"] : "";
+            $partnumber_id = array_key_exists("partnumber_id", $_REQUEST) ? $_REQUEST["partnumber_id"] : 0;
 
+            $partquestion_id = $partnumberpartquestion_id = 0;
 
+            if ($question == "") {
+                $this->Statusmodel->setError("Sorry, no question text received.");
+            } else if ($answer == "") {
+                $this->Statusmodel->setError("Sorry, no answer text received.");
+            } else if ($partnumber_id == 0) {
+                $this->Statusmodel->setError("Sorry, no distributor part number received.");
+            } else if ($this->Portalmodel->addPartProductAnswer($part_id, $question, $answer, $partnumber_id, $partquestion_id, $partnumberpartquestion_id)) {
+                // we need to set the data...
 
-        print json_encode($result);
+                $this->Statusmodel->setData("partquestion_id", $partquestion_id);
+                $this->Statusmodel->setData("partnumberpartquestion_id", $partnumberpartquestion_id);
+                $this->Statusmodel->setSuccess("Answer added successfully.");
+            } else {
+                $this->Statusmodel->setError("Sorry, that question is not a category filter question.");
+            }
+        }
+        $this->Statusmodel->outputStatus();
     }
-
-
 
     public function product_category_brand($id = NULL) {
         $this->_mainData['product'] = $this->admin_m->getAdminProduct($id);
@@ -523,6 +552,7 @@ class Adminproduct extends Admin {
             $_SESSION["product_category_brand_error"] = "";
         }
 
+        $this->_mainData["distributor_part"] = $this->Portalmodel->getQuickPartNumberVariation($id);
         $this->_mainData["product_questions"] = $this->Portalmodel->getFilterQuestions($id);
         $this->_mainData['product_categories'] = $this->Portalmodel->getPartCategories($id);
         $this->_mainData['product_brand'] = $this->Portalmodel->getPartBrand($id);

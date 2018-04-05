@@ -19,22 +19,77 @@ $not_is_new = !isset($new) || !$new;
     <script type="application/javascript" src="/assets/newjs/jquery-ui.min.js" ></script>
 
 <script type="text/template" id="QuestionView">
+<div class="noedit">
+    <p><strong><span class="question"><%= obj.question %></span></strong> <button type="button" name="editButton">Edit</button><button type="button" name="removeButton">Remove</button></p>
+</div>
+<div class="edit">
+    <input type="text" name="question" size="40" maxlength="64" /> <button type="button" name="saveButton">Save Changes</button><button type="button" name="cancelButton">Cancel Changes</button>
+</div>
 
+<table>
+    <thead>
+        <tr>
+            <th>Answer</th>
+            <th>Distributor</th>
+            <th>Distributor Part #</th>
+            <th>Manufacturer Part #</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody class="answers"></tbody>
+</table>
+
+    <p>&nbsp;</p>
 </script>
 <script type="text/template" id="AnswerView">
-
-
+<td><div class="noansweredit"><span class="answer"><%= obj.answer %></span></div><div class="answeredit"><input type="text" name="answer" value="" size="40" maxlength="64"/></div></td>
+<td><%= obj.name %></td>
+<td><%= obj.part_number %></td>
+<td><%= obj.manufacturer_part_number %></td>
+    <td><div class="noedit"><button type="button" name="editAnswerButton">Edit</button><button type="button" name="removeAnswerButton">Remove</button></div><div class="edit"><button type="button" name="saveAnswerButton">Save Changes</button><button type="button" name="cancelAnswerButton">Cancel Changes</button></div></td>
 </script>
 <script type="text/template" id="AddView">
+<p><strong>Add a New Filter Question/Answer</strong></p>
+
+<?php if (count($distributor_part) == 0): ?>
+    <p><em>Please add some distributor parts to this part entry under &quot;SKUs, Quantities, and Personalization&quot; before adding new filter questions.</em></p>
+<?php else: ?>
+
+<form onSubmit="return false; ">
+
+<table>
+    <tr>
+        <td><strong>Question:</strong></td>
+        <td><input type="text" size="64" maxlength="64" name="question" /></td>
+    </tr>
+    <tr>
+        <td><strong>Question:</strong></td>
+        <td><input type="text" size="64" maxlength="64" name="question" /></td>
+    </tr>
+    <tr>
+        <td><strong>Distributor Part:</strong></td>
+        <td><select name="partnumber_id">
+                <?php if (count($distributor_part) > 0): ?>
+                <option value="">-- Select Distributor Part --</option>
+                <?php endif; ?>
+                <?php foreach ($distributor_part as $part): ?>
+                <option value="<?php echo $part["partnumber_id"]; ?>"><?php echo htmlentities($part["name"]); ?> <?php echo htmlentities($part["part_number"]); ?></option>
+                <?php endforeach; ?>
+            </select></td>
+    </tr>
+    <tr>
+        <td colspan="2"><button class="addFunction">Add Filter Question/Answer</button></td>
+    </tr>
+</table>
+
+</form>
+
+    <?php endif; ?>
 
 </script>
 <script type="application/javascript">
 
     var QuestionViewIndex = {};
-
-    window.registerNewQuestionView = function(partquestion_id, question, partnumberpartquestion_id, answer, part_number, manufacturer_part_number, name) {
-
-    };
 
     /*
         This is a little widget that looks for the question, answer, and then part. You have to choose the part from a drop-down, so we are going to need to have a list of available part variations.
@@ -71,8 +126,8 @@ $not_is_new = !isset($new) || !$new;
                 return;
             }
 
-            var partvariation_id = this.$("select[name=partvariation_id]").val();
-            if (partvariation_id == '') {
+            var partnumber_id = this.$("select[name=partnumber_id]").val();
+            if (partnumber_id == '') {
                 alert('Please select a distributor part number.');
                 return;
             }
@@ -84,7 +139,7 @@ $not_is_new = !isset($new) || !$new;
                 data: {
                     "question" : question,
                     "answer" : answer,
-                    "partvariation_id" : partvariation_id
+                    "partnumber_id" : partnumber_id
                 },
                 dataType: "json",
                 success: _.bind(function(response) {
@@ -113,19 +168,26 @@ $not_is_new = !isset($new) || !$new;
     window.AnswerView = Backbone.View.extend({
         template: _.template($("#AnswerView")),
         className: "AddView",
+        tagName: "tr",
         initialize : function(options) {
             this.options = options || {};
-            _.bindAll(this, "render", "editButton", "cancelButton", "saveButton", "removeButton");
+            _.bindAll(this, "render", "editButton", "cancelButton", "saveButton", "removeButton", "setAnswer");
+        },
+        setAnswer: function(a) {
+            this.options.answer.answer = a;
+            this.$("input[type=text]").val(this.options.answer.answer);
+            this.$("span.answer").text = this.options.answer.answer;
         },
         render: function() {
             $(this.el).html(this.template(this.options.answer));
+            this.cancelButton();
             return this;
         },
         events: {
-            "click .editButton" : "editButton",
-            "click .cancelButton" : "cancelButton",
-            "click .saveButton" : "saveButton",
-            "click .removeButton" : "removeButton"
+            "click .editAnswerButton" : "editButton",
+            "click .cancelAnswerButton" : "cancelButton",
+            "click .saveAnswerButton" : "saveButton",
+            "click .removeAnswerButton" : "removeButton"
         },
         editButton: function(e) {
             if (e) {
@@ -134,8 +196,8 @@ $not_is_new = !isset($new) || !$new;
             }
 
             this.$("input[type=text]").val(this.options.answer.answer);
-            this.$(".edit").show();
-            this.$(".noedit").hide();
+            this.$(".answeredit").show();
+            this.$(".noansweredit").hide();
         },
         cancelButton: function(e) {
             if (e) {
@@ -143,8 +205,8 @@ $not_is_new = !isset($new) || !$new;
                 e.preventPropagation();
             }
 
-            this.$(".noedit").show();
-            this.$(".edit").hide();
+            this.$(".noansweredit").show();
+            this.$(".answeredit").hide();
         },
         saveButton: function(e) {
             if (e) {
@@ -165,6 +227,7 @@ $not_is_new = !isset($new) || !$new;
                     console.log(response);
                     if (response.data.success) {
                         this.$("span.answer").text = this.options.answer.answer;
+                        this.cancelButton();
                     } else {
                         // do something with this error.
                         alert(response.data.error_message);
@@ -184,28 +247,29 @@ $not_is_new = !isset($new) || !$new;
                 e.preventPropagation();
             }
 
-            $.ajax({
-                type: "POST",
-                url : "/admin/ajax_product_question_answer_remove/<?php echo $part_id; ?>/" + this.options.answer.partquestion_id + "/" + this.options.answer.partnumberpartquestion_id,
-                data: {
-                },
-                dataType: "json",
-                success: _.bind(function(response) {
-                    console.log(response);
-                    if (response.data.success) {
-                        $(this.el).remove();
-                        this.cancelButton();
-                    } else {
-                        // do something with this error.
-                        alert(response.data.error_message);
+            if (confirm('Really remove this answer?')) {
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/ajax_product_question_answer_remove/<?php echo $part_id; ?>/" + this.options.answer.partquestion_id + "/" + this.options.answer.partnumberpartquestion_id,
+                    data: {},
+                    dataType: "json",
+                    success: _.bind(function (response) {
+                        console.log(response);
+                        if (response.data.success) {
+                            $(this.el).remove();
+                            delete(QuestionViewIndex[this.options.answer.partquestion_id]["answers"][this.options.answer.partnumberpartquestion_id]);
+                        } else {
+                            // do something with this error.
+                            alert(response.data.error_message);
+                            window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
+                        }
+                    }, this),
+                    error: function () {
+                        alert("An error occurred; reloading page.");
                         window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
                     }
-                }, this),
-                error: function() {
-                    alert("An error occurred; reloading page.");
-                    window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
-                }
-            });
+                });
+            }
 
         }
     });
@@ -282,6 +346,7 @@ $not_is_new = !isset($new) || !$new;
                     console.log(response);
                     if (response.data.success) {
                         this.options.question.question = question;
+                        this.$("span.question").text = this.options.question.question;
                         this.cancelButton();
                     } else {
                         // do something with this error.
@@ -312,6 +377,7 @@ $not_is_new = !isset($new) || !$new;
                     console.log(response);
                     if (response.data.success) {
                         $(this.el).remove();
+                        delete(QuestionViewIndex[this.options.question.partquestion_id]);
                     } else {
                         // do something with this error.
                         alert(response.data.error_message);
@@ -325,6 +391,60 @@ $not_is_new = !isset($new) || !$new;
             });
         }
     });
+
+
+    window.registerNewQuestionView = function(partquestion_id, question, partnumberpartquestion_id, answer, part_number, manufacturer_part_number, name) {
+        // OK, we need to see if there's a view
+        if (!QuestionViewIndex[partquestion_id]) {
+            // OK, there is no entry for this question...
+            QuestionViewIndex[partquestion_id] = {
+                partquestion_id : partquestion_id,
+                question: question,
+                answers : {}
+            };
+
+            // OK, we have to add a QuestionView
+            QuestionViewIndex[partquestion_id]["view"] = new QuestionView({ question: {
+                question: question,
+                    partquestion_id : partquestion_id
+                }
+
+            });
+
+            // We have to render this into the right spot on the screen...
+            $(".filterquestionholder").append(QuestionViewIndex[partquestion_id]["view"].render().el);
+        }
+
+        // OK, you have to add the answer view...
+        if (!QuestionViewIndex[partquestion_id]["answers"][partnumberpartquestion_id]) {
+            QuestionViewIndex[partquestion_id]["answers"][partnumberpartquestion_id] = {
+                partnumberpartquestion_id : partnumberpartquestion_id,
+                answer: answer,
+                part_number : part_number,
+                manufacturer_part_number : manufacturer_part_number,
+                name: name,
+                partquestion_id : partquestion_id,
+                question: question
+            };
+            QuestionViewIndex[partquestion_id]["answers"][partnumberpartquestion_id]["view"] = new AnswerView({
+                answer: {
+                    partnumberpartquestion_id : partnumberpartquestion_id,
+                    answer: answer,
+                    part_number : part_number,
+                    manufacturer_part_number : manufacturer_part_number,
+                    name: name,
+                    partquestion_id : partquestion_id,
+                    question: question
+                }
+            });
+
+            // and you need to add it so it shows...
+            QuestionViewIndex[partquestion_id].view.addAnswerView(QuestionViewIndex[partquestion_id]["answers"][partnumberpartquestion_id].view);
+
+        } else {
+            QuestionViewIndex[partquestion_id]["answers"][partnumberpartquestion_id].view.setAnswer(answer);
+        }
+    };
 
 
 </script>
@@ -441,6 +561,17 @@ var categoryIdMap = {};
                 { title: "Category"}
             ]
         });
+
+        <?php if ($not_is_new && $product["mx"] == 0): ?>
+        var fqh = $(".filterquestionholder");
+        // Initialize all the questions we currently have
+        <?php foreach ($product_questions as $pq): ?>
+        registerNewQuestionView(<?php echo $pq['partquestion_id']; ?>, "<?php echo addslashes($pq["question"]); ?>", <?php echo $pq["partnumberpartquestion_id"]; ?>, "<?php echo addslashes($pq["answer"]); ?>", "<?php echo addslashes($pq["partnumber"]); ?>", "<?php echo addslashes($pq["manufacturer_part_number"]); ?>", "<?php echo addslashes($pq["name"]); ?>");
+        <?php endforeach; ?>
+
+        // Add a spot to add a question...
+        $fqh.append(new AddView().render().el);
+        <?php endif; ?>
     });
 
     $("#searchbutton").on("click", function(e) {
@@ -475,6 +606,7 @@ var categoryIdMap = {};
             <p><strong>Filter Questions</strong></p>
 
 
+            <div class="filterquestionholder"></div>
 
 
 

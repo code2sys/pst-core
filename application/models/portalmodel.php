@@ -8,6 +8,59 @@
 
 class Portalmodel extends Master_M {
 
+    public function getQuickPartNumberVariation($part_id) {
+        $query = $this->db->query("Select partvariation.partnumber_id, partvariation.part_number, distributor.name from partpartnumber join partvariation using (partnumber_id) join distributor using (distributor_id) where partpartnumber.part_id = ? order by distributor.name, partvariation.part_number", array($part_id));
+        return $query->result_array();
+    }
+
+    /*
+     * JLB 04-04-18
+     * I added these to support the controls on the product questions.
+     */
+    public function removePartProductQuestion($part_id, $partquestion_id) {
+        $this->db->query("Delete from partquestion where part_id = ? and partquestion_id = ? and productquestion > 0", array($part_id, $partquestion_id));
+    }
+
+    public function updatePartProductQuestion($part_id, $partquestion_id, $question) {
+        $this->db->query("Update partquestion set question = ? where part_id = ? and partquestion_id = ? and productquestion > 0", array($question, $part_id, $partquestion_id));
+    }
+
+    public function removePartProductAnswer($part_id, $partquestion_id, $partnumberpartquestion_id) {
+        $this->db->query("Delete from partnumberpartquestion where partnumberpartquestion_id = ?", array($partnumberpartquestion_id));
+    }
+
+    public function updatePartProductAnswer($part_id, $partquestion_id, $partnumberpartquestion_id, $answer) {
+        $this->db->query("Update partnumberpartquestion set answer = ? where partnumberpartquestion_id = ?", array($answer, $partnumberpartquestion_id));
+    }
+
+    /*
+     * This is the only one that could fail - if that question already exists AND it is not a product question, we have to reject it.
+     */
+    public function addPartProductAnswer($part_id, $question, $answer, $partnumber_id, &$partquestion_id, &$partnumberpartquestion_id) {
+        // Step #1: Does this question exist?
+        $query = $this->db->query("Select * from partquestion where part_id = ? and question = ?", array($part_id, $question));
+        $question_struct = $query->result_array();
+        if (count($question_struct) > 0) {
+            $question_struct = $question_struct[0];
+            if ($question_struct["productquestion"] > 0) {
+                $partquestion_id = $question_struct["partquestion_id"];
+            } else {
+                return false;
+            }
+        } else {
+            // OK, we have to add it..
+            $this->db->query("Insert into partquestion (part_id, question, productquestion) values (?, ?, 1)", array($part_id, $question));
+            $partquestion_id = $this->db->insert_id();
+        }
+
+        // OK, we have to just insert it and update it if there's already there
+        $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key set partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id), answer = values(answer)", array($partnumber_id, $partquestion_id, $answer));
+        $partnumberpartquestion_id = $this->db->insert_id();
+
+        return true;
+    }
+
+
     public function getQuickDealerInventory($part_id) {
         $query = $this->db->query("select partvariation.quantity_available as distributor_quantity_available,partvariation.cost as distributor_cost, partvariation.stock_code, partvariation.partvariation_id, partnumber.partnumber, partvariation.part_number, distributor.name, partvariation.manufacturer_part_number, partdealervariation.cost, partdealervariation.quantity_available from partpartnumber join partnumber using (partnumber_id) join partvariation using (partnumber_id) join distributor using (distributor_id) left join partdealervariation using (partvariation_id) where partpartnumber.part_id = ?", array($part_id));
         return $query->result_array();
