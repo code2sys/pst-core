@@ -344,7 +344,6 @@ class Shopping extends Master_Controller {
             $this->_mainData['brandMain'] = $this->parts_m->getBrand($listParameters['brand']);
         }
         $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $activeMachine, $this->_adpdtLimit);
-        print_r($this->_mainData['band']['products']); exit();
         $this->_mainData['questions'] = $this->parts_m->getFilterQuestions($listParameters);
 		
 		// echo '<pre>';
@@ -375,6 +374,9 @@ class Shopping extends Master_Controller {
         unset($this->_mainData['band']);
 
         $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters, $this->getActiveMachine(), NULL);
+        print "Second: ";
+        print_r($this->_mainData['band']['products']);
+        exit();
         // Created Variables for it in Category section, but calling it here to take advantage of breadcrumbs.
         $this->loadSidebar('widgets/category_filter_v_product');
         $this->loadSidebar('widgets/brand_filter_v_product');
