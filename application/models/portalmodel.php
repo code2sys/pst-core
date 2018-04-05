@@ -68,7 +68,7 @@ class Portalmodel extends Master_M {
             $partquestion_id = $this->db->insert_id();
 
             // we almost certainly have to add it into product question
-            $this->db->query("Insert into productquestion (part_id, question) values (?, ?) on key update productquestion_id = last_insert_id(productquestion_id)", array($part_id, $question));
+            $this->db->query("Insert into productquestion (part_id, question) values (?, ?) on key duplicate update productquestion_id = last_insert_id(productquestion_id)", array($part_id, $question));
             error_log("Insert into product question");
             $productquestion_id = $this->db->insert_id();
             error_log("Retrieved productquestion $productquestion_id");
@@ -80,8 +80,8 @@ class Portalmodel extends Master_M {
         $partnumberpartquestion_id = $this->db->insert_id();
 
         // We also have to insert it into the partquestionanswer and the productquestionanswer tables...
-        $this->db->query("Insert into partquestionanswer (partquestion_id, answer) values (?, ?) on dupliate key update partquestionanswer_id = last_insert_id(partquestionanswer_id)", array($partquestion_id, $answer));
-        $this->db->query("Insert into productquestionanswer (productquestion_id, answer) values (?, ?) on dupliate key update productquestionanswer_id = last_insert_id(productquestionanswer_id)", array($productquestion_id, $answer));
+        $this->db->query("Insert into partquestionanswer (partquestion_id, answer) values (?, ?) on duplicate key update partquestionanswer_id = last_insert_id(partquestionanswer_id)", array($partquestion_id, $answer));
+        $this->db->query("Insert into productquestionanswer (productquestion_id, answer) values (?, ?) on duplicate key update productquestionanswer_id = last_insert_id(productquestionanswer_id)", array($productquestion_id, $answer));
         
         
 
