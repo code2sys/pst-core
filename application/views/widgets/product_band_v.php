@@ -93,6 +93,7 @@ if (!function_exists('tag_creating')) {
         if(substr($seoUrl, 0, 5) == 'brand')
             $seoUrl = substr($seoUrl, -5, 0);
         if(@$prod['price']['sale_min']): $i++;?>
+        JACKPOT!
             <div class="product_box " <?php if($i == 4): $i = 0; ?> style="margin-right:0px; " <?php endif; ?> >
                 <?php if($prod['stock_code'] == 'Closeout'): ?>
                     <div class="percentage">CLOSEOUT <?php if(@$prod['price']['percentage']): echo number_format($prod['price']['percentage'], 0); ?>% OFF <?php endif; ?></div>
