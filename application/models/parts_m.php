@@ -2192,7 +2192,6 @@ class Parts_M extends Master_M {
         $records = $this->selectRecords('partnumber');
 
         print_r($records);
-        exit();
 
         //echo $this->db->last_query();
         //exit;
@@ -2327,6 +2326,10 @@ class Parts_M extends Master_M {
                 $rec['reviews'] = $this->getAverageReviews($rec['part_id']);
             }
         }
+
+        print_r($records);
+
+        exit();
         return $records;
     }
 
