@@ -353,7 +353,7 @@ $not_is_new = !isset($new) || !$new;
 
             $.ajax({
                 type: "POST",
-                url : "/adminproduct/ajax_product_question_remove/<?php echo $part_id; ?>/" + this.options.question.partquestion_id,
+                url : "/adminproduct/ajax_product_question_update/<?php echo $part_id; ?>/" + this.options.question.partquestion_id,
                 data: {
                     question: question
                 },
