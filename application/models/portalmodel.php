@@ -50,17 +50,7 @@ class Portalmodel extends Master_M {
     public function updatePartProductAnswer($part_id, $partquestion_id, $partnumberpartquestion_id, $answer) {
         $this->db->query("Update partnumberpartquestion set answer = ? where partnumberpartquestion_id = ?", array($answer, $partnumberpartquestion_id));
     }
-
-    public function getPartQuestion($partquestion_id) {
-        $query = $this->db->query("Select * from partquestion where partquestion_id = ?", array($partquestion_id));
-        $result = $query->result_array();
-        if (count($result) == 0) {
-            return FALSE;
-        }
-        $result = $result[0];
-        return $result;
-    }
-
+    
     /*
      * This is the only one that could fail - if that question already exists AND it is not a product question, we have to reject it.
      */
