@@ -64,8 +64,8 @@ $not_is_new = !isset($new) || !$new;
         <td><input type="text" size="64" maxlength="64" name="question" /></td>
     </tr>
     <tr>
-        <td><strong>Question:</strong></td>
-        <td><input type="text" size="64" maxlength="64" name="question" /></td>
+        <td><strong>Answer:</strong></td>
+        <td><input type="text" size="64" maxlength="64" name="answer" /></td>
     </tr>
     <tr>
         <td><strong>Distributor Part:</strong></td>
