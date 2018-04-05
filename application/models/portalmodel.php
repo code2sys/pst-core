@@ -18,6 +18,21 @@ class Portalmodel extends Master_M {
      * I added these to support the controls on the product questions.
      */
     public function removePartProductQuestion($part_id, $partquestion_id) {
+        $query = $this->db->query("Select * from partquestion where partquestion_id = ?", array($partquestion_id));
+        $result = $query->result_array();
+
+        if (count($result) == 0) {
+            return;
+        }
+        $result = $result[0];
+
+        if ($result["part_id"] != $part_id) {
+            return;
+        }
+
+        // you have to delete the product question...
+        $this->db->query("Delete from productquestion where productquestion_id = ?", array($result["productquestion_id"]));
+
         $this->db->query("Delete from partquestion where part_id = ? and partquestion_id = ? and productquestion > 0", array($part_id, $partquestion_id));
     }
 
