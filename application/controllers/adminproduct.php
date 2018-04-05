@@ -446,7 +446,7 @@ class Adminproduct extends Admin {
     public function ajax_product_question_remove($part_id, $partquestion_id) {
         $part = $this->admin_m->getAdminProduct($part_id);
 
-        if ($part["mx"] == 0) {
+        if ($part["mx"] != 0) {
             $this->Statusmodel->setError("Sorry, that is not an editable part number.");
         } else {
             $this->Portalmodel->removePartProductQuestion($part_id, $partquestion_id);
@@ -459,7 +459,7 @@ class Adminproduct extends Admin {
     public function ajax_product_question_update($part_id, $partquestion_id) {
         $part = $this->admin_m->getAdminProduct($part_id);
 
-        if ($part["mx"] == 0) {
+        if ($part["mx"] != 0) {
             $this->Statusmodel->setError("Sorry, that is not an editable part number.");
         } else {
             $question = array_key_exists("question", $_REQUEST) ? $_REQUEST["question"] : "";
@@ -476,7 +476,7 @@ class Adminproduct extends Admin {
     public function ajax_product_question_answer_remove($part_id, $partquestion_id, $partnumberpartquestion_id) {
         $part = $this->admin_m->getAdminProduct($part_id);
 
-        if ($part["mx"] == 0) {
+        if ($part["mx"] != 0) {
             $this->Statusmodel->setError("Sorry, that is not an editable part number.");
         } else {
             $this->Portalmodel->removePartProductAnswer($part_id, $partquestion_id, $partnumberpartquestion_id);
@@ -489,7 +489,7 @@ class Adminproduct extends Admin {
     public function ajax_product_question_answer_update($part_id, $partquestion_id, $partnumberpartquestion_id) {
         $part = $this->admin_m->getAdminProduct($part_id);
 
-        if ($part["mx"] == 0) {
+        if ($part["mx"] != 0) {
             $this->Statusmodel->setError("Sorry, that is not an editable part number.");
         } else {
             $answer = array_key_exists("answer", $_REQUEST) ? $_REQUEST["answer"] : "";
@@ -506,7 +506,7 @@ class Adminproduct extends Admin {
     public function ajax_product_question_answer_add($part_id) {
         $part = $this->admin_m->getAdminProduct($part_id);
 
-        if ($part["mx"] == 0) {
+        if ($part["mx"] != 0) {
             $this->Statusmodel->setError("Sorry, that is not an editable part number.");
         } else {
             $answer = array_key_exists("answer", $_REQUEST) ? $_REQUEST["answer"] : "";
