@@ -383,28 +383,30 @@ $not_is_new = !isset($new) || !$new;
                 e.preventDefault();
             }
 
-            $.ajax({
-                type: "POST",
-                url : "/adminproduct/ajax_product_question_remove/<?php echo $part_id; ?>/" + this.options.question.partquestion_id,
-                data: {
-                },
-                dataType: "json",
-                success: _.bind(function(response) {
-                    console.log(response);
-                    if (response.success) {
-                        $(this.el).remove();
-                        delete(QuestionViewIndex[this.options.question.partquestion_id]);
-                    } else {
-                        // do something with this error.
-                        alert(response.error_message);
+            if (confirm("Are you sure you want to remove this question and all answers associated with it?")) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/adminproduct/ajax_product_question_remove/<?php echo $part_id; ?>/" + this.options.question.partquestion_id,
+                    data: {},
+                    dataType: "json",
+                    success: _.bind(function (response) {
+                        console.log(response);
+                        if (response.success) {
+                            $(this.el).remove();
+                            delete(QuestionViewIndex[this.options.question.partquestion_id]);
+                        } else {
+                            // do something with this error.
+                            alert(response.error_message);
+                            window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
+                        }
+                    }, this),
+                    error: function () {
+                        alert("An error occurred; reloading page.");
                         window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
                     }
-                }, this),
-                error: function() {
-                    alert("An error occurred; reloading page.");
-                    window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
-                }
-            });
+                });
+            }
         }
     });
 
