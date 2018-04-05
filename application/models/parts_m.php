@@ -367,9 +367,13 @@ class Parts_M extends Master_M {
                 $results = $query->result_array();
                 $query->free_result();
                 print_r($results);
-                $parts[] = @$results[0]['part_id'];
+                if (count($results) > 0) {
+                    if (array_key_exists("part_id", $results[0])) {
+                        $parts[] = $results[0]['part_id'];
+                    }
+                }
             }
-            return $parts;
+            return count($parts) > 0 ? $parts : FALSE;
         } else
             return FALSE;
     }
