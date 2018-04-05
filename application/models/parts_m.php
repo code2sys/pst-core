@@ -2296,6 +2296,7 @@ class Parts_M extends Master_M {
                     $rec['activeRide'] = TRUE;
                 // Combo Processing
                 $combopartIds = $this->checkForCombo($rec['part_id']);
+                print_r($combopartIds);
                 if (is_array($combopartIds)) {
                     $PriceArr = array();
                     $finalPriceArr = array('retail_min' => 0, 'retail_max' => 0, 'sale_min' => 0, 'sale_max' => 0);
