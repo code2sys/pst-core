@@ -92,6 +92,8 @@ if (!function_exists('tag_creating')) {
         $seoUrl .= tag_creating($prod['label']);
         if(substr($seoUrl, 0, 5) == 'brand')
             $seoUrl = substr($seoUrl, -5, 0);
+
+        print "A\n";
         if(@$prod['price']['sale_min']): $i++;?>
         JACKPOT!
             <div class="product_box " <?php if($i == 4): $i = 0; ?> style="margin-right:0px; " <?php endif; ?> >
