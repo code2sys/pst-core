@@ -95,7 +95,7 @@ $not_is_new = !isset($new) || !$new;
         This is a little widget that looks for the question, answer, and then part. You have to choose the part from a drop-down, so we are going to need to have a list of available part variations.
      */
     window.AddView = Backbone.View.extend({
-        template: _.template($("#AddView")),
+        template: _.template($("#AddView").text()),
         className: "AddView",
         initialize : function(options) {
             this.options = options || {};
@@ -166,8 +166,8 @@ $not_is_new = !isset($new) || !$new;
         This is a row - it has edit and remove functionality - it shows the answer (which is the editable part), part number, distributor, and manufacturer part #
      */
     window.AnswerView = Backbone.View.extend({
-        template: _.template($("#AnswerView")),
-        className: "AddView",
+        template: _.template($("#AnswerView").text()),
+        className: "AnswerView",
         tagName: "tr",
         initialize : function(options) {
             this.options = options || {};
@@ -279,8 +279,8 @@ $not_is_new = !isset($new) || !$new;
     This is the question - it has edit and remove functionality - and it has a list of rows
      */
     window.QuestionView = Backbone.View.extend({
-        template: _.template($("#QuestionView")),
-        className: "AddView",
+        template: _.template($("#QuestionView").text()),
+        className: "QuestionView",
         initialize : function(options) {
             this.options = options || {};
             _.bindAll(this, "render", "editButton", "cancelButton", "saveButton", "removeButton", "addAnswerView");
