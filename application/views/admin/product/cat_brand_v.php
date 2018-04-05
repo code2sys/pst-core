@@ -396,6 +396,9 @@ $not_is_new = !isset($new) || !$new;
 
 
     window.registerNewQuestionView = function(partquestion_id, question, partnumberpartquestion_id, answer, part_number, manufacturer_part_number, name) {
+        partquestion_id = parseInt(partquestion_id, 10);
+        partnumberpartquestion_id = parseInt(partnumberpartquestion_id, 10);
+
         // OK, we need to see if there's a view
         if (!QuestionViewIndex[partquestion_id]) {
             // OK, there is no entry for this question...
