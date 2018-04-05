@@ -610,6 +610,8 @@ var categoryIdMap = {};
 
 
 
+            <div style="clear: both"></div>
+
             <?php else: ?>
         <div class="tab_content">
             <p><strong>Brand: </strong> <?php echo array_key_exists("name", $product_brand) ? $product_brand["name"] : ""; ?></p>
