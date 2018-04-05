@@ -586,6 +586,10 @@ var categoryIdMap = {};
         <?php if ($not_is_new && $product["mx"] == 0): ?>
         var fqh = $(".filterquestionholder");
         // Initialize all the questions we currently have
+        /*
+        <?php print_r($product_questions); ?>
+
+         */
         <?php foreach ($product_questions as $pq): ?>
         registerNewQuestionView(<?php echo $pq['partquestion_id']; ?>, "<?php echo addslashes($pq["question"]); ?>", <?php echo $pq["partnumberpartquestion_id"]; ?>, "<?php echo addslashes($pq["answer"]); ?>", "<?php echo addslashes($pq["partnumber"]); ?>", "<?php echo addslashes($pq["manufacturer_part_number"]); ?>", "<?php echo addslashes($pq["name"]); ?>");
         <?php endforeach; ?>
