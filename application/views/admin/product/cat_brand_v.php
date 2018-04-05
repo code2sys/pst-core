@@ -591,7 +591,9 @@ var categoryIdMap = {};
 
          */
         <?php foreach ($product_questions as $pq): ?>
-        registerNewQuestionView(<?php echo $pq['partquestion_id']; ?>, "<?php echo addslashes($pq["question"]); ?>", <?php echo $pq["partnumberpartquestion_id"]; ?>, "<?php echo addslashes($pq["answer"]); ?>", "<?php echo addslashes($pq["partnumber"]); ?>", "<?php echo addslashes($pq["manufacturer_part_number"]); ?>", "<?php echo addslashes($pq["name"]); ?>");
+        <?php foreach ($pq["partvariations"] as $pv): ?>
+        registerNewQuestionView(<?php echo $pq['partquestion_id']; ?>, "<?php echo addslashes($pv["question"]); ?>", <?php echo $pv["partnumberpartquestion_id"]; ?>, "<?php echo addslashes($pv["answer"]); ?>", "<?php echo addslashes($pv["partnumber"]); ?>", "<?php echo addslashes($pv["manufacturer_part_number"]); ?>", "<?php echo addslashes($pv["name"]); ?>");
+        <?php endforeach; ?>
         <?php endforeach; ?>
 
         // Add a spot to add a question...
