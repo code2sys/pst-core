@@ -9,7 +9,7 @@
 class Portalmodel extends Master_M {
 
     public function getQuickPartNumberVariation($part_id) {
-        $query = $this->db->query("Select partvariation.partnumber_id, partvariation.part_number, distributor.name from partpartnumber join partvariation using (partnumber_id) join distributor using (distributor_id) where partpartnumber.part_id = ? order by distributor.name, partvariation.part_number", array($part_id));
+        $query = $this->db->query("Select partvariation.partnumber_id, partvariation.part_number, distributor.name, partvariation.manufacturer_part_number from partpartnumber join partvariation using (partnumber_id) join distributor using (distributor_id) where partpartnumber.part_id = ? order by distributor.name, partvariation.part_number", array($part_id));
         return $query->result_array();
     }
 

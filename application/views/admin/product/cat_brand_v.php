@@ -92,6 +92,16 @@ $not_is_new = !isset($new) || !$new;
 
     var QuestionViewIndex = {};
 
+    var DistributorPartIndex = {};
+
+    <?php foreach ($distributor_part as $part): ?>
+    DistributorPartIndex[<?php echo $part["partnumber_id"]; ?>] = {
+        "name" : "<?php echo addslashes($part["name"]); ?>",
+        "part_number" : "<?php echo addslashes($part["part_number"]); ?>",
+        "manufacturer_part_number" : "<?php echo addslashes($part["manufacturer_part_number"]); ?>"
+    };
+    <?php endforeach; ?>
+
     /*
         This is a little widget that looks for the question, answer, and then part. You have to choose the part from a drop-down, so we are going to need to have a list of available part variations.
      */
@@ -133,6 +143,8 @@ $not_is_new = !isset($new) || !$new;
                 return;
             }
 
+            partnumber_id = parseInt(partnumber_id, 10);
+
             // now, we need to create a function that registers it locally
             $.ajax({
                 type: "POST",
@@ -147,7 +159,7 @@ $not_is_new = !isset($new) || !$new;
                     console.log(response);
                     if (response.success) {
                         // add it!
-                        registerNewQuestionView(response.partquestion_id, response.question, response.partnumberpartquestion_id, response.answer, response.part_number, response.manufacturer_part_number, response.name);
+                        registerNewQuestionView(response.data,partquestion_id, question, response.data.partnumberpartquestion_id, answer, DistributorPartIndex[partnumber_id].part_number, DistributorPartIndex[partnumber_id].manufacturer_part_number, DistributorPartIndex[partnumber_id].name);
                     } else {
                         // do something with this error.
                         alert(response.error_message);
