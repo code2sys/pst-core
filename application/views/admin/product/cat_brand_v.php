@@ -313,6 +313,7 @@ $not_is_new = !isset($new) || !$new;
             "click .removeButton" : "removeButton"
         },
         editButton: function(e) {
+            console.log("Call to editButton");
             if (e) {
                 ;
                 e.preventDefault();
@@ -321,6 +322,7 @@ $not_is_new = !isset($new) || !$new;
             this.$("input[type=text]").val(this.options.question.question);
             this.$(".edit").show();
             this.$(".noedit").hide();
+            console.log("Call to editButton done.");
         },
         cancelButton: function(e) {
             if (e) {
