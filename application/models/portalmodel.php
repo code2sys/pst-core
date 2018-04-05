@@ -39,7 +39,7 @@ class Portalmodel extends Master_M {
         if ($result == FALSE) {
             return;
         }
-        print_r($result);
+        error_log(print_r($result, true));
 
         $this->db->query("Update partquestion set question = ? where part_id = ? and partquestion_id = ? and productquestion > 0", array($question, $part_id, $partquestion_id));
         $this->db->query("update productquestion set question = ? where productquestion_id = ?", array($result["productquestion_id"]));
