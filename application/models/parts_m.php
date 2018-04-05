@@ -352,6 +352,8 @@ class Parts_M extends Master_M {
 
         $query = $this->db->query($sql);
         $partnumbers = $query->result_array();
+        print "Partnumbers \n";
+        print_r($partnumbers);
         $query->free_result();
         if (count($partnumbers) > 1) {
             $parts = array();
@@ -364,6 +366,7 @@ class Parts_M extends Master_M {
                 $query = $this->db->query($sql);
                 $results = $query->result_array();
                 $query->free_result();
+                print_r($results);
                 $parts[] = @$results[0]['part_id'];
             }
             return $parts;
