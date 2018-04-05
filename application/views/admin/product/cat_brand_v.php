@@ -227,7 +227,7 @@ $not_is_new = !isset($new) || !$new;
                 e.preventDefault();
             }
 
-            this.options.answer.answer = this.$("input[type-text]").val();
+            this.options.answer.answer = this.$("input[name='answer']").val();
 
             $.ajax({
                 type: "POST",
