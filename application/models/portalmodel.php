@@ -19,12 +19,10 @@ class Portalmodel extends Master_M {
      */
     public function removePartProductQuestion($part_id, $partquestion_id) {
         $query = $this->db->query("Select * from partquestion where partquestion_id = ?", array($partquestion_id));
-        $result = $query->result_array();
-
-        if (count($result) == 0) {
+        $result = $this->getPartQuestion($partquestion_id);
+        if ($result == FALSE) {
             return;
         }
-        $result = $result[0];
 
         if ($result["part_id"] != $part_id) {
             return;
@@ -37,7 +35,12 @@ class Portalmodel extends Master_M {
     }
 
     public function updatePartProductQuestion($part_id, $partquestion_id, $question) {
+        $result = $this->getPartQuestion($partquestion_id);
+        if ($result == FALSE) {
+            return;
+        }
         $this->db->query("Update partquestion set question = ? where part_id = ? and partquestion_id = ? and productquestion > 0", array($question, $part_id, $partquestion_id));
+        $this->db->query("update productquestion set question = ? where productquestion_id = ?", array($result["productquestion_id"]));
     }
 
     public function removePartProductAnswer($part_id, $partquestion_id, $partnumberpartquestion_id) {
@@ -46,6 +49,16 @@ class Portalmodel extends Master_M {
 
     public function updatePartProductAnswer($part_id, $partquestion_id, $partnumberpartquestion_id, $answer) {
         $this->db->query("Update partnumberpartquestion set answer = ? where partnumberpartquestion_id = ?", array($answer, $partnumberpartquestion_id));
+    }
+
+    public function getPartQuestion($partquestion_id) {
+        $query = $this->db->query("Select * from partquestion where partquestion_id = ?", array($partquestion_id));
+        $result = $query->result_array();
+        if (count($result) == 0) {
+            return FALSE;
+        }
+        $result = $result[0];
+        return $result;
     }
 
     /*
