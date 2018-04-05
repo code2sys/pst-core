@@ -571,6 +571,7 @@ $not_is_new = !isset($new) || !$new;
 
 
         <div class="filterquestionholder"></div>
+        <div class="addfilterquestionholder"></div>
 
 
 
@@ -613,7 +614,7 @@ var categoryIdMap = {};
         <?php endforeach; ?>
 
         // Add a spot to add a question...
-        fqh.append(new AddView().render().el);
+        $(".addfilterquestionholder").append(new AddView().render().el);
         <?php endif; ?>
     });
 
