@@ -543,6 +543,8 @@ $not_is_new = !isset($new) || !$new;
 
         </form>
 
+        <div style="clear: both"></div>
+
         <p><strong>Filter Questions</strong></p>
 
 
