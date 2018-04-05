@@ -68,7 +68,7 @@ class Portalmodel extends Master_M {
             $partquestion_id = $this->db->insert_id();
 
             // we almost certainly have to add it into product question
-            $this->db->query("Insert into productquestion (part_id, question) values (?, ?) on key duplicate update productquestion_id = last_insert_id(productquestion_id)", array($part_id, $question));
+            $this->db->query("Insert into productquestion (part_id, question) values (?, ?) on duplicate key update productquestion_id = last_insert_id(productquestion_id)", array($part_id, $question));
             error_log("Insert into product question");
             $productquestion_id = $this->db->insert_id();
             error_log("Retrieved productquestion $productquestion_id");
