@@ -19,6 +19,7 @@ $not_is_new = !isset($new) || !$new;
     <script type="application/javascript" src="/assets/newjs/jquery-ui.min.js" ></script>
 
 <script type="text/template" id="QuestionView">
+    <div style="clear: both"></div>
 <div class="noedit">
     <p><strong><span class="question"><%= obj.question %></span></strong> <button type="button" name="editButton">Edit</button><button type="button" name="removeButton">Remove</button></p>
 </div>
