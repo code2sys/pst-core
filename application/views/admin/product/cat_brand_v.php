@@ -570,7 +570,7 @@ var categoryIdMap = {};
         <?php endforeach; ?>
 
         // Add a spot to add a question...
-        $fqh.append(new AddView().render().el);
+        fqh.append(new AddView().render().el);
         <?php endif; ?>
     });
 
