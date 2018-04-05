@@ -83,6 +83,7 @@ if (!function_exists('tag_creating')) {
 
     <!-- PRODUCT LIST -->
     <?php $i = 0;  if(@$band['products']): foreach($band['products'] as $key => $prod):
+        print_r($prod);
         $seoUrl = '';
         if((isset($name)) &&(@$name != 'brand') &&(@$name != 'featured') && (@$name != 'category') && (@$name != 'question'))
             $seoUrl .= tag_creating($name).'-';
