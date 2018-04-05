@@ -145,12 +145,12 @@ $not_is_new = !isset($new) || !$new;
                 dataType: "json",
                 success: _.bind(function(response) {
                     console.log(response);
-                    if (response.data.success) {
+                    if (response.success) {
                         // add it!
-                        registerNewQuestionView(response.data.partquestion_id, response.data.question, response.data.partnumberpartquestion_id, response.data.answer, response.data.part_number, response.data.manufacturer_part_number, response.data.name);
+                        registerNewQuestionView(response.partquestion_id, response.question, response.partnumberpartquestion_id, response.answer, response.part_number, response.manufacturer_part_number, response.name);
                     } else {
                         // do something with this error.
-                        alert(response.data.error_message);
+                        alert(response.error_message);
                         window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
                     }
                 }, this),
@@ -226,12 +226,12 @@ $not_is_new = !isset($new) || !$new;
                 dataType: "json",
                 success: _.bind(function(response) {
                     console.log(response);
-                    if (response.data.success) {
+                    if (response.success) {
                         this.$("span.answer").text = this.options.answer.answer;
                         this.cancelButton();
                     } else {
                         // do something with this error.
-                        alert(response.data.error_message);
+                        alert(response.error_message);
                         window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
                     }
                 }, this),
@@ -256,12 +256,12 @@ $not_is_new = !isset($new) || !$new;
                     dataType: "json",
                     success: _.bind(function (response) {
                         console.log(response);
-                        if (response.data.success) {
+                        if (response.success) {
                             $(this.el).remove();
                             delete(QuestionViewIndex[this.options.answer.partquestion_id]["answers"][this.options.answer.partnumberpartquestion_id]);
                         } else {
                             // do something with this error.
-                            alert(response.data.error_message);
+                            alert(response.error_message);
                             window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
                         }
                     }, this),
@@ -346,13 +346,13 @@ $not_is_new = !isset($new) || !$new;
                 dataType: "json",
                 success: _.bind(function(response) {
                     console.log(response);
-                    if (response.data.success) {
+                    if (response.success) {
                         this.options.question.question = question;
                         this.$("span.question").text = this.options.question.question;
                         this.cancelButton();
                     } else {
                         // do something with this error.
-                        alert(response.data.error_message);
+                        alert(response.error_message);
                         window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
                     }
                 }, this),
@@ -377,12 +377,12 @@ $not_is_new = !isset($new) || !$new;
                 dataType: "json",
                 success: _.bind(function(response) {
                     console.log(response);
-                    if (response.data.success) {
+                    if (response.success) {
                         $(this.el).remove();
                         delete(QuestionViewIndex[this.options.question.partquestion_id]);
                     } else {
                         // do something with this error.
-                        alert(response.data.error_message);
+                        alert(response.error_message);
                         window.location.href = "/adminproduct/product_category_brand/<?php echo $part_id; ?>/" + (new Date()).getTime();
                     }
                 }, this),
