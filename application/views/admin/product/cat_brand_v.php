@@ -290,7 +290,7 @@ $not_is_new = !isset($new) || !$new;
             return this;
         },
         addAnswerView: function(v) {
-            this.(".answers").append(v.render().el);
+            this.$(".answers").append(v.render().el);
         },
         events: {
             "click .editButton" : "editButton",
