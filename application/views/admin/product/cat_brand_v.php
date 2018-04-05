@@ -47,7 +47,7 @@ $not_is_new = !isset($new) || !$new;
 <td><%= obj.name %></td>
 <td><%= obj.part_number %></td>
 <td><%= obj.manufacturer_part_number %></td>
-    <td><div class="answeredit"><button type="button" name="editAnswerButton">Edit</button><button type="button" name="removeAnswerButton">Remove</button></div><div class="edit"><button type="button" name="saveAnswerButton">Save Changes</button><button type="button" name="cancelAnswerButton">Cancel Changes</button></div></td>
+    <td><div class="noansweredit"><button type="button" name="editAnswerButton">Edit</button><button type="button" name="removeAnswerButton">Remove</button></div><div class="answeredit"><button type="button" name="saveAnswerButton">Save Changes</button><button type="button" name="cancelAnswerButton">Cancel Changes</button></div></td>
 </script>
 <script type="text/template" id="AddView">
 <p><strong>Add a New Filter Question/Answer</strong></p>
