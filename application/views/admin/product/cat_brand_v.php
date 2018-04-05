@@ -189,7 +189,7 @@ $not_is_new = !isset($new) || !$new;
         setAnswer: function(a) {
             this.options.answer.answer = a;
             this.$("input[type=text]").val(this.options.answer.answer);
-            this.$("span.answer").text = this.options.answer.answer;
+            this.$("span.answer").text(this.options.answer.answer);
         },
         render: function() {
             $(this.el).html(this.template(this.options.answer));
@@ -239,7 +239,7 @@ $not_is_new = !isset($new) || !$new;
                 success: _.bind(function(response) {
                     console.log(response);
                     if (response.success) {
-                        this.$("span.answer").text = this.options.answer.answer;
+                        this.$("span.answer").text(this.options.answer.answer);
                         this.cancelButton();
                     } else {
                         // do something with this error.
@@ -362,7 +362,7 @@ $not_is_new = !isset($new) || !$new;
                     console.log(response);
                     if (response.success) {
                         this.options.question.question = question;
-                        this.$("span.question").text = this.options.question.question;
+                        this.$("span.question").text(this.options.question.question);
                         this.cancelButton();
                     } else {
                         // do something with this error.
