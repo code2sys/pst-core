@@ -37,25 +37,34 @@ class Portalmodel extends Master_M {
      * This is the only one that could fail - if that question already exists AND it is not a product question, we have to reject it.
      */
     public function addPartProductAnswer($part_id, $question, $answer, $partnumber_id, &$partquestion_id, &$partnumberpartquestion_id) {
+error_log("a1");
         // Step #1: Does this question exist?
         $query = $this->db->query("Select * from partquestion where part_id = ? and question = ?", array($part_id, $question));
+        error_log("a2");
         $question_struct = $query->result_array();
+        error_log("a3");
         if (count($question_struct) > 0) {
+            error_log("a4");
             $question_struct = $question_struct[0];
             if ($question_struct["productquestion"] > 0) {
                 $partquestion_id = $question_struct["partquestion_id"];
             } else {
                 return false;
             }
+            error_log("a5");
         } else {
+            error_log("a6");
             // OK, we have to add it..
             $this->db->query("Insert into partquestion (part_id, question, productquestion) values (?, ?, 1)", array($part_id, $question));
             $partquestion_id = $this->db->insert_id();
+            error_log("a7");
         }
 
+        error_log("a8");
         // OK, we have to just insert it and update it if there's already there
         $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key set partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id), answer = values(answer)", array($partnumber_id, $partquestion_id, $answer));
         $partnumberpartquestion_id = $this->db->insert_id();
+        error_log("a9");
 
         return true;
     }
