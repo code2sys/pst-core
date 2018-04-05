@@ -91,6 +91,7 @@ if (!function_exists('tag_creating')) {
         $seoUrl .= tag_creating($prod['label']);
         if(substr($seoUrl, 0, 5) == 'brand')
             $seoUrl = substr($seoUrl, -5, 0);
+
         if(@$prod['price']['sale_min']): $i++;?>
             <div class="product_box " <?php if($i == 4): $i = 0; ?> style="margin-right:0px; " <?php endif; ?> >
                 <?php if($prod['stock_code'] == 'Closeout'): ?>
