@@ -521,18 +521,23 @@ class Adminproduct extends Admin {
             error_log("e");
 
             if ($question == "") {
+                error_log("e1");
                 $this->Statusmodel->setError("Sorry, no question text received.");
             } else if ($answer == "") {
+                error_log("e2");
                 $this->Statusmodel->setError("Sorry, no answer text received.");
             } else if ($partnumber_id == 0) {
+                error_log("e3");
                 $this->Statusmodel->setError("Sorry, no distributor part number received.");
             } else if ($this->Portalmodel->addPartProductAnswer($part_id, $question, $answer, $partnumber_id, $partquestion_id, $partnumberpartquestion_id)) {
+                error_log("e4");
                 // we need to set the data...
 
                 $this->Statusmodel->setData("partquestion_id", $partquestion_id);
                 $this->Statusmodel->setData("partnumberpartquestion_id", $partnumberpartquestion_id);
                 $this->Statusmodel->setSuccess("Answer added successfully.");
             } else {
+                error_log("e5");
                 $this->Statusmodel->setError("Sorry, that question is not a category filter question.");
             }
             error_log("f");
