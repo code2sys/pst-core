@@ -112,7 +112,7 @@ $not_is_new = !isset($new) || !$new;
         addFunction: function(e) {
             console.log(e);
             if (e) {
-                e.preventPropagation();
+                e.preventDefault();
             }
 
             var question = this.$("input[name='question']").val();
@@ -193,7 +193,7 @@ $not_is_new = !isset($new) || !$new;
         editButton: function(e) {
             if (e) {
                 ;
-                e.preventPropagation();
+                e.preventDefault();
             }
 
             this.$("input[type=text]").val(this.options.answer.answer);
@@ -203,7 +203,7 @@ $not_is_new = !isset($new) || !$new;
         cancelButton: function(e) {
             if (e) {
                 ;
-                e.preventPropagation();
+                e.preventDefault();
             }
 
             this.$(".noansweredit").show();
@@ -212,7 +212,7 @@ $not_is_new = !isset($new) || !$new;
         saveButton: function(e) {
             if (e) {
                 ;
-                e.preventPropagation();
+                e.preventDefault();
             }
 
             this.options.answer.answer = this.$("input[type-text]").val();
@@ -245,7 +245,7 @@ $not_is_new = !isset($new) || !$new;
         removeButton: function(e) {
             if (e) {
                 ;
-                e.preventPropagation();
+                e.preventDefault();
             }
 
             if (confirm('Really remove this answer?')) {
@@ -302,7 +302,7 @@ $not_is_new = !isset($new) || !$new;
         editButton: function(e) {
             if (e) {
                 ;
-                e.preventPropagation();
+                e.preventDefault();
             }
 
             this.$("input[type=text]").val(this.options.question.question);
@@ -312,12 +312,12 @@ $not_is_new = !isset($new) || !$new;
         cancelButton: function(e) {
             if (e) {
                 ;
-                e.preventPropagation();
+                e.preventDefault();
             }
 
             if (e) {
                 ;
-                e.preventPropagation();
+                e.preventDefault();
             }
 
             this.$(".noedit").show();
@@ -326,7 +326,7 @@ $not_is_new = !isset($new) || !$new;
         saveButton: function(e) {
             if (e) {
                 ;
-                e.preventPropagation();
+                e.preventDefault();
             }
 
 
@@ -365,7 +365,7 @@ $not_is_new = !isset($new) || !$new;
         removeButton: function(e) {
             if (e) {
                 ;
-                e.preventPropagation();
+                e.preventDefault();
             }
 
             $.ajax({
