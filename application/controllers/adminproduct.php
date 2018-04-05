@@ -14,6 +14,7 @@ class Adminproduct extends Admin {
         parent::__construct();
         $this->load->model("Portalmodel");
         $this->load->model("Statusmodel");
+        $this->load->model("admin_m");
         if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
             exit();
