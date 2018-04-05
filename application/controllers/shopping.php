@@ -344,6 +344,7 @@ class Shopping extends Master_Controller {
             $this->_mainData['brandMain'] = $this->parts_m->getBrand($listParameters['brand']);
         }
         $this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters1, $activeMachine, $this->_adpdtLimit);
+        print_r($this->_mainData['band']['products']); exit();
         $this->_mainData['questions'] = $this->parts_m->getFilterQuestions($listParameters);
 		
 		// echo '<pre>';

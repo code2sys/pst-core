@@ -2191,8 +2191,6 @@ class Parts_M extends Master_M {
         $this->db->where("partvariation.from_lightspeed", 0, FALSE);
         $records = $this->selectRecords('partnumber');
 
-        print_r($records);
-
         //echo $this->db->last_query();
         //exit;
         if ($records) {
@@ -2327,9 +2325,7 @@ class Parts_M extends Master_M {
             }
         }
 
-        print_r($records);
 
-        exit();
         return $records;
     }
 
