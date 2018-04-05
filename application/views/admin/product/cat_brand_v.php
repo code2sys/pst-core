@@ -111,7 +111,7 @@ $not_is_new = !isset($new) || !$new;
         },
         addFunction: function(e) {
             if (e) {
-                e.stopEvent();
+                ;
                 e.preventPropagation();
             }
 
@@ -192,7 +192,7 @@ $not_is_new = !isset($new) || !$new;
         },
         editButton: function(e) {
             if (e) {
-                e.stopEvent();
+                ;
                 e.preventPropagation();
             }
 
@@ -202,7 +202,7 @@ $not_is_new = !isset($new) || !$new;
         },
         cancelButton: function(e) {
             if (e) {
-                e.stopEvent();
+                ;
                 e.preventPropagation();
             }
 
@@ -211,7 +211,7 @@ $not_is_new = !isset($new) || !$new;
         },
         saveButton: function(e) {
             if (e) {
-                e.stopEvent();
+                ;
                 e.preventPropagation();
             }
 
@@ -244,7 +244,7 @@ $not_is_new = !isset($new) || !$new;
         },
         removeButton: function(e) {
             if (e) {
-                e.stopEvent();
+                ;
                 e.preventPropagation();
             }
 
@@ -301,7 +301,7 @@ $not_is_new = !isset($new) || !$new;
         },
         editButton: function(e) {
             if (e) {
-                e.stopEvent();
+                ;
                 e.preventPropagation();
             }
 
@@ -311,12 +311,12 @@ $not_is_new = !isset($new) || !$new;
         },
         cancelButton: function(e) {
             if (e) {
-                e.stopEvent();
+                ;
                 e.preventPropagation();
             }
 
             if (e) {
-                e.stopEvent();
+                ;
                 e.preventPropagation();
             }
 
@@ -325,7 +325,7 @@ $not_is_new = !isset($new) || !$new;
         },
         saveButton: function(e) {
             if (e) {
-                e.stopEvent();
+                ;
                 e.preventPropagation();
             }
 
@@ -364,7 +364,7 @@ $not_is_new = !isset($new) || !$new;
         },
         removeButton: function(e) {
             if (e) {
-                e.stopEvent();
+                ;
                 e.preventPropagation();
             }
 
