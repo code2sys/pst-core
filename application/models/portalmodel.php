@@ -51,11 +51,23 @@ class Portalmodel extends Master_M {
             // OK, we have to add it..
             $this->db->query("Insert into partquestion (part_id, question, productquestion) values (?, ?, 1)", array($part_id, $question));
             $partquestion_id = $this->db->insert_id();
+
+            // we almost certainly have to add it into product question
+            $this->db->query("Insert into productquestion (part_id, question) values (?, ?) on key update productquestion_id = last_insert_id(productquestion_id)", array($part_id, $question));
+
+            $productquestion_id = $this->db->insert_id();
+            $this->db->update("Update partquestion set productquestion_id = ? where partquestion_id = ? limit 1", array($productquestion_id, $partquestion_id));
         }
 
         // OK, we have to just insert it and update it if there's already there
         $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key update partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id), answer = values(answer)", array($partnumber_id, $partquestion_id, $answer));
         $partnumberpartquestion_id = $this->db->insert_id();
+
+        // We also have to insert it into the partquestionanswer and the productquestionanswer tables...
+        $this->db->query("Insert into partquestionanswer (partquestion_id, answer) values (?, ?) on dupliate key update partquestionanswer_id = last_insert_id(partquestionanswer_id)", array($partquestion_id, $answer));
+        $this->db->query("Insert into productquestionanswer (productquestion_id, answer) values (?, ?) on dupliate key update productquestionanswer_id = last_insert_id(productquestionanswer_id)", array($productquestion_id, $answer));
+        
+        
 
         return true;
     }
