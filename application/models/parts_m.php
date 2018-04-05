@@ -352,8 +352,6 @@ class Parts_M extends Master_M {
 
         $query = $this->db->query($sql);
         $partnumbers = $query->result_array();
-        print "Partnumbers \n";
-        print_r($partnumbers);
         $query->free_result();
         if (count($partnumbers) > 1) {
             $parts = array();
@@ -366,7 +364,6 @@ class Parts_M extends Master_M {
                 $query = $this->db->query($sql);
                 $results = $query->result_array();
                 $query->free_result();
-                print_r($results);
                 if (count($results) > 0) {
                     if (array_key_exists("part_id", $results[0])) {
                         $parts[] = $results[0]['part_id'];
@@ -2303,7 +2300,6 @@ class Parts_M extends Master_M {
                     $rec['activeRide'] = TRUE;
                 // Combo Processing
                 $combopartIds = $this->checkForCombo($rec['part_id']);
-                print_r($combopartIds);
                 if (is_array($combopartIds)) {
                     $PriceArr = array();
                     $finalPriceArr = array('retail_min' => 0, 'retail_max' => 0, 'sale_min' => 0, 'sale_max' => 0);
@@ -2321,11 +2317,9 @@ class Parts_M extends Master_M {
                     }
 
 
-                    print "Call to calculateMarkup with input " . implode(", ", array($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup'])) . "\n";
                     $rec['price'] = $this->calculateMarkup($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup']);
                 } else {
                     //partNumberRec
-                    print "Call to lower calculateMarkup with input " . implode(", ", array($partNumberRec['price_min'], $partNumberRec['price_max'], $partNumberRec['sale_min'], $partNumberRec['sale_max'], @$_SESSION['userRecord']['markup'])) . "\n";
                     $rec['price'] = $this->calculateMarkup($partNumberRec['price_min'], $partNumberRec['price_max'], $partNumberRec['sale_min'], $partNumberRec['sale_max'], @$_SESSION['userRecord']['markup']);
                 }
 
