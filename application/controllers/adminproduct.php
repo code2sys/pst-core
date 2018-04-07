@@ -1371,5 +1371,11 @@ class Adminproduct extends Admin {
         header("Location: /adminproduct/dealerinventory/$id");
     }
 
+    public function ajax_save_dealerinventory($part_id) {
+        $part = $this->admin_m->getAdminProduct($part_id);
 
+        $this->admin_m->setDistributorInventory($_REQUEST["partvariation_id"], $_REQUEST["quantity_available"], $_REQUEST["cost"]);
+
+        $this->Statusmodel->outputStatus();
+    }
 }
