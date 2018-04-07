@@ -467,7 +467,7 @@ $read_only = $product["mx"] > 0;
     <?php endif; ?>
 </script>
 <script type="text/template" id="PartPersonalizationPartNumberRow">
-    <td class="fitmentcell"><em></em> <a href="#" class="fitment">Edit Fitment</a><a href="#" class="hidefitment" style="display: none">Hide Fitment</a></td>
+    <td class="fitmentcell"><em></em> <?php if (!$read_only): ?><a href="#" class="fitment">Edit Fitment</a><a href="#" class="hidefitment" style="display: none">Hide Fitment</a><?php endif; ?></td>
     <td ><%= obj.distributor_name %><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %> <em>Via Lightspeed</em><% } %></td>
     <td ><%= obj.part_number %></td>
     <?php if ($read_only): ?>
