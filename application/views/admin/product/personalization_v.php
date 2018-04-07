@@ -701,7 +701,30 @@ $read_only = $product["mx"] > 0;
                     "change input[name=price]" : "update_local_settings",
                     "change input[name=qty_available]" : "update_local_settings",
                     "change input[name=cost]" : "update_local_settings",
-                    "change input[name=weight]" : "update_local_settings"
+                    "change input[name=weight]" : "update_local_settings",
+                    "click .updateDealerInventory" : "update_dealer_inventory"
+                },
+                update_dealer_inventory : function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    // We have to fetch and post it...
+                    $.ajax({
+                        "url" : "/adminproduct/ajax_save_dealerinventory/" + "<?php echo $part_id; ?>",
+                        "type" : "POST",
+                        "dataType" : "json",
+                        "async" : false,
+                        "data" : {
+                            "partvariation_id" : this.model.get('partvariation_id'),
+                            "quantity_available" : this.$("input[name='dealer_quantity']").val(),
+                            "cost" : this.$("input[name='dealer_cost']").val()
+                        },
+                        "success" : _.bind(function(data) {
+                            if (!data.success) {
+                                showGritter("error", data.error_message);
+                            }
+                        }, this)
+                    });
                 },
                 update_local_settings : function(e) {
                     var price = this.$("input[name=price]").val();
@@ -770,7 +793,7 @@ $read_only = $product["mx"] > 0;
                 initialize: function(options) {
                     //console.log("Here at initialize");
                     this.options = options || {};
-                    _.bindAll(this, "stock_code", "render", "remove", "fitment", "addfitment", "removefitment", "recalculatefitment", "hidefitment");
+                    _.bindAll(this, "stock_code", "render", "remove", "fitment", "addfitment", "removefitment", "recalculatefitment", "hidefitment", "update_dealer_inventory");
 
                     this.pv = _.find(app.PartVariationCollection.models, function(x) {
                         return (x.get('partnumber_id') == this.model.get('partnumber_id'));
