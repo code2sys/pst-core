@@ -354,9 +354,13 @@ $read_only = $product["mx"] > 0;
             <th class="center" >Fitment</th>
             <th class="center" >Distributor</th>
             <th class="center" >Part #</th>
-            <th class="center">MSRP</th>
-            <th class="center">Qty Available</th>
-            <th class="center">Cost</th>
+            <?php if ($read_only): ?>
+                <th class="center">Dealer Inventory</th>
+            <?php else: ?>
+                <th class="center">MSRP</th>
+                <th class="center">Qty Available</th>
+                <th class="center">Cost</th>
+            <?php endif; ?>
             <th class="center"><?php if ($read_only): ?>Stock Status<?php else: ?>Closeout?<?php endif; ?></th>
             <th class="center">Shipping Weight</th>
             <?php if (!$read_only): ?>
@@ -472,9 +476,7 @@ $read_only = $product["mx"] > 0;
     <td ><%= obj.distributor_name %><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %> <em>Via Lightspeed</em><% } %></td>
     <td ><%= obj.part_number %></td>
     <?php if ($read_only): ?>
-        <td ><%= obj.price %></td>
-        <td ><%= obj.qty_available %></td>
-        <td ><%= obj.cost %></td>
+        <td >Qty: <%= obj.qty_available %> Cost: <%= obj.cost %></td>
         <td align="center"><%= obj.stock_code %></td>
         <td ><%= obj.weight %></td>
     <?php else: ?>
