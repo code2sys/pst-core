@@ -43,7 +43,7 @@ if (count($featured) > 0) {
 
         mustache_tmpl_iterate($template, "FeaturedModels");
         mustache_tmpl_set($template, "FeaturedModels", array(
-            "link" => strtolower(str_replace(" ", "", $feature['type'])).'/'.str_replace(' ', '_', trim($feature['title'])).'/'.$feature['sku'],
+            "link" => strtolower(str_replace(" ", "", $feature['type'])).'/'.$feature['url_title'].'/'.$feature['sku'],
             "image_name" => $feature["external"] > 0 ? $feature["image_name"] : ("/media/" . $feature["image_name"]),
             "original_title" => $feature["title"],
             "price" => $price,
