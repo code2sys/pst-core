@@ -1375,7 +1375,7 @@ class Adminproduct extends Admin {
         $part = $this->admin_m->getAdminProduct($part_id);
 
         $this->admin_m->setDistributorInventory($_REQUEST["partvariation_id"], $_REQUEST["quantity_available"], $_REQUEST["cost"]);
-
+        $this->Statusmodel->setSuccess("Updated successfully.");
         $this->Statusmodel->outputStatus();
     }
 }
