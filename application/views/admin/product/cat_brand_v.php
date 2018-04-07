@@ -123,7 +123,7 @@ $not_is_new = !isset($new) || !$new;
                     console.log(response);
                     if (response.success) {
                         // add it!
-                        registerNewQuestionView(response.data.partquestion_id, question, response.data.partnumberanswer_id, answer);
+                        registerNewQuestionView(response.data.partquestion_id, question, response.data.partquestionanswer_id, answer);
                     } else {
                         // do something with this error.
                         alert(response.error_message);
