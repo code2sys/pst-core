@@ -556,6 +556,7 @@ class Adminproduct extends Admin {
 
         $this->_mainData["distributor_part"] = $this->Portalmodel->getQuickPartNumberVariation($id);
         $this->_mainData["product_questions"] = $this->Portalmodel->getFilterQuestions($id);
+        $this->_mainData["product_answers"] = $this->Portalmodel->getFilterQuestionAnswers($id);
         $this->_mainData['product_categories'] = $this->Portalmodel->getPartCategories($id);
         $this->_mainData['product_brand'] = $this->Portalmodel->getPartBrand($id);
         $query = $this->db->query("Select category_id, long_name from category order by long_name");

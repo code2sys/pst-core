@@ -101,6 +101,27 @@ class Portalmodel extends Master_M {
         return $query->result_array();
     }
 
+    public function getFilterQuestionAnswers($part_id) {
+        $query = $this->db->query("Select partquestion.*, partquestionanswer.answer frmo partquestion join partquestionanswer using (partquestion_id) where partquestion.part_id = ? and partquestion.productquestion > 0 order by partquestion.question, partquestionanswer.answer", array($part_id));
+        $results = array();
+
+        foreach ($query->result_array() as $row) {
+            $partquestion_id = $row["partquestion_id"];
+
+            if (!array_key_exists($partquestion_id, $results)) {
+                $results[$partquestion_id] = array(
+                    "partquestion_id" => $row["partquestion_id"],
+                    "question" => $row["question"],
+                    "answers" => array()
+                );
+            }
+
+            $results[$partquestion_id]["answers"][] = $row["answer"];
+        }
+
+        return $results;
+    }
+
     public function getFilterQuestions($part_id) {
         $query = $this->db->query("select partquestion.*, partnumberpartquestion.*, partvariation.part_number , partvariation.manufacturer_part_number , distributor.name , partnumberpartquestion.answer from partquestion join partnumberpartquestion using (partquestion_id) join partvariation using (partnumber_id) join distributor using (distributor_id) where partquestion.part_id = ? and partquestion.productquestion > 0 order by partquestion.question, partnumberpartquestion.answer, distributor.name, partvariation.part_number", array($part_id));
 
