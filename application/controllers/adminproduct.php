@@ -1376,6 +1376,9 @@ class Adminproduct extends Admin {
 
         $this->admin_m->setDistributorInventory($_REQUEST["partvariation_id"], $_REQUEST["quantity_available"], $_REQUEST["cost"]);
         $this->Statusmodel->setSuccess("Updated successfully.");
+        $this->db->query("Insert into queued_parts (part_id) values (?)", array($id));
+        $this->admin_m->processParts(5); // I move a little bit along, but hope this processes this part.
+
         $this->Statusmodel->outputStatus();
     }
 }

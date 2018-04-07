@@ -1705,6 +1705,7 @@ class Admin_M extends Master_M {
             $this->db->query("Delete from partdealervariation where partvariation_id = ?", array($partvariation_id));
             $this->db->query("Update partvariation set protect = 0 where partvariation_id = ?", array($partvariation_id));
         }
+
     }
 
     public function updateDistributorInventory($arr) {

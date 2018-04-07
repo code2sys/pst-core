@@ -721,9 +721,9 @@ $read_only = $product["mx"] > 0;
                         },
                         "success" : _.bind(function(data) {
                             if (!data.success) {
-                                showGritter("error", data.error_message);
+                                showGritter("Error", data.error_message);
                             } else {
-                                showGritter("success", data.success_message);
+                                showGritter("Success", data.success_message);
                             }
                         }, this)
                     });
