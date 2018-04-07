@@ -802,9 +802,11 @@ $read_only = $product["mx"] > 0;
                         var fitment_string = "";
                         fitment_string = _.map(this.fitments.models, function(x) { return x.get('make_name') + " " + x.get('model_name') + ' ' + x.get('year'); }).join("; ");
 
+                        <?php if (!$read_only): ?>
                         if (fitment_string.length > 100) {
                             fitment_string = fitment_string.substring(0,100) + "...";
                         }
+                        <?php endif; ?>
 
                         this.$(".fitmentcell em").html(fitment_string);
                     } else {
