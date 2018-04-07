@@ -357,10 +357,11 @@ $read_only = $product["mx"] > 0;
             <th class="center">MSRP</th>
             <th class="center">Qty Available</th>
             <th class="center">Cost</th>
-            <th class="center">Closeout?</th>
+            <th class="center"><?php if ($read_only): ?>Stock Status<?php else: ?>Closeout?<?php endif; ?></th>
             <th class="center">Shipping Weight</th>
+            <?php if (!$read_only): ?>
             <th class="center" ></th>
-
+            <?php endif; ?>
         </tr>
         </thead>
         <tbody class="PartPersonalizationQuestionAnswerViewtbody">
@@ -476,7 +477,6 @@ $read_only = $product["mx"] > 0;
         <td ><%= obj.cost %></td>
         <td align="center"><%= obj.stock_code %></td>
         <td ><%= obj.weight %></td>
-        <td ></td>
     <?php else: ?>
     <td ><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %><%= obj.price %><% } else { %><input type="text" name="price" value="<%= obj.price %>" /><% } %></td>
     <td ><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %><%= obj.qty_available %><% } else { %><input type="text" name="qty_available" value="<%= obj.qty_available %>" /><% } %></td>
