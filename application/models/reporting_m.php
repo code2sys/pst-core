@@ -448,11 +448,6 @@ class Reporting_M extends Master_M {
                 $classid = 1049211046;
             }
 
-
-
-
-
-            $title = str_replace(' ', '_', trim($motorcycle['title']));
             $motercycle_type = $this->get_motercycle_type_name($motorcycle['vehicle_type']);
             $motercycle_images = $this->get_motercycle_image($motorcycle['id']);
             $desc = preg_replace("/\r|\n/", "", $motorcycle['description']);
@@ -472,7 +467,7 @@ class Reporting_M extends Master_M {
             $data['year'] = $motorcycle['year'];
             $data['price'] = $motorcycle['sale_price'];
             $data['newused'] = $condition;
-            $data['itemurl'] = base_url(strtolower($motercycle_type) . '/' . $title . '/' . $motorcycle['sku']);
+            $data['itemurl'] = base_url(strtolower($motercycle_type) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']);
             $data['miles'] = $motorcycle['mileage'];
             $data['engine'] = $motorcycle['engine_type'];
             $data['weight'] = '';
