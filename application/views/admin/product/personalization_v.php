@@ -332,12 +332,13 @@ $read_only = $product["mx"] > 0;
 </script>
 
 <script type="text/template" id="PartPersonalizationQuestionAnswerDistributorPartView">
-    <td><a href="#" class="btn btn-block btn-default btn-icon glyphicons delete"><i></i>DELETE</a></td>
+    <td><?php if (!$read_only): ?><a href="#" class="btn btn-block btn-default btn-icon glyphicons delete"><i></i>DELETE</a><?php endif; ?></td>
     <td><%= obj.distributor_name %></td>
     <td><%= obj.part_number %></td>
 </script>
 <script type="text/template" id="PartPersonalizationQuestionAnswerView">
     <h4 class="heading-block">Answer: <%= obj.answer %></h4>
+    <?php if (!$read_only): ?>
     <% if (!obj.readonly) { %>
     <form>
         <strong>Answer:</strong> <input type="text" name="answer" value="<%= obj.answer %>" />
@@ -345,6 +346,7 @@ $read_only = $product["mx"] > 0;
         <input type="submit" class="deleteanswerbutton" value="Delete Answer" />
     </form>
     <% } %>
+    <?php endif; ?>
     <br/>
     <table class="table table-primary table-bordered table-vertical-center modifiedth" width="100%">
         <thead>
@@ -370,7 +372,8 @@ $read_only = $product["mx"] > 0;
 </script>
 
 <script type="text/template" id="PartPersonalizationCreateNewAnswerView">
-    <p><strong>Add New Answer</strong></p>
+<?php if (!$read_only): ?>
+<p><strong>Add New Answer</strong></p>
 
     <form>
         <input type="text" name="answer" placeholder="Enter Answer..." />
@@ -389,6 +392,7 @@ $read_only = $product["mx"] > 0;
 
         </div>
     </form>
+    <?php endif; ?>
 </script>
 <script type="text/template" id="PartPersonalizationQuestionView">
     <div class="innerLR">
@@ -397,6 +401,7 @@ $read_only = $product["mx"] > 0;
                 <h4 class="heading">Personalization Question: <%= obj.question %></h4>
             </div>
             <div class="widget-body">
+                <?php if (!$read_only): ?>
                 <% if (!obj.readonly) { %>
                 <form>
                     <em>Question:</em> <input type="text" name="question" value="<%= obj.question %>" />
@@ -408,6 +413,7 @@ $read_only = $product["mx"] > 0;
 <!--                <label><input type="radio" name="productquestion" value="1" <% if (parseInt(obj.productquestion, 10) > 0) { %>checked='checked'<% } %> /> Filter Question</label>-->
 <!--                </form>-->
                 <% } %>
+                <?php endif; ?>
                 <div class="answerdiv">
 
                 </div>
@@ -420,6 +426,7 @@ $read_only = $product["mx"] > 0;
     </div>
 </script>
 <script type="text/template" id="PartPersonalizationNewQuestionView">
+    <?php if (!$read_only): ?>
     <div class="innerLR">
         <div class="widget">
             <div class="widget-head">
@@ -434,6 +441,7 @@ $read_only = $product["mx"] > 0;
             </div>
         </div>
     </div>
+    <?php endif; ?>
 </script>
 <script type="text/template" id="PartPersonalizationView">
     <div class="fitment"></div>
@@ -452,23 +460,35 @@ $read_only = $product["mx"] > 0;
 <script type="text/template" id="PartPersonalizationPartNumberPartVariationRow">
     <td width="33%"><%= obj.distributor_name %></td>
     <td width="33%"><%= obj.part_number %></td>
+    <?php if (!$read_only): ?>
     <% if (!obj.readonly) { %>
     <td width="33%"><a href="#" class="removelink">Delete</a></td>
     <% } %>
+    <?php endif; ?>
 </script>
 <script type="text/template" id="PartPersonalizationPartNumberRow">
     <td class="fitmentcell"><em></em> <a href="#" class="fitment">Edit Fitment</a><a href="#" class="hidefitment" style="display: none">Hide Fitment</a></td>
     <td ><%= obj.distributor_name %><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %> <em>Via Lightspeed</em><% } %></td>
     <td ><%= obj.part_number %></td>
+    <?php if ($read_only): ?>
+        <td ><%= obj.price %></td>
+        <td ><%= obj.qty_available %></td>
+        <td ><%= obj.cost %></td>
+        <td align="center"><%= obj.stock_code %></td>
+        <td ><%= obj.weight %></td>
+        <td ></td>
+    <?php else: ?>
     <td ><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %><%= obj.price %><% } else { %><input type="text" name="price" value="<%= obj.price %>" /><% } %></td>
     <td ><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %><%= obj.qty_available %><% } else { %><input type="text" name="qty_available" value="<%= obj.qty_available %>" /><% } %></td>
     <td ><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %><%= obj.cost %><% } else { %><input type="text" name="cost" value="<%= obj.cost %>" /><% } %></td>
     <td align="center"><input type="checkbox" name="stock_code" value="Closeout" <% if (obj.stock_code == 'Closeout') { %>checked='checked'<% } %> /> </td>
     <td ><input type="text" name="weight" value="<%= obj.weight %>" /></td>
     <td ><a href="#" class="removelink">Delete</a></td>
+    <?php endif; ?>
  </script>
 <script type="text/template" id="EditPopoverView">
 <td colspan="8">
+    <?php if (!$read_only): ?>
                         <div style="width: 45%; float: left">
                             <p><strong>Add a Fitment Rule</strong></p>
 
@@ -522,10 +542,11 @@ $read_only = $product["mx"] > 0;
 
 
         <div style="clear: both"></div>
+    <?php endif; ?>
     </td>
 </script>
 <script type="text/template" id="EditPopoverFitmentRowView">
-    <td><a href="#" class="remove glyphicon remove_2"><i></i> Delete</a></td>
+    <td><?php if (!$read_only): ?><a href="#" class="remove glyphicon remove_2"><i></i> Delete</a><?php endif; ?></td>
     <td><%= obj.machinetype_name %></td>
     <td><%= obj.make_name %></td>
     <td><%= obj.model_name %></td>
