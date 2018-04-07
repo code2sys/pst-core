@@ -652,32 +652,24 @@ var categoryIdMap = {};
                 <?php endforeach; ?>
             </ul>
 
-            <?php if (count($product_questions) > 0): ?>
+            <?php if (count($product_questions) > 0):
+                $seen_answer_name = array();
+            ?>
             <p><strong>Filter Questions</strong></p>
 
             <?php foreach ($product_questions as $pq): ?>
                 <p><em><?php echo htmlentities($pq["question"]); ?></em></p>
-
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Answer</th>
-                        <th>Distributor</th>
-                        <th>Part Number</th>
-                        <th>Manufacturer Part Number</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <ul>
                     <?php foreach ($pq["partvariations"] as $pv): ?>
-                    <tr>
-                        <td><?php echo $pv["answer"]; ?></td>
-                        <td><?php echo $pv["name"]; ?></td>
-                        <td><?php echo $pv["part_number"]; ?></td>
-                        <td><?php echo $pv["manufacturer_part_number"]; ?></td>
-                    </tr>
+                        <?php $key = $pq["question"] . "-" . $pv["answer"]; ?>
+                    <?php if (!array_key_exists($key, $product_questions)): ?>
+                    <li><?php echo $pv["answer"]; ?></li>
+                    <?php $product_questions[$key] = true; ?>
+                    <?php endif; ?>
                     <?php endforeach; ?>
-                    </tbody>
-                </table>
+
+                </ul>
+
                     <p>&nbsp;</p>
 
             <?php endforeach?>
