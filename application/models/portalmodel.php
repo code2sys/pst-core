@@ -713,7 +713,7 @@ class Portalmodel extends Master_M {
     public function _getPartQuestionCollection($part_id) {
         $rows = array();
 
-        $query = $this->db->query("Select partquestion.*, part.name from partquestion join part using (part_id) where part.part_id = ? ", array($part_id));
+        $query = $this->db->query("Select partquestion.*, part.name from partquestion join part using (part_id) where part.part_id = ? and partquestion.productquestion = 0 ", array($part_id));
 
         foreach ($query->result_array() as $row) {
             $rows[] = $row;
