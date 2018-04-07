@@ -122,7 +122,7 @@ class Portalmodel extends Master_M {
     }
 
     public function getFilterQuestionAnswers($part_id) {
-        $query = $this->db->query("Select partquestion.*, partquestionanswer.answer from partquestion join partquestionanswer using (partquestion_id) where partquestion.part_id = ? and partquestion.productquestion > 0 order by partquestion.question, partquestionanswer.answer", array($part_id));
+        $query = $this->db->query("Select partquestion.*, partquestionanswer.answer, partquestionanswer.partquestionanswer_id from partquestion join partquestionanswer using (partquestion_id) where partquestion.part_id = ? and partquestion.productquestion > 0 order by partquestion.question, partquestionanswer.answer", array($part_id));
         $results = array();
 
         foreach ($query->result_array() as $row) {
