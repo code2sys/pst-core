@@ -701,7 +701,7 @@ class Portalmodel extends Master_M {
     public function _getPartNumberPartQuestionCollection($part_id) {
         $results = array();
 
-        $query = $this->db->query("Select distinct partnumber.*, partnumberpartquestion.answer, partnumberpartquestion.partquestion_id, partnumberpartquestion_id, partdealervariation.quantity_available as dealer_quantity, partdealervariation.cost as dealer_cost  from partnumber join partnumberpartquestion using (partnumber_id) join partpartnumber on partnumber.partnumber_id = partpartnumber.partnumber_id left join partdealervariation using (partnumber_id) where partpartnumber.part_id = ? group by partnumberpartquestion.partnumberpartquestion_id", array($part_id));
+        $query = $this->db->query("Select distinct partnumber.*, partnumberpartquestion.answer, partnumberpartquestion.partquestion_id, partnumberpartquestion_id, partdealervariation.quantity_available as dealer_quantity, partdealervariation.cost as dealer_cost  from partnumber join partnumberpartquestion using (partnumber_id) join partpartnumber on partnumber.partnumber_id = partpartnumber.partnumber_id left join partdealervariation on partnumber.partnumber_id = partdealervariation.partnumber_id where partpartnumber.part_id = ? group by partnumberpartquestion.partnumberpartquestion_id", array($part_id));
 
         foreach ($query->result_array() as $row) {
             $results[] = $row;
