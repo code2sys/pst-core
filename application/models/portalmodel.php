@@ -44,18 +44,39 @@ class Portalmodel extends Master_M {
         $this->db->query("update productquestion set question = ? where productquestion_id = ?", array($question, $result["productquestion_id"]));
     }
 
-    public function removePartProductAnswer($part_id, $partquestion_id, $partnumberpartquestion_id) {
-        $this->db->query("Delete from partnumberpartquestion where partnumberpartquestion_id = ?", array($partnumberpartquestion_id));
+    public function getPartQuestionAnswer($partquestionanswer_id) {
+        $query = $this->db->query("Select * from partquestionanswer where partquestionanswer_id = ?", array($partquestionanswer_id));
+        $query = $query->result_array();
+        return $query[0];
     }
 
-    public function updatePartProductAnswer($part_id, $partquestion_id, $partnumberpartquestion_id, $answer) {
-        $this->db->query("Update partnumberpartquestion set answer = ? where partnumberpartquestion_id = ?", array($answer, $partnumberpartquestion_id));
+    public function removePartProductAnswer($part_id, $partquestion_id, $partquestionanswer_id)
+    {
+        $partquestionanswer = $this->getPartQuestionAnswer($partquestionanswer_id);
+        // delete 'em
+        $this->db->query("Delete from partnumberpartquestion where partquestion_id = ? and answer = ?", array($partquestion_id, $partquestionanswer["answer"]));
+
+        $this->db->query("Delete from partquestionanswer where partquestionanswer_id = ?", array($partquestionanswer_id));
+
+        // Delete from productquestionanswer...
+        $partquestion = $this->getPartQuestion($partquestion_id);
+        $this->db->query("Delete from productquestionpartnumber where productquestion_id = ? and answer = ?", array($partquestion["productquestion_id"], $partquestionanswer["answer"]));
+        $this->db->query("Delete from productquestionanswer where productquestion_id = ? and answer = ?", array($partquestion["productquestion_id"], $partquestionanswer["answer"]));
+    }
+
+    public function updatePartProductAnswer($part_id, $partquestion_id, $partquestionanswer_id, $answer) {
+        $partquestionanswer = $this->getPartQuestionAnswer($partquestionanswer_id);
+        $this->db->query("Update partquestionanswer set answer = ? where partquestionanswer_id = ?", array($answer, $partquestionanswer_id));
+        $this->db->query("Update partnumberpartquestion set answer = ? where partquestion_id = ? and answer = ?", array($answer, $partquestion_id, $partquestionanswer["answer"]));
+        $partquestion = $this->getPartQuestion($partquestion_id);
+        $this->db->query("Update productquestionanswer set answer = ? where productquestion_id = ? and answer = ?", array($answer, $partquestion["productquestion_id"], $partquestionanswer["answer"]));
+        $this->db->query("Update productquestionpartnumber set answer = ? where productquestion_id = ? and answer = ?", array($answer, $partquestion["productquestion_id"], $partquestionanswer["answer"]));
     }
 
     /*
      * This is the only one that could fail - if that question already exists AND it is not a product question, we have to reject it.
      */
-    public function addPartProductAnswer($part_id, $question, $answer, $partnumber_id, &$partquestion_id, &$partnumberpartquestion_id) {
+    public function addPartProductAnswer($part_id, $question, $answer, &$partquestion_id, &$partquestionanswer_id) {
         // Step #1: Does this question exist?
         $query = $this->db->query("Select * from partquestion where part_id = ? and question = ?", array($part_id, $question));
         $question_struct = $query->result_array();
@@ -63,6 +84,7 @@ class Portalmodel extends Master_M {
             $question_struct = $question_struct[0];
             if ($question_struct["productquestion"] > 0) {
                 $partquestion_id = $question_struct["partquestion_id"];
+                $productquestion_id = $question_struct["productquestion_id"];
             } else {
                 return false;
             }
@@ -76,16 +98,14 @@ class Portalmodel extends Master_M {
             $productquestion_id = $this->db->insert_id();
             $this->db->query("Update partquestion set productquestion_id = ? where partquestion_id = ?", array($productquestion_id, $partquestion_id));
         }
-
-        // OK, we have to just insert it and update it if there's already there
-        $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) values (?, ?, ?) on duplicate key update partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id), answer = values(answer)", array($partnumber_id, $partquestion_id, $answer));
-        $partnumberpartquestion_id = $this->db->insert_id();
-
         // We also have to insert it into the partquestionanswer and the productquestionanswer tables...
         $this->db->query("Insert into partquestionanswer (partquestion_id, answer) values (?, ?) on duplicate key update partquestionanswer_id = last_insert_id(partquestionanswer_id)", array($partquestion_id, $answer));
+        $partquestionanswer_id = $this->db->insert_id();
         $this->db->query("Insert into productquestionanswer (productquestion_id, answer) values (?, ?) on duplicate key update productquestionanswer_id = last_insert_id(productquestionanswer_id)", array($productquestion_id, $answer));
         
-        
+        // Brandt said to push it down to all of them...
+        $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) select partnumber_id, ?, ? from partpartnumber where part_id = ? on duplicate key update partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id), answer = values(answer)", array($partquestion_id, $answer, $part_id));
+        $this->db->query("Insert into productquestionpartnumber (partnumber_id, productquestion_id, answer) select partnumber_id, ?, ? from partpartnumber where part_id = ? on duplicate key update productquestionpartnumber_id = last_insert_id(productquestionpartnumber_id), answer = values(answer)", array($productquestion_id, $answer, $part_id));
 
         return true;
     }
@@ -116,7 +136,7 @@ class Portalmodel extends Master_M {
                 );
             }
 
-            $results[$partquestion_id]["answers"][] = $row["answer"];
+            $results[$partquestion_id]["answers"][] = array("partquestionanswer_id" => $row["partquestionanswer_id"], "answer" => $row["answer"]);
         }
 
         return $results;

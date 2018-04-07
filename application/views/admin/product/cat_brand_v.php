@@ -31,9 +31,6 @@ $not_is_new = !isset($new) || !$new;
     <thead>
         <tr>
             <th>Answer</th>
-            <th>Distributor</th>
-            <th>Distributor Part #</th>
-            <th>Manufacturer Part #</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -44,9 +41,6 @@ $not_is_new = !isset($new) || !$new;
 </script>
 <script type="text/template" id="AnswerView">
 <td><div class="noansweredit"><span class="answer"><%= obj.answer %></span></div><div class="answeredit"><input type="text" name="answer" value="" size="40" maxlength="64"/></div></td>
-<td><%= obj.name %></td>
-<td><%= obj.part_number %></td>
-<td><%= obj.manufacturer_part_number %></td>
     <td><div class="noansweredit"><button type="button" name="editAnswerButton" class="editAnswerButton">Edit</button><button type="button" name="removeAnswerButton" class="removeAnswerButton">Remove</button></div><div class="answeredit"><button type="button" name="saveAnswerButton" class="saveAnswerButton">Save Changes</button><button type="button" name="cancelAnswerButton" class="cancelAnswerButton">Cancel Changes</button></div></td>
 </script>
 <script type="text/template" id="AddView">
@@ -68,17 +62,6 @@ $not_is_new = !isset($new) || !$new;
         <td><input type="text" size="64" maxlength="64" name="answer" /></td>
     </tr>
     <tr>
-        <td><strong>Distributor Part:</strong></td>
-        <td><select name="partnumber_id">
-                <?php if (count($distributor_part) > 1): ?>
-                <option value="">-- Select Distributor Part --</option>
-                <?php endif; ?>
-                <?php foreach ($distributor_part as $part): ?>
-                <option value="<?php echo $part["partnumber_id"]; ?>"><?php echo htmlentities($part["name"]); ?> <?php echo htmlentities($part["part_number"]); ?></option>
-                <?php endforeach; ?>
-            </select></td>
-    </tr>
-    <tr>
         <td colspan="2"><button class="addFunction">Add Filter Question/Answer</button></td>
     </tr>
 </table>
@@ -91,16 +74,6 @@ $not_is_new = !isset($new) || !$new;
 <script type="application/javascript">
 
     var QuestionViewIndex = {};
-
-    var DistributorPartIndex = {};
-
-    <?php foreach ($distributor_part as $part): ?>
-    DistributorPartIndex[<?php echo $part["partnumber_id"]; ?>] = {
-        "name" : "<?php echo addslashes($part["name"]); ?>",
-        "part_number" : "<?php echo addslashes($part["part_number"]); ?>",
-        "manufacturer_part_number" : "<?php echo addslashes($part["manufacturer_part_number"]); ?>"
-    };
-    <?php endforeach; ?>
 
     /*
         This is a little widget that looks for the question, answer, and then part. You have to choose the part from a drop-down, so we are going to need to have a list of available part variations.
@@ -137,29 +110,20 @@ $not_is_new = !isset($new) || !$new;
                 return;
             }
 
-            var partnumber_id = this.$("select[name=partnumber_id]").val();
-            if (partnumber_id == '') {
-                alert('Please select a distributor part number.');
-                return;
-            }
-
-            partnumber_id = parseInt(partnumber_id, 10);
-
             // now, we need to create a function that registers it locally
             $.ajax({
                 type: "POST",
                 url : "/adminproduct/ajax_product_question_answer_add/<?php echo $part_id; ?>",
                 data: {
                     "question" : question,
-                    "answer" : answer,
-                    "partnumber_id" : partnumber_id
+                    "answer" : answer
                 },
                 dataType: "json",
                 success: _.bind(function(response) {
                     console.log(response);
                     if (response.success) {
                         // add it!
-                        registerNewQuestionView(response.data.partquestion_id, question, response.data.partnumberpartquestion_id, answer, DistributorPartIndex[partnumber_id].part_number, DistributorPartIndex[partnumber_id].manufacturer_part_number, DistributorPartIndex[partnumber_id].name);
+                        registerNewQuestionView(response.data.partquestion_id, question, response.data.partnumberanswer_id, answer);
                     } else {
                         // do something with this error.
                         alert(response.error_message);
@@ -231,7 +195,7 @@ $not_is_new = !isset($new) || !$new;
 
             $.ajax({
                 type: "POST",
-                url : "/adminproduct/ajax_product_question_answer_update/<?php echo $part_id; ?>/" + this.options.answer.partquestion_id + "/" + this.options.answer.partnumberpartquestion_id,
+                url : "/adminproduct/ajax_product_question_answer_update/<?php echo $part_id; ?>/" + this.options.answer.partquestion_id + "/" + this.options.answer.partquestionanswer_id,
                 data: {
                     "answer" : this.options.answer.answer
                 },
@@ -263,14 +227,14 @@ $not_is_new = !isset($new) || !$new;
             if (confirm('Really remove this answer?')) {
                 $.ajax({
                     type: "POST",
-                    url: "/adminproduct/ajax_product_question_answer_remove/<?php echo $part_id; ?>/" + this.options.answer.partquestion_id + "/" + this.options.answer.partnumberpartquestion_id,
+                    url: "/adminproduct/ajax_product_question_answer_remove/<?php echo $part_id; ?>/" + this.options.answer.partquestion_id + "/" + this.options.answer.partquestionanswer_id,
                     data: {},
                     dataType: "json",
                     success: _.bind(function (response) {
                         console.log(response);
                         if (response.success) {
                             $(this.el).remove();
-                            delete(QuestionViewIndex[this.options.answer.partquestion_id]["answers"][this.options.answer.partnumberpartquestion_id]);
+                            delete(QuestionViewIndex[this.options.answer.partquestion_id]["answers"][this.options.answer.partquestionanswer_id]);
                         } else {
                             // do something with this error.
                             alert(response.error_message);
@@ -411,9 +375,9 @@ $not_is_new = !isset($new) || !$new;
     });
 
 
-    window.registerNewQuestionView = function(partquestion_id, question, partnumberpartquestion_id, answer, part_number, manufacturer_part_number, name) {
+    window.registerNewQuestionView = function(partquestion_id, question, partquestionanswer_id, answer) {
         partquestion_id = parseInt(partquestion_id, 10);
-        partnumberpartquestion_id = parseInt(partnumberpartquestion_id, 10);
+        partquestionanswer_id = parseInt(partquestionanswer_id, 10);
 
         // OK, we need to see if there's a view
         if (!QuestionViewIndex[partquestion_id]) {
@@ -437,33 +401,27 @@ $not_is_new = !isset($new) || !$new;
         }
 
         // OK, you have to add the answer view...
-        if (!QuestionViewIndex[partquestion_id]["answers"][partnumberpartquestion_id]) {
-            QuestionViewIndex[partquestion_id]["answers"][partnumberpartquestion_id] = {
-                partnumberpartquestion_id : partnumberpartquestion_id,
+        if (!QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id]) {
+            QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id] = {
+                partquestionanswer_id : partquestionanswer_id,
                 answer: answer,
-                part_number : part_number,
-                manufacturer_part_number : manufacturer_part_number,
-                name: name,
                 partquestion_id : partquestion_id,
                 question: question
             };
             QuestionViewIndex[partquestion_id]["answers"][partnumberpartquestion_id]["view"] = new AnswerView({
                 answer: {
-                    partnumberpartquestion_id : partnumberpartquestion_id,
+                    partquestionanswer_id : partquestionanswer_id,
                     answer: answer,
-                    part_number : part_number,
-                    manufacturer_part_number : manufacturer_part_number,
-                    name: name,
                     partquestion_id : partquestion_id,
                     question: question
                 }
             });
 
             // and you need to add it so it shows...
-            QuestionViewIndex[partquestion_id].view.addAnswerView(QuestionViewIndex[partquestion_id]["answers"][partnumberpartquestion_id].view);
+            QuestionViewIndex[partquestion_id].view.addAnswerView(QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id].view);
 
         } else {
-            QuestionViewIndex[partquestion_id]["answers"][partnumberpartquestion_id].view.setAnswer(answer);
+            QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id].view.setAnswer(answer);
         }
     };
 
@@ -607,9 +565,9 @@ var categoryIdMap = {};
         <?php if ($not_is_new && $product["mx"] == 0): ?>
         var fqh = $(".filterquestionholder");
         // Initialize all the questions we currently have
-        <?php foreach ($product_questions as $pq): ?>
-        <?php foreach ($pq["partvariations"] as $pv): ?>
-        registerNewQuestionView(<?php echo $pq['partquestion_id']; ?>, "<?php echo addslashes($pv["question"]); ?>", <?php echo $pv["partnumberpartquestion_id"]; ?>, "<?php echo addslashes($pv["answer"]); ?>", "<?php echo addslashes($pv["part_number"]); ?>", "<?php echo addslashes($pv["manufacturer_part_number"]); ?>", "<?php echo addslashes($pv["name"]); ?>");
+        <?php foreach ($product_answers as $pq): ?>
+        <?php foreach ($pq["answers"] as $pv): ?>
+        registerNewQuestionView(<?php echo $pq['partquestion_id']; ?>, "<?php echo addslashes($pv["question"]); ?>", <?php echo $pv["partquestionanswer_id"]; ?>, "<?php echo addslashes($pv["answer"]); ?>");
         <?php endforeach; ?>
         <?php endforeach; ?>
 
@@ -661,7 +619,7 @@ var categoryIdMap = {};
                 <p><em><?php echo htmlentities($pq["question"]); ?></em></p>
                 <ul>
                     <?php foreach ($pq["answers"] as $pv): ?>
-                    <li><?php echo $pv; ?></li>
+                    <li><?php echo $pv["answer"]; ?></li>
                     <?php endforeach; ?>
 
                 </ul>
