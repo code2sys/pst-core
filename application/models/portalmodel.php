@@ -533,7 +533,7 @@ class Portalmodel extends Master_M {
 
     public function _getPartCollection($part_id) {
         $results = array();
-        $query = $this->db->query("Select part.* from part where part_id = ? and mx = 0", array($part_id));
+        $query = $this->db->query("Select part.* from part where part_id = ? ", array($part_id));
         foreach ($query->result_array() as $row) {
             $results[] = $row;
         }
@@ -543,7 +543,7 @@ class Portalmodel extends Master_M {
     // to get answers, we have to merge partquestionanswer to partquestion
     public function _getPartQuestionAnswerCollection($part_id) {
         $rows = array();
-        $query = $this->db->query("Select partquestionanswer.*, partquestion.*, part.name from partquestionanswer join partquestion using (partquestion_id) join part using (part_id) where part.part_id = ? and part.mx = 0", array($part_id));
+        $query = $this->db->query("Select partquestionanswer.*, partquestion.*, part.name from partquestionanswer join partquestion using (partquestion_id) join part using (part_id) where part.part_id = ? ", array($part_id));
 
         foreach ($query->result_array() as $row) {
             $rows[] = $row;
