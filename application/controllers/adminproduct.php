@@ -1370,4 +1370,6 @@ class Adminproduct extends Admin {
 
         header("Location: /adminproduct/dealerinventory/$id");
     }
+
+
 }
