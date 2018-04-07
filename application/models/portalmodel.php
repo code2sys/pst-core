@@ -136,7 +136,8 @@ class Portalmodel extends Master_M {
                 );
             }
 
-            $results[$partquestion_id]["answers"][] = array("partquestionanswer_id" => $row["partquestionanswer_id"], "answer" => $row["answer"]);
+            $results[$partquestion_id]["answers"][] = array("partquestionanswer_id" => $row["partquestionanswer_id"], "answer" => $row["answer"], "partquestion_id" => $row["partquestion_id"],
+                "question" => $row["question"]);
         }
 
         return $results;
