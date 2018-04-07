@@ -408,7 +408,7 @@ $not_is_new = !isset($new) || !$new;
                 partquestion_id : partquestion_id,
                 question: question
             };
-            QuestionViewIndex[partquestion_id]["answers"][partnumberpartquestion_id]["view"] = new AnswerView({
+            QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id]["view"] = new AnswerView({
                 answer: {
                     partquestionanswer_id : partquestionanswer_id,
                     answer: answer,
