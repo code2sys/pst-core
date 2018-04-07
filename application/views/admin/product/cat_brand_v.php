@@ -569,7 +569,7 @@ var categoryIdMap = {};
         // Initialize all the questions we currently have
         <?php foreach ($product_answers as $pq): ?>
         <?php foreach ($pq["answers"] as $pv): ?>
-        registerNewQuestionView(<?php echo $pq['partquestion_id']; ?>, "<?php echo addslashes($pv["question"]); ?>", "<?php echo $pv["partquestionanswer_id"]; ?>"", "<?php echo addslashes($pv["answer"]); ?>");
+        registerNewQuestionView(<?php echo $pq['partquestion_id']; ?>, "<?php echo addslashes($pv["question"]); ?>", "<?php echo $pv["partquestionanswer_id"]; ?>", "<?php echo addslashes($pv["answer"]); ?>");
         <?php endforeach; ?>
         <?php endforeach; ?>
 
