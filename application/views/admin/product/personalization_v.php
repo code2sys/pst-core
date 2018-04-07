@@ -476,7 +476,7 @@ $read_only = $product["mx"] > 0;
     <td ><%= obj.distributor_name %><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %> <em>Via Lightspeed</em><% } %></td>
     <td ><%= obj.part_number %></td>
     <?php if ($read_only): ?>
-        <td ><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %>Qty: <%= obj.qty_available %> Cost: <%= obj.cost %><% } else { %>Qty: <input type="text" name="dealer_quantity" value="<%= obj.dealer_quantity %>" size="8" maxlength="16" /><br/>Cost: <input type="text" name="dealer_cost" value="<%= obj.dealer_cost %>" size="8" maxlength="16" /><br/><button type="button" class="updateDealerInventory">Update</button><% } %></td>
+        <td ><% if (obj.lightspeedpart_id && obj.lightspeedpart_id > 0) { %>Qty: <%= obj.qty_available %> Cost: <%= obj.cost %><% } else { %><nobr>Qty: <input type="text" name="dealer_quantity" value="<%= obj.dealer_quantity %>" size="8" maxlength="16" /></nobr><nobr>Cost: <input type="text" name="dealer_cost" value="<%= obj.dealer_cost %>" size="8" maxlength="16" /></nobr><button type="button" class="updateDealerInventory">Update</button><% } %></td>
         <td align="center"><%= obj.stock_code %></td>
         <td ><%= obj.weight %></td>
     <?php else: ?>
