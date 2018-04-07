@@ -942,29 +942,24 @@ class Adminproduct extends Admin {
         $this->_mainData["part_id"] = $id;
         $this->_mainData['product'] = $this->admin_m->getAdminProduct($id);
 
-        if ($this->_mainData['product']['mx'] == 0){
-            $this->Portalmodel->cleanPart($id);
-            // Now, start stuffing this thing
-            $getDataStructure = $this->Portalmodel->getDataStructure($id);
-            $this->_mainData["KnownModelCollection"] = $getDataStructure["KnownModelCollection"];
-            $this->_mainData["PartQuestionCollection"] = $getDataStructure["PartQuestionCollection"];
-            $this->_mainData["PartQuestionAnswerCollection"] = $getDataStructure["PartQuestionAnswerCollection"];
-            $this->_mainData["PartQuestionAnswerPartVariationCollection"] = $getDataStructure["PartQuestionAnswerPartVariationCollection"];
-            $this->_mainData["PartVariationCollection"] = $getDataStructure["PartVariationCollection"];
-            $this->_mainData["PartQuestionAnswerFitmentCollection"] = $getDataStructure["PartQuestionAnswerFitmentCollection"];
-            $this->_mainData["DistributorCollection"] = $getDataStructure["DistributorCollection"];
-            $this->_mainData["PartNumberCollection"] = $getDataStructure["PartNumberCollection"];
-            $this->_mainData["PartPartNumberCollection"] = $getDataStructure["PartPartNumberCollection"];
-            $this->_mainData["PartNumberPartQuestionCollection"] = $getDataStructure["PartNumberPartQuestionCollection"];
-            $this->_mainData["PartNumberModelCollection"] = $getDataStructure["PartNumberModelCollection"];
-            $this->_mainData["ManufacturerCollection"] = $getDataStructure["ManufacturerCollection"];
+        $this->Portalmodel->cleanPart($id);
+        // Now, start stuffing this thing
+        $getDataStructure = $this->Portalmodel->getDataStructure($id);
+        $this->_mainData["KnownModelCollection"] = $getDataStructure["KnownModelCollection"];
+        $this->_mainData["PartQuestionCollection"] = $getDataStructure["PartQuestionCollection"];
+        $this->_mainData["PartQuestionAnswerCollection"] = $getDataStructure["PartQuestionAnswerCollection"];
+        $this->_mainData["PartQuestionAnswerPartVariationCollection"] = $getDataStructure["PartQuestionAnswerPartVariationCollection"];
+        $this->_mainData["PartVariationCollection"] = $getDataStructure["PartVariationCollection"];
+        $this->_mainData["PartQuestionAnswerFitmentCollection"] = $getDataStructure["PartQuestionAnswerFitmentCollection"];
+        $this->_mainData["DistributorCollection"] = $getDataStructure["DistributorCollection"];
+        $this->_mainData["PartNumberCollection"] = $getDataStructure["PartNumberCollection"];
+        $this->_mainData["PartPartNumberCollection"] = $getDataStructure["PartPartNumberCollection"];
+        $this->_mainData["PartNumberPartQuestionCollection"] = $getDataStructure["PartNumberPartQuestionCollection"];
+        $this->_mainData["PartNumberModelCollection"] = $getDataStructure["PartNumberModelCollection"];
+        $this->_mainData["ManufacturerCollection"] = $getDataStructure["ManufacturerCollection"];
 
-            $this->setNav('admin/nav_v', 2);
-            $this->renderMasterPage('admin/master_v', 'admin/product/personalization_v', $this->_mainData);
-        } else {
-            print "Sorry, this is not reachable for non-dealer parts.";
-            exit();
-        }
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/product/personalization_v', $this->_mainData);
 
     }
 

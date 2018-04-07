@@ -1,3 +1,6 @@
+<?php
+$read_only = $product["mx"] > 0;
+?>
 <!-- Gritter -->
 <link rel="stylesheet"
       href="/assets/Gritter/css/jquery.gritter.css" />
