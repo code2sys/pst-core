@@ -1374,10 +1374,16 @@ class Adminproduct extends Admin {
     public function ajax_save_dealerinventory($part_id) {
         $part = $this->admin_m->getAdminProduct($part_id);
 
-        $this->admin_m->setDistributorInventory($_REQUEST["partvariation_id"], $_REQUEST["quantity_available"], $_REQUEST["cost"]);
-        $this->Statusmodel->setSuccess("Updated successfully.");
-        $this->db->query("Insert into queued_parts (part_id) values (?)", array($id));
-        $this->admin_m->processParts(5); // I move a little bit along, but hope this processes this part.
+        if ($_REQUEST["quantity_available"] > 0 && $_REQUEST["cost"] == 0) {
+            $this->Statusmodel->setError("Please provide a cost.");
+        } else {
+            $this->admin_m->setDistributorInventory($_REQUEST["partvariation_id"], $_REQUEST["quantity_available"], $_REQUEST["cost"]);
+            $this->Statusmodel->setSuccess("Updated successfully.");
+            $this->db->query("Insert into queued_parts (part_id) values (?)", array($part_id));
+            $this->admin_m->processParts(5); // I move a little bit along, but hope this processes this part.
+
+        }
+
 
         $this->Statusmodel->outputStatus();
     }
