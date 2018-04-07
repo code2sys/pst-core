@@ -487,7 +487,7 @@ $read_only = $product["mx"] > 0;
     <?php endif; ?>
  </script>
 <script type="text/template" id="EditPopoverView">
-<td colspan="8">
+<td colspan="9">
     <?php if (!$read_only): ?>
                         <div style="width: 45%; float: left">
                             <p><strong>Add a Fitment Rule</strong></p>
