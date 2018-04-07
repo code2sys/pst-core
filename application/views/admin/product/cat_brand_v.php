@@ -401,27 +401,29 @@ $not_is_new = !isset($new) || !$new;
         }
 
         // OK, you have to add the answer view...
-        if (!QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id]) {
-            QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id] = {
-                partquestionanswer_id : partquestionanswer_id,
-                answer: answer,
-                partquestion_id : partquestion_id,
-                question: question
-            };
-            QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id]["view"] = new AnswerView({
-                answer: {
-                    partquestionanswer_id : partquestionanswer_id,
+        if (partquestionanswer_id > 0) {
+            if (!QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id]) {
+                QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id] = {
+                    partquestionanswer_id: partquestionanswer_id,
                     answer: answer,
-                    partquestion_id : partquestion_id,
+                    partquestion_id: partquestion_id,
                     question: question
-                }
-            });
+                };
+                QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id]["view"] = new AnswerView({
+                    answer: {
+                        partquestionanswer_id: partquestionanswer_id,
+                        answer: answer,
+                        partquestion_id: partquestion_id,
+                        question: question
+                    }
+                });
 
-            // and you need to add it so it shows...
-            QuestionViewIndex[partquestion_id].view.addAnswerView(QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id].view);
+                // and you need to add it so it shows...
+                QuestionViewIndex[partquestion_id].view.addAnswerView(QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id].view);
 
-        } else {
-            QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id].view.setAnswer(answer);
+            } else {
+                QuestionViewIndex[partquestion_id]["answers"][partquestionanswer_id].view.setAnswer(answer);
+            }
         }
     };
 
@@ -567,7 +569,7 @@ var categoryIdMap = {};
         // Initialize all the questions we currently have
         <?php foreach ($product_answers as $pq): ?>
         <?php foreach ($pq["answers"] as $pv): ?>
-        registerNewQuestionView(<?php echo $pq['partquestion_id']; ?>, "<?php echo addslashes($pv["question"]); ?>", <?php echo $pv["partquestionanswer_id"]; ?>, "<?php echo addslashes($pv["answer"]); ?>");
+        registerNewQuestionView(<?php echo $pq['partquestion_id']; ?>, "<?php echo addslashes($pv["question"]); ?>", "<?php echo $pv["partquestionanswer_id"]; ?>"", "<?php echo addslashes($pv["answer"]); ?>");
         <?php endforeach; ?>
         <?php endforeach; ?>
 
