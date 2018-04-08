@@ -887,6 +887,13 @@ class Portalmodel extends Master_M {
             $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, quantity_last_updated, cost, price, clean_part_number, revisionset_id, manufacturer_part_number, weight, stock_code) select partvariation.partvariation_id, partvariation.part_number, partvariation.partnumber_id, partvariation.distributor_id, lightspeedpart.available, If(lightspeedpart.available > 9, 1, 0), now(), lightspeedpart.cost, lightspeedpart.current_active_price, partvariation.clean_part_number, partvariation.revisionset_id, partvariation.manufacturer_part_number, partvariation.weight, partvariation.stock_code from partvariation join lightspeedpart using (partvariation_id) where partvariation.partvariation_id = ? on duplicate key update quantity_available = values(quantity_available), quantity_ten_plus = values(quantity_ten_plus), quantity_last_updated = now(), cost = values(cost), price = values(price), weight = values(weight), stock_code = values(stock_code);", array($partvariation_id));
         }
 
+        // If the requested price is zero, we have to shove it along
+        if ($_REQUEST["price"] == 0) {
+            $this->db->query("update partdealervariation join partvariation using (partvariation_id) set partdealervariation.price = partvariation.price where partvariation.partvariation_id = ?", array($partvariation_id));
+            // we also have to update the partnumber
+            $this->db->query("update partnumber join partvariation using (partnumber_id) set partnumber.price = partvariation.price, partnumber.sale = partvariation.price where partnumber.price = 0 and iation.partvariation_id = ?", array($partvariation_id));
+        }
+
 
         // Insert into partpartnumber...
         $this->db->query("Insert into partpartnumber (part_id, partnumber_id) values (?, ?) on duplicate key update partpartnumber_id = last_insert_id(partpartnumber_id)", array($revisionset_id, $partnumber_id));
