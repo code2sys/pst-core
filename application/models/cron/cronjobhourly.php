@@ -6,6 +6,7 @@ class CronJobHourly extends AbstractCronJob
 {
 	public function runJob()
 	{
+	    $this->fixLocalProductCategories();
 	    $this->fixLightspeedPartSearch();
         $this->fixVideos();
         $this->fixNullManufacturers();
@@ -15,6 +16,11 @@ class CronJobHourly extends AbstractCronJob
         $this->fixPendingEBay();
 		$this->documentGeneration();
 	}
+
+	public function fixLocalProductCategories() {
+	    $this->db->query("insert into partnumberpartquestion (partnumber_id, partquestion_id, answer, mx) select partpartnumber.partnumber_id, partquestion.partquestion_id, partquestionanswer.answer, null from part join partpartnumber using (part_id)join partquestion using (part_id) join partquestionanswer using (partquestion_id) left join partnumberpartquestion on partpartnumber.partnumber_id = partnumberpartquestion.partnumber_id and partquestion.partquestion_id = partnumberpartquestion.partquestion_id and partquestionanswer.answer = partnumberpartquestion.answer where part.mx = 0 and partquestion.productquestion > 0 and partnumberpartquestion.partnumberpartquestion_id is null");
+	    $this->db->query("insert into productquestionpartnumber (partnumber_id, productquestion_id, answer, mx) select partpartnumber.partnumber_id, productquestion.productquestion_id, productquestionanswer.answer, null from part join partpartnumber using (part_id)join productquestion using (part_id) join productquestionanswer using (productquestion_id) left join productquestionpartnumber on partpartnumber.partnumber_id = productquestionpartnumber.partnumber_id and productquestion.productquestion_id = productquestionpartnumber.productquestion_id and productquestionanswer.answer = productquestionpartnumber.answer where part.mx = 0  and productquestionpartnumber.productquestionpartnumber_id is null");
+    }
 
 	public function fixLightspeedPartSearch() {
         $this->db->query("update partcategory join partpartnumber using (part_id) join partvariation using (partnumber_id)  set partvariation.from_lightspeed = 0;");
