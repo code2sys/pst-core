@@ -8,6 +8,163 @@
 
 class Portalmodel extends Master_M {
 
+    public function getQuickPartNumberVariation($part_id) {
+        $query = $this->db->query("Select partvariation.partnumber_id, partvariation.part_number, distributor.name, partvariation.manufacturer_part_number from partpartnumber join partvariation using (partnumber_id) join distributor using (distributor_id) where partpartnumber.part_id = ? order by distributor.name, partvariation.part_number", array($part_id));
+        return $query->result_array();
+    }
+
+    /*
+     * JLB 04-04-18
+     * I added these to support the controls on the product questions.
+     */
+    public function removePartProductQuestion($part_id, $partquestion_id) {
+        $query = $this->db->query("Select * from partquestion where partquestion_id = ?", array($partquestion_id));
+        $result = $this->getPartQuestion($partquestion_id);
+        if ($result == FALSE) {
+            return;
+        }
+
+        if ($result["part_id"] != $part_id) {
+            return;
+        }
+
+        // you have to delete the product question...
+        $this->db->query("Delete from productquestion where productquestion_id = ?", array($result["productquestion_id"]));
+
+        $this->db->query("Delete from partquestion where part_id = ? and partquestion_id = ? and productquestion > 0", array($part_id, $partquestion_id));
+    }
+
+    public function updatePartProductQuestion($part_id, $partquestion_id, $question) {
+        $result = $this->getPartQuestion($partquestion_id);
+        if ($result == FALSE) {
+            return;
+        }
+
+        $this->db->query("Update partquestion set question = ? where part_id = ? and partquestion_id = ? and productquestion > 0", array($question, $part_id, $partquestion_id));
+        $this->db->query("update productquestion set question = ? where productquestion_id = ?", array($question, $result["productquestion_id"]));
+    }
+
+    public function getPartQuestionAnswer($partquestionanswer_id) {
+        $query = $this->db->query("Select * from partquestionanswer where partquestionanswer_id = ?", array($partquestionanswer_id));
+        $query = $query->result_array();
+        return $query[0];
+    }
+
+    public function removePartProductAnswer($part_id, $partquestion_id, $partquestionanswer_id)
+    {
+        $partquestionanswer = $this->getPartQuestionAnswer($partquestionanswer_id);
+        // delete 'em
+        $this->db->query("Delete from partnumberpartquestion where partquestion_id = ? and answer = ?", array($partquestion_id, $partquestionanswer["answer"]));
+
+        $this->db->query("Delete from partquestionanswer where partquestionanswer_id = ?", array($partquestionanswer_id));
+
+        // Delete from productquestionanswer...
+        $partquestion = $this->getPartQuestion($partquestion_id);
+        $this->db->query("Delete from productquestionpartnumber where productquestion_id = ? and answer = ?", array($partquestion["productquestion_id"], $partquestionanswer["answer"]));
+        $this->db->query("Delete from productquestionanswer where productquestion_id = ? and answer = ?", array($partquestion["productquestion_id"], $partquestionanswer["answer"]));
+    }
+
+    public function updatePartProductAnswer($part_id, $partquestion_id, $partquestionanswer_id, $answer) {
+        $partquestionanswer = $this->getPartQuestionAnswer($partquestionanswer_id);
+        $this->db->query("Update partquestionanswer set answer = ? where partquestionanswer_id = ?", array($answer, $partquestionanswer_id));
+        $this->db->query("Update partnumberpartquestion set answer = ? where partquestion_id = ? and answer = ?", array($answer, $partquestion_id, $partquestionanswer["answer"]));
+        $partquestion = $this->getPartQuestion($partquestion_id);
+        $this->db->query("Update productquestionanswer set answer = ? where productquestion_id = ? and answer = ?", array($answer, $partquestion["productquestion_id"], $partquestionanswer["answer"]));
+        $this->db->query("Update productquestionpartnumber set answer = ? where productquestion_id = ? and answer = ?", array($answer, $partquestion["productquestion_id"], $partquestionanswer["answer"]));
+    }
+
+    /*
+     * This is the only one that could fail - if that question already exists AND it is not a product question, we have to reject it.
+     */
+    public function addPartProductAnswer($part_id, $question, $answer, &$partquestion_id, &$partquestionanswer_id) {
+        // Step #1: Does this question exist?
+        $query = $this->db->query("Select * from partquestion where part_id = ? and question = ?", array($part_id, $question));
+        $question_struct = $query->result_array();
+        if (count($question_struct) > 0) {
+            $question_struct = $question_struct[0];
+            if ($question_struct["productquestion"] > 0) {
+                $partquestion_id = $question_struct["partquestion_id"];
+                $productquestion_id = $question_struct["productquestion_id"];
+            } else {
+                return false;
+            }
+        } else {
+            // OK, we have to add it..
+            $this->db->query("Insert into partquestion (part_id, question, productquestion) values (?, ?, 1)", array($part_id, $question));
+            $partquestion_id = $this->db->insert_id();
+
+            // we almost certainly have to add it into product question
+            $this->db->query("Insert into productquestion (part_id, question) values (?, ?) on duplicate key update productquestion_id = last_insert_id(productquestion_id)", array($part_id, $question));
+            $productquestion_id = $this->db->insert_id();
+            $this->db->query("Update partquestion set productquestion_id = ? where partquestion_id = ?", array($productquestion_id, $partquestion_id));
+        }
+        // We also have to insert it into the partquestionanswer and the productquestionanswer tables...
+        $this->db->query("Insert into partquestionanswer (partquestion_id, answer) values (?, ?) on duplicate key update partquestionanswer_id = last_insert_id(partquestionanswer_id)", array($partquestion_id, $answer));
+        $partquestionanswer_id = $this->db->insert_id();
+        $this->db->query("Insert into productquestionanswer (productquestion_id, answer) values (?, ?) on duplicate key update productquestionanswer_id = last_insert_id(productquestionanswer_id)", array($productquestion_id, $answer));
+        
+        // Brandt said to push it down to all of them...
+        $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer, mx) select partnumber_id, ?, ?, null from partpartnumber where part_id = ? on duplicate key update partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id), answer = values(answer)", array($partquestion_id, $answer, $part_id));
+        $this->db->query("Insert into productquestionpartnumber (partnumber_id, productquestion_id, answer, mx) select partnumber_id, ?, ?, null from partpartnumber where part_id = ? on duplicate key update productquestionpartnumber_id = last_insert_id(productquestionpartnumber_id), answer = values(answer)", array($productquestion_id, $answer, $part_id));
+
+        return true;
+    }
+
+
+    public function getQuickDealerInventory($part_id) {
+        $query = $this->db->query("select partvariation.quantity_available as distributor_quantity_available,partvariation.cost as distributor_cost, partvariation.stock_code, partvariation.partvariation_id, partnumber.partnumber, partvariation.part_number, distributor.name, partvariation.manufacturer_part_number, partdealervariation.cost, partdealervariation.quantity_available from partpartnumber join partnumber using (partnumber_id) join partvariation using (partnumber_id) join distributor using (distributor_id) left join partdealervariation using (partvariation_id) where partpartnumber.part_id = ?", array($part_id));
+        return $query->result_array();
+    }
+
+    public function getQuickFitment($part_id) {
+        $query = $this->db->query("select partnumber.partnumber, partvariation.part_number , distributor.name, partvariation.manufacturer_part_number , partnumber.universalfit , machinetype.name as machinetype, make.name as make, model.name as model, partnumbermodel.year, group_concat(partnumberpartquestion.question order by partnumberpartquestion.partquestion_id separator ';') as question, group_concat(partnumberpartquestion.answer order by partnumberpartquestion.partquestion_id  separator ';') as answer from partpartnumber join partnumber using (partnumber_id) join partvariation using (partnumber_id) join distributor using (distributor_id)  left join partnumbermodel using (partnumber_id) left join model using (model_id) left join make using (make_id) left join machinetype using (machinetype_id) left join (select partquestion.question, partnumberpartquestion.* from partquestion join partnumberpartquestion using (partquestion_id) where partquestion.productquestion = 0) partnumberpartquestion  on partnumber.partnumber_id = partnumberpartquestion.partnumber_id where partpartnumber.part_id = ? group by partvariation.partvariation_id, partnumbermodel.partnumbermodel_id;", array($part_id));
+        return $query->result_array();
+    }
+
+    public function getFilterQuestionAnswers($part_id) {
+        $query = $this->db->query("Select partquestion.*, partquestionanswer.answer, partquestionanswer.partquestionanswer_id from partquestion left join partquestionanswer using (partquestion_id) where partquestion.part_id = ? and partquestion.productquestion > 0 order by partquestion.question, partquestionanswer.answer", array($part_id));
+        $results = array();
+
+        foreach ($query->result_array() as $row) {
+            $partquestion_id = $row["partquestion_id"];
+
+            if (!array_key_exists($partquestion_id, $results)) {
+                $results[$partquestion_id] = array(
+                    "partquestion_id" => $row["partquestion_id"],
+                    "question" => $row["question"],
+                    "answers" => array()
+                );
+            }
+
+            $results[$partquestion_id]["answers"][] = array("partquestionanswer_id" => $row["partquestionanswer_id"], "answer" => $row["answer"], "partquestion_id" => $row["partquestion_id"],
+                "question" => $row["question"]);
+        }
+
+        return $results;
+    }
+
+    public function getFilterQuestions($part_id) {
+        $query = $this->db->query("select partquestion.*, partnumberpartquestion.*, partvariation.part_number , partvariation.manufacturer_part_number , distributor.name , partnumberpartquestion.answer from partquestion join partnumberpartquestion using (partquestion_id) join partvariation using (partnumber_id) join distributor using (distributor_id) where partquestion.part_id = ? and partquestion.productquestion > 0 order by partquestion.question, partnumberpartquestion.answer, distributor.name, partvariation.part_number", array($part_id));
+
+        $results = array();
+
+        foreach ($query->result_array() as $row) {
+            $partquestion_id = $row["partquestion_id"];
+
+            if (!array_key_exists($partquestion_id, $results)) {
+                $results[$partquestion_id] = array(
+                    "partquestion_id" => $row["partquestion_id"],
+                    "question" => $row["question"],
+                    "partvariations" => array()
+                );
+            }
+
+            $results[$partquestion_id]["partvariations"][] = $row;
+        }
+
+        return $results;
+    }
+
     /*
      * This is copied over from the old admin_m model, but without the DIE statement....
      */
@@ -418,7 +575,7 @@ class Portalmodel extends Master_M {
 
     public function _getPartCollection($part_id) {
         $results = array();
-        $query = $this->db->query("Select part.* from part where part_id = ? and mx = 0", array($part_id));
+        $query = $this->db->query("Select part.* from part where part_id = ? ", array($part_id));
         foreach ($query->result_array() as $row) {
             $results[] = $row;
         }
@@ -428,7 +585,7 @@ class Portalmodel extends Master_M {
     // to get answers, we have to merge partquestionanswer to partquestion
     public function _getPartQuestionAnswerCollection($part_id) {
         $rows = array();
-        $query = $this->db->query("Select partquestionanswer.*, partquestion.*, part.name from partquestionanswer join partquestion using (partquestion_id) join part using (part_id) where part.part_id = ? and part.mx = 0", array($part_id));
+        $query = $this->db->query("Select partquestionanswer.*, partquestion.*, part.name from partquestionanswer join partquestion using (partquestion_id) join part using (part_id) where part.part_id = ? ", array($part_id));
 
         foreach ($query->result_array() as $row) {
             $rows[] = $row;
@@ -586,7 +743,7 @@ class Portalmodel extends Master_M {
     public function _getPartNumberPartQuestionCollection($part_id) {
         $results = array();
 
-        $query = $this->db->query("Select distinct partnumber.*, partnumberpartquestion.answer, partnumberpartquestion.partquestion_id, partnumberpartquestion_id from partnumber join partnumberpartquestion using (partnumber_id) join partpartnumber on partnumber.partnumber_id = partpartnumber.partnumber_id where partpartnumber.part_id = ? ", array($part_id));
+        $query = $this->db->query("Select distinct partnumber.*, partnumberpartquestion.answer, partnumberpartquestion.partquestion_id, partnumberpartquestion_id, partdealervariation.quantity_available as dealer_quantity, partdealervariation.cost as dealer_cost, partvariation.partvariation_id  from partnumber join partnumberpartquestion using (partnumber_id) join partpartnumber on partnumber.partnumber_id = partpartnumber.partnumber_id left join partvariation on partnumber.partnumber_id = partvariation.partnumber_id left join partdealervariation on partvariation.partvariation_id = partdealervariation.partvariation_id where partpartnumber.part_id = ? group by partnumberpartquestion.partnumberpartquestion_id", array($part_id));
 
         foreach ($query->result_array() as $row) {
             $results[] = $row;
@@ -598,7 +755,7 @@ class Portalmodel extends Master_M {
     public function _getPartQuestionCollection($part_id) {
         $rows = array();
 
-        $query = $this->db->query("Select partquestion.*, part.name from partquestion join part using (part_id) where part.part_id = ? ", array($part_id));
+        $query = $this->db->query("Select partquestion.*, part.name from partquestion join part using (part_id) where part.part_id = ? and partquestion.productquestion = 0 ", array($part_id));
 
         foreach ($query->result_array() as $row) {
             $rows[] = $row;
@@ -728,6 +885,13 @@ class Portalmodel extends Master_M {
         } else {
             // If that thing is in lightspeed, you have to pull it instead.
             $this->db->query("Insert into partdealervariation (partvariation_id, part_number, partnumber_id, distributor_id, quantity_available, quantity_ten_plus, quantity_last_updated, cost, price, clean_part_number, revisionset_id, manufacturer_part_number, weight, stock_code) select partvariation.partvariation_id, partvariation.part_number, partvariation.partnumber_id, partvariation.distributor_id, lightspeedpart.available, If(lightspeedpart.available > 9, 1, 0), now(), lightspeedpart.cost, lightspeedpart.current_active_price, partvariation.clean_part_number, partvariation.revisionset_id, partvariation.manufacturer_part_number, partvariation.weight, partvariation.stock_code from partvariation join lightspeedpart using (partvariation_id) where partvariation.partvariation_id = ? on duplicate key update quantity_available = values(quantity_available), quantity_ten_plus = values(quantity_ten_plus), quantity_last_updated = now(), cost = values(cost), price = values(price), weight = values(weight), stock_code = values(stock_code);", array($partvariation_id));
+        }
+
+        // If the requested price is zero, we have to shove it along
+        if ($_REQUEST["price"] == 0) {
+            $this->db->query("update partdealervariation join partvariation using (partvariation_id) set partdealervariation.price = partvariation.price where partvariation.partvariation_id = ?", array($partvariation_id));
+            // we also have to update the partnumber
+            $this->db->query("update partnumber join partvariation using (partnumber_id) set partnumber.price = partvariation.price, partnumber.sale = partvariation.price where partnumber.price = 0 and iation.partvariation_id = ?", array($partvariation_id));
         }
 
 

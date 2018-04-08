@@ -14,6 +14,7 @@ class Adminproduct extends Admin {
         parent::__construct();
         $this->load->model("Portalmodel");
         $this->load->model("Statusmodel");
+        $this->load->model("admin_m");
         if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
             exit();
@@ -437,6 +438,100 @@ class Adminproduct extends Admin {
         header("Location: " . base_url("adminproduct/product_category_brand/$id"));
     }
 
+    /*
+     * JLB 04-02-18
+     * These five functions support an ajax edit interface for product questions for store parts.
+     */
+
+    public function ajax_product_question_remove($part_id, $partquestion_id) {
+        $part = $this->admin_m->getAdminProduct($part_id);
+
+        if ($part["mx"] != 0) {
+            $this->Statusmodel->setError("Sorry, that is not an editable part number.");
+        } else {
+            $this->Portalmodel->removePartProductQuestion($part_id, $partquestion_id);
+            $this->Statusmodel->setSuccess("Question removed.");
+
+        }
+        $this->Statusmodel->outputStatus();
+    }
+
+    public function ajax_product_question_update($part_id, $partquestion_id) {
+        $part = $this->admin_m->getAdminProduct($part_id);
+
+        if ($part["mx"] != 0) {
+            $this->Statusmodel->setError("Sorry, that is not an editable part number.");
+        } else {
+            $question = array_key_exists("question", $_REQUEST) ? $_REQUEST["question"] : "";
+            if ($question == "") {
+                $this->Statusmodel->setError("Sorry, no question text received.");
+            } else {
+                $this->Portalmodel->updatePartProductQuestion($part_id, $partquestion_id, $question);
+                $this->Statusmodel->setSuccess("Question updated.");
+            }
+        }
+        $this->Statusmodel->outputStatus();
+    }
+
+    public function ajax_product_question_answer_remove($part_id, $partquestion_id, $partquestionanswer_id) {
+        $part = $this->admin_m->getAdminProduct($part_id);
+
+        if ($part["mx"] != 0) {
+            $this->Statusmodel->setError("Sorry, that is not an editable part number.");
+        } else {
+            $this->Portalmodel->removePartProductAnswer($part_id, $partquestion_id, $partquestionanswer_id);
+            $this->Statusmodel->setSuccess("Answer removed.");
+
+        }
+        $this->Statusmodel->outputStatus();
+    }
+
+    public function ajax_product_question_answer_update($part_id, $partquestion_id, $partquestionanswer_id) {
+        $part = $this->admin_m->getAdminProduct($part_id);
+
+        if ($part["mx"] != 0) {
+            $this->Statusmodel->setError("Sorry, that is not an editable part number.");
+        } else {
+            $answer = array_key_exists("answer", $_REQUEST) ? $_REQUEST["answer"] : "";
+            if ($answer == "") {
+                $this->Statusmodel->setError("Sorry, no answer text received.");
+            } else {
+                $this->Portalmodel->updatePartProductAnswer($part_id, $partquestion_id, $partquestionanswer_id, $answer);
+                $this->Statusmodel->setSuccess("Answer updated.");
+            }
+        }
+        $this->Statusmodel->outputStatus();
+    }
+
+    public function ajax_product_question_answer_add($part_id) {
+        $part = $this->admin_m->getAdminProduct($part_id);
+
+        if ($part["mx"] != 0) {
+            $this->Statusmodel->setError("Sorry, that is not an editable part number.");
+        } else {
+            $answer = array_key_exists("answer", $_REQUEST) ? $_REQUEST["answer"] : "";
+            $question = array_key_exists("question", $_REQUEST) ? $_REQUEST["question"] : "";
+
+            $partquestion_id = $partquestionanswer_id = 0;
+
+            if ($question == "") {
+                $this->Statusmodel->setError("Sorry, no question text received.");
+            } else if ($answer == "") {
+                $this->Statusmodel->setError("Sorry, no answer text received.");
+            } else if ($this->Portalmodel->addPartProductAnswer($part_id, $question, $answer, $partquestion_id, $partquestionanswer_id)) {
+                // we need to set the data...
+
+                $this->Statusmodel->setData("partquestion_id", $partquestion_id);
+                $this->Statusmodel->setData("partquestionanswer_id", $partquestionanswer_id);
+                $this->Statusmodel->setSuccess("Answer added successfully.");
+            } else {
+                $this->Statusmodel->setError("Sorry, that question is not a category filter question.");
+            }
+        }
+
+        $this->Statusmodel->outputStatus();
+    }
+
     public function product_category_brand($id = NULL) {
         $this->_mainData['product'] = $this->admin_m->getAdminProduct($id);
 
@@ -456,6 +551,9 @@ class Adminproduct extends Admin {
             $_SESSION["product_category_brand_error"] = "";
         }
 
+        $this->_mainData["distributor_part"] = $this->Portalmodel->getQuickPartNumberVariation($id);
+        $this->_mainData["product_questions"] = $this->Portalmodel->getFilterQuestions($id);
+        $this->_mainData["product_answers"] = $this->Portalmodel->getFilterQuestionAnswers($id);
         $this->_mainData['product_categories'] = $this->Portalmodel->getPartCategories($id);
         $this->_mainData['product_brand'] = $this->Portalmodel->getPartBrand($id);
         $query = $this->db->query("Select category_id, long_name from category order by long_name");
@@ -842,29 +940,24 @@ class Adminproduct extends Admin {
         $this->_mainData["part_id"] = $id;
         $this->_mainData['product'] = $this->admin_m->getAdminProduct($id);
 
-        if ($this->_mainData['product']['mx'] == 0){
-            $this->Portalmodel->cleanPart($id);
-            // Now, start stuffing this thing
-            $getDataStructure = $this->Portalmodel->getDataStructure($id);
-            $this->_mainData["KnownModelCollection"] = $getDataStructure["KnownModelCollection"];
-            $this->_mainData["PartQuestionCollection"] = $getDataStructure["PartQuestionCollection"];
-            $this->_mainData["PartQuestionAnswerCollection"] = $getDataStructure["PartQuestionAnswerCollection"];
-            $this->_mainData["PartQuestionAnswerPartVariationCollection"] = $getDataStructure["PartQuestionAnswerPartVariationCollection"];
-            $this->_mainData["PartVariationCollection"] = $getDataStructure["PartVariationCollection"];
-            $this->_mainData["PartQuestionAnswerFitmentCollection"] = $getDataStructure["PartQuestionAnswerFitmentCollection"];
-            $this->_mainData["DistributorCollection"] = $getDataStructure["DistributorCollection"];
-            $this->_mainData["PartNumberCollection"] = $getDataStructure["PartNumberCollection"];
-            $this->_mainData["PartPartNumberCollection"] = $getDataStructure["PartPartNumberCollection"];
-            $this->_mainData["PartNumberPartQuestionCollection"] = $getDataStructure["PartNumberPartQuestionCollection"];
-            $this->_mainData["PartNumberModelCollection"] = $getDataStructure["PartNumberModelCollection"];
-            $this->_mainData["ManufacturerCollection"] = $getDataStructure["ManufacturerCollection"];
+        $this->Portalmodel->cleanPart($id);
+        // Now, start stuffing this thing
+        $getDataStructure = $this->Portalmodel->getDataStructure($id);
+        $this->_mainData["KnownModelCollection"] = $getDataStructure["KnownModelCollection"];
+        $this->_mainData["PartQuestionCollection"] = $getDataStructure["PartQuestionCollection"];
+        $this->_mainData["PartQuestionAnswerCollection"] = $getDataStructure["PartQuestionAnswerCollection"];
+        $this->_mainData["PartQuestionAnswerPartVariationCollection"] = $getDataStructure["PartQuestionAnswerPartVariationCollection"];
+        $this->_mainData["PartVariationCollection"] = $getDataStructure["PartVariationCollection"];
+        $this->_mainData["PartQuestionAnswerFitmentCollection"] = $getDataStructure["PartQuestionAnswerFitmentCollection"];
+        $this->_mainData["DistributorCollection"] = $getDataStructure["DistributorCollection"];
+        $this->_mainData["PartNumberCollection"] = $getDataStructure["PartNumberCollection"];
+        $this->_mainData["PartPartNumberCollection"] = $getDataStructure["PartPartNumberCollection"];
+        $this->_mainData["PartNumberPartQuestionCollection"] = $getDataStructure["PartNumberPartQuestionCollection"];
+        $this->_mainData["PartNumberModelCollection"] = $getDataStructure["PartNumberModelCollection"];
+        $this->_mainData["ManufacturerCollection"] = $getDataStructure["ManufacturerCollection"];
 
-            $this->setNav('admin/nav_v', 2);
-            $this->renderMasterPage('admin/master_v', 'admin/product/personalization_v', $this->_mainData);
-        } else {
-            print "Sorry, this is not reachable for non-dealer parts.";
-            exit();
-        }
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/product/personalization_v', $this->_mainData);
 
     }
 
@@ -1208,4 +1301,88 @@ class Adminproduct extends Admin {
         $this->Statusmodel->outputStatus();
     }
 
+
+    // JLB 2018-04-03
+    // Issue #94 - Adding a Fitment Tab that is searchable to see all this stuff
+    public function fitments($id) {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($id)) {
+            $this->_mainData['new'] = TRUE;
+        } else {
+            $this->_mainData['product'] = $this->admin_m->getAdminProduct($id);
+        }
+
+        // You have to go get the part numbers, too....
+        $this->_mainData['fitments'] = $this->Portalmodel->getQuickFitment($id);
+
+        $this->_mainData['part_id'] = $id;
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/product/fitments_v', $this->_mainData);
+    }
+
+    // JLB 2018-04-03
+    // Issue #95 - Adding a page about dealer inventory
+    public function dealerinventory($id) {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($id)) {
+            $this->_mainData['new'] = TRUE;
+        } else {
+            $this->_mainData['product'] = $this->admin_m->getAdminProduct($id);
+        }
+
+        $this->_mainData["success"] = $_SESSION["dealerinventory_success"];
+        $this->_mainData["error"] = $_SESSION["dealerinventory_error"];
+        $_SESSION["dealerinventory_success"] = "";
+        $_SESSION["dealerinventory_error"] = "";
+
+        // You have to go get the part numbers, too....
+        $this->_mainData['dealerinventory'] = $this->Portalmodel->getQuickDealerInventory($id);
+
+        $this->_mainData['part_id'] = $id;
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/product/dealerinventory_v', $this->_mainData);
+    }
+
+    public function save_dealerinventory($id) {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        // You have to go get the part numbers, too....
+        $dealer_inventory = $this->Portalmodel->getQuickDealerInventory($id);
+
+        $this->load->model("admin_m");
+
+        foreach ($dealer_inventory as $di) {
+            $this->admin_m->setDistributorInventory($di["partvariation_id"], $_REQUEST["quantity_available_" . $di["partvariation_id"]], $_REQUEST["cost_" . $di["partvariation_id"]]);
+        }
+
+        $_SESSION["dealerinventory_success"] = count($dealer_inventory) . " quantities/costs updated successfully.";
+
+        $this->db->query("Insert into queued_parts (part_id) values (?)", array($id));
+        $this->admin_m->processParts(5); // I move a little bit along, but hope this processes this part.
+
+        header("Location: /adminproduct/dealerinventory/$id");
+    }
+
+    public function ajax_save_dealerinventory($part_id) {
+        $part = $this->admin_m->getAdminProduct($part_id);
+
+        if ($_REQUEST["quantity_available"] > 0 && $_REQUEST["cost"] == 0) {
+            $this->Statusmodel->setError("Please provide a cost.");
+        } else {
+            $this->admin_m->setDistributorInventory($_REQUEST["partvariation_id"], $_REQUEST["quantity_available"], $_REQUEST["cost"]);
+            $this->Statusmodel->setSuccess("Updated successfully.");
+            $this->db->query("Insert into queued_parts (part_id) values (?)", array($part_id));
+            $this->admin_m->processParts(5); // I move a little bit along, but hope this processes this part.
+
+        }
+
+
+        $this->Statusmodel->outputStatus();
+    }
 }

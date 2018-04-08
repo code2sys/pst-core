@@ -364,9 +364,13 @@ class Parts_M extends Master_M {
                 $query = $this->db->query($sql);
                 $results = $query->result_array();
                 $query->free_result();
-                $parts[] = @$results[0]['part_id'];
+                if (count($results) > 0) {
+                    if (array_key_exists("part_id", $results[0])) {
+                        $parts[] = $results[0]['part_id'];
+                    }
+                }
             }
-            return $parts;
+            return count($parts) > 0 ? $parts : FALSE;
         } else
             return FALSE;
     }
@@ -2312,10 +2316,12 @@ class Parts_M extends Master_M {
                         $finalPriceArr['sale_max'] += $pa['sale_max'];
                     }
 
+
                     $rec['price'] = $this->calculateMarkup($finalPriceArr['retail_min'], $finalPriceArr['retail_max'], $finalPriceArr['sale_min'], $finalPriceArr['sale_max'], @$_SESSION['userRecord']['markup']);
-                } else
-                //partNumberRec
+                } else {
+                    //partNumberRec
                     $rec['price'] = $this->calculateMarkup($partNumberRec['price_min'], $partNumberRec['price_max'], $partNumberRec['sale_min'], $partNumberRec['sale_max'], @$_SESSION['userRecord']['markup']);
+                }
 
                 //$rec['price'] = $this->calculateMarkup($rec['price_min'], $rec['price_max'], $rec['sale_min'], $rec['sale_max'], @$_SESSION['userRecord']['markup'], $rec['dealer_sale_min'], $rec['dealer_sale_max'], $rec['cnt']);
 
@@ -2324,6 +2330,8 @@ class Parts_M extends Master_M {
                 $rec['reviews'] = $this->getAverageReviews($rec['part_id']);
             }
         }
+
+
         return $records;
     }
 

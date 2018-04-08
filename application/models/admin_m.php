@@ -1671,6 +1671,43 @@ class Admin_M extends Master_M {
         return $results[0];
     }
 
+    public function setDistributorInventory($partvariation_id, $quantity, $cost)
+    {
+        $quantity = intVal($quantity);
+
+        if ($quantity > 0) {
+            // Insert it into partdealervariation
+            $present_in_partdealervariation = false;
+
+            $query = $this->db->query("Select count(*) as cnt from partdealervariation where partvariation_id = ?", array($partvariation_id));
+            foreach ($query->result_array() as $row) {
+                $present_in_partdealervariation = $row["cnt"] > 0;
+            }
+
+            if ($present_in_partdealervariation) {
+                $this->db->query("Update partdealervariation set quantity_available = ?, cost = ? where partvariation_id = ?", array($quantity, $cost, $partvariation_id));
+            } else {
+                $distributorInventory = $this->selectRecord('partvariation', array("partvariation_id" => $partvariation_id));
+                $data = $distributorInventory;
+                $data['cost'] = $cost;
+                $data['quantity_available'] = $quantity;
+                unset($data['bulk_insert_round']);
+                unset($data['ext_partvariation_id']);
+                unset($data['protect']);
+                unset($data['customerdistributor_id']);
+                unset($data['from_lightspeed']);
+                $this->db->insert('partdealervariation', $data);
+            }
+
+            $this->db->query("Update partvariation set protect = 1 where partvariation_id = ?", array($partvariation_id));
+        } else {
+            // OK, well, that means you have to release it...
+            $this->db->query("Delete from partdealervariation where partvariation_id = ?", array($partvariation_id));
+            $this->db->query("Update partvariation set protect = 0 where partvariation_id = ?", array($partvariation_id));
+        }
+
+    }
+
     public function updateDistributorInventory($arr) {
         $error = array();
         $scs = array();
