@@ -104,8 +104,8 @@ class Portalmodel extends Master_M {
         $this->db->query("Insert into productquestionanswer (productquestion_id, answer) values (?, ?) on duplicate key update productquestionanswer_id = last_insert_id(productquestionanswer_id)", array($productquestion_id, $answer));
         
         // Brandt said to push it down to all of them...
-        $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer) select partnumber_id, ?, ? from partpartnumber where part_id = ? on duplicate key update partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id), answer = values(answer)", array($partquestion_id, $answer, $part_id));
-        $this->db->query("Insert into productquestionpartnumber (partnumber_id, productquestion_id, answer) select partnumber_id, ?, ? from partpartnumber where part_id = ? on duplicate key update productquestionpartnumber_id = last_insert_id(productquestionpartnumber_id), answer = values(answer)", array($productquestion_id, $answer, $part_id));
+        $this->db->query("Insert into partnumberpartquestion (partnumber_id, partquestion_id, answer, mx) select partnumber_id, ?, ?, null from partpartnumber where part_id = ? on duplicate key update partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id), answer = values(answer)", array($partquestion_id, $answer, $part_id));
+        $this->db->query("Insert into productquestionpartnumber (partnumber_id, productquestion_id, answer, mx) select partnumber_id, ?, ?, null from partpartnumber where part_id = ? on duplicate key update productquestionpartnumber_id = last_insert_id(productquestionpartnumber_id), answer = values(answer)", array($productquestion_id, $answer, $part_id));
 
         return true;
     }
