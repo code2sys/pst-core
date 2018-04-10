@@ -2,6 +2,17 @@
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
 
+    // This is to pull a stream
+    public function fetchMotorcycleDealerFeeds() {
+        initializePSTAPI();
+        global $PSTAPI;
+
+        $feeds = $PSTAPI->mdfeed()->fetch();
+        foreach ($feeds as $f) {
+            $f->generateMDRecords();
+        }
+    }
+
     // We have to just migrate it
     public function migratePagesIssue80() {
         $query = $this->db->query("Select * from pages");

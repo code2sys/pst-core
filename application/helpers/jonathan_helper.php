@@ -210,4 +210,20 @@ function jserve_file($source_file_path, $filename, $mime_type) {
 }
 
 
+/*
+    This initializes the API object...
+ */
+
+ function initializePSTAPI() {
+     global $PSTAPI;
+
+     if (!isset($PSTAPI)) {
+         // we have to make a PDO object...
+        $dbh = new PDO("mysql:dbname=" . DATABASE_NAME . ";host=" . DATABASE_HOSTNAME, DATABASE_USER, DATABASE_PASS);
+
+         // then make it!
+         $PSTAPI = new PST\API($dbh);
+     }
+    
+ }
 
