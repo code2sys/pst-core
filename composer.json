@@ -2,6 +2,10 @@
     "name": "pst/core",
     "license": "Proprietary",
     "description" : "This was originally developed by Jessica @ Cloverfield with developers from Benzaitens Group. David Mathewes has been focusing on integrations - things like eBay and Lightspeed.",
+    "repositories": [{
+        "type": "composer",
+        "url": "http://www.powersporttechnologies.com"
+    }],
     "authors": [
         {
             "name": "Jonathan L Brown",
@@ -17,6 +21,7 @@
         "swiftmailer/swiftmailer": "@stable",
         "php": ">=5.3.9",
     	"dts/ebay-sdk": "~0.1",
-        "dts/ebay-sdk-php": "@stable"
+        "dts/ebay-sdk-php": "@stable",
+	"pst/objectlib" : "dev-master"
     }
 }
