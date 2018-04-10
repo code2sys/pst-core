@@ -4,7 +4,7 @@
     "description" : "This was originally developed by Jessica @ Cloverfield with developers from Benzaitens Group. David Mathewes has been focusing on integrations - things like eBay and Lightspeed.",
     "repositories": [{
         "type": "composer",
-        "url": "http://www.powersporttechnologies.com"
+        "url": "http://support1.powersporttechnologies.com/satis/"
     }],
     "authors": [
         {
