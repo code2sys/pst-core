@@ -8,7 +8,13 @@ class CronControl extends Master_Controller {
         global $PSTAPI;
 
         $feeds = $PSTAPI->mdfeed()->fetch();
+        if ($debug > 0) {
+            print "Found " . count($feeds) . " feeds \n";   
+        }
         foreach ($feeds as $f) {
+            if ($debug > 0) {
+                print "Feed " . $f->get("source_url") . "\n";                
+            }
             $f->generateMDRecords($debug > 0);
         }
     }
