@@ -23,5 +23,8 @@
     	"dts/ebay-sdk": "~0.1",
         "dts/ebay-sdk-php": "@stable",
 	"pst/objectlib" : "dev-master"
+    },
+    "config" : {
+        "secure-http" : 0
     }
 }
