@@ -3,13 +3,13 @@ require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
 
     // This is to pull a stream
-    public function fetchMotorcycleDealerFeeds() {
+    public function fetchMotorcycleDealerFeeds($debug = 0) {
         initializePSTAPI();
         global $PSTAPI;
 
         $feeds = $PSTAPI->mdfeed()->fetch();
         foreach ($feeds as $f) {
-            $f->generateMDRecords();
+            $f->generateMDRecords($debug > 0);
         }
     }
 
