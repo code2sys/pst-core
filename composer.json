@@ -25,6 +25,6 @@
 	"pst/objectlib" : "dev-master"
     },
     "config" : {
-        "secure-http" : 0
+        "secure-http" : false
     }
 }
