@@ -1,9 +1,7 @@
 		<h1 style="color:#3f51b5">
 			<span style="margin-right:10px;" class="glyphicon <?php echo $pageRec['icon'];?>"></span><?php echo $pageRec['label'];?>
 		</h1>
-		<p>
-			<?php echo $notice;?>
-		</p>
+
   		<!-- VALIDATION ERROR -->
 			<?php if(validation_errors()): ?>
 			<div class="validation_error">
