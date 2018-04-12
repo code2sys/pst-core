@@ -10,8 +10,21 @@ class Master_M extends CI_Model
 		//$this->load->database('default');
 
 	}
-	
-		/**
+
+
+    protected function _subContactFetch($key) {
+        $query = $this->db->query("Select $key from contact where id = 1");
+        $lightspeed_active_load = 0;
+
+        foreach ($query->result_array() as $row) {
+            $lightspeed_active_load = $row["$key"];
+        }
+
+        return $lightspeed_active_load;
+    }
+
+
+    /**
 	 * formSafePrep function.
 	 * 
 	 * Removes fields from form data that are not setup as rules in

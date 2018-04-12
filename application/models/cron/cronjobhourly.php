@@ -12,6 +12,7 @@ class CronJobHourly extends AbstractCronJob
         $this->fixNullManufacturers();
         $this->fixBrandSlugs();
         $this->fixBrandLongNames();
+        $this->fixPendingMDFeed();
         $this->fixPendingLightspeed();
         $this->fixPendingEBay();
 		$this->documentGeneration();
@@ -42,6 +43,29 @@ class CronJobHourly extends AbstractCronJob
         }
     }
 
+    public function fixPendingMDFeed() {
+        if (defined('ENABLE_MD_FEED') && ENABLE_MD_FEED) {
+            $query = $this->db->query("select * from mdfeed_feed_log where run_by = 'admin' and status = 0");
+            $results = $query->result_array();
+            if (count($results) > 0) {
+                // OK, we should attempt to pull the major unit lightspeed parts..
+                $this->db->query("Update mdfeed_feed_log set status = 1, processing_start = now() where run_by = 'admin' and status = 0");
+                $error_string = "";
+                try {
+                    $this->load->model("Mdfeed_m");
+                    $this->Mdfeed_m->get_major_units(); // that should fetch all those things, great.
+                } catch (Exception $e) {
+                    $error_string = $e->getMessage();
+                    if ($e->getMessage() != "MD Feed credentials not found.") {
+                        print "MD Feed error: " . $e->getMessage() . "\n";
+                    }
+                }
+
+                $this->db->query("Update mdfeed_feed_log set status = 2, processing_end = now(), error_string = ? where run_by = 'admin' and status = 1", array($error_string));
+            }
+        }
+    }
+
     public function fixPendingLightspeed() {
         // JLB 12-18-17
         // Lightspeed, if you have it...
@@ -55,7 +79,7 @@ class CronJobHourly extends AbstractCronJob
                 try {
                     $this->load->model("Lightspeed_m");
                     $this->Lightspeed_m->get_major_units(); // that should fetch all those things, great.
-                    $this->Lightspeed_m->get_parts(); // that should fetch all those things, great.
+                    // $this->Lightspeed_m->get_parts(); // that should fetch all those things, great. // The parts feed can be huge; let's delay it to once per day.
                 } catch (Exception $e) {
                     $error_string = $e->getMessage();
                     if ($e->getMessage() != "Lightspeed credentials not found.") {
