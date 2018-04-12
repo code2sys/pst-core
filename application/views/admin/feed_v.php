@@ -33,6 +33,35 @@
                     </tr>
                 </table>
 
+            <?php if ($mdfeed_enabled): ?>
+
+                <table width="100%" cellpadding="6">
+                    <tr>
+                        <th colspan="4"><h2>Motorcycle Dealer Major Unit Feed:</h2></th>
+                    </tr>
+                    <?php if (isset($mdfeed_error) && ($mdfeed_error != "")): ?>
+                        <tr>
+                            <td colspan="5">
+                                <div style="border: 5px solid red; background: #fee; padding: 1em;">
+                                    <div style="text-align: center"><strong>MD Feed Configuration Error</strong></div>
+                                    <p>Your store has the following MD Feed configuration error:</p>
+                                    <p><?php echo $mdfeed_error; ?></p>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <tr>
+                            <td><button type="button" name="get_mdfeed_feed" value="" onClick="window.location.href = '<?php echo base_url('admin_content/get_mdfeed_feed/'); ?>'; return false;">Request MD Feed</button></td>
+                            <td>Status : <?php echo isset($mdfeed_feeds['status']) ? ($mdfeed_feeds['status'] == 2 ? 'Completed' : ($mdfeed_feeds['status'] == 1 ?'Processing' : 'Queued')) : "Idle"; ?></td>
+                            <td>Last Run : <?php echo isset($mdfeed_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($mdfeed_feeds['run_at'])) : ''; ?></td>
+                            <?php if ($mdfeed_major_unit_count > 0): ?>
+                                <td>MD Feed Major Unit Count: <?php echo number_format($mdfeed_major_unit_count, 0); ?></td>
+                            <?php endif; ?>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            <?php endif; ?>
+
             <?php if ($lightspeed_enabled): ?>
                 <table width="100%" cellpadding="6">
                     <tr>

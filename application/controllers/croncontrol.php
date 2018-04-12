@@ -4,19 +4,8 @@ class CronControl extends Master_Controller {
 
     // This is to pull a stream
     public function fetchMotorcycleDealerFeeds($debug = 0) {
-        initializePSTAPI();
-        global $PSTAPI;
-
-        $feeds = $PSTAPI->mdfeed()->fetch();
-        if ($debug > 0) {
-            print "Found " . count($feeds) . " feeds \n";   
-        }
-        foreach ($feeds as $f) {
-            if ($debug > 0) {
-                print "Feed " . $f->get("source_url") . "\n";                
-            }
-            $f->generateMDRecords($debug > 0);
-        }
+        $this->load->model("Mdfeed_m");
+        $this->Mdfeed_m->get_md_feed();
     }
 
     // We have to just migrate it
@@ -139,7 +128,17 @@ class CronControl extends Master_Controller {
 
 	public function daily()
 	{
+	    // New - MDFeed daily
+        $this->dailyMDFeedUnits();
+
+	    // First, run the lightspeed units
+        $this->dailyLightspeedUnits();
+
+        // Then, do the regular daily routine
 		$this->_runJob('daily');
+
+		// Then, do the lightspeed parts
+        $this->dailyLightspeedParts();
 	}
 
 	public function weekly()
@@ -510,29 +509,48 @@ class CronControl extends Master_Controller {
         $this->Lightspeed_m->get_major_units();
     }
 
-    public function dailyLightspeedUnits() {
+    public function dailyLightspeedParts() {
+        $this->sub_dailyLightspeed("lightspeedpart_feed_log", "get_parts");
+    }
+
+    protected function sub_dailyLightspeed($log_table, $function_to_call) {
         // JLB 12-18-17
         // Lightspeed, if you have it...
         if (defined('ENABLE_LIGHTSPEED') && ENABLE_LIGHTSPEED) {
-            // insert into the table to log this..
-            $this->db->query("Insert into lightspeed_feed_log (status, processing_start, run_by) values (1, now(), 'cron')");
-
-            // OK, we should attempt to pull the major unit lightspeed parts..
-            $error_string = "";
-            try {
-                $this->load->model("Lightspeed_m");
-                $this->Lightspeed_m->get_major_units(); // that should fetch all those things, great.
-            } catch(Exception $e) {
-                $error_string = $e->getMessage();
-                if ($e->getMessage() != "Lightspeed credentials not found.") {
-                    print "Lightspeed error: " . $e->getMessage() . "\n";
-                }
-            }
-
-            // and update it...
-            $this->db->query("Update lightspeed_feed_log set status = 2, processing_end = now(), error_string = ? where run_by = 'cron' and status = 1", array($error_string));
+            $this->sub_sub_loggedDaily($log_table, $function_to_call, "Lightspeed_m", "Lightspeed");
         }
     }
+
+    protected function sub_sub_loggedDaily($log_table, $function_to_call, $model, $name) {
+        // insert into the table to log this..
+        $this->db->query("Insert into $log_table (status, processing_start, run_by) values (1, now(), 'cron')");
+
+        // OK, we should attempt to pull the major unit lightspeed parts..
+        $error_string = "";
+        try {
+            $this->load->model("$model");
+            $this->$model->$function_to_call(); // that should fetch all those things, great.
+        } catch(Exception $e) {
+            $error_string = $e->getMessage();
+            if ($e->getMessage() != "$name credentials not found.") {
+                print "$name error: " . $e->getMessage() . "\n";
+            }
+        }
+
+        // and update it...
+        $this->db->query("Update $log_table set status = 2, processing_end = now(), error_string = ? where run_by = 'cron' and status = 1", array($error_string));
+    }
+
+    public function dailyLightspeedUnits() {
+        $this->sub_dailyLightspeed("lightspeed_feed_log", "get_major_units");
+    }
+
+    public function dailyMDFeedUnits() {
+        if (defined('ENABLE_MD_FEED') && ENABLE_MD_FEED) {
+            $this->sub_sub_loggedDaily("mdfeed_feed_log", "get_major_units", "Mdfeed_m", "MDFeed");
+        }
+    }
+
 }
 
 /* End of file croncontrol.php */
