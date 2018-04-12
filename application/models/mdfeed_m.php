@@ -39,7 +39,7 @@ class Mdfeed_m extends CI_Model {
 
             // Now, we have to iterate these guys...
             foreach ($feeds as $feed) {
-                foreach ($feed["records"] as $record) {
+                foreach ($feed["records"]["records"] as $record) {
                     $matches = $PSTAPI->motorcycle()->fetch(array("mdfeed" => 1, "mdrecord_recordid" => $record->get("recordid")), true);
 
                     if (count($matches) > 0) {
@@ -231,7 +231,7 @@ class Mdfeed_m extends CI_Model {
         if ($debug > 0) {
             print "Found " . count($feeds) . " feeds \n";
         }
-        $return_feeds = array("feeds" => array());
+        $return_feeds = array();
         foreach ($feeds as $f) {
             if ($debug > 0) {
                 print "Feed " . $f->get("source_url") . "\n";
