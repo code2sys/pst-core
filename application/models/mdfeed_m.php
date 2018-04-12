@@ -8,7 +8,7 @@
 
 class Mdfeed_m extends CI_Model {
 
-    public function get_major_units() {
+    public function get_major_units($debug = 0) {
         $CI =& get_instance();
         $CI->load->model("CRS_m");
         $CI->load->model("CRSCron_M");
@@ -17,7 +17,7 @@ class Mdfeed_m extends CI_Model {
         $found_bikes = false;
 
         // OK, we need to get that feed, if it exists
-        $feeds = $this->get_md_feed();
+        $feeds = $this->get_md_feed($debug = 0);
 
         if (count($feeds) > 0) {
             $found_bikes = true;
@@ -216,7 +216,7 @@ class Mdfeed_m extends CI_Model {
 
     }
 
-    public function get_md_feed() {
+    public function get_md_feed($debug = 0) {
         initializePSTAPI();
         global $PSTAPI;
 
