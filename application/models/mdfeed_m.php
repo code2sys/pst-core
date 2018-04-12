@@ -18,6 +18,10 @@ class Mdfeed_m extends CI_Model {
 
         // OK, we need to get that feed, if it exists
         $feeds = $this->get_md_feed($debug = 0);
+        if ($debug > 0) {
+            print_r($feeds);
+        }
+
 
         if (count($feeds) > 0) {
             $found_bikes = true;
