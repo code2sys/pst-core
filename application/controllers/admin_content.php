@@ -341,6 +341,34 @@ class Admin_Content extends Master_Controller {
         $this->_mainData['ebaymarkup'] = $this->Ebaysetting->check_markup();
         $this->_mainData['quantity'] = $this->Ebaysetting->check_quantity();
 
+        if (defined('ENABLE_MD_FEED') && ENABLE_MD_FEED) {
+            initializePSTAPI();
+            global $PSTAPI;
+            $this->_mainData['mdfeed_enabled'] = true;
+            $feeds = $PSTAPI->mdfeed()->fetch();
+
+            if (count($feeds) > 0) {
+                // OK, great...
+                $query = $this->db->query("Select count(*) as cnt from motorcycle where mdfeed = 1");
+                $this->_mainData["mdfeed_major_unit_count"] = $query->result_array();
+                $this->_mainData["mdfeed_major_unit_count"] = $this->_mainData["mdfeed_major_unit_count"]['cnt'];
+
+                // When did this run last?
+                $query = $this->db->query("Select * From mdfeed_feed_log order by id desc limit 1");
+                $this->_mainData["mdfeed_feeds"] = $query->result_array();
+                if (count($this->_mainData["mdfeed_feeds"]) > 0){
+                    $this->_mainData["mdfeed_feeds"] = $this->_mainData["mdfeed_feeds"][0];
+                } else {
+                    unset($this->_mainData["mdfeed_feeds"]);
+                }
+            } else {
+                $this->_mainData["mdfeed_error"] = "No feed is defined - please contact PST support and provide a Motorcycle Dealer feed URL.";
+            }
+
+        } else {
+            $this->_mainData['mdfeed_enabled'] = false;
+        }
+
         if (defined('ENABLE_LIGHTSPEED') && ENABLE_LIGHTSPEED) {
             $this->load->model("Lightspeed_m");
 
@@ -385,6 +413,11 @@ class Admin_Content extends Master_Controller {
 
     public function get_lightspeed_feed() {
         $this->db->query("Insert into lightspeed_feed_log (run_by) values ('admin') ");
+        header("Location: /admin_content/feeds");
+    }
+
+    public function get_mdfeed_feed() {
+        $this->db->query("Insert into mdfeed_feed_log (run_by) values ('admin') ");
         header("Location: /admin_content/feeds");
     }
 

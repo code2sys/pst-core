@@ -96,7 +96,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 				<hr>
 				<div class="dtal-txt">
 					<label>location :</label>
-					<span><?php echo $store_name['city'].', '.$store_name['state'];?> </span>
+					<span><?php if ($motorcycle["location_description"] != "") :?><?php echo $motorcycle["location_description"]; ?><?php else: ?><?php echo $store_name['city'].', '.$store_name['state'];?> <?php endif; ?></span>
 				</div>
                 <?php if (($motorcycle['stock_status'] == 'In Stock' && $stock_status_mode >= 2 ) || ($motorcycle['stock_status'] != 'In Stock' && ($stock_status_mode == 1  || $stock_status_mode == 3))): ?>
                     <div class="dtal-txt">

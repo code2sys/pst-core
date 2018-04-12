@@ -482,6 +482,10 @@ class Lightspeed_M extends Master_M {
         $CI->CRSCron_M->removeExtraCRSBikes();
     }
 
+    public function getStockMotoCategory($name = "Dealer") {
+        return $this->_getStockMotoCategory($name);
+    }
+
     protected $stock_moto_category_cache;
     protected function _getStockMotoCategory($name = "Dealer") {
 
@@ -509,8 +513,13 @@ class Lightspeed_M extends Master_M {
         return $id;
     }
 
+    public function getMachineTypeMotoType($machine_type, $offroad_flag)
+    {
+        return $this->_getMachineTypeMotoType($machine_type, $offroad_flag);
+    }
 
-    protected $_preserveMachineMotoType;
+
+        protected $_preserveMachineMotoType;
     protected function _getMachineTypeMotoType($machine_type, $offroad_flag) {
         if (!isset($this->_preserveMachineMotoType)) {
             $this->_preserveMachineMotoType = array();
