@@ -17,7 +17,7 @@ class Mdfeed_m extends CI_Model {
         $found_bikes = false;
 
         // OK, we need to get that feed, if it exists
-        $feeds = $this->get_md_feed($debug = 0);
+        $feeds = $this->get_md_feed($debug);
         if ($debug > 0) {
             print_r($feeds);
         }
