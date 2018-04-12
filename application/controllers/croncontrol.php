@@ -521,20 +521,30 @@ class CronControl extends Master_Controller {
         }
     }
 
-    protected function sub_sub_loggedDaily($log_table, $function_to_call, $model, $name) {
+    protected function sub_sub_loggedDaily($log_table, $function_to_call, $model, $name, $debug = 0) {
         // insert into the table to log this..
+        if ($debug > 0) {
+            print "Inserting into the $log_table table as CRON \n";
+        }
         $this->db->query("Insert into $log_table (status, processing_start, run_by) values (1, now(), 'cron')");
 
         // OK, we should attempt to pull the major unit lightspeed parts..
         $error_string = "";
         try {
             $this->load->model("$model");
+            if ($debug > 0) {
+                print "Calling $model $function_to_call \n";
+            }
             $this->$model->$function_to_call(); // that should fetch all those things, great.
         } catch(Exception $e) {
             $error_string = $e->getMessage();
             if ($e->getMessage() != "$name credentials not found.") {
                 print "$name error: " . $e->getMessage() . "\n";
             }
+        }
+
+        if ($debug > 0) {
+            print "All done \n";
         }
 
         // and update it...
@@ -545,9 +555,16 @@ class CronControl extends Master_Controller {
         $this->sub_dailyLightspeed("lightspeed_feed_log", "get_major_units");
     }
 
-    public function dailyMDFeedUnits() {
+    public function dailyMDFeedUnits($debug = 0) {
         if (defined('ENABLE_MD_FEED') && ENABLE_MD_FEED) {
-            $this->sub_sub_loggedDaily("mdfeed_feed_log", "get_major_units", "Mdfeed_m", "MDFeed");
+            if ($debug > 0) {
+                print "Calling get_major_units \n";
+            }
+            $this->sub_sub_loggedDaily("mdfeed_feed_log", "get_major_units", "Mdfeed_m", "MDFeed", $debug);
+        } else {
+            if ($debug > 0) {
+                print "ENABLE_MD_FEED not defined \n";
+            }
         }
     }
 
