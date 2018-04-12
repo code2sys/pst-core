@@ -19,7 +19,9 @@ class Mdfeed_m extends CI_Model {
         // OK, we need to get that feed, if it exists
         $feeds = $this->get_md_feed($debug);
         if ($debug > 0) {
+            print "Feeds returned: \n";
             print_r($feeds);
+            print "End of feeds \n";
         }
 
 
