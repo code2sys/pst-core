@@ -192,7 +192,7 @@ class Mdfeed_m extends CI_Model {
 
 
                             // Now, we attempt to fix the machine type...
-                            $corrected_category = $this->_getMachineTypeMotoType($vin_match["machine_type"],  $vin_match["offroad"]);
+                            $corrected_category = $this->getMachineTypeMotoType($vin_match["machine_type"],  $vin_match["offroad"]);
                             if ($corrected_category > 0) {
                                 $this->db->query("Update motorcycle set vehicle_type = ? where id = ? limit 1", array($corrected_category, $motorcycle_id));
                             }

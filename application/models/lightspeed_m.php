@@ -509,8 +509,13 @@ class Lightspeed_M extends Master_M {
         return $id;
     }
 
+    public function getMachineTypeMotoType($machine_type, $offroad_flag)
+    {
+        return $this->_getMachineTypeMotoType($machine_type, $offroad_flag);
+    }
 
-    protected $_preserveMachineMotoType;
+
+        protected $_preserveMachineMotoType;
     protected function _getMachineTypeMotoType($machine_type, $offroad_flag) {
         if (!isset($this->_preserveMachineMotoType)) {
             $this->_preserveMachineMotoType = array();
