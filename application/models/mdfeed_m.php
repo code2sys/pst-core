@@ -6,7 +6,13 @@
  * Time: 10:23 AM
  */
 
-class Mdfeed_m extends CI_Model {
+require_once("master_m.php");
+
+class Mdfeed_m extends Master_M {
+
+    public function activeOnAdd() {
+        return $this->_subContactFetch("mdfeed_active_load") > 0;
+    }
 
     public function get_major_units($debug = 0) {
         $CI =& get_instance();
@@ -64,7 +70,8 @@ class Mdfeed_m extends CI_Model {
                             "retail_price" => $record->get("msrp"),
                             "mdfeed" => 1,
                             "mdfeed_flag" => 1,
-                            "mdfeed_deleted" => 0
+                            "mdfeed_deleted" => 0,
+                            "source" => "MD Feed"
                         ));
 
                         if ($matches[0]["customer_set_price"] > 0) {
@@ -118,7 +125,9 @@ class Mdfeed_m extends CI_Model {
                             "mdfeed_recordid" => $record->get("recordid"),
                             "mdfeed" => 1,
                             "mdfeed_flag" => 1,
-                            "mdfeed_deleted" => 0
+                            "mdfeed_deleted" => 0,
+                            "status" => $this->activeOnAdd() ? 1 : 0,
+                            "source" => "MD Feed"
                         ));
 
                         $motorcycle_id = $motorcycle->id();
