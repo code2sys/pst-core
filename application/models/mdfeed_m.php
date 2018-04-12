@@ -19,7 +19,7 @@ class Mdfeed_m extends CI_Model {
         // OK, we need to get that feed, if it exists
         // We require deeper debug to get that level of verbosity...
         $feeds = $this->get_md_feed($debug - 1);
-        if ($debug > 0) {
+        if ($debug > 1) {
             print "Feeds returned: \n";
             print_r($feeds);
             print "End of feeds \n";
