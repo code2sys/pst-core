@@ -482,6 +482,10 @@ class Lightspeed_M extends Master_M {
         $CI->CRSCron_M->removeExtraCRSBikes();
     }
 
+    public function getStockMotoCategory($name = "Dealer") {
+        return $this->_getStockMotoCategory($name);
+    }
+
     protected $stock_moto_category_cache;
     protected function _getStockMotoCategory($name = "Dealer") {
 
