@@ -535,7 +535,7 @@ class CronControl extends Master_Controller {
             if ($debug > 0) {
                 print "Calling $model $function_to_call \n";
             }
-            $this->$model->$function_to_call(); // that should fetch all those things, great.
+            $this->$model->$function_to_call($debug); // that should fetch all those things, great.
         } catch(Exception $e) {
             $error_string = $e->getMessage();
             if ($e->getMessage() != "$name credentials not found.") {
