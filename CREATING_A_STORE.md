@@ -70,6 +70,9 @@ And fix ownership
 chown -R customer1ftp.customer1ftp .
 chmod -R g+w .
 
+Get a dev cert if you need one:
+certbot certonly --webroot --webroot-path=/var/www/stores/pdi/html -d sierranevadapowersport.com
+
 Virtual Host Configuration
 ---------------------------
 
