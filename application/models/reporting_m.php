@@ -466,8 +466,8 @@ class Reporting_M extends Master_M {
             // JLB 04-18-18
             // Adding in per Holiday; the model may need to be more of the correct model, not just the code #
             $prefix = $motorcycle['year'] . " " . $motorcycle['make'];
-            if ($motorcycle["lightspeed"] == 1 && (strtolower($prefix) == strtolower(substr($motorcycle['model'], 0, strlen($prefix))))) {
-                $data['model'] = substr($motorcycle['model'], strlen($prefix) + 1);
+            if ($motorcycle["lightspeed"] == 1 && (strtolower($prefix) == strtolower(substr($motorcycle['title'], 0, strlen($prefix))))) {
+                $data['model'] = substr($motorcycle['title'], strlen($prefix) + 1);
             } else {
                 $data['model'] = $motorcycle['model'];
             }
