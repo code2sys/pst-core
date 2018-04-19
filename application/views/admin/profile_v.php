@@ -733,7 +733,6 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
     <?php
     global $PSTAPI;
     initializePSTAPI();
-?>
     ?>
     <tr>
         <td colspan="2">
@@ -746,7 +745,7 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                 </tr>
                 <tr>
                     <td style="width:30%;"><b>Enable:</b></td>
-                    <td><label><input type="radio" name="forward_leads_to_cdk" value="Yes" <?php if ("Yes" == ($flc = $PSTAPI->config()->getKeyValue('forward_leads_to_cdk'))): ?>checked="checked"<?php endif; ?> > Yes, forward leads to CDK/Lightspeed</label><label><input type="radio" name="forward_leads_to_cdk" value="Yes" <?php if ("Yes" != $flc): ?>checked="checked"<?php endif; ?> > No, not not</label></td>
+                    <td><label><input type="radio" name="forward_leads_to_cdk" value="Yes" <?php if ("Yes" == ($flc = $PSTAPI->config()->getKeyValue('forward_leads_to_cdk'))): ?>checked="checked"<?php endif; ?> > Yes, forward leads to CDK/Lightspeed</label><label><input type="radio" name="forward_leads_to_cdk" value="No" <?php if ("Yes" != $flc): ?>checked="checked"<?php endif; ?> > No, not not</label></td>
                 </tr>
                 <tr class="cdk_lead_integration">
                     <td style="width:30%;"><b>Source ID:</b></td>
