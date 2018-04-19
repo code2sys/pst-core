@@ -1129,6 +1129,26 @@ class Welcome extends Master_Controller {
         // Receive the contents from the post
         // Extract the ID field
         // Push something back, so we know it's done...
+        $input = fopen("php://input", "r");
+        $postdata = file_get_contents("php://input");
+
+        $results = simplexml_load_string($postdata);
+        $source_id = $results->Item->SourceProspectId;
+
+        $output_id = uniqid("vsept");
+
+        header("Content-Type: text/xml");
+        print <<<HERE
+<AddProspectResults>
+<Prospect>
+<SourceProspectId>$source_id</SourceProspectId>
+<PCHId>$output_id</PCHId>
+</Prospect>
+<Prospect>
+</AddProspectResults>
+UpdateProspectAvailability
+HERE;
+
     }
 
     public function category() {
