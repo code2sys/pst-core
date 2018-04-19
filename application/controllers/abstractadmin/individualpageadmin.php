@@ -157,6 +157,18 @@ abstract class Individualpageadmin extends Employeeadmin
                 $this->db->query("insert into `config` (`key`, `value`) values (?, ?) on duplicate key update `value` = values(`value`)", array($key, $val));
             }
 
+            // JLB 04-19-18
+            // We have new settings for the lead generation transfer to CDK
+            // Observe that we are transitioning styles in the code to the new object library...
+            $cdk_lead_transfer_keys = array("forward_leads_to_cdk", "vsept_source_id", "vsept_dealership_id");
+            global $PSTAPI;
+            initializePSTAPI();
+            foreach ($cdk_lead_transfer_keys as $k)  {
+                $$k = $val = $data[$k];
+                unset($data[$k]);
+                $PSTAPI->config()->setKeyValue($k, $val);
+            }
+
             $this->admin_m->updateAdminShippingProfile($this->input->post());
 
             // update config;
