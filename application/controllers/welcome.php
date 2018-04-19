@@ -1076,7 +1076,59 @@ class Welcome extends Master_Controller {
 //        $header.= "Content-Type: text/html; charset=utf-8\r\n";
 //        $header.= "X-Priority: 1\r\n";
 //        mail($toEmail, "New Motorcycle Enquiry", $message, $header);
+
+        // JLB 04-19-18
+        // Is the configuration in there for echoing leads to CDK?
+        global $PSTAPI;
+        initializePSTAPI();
+
+        if ($PSTAPI->config()->getKeyValue("forward_leads_to_cdk") == "Yes") {
+            $vehicle_type = $vehicle_make = $vehicle_model = $vehicle_year = "";
+            // We should be getting this motorcycle by title?
+            $moto_id = $this->motorcycle_m->getMotorcycleIdByTitle($post['motorcycle']);
+            $motorcycle = $this->motorcycle_m->getMotorcycle($moto_id);
+
+            if (array_key_exists("make", $motorcycle)) {
+                $vehicle_make = $motorcycle["make"];
+            }
+            if (array_key_exists("model", $motorcycle)) {
+                $vehicle_model = $motorcycle["model"];
+            }
+            if (array_key_exists("type", $motorcycle)) {
+                $vehicle_type = $motorcycle["type"];
+            }
+            if (array_key_exists("year", $motorcycle)) {
+                $vehicle_year = $motorcycle["year"];
+            }
+
+            // OK, we need to save it, and then we need to post it...
+            $inquiry = $PSTAPI->vseptprospect()->add(array(
+                "Email" => $post['email'],
+                "Name" => $post['firstName'] . " " . $post['lastName'],
+                "Phone" => $post['phone'],
+                "SourceDate" => date("Y-m-d"),
+                "Address1" => $post['address'],
+                "City" => $post['city'],
+                "State" => $post['state'],
+                "ZipCode" => $post['zipcode'],
+                "Notes" => $message,
+                "VehicleType" => $vehicle_type,
+                "VehicleMake" => $vehicle_make,
+                "VehicleModel" => $vehicle_model,
+                "VehicleYear" => $vehicle_year
+            ));
+
+            $inquiry->pushToVSept();
+        }
+
+
         redirect('welcome/benzDetails/' . $post['product_id']);
+    }
+
+    public function vseptDummy() {
+        // Receive the contents from the post
+        // Extract the ID field
+        // Push something back, so we know it's done...
     }
 
     public function category() {

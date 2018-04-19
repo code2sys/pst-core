@@ -730,6 +730,52 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
             </table>
         </td>
     </tr>
+    <?php
+    global $PSTAPI;
+    initializePSTAPI();
+?>
+    ?>
+    <tr>
+        <td colspan="2">
+            <table width="100%" style="background-color:white;">
+                <tr>
+                    <td colspan="2">
+                        <strong>CDK Lead Integration</strong><br/>
+                        This enables forwarding leads from the major unit quote request form to the CDK/Lightspeed CRM.
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:30%;"><b>Enable:</b></td>
+                    <td><label><input type="radio" name="forward_leads_to_cdk" value="Yes" <?php if ("Yes" == ($flc = $PSTAPI->config()->getKeyValue('forward_leads_to_cdk'))): ?>checked="checked"<?php endif; ?> > Yes, forward leads to CDK/Lightspeed</label><label><input type="radio" name="forward_leads_to_cdk" value="Yes" <?php if ("Yes" != $flc): ?>checked="checked"<?php endif; ?> > No, not not</label></td>
+                </tr>
+                <tr class="cdk_lead_integration">
+                    <td style="width:30%;"><b>Source ID:</b></td>
+                    <td><?php echo form_input(array('name' => 'vsept_source_id',
+                            'value' => $PSTAPI->config()->getKeyValue('vsept_source_id'),
+                            'class' => 'text large')); ?></td>
+                </tr>
+                <tr class="cdk_lead_integration">
+                    <td style="width:30%;"><b>Dealership ID:</b></td>
+                    <td><?php echo form_input(array('name' => 'vsept_dealership_id',
+                            'value' => $PSTAPI->config()->getKeyValue('vsept_dealership_id'),
+                            'class' => 'text large')); ?></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+<script type="application/javascript">
+    (function() {
+        var forward_leads_to_cdk_fn = function(e) {
+            if ($("input[name=forward_leads_to_cdk][value='Yes']:checked").length > 0) {
+                $(".cdk_lead_integration").show();
+            } else {
+                $(".cdk_lead_integration").hide();
+            }
+        };
+        $("input[name=forward_leads_to_cdk]").on("click", forward_leads_to_cdk_fn);
+        forward_leads_to_cdk_fn();
+    })();
+</script>
 <?php endif; ?>
 
 
