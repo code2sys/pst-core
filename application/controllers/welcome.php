@@ -1131,6 +1131,7 @@ class Welcome extends Master_Controller {
         // Push something back, so we know it's done...
         $input = fopen("php://input", "r");
         $postdata = file_get_contents("php://input");
+        error_log($postdata);
 
         $results = simplexml_load_string($postdata);
         $source_id = $results->Item->SourceProspectId;
@@ -1146,7 +1147,6 @@ class Welcome extends Master_Controller {
 </Prospect>
 <Prospect>
 </AddProspectResults>
-UpdateProspectAvailability
 HERE;
 
     }
