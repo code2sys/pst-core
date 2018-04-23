@@ -1038,11 +1038,11 @@ class Welcome extends Master_Controller {
     public function productEnquiry() {
         $post = $this->input->post();
         $this->load->model('motorcycle_m');
-        print "A\n";
-        exit();
 
 
         $this->motorcycle_m->saveEnquiry($post);
+        print "A\n";
+        exit();
 
         $toEmail = $this->motorcycle_m->getSalesEmail();
         $message = "";
