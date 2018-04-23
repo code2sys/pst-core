@@ -1101,6 +1101,8 @@ class Welcome extends Master_Controller {
                 $vehicle_year = $motorcycle["year"];
             }
 
+            print "A \n"; exit();
+
             // OK, we need to save it, and then we need to post it...
             $inquiry = $PSTAPI->vseptprospect()->add(array(
                 "Email" => $post['email'],
