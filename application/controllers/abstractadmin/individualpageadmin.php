@@ -159,6 +159,7 @@ abstract class Individualpageadmin extends Employeeadmin
 
 
             // update config;
+            $this->admin_m->updateAdminShippingProfile($this->input->post());
 
             $this->_mainData['success'] = TRUE;
 
