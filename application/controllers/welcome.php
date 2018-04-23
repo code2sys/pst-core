@@ -1038,6 +1038,10 @@ class Welcome extends Master_Controller {
     public function productEnquiry() {
         $post = $this->input->post();
         $this->load->model('motorcycle_m');
+        print "A\n";
+        exit();
+
+
         $this->motorcycle_m->saveEnquiry($post);
 
         $toEmail = $this->motorcycle_m->getSalesEmail();
@@ -1061,8 +1065,6 @@ class Welcome extends Master_Controller {
 
         $this->load->model("mail_gen_m");
 
-        print "A\n";
-        exit();
 
         $this->mail_gen_m->queueEmail(array(
             "toEmailAddress" => $toEmail,
