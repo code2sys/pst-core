@@ -1085,8 +1085,8 @@ class Welcome extends Master_Controller {
         if ($PSTAPI->config()->getKeyValue("forward_leads_to_cdk") == "Yes") {
             $vehicle_type = $vehicle_make = $vehicle_model = $vehicle_year = "";
             // We should be getting this motorcycle by title?
-            $moto_id = $this->motorcycle_m->getMotorcycleIdByTitle($post['motorcycle']);
-            $motorcycle = $this->motorcycle_m->getMotorcycle($moto_id);
+            $motorcycle = $PSTAPI->motorcycle->fetch(array("title" => $post['motorcycle']), true);
+            $motorcycle = count($motorcycle) > 0 ? $motorcycle[0] : array();
 
             if (array_key_exists("make", $motorcycle)) {
                 $vehicle_make = $motorcycle["make"];
