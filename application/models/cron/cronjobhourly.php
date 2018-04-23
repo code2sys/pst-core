@@ -6,6 +6,18 @@ class CronJobHourly extends AbstractCronJob
 {
 	public function runJob()
 	{
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $vseptprospect_null = $PSTAPI->vseptprospect()->fetch(array("PCHId" => null), true);
+        if (count($vseptprospect_null) > 0) {
+            print "Error: PCHId missing in these records, indicating they did not go to the server: ";
+            foreach ($vseptprospect_null as $r) {
+                print "\t" . $r["vseptprospect_id"] . "\n";
+            }
+        }
+
+
 	    $this->fixLocalProductCategories();
 	    $this->fixLightspeedPartSearch();
         $this->fixVideos();
