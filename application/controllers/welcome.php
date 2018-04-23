@@ -1038,6 +1038,8 @@ class Welcome extends Master_Controller {
     public function productEnquiry() {
         $post = $this->input->post();
         $this->load->model('motorcycle_m');
+
+
         $this->motorcycle_m->saveEnquiry($post);
 
         $toEmail = $this->motorcycle_m->getSalesEmail();
@@ -1060,6 +1062,7 @@ class Welcome extends Master_Controller {
         $message .= "Motorcycle : " . $post['motorcycle'] . '<br>';
 
         $this->load->model("mail_gen_m");
+
 
         $this->mail_gen_m->queueEmail(array(
             "toEmailAddress" => $toEmail,
@@ -1085,8 +1088,8 @@ class Welcome extends Master_Controller {
         if ($PSTAPI->config()->getKeyValue("forward_leads_to_cdk") == "Yes") {
             $vehicle_type = $vehicle_make = $vehicle_model = $vehicle_year = "";
             // We should be getting this motorcycle by title?
-            $moto_id = $this->motorcycle_m->getMotorcycleIdByTitle($post['motorcycle']);
-            $motorcycle = $this->motorcycle_m->getMotorcycle($moto_id);
+            $motorcycle = $PSTAPI->motorcycle()->fetch(array("title" => $post['motorcycle']), true);
+            $motorcycle = count($motorcycle) > 0 ? $motorcycle[0] : array();
 
             if (array_key_exists("make", $motorcycle)) {
                 $vehicle_make = $motorcycle["make"];
@@ -1111,7 +1114,7 @@ class Welcome extends Master_Controller {
                 "City" => $post['city'],
                 "State" => $post['state'],
                 "ZipCode" => $post['zipcode'],
-                "Notes" => $message,
+                "Notes" => "", // JLB 04-23-18 They asked me not to echo message here... $message,
                 "VehicleType" => $vehicle_type,
                 "VehicleMake" => $vehicle_make,
                 "VehicleModel" => $vehicle_model,

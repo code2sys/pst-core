@@ -416,8 +416,12 @@ class Motorcycle_M extends Master_M {
         // return $records;
     }
 
+    // JLB 04-23-18
+    // This kept throwing some weird error frmo the active recod
     public function saveEnquiry( $data ) {
-        $success = $this->createRecord('motorcycle_enquiry', $data, FALSE);
+        global $PSTAPI;
+        initializePSTAPI();
+        $PSTAPI->motorcycleenquiry()->add($data);
     }
 
     public function getSalesEmail() {
