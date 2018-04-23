@@ -1111,7 +1111,7 @@ class Welcome extends Master_Controller {
                 "City" => $post['city'],
                 "State" => $post['state'],
                 "ZipCode" => $post['zipcode'],
-                "Notes" => $message,
+                "Notes" => "", // JLB 04-23-18 They asked me not to echo message here... $message,
                 "VehicleType" => $vehicle_type,
                 "VehicleMake" => $vehicle_make,
                 "VehicleModel" => $vehicle_model,

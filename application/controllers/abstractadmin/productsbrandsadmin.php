@@ -996,6 +996,21 @@ abstract class Productsbrandsadmin extends Customeradmin {
         $this->Lightspeed_m->setActiveOnAdd($_REQUEST["lightspeed_active_load"]);
         $this->Lightspeed_m->setUnitCycleTraderDefault($_REQUEST["unitCycleTraderDefault"]);
         $this->Lightspeed_m->setLightSpeedPartPricingRule($_REQUEST["lightSpeedPartPricingRule"]);
+
+
+        // JLB 04-19-18
+        // We have new settings for the lead generation transfer to CDK
+        // Observe that we are transitioning styles in the code to the new object library...
+        $cdk_lead_transfer_keys = array("forward_leads_to_cdk", "vsept_dealership_id");
+        global $PSTAPI;
+        initializePSTAPI();
+        foreach ($cdk_lead_transfer_keys as $k)  {
+            $$k = $val = $_REQUEST[$k];
+            $PSTAPI->config()->setKeyValue($k, $val);
+        }
+
+        $this->admin_m->updateAdminShippingProfile($this->input->post());
+
         $this->session->Set_flashdata("success", "Settings updated successfully.");
 
         // Redirect it...
