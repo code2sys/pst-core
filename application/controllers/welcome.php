@@ -1061,6 +1061,9 @@ class Welcome extends Master_Controller {
 
         $this->load->model("mail_gen_m");
 
+        print "A\n";
+        exit();
+
         $this->mail_gen_m->queueEmail(array(
             "toEmailAddress" => $toEmail,
             "replyToEmailAddress" => $post['email'],
