@@ -1041,8 +1041,6 @@ class Welcome extends Master_Controller {
 
 
         $this->motorcycle_m->saveEnquiry($post);
-        print "A\n";
-        exit();
 
         $toEmail = $this->motorcycle_m->getSalesEmail();
         $message = "";
@@ -1105,8 +1103,6 @@ class Welcome extends Master_Controller {
             if (array_key_exists("year", $motorcycle)) {
                 $vehicle_year = $motorcycle["year"];
             }
-
-            print "A \n"; exit();
 
             // OK, we need to save it, and then we need to post it...
             $inquiry = $PSTAPI->vseptprospect()->add(array(
