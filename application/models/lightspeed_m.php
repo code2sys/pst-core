@@ -447,13 +447,6 @@ class Lightspeed_M extends Master_M {
                         }
                     }
 
-                    $where = array('sku' => $bike->StockNumber);
-                    $motorcycle = $this->updateRecord('motorcycle', $update_array, $where, FALSE);
-                    if ($motorcycle === FALSE) {
-                        print "Could not update: " . print_r($update_array, true) . "\n";
-                    }
-                    $valid_count++;
-
                     // JLB 04-24-18
                     // New - if any of these essentials change, then we need to SCRUB THE TRIM. That means, we have to get rid of the stuff that was already there...
                     $scrub_trim = false;
@@ -464,6 +457,14 @@ class Lightspeed_M extends Master_M {
                             print "Scrub trim on " . $bike->StockNumber . " for key $k change from " . $results[0][$k] . " to " .  $motorcycle_array[$k] . "\n";
                         }
                     }
+
+                    $where = array('sku' => $bike->StockNumber);
+                    $motorcycle = $this->updateRecord('motorcycle', $update_array, $where, FALSE);
+                    if ($motorcycle === FALSE) {
+                        print "Could not update: " . print_r($update_array, true) . "\n";
+                    }
+                    $valid_count++;
+
 
                 } else {
                     // we have to set some nulls. I think this is stupid, too.
