@@ -480,6 +480,11 @@ class CronControl extends Master_Controller {
     }
 
 
+    public function preserveMajorUnitsChangedField($field) {
+	    $this->load->model("lightspeed_m");
+	    $this->lightspeed_m->preserveMajorUnitsChangedField($field);
+    }
+
 	public function refreshCRSData() {
 	    $this->load->model("CRSCron_m");
 	    $this->CRSCron_m->refreshCRSData();

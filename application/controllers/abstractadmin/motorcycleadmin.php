@@ -93,9 +93,40 @@ abstract class Motorcycleadmin extends Firstadmin
             if ($this->admin_m->isNewPrice($id, $post['retail_price'], $post['sale_price'])) {
                 $post["customer_set_price"] = 1;
             }
+//
+//            if ($this->admin_m->isNewDescription($id, $post["description"])) {
+//                $post["customer_set_description"] = 1;
+//            }
 
-            if ($this->admin_m->isNewDescription($id, $post["description"])) {
-                $post["customer_set_description"] = 1;
+            global $PSTAPI;
+            initializePSTAPI();
+            $motorcycle = $PSTAPI->motorcycle()->get($id);
+            $scrub_trim = false;
+            foreach (array("description", "vin_number", "mileage", "color", "call_on_price", "destination_charge", "condition", "category", "make", "model", "title", "year") as $k) {
+                $val = array_key_exists($k, $_REQUEST) ? $_REQUEST[$k] : null;
+
+                if (is_null($val) && in_array($k, array("call_on_price", "destination_charge"))) {
+                    $val = 0;
+                }
+
+                // What about category?
+                if (!is_null($val)) {
+                    if ($k == "category") {
+                        $matching_category = $PSTAPI->motorcyclecategory()->get($motorcycle->get("category"));
+                        if (!is_null($matching_category) && strtolower($matching_category->get("name")) != strtolower($post['category'])) {
+                            $post['customer_set_category'] = 1;
+                        }
+                    } else {
+                        if ($motorcycle->get($k) != $val) {
+                            // OK, they change this value...
+                            $post["customer_set_" . $k] = 1; // We have to flag it...
+                            if (in_array($k, array("vin_number", "make", "model", "year"))) {
+                                $scrub_trim = true;
+                            }
+                        }
+                    }
+                }
+
             }
 
             $id = $this->admin_m->updateMotorcycle($id, $post);
@@ -116,6 +147,10 @@ abstract class Motorcycleadmin extends Firstadmin
 
                 $this->load->model("CRSCron_m");
                 $this->CRSCron_m->refreshCRSData($id);
+            } else if ($scrub_trim) {
+                // Well, if they just scrubbed the trim, we have to remove this...
+                $this->load->model("lightspeed_m");
+                $this->lightspeed_m->scrubTrim($id);
             }
 
             redirect('admin/motorcycle_edit/' . $id . '/updated');
