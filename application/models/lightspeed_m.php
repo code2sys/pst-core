@@ -413,7 +413,10 @@ class Lightspeed_M extends Master_M {
                 );
 
 
-                $results = $this->selectRecords('motorcycle', $where);
+                global $PSTAPI;
+                initializePSTAPI();
+                $results = $PSTAPI->motorcycle()->fetch(array("sku" => $bike->StockNumber), true);
+//                $results = $this->selectRecords('motorcycle', $where);
                 if($results) {
                     $last_known_trim = $results[0]["crs_trim_id"];
                     if ($results[0]["customer_set_price"] > 0) {
@@ -429,10 +432,17 @@ class Lightspeed_M extends Master_M {
                     foreach (array("description", "vin_number", "mileage", "color", "call_on_price", "destination_charge", "condition", "category", "make", "model", "title", "year") as $k) {
                         $set_k = "customer_set_" . $k;
                         if ($results[0][$set_k] > 0) {
-                            if ($motorcycle_array[$k] = $results[0][$k]) {
+                            $comp_val = $results[0][$k];
+
+                            if ($k == "category") {
+                                $comp_val = $PSTAPI->motorcyclecategory()->get($comp_val);
+                                $comp_val = is_null($comp_val) ? "" : $comp_val->get("name");
+                            }
+
+                            if ($motorcycle_array[$k] == $comp_val) {
                                 $update_array[$set_k] = 0; // if it matches, well, we should clear this flag, since they have gotten around to matching it in Lightspeed.
                             }
-                        } else if ($results[0][$k] != $motorcycle_array[$k]) {
+                        } else  {
                             $update_array[$k] = $motorcycle_array[$k];
                         }
                     }
