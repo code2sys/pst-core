@@ -439,7 +439,7 @@ class Lightspeed_M extends Master_M {
                                 $comp_val = is_null($comp_val) ? "" : $comp_val->get("name");
                             }
 
-                            if ($motorcycle_array[$k] == $comp_val) {
+                            if ($motorcycle_array[$k] == $comp_val && $k != "destination_charge") {
                                 $update_array[$set_k] = 0; // if it matches, well, we should clear this flag, since they have gotten around to matching it in Lightspeed.
                             }
                         } else  {
