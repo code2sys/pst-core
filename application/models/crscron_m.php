@@ -11,6 +11,8 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class CRSCron_M extends Master_M
 {
 
+
+
     protected $motorcycle_attributegroups;
     protected function _getAttributeGroup($motorcycle_id, $attributegroup_name, $attributegroup_number) {
         if (!isset($this->motorcycle_attributegroups)) {
@@ -40,8 +42,10 @@ class CRSCron_M extends Master_M
         return $motorcyclespecgroup_id;
     }
 
+    public function refreshCRSData($motorcycle_id = 0, $deep_cleaning = false) {
+        global $PSTAPI;
+        initializePSTAPI();
 
-    public function refreshCRSData($motorcycle_id = 0) {
         $CI =& get_instance();
         $CI->load->model("CRS_m");
         $where = $motorcycle_id > 0 ? sprintf(" AND motorcycle.id = %d ", $motorcycle_id) : "";
@@ -55,7 +59,10 @@ class CRSCron_M extends Master_M
         foreach ($matching_motorcycles as $m) {
             $motorcycle_id = $m["motorcycle_id"];
             $trim_id = $m["crs_trim_id"];
-            $version_number = $m["version_number"];
+            $version_number = $deep_cleaning ? 0 : $m["version_number"];
+
+            $existing_attributes = $PSTAPI->motorcyclespec()->getForMotorcycle($motorcycle_id);
+            $seen_attributes = array();
 
             // get the attributes...
             $attributes = $CI->CRS_m->getTrimAttributes($trim_id, $version_number);
@@ -64,7 +71,7 @@ class CRSCron_M extends Master_M
             foreach ($attributes as $a) {
                 $motorcyclespecgroup_id = $this->_getAttributeGroup($motorcycle_id, $a["attributegroup_name"], $a["attributegroup_number"]);
 
-                $this->db->query("Insert into motorcyclespec (version_number, value, feature_name, attribute_name, type, external_package_id, motorcycle_id, final_value, source, crs_attribute_id, motorcyclespecgroup_id, ordinal) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update value = If(source = 'PST', values(value), value), final_value = If(source = 'PST' AND override = 0, values(final_value), final_value), motorcyclespecgroup_id = values(motorcyclespecgroup_id)", array(
+                $this->db->query("Insert into motorcyclespec (version_number, value, feature_name, attribute_name, type, external_package_id, motorcycle_id, final_value, source, crs_attribute_id, motorcyclespecgroup_id, ordinal) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update value = If(source = 'PST', values(value), value), final_value = If(source = 'PST' AND override = 0, values(final_value), final_value), motorcyclespecgroup_id = values(motorcyclespecgroup_id), motorcyclespec_id = last_insert_id(motorcyclespec_id)", array(
                     $a["version_number"],
                     $a["text_value"],
                     $a["feature_name"],
@@ -79,22 +86,16 @@ class CRSCron_M extends Master_M
                     $a["attribute_id"] % 10000
                 ));
 
-//                print "Insert into motorcyclespec (version_number, value, feature_name, attribute_name, type, external_package_id, motorcycle_id, final_value, source, crs_attribute_id, motorcyclespecgroup_id, ordinal) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update value = If(source = 'PST', values(value), value), final_value = If(source = 'PST' AND override = 0, values(final_value), final_value), motorcyclespecgroup_id = values(motorcyclespecgroup_id)\n";
-//                print_r(array(
-//                    $a["version_number"],
-//                    $a["text_value"],
-//                    $a["feature_name"],
-//                    $a["label"],
-//                    $a["type"],
-//                    $a["package_id"],
-//                    $motorcycle_id,
-//                    $a["text_value"],
-//                    "PST",
-//                    $a["attribute_id"],
-//                    $motorcyclespecgroup_id,
-//                    $a["attribute_id"] % 10000
-//                ));
+                $seen_attributes[] = $this->db->insert_id();
+            }
 
+            if ($deep_cleaning) {
+                foreach ($existing_attributes as $ea) {
+                    // We only prune out the PST-ones...since they would be from
+                    if ($ea->get("source") == "PST" && !in_array($ea->id(), $seen_attributes)) {
+                        $ea->remove();
+                    }
+                }
             }
         }
 
@@ -106,8 +107,18 @@ class CRSCron_M extends Master_M
         foreach ($matching_motorcycles as $m) {
             $motorcycle_id = $m["motorcycle_id"];
             $trim_id = $m["crs_trim_id"];
-            $version_number = $m["version_number"];
+            $version_number = $deep_cleaning ? 0 : $m["version_number"];
             $ordinal = $m["ordinal"];
+
+            $existing_photos = $PSTAPI->motorcycleimage()->fetch(array("motorcycle_id" => $motorcycle_id, "source" => "PST"));
+            $seen_photos = array();
+            $known_urls = array();
+            if ($deep_cleaning) {
+                foreach ($existing_photos as $ep) {
+                    $url = $ep->get("image_name");
+                    $known_urls[$url] = true;
+                }
+            }
 
             // get the photos...
             $photos = $CI->CRS_m->getTrimPhotos($trim_id, $version_number);
@@ -117,7 +128,14 @@ class CRSCron_M extends Master_M
 
             foreach ($photos as $p) {
                 $ordinal++;
+                $seen_photos[] = $p["photo_url"];
                 // this needs to be inserted...
+                if ($deep_cleaning) {
+                    if (array_key_exists($p["photo_url"], $known_urls)) {
+                        continue;
+                    }
+                }
+
                 $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, ?, 1, ?, 'PST')", array(
                     $motorcycle_id,
                     $p["photo_url"],
@@ -126,8 +144,16 @@ class CRSCron_M extends Master_M
                     $p["version_number"]
                 ));
             }
-        }
 
+            if ($deep_cleaning) {
+                foreach ($existing_photos as $ep) {
+                    $url = $ep->get("image_name");
+                    if (!in_array($url, $seen_photos)) {
+                        $ep->remove();
+                    }
+                }
+            }
+        }
     }
 
     /*

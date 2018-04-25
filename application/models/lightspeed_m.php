@@ -71,7 +71,9 @@ class Lightspeed_M extends Master_M {
             "lawn and garden" => "Lawn and Garden",
             "dirt bike" => "Off-Road",
             "trailer" => "Trailer",
-            "snowmobile" => "Snowmobile"
+            "snowmobile" => "Snowmobile",
+            "water craft" => "Water Craft",
+            "watercraft" => "Water Craft"
         );
 
         if (array_key_exists(strtolower($category_name), $lookup_table)) {
@@ -273,6 +275,81 @@ class Lightspeed_M extends Master_M {
         return $color;
     }
 
+    public function preserveMajorUnitsChangedField($field) {
+        $CI =& get_instance();
+        $CI->load->model("CRS_m");
+        $CI->load->model("CRSCron_M");
+
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $string = "Dealer";
+        $call = $this->call($string);
+        $dealers = json_decode($call);
+
+        if($dealers == NULL) {
+            throw new \Exception("An error occurred and no data was received from Lightspeed. Possible cause: incorrect Lightspeed username or password.");
+        }
+
+        foreach($dealers as $dealer) {
+            $string = "Unit/" . $dealer->Cmf;
+            $call = $this->call($string);
+            $bikes = json_decode($call);
+
+            foreach ($bikes as $bike) {
+                $results = $PSTAPI->motorcycle()->fetch(array("sku" => $bike->StockNumber));
+                if (count($results) > 0) {
+                    $motorcycle_array = $this->_subUnpackMajorUnit($bike);
+                    // OK, we have to see if this field is the same or not...
+                    if ($motorcycle_array[$field] != $results[0]->get($field)) {
+                        $results[0]->set("customer_set_" . $field, 1);
+                        $results[0]->save();
+                        print "Setting field on " . $results[0]->get("sku") . "\n";
+                    }
+                }
+            }
+        }
+    }
+
+    protected function _subUnpackMajorUnit(&$bike) {
+        $bike->NewUsed = ($bike->NewUsed=="U")?2:1;
+        $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . ($bike->CodeName != "" ? $bike->CodeName : $bike->Model);
+
+        $data = array('total_cost' => $bike->totalCost, 'unit_cost' => $bike->totalCost, 'parts' => "", 'service' => "", 'auction_fee' => "", 'misc' => "");
+        $bike->data = json_encode($data);
+
+        $bike->WebPrice = ($bike->WebPrice <= 0) ? $bike->MSRP : $bike->WebPrice;
+        $bike->Color = $this->cleanColors($bike->Color);
+
+        return array(
+            'lightspeed_dealerID' => $bike->DealerId,
+            'sku' => $bike->StockNumber,
+            'vin_number' => $bike->VIN,
+            'lightspeed_location' => $bike->Location,
+            'mileage' => $bike->Odometer,
+            'data' => $bike->data,
+            'color' => $bike->Color,
+            'sale_price' => $bike->WebPrice,
+            'retail_price' => $bike->MSRP,
+            'description' => $bike->WebDescription,
+            'call_on_price' => $bike->WebPriceHidden,
+            "destination_charge" => ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
+            "lightspeed" => 1,
+            "lightspeed_flag" => 1,
+            "source" => "Lightspeed",
+
+
+            'condition' => $bike->NewUsed,
+            "vehicle_type" => $this->fetchMotorcycleType($bike->UnitType),
+            'category' => $this->fetchMotorcycleCategory($bike->UnitType), // TODO
+            'year' => $bike->ModelYear,
+            'make' => $bike->Make,
+            'model' => $bike->Model,
+            'title' => $bike->WebTitle,
+            "status" => $this->activeOnAdd() ? 1 : 0
+        );
+    }
+
     public function get_major_units() {
         $CI =& get_instance();
         $CI->load->model("CRS_m");
@@ -298,7 +375,11 @@ class Lightspeed_M extends Master_M {
             $bikes = json_decode($call);
 
             foreach($bikes as $bike) {
-                print "Considering bike: " . $bike->StockNumber . "\n";
+                $scrub_trim = false;
+                $last_known_trim = 0;
+                $motorcycle_array = $this->_subUnpackMajorUnit($bike);
+                $motorcycle_array["lightspeed_timestamp"] = $ts;
+
                 if (isset($bike->OnHold) && trim($bike->OnHold) != "") {
                     continue; // It's on hold for a deal. Not going to put that in tonight!
                 }
@@ -307,68 +388,37 @@ class Lightspeed_M extends Master_M {
                     continue; // It has been removed.
                 }
 
-                $bike->NewUsed = ($bike->NewUsed=="U")?2:1;
-                $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . ($bike->CodeName != "" ? $bike->CodeName : $bike->Model);
-
-                $data = array('total_cost' => $bike->totalCost, 'unit_cost' => $bike->totalCost, 'parts' => "", 'service' => "", 'auction_fee' => "", 'misc' => "");
-                $bike->data = json_encode($data);
-
                 $where = array(
                     "sku" => $bike->StockNumber
                 );
 
-                $bike->WebPrice = ($bike->WebPrice <= 0) ? $bike->MSRP : $bike->WebPrice;
-                $bike->Color = $this->cleanColors($bike->Color);
-
-                $motorcycle_array = array(
-                    'lightspeed_dealerID' => $bike->DealerId,
-                    'sku' => $bike->StockNumber,
-                    'condition' => $bike->NewUsed,
-                    "vehicle_type" => $this->fetchMotorcycleType($bike->UnitType),
-                    'category' => $this->fetchMotorcycleCategory($bike->UnitType), // TODO
-                    'year' => $bike->ModelYear,
-                    'make' => $bike->Make,
-                    'model' => $bike->Model,
-                    'vin_number' => $bike->VIN,
-                    'lightspeed_location' => $bike->Location,
-                    'lightspeed_timestamp' => $ts,
-                    'mileage' => $bike->Odometer,
-                    'data' => $bike->data,
-                    'color' => $bike->Color,
-                    'sale_price' => $bike->WebPrice,
-                    'retail_price' => $bike->MSRP,
-                    'description' => $bike->WebDescription,
-                    'call_on_price' => $bike->WebPriceHidden,
-                    'title' => $bike->WebTitle,
-                    "destination_charge" => ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
-                    "lightspeed" => 1,
-                    "lightspeed_flag" => 1,
-                    "source" => "Lightspeed",
-                    "status" => $this->activeOnAdd() ? 1 : 0
-                );
 
                 $update_array = array(
                     'lightspeed_dealerID' => $bike->DealerId,
                     'sku' => $bike->StockNumber,
-                    'vin_number' => $bike->VIN,
+//                    'vin_number' => $bike->VIN,
                     'lightspeed_location' => $bike->Location,
                     'lightspeed_timestamp' => $ts,
-                    'mileage' => $bike->Odometer,
+//                    'mileage' => $bike->Odometer,
                     'data' => $bike->data,
-                    'color' => $bike->Color,
+//                    'color' => $bike->Color,
                     'sale_price' => $bike->WebPrice,
                     'retail_price' => $bike->MSRP,
-                    'description' => $bike->WebDescription,
-                    'call_on_price' => $bike->WebPriceHidden,
-                    "destination_charge" => ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
+//                    'description' => $bike->WebDescription,
+//                    'call_on_price' => $bike->WebPriceHidden,
+//                    "destination_charge" => ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
                     "lightspeed" => 1,
                     "lightspeed_flag" => 1,
                     "source" => "Lightspeed"
                 );
 
 
-                $results = $this->selectRecords('motorcycle', $where);
+                global $PSTAPI;
+                initializePSTAPI();
+                $results = $PSTAPI->motorcycle()->fetch(array("sku" => $bike->StockNumber), true);
+//                $results = $this->selectRecords('motorcycle', $where);
                 if($results) {
+                    $last_known_trim = $results[0]["crs_trim_id"];
                     if ($results[0]["customer_set_price"] > 0) {
                         // OK, the customer set the price...so we can't do this...unless it matches exctly
                         if ($bike->MSRP == $results[0]["retail_price"] && $bike->WebPrice == $results[0]["sale_price"]) {
@@ -379,12 +429,32 @@ class Lightspeed_M extends Master_M {
                         }
                     }
 
-                    if ($results[0]["customer_set_description"] > 0) {
-                        // OK, the customer changed the description...
-                        if ($bike->WebDescription == $results[0]["description"]) {
-                            $update_array["customer_set_description"] = 0;
-                        } else {
-                            $update_array["description"] = $results[0]["description"];
+                    foreach (array("description", "vin_number", "mileage", "color", "call_on_price", "destination_charge", "condition", "category", "make", "model", "title", "year") as $k) {
+                        $set_k = "customer_set_" . $k;
+                        if ($results[0][$set_k] > 0) {
+                            $comp_val = $results[0][$k];
+
+                            if ($k == "category") {
+                                $comp_val = $PSTAPI->motorcyclecategory()->get($comp_val);
+                                $comp_val = is_null($comp_val) ? "" : $comp_val->get("name");
+                            }
+
+                            if ($motorcycle_array[$k] == $comp_val && $k != "destination_charge") {
+                                $update_array[$set_k] = 0; // if it matches, well, we should clear this flag, since they have gotten around to matching it in Lightspeed.
+                            }
+                        } else  {
+                            $update_array[$k] = $motorcycle_array[$k];
+                        }
+                    }
+
+                    // JLB 04-24-18
+                    // New - if any of these essentials change, then we need to SCRUB THE TRIM. That means, we have to get rid of the stuff that was already there...
+                    $scrub_trim = false;
+
+                    foreach (array("vin_number", "make", "model", "year") as $k) {
+                        if (array_key_exists($k, $update_array) && $results[0][$k] != $update_array[$k]) {
+                            $scrub_trim = true;
+                            print "Scrub trim on " . $bike->StockNumber . " for key $k change from " . $results[0][$k] . " to " .  $motorcycle_array[$k] . "\n";
                         }
                     }
 
@@ -392,10 +462,10 @@ class Lightspeed_M extends Master_M {
                     $motorcycle = $this->updateRecord('motorcycle', $update_array, $where, FALSE);
                     if ($motorcycle === FALSE) {
                         print "Could not update: " . print_r($update_array, true) . "\n";
-                    } else {
-                        print "Updated " . $update_array["sku"] . "\n";
                     }
                     $valid_count++;
+
+
                 } else {
                     // we have to set some nulls. I think this is stupid, too.
                     $motorcycle_array["engine_type"] = "";
@@ -428,7 +498,12 @@ class Lightspeed_M extends Master_M {
                     $vin_match = $vin_match[0];
                 }
 
+                if ($scrub_trim) {
+                    $this->scrubTrim($motorcycle_id);
+                }
+
                 if (array_key_exists("trim_id", $vin_match)) {
+
                     // we should definitely mark this
                     $this->db->query("Update motorcycle set crs_trim_id = ? where id = ? limit 1", array($vin_match["trim_id"], $motorcycle_id));
 
@@ -480,6 +555,41 @@ class Lightspeed_M extends Master_M {
         // JLB 12-29-17
         // At the end of this, we will remove any CRS items that overlap bikes from Lightspeed
         $CI->CRSCron_M->removeExtraCRSBikes();
+    }
+
+    public function scrubTrim($motorcycle_id) {
+        // What happens if this trim must go away?
+        // We have to clear the specs, we have to clear the CRS fields, and we have to remove the pictures.
+        global $PSTAPI;
+        initializePSTAPI();
+
+        // Clean up the specs
+        $specgroups = $PSTAPI->motorcyclespecgroup()->fetch(array("motorcycle_id" => $motorcycle_id));
+
+        foreach ($specgroups as $sg) {
+            $PSTAPI->motorcyclespec()->removeWhere(array(
+                "source" => "PST",
+                "motorcyclespecgroup_id" => $sg->id()
+            ));
+
+            if ($sg->get("source") == "PST") {
+                $specs = $PSTAPI->motorcyclespec()->fetch(array("motorcyclespecgroup_id" => $sg->id()), true);
+                if (count($specs) == 0) {
+                    $sg->remove();
+                }
+            }
+        }
+
+        // Clean up the photos...
+        $PSTAPI->motorcycleimage()->removeWhere(array(
+            "source" => "PST",
+            "motorcycle_id" => $motorcycle_id
+        ));
+
+        // clean it up...
+        $PSTAPI->motorcycle()->update($motorcycle_id, array(
+            "crs_trim_id" => null, "crs_machinetype" => null, "crs_model_id" => null, "crs_make_id" => null, "crs_year" => null, "crs_version_number" => 0
+        ));
     }
 
     public function getStockMotoCategory($name = "Dealer") {
