@@ -2,6 +2,20 @@
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
 
+    // JLB 04-25-18
+    // This is designed to review everything for CRS...a deep cleaning
+    public function deepCleanCRS() {
+        global $PSTAPI;
+        initializePSTAPI();
+        $matches = $PSTAPI->motorcycle()->getCRSMatched();
+
+        $this->load->model("crscron_m");
+
+        foreach ($matches as $m) {
+            $this->crscron_m->refreshCRSData($m->id(), true);
+        }
+    }
+
     // This is to pull a stream
     public function fetchMotorcycleDealerFeeds($debug = 0) {
         $this->load->model("Mdfeed_m");

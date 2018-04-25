@@ -498,11 +498,11 @@ class Lightspeed_M extends Master_M {
                     $vin_match = $vin_match[0];
                 }
 
+                if ($scrub_trim) {
+                    $this->scrubTrim($motorcycle_id);
+                }
+
                 if (array_key_exists("trim_id", $vin_match)) {
-                    if ($scrub_trim && $last_known_trim != $vin_match["trim_id"]) {
-                        // we are only here if we have an actual result up there...
-                        $this->scrubTrim($motorcycle_id);
-                    }
 
                     // we should definitely mark this
                     $this->db->query("Update motorcycle set crs_trim_id = ? where id = ? limit 1", array($vin_match["trim_id"], $motorcycle_id));
@@ -536,9 +536,6 @@ class Lightspeed_M extends Master_M {
                         $this->db->query("Update motorcycle set category = ? where id = ? limit 1", array($corrected_category, $motorcycle_id));
                     }
 
-                } else if ($scrub_trim) {
-                    // we are here, which means we have to scrub the trim...
-                    $this->scrubTrim($motorcycle_id);
                 }
 
 
@@ -591,7 +588,7 @@ class Lightspeed_M extends Master_M {
 
         // clean it up...
         $PSTAPI->motorcycle()->update($motorcycle_id, array(
-            "crs_trim_id" => null, "crs_machinetype" => null, "crs_model_id" => null, "crs_make_id" => null, "crs_year" => null
+            "crs_trim_id" => null, "crs_machinetype" => null, "crs_model_id" => null, "crs_make_id" => null, "crs_year" => null, "crs_version_number" => 0
         ));
     }
 
