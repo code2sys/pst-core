@@ -45,7 +45,11 @@ class MY_Form_validation extends CI_Form_validation {
         $last_number = $url[count($url) - 1];
         $last_number = intVal($last_number);
 
-        $query = $CI->db->query("Select count(*) as cnt from motorcycle where sku = ? and id != ?", array($str, $last_number));
+        // JLB 04-27-18
+        // Delete if really deleted
+        $CI->db->query("Delete from motorcycle where sku = ? and id != ? and deleted = 1", array($str, $last_number));
+
+        $query = $CI->db->query("Select count(*) as cnt from motorcycle where sku = ? and id != ? and deleted = 0", array($str, $last_number));
         $count = $query->result_array();
         $count = $count[0]["cnt"];
         return $count == 0;
