@@ -9,11 +9,20 @@ class CronJobHourly extends AbstractCronJob
         global $PSTAPI;
         initializePSTAPI();
 
-        $vseptprospect_null = $PSTAPI->vseptprospect()->fetch(array("PCHId" => null), true);
+        $vseptprospect_null = $PSTAPI->vseptprospect()->fetch(array("PCHId" => null));
         if (count($vseptprospect_null) > 0) {
-            print "Error: PCHId missing in these records, indicating they did not go to the server: ";
+
             foreach ($vseptprospect_null as $r) {
-                print "\t" . $r["vseptprospect_id"] . "\n";
+                $r->pushToVSept();
+            }
+
+            // Now, try again.
+            $vseptprospect_null = $PSTAPI->vseptprospect()->fetch(array("PCHId" => null));
+            if (count($vseptprospect_null) > 0) {
+                print "Error: PCHId missing in these records, indicating they did not go to the server: ";
+                foreach ($vseptprospect_null as $r) {
+                    print "\t" . $r["vseptprospect_id"] . "\n";
+                }
             }
         }
 
