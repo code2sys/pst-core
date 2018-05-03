@@ -234,7 +234,7 @@ window.CustomerPricingTableRowView = Backbone.View.extend({
 
         $.ajax({
             type: "POST",
-            url: "/admin/ajax_customer_pricing_update/" + this.model.gey("customerpricing_id") <?php if ($user_id > 0) { echo "+ '" . $user_id . "'"; } ?>,
+            url: "/admin/ajax_customer_pricing_update/" + this.model.get("customerpricing_id") <?php if ($user_id > 0) { echo "+ '" . $user_id . "'"; } ?>,
             data: {
                 distributor_id : distributor_id,
                 amount: amount,
