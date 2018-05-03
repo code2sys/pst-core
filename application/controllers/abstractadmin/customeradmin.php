@@ -10,6 +10,176 @@ require_once(__DIR__ . "/financeadmin.php");
 
 abstract class Customeradmin extends Financeadmin {
 
+    /*
+        This whole section is for the default pricing rules; we will probably dual-purpose these for customers, too.
+     */
+
+    public function customer_pricing_defaults() {
+        if (!$this->checkValidAccess('customers') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        if (!ENABLE_CUSTOMER_PRICING) {
+            $this->redirect("/"); exit();
+        }
+
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/customer/customer_pricing_defaults_v', $this->_mainData);
+    }
+
+    // This should return an error string if there is one, that is human intelligible, or "" if none.
+    protected function _isValidCustomerPricing_settings($pricing_rule, $amount) {
+        if (!in_array($pricing_rule, array("Cost+", "Retail-", "PcntMgn"))) {
+            return "Unrecognized pricing rule: " . $pricing_rule;
+        }
+
+        // Now, we have to figure out the range
+        switch($pricing_rule) {
+            case "Cost+":
+            if ($amount < 1) {
+                return "Sorry, please specify a percentage of cost greater than 1 (100%).";
+            }
+            break;
+
+            case "Retail-":
+            if ($amount > 1 || $amount < 0) {
+                return "Sorry, please specify between 0 and 1 (100%).";
+            }
+            break;
+
+            case "PcntMgn":
+            if ($amount > 1 || $amount < 0) {
+                return "Sorry, please specify between 0 and 1 (100%).";
+            }
+            break;
+        }
+        
+
+        return "";
+    }
+
+    public function ajax_customer_pricing_update($customerpricing_id, $user_id = null) {
+        $this->load->model("Statusmodel");
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $pricing_rule = array_key_exists("pricing_rule", $_REQUEST) ? $_REQUEST["pricing_rule"] : "";
+        $amount = array_key_exists("amount", $_REQUEST) ? $_REQUEST["amount"] : 0;
+        $distributor_id = array_key_exists("distributor_id", $_REQUEST) ? $_REQUEST["distributor_id"] : null;
+
+        $error = $this->_isValidCustomerPricing_settings($pricing_rule, $amount);
+
+        if ($error == "") {
+            // Is this distributor OK?
+            $distributor = $PSTAPI->distributor()->get($distributor_id);
+
+            if ($distributor_id > 0 && is_null($distributor)) {
+                $error = "Sorry, that distributor is not recognized.";
+            } else {
+                if ($distributor_id == 0) {
+                    $distributor_id = null;
+                }
+
+                // OK, we need to ensure there aren't rules for this user already.
+                $matches = $PSTAPI->customerpricing()->fetch(array(
+                    "distributor_id" => $distributor_id,
+                    "user_id" => $user_id
+                ));
+
+                if (count($matches) > 0 && $matches[0]->id() != $customerpricing_id) {
+                    // this is also an error
+                    $error = "Sorry, there is already a rule for this distributor.";
+                }
+            }
+        }
+
+        if ($error != "") {
+            $this->Statusmodel->setError($error);
+        } else {
+            // update it
+            $model = $PSTAPI->customerpricing()->update($customerpricing_id, array(
+                "amount" => $amount,
+                "pricing_rule" => $pricing_rule,
+                "distributor_id" => $distributor_id
+            ));
+            $this->Statusmodel->setData("model", $model->to_array());
+
+            // record success
+            $this->Statusmodel->setSuccess("Rule updated successfully.");
+        }
+
+        $this->Statusmodel->outputStatus();
+    }
+
+    public function ajax_customer_pricing_remove($customerpricing_id, $user_id = null) {
+        $this->load->model("Statusmodel");
+        global $PSTAPI;
+        initializePSTAPI();
+        $PSTAPI->customerpricing()->remove($customerpricing_id);
+        $this->Statusmodel->setSuccess("Pricing rule removed.");
+        $this->Statusmodel->outputStatus();
+    }
+
+    public function ajax_customer_pricing_add($user_id = null) {
+        $this->load->model("Statusmodel");
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $pricing_rule = array_key_exists("pricing_rule", $_REQUEST) ? $_REQUEST["pricing_rule"] : "";
+        $amount = array_key_exists("amount", $_REQUEST) ? $_REQUEST["amount"] : 0;
+        $distributor_id = array_key_exists("distributor_id", $_REQUEST) ? $_REQUEST["distributor_id"] : null;
+
+        $error = $this->_isValidCustomerPricing_settings($pricing_rule, $amount);
+
+        if ($error == "") {
+            // Is this distributor OK?
+            $distributor = $PSTAPI->distributor()->get($distributor_id);
+
+            if ($distributor_id > 0 && is_null($distributor)) {
+                $error = "Sorry, that distributor is not recognized.";
+            } else {
+                if ($distributor_id == 0) {
+                    $distributor_id = null;
+                }
+
+                // OK, we need to ensure there aren't rules for this user already.
+                $matches = $PSTAPI->customerpricing()->fetch(array(
+                    "distributor_id" => $distributor_id,
+                    "user_id" => $user_id
+                ));
+
+                if (count($matches) > 0) {
+                    // this is also an error
+                    $error = "Sorry, there is already a rule for this distributor.";
+                }
+            }
+        }
+
+        if ($error != "") {
+            $this->Statusmodel->setError($error);
+        } else {
+            $pricing_rule = $PSTAPI->customerpricing()->add(array(
+                "pricing_rule" => $pricing_rule,
+                "amount" => $amount,
+                "user_id" => $user_id,
+                "distributor_id" => $distributor_id
+            ));
+            $this->Statusmodel->setData("model", $pricing_rule->to_array());
+            $this->Statusmodel->setSuccess("Rule added successfully.");
+        }
+
+        $this->Statusmodel->outputStatus();
+    }
+
+
+    public function __construct() {
+        parent::__construct();
+
+        if (!defined('ENABLE_CUSTOMER_PRICING')) {
+            define('ENABLE_CUSTOMER_PRICING', false);
+        }
+    }
+
     //Customer's listing on admin side
     public function customers() {
         if (!$this->checkValidAccess('customers') && !@$_SESSION['userRecord']['admin']) {
