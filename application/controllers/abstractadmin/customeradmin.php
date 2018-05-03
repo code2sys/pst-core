@@ -76,6 +76,10 @@ abstract class Customeradmin extends Financeadmin {
             if ($distributor_id > 0 && is_null($distributor)) {
                 $error = "Sorry, that distributor is not recognized.";
             } else {
+                if ($distributor_id == 0) {
+                    $distributor_id = null;
+                }
+
                 // OK, we need to ensure there aren't rules for this user already.
                 $matches = $PSTAPI->customerpricing()->fetch(array(
                     "distributor_id" => $distributor_id,
@@ -133,6 +137,10 @@ abstract class Customeradmin extends Financeadmin {
             if ($distributor_id > 0 && is_null($distributor)) {
                 $error = "Sorry, that distributor is not recognized.";
             } else {
+                if ($distributor_id == 0) {
+                    $distributor_id = null;
+                }
+
                 // OK, we need to ensure there aren't rules for this user already.
                 $matches = $PSTAPI->customerpricing()->fetch(array(
                     "distributor_id" => $distributor_id,
