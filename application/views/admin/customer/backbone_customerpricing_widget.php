@@ -118,7 +118,7 @@ window.CustomerPricingCollection = Backbone.Collection.extend({
 // instantiate the pricing collection
 var myCustomerPricingCollection = new CustomerPricingCollection(<?php echo json_encode($PSTAPI->customerpricing()->fetchFrontEnd($user_id)); ?>);
 
-window.CustomerPricingAddView = new Backbone.View.extend({
+window.CustomerPricingAddView = Backbone.View.extend({
     template: _.template($("#CustomerPricingAddView").text()),
     initialize: function() {
         _.bindAll(this, "render", "addButton");
