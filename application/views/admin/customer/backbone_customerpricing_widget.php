@@ -297,7 +297,8 @@ window.CustomerPricingAddView = Backbone.View.extend({
         });
     },
     "events" : {
-        "click .addButton" : "addButton"
+        "click .addButton" : "addButton",
+        "submit form" : "addButton"
     },
     "className" : "CustomerPricingAddView"
 })
