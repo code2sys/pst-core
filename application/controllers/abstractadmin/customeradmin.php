@@ -29,7 +29,7 @@ abstract class Customeradmin extends Financeadmin {
 
     // This should return an error string if there is one, that is human intelligible, or "" if none.
     protected function _isValidCustomerPricing_settings($pricing_rule, $amount) {
-        if (!in_array("Cost+", "Retail-", "PcntMgn")) {
+        if (!in_array($pricing_rule, array("Cost+", "Retail-", "PcntMgn"))) {
             return "Unrecognized pricing rule: " . $pricing_rule;
         }
 
