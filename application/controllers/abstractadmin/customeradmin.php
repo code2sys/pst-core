@@ -97,11 +97,12 @@ abstract class Customeradmin extends Financeadmin {
             $this->Statusmodel->setError($error);
         } else {
             // update it
-            $PSTAPI->customerpricing()->update($customerpricing_id, array(
+            $model = $PSTAPI->customerpricing()->update($customerpricing_id, array(
                 "amount" => $amount,
                 "pricing_rule" => $pricing_rule,
                 "distributor_id" => $distributor_id
             ));
+            $this->Statusmodel->setData("model", $model->to_array());
 
             // record success
             $this->Statusmodel->setSuccess("Rule updated successfully.");

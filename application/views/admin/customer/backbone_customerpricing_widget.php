@@ -180,7 +180,7 @@ window.CustomerPricingTableRowView = Backbone.View.extend({
 
         $.ajax({
             type: "POST",
-            url: "/admin/ajax_customer_pricing_remove/" + this.model.get("customerpricing_id") <?php if ($user_id > 0) { echo "+/" . $user_id; } ?>,
+            url: "/admin/ajax_customer_pricing_remove/" + this.model.get("customerpricing_id") <?php if ($user_id > 0) { echo "+ '" . $user_id . "'"; } ?>,
             data: {
             },
             dataType: "json",
@@ -217,6 +217,45 @@ window.CustomerPricingTableRowView = Backbone.View.extend({
             e.preventDefault();
             e.stopPropagation();
         }
+
+                var distributor_id = this.$("[name=distributor_id]").val();
+        if (distributor_id == "" || distributor_id == 0) {
+            distributor_id = null;
+        }
+
+        var pricing_rule = this.$("[name='pricing_rule']").val();
+        var amount = this.$("[name='amount']").val();
+
+        if (!amount) {
+            alert("Please specify an amount.");
+            return;
+        }
+
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/ajax_customer_pricing_update/" + this.model.gey("customerpricing_id") <?php if ($user_id > 0) { echo "+ '" . $user_id . "'"; } ?>,
+            data: {
+                distributor_id : distributor_id,
+                amount: amount,
+                pricing_rule : pricing_rule
+            },
+            dataType: "json",
+            success : _.bind(function(response) {
+                console.log(response);
+                if (response.success) {
+                    showGritter("Success", response.success_message);
+                    myCustomerPricingCollection.remove(this.model);
+                    myCustomerPricingCollection.push(response.data.model);
+                    myCustomerPricingTable.redraw();
+                } else {
+                    showGritter("Error", response.error_message);
+                }
+            }, this),
+            error: function() {
+                alert("An error occurred; you may need to reload this page.");
+            }
+        });
     },
     "redraw" : function() {
         if (myCustomerPricingCollection.length > 0) {
