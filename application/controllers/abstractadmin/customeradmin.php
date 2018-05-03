@@ -71,25 +71,21 @@ abstract class Customeradmin extends Financeadmin {
 
         if ($error == "") {
             // Is this distributor OK?
-            if ($distributor_id > 0) {
-                $distributor = $PSTAPI->distributor()->get($distributor_id);
+            $distributor = $PSTAPI->distributor()->get($distributor_id);
 
-                if (is_null($distributor)) {
-                    $error = "Sorry, that distributor is not recognized.";
-                } else {
-                    // OK, we need to ensure there aren't rules for this user already.
-                    $matches = $PSTAPI->customerpricing()->fetch(array(
-                        "distributor_id" => $distributor_id,
-                        "user_id" => $user_id
-                    ));
-
-                    if (count($matches) > 0 && $matches[0]->id() != $customerpricing_id) {
-                        // this is also an error
-                        $error = "Sorry, there is already a rule for this distributor.";
-                    }
-                }
+            if ($distributor_id > 0 && is_null($distributor)) {
+                $error = "Sorry, that distributor is not recognized.";
             } else {
-                $distributor_id = null;
+                // OK, we need to ensure there aren't rules for this user already.
+                $matches = $PSTAPI->customerpricing()->fetch(array(
+                    "distributor_id" => $distributor_id,
+                    "user_id" => $user_id
+                ));
+
+                if (count($matches) > 0 && $matches[0]->id() != $customerpricing_id) {
+                    // this is also an error
+                    $error = "Sorry, there is already a rule for this distributor.";
+                }
             }
         }
 
@@ -131,26 +127,22 @@ abstract class Customeradmin extends Financeadmin {
         $error = $this->_isValidCustomerPricing_settings($pricing_rule, $amount);
 
         if ($error == "") {
-            if ($distributor_id > 0) {
-                // Is this distributor OK?
-                $distributor = $PSTAPI->distributor()->get($distributor_id);
+            // Is this distributor OK?
+            $distributor = $PSTAPI->distributor()->get($distributor_id);
 
-                if (is_null($distributor)) {
-                    $error = "Sorry, that distributor is not recognized.";
-                } else {
-                    // OK, we need to ensure there aren't rules for this user already.
-                    $matches = $PSTAPI->customerpricing()->fetch(array(
-                        "distributor_id" => $distributor_id,
-                        "user_id" => $user_id
-                    ));
-
-                    if (count($matches) > 0) {
-                        // this is also an error
-                        $error = "Sorry, there is already a rule for this distributor.";
-                    }
-                }
+            if ($distributor_id > 0 && is_null($distributor)) {
+                $error = "Sorry, that distributor is not recognized.";
             } else {
-                $distributor_id = null;
+                // OK, we need to ensure there aren't rules for this user already.
+                $matches = $PSTAPI->customerpricing()->fetch(array(
+                    "distributor_id" => $distributor_id,
+                    "user_id" => $user_id
+                ));
+
+                if (count($matches) > 0) {
+                    // this is also an error
+                    $error = "Sorry, there is already a rule for this distributor.";
+                }
             }
         }
 
