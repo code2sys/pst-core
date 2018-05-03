@@ -21,6 +21,8 @@ usort($distributors, function($a, $b) {
 <script type="application/javascript" src="/assets/newjs/jquery-ui.min.js" ></script>
 <script type="text/template" id="CustomerPricingTableView">
 
+
+
 <p><strong>Customer Pricing Rules</strong></p>
 
 <?php if ($user_id > 0): ?>
@@ -44,8 +46,11 @@ usort($distributors, function($a, $b) {
 </table>
 
 </script>
-<script type="text/template" id="CustomerPricingTableRowViw">
-
+<script type="text/template" id="CustomerPricingTableRowView">
+    <td><span class="editview"></span><span class="noeditview"><%= obj.distributor_name %></span></td>
+    <td><span class="editview"></span><span class="noeditview"><%= obj.pricing_rule %></span></td>
+    <td><span class="editview"></span><span class="noeditview"><%= obj.amount %></span></td>
+    <td><span class="editview"><a href="#" class="updateButton">Update</a> <a href="#" class="cancelButton">Cancel</a></span><span class="noeditview"><a href="#" class="editButton">Edit</a> <a href="#" class="removeButton">Remove</a></span></td>
 </script>
 <script type="text/template" id="CustomerPricingAddView">
 
@@ -137,6 +142,101 @@ window.CustomerPricingCollection = Backbone.Collection.extend({
 // instantiate the pricing collection
 var myCustomerPricingCollection = new CustomerPricingCollection(<?php echo json_encode($PSTAPI->customerpricing()->fetchFrontEnd($user_id)); ?>);
 
+window.CustomerPricingTableRowView = Backbone.View.extend({
+    template: _.template($("#CustomerPricingTableView").text()),
+    "className" : "CustomerPricingTableView",
+    "tagName" : "tr",
+    initialize: function() {
+        _.bindAll(this, "render", "cancelButton", "removeButton", "editButton", "updateButton");
+    }, 
+    "render" : function() {
+        $(this.el).html(this.template(this.model.toJSON()));
+        return this;
+    },
+    "events" : {
+        "click .cancelButton" : "cancelButton",
+        "click .removeButton" : "removeButton",
+        "click .editButton" : "editButton",
+        "click .updateButton" : "updateButton"
+    },
+    "cancelButton" : function(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        this.$(".editview").hide();
+        this.$(".noeditview").show();
+    },
+    "removeButton" : function(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    },
+    "editButton" : function(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        this.$(".editview").show();
+        this.$(".noeditview").hide();
+    },
+    "updateButton" : function(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    },
+    "redraw" : function() {
+        if (myCustomerPricingCollection.length > 0) {
+            this.$("table tbody").html("");
+
+            for (var i = 0; i < myCustomerPricingCollection.length; i++) {
+                var m = myCustomerPricingCollection.at(i);
+                var v = new CustomerPricingTableRowView({
+                    model: m
+                });
+                this.$("table tbody").append(v.render().el);
+            }
+
+            this.$("table").show();
+        } else {
+            this.$("table").hide();
+        }
+    }
+});
+
+window.CustomerPricingTableView = Backbone.View.extend({
+    template: _.template($("#CustomerPricingTableView").text()),
+    "className" : "CustomerPricingTableView",
+    initialize: function() {
+        _.bindAll(this, "render", "redraw");
+    }, 
+    "render" : function() {
+        $(this.el).html(this.template({}));
+        this.redraw();
+        return this;
+    },
+    "redraw" : function() {
+        if (myCustomerPricingCollection.length > 0) {
+            this.$("table tbody").html("");
+
+            for (var i = 0; i < myCustomerPricingCollection.length; i++) {
+                var m = myCustomerPricingCollection.at(i);
+                var v = new CustomerPricingTableRowView({
+                    model: m
+                });
+                this.$("table tbody").append(v.render().el);
+            }
+
+            this.$("table").show();
+        } else {
+            this.$("table").hide();
+        }
+    }
+});
+
 window.CustomerPricingAddView = Backbone.View.extend({
     template: _.template($("#CustomerPricingAddView").text()),
     initialize: function() {
@@ -182,6 +282,7 @@ window.CustomerPricingAddView = Backbone.View.extend({
                     this.$("[name='amount']").val("");
                     this.$("[name=distributor_id]").val("");
                     myCustomerPricingCollection.push(response.data.model);
+                    CustomerPricingTableView.redraw();
                 } else {
                     showGritter("Error", response.error_message);
                 }
@@ -198,9 +299,12 @@ window.CustomerPricingAddView = Backbone.View.extend({
 })
 
 var myCustomerPricingAddView;
+var myCustomerPricingTable;
 
 $(document).on("ready", function() {
+    myCustomerPricingTable = new CustomerPricingTableView({});
     myCustomerPricingAddView = new CustomerPricingAddView({});
     $(".addrowholder").html(myCustomerPricingAddView.render().el);
+    $(".tableholder").html(myCustomerPricingTable.render().el);
 });
 </script>
