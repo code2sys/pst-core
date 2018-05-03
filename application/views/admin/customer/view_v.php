@@ -206,7 +206,7 @@
 				<?php if (ENABLE_CUSTOMER_PRICING) {
 					$CI =& get_instance();
 					?>
-					<div style="width: 45%">
+					<div style="width: 45%; float: left;">
 					<?php echo $CI->load->view("admin/customer/backbone_customerpricing_widget", array("user_id" => $user_id), true); ?>
 					</div>
 					<?php
