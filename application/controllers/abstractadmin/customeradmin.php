@@ -19,6 +19,10 @@ abstract class Customeradmin extends Financeadmin {
             redirect('');
         }
 
+        if (!ENABLE_CUSTOMER_PRICING) {
+            $this->redirect("/"); exit();
+        }
+
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/customer/customer_pricing_defaults_v', $this->_mainData);
     }
