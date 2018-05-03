@@ -155,6 +155,8 @@ abstract class Customeradmin extends Financeadmin {
                 "user_id" => $user_id,
                 "distributor_id" => $distributor_id
             ));
+            $this->Statusmodel->setData("model", $pricing_rule->to_array());
+            $this->Statusmodel->setSuccess("Rule added successfully.");
         }
 
         $this->Statusmodel->outputStatus();

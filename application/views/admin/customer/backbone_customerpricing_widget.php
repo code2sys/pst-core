@@ -132,6 +132,45 @@ window.CustomerPricingAddView = Backbone.View.extend({
             e.stopPropagation();
             e.preventDefault();
         }
+
+        var distributor_id = this.$("[name=distributor_id]").val();
+        if (distributor_id == "" || distributor_id == 0) {
+            distributor_id = null;
+        }
+
+        var pricing_rule = this.$("[name='pricing_rule']").val();
+        var amount = this.$("[name='amount']").val();
+
+        if (!amount) {
+            alert("Please specify an amount.");
+            return;
+        }
+
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/ajax_customer_pricing_add<?php if ($user_id > 0) { echo "/" . $user_id; } ?>",
+            data: {
+                distributor_id : distributor_id,
+                amount: amount,
+                pricing_rule : pricing_rule
+            },
+            dataType: "json",
+            success : _.bind(function(response) {
+                console.log(response);
+                if (response.success) {
+                    showGritter("Success", response.success_message);
+                    this.$("[name='amount']").val("");
+                    this.$("[name=distributor_id]").val("");
+                    myCustomerPricingCollection.push(response.data.model);
+                } else {
+                    showGritter("Error", response.error_message);
+                }
+            }, this),
+            error: function() {
+                alert("An error occurred; you may need to reload this page.");
+            }
+        });
     },
     "events" : {
         "click .addButton" : "addButton"
