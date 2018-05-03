@@ -143,8 +143,8 @@ window.CustomerPricingCollection = Backbone.Collection.extend({
 var myCustomerPricingCollection = new CustomerPricingCollection(<?php echo json_encode($PSTAPI->customerpricing()->fetchFrontEnd($user_id)); ?>);
 
 window.CustomerPricingTableRowView = Backbone.View.extend({
-    template: _.template($("#CustomerPricingTableView").text()),
-    "className" : "CustomerPricingTableView",
+    template: _.template($("#CustomerPricingTableRowView").text()),
+    "className" : "CustomerPricingTableRowView",
     "tagName" : "tr",
     initialize: function() {
         _.bindAll(this, "render", "cancelButton", "removeButton", "editButton", "updateButton");
