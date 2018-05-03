@@ -103,6 +103,9 @@ usort($distributors, function($a, $b) {
 
 var current_user_id = <?php echo is_null($user_id) ? "null" : $user_id; ?>;
 
+var myCustomerPricingAddView;
+var myCustomerPricingTable;
+
 window.CustomerPricingModel = Backbone.Model.extend({
     defaults: {
         "customerpricing_id" : 0,
@@ -282,7 +285,7 @@ window.CustomerPricingAddView = Backbone.View.extend({
                     this.$("[name='amount']").val("");
                     this.$("[name=distributor_id]").val("");
                     myCustomerPricingCollection.push(response.data.model);
-                    myCustomerPricingTableView.redraw();
+                    myCustomerPricingTable.redraw();
                 } else {
                     showGritter("Error", response.error_message);
                 }
@@ -297,9 +300,6 @@ window.CustomerPricingAddView = Backbone.View.extend({
     },
     "className" : "CustomerPricingAddView"
 })
-
-var myCustomerPricingAddView;
-var myCustomerPricingTable;
 
 $(document).on("ready", function() {
     myCustomerPricingTable = new CustomerPricingTableView({});
