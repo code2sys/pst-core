@@ -10,6 +10,14 @@ require_once(__DIR__ . "/financeadmin.php");
 
 abstract class Customeradmin extends Financeadmin {
 
+    public function __construct() {
+        parent::__construct();
+
+        if (!defined('ENABLE_CUSTOMER_PRICING')) {
+            define('ENABLE_CUSTOMER_PRICING', false);
+        }
+    }
+
     //Customer's listing on admin side
     public function customers() {
         if (!$this->checkValidAccess('customers') && !@$_SESSION['userRecord']['admin']) {
