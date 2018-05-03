@@ -247,6 +247,7 @@ window.CustomerPricingTableRowView = Backbone.View.extend({
                     showGritter("Success", response.success_message);
                     myCustomerPricingCollection.remove(this.model);
                     myCustomerPricingCollection.push(response.data.model);
+                    myCustomerPricingCollection.sort();
                     myCustomerPricingTable.redraw();
                 } else {
                     showGritter("Error", response.error_message);
@@ -351,6 +352,7 @@ window.CustomerPricingAddView = Backbone.View.extend({
                     this.$("[name='amount']").val("");
                     this.$("[name=distributor_id]").val("");
                     myCustomerPricingCollection.push(response.data.model);
+                    myCustomerPricingCollection.sort();
                     myCustomerPricingTable.redraw();
                 } else {
                     showGritter("Error", response.error_message);
