@@ -47,9 +47,9 @@ usort($distributors, function($a, $b) {
 
 </script>
 <script type="text/template" id="CustomerPricingTableRowView">
-    <td><span class="editview"></span><span class="noeditview"><%= obj.distributor_name %></span></td>
-    <td><span class="editview"></span><span class="noeditview"><%= obj.pricing_rule %></span></td>
-    <td><span class="editview"></span><span class="noeditview"><%= obj.amount %></span></td>
+    <td><span class="editview"><select name="distributor_id"><option value="">Default</option><?php foreach ($distributors as $d): ?><option value="<?php echo $d->get("distributor_id"); ?>"><?php echo $d->get("name"); ?></option><?php endforeach; ?></select></span><span class="noeditview"><%= obj.distributor_name %></span></td>
+    <td><span class="editview"><select name="pricing_rule"><option value="Cost+">Cost+</option><option value="Retail-">Retail-</option><option value="PcntMgn">Margin %</option></select></span><span class="noeditview"><%= obj.pricing_rule %></span></td>
+    <td><span class="editview"><input type="text" name="amount" size="8" maxlength="8" /></span><span class="noeditview"><%= obj.amount %></span></td>
     <td><span class="editview"><a href="#" class="updateButton">Update</a> <a href="#" class="cancelButton">Cancel</a></span><span class="noeditview"><a href="#" class="editButton">Edit</a> <a href="#" class="removeButton">Remove</a></span></td>
 </script>
 <script type="text/template" id="CustomerPricingAddView">
@@ -204,6 +204,11 @@ window.CustomerPricingTableRowView = Backbone.View.extend({
             e.preventDefault();
             e.stopPropagation();
         }
+
+        this.$("[name='amount']").val(this.model.get("amount"));
+        this.$("select[name='distributor_id'] option[value='" + this.model.get('distributor_id') + "']").prop("selected", true);
+        this.$("select[name='pricing_rule'] option[value='" + this.model.get('pricing_rule') + "']").prop("selected", true);
+
         this.$(".editview").show();
         this.$(".noeditview").hide();
     },
