@@ -77,6 +77,25 @@ usort($distributors, function($a, $b) {
 <div class="tableholder"></div>
 <div class="addrowholder"></div>
 <script type="application/javascript">
+
+    function showGritter(title, message) {
+        $.extend($.gritter.options, {
+            time: 1500 // hang on the screen for ...
+        });
+
+        setTimeout(function () {
+            $.gritter.add({
+                title: title,
+                text: message,
+                image: '',
+                sticky: false,
+                time: 5000
+            });
+            return false;
+        }, 800);
+    }
+
+
 var current_user_id = <?php echo is_null($user_id) ? "null" : $user_id; ?>;
 
 window.CustomerPricingModel = Backbone.Model.extend({
