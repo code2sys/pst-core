@@ -77,13 +77,14 @@ usort($distributors, function($a, $b) {
 <div class="tableholder"></div>
 <div class="addrowholder"></div>
 <script type="application/javascript">
+var current_user_id = <?php echo is_null($user_id) ? "null" : $user_id; ?>;
 
 window.CustomerPricingModel = Backbone.Model.extend({
     defaults: {
         "customerpricing_id" : 0,
         "distributor_id" : 0,
         "distributor_name" : "default",
-        "user_id" : <?php echo $user_id; ?>,
+        "user_id" : current_user_id,
         "pricing_rule" : "Cost+",
         "amount" : 0
     },
