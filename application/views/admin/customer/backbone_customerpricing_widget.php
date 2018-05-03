@@ -177,6 +177,27 @@ window.CustomerPricingTableRowView = Backbone.View.extend({
             e.preventDefault();
             e.stopPropagation();
         }
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/ajax_customer_pricing_remove/" + this.model.get("customerpricing_id") <?php if ($user_id > 0) { echo "+/" . $user_id; } ?>,
+            data: {
+            },
+            dataType: "json",
+            success : _.bind(function(response) {
+                console.log(response);
+                if (response.success) {
+                    showGritter("Success", response.success_message);
+                    myCustomerPricingCollection.remove(this.model);
+                    myCustomerPricingTable.redraw();
+                } else {
+                    showGritter("Error", response.error_message);
+                }
+            }, this),
+            error: function() {
+                alert("An error occurred; you may need to reload this page.");
+            }
+        });
     },
     "editButton" : function(e) {
         if (e) {
