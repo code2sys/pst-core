@@ -282,7 +282,7 @@ window.CustomerPricingAddView = Backbone.View.extend({
                     this.$("[name='amount']").val("");
                     this.$("[name=distributor_id]").val("");
                     myCustomerPricingCollection.push(response.data.model);
-                    CustomerPricingTableView.redraw();
+                    myCustomerPricingTableView.redraw();
                 } else {
                     showGritter("Error", response.error_message);
                 }
