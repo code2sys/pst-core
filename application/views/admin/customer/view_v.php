@@ -202,6 +202,16 @@
 					endif; ?>
 				</table>
 				</form>
+
+				<?php if (ENABLE_CUSTOMER_PRICING) {
+					$CI =& get_instance();
+					?>
+					<div style="width: 45%">
+					<?php echo $CI->load->view("backbone_customerpricing_widget", array("user_id" => $user_id), true); ?>
+					</div>
+					<?php
+				} ?>
+
 			</div>
 		</div>
 	</div>
