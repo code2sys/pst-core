@@ -67,7 +67,7 @@ usort($distributors, function($a, $b) {
 <thead>
     <tr class="head_row">
         <?php if ($user_id == 0): ?>
-        <td><b>Pricing Tier</b></tr>
+        <td><b>Pricing Tier</b></td>
         <?php endif; ?>
         <td><b>Distributor</b></td>
         <td><b>Pricing Rule</b></td>
