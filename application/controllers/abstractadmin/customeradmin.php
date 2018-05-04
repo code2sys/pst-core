@@ -64,6 +64,8 @@ abstract class Customeradmin extends Financeadmin {
         if ($error != "") {
             $this->Statusmodel->setError($error);
         } else {
+            global $PSTAPI;
+
             // update it
             $model = $PSTAPI->customerpricing()->update($customerpricing_id, array(
                 "amount" => $amount,
