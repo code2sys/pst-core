@@ -331,7 +331,7 @@ window.CustomerTierTableView = Backbone.View.extend({
 });
 
 window.CustomerAddTierView = Backbone.View.extend({
-    template: _.template($("#CustomerPricingAddView").text()),
+    template: _.template($("#CustomerAddTierView").text()),
     initialize: function() {
         _.bindAll(this, "render", "addButton");
     }, 
