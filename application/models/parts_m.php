@@ -1687,7 +1687,7 @@ class Parts_M extends Master_M {
     public function updateCart() {
     
         foreach ($_SESSION['cart'] as $part => $rec) {
-            $rec["finalPrice"] = 0.9 * floatVal(preg_replace("/[^0-9\.\-]/", "", (array_key_exists("finalPrice", $rec) ? $rec["finalPrice"] : $rec["price"])));
+            $rec["price"] = round(0.9 * floatVal(preg_replace("/[^0-9\.\-]/", "", (array_key_exists("price", $rec) ? $rec["price"] : $rec["price"]))), 2);
             $_SESSION['cart'][$part] = $rec;
         }
         $shoppingCart = json_encode($_SESSION['cart']);
