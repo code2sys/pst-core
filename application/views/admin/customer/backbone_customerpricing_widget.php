@@ -28,12 +28,15 @@ usort($distributors, function($a, $b) {
 <?php if ($user_id > 0): ?>
 <p><em>Please use the following to establish customer-specific pricing rules.</p>
 <?php else: ?>
-<p><em>Please use the following to establish default distributor-specific pricing rules.</em></p>
+<p><em>Please use the following to establish default distributor-specific pricing rules that can then be assigned to one or more customers.</em></p>
 <?php endif; ?>
 
 <table width="100%" cellpadding="10" style="border:1px solid silver; border-collapse:separate;">
 <thead>
     <tr class="head_row">
+        <?php if ($user_id == 0): ?>
+        <td><b>Pricing Tier</b></td>
+        <?php endif; ?>
         <td><b>Distributor</b></td>
         <td><b>Pricing Rule</b></td>
         <td><b>Multiplier</b></td>
@@ -47,7 +50,10 @@ usort($distributors, function($a, $b) {
 
 </script>
 <script type="text/template" id="CustomerPricingTableRowView">
-    <td><span class="editview"><select name="distributor_id"><option value="">Default</option><?php foreach ($distributors as $d): ?><option value="<?php echo $d->get("distributor_id"); ?>"><?php echo $d->get("name"); ?></option><?php endforeach; ?></select></span><span class="noeditview"><%= obj.distributor_name %></span></td>
+    <?php if ($user_id == 0):?>
+    <td><span class="editview"><input type="text" name="pricing_tier" size="40" maxlength="255" /></span><span class="noeditview"><%= obj.pricing_tier %></span></td>
+    <?php endif; ?>
+    <td><span class="editview"><select name="distributor_id"><option value="">All Distributors</option><?php foreach ($distributors as $d): ?><option value="<?php echo $d->get("distributor_id"); ?>"><?php echo $d->get("name"); ?></option><?php endforeach; ?></select></span><span class="noeditview"><%= obj.distributor_name %></span></td>
     <td><span class="editview"><select name="pricing_rule"><option value="Cost+">Cost+</option><option value="Retail-">Retail-</option><option value="PcntMgn">Margin %</option></select></span><span class="noeditview"><%= obj.pricing_rule %></span></td>
     <td><span class="editview"><input type="text" name="amount" size="8" maxlength="8" /></span><span class="noeditview"><%= obj.amount %></span></td>
     <td><span class="editview"><a href="#" class="updateButton">Update</a> <a href="#" class="cancelButton">Cancel</a></span><span class="noeditview"><a href="#" class="editButton">Edit</a> <a href="#" class="removeButton">Remove</a></span></td>
@@ -60,13 +66,19 @@ usort($distributors, function($a, $b) {
 <table width="100%" cellpadding="10" style="border:1px solid silver; border-collapse:separate;">
 <thead>
     <tr class="head_row">
+        <?php if ($user_id == 0): ?>
+        <td><b>Pricing Tier</b></tr>
+        <?php endif; ?>
         <td><b>Distributor</b></td>
         <td><b>Pricing Rule</b></td>
         <td><b>Multiplier</b></td>
         <td><b>Action</b></td>
     </tr>
     <tr>
-        <td><select name="distributor_id"><option value="">Default</option><?php foreach ($distributors as $d): ?><option value="<?php echo $d->get("distributor_id"); ?>"><?php echo $d->get("name"); ?></option><?php endforeach; ?></select></td>
+        <?php if ($user_id == 0):?>
+        <td><input type="text" name="pricing_tier" size="40" maxlength="255" /></td>
+        <?php endif; ?>
+        <td><select name="distributor_id"><option value="">All Distributors</option><?php foreach ($distributors as $d): ?><option value="<?php echo $d->get("distributor_id"); ?>"><?php echo $d->get("name"); ?></option><?php endforeach; ?></select></td>
         <td><select name="pricing_rule"><option value="Cost+">Cost+</option><option value="Retail-">Retail-</option><option value="PcntMgn">Margin %</option></select></td>
         <td><input type="text" name="amount" size="8" maxlength="8" /></td>
         <td><a href="#" class="addButton">Add</a></td>
@@ -108,6 +120,9 @@ var myCustomerPricingTable;
 
 window.CustomerPricingModel = Backbone.Model.extend({
     defaults: {
+<?php if ($user_id == 0): ?>
+        "pricing_tier" : "",
+<?php endif; ?>
         "customerpricing_id" : 0,
         "distributor_id" : 0,
         "distributor_name" : "default",
@@ -120,6 +135,15 @@ window.CustomerPricingModel = Backbone.Model.extend({
 window.CustomerPricingCollection = Backbone.Collection.extend({
     model: CustomerPricingModel,
         comparator: function(a, b) {
+            <?php if ($user_id == 0): ?>
+            if (a.get("pricing_tier") != b.get("pricing_tier")) {
+                var a_tier = a.get("pricing_tier").toLowerCase();
+                var b_tier = b.get("pricing_tier").toLowerCase();
+
+                return a_name < b_name ? -1 : 1;
+            }
+            <?php endif; ?>
+
             if (a.get("distributor_id") > 0 && b.get("distributor_id") > 0) {
                 var a_name = a.get("distributor_name").toLowerCase();
                 var b_name = b.get("distributor_name").toLowerCase();
@@ -208,6 +232,9 @@ window.CustomerPricingTableRowView = Backbone.View.extend({
         this.$("[name='amount']").val(this.model.get("amount"));
         this.$("select[name='distributor_id'] option[value='" + this.model.get('distributor_id') + "']").prop("selected", true);
         this.$("select[name='pricing_rule'] option[value='" + this.model.get('pricing_rule') + "']").prop("selected", true);
+        <?php if ($user_id == 0): ?>
+        this.$("[name='pricing_tier']").val(this.model.get("pricing_tier"));
+        <?php endif; ?>
 
         this.$(".editview").show();
         this.$(".noeditview").hide();
@@ -231,11 +258,22 @@ window.CustomerPricingTableRowView = Backbone.View.extend({
             return;
         }
 
+        <?php if ($user_id == 0): ?>
+        var pricing_tier = this.$("[name='pricing_tier']").val();
+        if (!pricing_tier || pricing_tier == "") {
+            alert("Please name this pricing tier.");
+            return;
+        }
+        <?php endif; ?>
+
 
         $.ajax({
             type: "POST",
             url: "/admin/ajax_customer_pricing_update/" + this.model.get("customerpricing_id") <?php if ($user_id > 0) { echo "+ '" . $user_id . "'"; } ?>,
             data: {
+                <?php if ($user_id == 0): ?>
+                pricing_tier: pricing_tier,
+                <?php endif; ?>
                 distributor_id : distributor_id,
                 amount: amount,
                 pricing_rule : pricing_rule
@@ -335,11 +373,21 @@ window.CustomerPricingAddView = Backbone.View.extend({
             return;
         }
 
+        <?php if ($user_id == 0): ?>
+        var pricing_tier = this.$("[name='pricing_tier']").val();
+        if (!pricing_tier || pricing_tier == "") {
+            alert("Please name this pricing tier.");
+            return;
+        }
+        <?php endif; ?>
 
         $.ajax({
             type: "POST",
             url: "/admin/ajax_customer_pricing_add<?php if ($user_id > 0) { echo "/" . $user_id; } ?>",
             data: {
+                <?php if ($user_id == 0): ?>
+                pricing_tier: pricing_tier,
+                <?php endif; ?>
                 distributor_id : distributor_id,
                 amount: amount,
                 pricing_rule : pricing_rule

@@ -59,39 +59,7 @@ abstract class Customeradmin extends Financeadmin {
     }
 
     public function ajax_customer_pricing_update($customerpricing_id, $user_id = null) {
-        $this->load->model("Statusmodel");
-        global $PSTAPI;
-        initializePSTAPI();
-
-        $pricing_rule = array_key_exists("pricing_rule", $_REQUEST) ? $_REQUEST["pricing_rule"] : "";
-        $amount = array_key_exists("amount", $_REQUEST) ? $_REQUEST["amount"] : 0;
-        $distributor_id = array_key_exists("distributor_id", $_REQUEST) ? $_REQUEST["distributor_id"] : null;
-
-        $error = $this->_isValidCustomerPricing_settings($pricing_rule, $amount);
-
-        if ($error == "") {
-            // Is this distributor OK?
-            $distributor = $PSTAPI->distributor()->get($distributor_id);
-
-            if ($distributor_id > 0 && is_null($distributor)) {
-                $error = "Sorry, that distributor is not recognized.";
-            } else {
-                if ($distributor_id == 0) {
-                    $distributor_id = null;
-                }
-
-                // OK, we need to ensure there aren't rules for this user already.
-                $matches = $PSTAPI->customerpricing()->fetch(array(
-                    "distributor_id" => $distributor_id,
-                    "user_id" => $user_id
-                ));
-
-                if (count($matches) > 0 && $matches[0]->id() != $customerpricing_id) {
-                    // this is also an error
-                    $error = "Sorry, there is already a rule for this distributor.";
-                }
-            }
-        }
+        $error = $this->sub_ajax_customer_pricing_save($user_id, $customerpricing_id);
 
         if ($error != "") {
             $this->Statusmodel->setError($error);
@@ -120,7 +88,7 @@ abstract class Customeradmin extends Financeadmin {
         $this->Statusmodel->outputStatus();
     }
 
-    public function ajax_customer_pricing_add($user_id = null) {
+    protected function sub_ajax_customer_pricing_save($user_id, $customerpricing_id) {
         $this->load->model("Statusmodel");
         global $PSTAPI;
         initializePSTAPI();
@@ -128,8 +96,29 @@ abstract class Customeradmin extends Financeadmin {
         $pricing_rule = array_key_exists("pricing_rule", $_REQUEST) ? $_REQUEST["pricing_rule"] : "";
         $amount = array_key_exists("amount", $_REQUEST) ? $_REQUEST["amount"] : 0;
         $distributor_id = array_key_exists("distributor_id", $_REQUEST) ? $_REQUEST["distributor_id"] : null;
+        $pricing_tier = array_key_exists("pricing_tier", $_REQUEST) ? $_REQUEST["pricing_tier"] : null;
+        $pricingtier_id = null;
 
         $error = $this->_isValidCustomerPricing_settings($pricing_rule, $amount);
+
+        if ($error == "") {
+            if (is_null($user_id)) {
+                // we have to fetch a pricing tier...
+                if ($pricing_tier == "") {
+                    $error = "Please specify a pricing tier.";
+                } else {
+                    $pricingtier = $PSTAPI->pricingtier()->fetch(array("name" => $pricing_tier));
+                    if (count($pricingtier) > 0) {
+                        $pricingtier_id = $pricingtier[0]->id(); // get the ID value.
+                        // better fix it in case they changed the spelling somehow
+                        $PSTAPI->pricingtier()->update($pricingtier_id, array("name" => $pricing_tier));
+                    } else {
+                        $pricingtier = $PSTAPI->pricingtier()->add(array("name" => $pricing_tier));
+                        $pricingtier_id = $pricingtier->id();
+                    }
+                }
+            }
+        }
 
         if ($error == "") {
             // Is this distributor OK?
@@ -145,19 +134,27 @@ abstract class Customeradmin extends Financeadmin {
                 // OK, we need to ensure there aren't rules for this user already.
                 $matches = $PSTAPI->customerpricing()->fetch(array(
                     "distributor_id" => $distributor_id,
-                    "user_id" => $user_id
+                    "user_id" => $user_id, 
+                    "pricingtier_id" => $pricingtier_id
                 ));
 
-                if (count($matches) > 0) {
+                if (count($matches) > 0 && $matches[0]->id() != $customerpricing_id) {
                     // this is also an error
                     $error = "Sorry, there is already a rule for this distributor.";
                 }
             }
         }
 
+        return $error;
+    }
+
+    public function ajax_customer_pricing_add($user_id = null) {
+        $error = $this->sub_ajax_customer_pricing_save($user_id, null);
+
         if ($error != "") {
             $this->Statusmodel->setError($error);
         } else {
+            global $PSTAPI;
             $pricing_rule = $PSTAPI->customerpricing()->add(array(
                 "pricing_rule" => $pricing_rule,
                 "amount" => $amount,
