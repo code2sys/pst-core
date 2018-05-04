@@ -314,8 +314,8 @@ window.CustomerTierTableView = Backbone.View.extend({
         if (myCustomerPricingTierCollection.length > 0) {
             this.$("table tbody").html("");
 
-            for (var i = 0; i < myCustomerPricingCollection.length; i++) {
-                var m = myCustomerPricingCollection.at(i);
+            for (var i = 0; i < myCustomerPricingTierCollection.length; i++) {
+                var m = myCustomerPricingTierCollection.at(i);
                 var v = new CustomerTierRowView({
                     model: m
                 });
