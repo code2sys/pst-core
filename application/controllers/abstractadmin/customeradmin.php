@@ -14,6 +14,44 @@ abstract class Customeradmin extends Financeadmin {
         This whole section is for the default pricing rules; we will probably dual-purpose these for customers, too.
      */
 
+    public function ajax_customer_pricing_tier_add($user_id, $pricingtier_id) {
+        if (!$this->checkValidAccess('customers') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        if (!ENABLE_CUSTOMER_PRICING) {
+            $this->redirect("/"); exit();
+        }
+
+        $this->load->model("Statusmodel");
+        global $PSTAPI;
+        initializePSTAPI();
+        $model = $PSTAPI->customerpricingtier()->add(array(
+            "user_id" => $user_id,
+            "pricingtier_id" => $pricingtier_id
+        ));
+        $this->Statusmodel->setData("model", $model->to_array());
+        $this->Statusmodel->setSuccess("Added successfully.");
+        $this->Statusmodel->outputStatus();
+    }
+
+    public function ajax_customer_pricing_tier_remove($customerpricingtier_id) {
+        if (!$this->checkValidAccess('customers') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        if (!ENABLE_CUSTOMER_PRICING) {
+            $this->redirect("/"); exit();
+        }
+
+        $this->load->model("Statusmodel");
+        global $PSTAPI;
+        initializePSTAPI();
+        $model = $PSTAPI->customerpricingtier()->remove($customerpricingtier_id);
+        $this->Statusmodel->setSuccess("Removed successfully.");
+        $this->Statusmodel->outputStatus();
+    }
+
     public function customer_pricing_defaults() {
         if (!$this->checkValidAccess('customers') && !@$_SESSION['userRecord']['admin']) {
             redirect('');

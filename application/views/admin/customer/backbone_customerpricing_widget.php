@@ -19,6 +19,68 @@ usort($distributors, function($a, $b) {
 <script type="application/javascript" src="/assets/backbone/backbone-min.js" ></script>
 <script type="application/javascript" src="/assets/dropzone/dropzone.js" ></script>
 <script type="application/javascript" src="/assets/newjs/jquery-ui.min.js" ></script>
+<?php if ($user_id > 0): ?>
+<script type="text/template" id="CustomerTierTableView">
+
+
+<p><strong>Apply Pricing Tiers</strong></p>
+
+<p><em>If you set up default pricing rules for pricing tiers, you can then assign a customer to a specific pricing tier, and that customer will inherit all pricing rules associated with that pricing tier - e.g., Gold, Silver, Bronze.</em></p>
+
+<table width="100%" cellpadding="10" style="border:1px solid silver; border-collapse:separate;">
+<thead>
+    <tr class="head_row">
+        <td><b>Pricing Tier</b></td>
+        <td><b>Action</b></td>
+    </tr>
+</thead>
+<tbody>
+
+</tbody>
+</table>
+
+</script>
+<script type="text/template" id="CustomerTierRowView">
+    <td><%= obj.name %></td>
+    <td><a href="#" class="removeButton">Remove</a></td>
+</script>
+<script type="text/template" id="CustomerAddTierView">
+
+
+<p><strong>Add Pricing Tier</strong></p>
+
+<form>
+<table width="100%" cellpadding="10" style="border:1px solid silver; border-collapse:separate;">
+<thead>
+    <tr class="head_row">
+        <td><b>Pricing Tier</b></td>
+        <td><b>Action</b></td>
+    </tr>
+    <tr>
+        <td><select name='pricingtier_id'>
+        <option value=''>-- Select Pricing Tier --</option>
+        <?php
+        // get the available options and print them here.
+        $pricingtiers = $PSTAPI->pricingtier()->fetch();
+        foreach ($pricingtiers as $pt) {
+            ?>
+            <option value="<?php echo $pt->id(); ?>"><?php echo $pt->get("name"); ?></option>
+            <?php
+        }
+        ?>
+        </select>
+        </td>
+        <td><a href="#" class="addButton">Add</a></td>
+    </tr>
+</thead>
+<tbody>
+
+</tbody>
+</table>
+</form>
+
+</script>
+<?php endif; ?>
 <script type="text/template" id="CustomerPricingTableView">
 
 
@@ -93,6 +155,8 @@ usort($distributors, function($a, $b) {
 </script>
 <div class="tableholder"></div>
 <div class="addrowholder"></div>
+<div class="pricetierholder"></div>
+<div class="addpricetierholder"></div>
 <script type="application/javascript">
 
     function showGritter(title, message) {
@@ -117,6 +181,28 @@ var current_user_id = <?php echo is_null($user_id) ? "null" : $user_id; ?>;
 
 var myCustomerPricingAddView;
 var myCustomerPricingTable;
+
+<?php if ($user_id > 0): ?>
+var myCustomerTierTableView;
+var myCustomerAddTierView;
+
+window.CustomerPricingTierModel = Backbone.Model.extend({
+    defaults: {
+        "customerpricingtier_id" : 0,
+        "user_id" : 0,
+        "pricingtier_id" : 0
+    }
+});
+
+window.CustomerPricingTierCollection = Backbone.Collection.extend({
+    model: CustomerPricingTierModel
+});
+
+var myCustomerPricingTierCollection = new CustomerPricingTierCollection(
+    <?php echo json_encode($PSTAPI->customerpricingtier()->fetch(array("user_id" => $user_id), true)); ?>
+); 
+
+<?php endif; ?>
 
 window.CustomerPricingModel = Backbone.Model.extend({
     defaults: {
@@ -168,6 +254,160 @@ window.CustomerPricingCollection = Backbone.Collection.extend({
 
 // instantiate the pricing collection
 var myCustomerPricingCollection = new CustomerPricingCollection(<?php echo json_encode($PSTAPI->customerpricing()->fetchFrontEnd($user_id)); ?>);
+
+<?php if ($user_id > 0): ?>
+window.CustomerTierRowView = Backbone.View.extend({
+    template: _.template($("#CustomerTierRowView").text()),
+    "className" : "CustomerTierRowView",
+    "tagName" : "tr",
+    initialize: function() {
+        _.bindAll(this, "render", "removeButton");
+    }, 
+    "render" : function() {
+        $(this.el).html(this.template(this.model.toJSON()));
+        this.cancelButton();
+        return this;
+    },
+    "events" : {
+        "click .removeButton" : "removeButton"
+    },
+    "removeButton" : function(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/ajax_customer_pricing_tier_remove/" + this.model.get("customerpricingtier_id"),
+            data: {
+            },
+            dataType: "json",
+            success : _.bind(function(response) {
+                console.log(response);
+                if (response.success) {
+                    showGritter("Success", response.success_message);
+                    myCustomerPricingTierCollection.remove(this.model);
+                    myCustomerTierTableView.redraw();
+                } else {
+                    showGritter("Error", response.error_message);
+                }
+            }, this),
+            error: function() {
+                alert("An error occurred; you may need to reload this page.");
+            }
+        });
+    }
+});
+
+window.CustomerTierTableView = Backbone.View.extend({
+    template: _.template($("#CustomerTierTableView").text()),
+    "className" : "CustomerTierTableView",
+    initialize: function() {
+        _.bindAll(this, "render", "redraw");
+    }, 
+    "render" : function() {
+        $(this.el).html(this.template({}));
+        this.redraw();
+        return this;
+    },
+    "redraw" : function() {
+        if (myCustomerPricingTierCollection.length > 0) {
+            this.$("table tbody").html("");
+
+            for (var i = 0; i < myCustomerPricingCollection.length; i++) {
+                var m = myCustomerPricingCollection.at(i);
+                var v = new CustomerTierRowView({
+                    model: m
+                });
+                this.$("table tbody").append(v.render().el);
+            }
+
+            this.$("table").show();
+        } else {
+            this.$("table").hide();
+        }
+    }
+});
+
+window.CustomerAddTierView = Backbone.View.extend({
+    template: _.template($("#CustomerPricingAddView").text()),
+    initialize: function() {
+        _.bindAll(this, "render", "addButton");
+    }, 
+    "render" : function() {
+        $(this.el).html(this.template({}));
+        return this;
+    },
+    "addButton" : function(e) {
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+        var pricingtier_id = this.$("[name=pricingtier_id]").val();
+        if (pricingtier_id == "" || pricingtier_id == 0) {
+            pricingtier_id = null;
+        }
+
+        if (!pricingtier_id) {
+            alert("Please select a tier.");
+            return;
+        }
+
+        var pricing_rule = this.$("[name='pricing_rule']").val();
+        var amount = this.$("[name='amount']").val();
+
+        if (!amount) {
+            alert("Please specify an amount.");
+            return;
+        }
+
+        <?php if ($user_id == 0): ?>
+        var pricing_tier = this.$("[name='pricing_tier']").val();
+        if (!pricing_tier || pricing_tier == "") {
+            alert("Please name this pricing tier.");
+            return;
+        }
+        <?php endif; ?>
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/ajax_customer_pricing_tier_add/<?php echo $user_id; ?>",
+            data: {
+                <?php if ($user_id == 0): ?>
+                pricing_tier: pricing_tier,
+                <?php endif; ?>
+                distributor_id : distributor_id,
+                amount: amount,
+                pricing_rule : pricing_rule
+            },
+            dataType: "json",
+            success : _.bind(function(response) {
+                console.log(response);
+                if (response.success) {
+                    showGritter("Success", response.success_message);
+                    this.$("[name='amount']").val("");
+                    this.$("[name=distributor_id]").val("");
+                    myCustomerPricingCollection.push(response.data.model);
+                    myCustomerPricingCollection.sort();
+                    myCustomerPricingTable.redraw();
+                } else {
+                    showGritter("Error", response.error_message);
+                }
+            }, this),
+            error: function() {
+                alert("An error occurred; you may need to reload this page.");
+            }
+        });
+    },
+    "events" : {
+        "click .addButton" : "addButton",
+        "submit form" : "addButton"
+    },
+    "className" : "CustomerPricingAddView"
+});
+<?php endif; ?>
 
 window.CustomerPricingTableRowView = Backbone.View.extend({
     template: _.template($("#CustomerPricingTableRowView").text()),
@@ -423,5 +663,12 @@ $(document).on("ready", function() {
     myCustomerPricingAddView = new CustomerPricingAddView({});
     $(".addrowholder").html(myCustomerPricingAddView.render().el);
     $(".tableholder").html(myCustomerPricingTable.render().el);
+
+    <?php if ($user_id > 0): ?>
+    myCustomerTierTableView = new CustomerPricingTableView({});
+        myCustomerAddTierView = new CustomerPricingAddView({});
+    $(".addpricetierholder").html(myCustomerAddTierView.render().el);
+    $(".pricetierholder").html(myCustomerTierTableView.render().el);
+    <?php endif; ?>
 });
 </script>
