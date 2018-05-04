@@ -355,43 +355,19 @@ window.CustomerAddTierView = Backbone.View.extend({
             return;
         }
 
-        var pricing_rule = this.$("[name='pricing_rule']").val();
-        var amount = this.$("[name='amount']").val();
-
-        if (!amount) {
-            alert("Please specify an amount.");
-            return;
-        }
-
-        <?php if ($user_id == 0): ?>
-        var pricing_tier = this.$("[name='pricing_tier']").val();
-        if (!pricing_tier || pricing_tier == "") {
-            alert("Please name this pricing tier.");
-            return;
-        }
-        <?php endif; ?>
-
         $.ajax({
             type: "POST",
-            url: "/admin/ajax_customer_pricing_tier_add/<?php echo $user_id; ?>",
+            url: "/admin/ajax_customer_pricing_tier_add/<?php echo $user_id; ?>/" + pricingtier_id,
             data: {
-                <?php if ($user_id == 0): ?>
-                pricing_tier: pricing_tier,
-                <?php endif; ?>
-                distributor_id : distributor_id,
-                amount: amount,
-                pricing_rule : pricing_rule
             },
             dataType: "json",
             success : _.bind(function(response) {
                 console.log(response);
                 if (response.success) {
                     showGritter("Success", response.success_message);
-                    this.$("[name='amount']").val("");
-                    this.$("[name=distributor_id]").val("");
-                    myCustomerPricingCollection.push(response.data.model);
-                    myCustomerPricingCollection.sort();
-                    myCustomerPricingTable.redraw();
+                    myCustomerPricingTierCollection.push(response.data.model);
+                    myCustomerPricingTierCollection.sort();
+                    myCustomerTierTableView.redraw();
                 } else {
                     showGritter("Error", response.error_message);
                 }
