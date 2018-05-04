@@ -59,26 +59,7 @@ abstract class Customeradmin extends Financeadmin {
     }
 
     public function ajax_customer_pricing_update($customerpricing_id, $user_id = null) {
-        $error = $this->sub_ajax_customer_pricing_save($user_id, $customerpricing_id);
-
-        if ($error != "") {
-            $this->Statusmodel->setError($error);
-        } else {
-            global $PSTAPI;
-
-            // update it
-            $model = $PSTAPI->customerpricing()->update($customerpricing_id, array(
-                "amount" => $amount,
-                "pricing_rule" => $pricing_rule,
-                "distributor_id" => $distributor_id
-            ));
-            $this->Statusmodel->setData("model", $model->to_array());
-
-            // record success
-            $this->Statusmodel->setSuccess("Rule updated successfully.");
-        }
-
-        $this->Statusmodel->outputStatus();
+        $this->sub_ajax_customer_pricing_save($user_id, $customerpricing_id, true);
     }
 
     public function ajax_customer_pricing_remove($customerpricing_id, $user_id = null) {
@@ -90,7 +71,7 @@ abstract class Customeradmin extends Financeadmin {
         $this->Statusmodel->outputStatus();
     }
 
-    protected function sub_ajax_customer_pricing_save($user_id, $customerpricing_id) {
+    protected function sub_ajax_customer_pricing_save($user_id, $customerpricing_id, $update = false) {
         $this->load->model("Statusmodel");
         global $PSTAPI;
         initializePSTAPI();
@@ -147,29 +128,36 @@ abstract class Customeradmin extends Financeadmin {
             }
         }
 
-        return $error;
-    }
-
-    public function ajax_customer_pricing_add($user_id = null) {
-        $error = $this->sub_ajax_customer_pricing_save($user_id, null);
-
         if ($error != "") {
             $this->Statusmodel->setError($error);
         } else {
-            global $PSTAPI;
-            $pricing_rule = $PSTAPI->customerpricing()->add(array(
-                "pricing_rule" => $pricing_rule,
-                "amount" => $amount,
-                "user_id" => $user_id,
-                "distributor_id" => $distributor_id
-            ));
-            $this->Statusmodel->setData("model", $pricing_rule->to_array());
-            $this->Statusmodel->setSuccess("Rule added successfully.");
+            if ($update) {
+                // update it
+                $model = $PSTAPI->customerpricing()->update($customerpricing_id, array(
+                    "amount" => $amount,
+                    "pricing_rule" => $pricing_rule,
+                    "distributor_id" => $distributor_id,
+                    "pricingtier_id" => $pricingtier_id
+                ));
+                $this->Statusmodel->setData("model", $model->to_array());
+            } else{
+                $pricing_rule = $PSTAPI->customerpricing()->add(array(
+                    "pricing_rule" => $pricing_rule,
+                    "amount" => $amount,
+                    "user_id" => $user_id,
+                    "distributor_id" => $distributor_id
+                ));
+                $this->Statusmodel->setData("model", $pricing_rule->to_array());
+                $this->Statusmodel->setSuccess("Rule added successfully.");
+            }
+
+
+            // record success
+            $this->Statusmodel->setSuccess("Rule updated successfully.");
         }
 
         $this->Statusmodel->outputStatus();
     }
-
 
     public function __construct() {
         parent::__construct();
