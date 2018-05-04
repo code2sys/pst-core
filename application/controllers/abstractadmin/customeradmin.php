@@ -62,6 +62,10 @@ abstract class Customeradmin extends Financeadmin {
         $this->sub_ajax_customer_pricing_save($user_id, $customerpricing_id, true);
     }
 
+    public function ajax_customer_pricing_add($user_id = null) {
+        $this->sub_ajax_customer_pricing_save($user_id, null, false);
+    }
+
     public function ajax_customer_pricing_remove($customerpricing_id, $user_id = null) {
         $this->load->model("Statusmodel");
         global $PSTAPI;
