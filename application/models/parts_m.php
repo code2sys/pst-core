@@ -1684,12 +1684,28 @@ class Parts_M extends Master_M {
 
     /*     * **************************************** END WISHLIST *********************************************** */
 
-    public function updateCart() {
-    
-        foreach ($_SESSION['cart'] as $part => $rec) {
-            $rec["price"] = round(0.9 * floatVal(preg_replace("/[^0-9\.\-]/", "", (array_key_exists("price", $rec) ? $rec["price"] : $rec["price"]))), 2);
-            $_SESSION['cart'][$part] = $rec;
+    public function fixCartForWOPPricing() {
+        if (defined('ENABLE_CUSTOMER_PRICING') && ENABLE_CUSTOMER_PRICING) {
+            if (array_key_exists("userRecord", $_SESSION) && array_key_exists("id", $_SESSION["userRecord"]) && $_SESSION["userRecord"]["id"] > 0) {
+                foreach ($_SESSION['cart'] as $part => $rec) {
+                    if (!array_key_exists("rule", $rec)) {
+                        global $PSTAPI;
+                        initializePSTAPI();
+                        $result_of_rerating = $PSTAPI->customerpricing()->pricePartnumber($_SESSION["userRecord"]["id"], $part);
+                        if (FALSE !== $result_of_rerating && is_array($result_of_rerating)) {
+                            $rec["initial_price"] = $rec["price"];
+                            $rec["price"] = $result_of_rerating[0];
+                            $rec["rule"] = $result_of_rerating[1];                            
+                        }
+                    }
+                    $_SESSION['cart'][$part] = $rec;
+                }
+            }
         }
+    }
+
+    public function updateCart() {
+        $this->fixCartForWOPPricing();
         $shoppingCart = json_encode($_SESSION['cart']);
         $data = array('cart' => $shoppingCart, 'user_id' => @$_SESSION['userRecord']['id']);
         $where = array('user_id' => @$_SESSION['userRecord']['id']);
