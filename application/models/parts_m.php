@@ -1687,6 +1687,7 @@ class Parts_M extends Master_M {
     public function updateCart() {
         foreach ($_SESSION['cart'] as $part => $rec) {
             $rec["finalPrice"] = 0.9 * $rec["finalPrice"];
+            $_SESSION['cart'][$part] = $rec;
         }
         $shoppingCart = json_encode($_SESSION['cart']);
         $data = array('cart' => $shoppingCart, 'user_id' => @$_SESSION['userRecord']['id']);
