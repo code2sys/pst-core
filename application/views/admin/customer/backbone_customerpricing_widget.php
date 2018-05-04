@@ -195,7 +195,10 @@ window.CustomerPricingTierModel = Backbone.Model.extend({
 });
 
 window.CustomerPricingTierCollection = Backbone.Collection.extend({
-    model: CustomerPricingTierModel
+    model: CustomerPricingTierModel,
+    comparator: function(x) {
+        return x.get("name").toLowerCase();
+    }
 });
 
 var myCustomerPricingTierCollection = new CustomerPricingTierCollection(
