@@ -665,8 +665,8 @@ $(document).on("ready", function() {
     $(".tableholder").html(myCustomerPricingTable.render().el);
 
     <?php if ($user_id > 0): ?>
-    myCustomerTierTableView = new CustomerPricingTableView({});
-        myCustomerAddTierView = new CustomerPricingAddView({});
+    myCustomerTierTableView = new CustomerTierTableView({});
+        myCustomerAddTierView = new CustomerAddTierView({});
     $(".addpricetierholder").html(myCustomerAddTierView.render().el);
     $(".pricetierholder").html(myCustomerTierTableView.render().el);
     <?php endif; ?>
