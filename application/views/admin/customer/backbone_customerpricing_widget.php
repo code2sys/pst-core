@@ -449,7 +449,7 @@ window.CustomerPricingTableRowView = Backbone.View.extend({
 
         $.ajax({
             type: "POST",
-            url: "/admin/ajax_customer_pricing_remove/" + this.model.get("customerpricing_id") <?php if ($user_id > 0) { echo "+ '" . $user_id . "'"; } ?>,
+            url: "/admin/ajax_customer_pricing_remove/" + this.model.get("customerpricing_id") <?php if ($user_id > 0) { echo "+ '/" . $user_id . "'"; } ?>,
             data: {
             },
             dataType: "json",
