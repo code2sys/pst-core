@@ -2,6 +2,13 @@
 global $PSTAPI;
 initializePSTAPI();
 $distributors = $PSTAPI->distributor()->fetch();
+$clean_distributors = array();
+foreach ($distributors as $d) {
+    if ($d->get("name") != "Lightspeed Feed") {
+        $clean_distributors[] = $d;
+    }
+}
+$distributors = $clean_distributors;
 usort($distributors, function($a, $b) {
     return strnatcasecmp($a->get("name"), $b->get("name"));
 });
