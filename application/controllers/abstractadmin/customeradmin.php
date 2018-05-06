@@ -128,6 +128,8 @@ abstract class Customeradmin extends Financeadmin {
         $pricing_tier = array_key_exists("pricing_tier", $_REQUEST) ? $_REQUEST["pricing_tier"] : null;
         $pricingtier_id = null;
         $amount = $this->sub_percentage_to_amount($pricing_rule, $percentage);
+        $this->Statusmodel->setData("percentage", $percentage);
+        $this->Statusmodel->setData("amount", $amount);
 
         $error = $this->_isValidCustomerPricing_settings($pricing_rule, $amount);
 
