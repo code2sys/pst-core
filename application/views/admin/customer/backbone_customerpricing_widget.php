@@ -100,6 +100,13 @@ usort($distributors, function($a, $b) {
 <p><em>Please use the following to establish default distributor-specific pricing rules that can then be assigned to one or more customers.</em></p>
 <?php endif; ?>
 
+<p><em>Rules:</em></p>
+<ul>
+<li> Cost+: Price will be set to a percentage above the cost, e.g. entering 10 will cause the price to be 110% of cost.</li>
+<li> Retail-: Price will be set to a discount from retail, e.g. entering 10 will set the price to 90% of retail.</li>
+<li> Margin %: Price will be set as a fraction of the margin between retail and cost, e.g. entering 70 will set the price to the cost plus 70% of margin (retail minus cost).</li>
+</ul>
+
 <table width="100%" cellpadding="10" style="border:1px solid silver; border-collapse:separate;">
 <thead>
     <tr class="head_row">
@@ -108,7 +115,7 @@ usort($distributors, function($a, $b) {
         <?php endif; ?>
         <td><b>Distributor</b></td>
         <td><b>Pricing Rule</b></td>
-        <td><b>Multiplier</b></td>
+        <td><b>Percentage</b></td>
         <td><b>Action</b></td>
     </tr>
 </thead>
