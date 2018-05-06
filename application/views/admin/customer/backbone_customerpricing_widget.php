@@ -156,7 +156,7 @@ usort($distributors, function($a, $b) {
         <?php endif; ?>
         <td><select name="distributor_id"><option value="">All Distributors</option><?php foreach ($distributors as $d): ?><option value="<?php echo $d->get("distributor_id"); ?>"><?php echo $d->get("name"); ?></option><?php endforeach; ?></select></td>
         <td><select name="pricing_rule"><option value="Cost+">Cost+</option><option value="Retail-">Retail-</option><option value="PcntMgn">Margin %</option></select></td>
-        <td><input type="text" name="amount" size="8" maxlength="8" /></td>
+        <td><input type="text" name="percentage" size="8" maxlength="8" /></td>
         <td><a href="#" class="addButton">Add</a></td>
     </tr>
 </thead>
@@ -611,10 +611,10 @@ window.CustomerPricingAddView = Backbone.View.extend({
         }
 
         var pricing_rule = this.$("[name='pricing_rule']").val();
-        var amount = this.$("[name='amount']").val();
+        var percentage = this.$("[name='percentage']").val();
 
-        if (!amount) {
-            alert("Please specify an amount.");
+        if (!percentage) {
+            alert("Please specify an percentage.");
             return;
         }
 
@@ -634,7 +634,7 @@ window.CustomerPricingAddView = Backbone.View.extend({
                 pricing_tier: pricing_tier,
                 <?php endif; ?>
                 distributor_id : distributor_id,
-                amount: amount,
+                percentage: percentage,
                 pricing_rule : pricing_rule
             },
             dataType: "json",
@@ -642,7 +642,7 @@ window.CustomerPricingAddView = Backbone.View.extend({
                 console.log(response);
                 if (response.success) {
                     showGritter("Success", response.success_message);
-                    this.$("[name='amount']").val("");
+                    this.$("[name='percentage']").val("");
                     this.$("[name=distributor_id]").val("");
                     myCustomerPricingCollection.push(response.data.model);
                     myCustomerPricingCollection.sort();
