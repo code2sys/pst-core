@@ -73,21 +73,15 @@ abstract class Customeradmin extends Financeadmin {
 
         // Now, we have to figure out the range
         switch($pricing_rule) {
-            case "Cost+":
-            if ($amount < 1) {
-                return "Sorry, please specify a percentage of cost greater than 1 (100%).";
-            }
-            break;
-
             case "Retail-":
             if ($amount > 1 || $amount < 0) {
-                return "Sorry, please specify between 0 and 1 (100%).";
+                return "Sorry, please specify between 0% and 100%.";
             }
             break;
 
             case "PcntMgn":
             if ($amount > 1 || $amount < 0) {
-                return "Sorry, please specify between 0 and 1 (100%).";
+                return "Sorry, please specify between 0% and 100%.";
             }
             break;
         }
@@ -113,16 +107,27 @@ abstract class Customeradmin extends Financeadmin {
         $this->Statusmodel->outputStatus();
     }
 
+    protected function sub_percentage_to_amount($pricing_rule, $percentage) {
+        $percentage = preg_replace("/[^0-9\.]/", $percentage);
+        $percentage = floatVal($percentage);
+        $amount = $percentage / 100.0;
+        if ($pricing_rule == "Cost+") {
+            $amount = 1 + $amount;
+        }
+        return $amount;
+    }
+
     protected function sub_ajax_customer_pricing_save($user_id, $customerpricing_id, $update = false) {
         $this->load->model("Statusmodel");
         global $PSTAPI;
         initializePSTAPI();
 
         $pricing_rule = array_key_exists("pricing_rule", $_REQUEST) ? $_REQUEST["pricing_rule"] : "";
-        $amount = array_key_exists("amount", $_REQUEST) ? $_REQUEST["amount"] : 0;
+        $percentage = array_key_exists("percentage", $_REQUEST) ? $_REQUEST["percentage"] : 0;
         $distributor_id = array_key_exists("distributor_id", $_REQUEST) ? $_REQUEST["distributor_id"] : null;
         $pricing_tier = array_key_exists("pricing_tier", $_REQUEST) ? $_REQUEST["pricing_tier"] : null;
         $pricingtier_id = null;
+        $amount = $this->sub_percentage_to_amount($pricing_rule, $percentage);
 
         $error = $this->_isValidCustomerPricing_settings($pricing_rule, $amount);
 
