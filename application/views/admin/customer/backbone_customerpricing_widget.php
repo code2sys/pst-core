@@ -131,7 +131,7 @@ usort($distributors, function($a, $b) {
     <?php endif; ?>
     <td><span class="editview"><select name="distributor_id"><option value="">All Distributors</option><?php foreach ($distributors as $d): ?><option value="<?php echo $d->get("distributor_id"); ?>"><?php echo $d->get("name"); ?></option><?php endforeach; ?></select></span><span class="noeditview"><%= obj.distributor_name %></span></td>
     <td><span class="editview"><select name="pricing_rule"><option value="Cost+">Cost+</option><option value="Retail-">Retail-</option><option value="PcntMgn">Margin %</option></select></span><span class="noeditview"><%= obj.pricing_rule %></span></td>
-    <td><span class="editview"><input type="text" name="amount" size="8" maxlength="8" /></span><span class="noeditview"><%= obj.amount %></span></td>
+    <td><span class="editview"><input type="text" name="amount" size="8" maxlength="8" /></span><span class="noeditview"><%= obj.percentage %></span></td>
     <td><span class="editview"><a href="#" class="updateButton">Update</a> <a href="#" class="cancelButton">Cancel</a></span><span class="noeditview"><a href="#" class="editButton">Edit</a> <a href="#" class="removeButton">Remove</a></span></td>
 </script>
 <script type="text/template" id="CustomerPricingAddView">
@@ -409,6 +409,19 @@ window.CustomerPricingTableRowView = Backbone.View.extend({
         _.bindAll(this, "render", "cancelButton", "removeButton", "editButton", "updateButton");
     }, 
     "render" : function() {
+        switch (this.model.get("pricing_rule")) {
+            case 'Cost+':
+            this.model.set("percentage", Math.round((parseFloat(this.model.get("amount")) - 1)*100, 2));
+            break;
+            
+            case 'Retail-':
+            this.model.set("percentage", Math.round((parseFloat(this.model.get("amount")) * 100), 2));
+            break;
+            
+            case 'PcntMgn':
+            this.model.set("percentage", Math.round((parseFloat(this.model.get("amount")) * 100), 2));                
+            break;
+        }
         $(this.el).html(this.template(this.model.toJSON()));
         this.cancelButton();
         return this;
