@@ -108,7 +108,7 @@ abstract class Customeradmin extends Financeadmin {
     }
 
     protected function sub_percentage_to_amount($pricing_rule, $percentage) {
-        $percentage = preg_replace("/[^0-9\.]/", $percentage);
+        $percentage = preg_replace("/[^0-9\.]/", "", $percentage);
         $percentage = floatVal($percentage);
         $amount = $percentage / 100.0;
         if ($pricing_rule == "Cost+") {
