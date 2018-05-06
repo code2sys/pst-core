@@ -147,7 +147,7 @@ usort($distributors, function($a, $b) {
         <?php endif; ?>
         <td><b>Distributor</b></td>
         <td><b>Pricing Rule</b></td>
-        <td><b>Multiplier</b></td>
+        <td><b>Percentage</b></td>
         <td><b>Action</b></td>
     </tr>
     <tr>
