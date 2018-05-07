@@ -21,6 +21,9 @@ table.dataTable thead th, table.dataTable thead td{border-bottom:0px solid #111 
 		<div class="" style="float:left; padding:2% 3% 3% 0%;">
 			<a href="<?php echo base_url('admin/customer_edit'); ?>"><button style="color:black; padding:10px 15px;">Add New Customer</button></a>
 			<a href="<?php echo base_url('admin/export_customer'); ?>"><button style="color:black; padding:10px 15px;">Export Customers</button></a>
+			<?php if (ENABLE_CUSTOMER_PRICING): ?>
+			<a href="<?php echo base_url('admin/customer_pricing_defaults'); ?>"><button style="color:black; padding:10px 15px;">Set Default Pricing Rules</button></a>
+			<?php endif; ?>
 		</div>
 		<div class="admin_search_full" style="height:auto;">
 			<form action="<?php echo base_url('admin/customers'); ?>/" method="get" id="moto_search" class="form_standard">
