@@ -241,7 +241,7 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 		</div>
 	</div>
 	<?php } ?>
-	<div class="sw brd">
+	<div class="sw brd container_for_top_brands">
 		<div class="container_b" id="our_top_brands">
 			<div class="featured-listings">
 				<h3> OUR TOP BRANDS </h3>
