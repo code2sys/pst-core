@@ -192,7 +192,8 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 						</li>
 						<?php } ?>
 					</ul>
-				</div>				
+				</div>
+                <div style="clear: both"></div>
 			</div>
 		</div>
 	</div>
