@@ -8,8 +8,8 @@ $new_assets_url1 = jsite_url( "/qatesting/benz_assets/");
 	$CI =& get_instance();
 $CI->load->helper("mustache_helper");
 $template = mustache_tmpl_open("master/footer_v.html");
-mustache_tmpl_set($template, "selector2_js", $CI->load->view("master/widgets/selector2_js"));
-mustache_tmpl_set($template, "selector3_js", $CI->load->view("master/widgets/selector3_js"));
+mustache_tmpl_set($template, "selector2_js", $CI->load->view("master/widgets/selector2_js", array(), true));
+mustache_tmpl_set($template, "selector3_js", $CI->load->view("master/widgets/selector3_js", array(), true));
 $catd = "";
 foreach($category as $id => $ref){
     $catd = $ref['label'];
