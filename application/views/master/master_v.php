@@ -224,7 +224,7 @@ if (isset($keywords) && $keywords != "") {
         <?php echo jget_store_block("bottom_header"); ?>
     </head>
 
-    <body class="body" <?php if (isset($new_header)) { ?>style="width:100%;margin:0 auto;"<?php } ?>>
+    <body class="body master_v" <?php if (isset($new_header)) { ?>style="width:100%;margin:0 auto;"<?php } ?>>
     <?php echo jget_store_block("top_body"); ?>
         <!-- WRAPPER ==============================================================================-->
         <div class="wrap">
@@ -237,84 +237,15 @@ if (isset($keywords) && $keywords != "") {
                 <link rel="stylesheet" href="<?php echo $new_assets_url; ?>stylesheet/style.css" />
                 <link rel="stylesheet" href="<?php echo $new_assets_url; ?>stylesheet/custom.css" />
 
-                <div class="topBar_b">
-                    <div class="container_b">
-                        <p class="creditCar_b fltL_b">
-                            <span>Ph : <?php echo $store_name['phone']; ?></span>				
-                            <a href="<?php echo site_url('pages/index/contactus') ?>"><i class="fa fa-map-marker" aria-hidden="true"></i> MAP & HOURS</a>				
-                        </p>			
-                        <div class="loginSec_b navbar-right">
-    <?php if (@$_SESSION['userRecord']): ?>
-                                <b>Welcome: <?php echo @$_SESSION['userRecord']['first_name']; ?></b> <span class="fltR seperator_b">|</span> <b><a href="<?php echo $s_baseURL . 'welcome/logout'; ?>"><u>Logout</u></a></b>
-                                <?php if ($_SESSION['userRecord']['admin'] || $_SESSION['userRecord']['user_type'] == 'employee'): ?>
-                                    <span class="fltR seperator_b">|</span>
-                                    <a href="<?php echo base_url('admin'); ?>"><b><u>Admin Panel</u></b></a>
-                                <?php endif; ?>
-    <?php else: ?>
-                                <a class="loginLink_b fltR mr10" href="javascript:void(0);" onclick="openLogin();"><b><u>Login</u></b></a>
-                                <span class="fltR seperator_b">|</span>
-                                <a class="creatAcc ml10 fltR" href="javascript:void(0);" onclick="openCreateAccount();"><b><u>Create Account</u></b></a>
-    <?php endif; ?>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="topHeaderNav_b pull-right">
-                            <ul>
-                                <li class="icon homeLink"><a href="<?php echo base_url(); ?>">Home</a></li>
-                                <li class="icon accountLink"><a href="<?php echo $s_baseURL . 'checkout/account'; ?>">Account</a></li>
-                                <li class="icon wishListLink"><a href="<?php echo base_url('/shopping/wishlist'); ?>">Wish List</a></li>
-                                <li class="icon shopLink"><a href="<?php echo base_url('shopping/cart'); ?>">Shopping Cart (<span id="shopping_count"><?php echo @$_SESSION['cart']['qty'] ? $_SESSION['cart']['qty'] : 0; ?></span>)</a></li>
-                            </ul>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-
-                <div class="header_b">
-                    <div class="container_b">
-                        <a href="<?php echo base_url(); ?>" class="logoCont fltL logo-tp_b">
-                            <img src="/logo.png" width="200" height="50">
-                        </a>
-
-                        <div class="side-hdr">
-                            <div class="sidebar-menu">
-                                <span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
-                                <ul class="mb-drpdwn">
-                                    <?php require(__DIR__ . "/../mobile_navigation_fragment.php"); ?>
-
-                                </ul>
-                            </div>		
-                            <div class="cl"><a class="cel" href="tel:<?php echo CLEAN_PHONE_NUMBER; ?>">
-                                    <img class="cl-img" src="<?php echo $new_assets_url1; ?>images/cl.png"><br>Call</a>
-                            </div>
-                            <div class="crt">
-                                <a class="cel" href="<?php echo base_url('shopping/cart'); ?>">
-                                    <img class="cl-img" src="<?php echo $new_assets_url1; ?>images/kart.png"><br>Cart</a>
-                            </div>
-                            <div class="shpbrnd-map">
-                                <p class="creditCar_b loct">				
-                                    <a href="<?php echo site_url('pages/index/contactus') ?>"><i class="fa fa-map-marker" aria-hidden="true"></i> MAP & HOURS</a>				
-                                </p>
-                            </div>
-                        </div>
-                        <div class="mblacnt-log">
-                            <a href="javascript:void(0);" onclick="openLogin();"> <i class="fa fa-user usr" aria-hidden="true"></i> Login/create account</a>
-                        </div>
-                        <?php
-                        $CI =& get_instance();
-                        echo $CI->load->view("search_placeholder", array(), true);
-                        ?>
-                        <div class="clear"></div>						
-                    </div>
-                    <div class="container_b">
-                        <div class="vehicleCategory">
-                            <?php require(__DIR__ . "/../navigation_fragment.php"); ?>
-                        </div>	
-                        <div class="clear"></div>
-                    </div>
-                </div>
-
                 <?php
+
                 $CI =& get_instance();
+
+                echo $CI->load->view("master/widgets/mainheader", array(
+                    "store_name" => $store_name,
+                    "s_baseURL" => $s_baseURL
+                ), true);
+
                 $CI->load->helper("mustache_helper");
                 $motorcycle_action_buttons = mustache_tmpl_open("store_header_marquee.html");
                 echo mustache_tmpl_parse($motorcycle_action_buttons);
