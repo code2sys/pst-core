@@ -321,25 +321,11 @@ class Coupons_M extends Master_M
 			if($coupon['couponSpecialConstraintsId'])
 			{
 				$couponConstraints = json_decode($coupon['couponSpecialConstraintsId'], TRUE);
-				print_r($couponConstraints);
 				$constraintList = $this->getSpecialConstraintsDD(TRUE);
 				foreach($couponConstraints as $const)
 				{
-				    print "Const\n";
-
-				    print_r($const);
-				    print "Coupon\n";
-				    print_r($coupon);
-                    print "Constraint List\n";
-                    print_r($constraintList);
-
-                    // JLB 05-13-18
-                    // Was this EVER tested??? WTF?
-
-                    foreach ($constraintList as $cl) {
-
-                    }
-					$coupon = $this->$constraintList[$const]($coupon);
+                    $constraint_function = $constraintList[$const];
+					$coupon = $this->$constraint_function($coupon);
 					if(is_null($coupon))
 					return FALSE;
 				}
