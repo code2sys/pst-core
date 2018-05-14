@@ -149,39 +149,34 @@ if (!function_exists("sub_googleSalesXMLNew")) {
 }
 
 // We need to print out the footer without always relying on the same code copied-and-pasted everywhere.
-function jprint_interactive_footer($pages) {
+function jprint_interactive_footer($pages = null, $output = true) {
+    $CI =& get_instance();
 
     if (!isset($pages) || is_null($pages) || !is_array($pages)) {
         // Well, if there is nothing here, then let's go get the real deal.
-        $CI =& get_instance();
         $CI->load->model('pages_m');
         $pages = $CI->pages_m->getPages(1, 'footer');
     }
+    $CI->load->helper("mustache_helper");
+    $template = mustache_tmpl_open("jprint_interactive_footer");
 
-    ?>
-<div class="one-fifth">
-    <?php
     if (is_array($pages) && count($pages) > 0) {
-        ?>
-    <h3>quick links</h3>
-    <ul class="clear">
-
-        <?php
+        mustache_tmpl_set($template, "pages", 1);
         foreach ($pages as $p) {
-        ?>
-            <?php if ($p['type'] == 'External Link'): ?>
-        <li><a href="<?php echo $p['external_url']; ?>" target="_blank"><?php echo $p['label']; ?></a></li>
-                <?php else: ?>
-        <li><a href="<?php echo site_url('pages/index/' . $p['tag']); ?>"><?php echo $p['label']; ?></a></li>
-            <?php endif;
+            mustache_tmpl_iterate($template, "each_page");
+            mustache_tmpl_set($template, "each_page", array(
+                "label" => $p['label'],
+                "target" => ($p['type'] == 'External Link') ? 'target="_blank"' : '',
+                "link" => ($p['type'] == 'External Link') ? $p['external_url'] : site_url('pages/index/' . $p['tag'])
+            ));
         }
-        ?>
-    </ul>
-        <?php
     }
-    ?>
-</div>
-    <?php
+
+    if ($output) {
+        echo mustache_tmpl_parse($template);
+    } else {
+        return mustache_tmpl_parse($template);
+    }
 }
 
 // for the blocks
