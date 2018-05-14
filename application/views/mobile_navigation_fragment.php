@@ -31,4 +31,9 @@ if (!isset($SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS) || !$SIMPLIFIED_NAV_WITHIN_MAJOR_
     mustache_tmpl_set($template, "active_primary_navigation", $active_primary_navigation);
 }
 
-echo mustache_tmpl_parse($template);
+
+if (isset($GLOBAL_MOBILE_NAV_FRAG_STRING) && $GLOBAL_MOBILE_NAV_FRAG_STRING) {
+    $GLOBAL_MOBILE_NAV_FRAG =  mustache_tmpl_parse($template);
+} else {
+    echo mustache_tmpl_parse($template);
+}
