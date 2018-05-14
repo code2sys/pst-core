@@ -442,49 +442,78 @@ class Coupons_M extends Master_M
 		
 	public function calculateCoupon()
 	{
-		$this->load->model('coupons_m');
-		
-		foreach($_SESSION['cart'] as $key => &$coupon) 	
-		{
-		    error_log("Key $key Coupon " . print_r($coupon, true));
-			if(strpos($key, 'coupon') !== FALSE)
-			{
-			    error_log("A");
-				if($coupon)
-				{
-                    error_log("B");
-					  if($coupon['couponSpecialConstraintsId'])
-					  {
-                          error_log("C");
+//		$this->load->model('coupons_m');
+        $keys = array_keys($_SESSION['cart']);
+        for ($i = 0; $i < count($keys); $i++) {
+            $key = $keys[$i];
+            $coupon = $_SESSION['cart'][$key];
+            if(strpos($key, 'coupon') !== FALSE)
+            {
+                if($coupon)
+                {
+                    if($coupon['couponSpecialConstraintsId'])
+                    {
+                        $couponConstraints = json_decode($coupon['couponSpecialConstraintsId'], TRUE);
+                        $constraintList = $this->coupons_m->getSpecialConstraintsDD(TRUE);
+                        $coupon['wholesale'] = 0.00;
 
-                          $couponConstraints = json_decode($coupon['couponSpecialConstraintsId'], TRUE);
-                          error_log("D");
-					    $constraintList = $this->coupons_m->getSpecialConstraintsDD(TRUE);
-                          error_log("E");
-					    $coupon['wholesale'] = 0.00;
-                          error_log("E");
-
-						$coupon = $this->processPercentageValue($coupon, TRUE); // Keep Shipping value inside Checkout process
-                          error_log("F");
-					    foreach($couponConstraints as $const)
-					    {
-                            error_log("G");
-
+                        $coupon = $this->processPercentageValue($coupon, TRUE); // Keep Shipping value inside Checkout process
+                        foreach($couponConstraints as $const)
+                        {
                             $constraint_function = $constraintList[$const];
                             $coupon = $this->$constraint_function($coupon);
-					      if(is_null($coupon))
-					        return FALSE;
-					    } 
-					    $coupon['price'] = $coupon['wholesale'];
+                            if(is_null($coupon))
+                                return FALSE;
+                        }
+                        $coupon['price'] = $coupon['wholesale'];
+                    }
+                }
+            }
+            $_SESSION['cart'][$key] = $coupon;
 
-                          error_log("H");
-					  }
-                    error_log("I");
-				}
-                error_log("J");
-			}
-            error_log("K");
-		}
+        }
+		
+//		foreach($_SESSION['cart'] as $key => &$coupon)
+//		{
+//		    error_log("Key $key Coupon " . print_r($coupon, true));
+//			if(strpos($key, 'coupon') !== FALSE)
+//			{
+//			    error_log("A");
+//				if($coupon)
+//				{
+//                    error_log("B");
+//					  if($coupon['couponSpecialConstraintsId'])
+//					  {
+//                          error_log("C");
+//
+//                          $couponConstraints = json_decode($coupon['couponSpecialConstraintsId'], TRUE);
+//                          error_log("D");
+//					    $constraintList = $this->coupons_m->getSpecialConstraintsDD(TRUE);
+//                          error_log("E");
+//					    $coupon['wholesale'] = 0.00;
+//                          error_log("E");
+//
+//						$coupon = $this->processPercentageValue($coupon, TRUE); // Keep Shipping value inside Checkout process
+//                          error_log("F");
+//					    foreach($couponConstraints as $const)
+//					    {
+//                            error_log("G");
+//
+//                            $constraint_function = $constraintList[$const];
+//                            $coupon = $this->$constraint_function($coupon);
+//					      if(is_null($coupon))
+//					        return FALSE;
+//					    }
+//					    $coupon['price'] = $coupon['wholesale'];
+//
+//                          error_log("H");
+//					  }
+//                    error_log("I");
+//				}
+//                error_log("J");
+//			}
+//            error_log("K");
+//		}
 	}
 	
 	public function deleteCoupon($id)
