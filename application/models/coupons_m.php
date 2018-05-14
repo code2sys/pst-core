@@ -325,11 +325,12 @@ class Coupons_M extends Master_M
 				foreach($couponConstraints as $const)
 				{
 				    print "Const\n";
-				    
+
 				    print_r($const);
 				    print "Coupon\n";
 				    print_r($coupon);
-
+                    print "Constraint List\n";
+                    print_r($constraintList);
 
 					$coupon = $this->$constraintList[$const]($coupon);
 					if(is_null($coupon))
