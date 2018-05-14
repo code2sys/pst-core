@@ -200,7 +200,7 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 	<div class="sw podct">
 		<div class="container_b">						
 			<div class="row">
-                <?php if (count($topRated) > 0): ?>
+                <?php if (count(array_keys($topRated)) > 0): ?>
 				<div class="col-md-12 col-sm-12 sldr-section">				
 					<h1 class="best mrgnbtm65">Top<span> Rated </span> Products</h1>
 					<div id="hotels-flats-1" class="owl-carousel">
