@@ -92,7 +92,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 
 </head>
 
-<body>
+<body class="master_v_front">
 <?php echo jget_store_block("top_body"); ?>
 <?php
 
