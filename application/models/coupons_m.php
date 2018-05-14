@@ -324,6 +324,13 @@ class Coupons_M extends Master_M
 				$constraintList = $this->getSpecialConstraintsDD(TRUE);
 				foreach($couponConstraints as $const)
 				{
+				    print "Const\n";
+				    
+				    print_r($const);
+				    print "Coupon\n";
+				    print_r($coupon);
+
+
 					$coupon = $this->$constraintList[$const]($coupon);
 					if(is_null($coupon))
 					return FALSE;
