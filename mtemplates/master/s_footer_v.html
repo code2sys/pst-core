@@ -1,0 +1,80 @@
+<script>
+    $(document).ready(function() {
+        $(".tp-cat-head").click(function(){
+            $(this).toggleClass("active");
+            $(this).next(".tlg").stop('true','true').slideToggle("slow");
+        });
+    });
+</script>
+
+<div class="sw footer clear">
+    <div class="container_b">
+        <div class="one-fifth">
+            <h3>About <span>{{store_name}}</span></h3>
+            <ul class="clear">
+                <li><a href="/pages/index/aboutus">About Us</a></li>
+            </ul>
+        </div>
+        {{{pages_rendered}}}
+
+
+        <div class="one-fifth map">
+            <h3>Contact Us</h3>
+            <ul class="clear">
+                < <li style="line-height: 16px">Address: {{street_address}}, {{#address_2}}, {{address_2}}{{/address_2}}{{city}}, {{state}} {{zip}}</li>
+                <li><img src="{{new_assets_url}}images/mobile.png"> {{phone}}</li>
+                <li><img src="{{new_assets_url}}images/footer-email.png"> {{email}}</li>
+            </ul>
+            <h3 class="aut-title">Payment Methods</h3>
+            <a href="/pages/index/paymentoptions">
+                <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/cc-badges-ppppcmcvdam.png" alt="Pay with PayPal, PayPal Credit or any major credit card" />
+            </a>
+        </div>
+        <div class="one-fifth">
+            <h3>find us on</h3>
+            {{{social_link_buttons}}}
+
+            <h3 class="nwsltr">newsletter</h3>
+            <form action="" method="post" id="form_example" class="form_standard">
+                <input type="text" id="newsletter" name="newsletter">
+                <input type="button" value="SUBMIT" onclick="submitNewsletter();">
+            </form>
+        </div>
+        <div class="img-footer">
+            <a href="#"><img src="{{{new_assets_url}}}images/powered-logo.png"  class="powerlogo-a"/></a>
+        </div>
+        <hr class="ftr-line">
+    </div>
+</div>
+{{{braintree}}}
+
+<script>
+    var ctd = '{{catd}}';
+
+    {{{selector2_js}}}
+
+</script>
+<script>
+    var ct = '{{top_parent}}';
+
+    {{{selector3_js}}}
+</script>
+</body>
+<link type="text/css" rel="stylesheet" href="{{s_assets}}/css_front/style.css">
+<link rel="stylesheet" href="/custom.css" />
+
+</html>
+<script>
+    function submitNewsletter()
+    {
+        $.post(base_url + 'ajax/updateNewsletterList/',
+            {
+                'email' : $('#newsletter').val(),
+                'ajax' : true
+            },
+            function()
+            {
+                $('#newsletter_success').show();
+            });
+    }
+</script>
