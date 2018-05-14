@@ -1,368 +1,81 @@
 <?php
-	$new_assets_url = jsite_url("/qatesting/benz_assets/");
-	?>
-	<div class="sw footer clear">
-		<div class="container_b">			
-			<div class="one-fifth">
-				<h3 class="aut-title">About <span><?php echo $store_name['company'];?></span></h3>
-				<ul class="clear">
-					<li><a href="<?php echo site_url('pages/index/aboutus');?>">About Us</a></li>
-				</ul>				
-			</div>
-			<?php
-			jprint_interactive_footer($pages); ?>
 
-			<div class="one-fifth map">
-				<h3>Contact Us</h3>
-				<ul class="clear">
-                    <li style="line-height: 16px">Address: <?php echo $store_name['street_address'].', ' . ($store_name['address_2'] != "" ? $store_name['address_2'] . ", " : "") . $store_name['city'].', '.$store_name['state'] . ' ' . $store_name['zip'];?></li>
-					<li><img src="<?php echo $new_assets_url; ?>images/mobile.png"> <?php echo $store_name['phone'];?></li>
-					<li><img src="<?php echo $new_assets_url; ?>images/footer-email.png"> <?php echo $store_name['email'];?> </li>
-				</ul>
-				<h3 class="aut-title">Payment Methods</h3>
-				<a href="<?php echo site_url('pages/index/paymentoptions');?>">
-					<img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/cc-badges-ppppcmcvdam.png" alt="Pay with PayPal, PayPal Credit or any major credit card" />
-					<!--<img class="crdt" src="<?php echo $new_assets_url; ?>images/Credit-Cards.jpg">-->
-				</a>
-			</div>
-			<div class="one-fifth">
-				<h3>find us on</h3>
-                <?php
-                $CI =& get_instance();
-                echo $CI->load->view("social_link_buttons", array(
-                    "SMSettings" => $SMSettings
-                ), true);
-                ?>
-				<h3 class="nwsltr">newsletter</h3>
-				<form action="" class="form_standard">
-					<input type="text" id="newsletter" name="newsletter">
-					<input type="button" value="SUBMIT" onclick="submitNewsletter();">	
-				</form>
-			</div>
-			<div class="img-footer">
-				<a href="http://powersporttechnologies.com"><img src="<?php echo $new_assets_url; ?>images/powered-logo.png"  class="powerlogo-a"/></a>
-			</div>
-			<hr class="ftr-line">		
-		</div>
-	</div>
-	
-<?php
+/*
+ * JLB 05-14-18
+ * Some jackass decided to make three very similar but different footers.
+ */
+
 $CI =& get_instance();
-echo $CI->load->view("braintree", array(
-        "store_name" =>	$store_name
-), true);
-?>
-		
-	<script type="application/javascript">
-		$(document).ready(function() {
- 
-			$("#owl-demo").owlCarousel({
- 				navigation : true,
-				 slideSpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 300; ?>,
-				 paginationSpeed : <?php echo defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_PAGINATION_SPEED : 400; ?>,
-				 singleItem:true,
-				 autoPlay: <?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000; ?>,
-				 autoPlayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 1000; ?>
-			 });
+$CI->load->helper("mustache_helper");
+$template = mustache_tmpl_open("master/footer_v.html");
 
-			<?php
-            // JLB 01-31-18
+tmpl_set($template, "new_assets_url", jsite_url("/qatesting/benz_assets/"));
+
+mustache_tmpl_set($template, "store_name", $store_name['company']);
+
+
+// we will set pages two ways
+mustache_tmpl_set($template, "pages", $pages);
+// we also will make that into its own rendered version
+mustache_tmpl_set($template, "pages_rendered", jprint_interactive_footer($pages, false));
+
+
+// the following builds up the address
+mustache_tmpl_set($template, "street_address", $store_name['street_address']);
+mustache_tmpl_set($template, "address_2", $store_name['address_2']);
+mustache_tmpl_set($template, "city", $store_name['city']);
+mustache_tmpl_set($template, "state", $store_name['state']);
+mustache_tmpl_set($template, "zip", $store_name['zip']);
+mustache_tmpl_set($template, "phone", $store_name['phone']);
+mustache_tmpl_set($template, "email", $store_name['email']);
+mustache_tmpl_set($template, "new_assets_url", $new_assets_url);
+
+// we now render the social
+mustache_tmpl_set($template, "social_link_buttons", $CI->load->view("social_link_buttons", array(
+    "SMSettings" => $SMSettings
+), true));
+// and give it the raw, if desired
+mustache_tmpl_set($template, "social_settings_raw", $SMSettings);
+foreach ($SMSettings as $key => $val) {
+    mustache_tmpl_set($template, "social_" . $key, $val);
+}
+
+mustache_tmpl_set($template, "braintree", $CI->load->view("braintree", array(
+    "store_name" =>	$store_name
+), true));
+
+/*
+ * These are specific to the home screen
+ */
+mustache_tmpl_set($template, "HOME_SCREEN_SLIDER_SPEED", defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 300);
+mustache_tmpl_set($template, "HOME_SCREEN_PAGINATION_SPEED", defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_PAGINATION_SPEED : 400);
+mustache_tmpl_set($template, "HOME_SCREEN_AUTO_PLAY_TIMEOUT", defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000);
+// JLB: I don't know why there are two or which works but they had different defaults..
+mustache_tmpl_set($template, "HOME_SCREEN_AUTO_PLAY_TIMEOUT2", defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 1000);
+
+mustache_tmpl_set($template, "s_baseURL", $s_baseURL);
+mustache_tmpl_set($template, "WEBSITE_NAME", WEBSITE_NAME);
+
+mustache_tmpl_set($template, "flexiselect", $CI->load->view("master/widgets/flexiselect", array(), true));
+
+if (isset($script) && $script != "") {
+    mustache_tmpl_set($template, "script", $script);
+} else {
+    mustache_tmpl_set($template, "script", "");
+}
+
+mustache_tmpl_set($template, "ride_selection_js",  $CI->load->view("widgets/ride_selection_js", array(
+    "product" => isset($product) ? $product : null,
+
+), true));
+mustache_tmpl_set($template, "showvideo_function", $CI->load->view("showvideo_function", array(), false));
+
+/*
+ * Comment preserved from the "ownCarousel" in the template:
+ *             // JLB 01-31-18
             // The BENZ guys just cannot make good names. I don't know which ones of these are live, but they all appear to exist somewhere.
-                // Really, a clusterfuck of bad design on this page...and it's duplicated in header.php and in a few other spots.
-                ?>
-            $("#hotels-flats").owlCarousel({
-                items : 4,
-                lazyLoad : true,
-                navigation : true,
-                autoPlay: true,
-                autoPlayTimeout:3000
-            });
-
-            $("#homes-for-rent").owlCarousel({
-                items : 4,
-                lazyLoad : true,
-                navigation : true
-            });
-            $("#homes-for-rent-1").owlCarousel({
-                items : 3,
-                lazyLoad : true,
-                navigation : true
-            });
-            $("#hotels-flats-1").owlCarousel({
-                items : 3,
-                lazyLoad : true,
-                navigation : true
-            });
+            // Really, a clusterfuck of bad design on this page...and it's duplicated in header.php and in a few other spots.
+ */
 
 
-        });
-		 
-
-
-	</script>
-	
-	<script type="text/javascript">
-  /* Submit on Enter */
-  $(document).ready(function(){
-    $('#search').keydown(function(e){
-      if(e.keyCode == 13)
-      {
-	      e.preventDefault();
-		  setSearch($('#search').val());
-		  return false;
-      }
-    });
-
-    $('.scl').click(function(e){
-	$('.scl').removeClass('active');
-	$(this).addClass('active');
-	$('.social-page').hide();
-	$('.'+$(this).data('link')).show();
-    });
-
-   });
-   
-   
-  
-</script>
-	
-</body>
-</html>
-
-
-<script>		
-function showSubNav( from ){
-
-	/*if( $("#nav"+from).is(":visible") ){
-	
-		$("#nav"+from).hide();
-	
-	}else{*/
-	
-		$(".SubNavs").hide();	
-		$("#nav"+from).show();
-	
-	/*}*/
-
-}
-
-function openLogin()
-{
-	window.location.replace('<?php echo $s_baseURL.'checkout/account'; ?>');
-	/*
-$.post(s_base_url + 'welcome/load_login/', {}, function(returnData)
-	{
-		$.modal(returnData);
-		$('#simplemodal-container').height('auto').width('auto');
-		$(window).resize();
-	});
-*/
-}
-	
-function openCreateAccount()
-{
-	window.location.replace('<?php echo $s_baseURL.'checkout/account'; ?>');
-	/*
-$.post(s_base_url + 'welcome/load_new_user/', {}, function(returnData)
-	{
-		$.modal(returnData);
-		$('#simplemodal-container').height('auto').width('auto');
-	  	$('#create_new').show();
-	  	$('#login').hide();
-	  	$(window).resize();
-	});
-*/
-}
-</script>
-
-<script>
-$(document).ready(function() {
-	
-	$('.panel-title').click(function() {
-		var id = $(this).data('id');
-		var not = $(this).data('not');
-		$('#'+not).slideUp();
-		$('#'+id).slideDown();
-		//alert(id);
-	});
-	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
- 		$("body").css("display","table");
-	}
-	
-	$( ".topNavAnchors" ).hover(
-	  function() {
-		showSubNav( $(this).attr("id") );
-	  }, function() {
-		//showSubNav( $(this).attr("id") );
-	  }
-	);
-	$(document).mouseup(function (e){
-		var container = $(".SubNavs");
-		if (!container.is(e.target) // if the target of the click isn't the container...
-			&& container.has(e.target).length === 0) // ... nor a descendant of the container
-		{
-			container.hide();
-		}
-	});
-
-	try {
-
-        $('.popup-gallery').magnificPopup({
-            delegate: 'a',
-            type: 'image',
-            tLoading: 'Loading image #%curr%...',
-            mainClass: 'mfp-img-mobile',
-            gallery: {
-                enabled: true,
-                navigateByImgClick: false,
-                preload: [0,1] // Will preload 0 - before current, and 1 after the current image
-            },
-            image: {
-                tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
-                titleSrc: function(item) {
-                    return item.el.attr('title') + '<small><?php echo WEBSITE_NAME; ?>&trade;</small>';
-                }
-            }
-        });
-    } catch(err) {
-	    console.log("Error with magnificPopup AGAIN: " + err);
-    }
-
-});
-</script>
-<?php
-$CI =& get_instance();
-echo $CI->load->view("master/widgets/flexiselect", array(), true);
-?>
-<script type="text/javascript">
-
-  /* Submit on Enter */
-  $(document).ready(function(){
-    $('#search').keydown(function(e){
-      if(e.keyCode == 13)
-      {
-	      e.preventDefault();
-		  setSearch($('#search').val());
-		  return false;
-      }
-    });
-
-    $('.scl').click(function(e){
-	$('.scl').removeClass('active');
-	$(this).addClass('active');
-	$('.social-page').hide();
-	$('.'+$(this).data('link')).show();
-    });
-
-   });
-   
-   function setMainSearch(event, section, id)
-   {
-	   event.preventDefault();
-	   $.post(base_url + 'ajax/setSearch/',
-		{
-			'ajax' : true,
-			'section' : section,
-			'id': id
-		},
-		function(newURL)
-		{
-			//alert( newURL );
-			window.location.href = base_url + 'shopping/productlist' + newURL;
-		});
-   }
-   
-   function setNamedSearch(event, section, id, name)
-   {
-	   event.preventDefault();
-	   $.post(base_url + 'ajax/setSearch/',
-		{
-			'ajax' : true,
-			'section' : section,
-			'name' : name,
-			'id': id
-		},
-		function(newURL)
-		{
-			window.location.href = base_url + 'shopping/productlist' + newURL;
-		});
-   }
-   
-   function setNamedSearchBrandt(event, section, id, name)
-   {
-	   event.preventDefault();
-	   $.post(base_url + 'ajax/setSearch/',
-		{
-			'ajax' : true,
-			'section' : section,
-			'name' : name,
-			'id': id
-		},
-		function(newURL)
-		{
-			//window.location.href = base_url + 'shopping/productlist' + newURL;
-		});
-   }
-   
-   function setSearch(search)
-   {
-	   //search = search.replace(/\W/g, ' ')
-	   search = search.toLowerCase();
-	   search = search.replace("oneal", "o'neal");
-	   search = search.replace("dcor", "d'cor");
-	   $.post(base_url + 'ajax/setSearch/',
-		{
-			'ajax' : true,
-			'section' : 'search',
-			'name' : search,
-			'id': 1
-		},
-		function(newURL)
-		{
-			//window.location.href = base_url + 'shopping/productlist' + newURL;
-			window.location.href = base_url + 'shopping/search_product/?search=' + search;
-		});
-   }
-   
-   function removeHeaderSearch() {
-	   $.post(base_url + 'ajax/removeHeaderSearch/',{},
-		function(newURL) {
-		});
-	}
-   
-   function removeMainSearch(section, id)
-   {
-	   $.post(base_url + 'ajax/removeSearch/',
-		{
-			'ajax' : true,
-			'section' : section,
-			'id': id
-		},
-		function(newURL)
-		{
-			window.location.href = base_url + 'shopping/productlist' + newURL;
-		});
-		
-   }
-
-
-</script>
-
-
-
-<?php echo @$script; ?>
-
-<?php
-    $CI =& get_instance();
-    echo $CI->load->view("widgets/ride_selection_js", array(
-        "product" => isset($product) ? $product : null,
-
-    ), true);
-
-
-?>
-
-<?php
-$CI =& get_instance();
-echo $CI->load->view("showvideo_function", array(), false);
-?>
+echo mustache_tmpl_parse($template);
