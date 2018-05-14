@@ -1,0 +1,11 @@
+<div class="one-fifth">
+    {{#pages}}
+    <h3>quick links</h3>
+    <ul class="clear">
+        {{#each_page}}
+        <li><a href="{{link}}" {{target}}>{{{label}}}</a></li>
+        {{/each_page}}
+
+    </ul>
+    {{/pages}}
+</div>
