@@ -5,7 +5,7 @@ $template = mustache_tmpl_open("master/s_footer_v.html");
 
 $new_assets_url = jsite_url("/qatesting/newassets/");
 
-tmpl_set($template, "new_assets_url", $new_assets_url);
+mustache_tmpl_set($template, "new_assets_url", $new_assets_url);
 mustache_tmpl_set($template, "store_name", $store_name['company']);
 
 
