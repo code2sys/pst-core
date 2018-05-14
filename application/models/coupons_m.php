@@ -458,7 +458,9 @@ class Coupons_M extends Master_M
 						$coupon = $this->processPercentageValue($coupon, TRUE); // Keep Shipping value inside Checkout process
 					    foreach($couponConstraints as $const)
 					    {
-					      $coupon = $this->$constraintList[$const]($coupon);
+
+                            $constraint_function = $constraintList[$const];
+                            $coupon = $this->$constraint_function($coupon);
 					      if(is_null($coupon))
 					        return FALSE;
 					    } 
