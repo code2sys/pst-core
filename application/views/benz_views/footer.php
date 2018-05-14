@@ -9,7 +9,7 @@ $CI =& get_instance();
 $CI->load->helper("mustache_helper");
 $template = mustache_tmpl_open("master/footer_v.html");
 
-tmpl_set($template, "new_assets_url", jsite_url("/qatesting/benz_assets/"));
+mustache_tmpl_set($template, "new_assets_url", jsite_url("/qatesting/benz_assets/"));
 
 mustache_tmpl_set($template, "store_name", $store_name['company']);
 
