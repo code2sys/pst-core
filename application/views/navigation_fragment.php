@@ -23,13 +23,19 @@ $number_across = count($active_primary_navigation);
 //    $number_across++;
 //}
 
-$template = mustache_tmpl_open("navigation_fragment.html");
-mustache_tmpl_set($template, "number_across", $number_across);
+$navigation_fragment_template = mustache_tmpl_open("navigation_fragment.html");
+mustache_tmpl_set($navigation_fragment_template, "number_across", $number_across);
 //if ($partsfinder_link != "") {
-//    mustache_tmpl_set($template, "partsfinder_link", $partsfinder_link);
+//    mustache_tmpl_set($navigation_fragment_template, "partsfinder_link", $partsfinder_link);
 //}
 
 // We have to dump out some more navigation items here in a list...
-mustache_tmpl_set($template, "active_primary_navigation", $active_primary_navigation);
+mustache_tmpl_set($navigation_fragment_template, "active_primary_navigation", $active_primary_navigation);
 
-echo mustache_tmpl_parse($template);
+if (isset($GLOBAL_NAV_FRAG_STRING) && $GLOBAL_NAV_FRAG_STRING) {
+    $GLOBAL_NAV_FRAG =  mustache_tmpl_parse($navigation_fragment_template);
+} else {
+    echo mustache_tmpl_parse($navigation_fragment_template);
+}
+
+
