@@ -158,7 +158,7 @@ function jprint_interactive_footer($pages = null, $output = true) {
         $pages = $CI->pages_m->getPages(1, 'footer');
     }
     $CI->load->helper("mustache_helper");
-    $template = mustache_tmpl_open("jprint_interactive_footer");
+    $template = mustache_tmpl_open("jprint_interactive_footer.html");
 
     if (is_array($pages) && count($pages) > 0) {
         mustache_tmpl_set($template, "pages", 1);
