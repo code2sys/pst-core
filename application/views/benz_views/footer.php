@@ -7,7 +7,7 @@
 
 $CI =& get_instance();
 $CI->load->helper("mustache_helper");
-$template = mustache_tmpl_open("master/footer_v.html");
+$template = mustache_tmpl_open("benz_views/footer.html");
 
 mustache_tmpl_set($template, "new_assets_url", jsite_url("/qatesting/benz_assets/"));
 
