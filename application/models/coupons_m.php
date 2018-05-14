@@ -446,18 +446,29 @@ class Coupons_M extends Master_M
 		
 		foreach($_SESSION['cart'] as $key => &$coupon) 	
 		{
+		    error_log("Key $key Coupon " . print_r($coupon, true));
 			if(strpos($key, 'coupon') !== FALSE)
 			{
+			    error_log("A");
 				if($coupon)
 				{
+                    error_log("B");
 					  if($coupon['couponSpecialConstraintsId'])
 					  {
-					    $couponConstraints = json_decode($coupon['couponSpecialConstraintsId'], TRUE);
+                          error_log("C");
+
+                          $couponConstraints = json_decode($coupon['couponSpecialConstraintsId'], TRUE);
+                          error_log("D");
 					    $constraintList = $this->coupons_m->getSpecialConstraintsDD(TRUE);
+                          error_log("E");
 					    $coupon['wholesale'] = 0.00;
+                          error_log("E");
+
 						$coupon = $this->processPercentageValue($coupon, TRUE); // Keep Shipping value inside Checkout process
+                          error_log("F");
 					    foreach($couponConstraints as $const)
 					    {
+                            error_log("G");
 
                             $constraint_function = $constraintList[$const];
                             $coupon = $this->$constraint_function($coupon);
@@ -466,10 +477,14 @@ class Coupons_M extends Master_M
 					    } 
 					    $coupon['price'] = $coupon['wholesale'];
 
+                          error_log("H");
 					  }
+                    error_log("I");
 				}
+                error_log("J");
 			}
-		}		
+            error_log("K");
+		}
 	}
 	
 	public function deleteCoupon($id)
