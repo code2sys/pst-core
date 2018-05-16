@@ -93,6 +93,7 @@ $SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
 <body <?php if ($SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS): ?>class="benz_views_header simplified_mu_nav"<?php endif; ?>>
 <?php echo jget_store_block("top_body"); ?>
 <?php echo jget_store_block("moto_top_body"); ?>
+<?php
 
 $CI =& get_instance();
 
