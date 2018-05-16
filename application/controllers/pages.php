@@ -374,7 +374,7 @@ class Pages extends Master_Controller {
 	  		}
 	  		
 	  		$this->setNav('master/navigation_v', 0);
-			$this->mainData["full_info_content"] = 1;
+			$this->_mainData["full_info_content"] = 1;
 	  		$this->renderMasterPage('master/master_v', 'info/ride_home_v', $this->_mainData);
 	  		
 	  	}
