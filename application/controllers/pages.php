@@ -306,7 +306,9 @@ class Pages extends Master_Controller {
 			$this->_mainData['notice'] = $notice[0]['text'];
 			$this->_mainData['widgetBlock'] = $this->pages_m->widgetCreator($this->_mainData['pageRec']['id'], $this->_mainData['pageRec']);
 			$this->_mainData['pages'] = $this->pages_m->getPages(1);
-			$this->loadSidebar('widgets/info_v');
+
+			// Turn off for regular pages?
+			// $this->loadSidebar('widgets/info_v');
 			
 			if($pageTag == 'shippingquestions')
 			{
