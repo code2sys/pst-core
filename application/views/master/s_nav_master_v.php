@@ -234,7 +234,7 @@ if (isset($keywords) &&	$keywords != "") {
     mustache_tmpl_set($template, "s_baseURL", $s_baseURL);
 
     $GLOBAL_MOBILE_NAV_FRAG_STRING = true;
-    require(__DIR__ . "/../../mobile_navigation_fragment.php");
+    require(__DIR__ . "/../mobile_navigation_fragment.php");
     mustache_tmpl_set($template, "mobile_navigation_menu", $GLOBAL_MOBILE_NAV_FRAG);
     $GLOBAL_MOBILE_NAV_FRAG_STRING = false;
 
@@ -243,7 +243,7 @@ if (isset($keywords) &&	$keywords != "") {
     mustache_tmpl_set($template, "search_placeholder", $CI->load->view("search_placeholder", array(), true));
 
     $GLOBAL_NAV_FRAG_STRING = true;
-    require(__DIR__ . "/../../navigation_fragment.php");
+    require(__DIR__ . "/../navigation_fragment.php");
     mustache_tmpl_set($template, "navigation_fragment", $GLOBAL_NAV_FRAG);
     $GLOBAL_NAV_FRAG_STRING = false;
 
