@@ -203,156 +203,55 @@ if (isset($keywords) &&	$keywords != "") {
 
 </head>
 
-<body class="body" <?php if(isset($new_header)){?>style="width:100%;margin:0 auto;"<?php }?>>
+<body class="body" style="width:100%;margin:0 auto;">
 <?php echo jget_store_block("top_body"); ?>
 
 <!-- WRAPPER ==============================================================================-->
 <div class="wrap">
 	
-    <?php
-	if(!isset($new_header)){?>
-	<!-- HEADER =============================================================================-->
-	<div class="header_wrap">
-		
-		<div class="header_content">
-		
-			
-			<!-- LOGO -->
-			<div class="logo">
-				<a href="<?php echo $s_base_url; ?>"><img src="<?php echo $s_logo; ?>"></a>
-			</div>
-			<!-- END LOGO -->
-			
-			<!-- NAVAGATION -->
-				<?php echo @$nav ?>
-			<!-- END NAVAGATION -->
-			<div class="clear"></div> 
-		
-		</div>
-		
-		
-		<!-- MOTO MENU & SEARCH -->
-		<div class="moto_menu_wrap">
-			<div class="moto_menu">
-				<h4>SHOP BY MACHINE</h4>
-				
-				<div class="moto_links" style="line-height: 1;">
-					<a href="<?php echo base_url('dirtbikeparts'); ?>"><img src="<?php echo $s_assets; ?>/images/icon_dirtbike.png" border="0" width="55"><br>Dirt Bikes</a>
-					<a href="<?php echo base_url('atvparts'); ?>"><img src="<?php echo $s_assets; ?>/images/icon_atv.png" border="0" width="55"><br>ATV's</a>
-					<a href="<?php echo base_url('streetbikeparts'); ?>"><img src="<?php echo $s_assets; ?>/images/icon_streetbike.png" border="0" width="55"><br>Street Bikes</a>
-					<a href="<?php echo base_url('utvparts'); ?>"><img src="<?php echo $s_assets; ?>/images/icon_utv.png" border="0" width="55"><br>UTV's</a>
-				</div>
-				<div class="moto_search">
-					<form action="<?php echo $s_baseURL; ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-						<input id="search" name="search" placeholder="Search <?php echo WEBSITE_NAME; ?>" class="text medium_search" />
-						<a href="javascript:void(0);" class="button" style="margin-top:6px;" onClick="setSearch($('#search').val());">Go!</a>
-					</form>
-				</div>
-				
-				<div class="clear"></div>
-			</div>
-			<div class="clear"></div>
-		</div>
-		
-		<!-- END MOTO MENU & SEARCH -->
-		
-		
-		<?php echo @$rideSelector; ?>
-		
-		<?php echo @$shippingBar; ?>
-		
-		<?php //echo @$brandSlider; ?>
-		                  
-		
-	
-	</div>
-	<!-- END HEADER ===========================================================================-->	
-	<?php }else{?>
-		
+
 		<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/style.css" />
 		<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/custom.css" />
-		
-
-	<div class="topBar_b">
-		<div class="container_b">
-			<p class="creditCar_b fltL_b">
-				<span>Ph : <?php echo SUPPORT_PHONE_NUMBER; ?></span>
-				<a href="<?php echo site_url('pages/index/contactus') ?>"><i class="fa fa-map-marker" aria-hidden="true"></i> MAP & HOURS</a>				
-			</p>			
-			<div class="loginSec_b navbar-right">
-				<?php if(@$_SESSION['userRecord']): ?>
-					<b>Welcome: <?php echo @$_SESSION['userRecord']['first_name']; ?></b> <span class="fltR seperator_b">|</span> <b><a href="<?php echo $s_baseURL.'welcome/logout'; ?>"><u>Logout</u></a></b>
-					<?php if($_SESSION['userRecord']['admin']): ?> <span class="fltR seperator_b">|</span>
-					<a href="<?php echo base_url('admin'); ?>"><b><u>Admin Panel</u></b></a>
-					<?php endif; ?>
-				<?php else: ?>
-					<a class="loginLink_b fltR mr10" href="javascript:void(0);" onclick="openLogin();"><b><u>Login</u></b></a>
-					<span class="fltR seperator_b">|</span>
-					<a class="creatAcc ml10 fltR" href="javascript:void(0);" onclick="openCreateAccount();"><b><u>Create Account</u></b></a>
-				<?php endif; ?>
-				<div class="clear"></div>
-			</div>
-			<div class="topHeaderNav_b pull-right">
-				<ul>
-					<li class="icon homeLink"><a href="<?php echo base_url(); ?>">Home</a></li>
-					<li class="icon accountLink"><a href="<?php echo $s_baseURL.'checkout/account'; ?>">Account</a></li>
-					<li class="icon wishListLink"><a href="<?php echo base_url('/shopping/wishlist'); ?>">Wish List</a></li>
-					<li class="icon shopLink"><a href="<?php echo base_url('shopping/cart'); ?>">Shopping Cart (<span id="shopping_count"><?php echo @$_SESSION['cart']['qty'] ? $_SESSION['cart']['qty'] : 0 ; ?></span>)</a></li>
-				</ul>
-			</div>
-			<div class="clear"></div>
-		</div>
-	</div>
-
-        
-        <div class="header_b">
-		<div class="container_b">
-			<a href="<?php echo base_url();?>" class="logoCont fltL logo-tp_b">
-				<img src="/logo.png" width="200" height="50">
-			</a>
-
-			<div class="side-hdr">
-				<div class="sidebar-menu">
-					<span> <i class="fa fa-bars" aria-hidden="true"></i> Menu</span>
-					<ul class="mb-drpdwn">
-						<?php require(__DIR__ . "/../mobile_navigation_fragment.php"); ?>
-					</ul>
-				</div>		
-				<div class="cl"><a class="cel" href="tel:<?php echo CLEAN_PHONE_NUMBER; ?>">
-					<img class="cl-img" src="<?php echo $new_assets_url1; ?>images/cl.png"><br>Call</a>
-				</div>
-				<div class="crt">
-					<a class="cel" href="<?php echo base_url('shopping/cart'); ?>">
-					<img class="cl-img" src="<?php echo $new_assets_url1; ?>images/kart.png"><br>Cart</a>
-				</div>
-				<div class="shpbrnd-map">
-					<p class="creditCar_b loct">				
-						<a href="<?php echo site_url('pages/index/contactus') ?>"><i class="fa fa-map-marker" aria-hidden="true"></i> MAP & HOURS</a>				
-					</p>
-				</div>
-			</div>
-			<div class="mblacnt-log">
-				<a href="javascript:void(0);" onclick="openLogin();"> <i class="fa fa-user usr" aria-hidden="true"></i> Login/create account</a>
-			</div>
-            <?php
-            $CI =& get_instance();
-            echo $CI->load->view("search_placeholder", array(), true);
-            ?>
-			<div class="clear"></div>
-		</div>
-            <div class="container_b">
-			<div class="vehicleCategory">
-				<?php require(__DIR__ . "/../navigation_fragment.php"); ?>
-
-			</div>	
-			<div class="clear"></div>
-		</div>
-	</div>
 
 
-        <?php
-        $CI =& get_instance();
-        $CI->load->helper("mustache_helper");
+    <?php
+    $CI =& get_instance();
+    $CI->load->helper("mustache_helper");
+    $template = mustache_tmpl_open("master/s_nav_master_v.html");
+
+    mustache_tmpl_set($template, "SUPPORT_PHONE_NUMBER", SUPPORT_PHONE_NUMBER);
+
+    if (array_key_exists("userRecord", $_SESSION) && $_SESSION["userRecord"]) {
+        mustache_tmpl_set($template, "userRecord_show", true);
+        mustache_tmpl_set($template, "userRecord_firstname", $_SESSION['userRecord']['first_name']);
+
+        mustache_tmpl_set($template, "userRecord_admin", $_SESSION['userRecord']['admin'] || $_SESSION['userRecord']['user_type'] == 'employee');
+    } else {
+        mustache_tmpl_set($template, "userRecord_show", false);
+    }
+    mustache_tmpl_set($template, "shopping_count", (array_key_exists("cart", $_SESSION) && array_key_exists("qty", $_SESSION['cart']) && $_SESSION['cart']['qty'] > 0)  ? $_SESSION['cart']['qty'] : 0);
+
+    mustache_tmpl_set($template, "s_baseURL", $s_baseURL);
+
+    $GLOBAL_MOBILE_NAV_FRAG_STRING = true;
+    require(__DIR__ . "/../mobile_navigation_fragment.php");
+    mustache_tmpl_set($template, "mobile_navigation_menu", $GLOBAL_MOBILE_NAV_FRAG);
+    $GLOBAL_MOBILE_NAV_FRAG_STRING = false;
+
+    mustache_tmpl_set($template, "CLEAN_PHONE_NUMBER", CLEAN_PHONE_NUMBER);
+
+    mustache_tmpl_set($template, "search_placeholder", $CI->load->view("search_placeholder", array(), true));
+
+    $GLOBAL_NAV_FRAG_STRING = true;
+    require(__DIR__ . "/../navigation_fragment.php");
+    mustache_tmpl_set($template, "navigation_fragment", $GLOBAL_NAV_FRAG);
+    $GLOBAL_NAV_FRAG_STRING = false;
+
+    mustache_tmpl_set($template, "new_assets_url1", $new_assets_url1);
+
+
+    echo mustache_tmpl_parse($template);
+
         $motorcycle_action_buttons = mustache_tmpl_open("store_header_marquee.html");
         echo mustache_tmpl_parse($motorcycle_action_buttons);
         $motorcycle_action_buttons = mustache_tmpl_open("store_header_banner.html");
@@ -363,8 +262,6 @@ if (isset($keywords) &&	$keywords != "") {
         <div class="clear"></div>
 
 
-	<?php }?>
-    
 	<!-- CONTENT WRAP =========================================================================-->
 	
 	
