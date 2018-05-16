@@ -291,7 +291,8 @@ class Pages extends Master_Controller {
 			$this->setFooterView('master/footer_v.php');
 	  		
 	  		$this->load->model('parts_m');
-			$this->loadSidebar('widgets/garage_v');
+	  		// Turn off for regular pages?
+			// $this->loadSidebar('widgets/garage_v');
 	    	
 			$this->_mainData['machines'] = $this->parts_m->getMachinesDd();
 	    	$this->_mainData['rideSelector'] = $this->load->view('widgets/ride_select_v', $this->_mainData, TRUE);
