@@ -15,8 +15,26 @@ mustache_tmpl_set($template, "email", $store_name['email']);
 mustache_tmpl_set($template, "s_baseURL", $s_baseURL);
 
 
-if (FALSE !== ($string = joverride_viewpiece("master-master_v_front-1"))) {
-    mustache_tmpl_set($template, "master-master_v_front-1", $string);
+if (isset($invoking_page)) {
+    if ($invoking_page == "master_v_front" || $invoking_page == "master_v_bikefront") {
+        if (FALSE !== ($string = joverride_viewpiece("master-master_v_front-1"))) {
+            mustache_tmpl_set($template, "master-master_v_front-1", $string);
+        }
+    }
+
+    if ($invoking_page == "master_v_bikefront") {
+        mustache_tmpl_set($template, "display_shopping_navigation", false);
+    } else if ($invoking_page == "benz_views_header") {
+        if (!defined('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS')) {
+            define('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS', true);
+        }
+        mustache_tmpl_set($template, "display_shopping_navigation", SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS);
+    } else {
+        mustache_tmpl_set($template, "display_shopping_navigation", true);
+    }
+
+} else {
+    mustache_tmpl_set($template, "display_shopping_navigation", true);
 }
 
 mustache_tmpl_set($template, "shopping_count", (array_key_exists("cart", $_SESSION) && array_key_exists("qty", $_SESSION['cart']) && $_SESSION['cart']['qty'] > 0)  ? $_SESSION['cart']['qty'] : 0);
