@@ -115,46 +115,18 @@
 
 <script>
     function showSubNav( from ){
-
-        /*if( $("#nav"+from).is(":visible") ){
-
-            $("#nav"+from).hide();
-
-        }else{*/
-
         $(".SubNavs").hide();
         $("#nav"+from).show();
-
-        /*}*/
-
     }
 
     function openLogin()
     {
         window.location.replace('{{s_baseURL}}checkout/account');
-        /*
-    $.post(s_base_url + 'welcome/load_login/', {}, function(returnData)
-        {
-            $.modal(returnData);
-            $('#simplemodal-container').height('auto').width('auto');
-            $(window).resize();
-        });
-    */
     }
 
     function openCreateAccount()
     {
         window.location.replace('{{s_baseURL}}checkout/account');
-        /*
-    $.post(s_base_url + 'welcome/load_new_user/', {}, function(returnData)
-        {
-            $.modal(returnData);
-            $('#simplemodal-container').height('auto').width('auto');
-              $('#create_new').show();
-              $('#login').hide();
-              $(window).resize();
-        });
-    */
     }
 </script>
 

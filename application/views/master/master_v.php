@@ -353,18 +353,8 @@ foreach ($title1 as $k => $v) {
 
         <script>		
             function showSubNav( from ){
-
-                /*if( $("#nav"+from).is(":visible") ){
-	
-                        $("#nav"+from).hide();
-	
-                }else{*/
-	
-                $(".SubNavs").hide();	
+                $(".SubNavs").hide();
                 $("#nav"+from).show();
-	
-                /*}*/
-
             }
 
             //$( ".bnz-nv" ).on("mouseleave", function() {
@@ -374,29 +364,11 @@ foreach ($title1 as $k => $v) {
             function openLogin()
             {
                 window.location.replace('<?php echo $s_baseURL . 'checkout/account'; ?>');
-                /*
-        $.post(s_base_url + 'welcome/load_login/', {}, function(returnData)
-                {
-                        $.modal(returnData);
-                        $('#simplemodal-container').height('auto').width('auto');
-                        $(window).resize();
-                });
-                 */
             }
 	
             function openCreateAccount()
             {
                 window.location.replace('<?php echo $s_baseURL . 'checkout/account'; ?>');
-                /*
-        $.post(s_base_url + 'welcome/load_new_user/', {}, function(returnData)
-                {
-                        $.modal(returnData);
-                        $('#simplemodal-container').height('auto').width('auto');
-                        $('#create_new').show();
-                        $('#login').hide();
-                        $(window).resize();
-                });
-                 */
             }
         </script>
 

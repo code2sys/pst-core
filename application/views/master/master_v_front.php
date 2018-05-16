@@ -100,7 +100,8 @@ $CI =& get_instance();
 
 echo $CI->load->view("master/widgets/mainheader", array(
     "store_name" => $store_name,
-    "s_baseURL" => $s_baseURL
+    "s_baseURL" => $s_baseURL,
+    "invoking_page" => "master_v_front"
 ), true);
 
 $CI->load->helper("mustache_helper");
