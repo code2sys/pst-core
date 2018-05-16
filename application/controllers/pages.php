@@ -291,7 +291,8 @@ class Pages extends Master_Controller {
 			$this->setFooterView('master/footer_v.php');
 	  		
 	  		$this->load->model('parts_m');
-			$this->loadSidebar('widgets/garage_v');
+	  		// Turn off for regular pages?
+			// $this->loadSidebar('widgets/garage_v');
 	    	
 			$this->_mainData['machines'] = $this->parts_m->getMachinesDd();
 	    	$this->_mainData['rideSelector'] = $this->load->view('widgets/ride_select_v', $this->_mainData, TRUE);
@@ -305,7 +306,9 @@ class Pages extends Master_Controller {
 			$this->_mainData['notice'] = $notice[0]['text'];
 			$this->_mainData['widgetBlock'] = $this->pages_m->widgetCreator($this->_mainData['pageRec']['id'], $this->_mainData['pageRec']);
 			$this->_mainData['pages'] = $this->pages_m->getPages(1);
-			$this->loadSidebar('widgets/info_v');
+
+			// Turn off for regular pages?
+			// $this->loadSidebar('widgets/info_v');
 			
 			if($pageTag == 'shippingquestions')
 			{
@@ -371,6 +374,7 @@ class Pages extends Master_Controller {
 	  		}
 	  		
 	  		$this->setNav('master/navigation_v', 0);
+			$this->_mainData["full_info_content"] = 1;
 	  		$this->renderMasterPage('master/master_v', 'info/ride_home_v', $this->_mainData);
 	  		
 	  	}

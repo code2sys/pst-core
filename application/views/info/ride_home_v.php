@@ -4,7 +4,8 @@
 		
 		
 		<!-- MAIN CONTENT -->
-		<div class="main_content fl-wdh">
+		<div class="main_content fl-wdh <?php if ($full_info_content): ?>full_info_content<?php endif; ?>" <?php if ($full_info_content): ?>style="float: none !important
+		; width: 100% !important;"<?php endif; ?>>
 			
 			<?php echo @$widgetBlock; ?>
 		
