@@ -152,6 +152,8 @@
                                             $slider = 0;
                                             $videos = 0;
                                             $textedit = 0;
+                                            $gallery = 0;
+                                            $events = 0;
                                             foreach ($page_sections as $section) {
                                                 switch ($section["type"]) {
                                                     case "Textbox":
@@ -168,6 +170,16 @@
                                                     case "Slider":
                                                         $slider++;
                                                         $label = $section["type"] . " " . $slider;
+                                                        break;
+
+                                                    case "Gallery":
+                                                        $gallery++;
+                                                        $label = $section["type"] . " " . $gallery;
+                                                        break;
+
+                                                    case "Events":
+                                                        $events++;
+                                                        $label = $section["type"] . " " . $events;
                                                         break;
                                                 }
 
