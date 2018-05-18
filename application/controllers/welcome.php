@@ -112,7 +112,7 @@ class Welcome extends Master_Controller {
 
             return TRUE;
         } else {
-            $this->form_validation->set_message('_processLogin', 'You have provided an invalid Password. $new_password $clear_password ');
+            $this->form_validation->set_message('_processLogin', "You have provided an invalid Password. $new_password $clear_password ");
             $_SESSION['userRecord'] = '';
             return FALSE;
         }
