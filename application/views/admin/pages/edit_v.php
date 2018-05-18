@@ -137,6 +137,14 @@
 
                                         <li ><strong>Slider Widget</strong> <a href="javascript:void(0);" onclick="addWidget('Slider');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Large image slider with 1024x400px images.</p>
 
+
+                                        <li ><strong>Photo Gallery</strong> <a href="javascript:void(0);" onclick="addWidget('Gallery');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Large, interactive photo gallery.</p>
+
+
+                                        <li ><strong>Calendar of Events</strong> <a href="javascript:void(0);" onclick="addWidget('Events');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Large image slider with 1024x400px images.</p>
+
+
+
 									</ul>
 									<ul id="sortable">
                                         <?php
