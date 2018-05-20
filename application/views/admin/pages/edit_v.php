@@ -216,6 +216,8 @@
                 $slider = 0;
                 $videos = 0;
                 $textedit = 0;
+                $gallery = 0;
+                $events = 0;
                 foreach ($page_sections as $section) {
                     switch($section["type"]) {
                         case "Textbox":
@@ -327,6 +329,105 @@
         <?php
 
                             break;
+
+            case "Gallery":
+                $gallery++;
+
+                ?>
+                <div class="divider typeSpecific showManagedPage"></div>
+            <h2>Gallery <?php echo $gallery; ?></h2>
+
+            <script>
+                $(function(){
+                    $( "#sortableGallery<?php echo $gallery; ?>" ).sortable();
+                    $( "#sortableGallery<?php echo $gallery; ?>" ).disableSelection();
+                    var data = "";
+
+                    $("#sortableGallery<?php echo $gallery; ?> li").each(function(i, el){
+                        //alert(i);
+                        //alert($(el).attr('id'));
+                        var p = $(el).text().toLowerCase().replace(" ", "_");
+                        //alert(p);
+                        data += $(el).attr('id')+"="+$(el).index()+",";
+
+                    });
+
+                    var dta = data.slice(0, -1);
+                    $("#order").val(dta);
+                });
+                $(document).ready(function(){
+                    $("#sortableGallery<?php echo $gallery; ?>").sortable({
+                        stop: function(event, ui) {
+                            var data = "";
+
+                            $("#sortableGallery<?php echo $gallery; ?> li").each(function(i, el){
+                                //alert(i);
+                                //alert($(el).attr('id'));
+                                var p = $(el).text().toLowerCase().replace(" ", "_");
+                                //alert(p);
+                                data += $(el).attr('id')+"="+$(el).index()+",";
+
+                            });
+
+                            var dta = data.slice(0, -1);
+                            $("#order").val(dta);
+                        }
+                    });
+                });
+            </script>
+
+                    <!-- TAB CONTENT -->
+                    <div class="tab_content">
+                        <div class="hidden_table box-table-content">
+                            <?php if (isset($image) && is_array($image) && count($image) > 0): ?>
+                                <ul id="sortableGallery<?php echo $gallery; ?>">
+                                    <?php foreach( $image as $k => $v ) { ?>
+                                        <li style="padding:20px;" id="<?php echo $v['id'] ?>" class="ui-state-default">
+                                            <div class="tabe"><img height="50" width="50"  src="<?php echo base_url($media); ?>/<?php echo $v['image_name']; ?>"></div>
+                                            <form class="form_standard" enctype="multipart/form-data" method="post">
+                                                <input id="name" name="description[<?php echo $v['id'];?>]" placeholder="Description" value="<?php echo $v['description'];?>" class="text medium" /><br>
+                                                <input type="submit" value="Update Description" name="update">
+                                                <a href="<?php echo site_url('pages/deleteVaultImage/'.$v['id']);?>">
+                                                    <input type="button" class="dlt" value="Delete Image">
+                                                </a>
+                                            </form>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                                <form class="form_standard float-section" method="post">
+                                    <input type="hidden" name="order" id="order"></input>
+                                    <input type="submit" name="orderSubmit" value="Change Order"></input>
+                                </form>
+                            <?php endif; ?>
+                            <table width="auto" cellpadding="12">
+                                <tr>
+                                    <td valign="top"><b>Add Image:</b></td>
+                                    <td valign="top">
+                                        <form class="form_standard" enctype="multipart/form-data" method="post">
+                                            <div style="display:grid">
+                                                <input type="file" name="file[]" multiple value="" required>
+                                                <span style="margin:10px 0px 10px 0px;">Hold control button to select and upload multiple images at once.</span>
+                                            </div>
+                                            <input id="name" name="description" placeholder="Description" class="text medium" /><br>
+                                            <input type="submit" name="submit" value="Add Image"></b>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+
+        <?php
+                break;
+
+
+            case "Events":
+                $events++;
+
+
+                break;
+
 
                         case "Slider":
                             $slider++;
