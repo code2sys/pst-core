@@ -281,7 +281,7 @@ class Pages_M extends Master_M
                     if (count($images) > 0) {
                         $widgetBlock .= $this->load->view("vault/vault_gallery", array(
                             "fancybox_group" => "pageSectionGallery" . $page_section_id,
-                            "fancybox_class" => "pageSectionGallery" . $page_section_id,
+                            "fancybox_class" => "pageSectionGallery" . $page_section_id . "galleria",
                             "image" => $images
                         ), true);
                     }
