@@ -1024,7 +1024,8 @@ class Pages extends Master_Controller {
             "address2" => array_key_exists("address2", $_REQUEST) ? $_REQUEST["address2"] : "",
             "state" => array_key_exists("state", $_REQUEST) ? $_REQUEST["state"] : "",
             "zip" => array_key_exists("zip", $_REQUEST) ? $_REQUEST["zip"] : "",
-            "city" => array_key_exists("city", $_REQUEST) ? $_REQUEST["city"] : ""
+            "city" => array_key_exists("city", $_REQUEST) ? $_REQUEST["city"] : "",
+            "page_section_id" => $page_section_id
         ));
 
 
