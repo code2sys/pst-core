@@ -1,3 +1,5 @@
+
+
 	<div class="content_wrap">
 		<div class="content">
 			
@@ -137,6 +139,14 @@
 
                                         <li ><strong>Slider Widget</strong> <a href="javascript:void(0);" onclick="addWidget('Slider');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Large image slider with 1024x400px images.</p>
 
+
+                                        <li ><strong>Photo Gallery</strong> <a href="javascript:void(0);" onclick="addWidget('Gallery');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Large, interactive photo gallery.</p>
+
+
+                                        <li ><strong>Calendar of Events</strong> <a href="javascript:void(0);" onclick="addWidget('Events');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Large image slider with 1024x400px images.</p>
+
+
+
 									</ul>
 									<ul id="sortable">
                                         <?php
@@ -144,6 +154,8 @@
                                             $slider = 0;
                                             $videos = 0;
                                             $textedit = 0;
+                                            $gallery = 0;
+                                            $events = 0;
                                             foreach ($page_sections as $section) {
                                                 switch ($section["type"]) {
                                                     case "Textbox":
@@ -160,6 +172,16 @@
                                                     case "Slider":
                                                         $slider++;
                                                         $label = $section["type"] . " " . $slider;
+                                                        break;
+
+                                                    case "Gallery":
+                                                        $gallery++;
+                                                        $label = $section["type"] . " " . $gallery;
+                                                        break;
+
+                                                    case "Events":
+                                                        $events++;
+                                                        $label = $section["type"] . " " . $events;
                                                         break;
                                                 }
 
@@ -196,6 +218,8 @@
                 $slider = 0;
                 $videos = 0;
                 $textedit = 0;
+                $gallery = 0;
+                $events = 0;
                 foreach ($page_sections as $section) {
                     switch($section["type"]) {
                         case "Textbox":
@@ -307,6 +331,256 @@
         <?php
 
                             break;
+
+            case "Gallery":
+                $gallery++;
+
+                ?>
+                <div class="divider typeSpecific showManagedPage"></div>
+            <h2>Gallery <?php echo $gallery; ?></h2>
+
+            <script>
+                $(function(){
+                    $( "#sortableGallery<?php echo $gallery; ?>" ).sortable();
+                    $( "#sortableGallery<?php echo $gallery; ?>" ).disableSelection();
+                    var data = "";
+
+                    $("#sortableGallery<?php echo $gallery; ?> li").each(function(i, el){
+                        //alert(i);
+                        //alert($(el).attr('id'));
+                        var p = $(el).text().toLowerCase().replace(" ", "_");
+                        //alert(p);
+                        data += $(el).attr('id')+"="+$(el).index()+",";
+
+                    });
+
+                    var dta = data.slice(0, -1);
+                    $("#order<?php echo $section['page_section_id']; ?>").val(dta);
+                });
+                $(document).ready(function(){
+                    $("#sortableGallery<?php echo $gallery; ?>").sortable({
+                        stop: function(event, ui) {
+                            var data = "";
+
+                            $("#sortableGallery<?php echo $gallery; ?> li").each(function(i, el){
+                                //alert(i);
+                                //alert($(el).attr('id'));
+                                var p = $(el).text().toLowerCase().replace(" ", "_");
+                                //alert(p);
+                                data += $(el).attr('id')+"="+$(el).index()+",";
+
+                            });
+
+                            var dta = data.slice(0, -1);
+                            $("#order<?php echo $section['page_section_id']; ?>").val(dta);
+                        }
+                    });
+                });
+            </script>
+
+                    <!-- TAB CONTENT -->
+                    <div class="tab_content">
+                        <div class="hidden_table box-table-content">
+                            <?php if (isset($section["gallery"]) && is_array($section["gallery"]) && count($section["gallery"]) > 0): ?>
+                                <ul id="sortableGallery<?php echo $gallery; ?>">
+                                    <?php foreach( $section["gallery"] as $k => $v ) { ?>
+                                        <li style="padding:20px;" id="pageVaultGallery<?php echo $v['page_vault_image_id'] ?>" class="ui-state-default">
+                                            <div class="tabe"><img height="50" width="50"  src="<?php echo base_url($media); ?>/<?php echo $v['image_name']; ?>"></div>
+                                            <form class="form_standard" enctype="multipart/form-data" method="post" action="/pages/vault_updateImage/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>/<?php echo $v['page_vault_image_id']; ?>">
+                                                <input id="name<?php echo $v['page_vault_image_id']; ?>" name="description" placeholder="Description" value="<?php echo $v['description'];?>" class="text medium" /><br>
+                                                <input type="submit" value="Update Description" name="update">
+                                            </form>
+                                            <form class="form_standard" enctype="multipart/form-data" method="post" action="/pages/vault_deleteImage/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>/<?php echo $v['page_vault_image_id']; ?>">
+                                                <input type="submit" class="dlt" value="Delete Image">
+                                            </form>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                                <form class="form_standard float-section" method="post" action="/pages/vault_reorderImages/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>">
+                                    <input type="hidden" name="order" id="order<?php echo $section['page_section_id']; ?>"></input>
+                                    <input type="submit" name="orderSubmit" value="Update Order"></input>
+                                </form>
+                            <?php endif; ?>
+                            <table width="auto" cellpadding="12">
+                                <tr>
+                                    <td valign="top"><b>Add Image:</b></td>
+                                    <td valign="top">
+                                        <form class="form_standard" enctype="multipart/form-data" method="post" action="/pages/vault_addImage/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>">
+                                            <div style="display:grid">
+                                                <input type="file" name="file[]" multiple value="" required>
+                                                <span style="margin:10px 0px 10px 0px;">Hold control button to select and upload multiple images at once.</span>
+                                            </div>
+                                            <input id="name" name="description" placeholder="Description" class="text medium" /><br>
+                                            <input type="submit" name="submit" value="Add Image"></b>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+
+        <?php
+                break;
+
+
+            case "Events":
+                $events++;
+
+                ?>
+            <div class="divider  typeSpecific showManagedPage""></div>
+        <h2>Events <?php echo $events; ?></h2>
+
+        <div class="tab_content">
+            <div class="hidden_table box-table-content">
+
+                <?php if (count($section['events']) > 0): ?>
+                <p><strong>Existing Events</strong></p>
+
+                    <table width="100%" cellpadding="10" id="page_calendar_events<?php echo $section['page_section_id']; ?>">
+                        <thead>
+                        <tr>
+                            <th><b>Title</b></th>
+                            <th><b>Start</b></th>
+                            <th><b>End</b></th>
+                            <th><b>Location</b></th>
+                            <th><b>Extra Info</b></th>
+                            <th><b>Actions</b></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($section['events'] as $e): ?>
+                            <tr>
+                                <td><?php echo $e["title"]; ?></td>
+                                <td><?php echo $e["start"] > "0000-00-00 00:00:00" ? date("m/d/Y g:i a", strtotime($e["start"])) : ""; ?></td>
+                                <td><?php echo $e["end"] > "0000-00-00 00:00:00" ? date("m/d/Y g:i a", strtotime($e["end"])) : ""; ?></td>
+                                <td><?php
+                                    $leading = false;
+                                    if ($e["address1"] != "") {
+                                        echo $e["address1"];
+                                        $leading = true;
+                                    }
+                                    if ($e["address2"] != "") {
+                                        if ($leading) {
+                                            echo ", ";
+                                        }
+                                        $leading = true;
+                                        echo $e["address2"];
+                                    }
+                                    if ($e["city"] != "") {
+                                        if ($leading) {
+                                            echo ", ";
+                                        }
+                                        $leading = true;
+                                        echo $e["city"];
+                                    }
+                                    if ($e["state"] != "") {
+                                        if ($leading) {
+                                            echo ", ";
+                                        }
+                                        $leading = true;
+                                        echo $e["state"];
+                                    }
+                                    if ($e["zip"] != "") {
+                                        echo " ";
+                                        echo $e["zip"];
+                                    }
+
+                                    ?></td>
+                                <td><?php if ($e["url"] != ""): ?>
+                                <a href="<?php echo $e["url"]; ?>" target="_blank">Additional Info URL</a>
+                                <?php endif; ?></td>
+                                <td>Edit | <a href="/pages/calendar_removeEvent/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>/<?php echo $e["page_calendar_event_id"]; ?>"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a></td>
+
+                            </tr>
+
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+
+
+                <script type="application/javascript">
+                    $(window).load(function() {
+                        $("#page_calendar_events<?php echo $section['page_section_id']; ?>").dataTable({
+                            "processing" : true,
+                            "paging" : true,
+                            "info" : true,
+                            "stateSave" : true,
+                            "order": [[ 0, "desc" ]],
+                            "columns" : [
+                                null,
+                                { "width" : "15%", "type" : "datetime" },
+                                { "width" : "15%", "type" : "datetime" },
+                                null,
+                                null,
+                                null
+                            ]
+                        });
+
+                    });
+                    </script>
+
+                <?php endif; ?>
+
+
+                <p><strong>Add Event</strong></p>
+                <form method="post" action="/pages/calendar_addEvent/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>" class="form_standard">
+                <table width="auto" cellpadding="12">
+                    <tr>
+                        <td valign="top"><strong>Title:</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="title" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>Description:</strong></td>
+                        <td valign="top"><textarea name="description" cols="80" rows="15"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>Start Date/Time:</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="start" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>End Date/Time:</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="end" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>Additional Info Link URL:</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="url" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><em>Location</em></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>Address</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="address1" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>Address 2</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="address2" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>City</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="city" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>State</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="state" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>Zip</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="zip" /></td>
+                    </tr>
+                </table>
+                    <input type="submit" name="submit" value="Add Event">
+                </form>
+            </div>
+        </div>
+
+
+
+            <?php
+
+                break;
+
 
                         case "Slider":
                             $slider++;
@@ -502,8 +776,11 @@
 
 
     </script>
+    <!-- JLB: I would like to strangle whoever required two versions of this -->
 <script src="/assets/insourced/jquery-1.12.4.js"></script>
 <script src="/assets/insourced/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/assets/css_front/jquery.dataTables.min.css" type="text/css" >
+    <script src="/assets/js_front/jquery.dataTables.min.js"></script>
 
 <style>
     .ui-sortable-placeholder {

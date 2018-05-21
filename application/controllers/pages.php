@@ -698,6 +698,27 @@ class Pages extends Master_Controller {
                     case "Slider":
                         $section["sliders"] = $this->admin_m->getSliderImages($pageId, $section["page_section_id"]);
                         break;
+
+                    case "Gallery":
+                        global $PSTAPI;
+                        initializePSTAPI();
+                        $section["gallery"] = $PSTAPI->pagevaultimage()->fetch(array("page_section_id" => $section["page_section_id"]), true);
+                        usort($section["gallery"], function($a, $b) {
+                            if ($a["priority_number"] < $b["priority_number"]) {
+                                return -1;
+                            } else if ($a["priority_number"] > $b["priority_number"]) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        });
+                        break;
+
+                    case "Events":
+                        global $PSTAPI;
+                        initializePSTAPI();
+                        $section["events"] = $PSTAPI->pagecalendarevent()->fetch(array("page_section_id" => $section["page_section_id"]), true);
+                        break;
                 }
             }
   		}
@@ -905,6 +926,125 @@ class Pages extends Master_Controller {
         */
         $this->pages_m->updateTopVideos($this->input->post('pageId'), $page_section_id, $arr);
         redirect('pages/edit/' . $this->input->post('pageId'));
+    }
+
+    /*
+     * JLB 05-20-18
+     * Gallery moved here from the vault admin
+     */
+
+    public function vault_deleteImage($page_id, $page_section_id, $page_vault_image_id) {
+        $this->enforceAdmin("pages");
+
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $pvi = $PSTAPI->pagevaultimage()->get($page_vault_image_id);
+
+        if (!is_null($pvi)) {
+            $img = $pvi->get("image_name");
+            $dir = STORE_DIRECTORY.'/html/media/'.$img;
+            if (file_exists($dir) && is_file($dir)) {
+                unlink($dir);
+            }
+            $pvi->remove();
+        }
+
+        header("Location: /pages/edit/${page_id}");
+    }
+
+    public function vault_updateImage($page_id, $page_section_id, $page_vault_image_id) {
+        $this->enforceAdmin("pages");
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $description = array_key_exists("description", $_REQUEST) ? $_REQUEST["description"] : "";
+        $PSTAPI->pagevaultimage()->update($page_vault_image_id, array(
+            "description" => $description
+        ));
+
+        header("Location: /pages/edit/${page_id}");
+    }
+
+    public function vault_reorderImages($page_id, $page_section_id) {
+        $this->enforceAdmin("pages");
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $order = array_key_exists("order", $_REQUEST) ? $_REQUEST["order"] : "";
+        $order = explode(",", $order);
+
+        foreach ($order as $part) {
+            list($label, $ordinal) = explode("=", $part);
+            $number = intVal(substr($label, strlen("pageVaultGallery")));
+            $PSTAPI->pagevaultimage()->update($number, array(
+               "priority_number" => $ordinal
+            ));
+        }
+
+        header("Location: /pages/edit/${page_id}");
+    }
+
+    public function vault_addImage($page_id, $page_section_id) {
+        $this->enforceAdmin("pages");
+        global $PSTAPI;
+        initializePSTAPI();
+        $next_ordinal = $PSTAPI->pagevaultimage()->getNextOrdinal($page_section_id);
+
+        foreach ($_FILES['file']['name'] as $key => $val) {
+            $arr = array();
+            $img = time() . '_' . $next_ordinal . '_' . str_replace(' ','_',$val);
+            $dir = STORE_DIRECTORY.'/html/media/'.$img;
+            move_uploaded_file($_FILES["file"]["tmp_name"][$key], $dir);
+
+            $arr['description'] = $_POST['description'];
+            $arr['image_name'] = $img;
+            $arr['priority_number'] = $next_ordinal;
+            $arr['page_section_id'] = $page_section_id;
+
+            $PSTAPI->pagevaultimage()->add($arr);
+
+            $next_ordinal++;
+        }
+
+        header("Location: /pages/edit/${page_id}");
+    }
+
+
+
+    /*
+     * These are for the calendar...
+     */
+    public function calendar_addEvent($page_id, $page_section_id) {
+        $this->enforceAdmin("pages");
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $PSTAPI->pagecalendarevent()->add(array(
+            "title" => array_key_exists("title", $_REQUEST) ? $_REQUEST["title"] : "",
+            "description" => array_key_exists("description", $_REQUEST) ? $_REQUEST["description"] : "",
+            "start" => array_key_exists("start", $_REQUEST) && $_REQUEST["start"] != "" ? date("Y-m-d H:i:s", strtotime($_REQUEST["start"])) : null,
+            "end" => array_key_exists("end", $_REQUEST) && $_REQUEST["end"] != "" ? date("Y-m-d H:i:s", strtotime($_REQUEST["end"])) : null,
+            "url" => array_key_exists("url", $_REQUEST) ? $_REQUEST["url"] : "",
+            "address1" => array_key_exists("address1", $_REQUEST) ? $_REQUEST["address1"] : "",
+            "address2" => array_key_exists("address2", $_REQUEST) ? $_REQUEST["address2"] : "",
+            "state" => array_key_exists("state", $_REQUEST) ? $_REQUEST["state"] : "",
+            "zip" => array_key_exists("zip", $_REQUEST) ? $_REQUEST["zip"] : "",
+            "city" => array_key_exists("city", $_REQUEST) ? $_REQUEST["city"] : "",
+            "page_section_id" => $page_section_id
+        ));
+
+
+        header("Location: /pages/edit/${page_id}");
+
+    }
+
+    public function calendar_removeEvent($page_id, $page_section_id, $page_calendar_event_id) {
+        $this->enforceAdmin("pages");
+        global $PSTAPI;
+        initializePSTAPI();
+        $PSTAPI->pagecalendarevent()->remove($page_calendar_event_id);
+        header("Location: /pages/edit/${page_id}");
     }
 
 }
