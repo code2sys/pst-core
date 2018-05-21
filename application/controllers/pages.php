@@ -930,7 +930,21 @@ class Pages extends Master_Controller {
     public function vault_deleteImage($page_id, $page_section_id, $page_vault_image_id) {
         $this->enforceAdmin("pages");
 
+        global $PSTAPI;
+        initializePSTAPI();
 
+        $pvi = $PSTAPI->pagevaultimage()->get($page_vault_image_id);
+
+        if (!is_null($pvi)) {
+            $img = $pvi->get("image_name");
+            $dir = STORE_DIRECTORY.'/html/media/'.$img;
+            if (file_exists($dir) && is_file($dir)) {
+                unlink($dir);
+            }
+            $pvi->remove();
+        }
+
+        header("Location: /pages/edit/${page_id}");
     }
 
     public function vault_updateImage($page_id, $page_section_id, $page_vault_image_id) {
