@@ -965,16 +965,17 @@ class Pages extends Master_Controller {
         global $PSTAPI;
         initializePSTAPI();
 
-        $order = array_key_exists("order", $_REQUEST) ? $_REQUEST["order"] : array();
+        $order = array_key_exists("order", $_REQUEST) ? $_REQUEST["order"] : "";
+        $order = explode(",", $order);
 
-        foreach ($order as $label => $ordinal) {
+        foreach ($order as $part) {
+            list($label, $ordinal) = explode("=", $part);
             $number = intVal(substr($label, strlen("pageVaultGallery")));
             $PSTAPI->pagevaultimage()->update($number, array(
                "priority_number" => $ordinal
             ));
         }
 
-        exit();
         header("Location: /pages/edit/${page_id}");
     }
 
