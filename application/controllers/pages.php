@@ -1004,4 +1004,32 @@ class Pages extends Master_Controller {
         header("Location: /pages/edit/${page_id}");
     }
 
+
+
+    /*
+     * These are for the calendar...
+     */
+    public function calendar_addEvent($page_id, $page_section_id) {
+        $this->enforceAdmin("pages");
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $PSTAPI->pagecalendarevent()->add(array(
+            "title" => array_key_exists("title", $_REQUEST) ? $_REQUEST["title"] : "",
+            "description" => array_key_exists("description", $_REQUEST) ? $_REQUEST["description"] : "",
+            "start" => array_key_exists("start", $_REQUEST) && $_REQUEST["start"] != "" ? date("Y-m-d H:i:s", strtotime($_REQUEST["start"])) : null,
+            "end" => array_key_exists("end", $_REQUEST) && $_REQUEST["end"] != "" ? date("Y-m-d H:i:s", strtotime($_REQUEST["end"])) : null,
+            "url" => array_key_exists("url", $_REQUEST) ? $_REQUEST["url"] : "",
+            "address1" => array_key_exists("address1", $_REQUEST) ? $_REQUEST["address1"] : "",
+            "address2" => array_key_exists("address2", $_REQUEST) ? $_REQUEST["address2"] : "",
+            "state" => array_key_exists("state", $_REQUEST) ? $_REQUEST["state"] : "",
+            "zip" => array_key_exists("zip", $_REQUEST) ? $_REQUEST["zip"] : "",
+            "city" => array_key_exists("city", $_REQUEST) ? $_REQUEST["city"] : ""
+        ));
+
+
+        header("Location: /pages/edit/${page_id}");
+
+    }
+
 }
