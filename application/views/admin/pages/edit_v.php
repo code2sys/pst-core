@@ -432,7 +432,7 @@
         <h2>Events <?php echo $events; ?></h2>
 
         <div class="tab_content">
-            <div class="hidden_table">
+            <div class="hidden_table box-table-content">
 
                 <?php if (count($section['events']) > 0): ?>
                 <p><strong>Existing Events</strong></p>
@@ -524,7 +524,7 @@
 
 
                 <p><strong>Add Event</strong></p>
-                <form method="post" action="/pages/calendar_addEvent/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>">
+                <form method="post" action="/pages/calendar_addEvent/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>" class="form_standard">
                 <table width="auto" cellpadding="12">
                     <tr>
                         <td valign="top"><strong>Title:</strong></td>
