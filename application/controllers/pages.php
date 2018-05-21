@@ -935,8 +935,15 @@ class Pages extends Master_Controller {
 
     public function vault_updateImage($page_id, $page_section_id, $page_vault_image_id) {
         $this->enforceAdmin("pages");
+        global $PSTAPI;
+        initializePSTAPI();
 
+        $description = array_key_exists("description", $_REQUEST) ? $_REQUEST["description"] : "";
+        $PSTAPI->pagevaultimage()->update($page_vault_image_id, array(
+            "description" => $description
+        ));
 
+        header("Location: /pages/edit/${page_id}");
     }
 
     public function vault_reorderImages($page_id, $page_section_id) {
