@@ -40,7 +40,7 @@
 	<script src="<?php echo $assets; ?>/js/jquery.flot.symbol.js"></script>
 	<script src="<?php echo $assets; ?>/js/jquery.flot.categories.js"></script>
 	<script src="<?php echo $assets; ?>/js/jquery.flot.orderBars.js"></script>
-
+    <script src="/assets/js_front/jquery.dataTables.min.js"></script>
 
 	<?php echo @$script; ?>
    <script>
