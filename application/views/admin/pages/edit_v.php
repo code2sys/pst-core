@@ -432,6 +432,89 @@
         <div class="tab_content">
             <div class="hidden_table">
 
+                <?php if (count($section['events']) > 0): ?>
+                <p><strong>Existing Events</strong></p>
+
+                    <table width="100%" cellpadding="10" id="page_calendar_events<?php echo $section['page_section_id']; ?>">
+                        <thead>
+                        <tr>
+                            <th><b>Title</b></th>
+                            <th><b>Start</b></th>
+                            <th><b>End</b></th>
+                            <th><b>Location</b></th>
+                            <th><b>Extra Info</b></th>
+                            <th><b>Actions</b></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($section['events'] as $e): ?>
+                            <tr>
+                                <td><?php echo $e["title"]; ?></td>
+                                <td><?php echo date("m/d/Y g:i a", strtotime($e["start"])); ?></td>
+                                <td><?php echo date("m/d/Y g:i a", strtotime($e["end"])); ?></td>
+                                <td><?php
+                                    $leading = false;
+                                    if ($e["address1"] != "") {
+                                        echo $e["address1"];
+                                        $leading = true;
+                                    }
+                                    if ($e["address2"] != "") {
+                                        if ($leading) {
+                                            echo ",";
+                                        }
+                                        $leading = true;
+                                        echo $e["address2"];
+                                    }
+                                    if ($e["city"] != "") {
+                                        if ($leading) {
+                                            echo ",";
+                                        }
+                                        $leading = true;
+                                        echo $e["city"];
+                                    }
+                                    if ($e["state"] != "") {
+                                        if ($leading) {
+                                            echo ",";
+                                        }
+                                        $leading = true;
+                                        echo $e["state"];
+                                    }
+                                    if ($e["zip"] != "") {
+                                        echo $e["zip"];
+                                    }
+
+                                    ?></td>
+                                <td>Edit Delete</td>
+
+                            </tr>
+
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+
+
+                <script type="application/javascript">
+                    $(window).load(function() {
+                        $("#page_calendar_events<?php echo $section['page_section_id']; ?>").dataTable({
+                            "processing" : true,
+                            "paging" : true,
+                            "info" : true,
+                            "stateSave" : true,
+                            "order": [[ 0, "desc" ]],
+                            "columns" : [
+                                null,
+                                { "width" : "15%", "type" : "datetime" },
+                                { "width" : "15%", "type" : "datetime" },
+                                null,
+                                null,
+                                null
+                            ]
+                        });
+
+                    });
+                    </script>
+
+                <?php endif; ?>
 
 
                 <p><strong>Add Event</strong></p>

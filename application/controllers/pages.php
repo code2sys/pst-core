@@ -713,6 +713,12 @@ class Pages extends Master_Controller {
                             }
                         });
                         break;
+
+                    case "Events":
+                        global $PSTAPI;
+                        initializePSTAPI();
+                        $section["events"] = $PSTAPI->pagecalendarevent()->fetch(array("page_section_id" => $section["page_section_id"]), true);
+                        break;
                 }
             }
   		}
