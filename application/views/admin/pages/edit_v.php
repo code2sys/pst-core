@@ -353,7 +353,7 @@
                     });
 
                     var dta = data.slice(0, -1);
-                    $("#order").val(dta);
+                    $("#order<?php echo $section['page_section_id']; ?>").val(dta);
                 });
                 $(document).ready(function(){
                     $("#sortableGallery<?php echo $gallery; ?>").sortable({
@@ -370,7 +370,7 @@
                             });
 
                             var dta = data.slice(0, -1);
-                            $("#order").val(dta);
+                            $("#order<?php echo $section['page_section_id']; ?>").val(dta);
                         }
                     });
                 });
@@ -395,7 +395,7 @@
                                     <?php } ?>
                                 </ul>
                                 <form class="form_standard float-section" method="post" action="/pages/vault_reorderImages/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>">
-                                    <input type="hidden" name="order" id="order"></input>
+                                    <input type="hidden" name="order" id="order<?php echo $section['page_section_id']; ?>"></input>
                                     <input type="submit" name="orderSubmit" value="Update Order"></input>
                                 </form>
                             <?php endif; ?>
