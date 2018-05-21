@@ -14,7 +14,7 @@
 <script type="text/javascript" src="/assets/jqwidgets/js/jqxdatetimeinput.js"></script>
 <script type="text/javascript" src="/assets/jqwidgets/js/jqxcalendar.js"></script>
 <script type="text/javascript" src="/assets/jqwidgets/js/jqxtooltip.js"></script>
-<script type="text/javascript" src="/assets/jqwidgets/js/globalize/globalization.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/globalize/globalize.js"></script>
 
 
 
