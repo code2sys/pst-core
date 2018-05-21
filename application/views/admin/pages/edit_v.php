@@ -485,7 +485,7 @@
 
                                     ?></td>
                                 <td><?php if ($e["url"] != ""): ?>
-                                <a href="<?php echo $["url"]; ?>" target="_blank">Additional Info URL</a>
+                                <a href="<?php echo $e["url"]; ?>" target="_blank">Additional Info URL</a>
                                 <?php endif; ?></td>
                                 <td>Edit Delete</td>
 
