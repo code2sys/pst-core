@@ -286,7 +286,7 @@ a:active {
 
 	#draggable_list { 
 		width: 400px; 
-		height: 225px; 
+		min-height: 225px;
 		padding: 0.5em; 
 		float: left; 
 		margin: 10px 10px 10px 0; 

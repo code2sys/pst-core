@@ -1,4 +1,10 @@
-<div class="sw gallery">
+<?php
+
+$fancybox_group = isset($fancybox_group) ? $fancybox_group : "gallery";
+$fancybox_class = isset($fancybox_class) ? $fancybox_class : "fancybox";
+
+?>
+<div class="sw gallery <?php echo $fancybox_group; ?>">
     <div class="container cont-content">
         <div class="row">
             <!--<div class="side-left-img">
@@ -9,7 +15,7 @@
                 <ul>
                     <?php foreach($image as $k=>$v){ ?>
                         <li data-thumb="<?php echo base_url($media); ?>/<?php echo $v['image_name']; ?>">
-                            <a class="fancybox pop-img" href="<?php echo base_url($media); ?>/<?php echo $v['image_name']; ?>" data-fancybox-group="gallery">
+                            <a class="<?php echo $fancybox_class; ?> pop-img" href="<?php echo base_url($media); ?>/<?php echo $v['image_name']; ?>" data-fancybox-group="<?php echo $fancybox_group; ?>">
                                 <div class="overlay-img">
                                     <img src="<?php echo base_url($media); ?>/<?php echo $v['image_name']; ?>">
                                     <span class="fa fa-search-plus"></span>
@@ -26,12 +32,14 @@
     </div>
 </div>
 
+<div style="clear: both"></div>
+
 <script>
     //$(document).ready(function(){
     // $('#lightgallery').lightGallery();
     //});
     $(document).ready(function() {
-        $(".fancybox").fancybox({
+        $(".<?php echo $fancybox_class; ?>").fancybox({
             prevEffect	: 'none',
             nextEffect	: 'none',
             helpers	: {

@@ -108,7 +108,7 @@ class Pages_M extends Master_M
         $ordinal = 0;
         foreach ($page_section_ids as $psid) {
             $ordinal++;
-            if ($psid == "Textbox" || $psid == "Video" || $psid == "Slider") {
+            if (in_array($psid, array('Textbox','Video','Slider', 'Gallery', 'Events'))) {
                 // Insert it!
                 $this->db->query("Insert into page_section (page_id, ordinal, type) values (?, ?, ?)", array($page_id, $ordinal, $psid));
                 $real_psid = $this->db->insert_id();
@@ -271,6 +271,21 @@ class Pages_M extends Master_M
                         $widgetBlock .= $this->load->view('widgets/slider_v', $data, TRUE);
                         $widgetBlock .='<br />';
                     }
+                    break;
+
+                case "Gallery":
+                    // OK, great, gallery images...
+                    global $PSTAPI;
+                    initializePSTAPI();
+                    $images = $PSTAPI->pagevaultimage()->fetch(array("page_section_id" => $page_section_id), true);
+                    if (count($images) > 0) {
+                        $widgetBlock .= $this->load->view("vault/vault_gallery", array(
+                            "fancybox_group" => "pageSectionGallery" . $page_section_id,
+                            "fancybox_class" => "pageSectionGallery" . $page_section_id . "galleria",
+                            "image" => $images
+                        ), true);
+                    }
+
                     break;
             }
 
