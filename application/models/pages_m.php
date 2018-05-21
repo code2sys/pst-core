@@ -287,6 +287,20 @@ class Pages_M extends Master_M
                     }
 
                     break;
+
+                case "Events":
+                    // OK, great, we have to make a calendar
+                    global $PSTAPI;
+                    initializePSTAPI();
+                    $events = $PSTAPI->pagecalendarevent()->fetch(array("page_section_id" => $page_section_id), true);
+                    if (count($events) > 0) {
+                        $widgetBlock .= $this->load->view("master/widgets/page_calendar_event", array(
+                            "events" => $events,
+                            "page_section_id" => $page_section_id
+                        ), true);
+                    }
+
+                    break;
             }
 
 
