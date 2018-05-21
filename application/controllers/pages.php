@@ -962,8 +962,19 @@ class Pages extends Master_Controller {
 
     public function vault_reorderImages($page_id, $page_section_id) {
         $this->enforceAdmin("pages");
+        global $PSTAPI;
+        initializePSTAPI();
 
+        $order = array_key_exists("order", $_REQUEST) ? $_REQUEST["order"] : array();
 
+        foreach ($order as $label => $ordinal) {
+            $number = intVal(substr($label, strlen("pageVaultGallery")));
+            $PSTAPI->pagevaultimage()->update($number, array(
+               "priority_number" => $ordinal
+            ));
+        }
+
+        header("Location: /pages/edit/${page_id}");
     }
 
     public function vault_addImage($page_id, $page_section_id) {
