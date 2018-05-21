@@ -450,8 +450,8 @@
                         <?php foreach ($section['events'] as $e): ?>
                             <tr>
                                 <td><?php echo $e["title"]; ?></td>
-                                <td><?php echo date("m/d/Y g:i a", strtotime($e["start"])); ?></td>
-                                <td><?php echo date("m/d/Y g:i a", strtotime($e["end"])); ?></td>
+                                <td><?php echo $e["start"] > "0000-00-00 00:00:00" ? date("m/d/Y g:i a", strtotime($e["start"])) : ""; ?></td>
+                                <td><?php echo $e["end"] > "0000-00-00 00:00:00" ? date("m/d/Y g:i a", strtotime($e["end"])) : ""; ?></td>
                                 <td><?php
                                     $leading = false;
                                     if ($e["address1"] != "") {
