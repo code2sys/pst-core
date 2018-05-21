@@ -460,26 +460,27 @@
                                     }
                                     if ($e["address2"] != "") {
                                         if ($leading) {
-                                            echo ",";
+                                            echo ", ";
                                         }
                                         $leading = true;
                                         echo $e["address2"];
                                     }
                                     if ($e["city"] != "") {
                                         if ($leading) {
-                                            echo ",";
+                                            echo ", ";
                                         }
                                         $leading = true;
                                         echo $e["city"];
                                     }
                                     if ($e["state"] != "") {
                                         if ($leading) {
-                                            echo ",";
+                                            echo ", ";
                                         }
                                         $leading = true;
                                         echo $e["state"];
                                     }
                                     if ($e["zip"] != "") {
+                                        echo " ";
                                         echo $e["zip"];
                                     }
 
