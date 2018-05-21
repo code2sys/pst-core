@@ -1,4 +1,17 @@
 
+<link rel="stylesheet" href="/assets/jqwidgets/styles/jqx.base.css" type="text/css" />
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxcore.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxcolorpicker.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxradiobutton.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxdropdownbutton.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxscrollview.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxbuttons.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxdatetimeinput.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxcalendar.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxtooltip.js"></script>
+
+
+
 
 	<div class="content_wrap">
 		<div class="content">
@@ -536,11 +549,11 @@
                     </tr>
                     <tr>
                         <td valign="top"><strong>Start Date/Time:</strong></td>
-                        <td valign="top"><input type="text" size="40" maxlength="255" name="start" /></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="start" class="enhancedDateSelector" /></td>
                     </tr>
                     <tr>
                         <td valign="top"><strong>End Date/Time:</strong></td>
-                        <td valign="top"><input type="text" size="40" maxlength="255" name="end" /></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="end" class="enhancedDateSelector" /></td>
                     </tr>
                     <tr>
                         <td valign="top"><strong>Additional Info Link URL:</strong></td>
@@ -574,6 +587,17 @@
                 </form>
             </div>
         </div>
+
+        <script type="application/javascript">
+        $(document).ready(function() {
+            $(".enhancedDateSelector").jqxDateTimeInput({
+                "showTimeButton" : true,
+                width: '350px',
+                height: '25px',
+                formatString: 'F'
+            });
+        })
+        </script>
 
 
 
