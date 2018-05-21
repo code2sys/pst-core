@@ -555,11 +555,11 @@
                     </tr>
                     <tr>
                         <td valign="top"><strong>Start Date/Time:</strong></td>
-                        <td valign="top"><input type="text" size="40" maxlength="255" name="start" class="enhancedDateSelector" id="add_form_<?php echo $section['page_section_id']; ?>_start" /></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="start" class="enhancedDateSelector" id="add_form_<?php echo $section['page_section_id']; ?>_start" value="<?php echo date('M/d/yyyy h:mm tt'); ?>"/></td>
                     </tr>
                     <tr>
                         <td valign="top"><strong>End Date/Time:</strong></td>
-                        <td valign="top"><input type="text" size="40" maxlength="255" name="end" class="enhancedDateSelector"  id="add_form_<?php echo $section['page_section_id']; ?>_end"  /></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="end" class="enhancedDateSelector"  id="add_form_<?php echo $section['page_section_id']; ?>_end" value="<?php echo date('M/d/yyyy h:mm tt'); ?>" /></td>
                     </tr>
                     <tr>
                         <td valign="top"><strong>Additional Info Link URL:</strong></td>
@@ -612,6 +612,11 @@
             $("#add_form_<?php echo $section['page_section_id']; ?>_end").on("change", function(event) {
 
                 $("#add_form_<?php echo $section['page_section_id']; ?>_end_jqxDateTimeInput").val(event.args.date);
+            });
+
+            $("#add_form_<?php echo $section['page_section_id']; ?>_start").on("change", function(event) {
+
+                $("#add_form_<?php echo $section['page_section_id']; ?>_start_jqxDateTimeInput").val(event.args.date);
             });
         })
         </script>
