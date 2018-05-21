@@ -974,6 +974,7 @@ class Pages extends Master_Controller {
             ));
         }
 
+        exit();
         header("Location: /pages/edit/${page_id}");
     }
 
