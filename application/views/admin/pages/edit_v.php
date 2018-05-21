@@ -1,3 +1,7 @@
+<link rel="stylesheet" href="/assets/css_front/jquery.dataTables.min.css" type="text/css" >
+<script src="/assets/js_front/jquery.dataTables.min.js"></script>
+
+
 	<div class="content_wrap">
 		<div class="content">
 			
