@@ -384,11 +384,11 @@
                                     <?php foreach( $section["gallery"] as $k => $v ) { ?>
                                         <li style="padding:20px;" id="pageVaultGallery<?php echo $v['page_vault_image_id'] ?>" class="ui-state-default">
                                             <div class="tabe"><img height="50" width="50"  src="<?php echo base_url($media); ?>/<?php echo $v['image_name']; ?>"></div>
-                                            <form class="form_standard" enctype="multipart/form-data" method="post" action="/pages/vault_updateImage/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>/<?php echo $section['page_vault_image_id']; ?>">
+                                            <form class="form_standard" enctype="multipart/form-data" method="post" action="/pages/vault_updateImage/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>/<?php echo $v['page_vault_image_id']; ?>">
                                                 <input id="name<?php echo $section['page_vault_image_id']; ?>" name="description" placeholder="Description" value="<?php echo $v['description'];?>" class="text medium" /><br>
                                                 <input type="submit" value="Update Description" name="update">
                                             </form>
-                                            <form class="form_standard" enctype="multipart/form-data" method="post" action="/pages/vault_deleteImage/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>/<?php echo $section['page_vault_image_id']; ?>">
+                                            <form class="form_standard" enctype="multipart/form-data" method="post" action="/pages/vault_deleteImage/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>/<?php echo $v['page_vault_image_id']; ?>">
                                                 <input type="submit" class="dlt" value="Delete Image">
                                             </form>
                                         </li>
