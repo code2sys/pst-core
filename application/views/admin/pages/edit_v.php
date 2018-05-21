@@ -425,6 +425,70 @@
             case "Events":
                 $events++;
 
+                ?>
+            <div class="divider  typeSpecific showManagedPage""></div>
+        <h2>Events <?php echo $events; ?></h2>
+
+        <div class="tab_content">
+            <div class="hidden_table">
+
+
+
+                <p><strong>Add Event</strong></p>
+                <form method="post" action="/pages/calendar_addEvent/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>">
+                <table width="auto" cellpadding="12">
+                    <tr>
+                        <td valign="top"><strong>Title:</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="title" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>Description:</strong></td>
+                        <td valign="top"><textarea name="description" cols="80" rows="15"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>Start Date/Time:</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="start" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>End Date/Time:</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="end" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>Additional Info Link URL:</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="url" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><em>Location</em></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>Address</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="address1" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>Address 2</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="address2" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>City</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="city" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>State</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="state" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><strong>Zip</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="zip" /></td>
+                    </tr>
+                </table>
+                    <input type="submit" name="submit" value="Add Event">
+                </form>
+            </div>
+        </div>
+
+
+
+            <?php
 
                 break;
 
