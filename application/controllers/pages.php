@@ -907,4 +907,52 @@ class Pages extends Master_Controller {
         redirect('pages/edit/' . $this->input->post('pageId'));
     }
 
+    /*
+     * JLB 05-20-18
+     * Gallery moved here from the vault admin
+     */
+
+    public function vault_deleteImage($page_id, $page_section_id, $page_vault_image_id) {
+        $this->enforceAdmin("pages");
+
+
+    }
+
+    public function vault_updateImage($page_id, $page_section_id, $page_vault_image_id) {
+        $this->enforceAdmin("pages");
+
+
+    }
+
+    public function vault_reorderImages($page_id, $page_section_id) {
+        $this->enforceAdmin("pages");
+
+
+    }
+
+    public function vault_addImage($page_id, $page_section_id) {
+        $this->enforceAdmin("pages");
+        global $PSTAPI;
+        initializePSTAPI();
+        $next_ordinal = $PSTAPI()->pagevalueimage()->getNextOrdinal($page_section_id);
+
+        foreach ($_FILES['file']['name'] as $key => $val) {
+            $arr = array();
+            $img = time() . '_' . $next_ordinal . '_' . str_replace(' ','_',$val);
+            $dir = STORE_DIRECTORY.'/html/media/'.$img;
+            move_uploaded_file($_FILES["file"]["tmp_name"][$key], $dir);
+
+            $arr['description'] = $_POST['description'];
+            $arr['image_name'] = $img;
+            $arr['priority_number'] = $next_ordinal;
+            $arr['page_section_id'] = $page_section_id;
+
+            $PSTAPI->pagevaultimage()->add($arr);
+
+            $next_ordinal++;
+        }
+
+        header("Location: /pages/edit/${page_id}");
+    }
+
 }

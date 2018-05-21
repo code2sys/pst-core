@@ -403,7 +403,7 @@
                                 <tr>
                                     <td valign="top"><b>Add Image:</b></td>
                                     <td valign="top">
-                                        <form class="form_standard" enctype="multipart/form-data" method="post">
+                                        <form class="form_standard" enctype="multipart/form-data" method="post" action="/pages/vault_addImage/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>">
                                             <div style="display:grid">
                                                 <input type="file" name="file[]" multiple value="" required>
                                                 <span style="margin:10px 0px 10px 0px;">Hold control button to select and upload multiple images at once.</span>
