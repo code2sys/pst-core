@@ -34,7 +34,6 @@
   <script src="<?php echo $assets; ?>/wdCalendar/src/Plugins/datepicker_lang_US.js" type="text/javascript"></script>
   <script src="<?php echo $assets; ?>/wdCalendar/src/Plugins/jquery.datepicker.js"></script>
   <script src="<?php echo $assets; ?>/js/jquery-ui-1.10.4.js"></script>
-  <script src="<?php echo $assets; ?>/js_front/jquery.dataTables.min.js"></script>
 
 	<script src="<?php echo $assets; ?>/js/jquery.flot.min.js"></script>
 	<script src="<?php echo $assets; ?>/js/jquery.flot.time.js"></script>
