@@ -4,7 +4,7 @@ $fancybox_group = isset($fancybox_group) ? $fancybox_group : "gallery";
 $fancybox_class = isset($fancybox_class) ? $fancybox_class : "fancybox";
 
 ?>
-<div class="sw gallery">
+<div class="sw gallery <?php echo $fancybox_group; ?>">
     <div class="container cont-content">
         <div class="row">
             <!--<div class="side-left-img">
@@ -31,6 +31,8 @@ $fancybox_class = isset($fancybox_class) ? $fancybox_class : "fancybox";
         </div>
     </div>
 </div>
+
+<div style="clear: both"></div>
 
 <script>
     //$(document).ready(function(){
