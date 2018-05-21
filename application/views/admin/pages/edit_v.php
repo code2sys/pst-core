@@ -543,10 +543,10 @@
 
 
                 <p><strong>Add Event</strong></p>
-                <form method="post" action="/pages/calendar_addEvent/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>" class="form_standard">
+                <form method="post" action="/pages/calendar_addEvent/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>" class="form_standard" id="add_form_<?php echo $section['page_section_id']; ?>">
                 <table width="auto" cellpadding="12">
                     <tr>
-                        <td valign="top"><strong>Title:</strong></td>
+                        <td valign="top"><strong>Title:*</strong></td>
                         <td valign="top"><input type="text" size="40" maxlength="255" name="title" /></td>
                     </tr>
                     <tr>
@@ -554,7 +554,7 @@
                         <td valign="top"><textarea name="description" cols="80" rows="15"></textarea></td>
                     </tr>
                     <tr>
-                        <td valign="top"><strong>Start Date/Time:</strong></td>
+                        <td valign="top"><strong>Start Date/Time:*</strong></td>
                         <td valign="top"><input type="text" size="40" maxlength="255" name="start" class="enhancedDateSelector" id="add_form_<?php echo $section['page_section_id']; ?>_start" value="<?php echo date('m/d/Y g:i a'); ?>"/></td>
                     </tr>
                     <tr>
@@ -618,6 +618,27 @@
 
                 $("#add_form_<?php echo $section['page_section_id']; ?>_start_jqxDateTimeInput").val(event.args.date);
             });
+
+            $("#add_form_<?php echo $section['page_section_id']; ?>").on("submit", function(e) {
+                // Is there a title?
+                var title = $("#add_form_<?php echo $section['page_section_id']; ?> input[name=title]").val();
+
+                if (!title || title === "") {
+                    alert("Please provide a title.");
+                    return false;
+                }
+
+                // Is there a date?
+                var start = $("#add_form_<?php echo $section['page_section_id']; ?> input[name=start]").val();
+
+                if (!start || start === "") {
+                    alert("Please specify a start time.");
+                    return false;
+                }
+                
+                return true;
+            })
+
         })
         </script>
 
