@@ -698,6 +698,21 @@ class Pages extends Master_Controller {
                     case "Slider":
                         $section["sliders"] = $this->admin_m->getSliderImages($pageId, $section["page_section_id"]);
                         break;
+
+                    case "Gallery":
+                        global $PSTAPI;
+                        initializePSTAPI();
+                        $section["gallery"] = $PSTAPI->pagevaultimage()->fetch(array("page_section_id" => $section["page_section_id"]), true);
+                        usort($section["gallery"], function($a, $b) {
+                            if ($a["priority_number"] < $b["priority_number"]) {
+                                return -1;
+                            } else if ($a["priority_number"] > $b["priority_number"]) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        });
+                        break;
                 }
             }
   		}
