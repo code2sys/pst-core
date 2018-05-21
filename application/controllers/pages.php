@@ -1039,4 +1039,12 @@ class Pages extends Master_Controller {
 
     }
 
+    public function calendar_removeEvent($page_id, $page_section_id, $page_calendar_event_id) {
+        $this->enforceAdmin("pages");
+        global $PSTAPI;
+        initializePSTAPI();
+        $PSTAPI->pagecalendarevent()->remove($page_calendar_event_id);
+        header("Location: /pages/edit/${page_id}");
+    }
+
 }

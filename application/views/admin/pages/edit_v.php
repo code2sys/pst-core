@@ -488,7 +488,7 @@
                                 <td><?php if ($e["url"] != ""): ?>
                                 <a href="<?php echo $e["url"]; ?>" target="_blank">Additional Info URL</a>
                                 <?php endif; ?></td>
-                                <td>Edit Delete</td>
+                                <td>Edit | <a href="/pages/calendar_removeEvent/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>/<?php echo $e["page_calendar_event_id"]; ?>"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a></td>
 
                             </tr>
 
