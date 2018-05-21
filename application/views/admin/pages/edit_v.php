@@ -555,11 +555,11 @@
                     </tr>
                     <tr>
                         <td valign="top"><strong>Start Date/Time:</strong></td>
-                        <td valign="top"><input type="text" size="40" maxlength="255" name="start" class="enhancedDateSelector" /></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="start" class="enhancedDateSelector" id="add_form_<?php echo $section['page_section_id']; ?>_start" /></td>
                     </tr>
                     <tr>
                         <td valign="top"><strong>End Date/Time:</strong></td>
-                        <td valign="top"><input type="text" size="40" maxlength="255" name="end" class="enhancedDateSelector" /></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="end" class="enhancedDateSelector"  id="add_form_<?php echo $section['page_section_id']; ?>_end"  /></td>
                     </tr>
                     <tr>
                         <td valign="top"><strong>Additional Info Link URL:</strong></td>
@@ -596,7 +596,13 @@
 
         <script type="application/javascript">
         $(document).ready(function() {
-            $(".enhancedDateSelector").jqxDateTimeInput({
+            $("#add_form_<?php echo $section['page_section_id']; ?>_end").jqxDateTimeInput({
+                "showTimeButton" : true,
+                width: '350px',
+                height: '25px',
+                formatString: 'M/d/yyyy h:mm tt'
+            });
+            $("#add_form_<?php echo $section['page_section_id']; ?>_start").jqxDateTimeInput({
                 "showTimeButton" : true,
                 width: '350px',
                 height: '25px',
