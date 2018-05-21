@@ -31,7 +31,7 @@
                 return $data;
             }, array_values(array_filter($events, function($x) {
                 return $x["start"] > "0000-00-00 00:00:00";
-            }))); ?>
+            })))); ?>
         });
 
     });
