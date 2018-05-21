@@ -608,6 +608,11 @@
                 height: '25px',
                 formatString: 'M/d/yyyy h:mm tt'
             });
+
+            $("#add_form_<?php echo $section['page_section_id']; ?>_end").on("change", function(event) {
+
+                $("#add_form_<?php echo $section['page_section_id']; ?>_end_jqxDateTimeInput").val(event.args.date);
+            });
         })
         </script>
 
