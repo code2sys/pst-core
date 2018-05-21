@@ -272,6 +272,21 @@ class Pages_M extends Master_M
                         $widgetBlock .='<br />';
                     }
                     break;
+
+                case "Gallery":
+                    // OK, great, gallery images...
+                    global $PSTAPI;
+                    initializePSTAPI();
+                    $images = $PSTAPI->pagevaultimage()->fetch(array("page_section_id" => $page_section_id), true);
+                    if (count($images) > 0) {
+                        $widgetBlock .= $this->load->view("vault/vault_gallery", array(
+                            "fancybox_group" => "pageSectionGallery" . $page_section_id,
+                            "fancybox_class" => "pageSectionGallery" . $page_section_id,
+                            "image" => $images
+                        ), true);
+                    }
+
+                    break;
             }
 
 
