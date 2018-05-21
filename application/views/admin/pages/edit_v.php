@@ -600,7 +600,7 @@
                 "showTimeButton" : true,
                 width: '350px',
                 height: '25px',
-                formatString: 'F'
+                formatString: 'M/d/yyyy h:mm tt'
             });
         })
         </script>
