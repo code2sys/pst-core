@@ -934,7 +934,7 @@ class Pages extends Master_Controller {
         $this->enforceAdmin("pages");
         global $PSTAPI;
         initializePSTAPI();
-        $next_ordinal = $PSTAPI()->pagevalueimage()->getNextOrdinal($page_section_id);
+        $next_ordinal = $PSTAPI->pagevalueimage()->getNextOrdinal($page_section_id);
 
         foreach ($_FILES['file']['name'] as $key => $val) {
             $arr = array();
