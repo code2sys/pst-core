@@ -1,3 +1,8 @@
+<!-- JLB: I would like to strangle whoever required two versions of this -->
+<script src="/assets/insourced/jquery-1.12.4.js"></script>
+<script src="/assets/insourced/jquery-ui.js"></script>
+<link rel="stylesheet" href="/assets/css_front/jquery.dataTables.min.css" type="text/css" >
+<script src="/assets/js_front/jquery.dataTables.min.js"></script>
 
 <link rel="stylesheet" href="/assets/jqwidgets/styles/jqx.base.css" type="text/css" />
 <script type="text/javascript" src="/assets/jqwidgets/js/jqxcore.js"></script>
@@ -9,6 +14,7 @@
 <script type="text/javascript" src="/assets/jqwidgets/js/jqxdatetimeinput.js"></script>
 <script type="text/javascript" src="/assets/jqwidgets/js/jqxcalendar.js"></script>
 <script type="text/javascript" src="/assets/jqwidgets/js/jqxtooltip.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/globalize/globalization.js"></script>
 
 
 
@@ -800,6 +806,7 @@
 
 
     </script>
+
 
 <style>
     .ui-sortable-placeholder {
