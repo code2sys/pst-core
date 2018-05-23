@@ -344,6 +344,9 @@ abstract class Orderadmin extends Productsbrandsadmin {
                 $error = $result->message;
                 $this->session->set_flashdata('error',$error);
             }
+            print "Success!";
+        } else {
+            print "Failed";
         }
     }
 
