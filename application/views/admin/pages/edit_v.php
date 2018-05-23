@@ -575,6 +575,53 @@
             </div>
         </div>
 
+        <script type="application/javascript">
+        $(document).ready(function() {
+            $("#add_form_<?php echo $section['page_section_id']; ?>_end").jqxDateTimeInput({
+                "showTimeButton" : true,
+                width: '350px',
+                height: '25px',
+                formatString: 'M/d/yyyy h:mm tt'
+            });
+            $("#add_form_<?php echo $section['page_section_id']; ?>_start").jqxDateTimeInput({
+                "showTimeButton" : true,
+                width: '350px',
+                height: '25px',
+                formatString: 'M/d/yyyy h:mm tt'
+            });
+
+            $("#add_form_<?php echo $section['page_section_id']; ?>_end").on("change", function(event) {
+
+                $("#add_form_<?php echo $section['page_section_id']; ?>_end_jqxDateTimeInput").val(event.args.date);
+            });
+
+            $("#add_form_<?php echo $section['page_section_id']; ?>_start").on("change", function(event) {
+
+                $("#add_form_<?php echo $section['page_section_id']; ?>_start_jqxDateTimeInput").val(event.args.date);
+            });
+
+            $("#add_form_<?php echo $section['page_section_id']; ?>").on("submit", function(e) {
+                // Is there a title?
+                var title = $("#add_form_<?php echo $section['page_section_id']; ?> input[name=title]").val();
+
+                if (!title || title === "") {
+                    alert("Please provide a title.");
+                    return false;
+                }
+
+                // Is there a date?
+                var start = $("#add_form_<?php echo $section['page_section_id']; ?> input[name=start]").val();
+
+                if (!start || start === "") {
+                    alert("Please specify a start time.");
+                    return false;
+                }
+
+                return true;
+            })
+
+        })
+        </script>
 
 
             <?php
