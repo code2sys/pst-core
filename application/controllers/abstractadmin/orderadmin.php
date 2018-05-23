@@ -336,19 +336,14 @@ abstract class Orderadmin extends Productsbrandsadmin {
         if(array_key_exists("transaction_id", $_REQUEST) && $_REQUEST['transaction_id'] != "" && array_key_exists("refund_amount", $_REQUEST)  && $_REQUEST['refund_amount'] > 0) {
             $result = Braintree_Transaction::refund($_REQUEST['transaction_id'], $_REQUEST['refund_amount']);
 
-            print_r($result);
             if( @$result->success ) {
                 $transaction = $result->transaction;
                 $arr = array('braintree_transaction_id' => $transaction->id, 'sales_price' => '-'.$_REQUEST['refund_amount']);
                 $this->admin_m->updateOrderPaymentByAdmin( $id, $arr );
-                print "Success!";
             } else {
                 $error = $result->message;
                 $this->session->set_flashdata('error',$error);
-                print "Error: " . $error . "\n";
             }
-        } else {
-            print "Failed";
         }
     }
 
