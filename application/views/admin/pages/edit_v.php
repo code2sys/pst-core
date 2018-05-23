@@ -635,13 +635,11 @@
                     alert("Please specify a start time.");
                     return false;
                 }
-                
                 return true;
             })
 
         })
         </script>
-
 
 
             <?php
