@@ -33,15 +33,16 @@ $SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
     ?>
 
 	<?php echo @$metatag; ?>
-	
+
 	<!--Motercycle Content Start-->
 	<!--Motercycle Content End-->
-	
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400,500">
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/style.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/bootstrap.min.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/owl.carousel.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/owl.theme.css" />
-	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/owl.transitions.css" />	
+	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/owl.transitions.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/font-awesome.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/lightslider.css" />
 	<link rel="stylesheet" href="/qatesting/newassets/stylesheet/custom.css" />
@@ -52,7 +53,7 @@ $SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
 
 	<script src="<?php echo $CI->config->item("base_scheme"); ?>://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/bootstrap.min.js"></script>
-	<script src="<?php echo $new_assets_url; ?>js/owl.carousel.js"></script>	
+	<script src="<?php echo $new_assets_url; ?>js/owl.carousel.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/lightslider.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/jquery.fancybox.pack.js"></script>
 
@@ -64,7 +65,7 @@ $SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
 		});
 	});
 	</script>
-	
+
 	<script>
 	$(document).ready(function() {
 		$(".fiter-menu").click(function(){
@@ -112,7 +113,7 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 ?>
 
 
-	
+
 	<!--<div class="searchHolder search-two">
 		<form action="<?php //echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
 			<input id="search" name="search" placeholder="Search" class="search-bx" style="float:left;" />
@@ -121,19 +122,19 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 		<div class="clear"></div>
 	</div>-->
 
-	
+
 	<?php  echo @$mainContent; ?>
-	
+
 	<?php
 	$new_assets_url = jsite_url( "/qatesting/newassets/" );
 	?>
 	<div class="sw footer clear">
-		<div class="container_b">			
+		<div class="container_b">
 			<div class="one-fifth">
 				<h3 class="aut-title">About <span><?php echo $store_name['company'];?></span></h3>
 				<ul class="clear">
 					<li><a href="<?php echo site_url('pages/index/aboutus');?>">About Us</a></li>
-				</ul>				
+				</ul>
 			</div>
 			<?php
 			jprint_interactive_footer($pages); ?>
@@ -163,23 +164,23 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 				<h3 class="nwsltr">newsletter</h3>
 				<form action="" class="form_standard">
 					<input type="text" id="newsletter" name="newsletter">
-					<input type="button" value="SUBMIT" onclick="submitNewsletter();">	
+					<input type="button" value="SUBMIT" onclick="submitNewsletter();">
 				</form>
 			</div>
 			<div class="img-footer">
 				<a href="http://powersporttechnologies.com"><img src="<?php echo $new_assets_url; ?>images/powered-logo.png"  class="powerlogo-a"/></a>
 			</div>
-			<hr class="ftr-line">		
+			<hr class="ftr-line">
 		</div>
 	</div>
-	
+
 <?php
 $CI =& get_instance();
 echo $CI->load->view("braintree", array(
         "store_name" =>	$store_name
 ), true);
 ?>
-	
+
 	<script language="javascript">
 		function tweetCurrentPage()
 		{ window.open("https://twitter.com/share?u="+escape(window.location.href), '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false; }
@@ -209,7 +210,7 @@ echo $CI->load->view("braintree", array(
 			}).get();
 			var condition = "<?php echo $_GET['fltr'];?>";
 			pg = parseInt(pg)-1;
-			
+
 			var ajax_url = "<?php echo site_url('motorcycle_ci/filterMotorcycle');?>";
 			$.post( ajax_url, {'brands':brands,'years':years,'categories':categories,'vehicles':vehicles, 'condition':condition,'page':pg}, function( result ){
 				$('.prdts').html(result);
@@ -222,9 +223,9 @@ echo $CI->load->view("braintree", array(
 			});
 		}
 	});
-	
+
 		$(document).ready(function() {
- 
+
 			$("#owl-demo").owlCarousel({
 				navigation : true,
 			   slideSpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 300; ?>,
@@ -264,9 +265,9 @@ echo $CI->load->view("braintree", array(
 
 
         });
-		 
+
     </script>
-	
+
 	<script type="text/javascript">
   /* Submit on Enter */
   $(document).ready(function(){
@@ -311,17 +312,17 @@ echo $CI->load->view("braintree", array(
 
 		// This is just stupid, too...
 		var condition = "<?php echo (array_key_exists('fltr', $_GET) && $_GET['fltr'] != '') ? $_GET['fltr'] : '';?>";
-		
+
 		var cndn = "";
 		if( condition != "" ) {
 			cndn = "fltr="+condition;
 		}
-		
+
 		var brnd = brands.join('$');
 		var yrs = years.join('$');
 		var ctgrs = categories.join('$');
 		var vhcl = vehicles.join('$');
-		
+
 		var url1 = cndn;
 		if( brands.length > 0 ) {
 			url1 = url1+"&brands="+brnd;
@@ -339,7 +340,7 @@ echo $CI->load->view("braintree", array(
 		// JLB 12-26-17
        // We need to tell this to change the filter. This helps given that they made the insane choice of POSTING the other things...Why would you ever post this???
        url1 = url1 + (url1 != "" ? '&' : '')  + "filterChange=1";
-		
+
 		//var url1 = cndn+"&brands="+brnd+"&categories="+ctgr+"&years="+yrs+"&vehicles="+vhcl;
 		//alert(url1);
 		var url = "<?php
@@ -354,14 +355,14 @@ echo $CI->load->view("braintree", array(
             }
             ?>?"+url1;
 		window.location.href = url;
-		
+
 		// var ajax_url = "<?php echo site_url('welcome/filterMotorcycle');?>";
 		// $.post( ajax_url, {'brands':brands,'years':years,'categories':categories,'vehicles':vehicles, 'condition':condition}, function( result ){
 			// $('.prdts').html(result);
 			// //alert(result);
 		// });
    });
-  
+
 </script>
 <script>
     if (typeof window.showSubNav === 'undefined') {
@@ -383,7 +384,7 @@ $.post(s_base_url + 'welcome/load_login/', {}, function(returnData)
 	});
 */
 }
-	
+
 function openCreateAccount()
 {
 	window.location.replace('<?php echo $s_baseURL.'checkout/account'; ?>');
@@ -402,7 +403,7 @@ $.post(s_base_url + 'welcome/load_new_user/', {}, function(returnData)
 
 <script>
 $(document).ready(function() {
-	
+
 	$('.panel-title').click(function() {
 		var id = $(this).data('id');
 		var not = $(this).data('not');
@@ -413,7 +414,7 @@ $(document).ready(function() {
 	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
  		$("body").css("display","table");
 	}
-	
+
 	$( ".topNavAnchors" ).hover(
 	  function() {
 		showSubNav( $(this).attr("id") );
@@ -481,7 +482,7 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
     });
 
    });
-   
+
    function setMainSearch(event, section, id)
    {
 	   event.preventDefault();
@@ -497,7 +498,7 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
 			window.location.href = base_url + 'shopping/productlist' + newURL;
 		});
    }
-   
+
    function setNamedSearch(event, section, id, name)
    {
 	   event.preventDefault();
@@ -513,7 +514,7 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
 			window.location.href = base_url + 'shopping/productlist' + newURL;
 		});
    }
-   
+
    function setNamedSearchBrandt(event, section, id, name)
    {
 	   event.preventDefault();
@@ -529,7 +530,7 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
 			//window.location.href = base_url + 'shopping/productlist' + newURL;
 		});
    }
-   
+
    function setSearch(search)
    {
 	   //search = search.replace(/\W/g, ' ')
@@ -549,13 +550,13 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
 			window.location.href = base_url + 'shopping/search_product/?search=' + search;
 		});
    }
-   
+
    function removeHeaderSearch() {
 	   $.post(base_url + 'ajax/removeHeaderSearch/',{},
 		function(newURL) {
 		});
 	}
-   
+
    function removeMainSearch(section, id)
    {
 	   $.post(base_url + 'ajax/removeSearch/',
@@ -568,7 +569,7 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
 		{
 			window.location.href = base_url + 'shopping/productlist' + newURL;
 		});
-		
+
    }
 
 
@@ -650,4 +651,4 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
 
 <?php echo jget_store_block("bottom_body"); ?>
 </body>
-</html>	
+</html>
