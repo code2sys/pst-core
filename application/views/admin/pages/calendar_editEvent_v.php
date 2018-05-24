@@ -28,7 +28,7 @@
         <div class="hidden_table box-table-content">
 
 
-            <form method="post" action="/pages/calendarSaveEvent/<?php echo $pageId; ?> ?>/<?php echo $page_calendar_event_id; ?>" class="form_standard" id="edit_form">
+            <form method="post" action="/pages/calendarSaveEvent/<?php echo $pageId; ?>/<?php echo $page_calendar_event_id; ?>" class="form_standard" id="edit_form">
                 <table width="auto" cellpadding="12">
                     <tr>
                         <td valign="top"><strong>Title:*</strong></td>
