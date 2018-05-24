@@ -46,6 +46,8 @@
                 // display them..
                 var offset = $(jsEvent.currentTarget).offset();
                 var width = $(jsEvent.currentTarget).width();
+                console.log("Found offset");
+                console.log(offset);
 
                 $("#hover_box").css("top", offset.top + 12);
                 $("#hover_box").css("top", offset.left -  Math.floor((100-width)/2));
