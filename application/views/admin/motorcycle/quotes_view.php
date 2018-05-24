@@ -61,6 +61,8 @@
                                    array("key" => "phone", "label" => "Phone"),
                                    array("key" => "questions", "label" => "Comments"),
                                    array("key" => "motorcycle", "label" => "Major unit"),
+                                   array("key" => "make", "label" => "Make"),
+                                   array("key" => "model", "label" => "Model"),
                                    array("key" => "created", "label" => "Request Date/Time"),
                                    array("key" => "status", "label" => "Status")
 
