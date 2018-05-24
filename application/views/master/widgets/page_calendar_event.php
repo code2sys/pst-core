@@ -49,8 +49,8 @@
                 console.log("Found offset");
                 console.log(offset);
 
-                $("#hover_box").css("top", offset.top + 12);
-                $("#hover_box").css("top", offset.left -  Math.floor((100-width)/2));
+                $("#hover_box").css("top", (offset.top + 12) + "px");
+                $("#hover_box").css("left", (offset.left -  Math.floor((100-width)/2)) + "px");
 
                 $("#hover_box").css("display", "block");
             },
