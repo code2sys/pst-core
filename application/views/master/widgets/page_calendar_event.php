@@ -99,6 +99,8 @@
         position: absolute;
         border: 2px solid gray;
         padding: 6px;
+        z-index: 1000;
+        
     }
     #hoverbox .title {
         font-size: 16px;
