@@ -1047,4 +1047,12 @@ class Pages extends Master_Controller {
         header("Location: /pages/edit/${page_id}");
     }
 
+    public function calendar_editEvent($page_id, $page_section_id, $page_calendar_event_id) {
+
+    }
+
+    public function calendar_saveEditEvent($page_id, $page_section_id, $page_calendar_event_id) {
+
+    }
+
 }
