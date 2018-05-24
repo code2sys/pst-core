@@ -49,7 +49,7 @@
                 console.log("Found offset");
                 console.log(offset);
 
-                $("#hover_box").offset({ "top" : (Math.floor(offset.top) + 12), "left" : (Math.floor(offset.left) -  Math.floor((100-width)/2)) });
+                $("#hover_box").offset(offset);
 
                 $("#hover_box").css("display", "block");
             },
