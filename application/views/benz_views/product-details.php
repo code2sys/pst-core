@@ -335,6 +335,13 @@ $stock_status_mode = $CI->_getStockStatusMode();
 	</div>
 </div>
 
+<script type="application/javascript">
+// Show Major Unit Detail modal
+setTimeout(function () {
+	$('#myModal<?php echo $motorcycle['id']; ?>').modal('show');
+}, 5000);
+</script>
+
 <?php if ($show_info && $show_spec): ?>
 <script type="application/javascript">
     $(document).ready(function() {
@@ -365,6 +372,10 @@ $stock_status_mode = $CI->_getStockStatusMode();
 <?php endif; ?>
 
 <?php
+if ($image_url == "" || is_null($image_url) || $image_url == $media_url) {
+	$image_url = "/assets/image_unavailable.png";
+}
+
 $this->view('modals/major_unit_detail_modal.php', array(
 	'motorcycle'       => $motorcycle,
 	'motorcycle_image' => $image_url,
