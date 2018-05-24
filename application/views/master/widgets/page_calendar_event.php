@@ -35,12 +35,26 @@
             })))); ?>,
             eventClick: function(calEvent, jsEvent, view) {
                 console.log(["Click on event", calEvent, jsEvent, view]);
+                $("#hover_box").css("display", "none");
             },
             eventMouseover: function(calEvent, jsEvent, view) {
                 console.log(["Hover on event", calEvent, jsEvent, view]);
+                // fill  them in
+                $("#hover_box .title").text(calEvent.title);
+                // position it...
+
+                // display them..
+                var offset = $(jsEvent.currentTarget).offset();
+                var width = $(jsEvent.currentTarget).width();
+
+                $("#hover_box").css("top", offset.top + 12);
+                $("#hover_box").css("top", offset.left -  Math.floor((100-width)/2));
+
+                $("#hover_box").css("display", "block");
             },
             eventMouseout: function(calEvent, jsEvent, view) {
                 console.log(["Out of the event", calEvent, jsEvent, view]);
+                $("#hover_box").css("display", "none");
             }
         });
 
@@ -59,10 +73,12 @@
     <h1 class="title"></h1>
 
     <div class="when">
+        <strong>When</strong> <br/>
         <span class="start"></span>
         <span class="end"></span>
     </div>
     <div class="where">
+        <strong>Where</strong><br/>
         <span class="address1"></span>
         <span class="state"></span>
         <span class="city"></span>
@@ -71,3 +87,23 @@
     </div>
 
 </div>
+<style>
+    #hover_box {
+        border-color: black;
+        background-color: white;
+        font-size: 12px;
+        width: 200px;
+        max-width: 80%;
+        position: absolute;
+    }
+    #hoverbox .title {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    #hoverbox .when,
+    #hoverbox .where {
+        text-indent: -10px;
+        margin-left: 10px
+    }
+</style>
