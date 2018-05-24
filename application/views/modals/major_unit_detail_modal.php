@@ -69,7 +69,7 @@
 								<input type="hidden" name="product_id" value="<?php echo $motorcycle['id']; ?>">
 
 								<div class="text-center">
-									<input type="submit" class="btn">
+									<input class="btn" type="submit" value="Submit">
 								</div>
 							<?php echo form_close(); ?>
 						</div>
