@@ -67,7 +67,7 @@
 
 								<input type="hidden" name="motorcycle" value="<?php echo $motorcycle['title']; ?>">
 								<input type="hidden" name="product_id" value="<?php echo $motorcycle['id']; ?>">
-								<input type="hidden" name="vin_number" value="<?php echo $motorcycle['vin_number']; ?>">
+								<input type="hidden" name="sku" value="<?php echo $motorcycle['sku']; ?>">
 
 								<div class="text-center">
 									<input class="btn" type="submit" value="Submit">
