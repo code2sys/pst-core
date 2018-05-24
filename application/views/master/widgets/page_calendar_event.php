@@ -49,8 +49,8 @@
                 console.log("Found offset");
                 console.log(offset);
 
-                $("#hover_box").css("top", (offset.top + 12) + "px");
-                $("#hover_box").css("left", (offset.left -  Math.floor((100-width)/2)) + "px");
+                $("#hover_box").css("top", (Math.floor(offset.top) + 12) + "px");
+                $("#hover_box").css("left", (Math.floor(offset.left) -  Math.floor((100-width)/2)) + "px");
 
                 $("#hover_box").css("display", "block");
             },
@@ -100,7 +100,7 @@
         border: 2px solid gray;
         padding: 6px;
         z-index: 1000;
-        
+
     }
     #hoverbox .title {
         font-size: 16px;
