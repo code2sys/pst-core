@@ -1,4 +1,4 @@
-<div class="modal fade pop" id="myModal<?php echo $motorcycle['id']; ?>">
+<div class="modal fade pop" id="major-unit-detail-modal_<?php echo $motorcycle['id']; ?>">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-body modal-body-dark">

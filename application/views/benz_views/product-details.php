@@ -29,7 +29,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 			</nav>
 			<div class="menu-section">
 				<ul class="nav navbar-nav menu-dti">
-					<li><a href="#" data-toggle="modal" data-target="#myModal<?php echo $motorcycle['id']; ?>">GET A QUOTE</a></li>
+					<li><a href="#" data-toggle="modal" data-target="#major-unit-detail-modal_<?php echo $motorcycle['id']; ?>">GET A QUOTE</a></li>
 					<li><a href="#" data-toggle="modal" data-target="#myModal">TRADE VALUE</a></li>
 					<li style="margin-right:10px;" data-toggle="modal" data-target="#myModal"><a href="#"><?php if (defined('WORDING_SCHEDULE_TEST_DRIVE')) { echo WORDING_SCHEDULE_TEST_DRIVE; } else { ?>SCHEDULE TEST DRIVE<?php } ?></a></li>
 					<li><a href="/pages/index/financerequest"><?php
@@ -335,13 +335,6 @@ $stock_status_mode = $CI->_getStockStatusMode();
 	</div>
 </div>
 
-<script type="application/javascript">
-// Show Major Unit Detail modal
-setTimeout(function () {
-	$('#myModal<?php echo $motorcycle['id']; ?>').modal('show');
-}, 5000);
-</script>
-
 <?php if ($show_info && $show_spec): ?>
 <script type="application/javascript">
     $(document).ready(function() {
@@ -381,6 +374,13 @@ $this->view('modals/major_unit_detail_modal.php', array(
 	'motorcycle_image' => $image_url,
 ));
 ?>
+
+<script type="application/javascript">
+// Show Major Unit Detail modal
+setTimeout(function () {
+	$('#major-unit-detail-modal_<?php echo $motorcycle['id']; ?>').modal('show');
+}, 5000);
+</script>
 
 <script language="javascript">
 	function fbshareCurrentPage()

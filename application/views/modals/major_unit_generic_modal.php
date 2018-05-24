@@ -1,4 +1,4 @@
-<div class="modal fade pop" id="major-unit-list-modal">
+<div class="modal fade pop" id="major-unit-generic-modal">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-body modal-body-dark">
@@ -77,10 +77,3 @@
 		</div>
 	</div>
 </div>
-
-<script type="application/javascript">
-// Show Major Unit List modal
-setTimeout(function () {
-	$('#major-unit-list-modal').modal('show');
-}, 5000);
-</script>
