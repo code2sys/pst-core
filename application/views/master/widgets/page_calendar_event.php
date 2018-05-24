@@ -18,17 +18,18 @@
             editable: true,
             eventLimit: true, // allow "more" link when too many events
             events: <?php echo json_encode(array_map(function($x) {
+                $x["id"] = $x["page_calendar_event_id"];
                 $data = array(
                     "title" => $x["title"],
                     "start" => $x["start"],
                     "id" => $x["page_calendar_event_id"]
                 );
 
-                if ($x["start"] != $x["end"] && $x["end"] > "0000-00-00 00:00:00") {
-                    $data["end"] = $x["end"];
+                if ($x["start"] == $x["end"] || $x["end"] <= "0000-00-00 00:00:00") {
+                    unset($x["end"]);
                 }
 
-                return $data;
+                return $x;
             }, array_values(array_filter($events, function($x) {
                 return $x["start"] > "0000-00-00 00:00:00";
             })))); ?>,
@@ -53,5 +54,20 @@
     }
 
 </style>
-
 <div id='calendar<?php echo $page_section_id;?>'></div>
+<div id="hover_box" style="display:none">
+    <h1 class="title"></h1>
+
+    <div class="when">
+        <span class="start"></span>
+        <span class="end"></span>
+    </div>
+    <div class="where">
+        <span class="address1"></span>
+        <span class="state"></span>
+        <span class="city"></span>
+        <span class="state"></span>
+        <span class="zip"></span>
+    </div>
+
+</div>
