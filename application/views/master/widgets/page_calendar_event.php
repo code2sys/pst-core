@@ -50,6 +50,8 @@
                 console.log(offset);
 
                 $("#hover_box").offset(offset);
+                console.log("Hoverbox offset");
+                console.log($("#hover_box").offset());
 
                 $("#hover_box").css("display", "block");
             },
