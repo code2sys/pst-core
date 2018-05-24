@@ -40,11 +40,11 @@
                     </tr>
                     <tr>
                         <td valign="top"><strong>Start Date/Time:*</strong></td>
-                        <td valign="top"><input type="text" size="40" maxlength="255" name="start" class="enhancedDateSelector" id="add_form_start" value="<?php echo date('m/d/Y g:i a', strtotime($page_calendar_event["start"])); ?>"/></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="start" class="enhancedDateSelector" id="add_form_start" value="<?php echo date('m/d/Y g:i a', $page_calendar_event["start"] > '0000-00-00 00:00:00' ? strtotime($page_calendar_event["start"]) : time()); ?>"/></td>
                     </tr>
                     <tr>
                         <td valign="top"><strong>End Date/Time:</strong></td>
-                        <td valign="top"><input type="text" size="40" maxlength="255" name="end" class="enhancedDateSelector"  id="add_form_end" value="<?php echo date('m/d/Y g:i a', strtotime($page_calendar_event["end"])); ?>" /></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="end" class="enhancedDateSelector"  id="add_form_end" value="<?php echo date('m/d/Y g:i a', $page_calendar_event["end"] > '0000-00-00 00:00:00' ? strtotime($page_calendar_event["end"]) : time()); ?>" /></td>
                     </tr>
                     <tr>
                         <td valign="top"><strong>Additional Info Link URL:</strong></td>
