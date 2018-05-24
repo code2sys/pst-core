@@ -97,6 +97,8 @@
         width: 200px;
         max-width: 80%;
         position: absolute;
+        border: 2px solid gray;
+        padding: 6px;
     }
     #hoverbox .title {
         font-size: 16px;
