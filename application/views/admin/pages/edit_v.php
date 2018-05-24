@@ -1,3 +1,22 @@
+<!-- JLB: I would like to strangle whoever required two versions of this -->
+<script src="/assets/insourced/jquery-1.12.4.js"></script>
+<script src="/assets/insourced/jquery-ui.js"></script>
+<link rel="stylesheet" href="/assets/css_front/jquery.dataTables.min.css" type="text/css" >
+<script src="/assets/js_front/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" href="/assets/jqwidgets/styles/jqx.base.css" type="text/css" />
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxcore.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxcolorpicker.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxradiobutton.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxdropdownbutton.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxscrollview.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxbuttons.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxdatetimeinput.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxcalendar.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/jqxtooltip.js"></script>
+<script type="text/javascript" src="/assets/jqwidgets/js/globalization/globalize.js"></script>
+
+
 
 
 	<div class="content_wrap">
@@ -490,7 +509,7 @@
                                 <td><?php if ($e["url"] != ""): ?>
                                 <a href="<?php echo $e["url"]; ?>" target="_blank">Additional Info URL</a>
                                 <?php endif; ?></td>
-                                <td>Edit | <a href="/pages/calendar_removeEvent/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>/<?php echo $e["page_calendar_event_id"]; ?>"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a></td>
+                                <td><a href="/pages/calendar_editEvent/<?php echo $pageRec['id']; ?>/<?php echo $e["page_calendar_event_id"]; ?>"><i class="fa fa-edit"></i>&nbsp;<b>Edit</b></a> | <a href="/pages/calendar_removeEvent/<?php echo $pageRec['id']; ?>/<?php echo $e["page_calendar_event_id"]; ?>"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a></td>
 
                             </tr>
 
@@ -524,10 +543,10 @@
 
 
                 <p><strong>Add Event</strong></p>
-                <form method="post" action="/pages/calendar_addEvent/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>" class="form_standard">
+                <form method="post" action="/pages/calendar_addEvent/<?php echo $pageRec['id']; ?>/<?php echo $section['page_section_id']; ?>" class="form_standard" id="add_form_<?php echo $section['page_section_id']; ?>">
                 <table width="auto" cellpadding="12">
                     <tr>
-                        <td valign="top"><strong>Title:</strong></td>
+                        <td valign="top"><strong>Title:*</strong></td>
                         <td valign="top"><input type="text" size="40" maxlength="255" name="title" /></td>
                     </tr>
                     <tr>
@@ -535,12 +554,12 @@
                         <td valign="top"><textarea name="description" cols="80" rows="15"></textarea></td>
                     </tr>
                     <tr>
-                        <td valign="top"><strong>Start Date/Time:</strong></td>
-                        <td valign="top"><input type="text" size="40" maxlength="255" name="start" /></td>
+                        <td valign="top"><strong>Start Date/Time:*</strong></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="start" class="enhancedDateSelector" id="add_form_<?php echo $section['page_section_id']; ?>_start" value="<?php echo date('m/d/Y g:i a'); ?>"/></td>
                     </tr>
                     <tr>
                         <td valign="top"><strong>End Date/Time:</strong></td>
-                        <td valign="top"><input type="text" size="40" maxlength="255" name="end" /></td>
+                        <td valign="top"><input type="text" size="40" maxlength="255" name="end" class="enhancedDateSelector"  id="add_form_<?php echo $section['page_section_id']; ?>_end" value="<?php echo date('m/d/Y g:i a'); ?>" /></td>
                     </tr>
                     <tr>
                         <td valign="top"><strong>Additional Info Link URL:</strong></td>
@@ -616,7 +635,6 @@
                     alert("Please specify a start time.");
                     return false;
                 }
-
                 return true;
             })
 
@@ -823,11 +841,7 @@
 
 
     </script>
-    <!-- JLB: I would like to strangle whoever required two versions of this -->
-<script src="/assets/insourced/jquery-1.12.4.js"></script>
-<script src="/assets/insourced/jquery-ui.js"></script>
-    <link rel="stylesheet" href="/assets/css_front/jquery.dataTables.min.css" type="text/css" >
-    <script src="/assets/js_front/jquery.dataTables.min.js"></script>
+
 
 <style>
     .ui-sortable-placeholder {
