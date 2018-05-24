@@ -18,7 +18,7 @@
 							<li><strong><?php echo $motorcycle['title']; ?></strong></li>
 							<li>Color: <?php echo $motorcycle['color']; ?></li>
 							<li>Stock #: <?php echo $motorcycle['sku']; ?></li>
-							<li>Color: <?php echo $motorcycle['color']; ?></li>
+							<li>VIN: <?php echo $motorcycle['vin_number']; ?></li>
 						</ul>
 					</div>
 				</div>
