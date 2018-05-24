@@ -31,7 +31,16 @@
                 return $data;
             }, array_values(array_filter($events, function($x) {
                 return $x["start"] > "0000-00-00 00:00:00";
-            })))); ?>
+            })))); ?>,
+            eventClick: function(calEvent, jsEvent, view) {
+                console.log(["Click on event", calEvent, jsEvent, view]);
+            },
+            eventMouseover: function(calEvent, jsEvent, view) {
+                console.log(["Hover on event", calEvent, jsEvent, view]);
+            },
+            eventMouseout: function(calEvent, jsEvent, view) {
+                console.log(["Out of the event", calEvent, jsEvent, view]);
+            }
         });
 
     });
