@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald:400,500');
+
 * {
     margin: 0px;
     padding: 0px;
@@ -33,8 +35,8 @@
 }
 .creditCar_b {
     display: inline-block;
-    color: #fff;   
-    font-weight: 600 !important;	
+    color: #fff;
+    font-weight: 600 !important;
     margin: 0;
     font-style: italic;
 	font-family:sans-serif !important
@@ -93,7 +95,7 @@ li.shopLink {
 	line-height:1.42857143;
 }
 .seperator_b {
-    color: #fff;        
+    color: #fff;
 	font-size:18px;
 	line-height:20px;
 	font-weight:700;
@@ -112,7 +114,7 @@ a.loginLink_b {
 /* HEADER CSS */
 
 .header_b {
-    padding: 10px 0px 2px; 
+    padding: 10px 0px 2px;
     background-color: #eee;
 }
 .vehicleCategory_b {
@@ -126,7 +128,7 @@ a.loginLink_b {
 }
 .vehicleCategory_b a {
     font-size: 12px;
-    color: #003ca2;	
+    color: #003ca2;
     width: 145px;
     font-weight: bold;
     text-decoration: none;
@@ -475,7 +477,7 @@ a.ftrimg1 {
     width: 100%;
 }
 
-#brandpagegrid img, 
+#brandpagegrid img,
 #our_top_brands img {
     max-width: 100%;
     max-height: 120px;
@@ -580,12 +582,12 @@ a.ftrimg1 {
     text-transform: capitalize;
     line-height: 34px;
     background: url(../images/arrow1.png)no-repeat right center;
-    padding-right: 15px;	
+    padding-right: 15px;
 }
 .head-txt span  a {
 	color:#0074d4
 }
-.sw .btn-secc {   
+.sw .btn-secc {
 	background: #3478ce;
     padding: 3px 12px;
     font-family: 'Open Sans';
@@ -643,14 +645,14 @@ h1.hdng {
 }
 .creditCar_b a {
     text-decoration: none !important;
-    color: #fff;    
+    color: #fff;
     font-size: 12px;
     padding: 4px 10px;
     border-radius: 4px;
     margin: 0 0 0 4px;
     display: inline-block;
-    font-family: 'Helvetica';    
-	background: #d0191f;        
+    font-family: 'Helvetica';
+	background: #d0191f;
     	background: linear-gradient(to bottom, #ed1c23 0%, #ed1c23 55%, #d0191f 50%, #d0191f 100%);
 }
 .creditCar_b a i {
@@ -738,13 +740,13 @@ h1.hdng {
 }
 .fltrbx .up-buttons .up-buttons-2 {
     text-decoration: none;
-	background:#ccc;	
+	background:#ccc;
     color: #fff;
     text-transform: capitalize;
     font-weight: bold;
     font-size: 12px;
     text-align: center;
-    padding: 10px 11px; 
+    padding: 10px 11px;
     margin: 6px 4px;
     display: inline-block;
     position: relative;
@@ -772,7 +774,7 @@ h1.hdng {
 }
 .fltrbx .it-4 {
     background: url(../images/searcha.png) no-repeat right -1px;
-    background-size: 21px;    
+    background-size: 21px;
     cursor: auto;
 }
 .checkbox label:before {
@@ -1071,21 +1073,21 @@ img.powerlogo-a {
 .prod-ls .breadcrumb {
     background:#fff;
 	padding:10px 0 ;
-    margin-bottom: 20px;       
+    margin-bottom: 20px;
 	margin-bottom: 12px;
-    color: #555;  
+    color: #555;
 	float: left;
     width: 100%;
 }
 
 .prod-ls .breadcrumb a:hover {
-	color: #555 !important;    
+	color: #555 !important;
 	text-decoration:none !important;
 }
 
 .breadcrumb a{
 	color:#555;
-    display:inline-block;    
+    display:inline-block;
 	font-size:13.5px;
 }
 
@@ -1104,14 +1106,14 @@ img.powerlogo-a {
 
 .bx-rit h3 {
 	color:#474646;
-    margin: 15px 0 0;    
+    margin: 15px 0 0;
     font-size: 30px;
     font-family: 'proxima_novasemibold';
 }
 
 .bx-rit p {
 	font-family: 'proxima_novasemibold';
-	font-size:19px;	
+	font-size:19px;
 	color:#474646;
 	}
 .bx-rit p.cfp {
@@ -1142,26 +1144,26 @@ img.powerlogo-a {
 }
 
 .dtal-txt {
-	width:100%;	
+	width:100%;
 	display:inline-block;
 	margin-bottom:1px;
 }
 
 .dtal-txt label{
-	width:35%;		
+	width:35%;
     text-transform: capitalize;
     font-weight: 500;
 	color:#858585;
-	font-size:16px	 
+	font-size:16px
 }
 
 .dtal-txt span {
-	color:#313131;	
-	font-size:16px;	
+	color:#313131;
+	font-size:16px;
 	text-transform: capitalize;
 }
 
-.scia-share  {		
+.scia-share  {
 	float:left;
 	width:25%;
 }
@@ -1170,7 +1172,7 @@ img.powerlogo-a {
 	margin-bottom:20px;
 }
 
-.social-button a {	
+.social-button a {
 	width:34px;
 	display:inline-block;
 	text-align:center;
@@ -1183,7 +1185,7 @@ img.powerlogo-a {
 .social-button a:focus {
 	color:#fff;
 }
-.social-button a:hover {	
+.social-button a:hover {
 	text-decoration:none !important;
 }
 
@@ -1201,7 +1203,7 @@ img.powerlogo-a {
 }
 
 .prod-ls .fltrbar {
-	padding-right:0;	
+	padding-right:0;
 }
 
 .prod-ls .fltrbx {
@@ -1239,7 +1241,7 @@ img.powerlogo-a {
 .info ul li {
     padding-left: 10px;
     margin: 0 0 20px;
-    list-style: url(../images/dot.png);    
+    list-style: url(../images/dot.png);
 }
 
 .col-md-9 .info-btn {
@@ -1307,12 +1309,12 @@ img.powerlogo-a {
 
 ul.lSPager.lSGallery {
 	position:absolute;
-	bottom:8px; 
+	bottom:8px;
 	right:16px;
 }
 
 .vehicleCategory_b .last {
-	position:relative; 
+	position:relative;
 	bottom:18px;
 }
 
@@ -1432,7 +1434,7 @@ img.powerlogo-a {
 }
 .searchHolder .form_standard input.medium_search {
     background: #fff;
-    border: 1px solid #cbcbcb;    
+    border: 1px solid #cbcbcb;
     padding:9px 10px;
     width: 300px;
     margin: 0 2px 0 0;
@@ -1468,7 +1470,7 @@ img.powerlogo-a {
 
 /* HEADER CSS */
 
-.tablinks {	
+.tablinks {
 	padding:0 2px;
 	border-right:3px solid #fff;
 	text-align:center;
@@ -1561,7 +1563,7 @@ h4.expand_heading {
 
 .filterBar {
     background: url(../images/bg_fullsize.png) repeat-x left center;
-    background-size: cover;    
+    background-size: cover;
     height:71px;
 }
 
@@ -1579,7 +1581,7 @@ h4.expand_heading {
 }
 
 .brnds .brnd-list .lft ul li.actv {
-	box-shadow:none;	
+	box-shadow:none;
 }
 
 .brnds .brnd-list .ryt ul li {
@@ -1619,7 +1621,7 @@ form input.text{
     background: -moz-linear-gradient(#EEE 0%, #CCC 100%);
     background: -ms-linear-gradient(#EEE 0%, #CCC 100%);
     border: 1px #AAA solid;
-	
+
     font: bold 14px 'Helvetica', sans-serif;
     height: auto;
     padding: 5px 10px;
@@ -1627,7 +1629,7 @@ form input.text{
     text-align: center;
     text-transform: capitalize;
     text-shadow: 0px 1px #FFF;
-    width: auto;       
+    width: auto;
     border-radius: 0;
 }*/
 
@@ -1689,7 +1691,7 @@ img.crdt {
     font-size: 18px;
     font-family: 'Open Sans';
     font-weight: 600;
-	margin:20px 0;	
+	margin:20px 0;
 }
 
 hr.brdr {
@@ -1720,9 +1722,9 @@ hr.brdr {
 .col-md-12 .bttn:hover {
 	color:#fff
 }
-.clo {		
+.clo {
     position: relative;
-    opacity: 1;	    
+    opacity: 1;
     color: #626262;
     padding: 4px 0;
     text-align: center;
@@ -1731,7 +1733,7 @@ hr.brdr {
     line-height: normal;
     color: #3478ce;
     font-size: 16px;
-    font-weight: 700; 
+    font-weight: 700;
 }
 .area .modal-header{
 	background:#f2f2f2;
@@ -1751,26 +1753,26 @@ hr.brdr {
 	color: #626262;
     font-size: 20px;
     margin: 0px 0;
-    position: absolute;   
+    position: absolute;
     right: 0;
-    top: -2px;   
+    top: -2px;
 }
 
 #scol::-webkit-scrollbar-track
-{	
+{
 	background-color:  #f2f2f2;
 	border-radius: 10px;
 }
 
 #scol::-webkit-scrollbar
 {
-	width: 5px;	
+	width: 5px;
 }
 
 #scol::-webkit-scrollbar-thumb
 {
 	border-radius:10px;
-	background-color: #F90;	
+	background-color: #F90;
 	background-image: -webkit-linear-gradient(45deg,
 	rgba(255, 255, 255, .2) 25%,
 	transparent 25%,
@@ -1778,7 +1780,7 @@ hr.brdr {
 	rgba(255, 255, 255, .2) 50%,
 	rgba(255, 255, 255, .2) 75%,
 	transparent 75%,
-	transparent)	
+	transparent)
 }
 .info .vds{width:100%; float:left;}
 .info .vds iframe{float:left;}
@@ -1793,7 +1795,7 @@ hr.brdr {
 .side-hdr {
     width: 100%;
     float: left;
-    background: rgba(0, 0, 0, 0.7);	
+    background: rgba(0, 0, 0, 0.7);
     position: relative;
     display: none;
 }
@@ -1831,7 +1833,7 @@ hr.brdr {
 }
 
 .side-hdr .sidebar-menu ul.mb-drpdwn li a {
-    color: white;    
+    color: white;
     float: left;
     padding: 10px;
 	line-height:normal;
@@ -1842,7 +1844,7 @@ hr.brdr {
 .side-hdr .crt a,
 .side-hdr .cl a {
     color: white;
-    font-size: 12px;	
+    font-size: 12px;
 }
 .side-hdr .shpbrnd-map {
     width: 35%;
@@ -1851,7 +1853,7 @@ hr.brdr {
     padding: 8px 0;
 	height:48px;
     background: black;
-    color: white;   
+    color: white;
 }
 
 .side-hdr .shpbrnd-map a {
@@ -1875,7 +1877,7 @@ hr.brdr {
     width: 20%;
     float: left;
     color: white;
-    background: black;        
+    background: black;
     text-align: center;
     padding: 4px 0;
     border-right: 1px solid silver;
@@ -1884,7 +1886,7 @@ p.creditCar_b.loct a i{
 	font-size: 12px;
     margin: 1px;
 }
-	
+
 .mblacnt-log {
     width: 100%;
     float: left;
@@ -1939,12 +1941,12 @@ p.creditCar_b.loct a i{
 }
 
 .btn-large {
-    width: 52px;		
-    color: #fff;            
-	border-radius: 50%;    
+    width: 52px;
+    color: #fff;
+	border-radius: 50%;
     cursor: pointer;
     vertical-align: middle;
-	text-align: center;    
+	text-align: center;
 	box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
 	background:#F44336;
     height: 52px;
@@ -1953,12 +1955,12 @@ p.creditCar_b.loct a i{
 }
 
 .togle-icon {
-	line-height: 54px !important;	     
+	line-height: 54px !important;
 	top:auto !important;
-	font-size: 20px ;	        
+	font-size: 20px ;
 	letter-spacing:-1px;
 }
- 
+
 .fltrbar h4.recnt {
 	margin:2px 0 15px !important;
 }
@@ -1977,7 +1979,7 @@ p.creditCar_b.loct a i{
 
 .search-bx {
 	border-radius:0;
-	padding:6px;    	
+	padding:6px;
 	height:36px;
 	/*width:150px;*/
         width:311px;
@@ -1995,16 +1997,16 @@ p.creditCar_b.loct a i{
 .logo-tp_b img {
 	height:auto;
 	max-width:100%;
-	width:auto;	
+	width:auto;
 }
 
 .logo-tp_b {
 	display: inline-block;
     width: 200px;
-    text-align: center;    	
+    text-align: center;
 }
 
-.vehicleCategory a span{	
+.vehicleCategory a span{
     display: inline-block;
     padding-bottom: 4px;
     width: 75%;
@@ -2017,7 +2019,7 @@ p.creditCar_b.loct a i{
  */
 @media  (max-width:767px){
 	.logo-tp_b img {
-		margin-left: auto; 
+		margin-left: auto;
 		margin-right: auto;
 		margin-bottom: 10px;
 	}
@@ -2058,7 +2060,7 @@ p.creditCar_b.loct a i{
 }
 .garage_active .fa-check, .garage_delete .fa-times {
     font-size: 14px;
-	
+
 }
 .leftBar .box img,
 .side_section img {
@@ -2094,4 +2096,147 @@ p.creditCar_b.loct a i{
 
 .bikeControlRow.row {
     margin: 0;
+}
+
+
+
+/*==============================================================================
+    Modal
+/*============================================================================*/
+@media (min-width: 768px) {
+    .modal-dialog {
+        width: 704px !important;
+        margin: 96px auto !important;
+    }
+}
+
+/* Dark Modal */
+.modal .modal-body-dark {
+    color: #ffffff;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+        url(../images/dark-textured-background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+
+.modal .modal-body-dark .close {
+    font-size: 2em;
+    color: #ffffff;
+    opacity: 0.6;
+}
+
+/* Body Title */
+.modal .modal-body-dark .modal-body-title {
+    margin: 16px 0;
+    font-family: 'Oswald', sans-serif;
+    font-size: 3.5em;
+    font-weight: 500;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ff0000;
+}
+
+/* Unit Details */
+.modal .modal-unit-details {
+    margin-bottom: 16px;
+    padding: 8px;
+    background: #ffffff;
+    color: #000000;
+}
+
+.modal .modal-unit-details ul {
+    padding: 0;
+    margin: 12px 0;
+    list-style: none;
+    font-size: 1.2em;
+    line-height: 1.4em;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .modal .modal-unit-details ul {
+        text-align: left;
+    }
+}
+
+/* Modal Form Instructions */
+.modal .modal-form-instructions {
+    margin-top: 24px;
+    margin-left: 24px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.4em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.modal .modal-form-instructions li {
+    margin-bottom: 48px;
+}
+
+.modal .modal-form-instructions li:last-of-type {
+    margin-bottom: 0;
+}
+
+/* Modal Form */
+.modal .modal-form-container {
+    padding: 16px;
+    background-color: #c3c1c3;
+    color: #000000;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.4em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.modal .modal-form-container p:first-of-type {
+    text-align: center;
+}
+
+.modal .modal-form-container .form-group {
+    display: flex;
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.modal .modal-form-container .form-group label,
+.modal .modal-form-container .form-group input,
+.modal .modal-form-container .form-group textarea {
+    display: inline-block;
+}
+
+.modal .modal-form-container .form-group label {
+    font-weight: 500;
+}
+
+.modal .modal-form-container .form-group input,
+.modal .modal-form-container .form-group textarea {
+    flex-grow: 1;
+    margin-left: 8px;
+}
+
+.modal .modal-form-container .form-group .formRequired {
+    top: -10px;
+    right: auto;
+    left: -10px;
+    color: #ff0000;
+}
+
+.modal .modal-form-container input[type=submit].btn {
+    padding: 4px 32px;
+    font-size: 1em;
+    color: #ffffff;
+    text-transform: uppercase;
+    background: #ff0000;
+}
+
+/* Modal Body Footer */
+.modal .modal-body-footer {
+    margin: 24px 0 0;
+    font-size: 0.9em;
+    color: #666666;
 }
