@@ -1050,6 +1050,8 @@ class Welcome extends Master_Controller {
         $message .= "Phone : " . $post['phone'] . '<br>';
         $message .= "Comments : " . $post['questions'] . '<br>';
         $message .= "Major unit : " . $post['motorcycle'] . '<br>';
+        $message .= "Make : " . $post['make'] . '<br>';
+        $message .= "Model : " . $post['model'] . '<br>';
         $message .= "SKU : " . $post['sku'] . '<br>';
         $message .= "VIN : " . $post['vin'] . '<br>';
 

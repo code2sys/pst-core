@@ -1,4 +1,4 @@
-<div class="modal fade pop" id="myModal<?php echo $motorcycle['id']; ?>">
+<div class="modal fade pop" id="major-unit-list-modal">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-body modal-body-dark">
@@ -8,20 +8,7 @@
 
 				<p class="modal-body-title">Get Out-The-Door Price</p>
 
-				<div class="modal-unit-details row">
-					<div class="col-sm-5">
-						<img class="img-responsive center-block" src="<?php echo $motorcycle_image; ?>"/>
-					</div>
-
-					<div class="col-sm-7">
-						<ul>
-							<li><strong><?php echo $motorcycle['title']; ?></strong></li>
-							<li>Color: <?php echo $motorcycle['color']; ?></li>
-							<li>Stock #: <?php echo $motorcycle['sku']; ?></li>
-							<li>VIN: <?php echo $motorcycle['vin_number']; ?></li>
-						</ul>
-					</div>
-				</div>
+				<p class="modal-body-subtitle">Looking for Your Next Adventure?</p>
 
 				<div class="row">
 					<div class="hidden-xs col-sm-4">
@@ -61,14 +48,21 @@
 								</div>
 
 								<div class="form-group">
+									<label for="make">Make:</label>
+									<input id="make" class="form-control" type="text" name="make" required>
+									<div class="formRequired">*</div>
+								</div>
+
+								<div class="form-group">
+									<label for="model">Model:</label>
+									<input id="model" class="form-control" type="text" name="model" required>
+									<div class="formRequired">*</div>
+								</div>
+
+								<div class="form-group">
 									<label for="questions">Comments:</label>
 									<textarea id="questions" class="form-control" type="text" name="questions"></textarea>
 								</div>
-
-								<input type="hidden" name="motorcycle" value="<?php echo $motorcycle['title']; ?>">
-								<input type="hidden" name="product_id" value="<?php echo $motorcycle['id']; ?>">
-								<input type="hidden" name="sku" value="<?php echo $motorcycle['sku']; ?>">
-								<input type="hidden" name="vin" value="<?php echo $motorcycle['vin_number']; ?>">
 
 								<div class="text-center">
 									<input class="btn" type="submit" value="Submit">
@@ -83,3 +77,10 @@
 		</div>
 	</div>
 </div>
+
+<script type="application/javascript">
+// Show Major Unit List modal
+setTimeout(function () {
+	$('#major-unit-list-modal').modal('show');
+}, 5000);
+</script>

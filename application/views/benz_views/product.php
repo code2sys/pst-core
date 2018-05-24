@@ -319,3 +319,5 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
         </div>
     </div>
 </div>
+
+<?php $this->view('modals/major_unit_list_modal.php'); ?>
