@@ -98,7 +98,7 @@ class Welcome extends Master_Controller {
         }
         $clear_password = $this->encrypt->decode($userRecord['password']);
         $new_password = $this->encrypt->encode($password);
-        
+
         if ($password == $clear_password) {
             $this->account_m->updateLogin($userRecord['id']);
             unset($_SESSION['contactInfo']);
@@ -1060,6 +1060,7 @@ class Welcome extends Master_Controller {
         $message .= "Accessories : " . $post['accessories'] . '<br>';
         $message .= "Questions : " . $post['questions'] . '<br>';
         $message .= "Motorcycle : " . $post['motorcycle'] . '<br>';
+        $message .= "VIN : " . $post['vin_number'] . '<br>';
 
         $this->load->model("mail_gen_m");
 
