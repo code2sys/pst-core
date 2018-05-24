@@ -588,6 +588,7 @@ class Pages extends Master_Controller {
         jserve_file(STORE_DIRECTORY . '/attachments/' . $this->_mainData['pageRec']['attachment_filename'], $this->_mainData['pageRec']['original_filename'], $this->_mainData['pageRec']['attachment_mime_type']);
     }
 
+
   	public function edit($pageId = NULL)
   	{
         $this->enforceAdmin("pages");
@@ -1047,12 +1048,61 @@ class Pages extends Master_Controller {
         header("Location: /pages/edit/${page_id}");
     }
 
-    public function calendar_editEvent($page_id, $page_section_id, $page_calendar_event_id) {
 
+    public function calendar_editEvent($pageId, $page_calendar_event_id) {
+        $this->enforceAdmin("pages");
+
+        // OK, great. The idea here is to just slam it into a form.
+        // I don't know how much of this is really needed...I am going based on function edit.
+
+        $this->_mainData['widgets'] = $this->pages_m->getWidgets();
+        $this->_mainData['pageId'] = $pageId;
+        $this->_mainData['page_calendar_event_id'] = $page_calendar_event_id;
+
+        $this->_mainData['pageRec'] = $this->pages_m->getPageRec($pageId);
+        $this->setMasterPageVars('descr', $this->_mainData['pageRec']['metatags']);
+        $this->setMasterPageVars('title', $this->_mainData['pageRec']['title']);
+        $this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
+        $this->_mainData['pageRec']['location'] = explode(',', $this->_mainData['pageRec']['location']);
+        $this->_mainData['pageRec']['widgets'] = json_decode($this->_mainData['pageRec']['widgets'], TRUE);
+
+        $this->_mainData['location'] = array('footer' => 'Footer', 'comp_info' => 'Company Info');
+        $this->_mainData['widgets'] = $this->pages_m->getWidgets();
+        $js = '<script type="text/javascript" src="' . $this->_mainData['assets'] . '/ckeditor4/ckeditor.js"></script>';
+        $this->loadJS($js);
+        $this->_mainData['edit_config'] = $this->_mainData['assets'] . '/js/htmleditor.js';
+
+        global $PSTAPI;
+        initializePSTAPI();
+        $this->_mainData['page_calendar_event'] = $PSTAPI->pagecalendarevent()->get($page_calendar_event_id);
+        $this->_mainData['page_calendar_event'] = $this->_mainData['page_calendar_event']->to_array();
+        $this->setNav('admin/nav_v', 1);
+        $this->renderMasterPage('admin/master_v', 'admin/pages/calendar_editEvent_v', $this->_mainData);
     }
 
-    public function calendar_saveEditEvent($page_id, $page_section_id, $page_calendar_event_id) {
+    public function calendarSaveEvent($pageId, $page_calendar_event_id) {
+        $this->enforceAdmin("pages");
+        global $PSTAPI;
+        initializePSTAPI();
 
+        // So you think JavaScript is going to do it?
+        // I'm not entirely proud of this; it just needs to be done.
+
+        $PSTAPI->pagecalendarevent()->update($page_calendar_event_id, array(
+            "title" => array_key_exists("title", $_REQUEST) ? $_REQUEST["title"] : "",
+            "description" => array_key_exists("description", $_REQUEST) ? $_REQUEST["description"] : "",
+            "start" => array_key_exists("start", $_REQUEST) && $_REQUEST["start"] != "" ? date("Y-m-d H:i:s", strtotime($_REQUEST["start"])) : null,
+            "end" => array_key_exists("end", $_REQUEST) && $_REQUEST["end"] != "" ? date("Y-m-d H:i:s", strtotime($_REQUEST["end"])) : null,
+            "url" => array_key_exists("url", $_REQUEST) ? $_REQUEST["url"] : "",
+            "address1" => array_key_exists("address1", $_REQUEST) ? $_REQUEST["address1"] : "",
+            "address2" => array_key_exists("address2", $_REQUEST) ? $_REQUEST["address2"] : "",
+            "state" => array_key_exists("state", $_REQUEST) ? $_REQUEST["state"] : "",
+            "zip" => array_key_exists("zip", $_REQUEST) ? $_REQUEST["zip"] : "",
+            "city" => array_key_exists("city", $_REQUEST) ? $_REQUEST["city"] : ""
+        ));
+
+
+        header("Location: /pages/edit/${pageId}");
     }
 
 }
