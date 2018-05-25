@@ -27,7 +27,7 @@ if (count($rotating_things) > 0) {
 
     $CI =& get_instance();
     $CI->load->helper("mustache_helper");
-    $template = mustache_tmpl_open("master/widgets/mainheader.html");
+    $template = mustache_tmpl_open("master/widgets/hotelsflatsslider.html");
 
     global $hotels_flats_counter;
 
