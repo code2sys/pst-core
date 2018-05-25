@@ -28,7 +28,7 @@ if (isset($invoking_page)) {
         if (!defined('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS')) {
             define('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS', true);
         }
-        mustache_tmpl_set($template, "display_shopping_navigation", SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS);
+        mustache_tmpl_set($template, "display_shopping_navigation", !SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS);
     } else {
         mustache_tmpl_set($template, "display_shopping_navigation", true);
     }
