@@ -324,6 +324,29 @@ abstract class Orderadmin extends Productsbrandsadmin {
         $this->renderMasterPage('admin/master_v', 'admin/order/list_v', $this->_mainData);
     }
 
+    public function order_refund($id) {
+        if (!$this->checkValidAccess('orders') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        // JLB -I don't know why this is here.
+        $clientToken = $this->braintree_lib->create_client_token();
+
+        $post = $this->input->post();
+        if(array_key_exists("transaction_id", $_REQUEST) && $_REQUEST['transaction_id'] != "" && array_key_exists("refund_amount", $_REQUEST)  && $_REQUEST['refund_amount'] > 0) {
+            $result = Braintree_Transaction::refund($_REQUEST['transaction_id'], $_REQUEST['refund_amount']);
+
+            if( @$result->success ) {
+                $transaction = $result->transaction;
+                $arr = array('braintree_transaction_id' => $transaction->id, 'sales_price' => '-'.$_REQUEST['refund_amount']);
+                $this->admin_m->updateOrderPaymentByAdmin( $id, $arr );
+            } else {
+                $error = $result->message;
+                $this->session->set_flashdata('error',$error);
+            }
+        }
+    }
+
     public function order_edit($id = 'new', $newPartNumber = NULL, $qty = 1) {
         if (!$this->checkValidAccess('orders') && !@$_SESSION['userRecord']['admin']) {
             redirect('');

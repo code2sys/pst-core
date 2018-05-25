@@ -202,6 +202,14 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 	<div class="sw podct">
 		<div class="container_b">						
 			<div class="row">
+                <?php
+
+                if (!defined('DISABLE_TOP_RATED')) {
+                    define('DISABLE_TOP_RATED', false);
+                }
+
+                if (!DISABLE_TOP_RATED) {
+                ?>
                 <?php if (count(array_keys($topRated)) > 0): ?>
 				<div class="col-md-12 col-sm-12 sldr-section">				
 					<h1 class="best mrgnbtm65">Top<span> Rated </span> Products</h1>
@@ -224,6 +232,7 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 					</div>	
 				</div>
                 <?php endif; ?>
+                <?php } ?>
 
 				<?php if (false): ?>
 				<div class="col-md-3 testi pull-right fb-frem">
