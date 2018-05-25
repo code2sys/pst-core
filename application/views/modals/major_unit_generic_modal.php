@@ -22,7 +22,7 @@
 					<div class="col-xs-12 col-sm-8">
 						<div class="modal-form-container">
 							<?php echo form_open('welcome/productEnquiry', array('class' => 'form_standard')); ?>
-								<p>Fill out the form below to get your free out-the-door price!</p>
+								<p>Fill out the form below to get your<br>free out-the-door price!</p>
 
 								<div class="form-group">
 									<label for="firstName">First&nbsp;Name:</label>
