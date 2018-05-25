@@ -30,7 +30,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 			<div class="menu-section">
 				<ul class="nav navbar-nav menu-dti">
 					<li><a href="#" data-toggle="modal" data-target="#major-unit-detail-modal_<?php echo $motorcycle['id']; ?>">GET A QUOTE</a></li>
-					<li><a href="#" data-toggle="modal" data-target="#major-unit-detail-modal_<?php echo $motorcycle['id']; ?>">TRADE VALUE</a></li>
+					<li><a href="#" data-toggle="modal" data-target="#trade-in-value-modal_<?php echo $motorcycle['id']; ?>">TRADE VALUE</a></li>
 					<li style="margin-right:10px;" data-toggle="modal" data-target="#myModal"><a href="#"><?php if (defined('WORDING_SCHEDULE_TEST_DRIVE')) { echo WORDING_SCHEDULE_TEST_DRIVE; } else { ?>SCHEDULE TEST DRIVE<?php } ?></a></li>
 					<li><a href="/pages/index/financerequest"><?php
                             if (!defined('GET_FINANCING_WORDING')) {
@@ -473,7 +473,7 @@ $this->view('modals/major_unit_detail_modal.php', array(
 	'motorcycle'       => $motorcycle,
 	'motorcycle_image' => $image_url,
 ));
-
+$this->view('modals/trade_in_value_modal.php', array('motorcycle' => $motorcycle));
 $this->view('modals/customer_exit_modal.php');
 ?>
 

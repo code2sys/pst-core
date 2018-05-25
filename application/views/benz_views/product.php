@@ -258,6 +258,7 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
                         'motorcycle'       => $motorcycle,
                         'motorcycle_image' => $motorcycle_image,
                     ));
+                    $this->view('modals/trade_in_value_modal.php', array('motorcycle' => $motorcycle));
                 }
 
                 $CI =& get_instance();
