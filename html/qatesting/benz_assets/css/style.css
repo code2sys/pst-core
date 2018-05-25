@@ -2203,6 +2203,7 @@ p.creditCar_b.loct a i{
     position: relative;
     padding: 1px 0;
     color: #ffffff;
+    line-height: 3.5rem;
     text-align: center;
     background-color: #9f9c9e;
 }
@@ -2220,6 +2221,7 @@ p.creditCar_b.loct a i{
 .modal#customer-exit-modal .modal-body-subtitle > span {
     position: relative;
     padding: 0 8px;
+    vertical-align: middle;
     font-family: 'Oswald', sans-serif;
     font-size: 2.5rem;
     font-weight: 500;
@@ -2230,6 +2232,7 @@ p.creditCar_b.loct a i{
 
 .modal#customer-exit-modal .modal-body-message {
     position: relative;
+    line-height: 4rem;
 }
 
 .modal#customer-exit-modal .modal-body-message::before {
@@ -2361,6 +2364,7 @@ p.creditCar_b.loct a i{
 /* Customer Exit - Modal Form */
 .modal#customer-exit-modal .modal-form-container form {
     padding: 0;
+    margin-top: 16px;
     background-color: transparent;
 }
 
@@ -2380,18 +2384,20 @@ p.creditCar_b.loct a i{
 
 .modal#customer-exit-modal .modal-form-field-inner-container {
     position: relative;
-    display: block;
     padding: 16px;
     margin: 0 0 0 8px;
+    background-color: #555555;
+    border: 8px solid #ffffff;
+    border-top: none;
+    border-right: none;
+}
+
+.modal#customer-exit-modal .modal-form-field-inner-container label {
     font-family: 'Oswald', sans-serif;
     font-size: 2rem;
     font-weight: 500;
     text-transform: uppercase;
     color: #ffffff;
-    background-color: #555555;
-    border: 8px solid #ffffff;
-    border-top: none;
-    border-right: none;
 }
 
 .modal#customer-exit-modal .modal-form-container input[type=submit] {
