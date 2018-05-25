@@ -1011,7 +1011,7 @@ h3.head-tx {
     box-shadow: 0 2px 5px black;
 }
 .mid .mid-r .mid-r-but a:nth-child(2) {
-    line-height: 0;
+    line-height: 1rem;
     padding: 11px 15px 14px 15px;
 }
 .mid .mid-r .mid-r-but a:nth-child(2) img {
