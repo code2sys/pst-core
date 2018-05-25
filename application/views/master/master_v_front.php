@@ -198,79 +198,45 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 			</div>
 		</div>
 	</div>
-	
+
+<?php
+
+if (!defined('DISABLE_TOP_RATED')) {
+    define('DISABLE_TOP_RATED', false);
+}
+
+if (!DISABLE_TOP_RATED) {
+    ?>
+    <?php if (count(array_keys($topRated)) > 0): ?>
+        <?php
+        $CI =& get_instance();
+        echo $CI->load->view(array("master/widgets/hotelsflatsslider", array(
+            "extra_master_classes" => "podct",
+            "wrapper_id" => "home_top_rated_products",
+            "header_class" => "best mrgnbtm65",
+            "header_text" => "Top <span>Rated</span> Products",
+            "item_extra_class" => "padg-le",
+            "box_extra_class" => "box",
+            "rotating_things" => array_map(function($x) use ($CI) {
+                return array(
+                        "rendered_html" => $CI->load->view("master/widgets/front_end_rating_box", array(
+                            "val" => $x
+                        ), true)
+                );
+            }, $topRated)
+        ), true));
+
+
+        ?>
+    <?php endif; ?>
+<?php } ?>
+
+
 	<div class="sw podct">
 		<div class="container_b">						
 			<div class="row">
-                <?php
 
-                if (!defined('DISABLE_TOP_RATED')) {
-                    define('DISABLE_TOP_RATED', false);
-                }
 
-                if (!DISABLE_TOP_RATED) {
-                ?>
-                <?php if (count(array_keys($topRated)) > 0): ?>
-				<div class="col-md-12 col-sm-12 sldr-section">				
-					<h1 class="best mrgnbtm65">Top<span> Rated </span> Products</h1>
-					<div id="hotels-flats-1" class="owl-carousel">
-						<?php foreach( $topRated as $key => $val ) { ?>
-						<div class="item  padg-le">							
-							<div class="box">
-								<img class="lazyOwl" alt="Product Image" src="<?php echo site_url('productimages/'.$val['images'][0]['path']);?>" style="display: inline;">
-								<h2><?php echo $val['label'];?></h2>
-								<p>
-								<?php for( $i=1; $i<=$val['rating']; $i++ ) { ?>
-									<i class="fa fa-star"></i>
-								<?php } ?>
-								</p>
-								<p><?php echo substr($val['review'], 0, 75 ).'...';?></p>
-								<a href="<?php echo site_url('shopping/item/'.$val['part_id']);?>" class="btn btn-primary btn-secc">Check Details</a>
-							</div>
-						</div>
-						<?php } ?>						
-					</div>	
-				</div>
-                <?php endif; ?>
-                <?php } ?>
-
-				<?php if (false): ?>
-				<div class="col-md-3 testi pull-right fb-frem">
-					<h3> Get Social</h3>					
-					<span>&nbsp;</span>
-					<div class="social">
-						<ul>
-							<?php if(FALSE && @$SMSettings['sm_fblink']): ?>
-							<li><a class="active scl" data-link="facebook-page" href="javascript:void(0);">Facebook</a></li>
-							<?php endif; ?>
-							<?php if(FALSE && @$SMSettings['sm_twlink']): ?>
-							<li><a class="scl" data-link="twitter-page" href="javascript:void(0);">Twitter</a></li>
-							<?php endif; ?>
-							<?php if(@$SMSettings['sm_gplink']): ?>
-							<li><a class="scl" data-link="google-page" href="javascript:void(0);">Google+</a></li>
-							<?php endif; ?>
-						</ul>
-						<?php if(@$SMSettings['sm_fblink']): ?>
-						<div class="facebook-page social-page">
-							<iframe src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2FPowerSortTechnologies&amp;width&amp;height=590&amp;colorscheme=light&amp;show_faces=true&amp;header=true&amp;stream=true&amp;show_border=true&amp;appId=313201365506980" height="590" frameborder="0" style="border:0" allowfullscreen></iframe>
-						</div>
-						<?php endif; ?>
-						<?php if(@$SMSettings['sm_twlink']): ?>
-						<div class="twitter-page social-page" style="display:none;">
-							<a class="twitter-timeline" href="<?php echo $SMSettings['sm_twlink']; ?>" data-widget-id="717316381994123265">Tweets by @<?php echo basename($SMSettings['sm_twlink']); ?></a>
-								<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id))	{js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-						</div>
-						<?php endif; ?>
-						<?php if(@$SMSettings['sm_gplink']): ?>
-						<div class="google-page social-page" style="display:none;">						
-							<script src="https://apis.google.com/js/platform.js"></script>						
-							<div class="g-page" data-href="https://plus.google.com/105422634089178330616/posts/hdbPtrsqMXQ/" data-rel="publisher"></div>
-						</div>
-						<?php endif; ?>
-					</div>
-				</div>
-				<?php endif; ?>
-				
 				<div class="col-md-12 text-center cnet">
 					<!--<hr class="tp">-->
 					<div class="pr" style="padding-top:30px;">
