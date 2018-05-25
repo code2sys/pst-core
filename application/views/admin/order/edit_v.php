@@ -1062,7 +1062,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
 
     function refundProcess()
     {
-        var refundAmount = parseInt(jQuery('input[name=refund_amount]').val());
+        var refundAmount = parseFloat(jQuery('input[name=refund_amount]').val());
         var transaction = jQuery('input[name=transaction_id]:checked').val();
         if( refundAmount <= 0 ) {
             alert('Please Enter amount to refund.');

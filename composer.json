@@ -19,7 +19,7 @@
     "require": {
         "mustache/mustache" : "~2.5",
         "swiftmailer/swiftmailer": "@stable",
-        "php": ">=5.3.9",
+        "php": ">=7.0",
     	"dts/ebay-sdk": "~0.1",
         "dts/ebay-sdk-php": "@stable",
 	"pst/objectlib" : "dev-master"
