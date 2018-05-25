@@ -85,7 +85,12 @@ $(document).ready(function () {
 		// None of the above conditions held; show the modal
 		siteModalsState['customerExitModalViewCount'] = (siteModalsState['customerExitModalViewCount'] + 1) || 1;
 		localStorage.setItem('siteModalsState', JSON.stringify(siteModalsState));
-		$('#customer-exit-modal').modal('show');
+		$('.modal').modal('hide');
+
+		// Fixes Bootstrap bug
+		setTimeout(function () {
+			$('#customer-exit-modal').modal('show');
+		}, 500);
 	});
 
 	// Record the modal form submission so we don't show more sales modals

@@ -486,7 +486,12 @@ $(document).ready(function () {
 		// If user has already made a form submission on another modal, don't show this modal
 		if (siteModalsState['hasContactedSales']) return;
 
-		$('#major-unit-detail-modal_<?php echo $motorcycle['id']; ?>').modal('show');
+		$('.modal').modal('hide');
+
+		// Fixes Bootstrap bug
+		setTimeout(function () {
+			$('#major-unit-detail-modal_<?php echo $motorcycle['id']; ?>').modal('show');
+		}, 500);
 	}, 5000);
 });
 </script>

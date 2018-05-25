@@ -1052,7 +1052,6 @@ class Welcome extends Master_Controller {
         $message .= "City : " . $post['city'] . '<br>';
         $message .= "State : " . $post['state'] . '<br>';
         $message .= "Zipcode : " . $post['zipcode'] . '<br>';
-        $message .= "<hr>";
         $message .= "Date Of Ride : " . $post['date_of_ride'] . '<br>';
         $message .= "Major unit : " . $post['motorcycle'] . '<br>';
         $message .= "Make : " . $post['make'] . '<br>';
@@ -1062,7 +1061,6 @@ class Welcome extends Master_Controller {
         $message .= "VIN : " . $post['vin'] . '<br>';
         $message .= "Miles : " . $post['miles'] . '<br>';
         $message .= "Accessories : " . $post['accessories'] . '<br>';
-        $message .= "<hr>";
         $message .= "Comments : " . $post['questions'] . '<br>';
 
         $this->load->model("mail_gen_m");

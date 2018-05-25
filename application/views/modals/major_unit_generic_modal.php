@@ -93,7 +93,12 @@ $(document).ready(function () {
 		// User hasn't seen modal yet so show it to them
 		siteModalsState['hasSeenGenericMajorUnitModal'] = true;
 		localStorage.setItem('siteModalsState', JSON.stringify(siteModalsState));
-		$('#major-unit-generic-modal').modal('show');
+		$('.modal').modal('hide');
+
+		// Fixes Bootstrap bug
+		setTimeout(function () {
+			$('#major-unit-generic-modal').modal('show');
+		}, 500);
 	}, 5000);
 
 	// Record the modal form submission so we don't show more sales modals
