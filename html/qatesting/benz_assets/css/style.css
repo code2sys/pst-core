@@ -2232,7 +2232,7 @@ p.creditCar_b.loct a i{
 
 .modal#customer-exit-modal .modal-body-message {
     position: relative;
-    line-height: 4rem;
+    line-height: 2rem;
 }
 
 .modal#customer-exit-modal .modal-body-message::before {
@@ -2262,6 +2262,10 @@ p.creditCar_b.loct a i{
 }
 
 @media (min-width: 768px) {
+    .modal#customer-exit-modal .modal-body-message {
+        line-height: 4rem;
+    }
+
     .modal#customer-exit-modal .modal-body-message > span {
         font-size: 3rem;
     }
