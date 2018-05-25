@@ -210,7 +210,7 @@ if (!DISABLE_TOP_RATED) {
     <?php if (count(array_keys($topRated)) > 0): ?>
         <?php
         $CI =& get_instance();
-        echo $CI->load->view(array("master/widgets/hotelsflatsslider", array(
+        echo $CI->load->view("master/widgets/hotelsflatsslider", array(
             "extra_master_classes" => "podct",
             "wrapper_id" => "home_top_rated_products",
             "header_class" => "best mrgnbtm65",
@@ -224,7 +224,7 @@ if (!DISABLE_TOP_RATED) {
                         ), true)
                 );
             }, $topRated)
-        ), true));
+        ), true);
 
 
         ?>
