@@ -54,21 +54,27 @@
         <div>
             <table>
                 <tbody>
-                <?php foreach (array(
-                                   array("key" => "firstName", "label" => "First Name"),
-                                   array("key" => "lastName", "label" => "Last Name"),
-                                   array("key" => "email", "label" => "Email Address"),
-                                   array("key" => "phone", "label" => "Phone"),
-                                   array("key" => "questions", "label" => "Comments"),
-                                   array("key" => "motorcycle", "label" => "Major unit"),
-                                   array("key" => "make", "label" => "Make"),
-                                   array("key" => "model", "label" => "Model"),
-                                   array("key" => "created", "label" => "Request Date/Time"),
-                                   array("key" => "status", "label" => "Status")
-
-
-                               ) as $rec) {
-
+                <?php
+                foreach (array(
+                    array("key" => "firstName", "label" => "First Name"),
+                    array("key" => "lastName", "label" => "Last Name"),
+                    array("key" => "email", "label" => "Email Address"),
+                    array("key" => "phone", "label" => "Phone"),
+                    array("key" => "address", "label" => "Address"),
+                    array("key" => "city", "label" => "City"),
+                    array("key" => "state", "label" => "State"),
+                    array("key" => "zipcode", "label" => "Zip"),
+                    array("key" => "date_of_ride", "label" => defined('WORDING_PLACEHOLDER_DATE_OF_RIDE') ? WORDING_PLACEHOLDER_DATE_OF_RIDE : "Date of Test Ride"),
+                    array("key" => "motorcycle", "label" => "Major unit"),
+                    array("key" => "make", "label" => "Make"),
+                    array("key" => "model", "label" => "Model"),
+                    array("key" => "year", "label" => "Year"),
+                    array("key" => "miles", "label" => "Miles"),
+                    array("key" => "accessories", "label" => "Accessories"),
+                    array("key" => "questions", "label" => "Comments"),
+                    array("key" => "created", "label" => "Request Date/Time"),
+                    array("key" => "status", "label" => "Status")
+                ) as $rec) {
                     $value = array_key_exists($rec["key"], $quote) ? $quote[ $rec["key"] ] : "";
 
                     if ($value != "") {
