@@ -2137,6 +2137,17 @@ p.creditCar_b.loct a i{
     color: #ff0000;
 }
 
+.modal .modal-body-dark .modal-body-subtitle {
+    margin: 12px 0 24px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 2em;
+    font-weight: 400;
+    text-align: center;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
 /* Unit Details */
 .modal .modal-unit-details {
     margin-bottom: 16px;
@@ -2188,7 +2199,6 @@ p.creditCar_b.loct a i{
     font-size: 1.4em;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 .modal .modal-form-container p:first-of-type {

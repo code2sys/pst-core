@@ -319,3 +319,20 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
         </div>
     </div>
 </div>
+
+<?php $this->view('modals/major_unit_generic_modal.php'); ?>
+
+<script type="application/javascript">
+// Show Major Unit Generic modal
+setTimeout(function () {
+    var siteModalsState = JSON.parse(localStorage.getItem('siteModalsState')) || {};
+
+    // If user has already seen the modal don't show it again
+    if (siteModalsState['hasSeenGenericMajorUnitModal']) return;
+
+    // User hasn't seen modal yet so show it to them
+    siteModalsState['hasSeenGenericMajorUnitModal'] = true;
+    localStorage.setItem('siteModalsState', JSON.stringify(siteModalsState));
+    $('#major-unit-generic-modal').modal('show');
+}, 5000);
+</script>
