@@ -25,6 +25,11 @@
 
 if (count($rotating_things) > 0) {
 
+    ?><!--
+    <?php print_r($rotating_things); ?>
+
+    --> <?php
+
     $CI =& get_instance();
     $CI->load->helper("mustache_helper");
     $template = mustache_tmpl_open("master/widgets/hotelsflatsslider.html");
