@@ -98,7 +98,7 @@ class Welcome extends Master_Controller {
         }
         $clear_password = $this->encrypt->decode($userRecord['password']);
         $new_password = $this->encrypt->encode($password);
-        
+
         if ($password == $clear_password) {
             $this->account_m->updateLogin($userRecord['id']);
             unset($_SESSION['contactInfo']);
@@ -1048,18 +1048,10 @@ class Welcome extends Master_Controller {
         $message .= "Last Name : " . $post['lastName'] . '<br>';
         $message .= "Email : " . $post['email'] . '<br>';
         $message .= "Phone : " . $post['phone'] . '<br>';
-        $message .= "Address : " . $post['address'] . '<br>';
-        $message .= "City : " . $post['city'] . '<br>';
-        $message .= "State : " . $post['state'] . '<br>';
-        $message .= "Zipcode : " . $post['zipcode'] . '<br>';
-        $message .= "Date Of Ride : " . $post['date_of_ride'] . '<br>';
-        $message .= "Make : " . $post['make'] . '<br>';
-        $message .= "Model : " . $post['model'] . '<br>';
-        $message .= "Year : " . $post['year'] . '<br>';
-        $message .= "Miles : " . $post['miles'] . '<br>';
-        $message .= "Accessories : " . $post['accessories'] . '<br>';
-        $message .= "Questions : " . $post['questions'] . '<br>';
-        $message .= "Motorcycle : " . $post['motorcycle'] . '<br>';
+        $message .= "Comments : " . $post['questions'] . '<br>';
+        $message .= "Major unit : " . $post['motorcycle'] . '<br>';
+        $message .= "SKU : " . $post['sku'] . '<br>';
+        $message .= "VIN : " . $post['vin'] . '<br>';
 
         $this->load->model("mail_gen_m");
 

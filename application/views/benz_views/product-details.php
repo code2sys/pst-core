@@ -27,9 +27,9 @@ $stock_status_mode = $CI->_getStockStatusMode();
 				<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
 				<a href="<?php echo base_url('welcome/benzDetails/'.$motorcycle['id']); ?>"><?php echo $motorcycle['title'];?></a>
 			</nav>
-			<div class="menu-section">				
+			<div class="menu-section">
 				<ul class="nav navbar-nav menu-dti">
-					<li><a href="#" data-toggle="modal" data-target="#myModal">GET A QUOTE</a></li>
+					<li><a href="#" data-toggle="modal" data-target="#myModal<?php echo $motorcycle['id']; ?>">GET A QUOTE</a></li>
 					<li><a href="#" data-toggle="modal" data-target="#myModal">TRADE VALUE</a></li>
 					<li style="margin-right:10px;" data-toggle="modal" data-target="#myModal"><a href="#"><?php if (defined('WORDING_SCHEDULE_TEST_DRIVE')) { echo WORDING_SCHEDULE_TEST_DRIVE; } else { ?>SCHEDULE TEST DRIVE<?php } ?></a></li>
 					<li><a href="/pages/index/financerequest"><?php
@@ -107,15 +107,15 @@ $stock_status_mode = $CI->_getStockStatusMode();
 				<div class="dtal-txt">
 					<label>Condition :</label>
 					<span><?php echo $motorcycle['condition'] == '1' ? 'New' : 'Pre-Owned';?></span>
-				</div>				
+				</div>
 				<div class="dtal-txt">
 					<label>year :</label>
 					<span><?php echo $motorcycle['year'];?></span>
-				</div>				
+				</div>
 				<div class="dtal-txt">
 					<label>make :</label>
 					<span><?php echo $motorcycle['make'];?></span>
-				</div>				
+				</div>
 				<div class="dtal-txt">
 					<label>model :</label>
 					<span><?php echo $motorcycle['model'];?></span>
@@ -166,7 +166,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 				<!--<div class="dtal-txt">
 					<label>width :</label>
 					<span>32.1 In.</span>
-				</div>				
+				</div>
 				<div class="dtal-txt">
 					<label>Height</label>
 					<span>44.7 In.</span>
@@ -199,8 +199,8 @@ $stock_status_mode = $CI->_getStockStatusMode();
 					<a href="javascript:googleCurrentPage()" target="_blank" class="plus">
 						<span class="fa fa-google-plus"></span>
 					</a>
-				</div>				
-			</div>			
+				</div>
+			</div>
 		</div>
 		<div class="col-md-12 col-xs-12 pdig padg-one" style="padding-top:50px;">
             <?php
@@ -335,6 +335,13 @@ $stock_status_mode = $CI->_getStockStatusMode();
 	</div>
 </div>
 
+<script type="application/javascript">
+// Show Major Unit Detail modal
+setTimeout(function () {
+	$('#myModal<?php echo $motorcycle['id']; ?>').modal('show');
+}, 5000);
+</script>
+
 <?php if ($show_info && $show_spec): ?>
 <script type="application/javascript">
     $(document).ready(function() {
@@ -364,84 +371,16 @@ $stock_status_mode = $CI->_getStockStatusMode();
 </script>
 <?php endif; ?>
 
-<div class="modal fade pop" id="myModal">
-	<div class="modal-dialog area">	  
-		<div class="modal-content">
-			<div class="modal-header">
-				<div class="clo" data-dismiss="modal">get a quote</div>			 
-			</div>
-			<?php echo form_open('welcome/productEnquiry', array('class' => 'form_standard')); ?>
-				<div class="modal-body" id="scol">				
-					 <div class="form-group">						
-						<input type="text" class="form-control" placeholder="first name" name="firstName" required="">
-						<div class="formRequired">*</div>
-					</div>
-					 <div class="form-group">						
-						<input type="text" class="form-control" placeholder="last name" name="lastName" required="">
-						<div class="formRequired">*</div>
-					</div>
-					 <div class="form-group">						
-						<input type="email" class="form-control" placeholder="email" name="email" required="">
-						<div class="formRequired">*</div>
-					</div>
-					 <div class="form-group">						
-						<input type="text" class="form-control" placeholder="phone" name="phone">
-					</div>
-					 <div class="form-group">						
-						<input type="text" class="form-control" placeholder="address" name="address">
-					</div>
-					 <div class="form-group">						
-						<input type="text" class="form-control" placeholder="city" name="city">
-					</div>
-					 <div class="form-group">						
-						<input type="text" class="form-control" placeholder="state" name="state">
-					</div>
-					<div class="form-group">						
-						<input type="text" class="form-control" placeholder="zip code" name="zipcode">
-					</div>
-                    <?php if (!defined('DISABLE_TEST_DRIVE') || !DISABLE_TEST_DRIVE): ?>
-					<h3 class="txt-title"><?php if (defined('WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE')) { echo WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE; } else { ?>Want to Schedule a Test Drive?<?php } ?></h3>
-					
-					<div class="form-group">						
-						<input type="text" class="form-control" placeholder="<?php if (defined('WORDING_PLACEHOLDER_DATE_OF_RIDE')) { echo WORDING_PLACEHOLDER_DATE_OF_RIDE; } else { ?>date of ride<?php } ?>" name="date_of_ride">
-					</div>
-					<hr class="brdr">
-                    <?php endif; ?>
-					<h3 class="txt-title">Trade in?</h3>
-					
-					<div class="form-group">						
-						<input type="text" class="form-control" placeholder="make" name="make">
-					</div>
-					<div class="form-group">						
-						<input type="text" class="form-control" placeholder="model" name="model">
-					</div>
-					<div class="form-group">						
-						<input type="text" class="form-control" placeholder="year" name="year">
-					</div>
-					<div class="form-group">						
-						<input type="text" class="form-control" placeholder="miles" name="miles">
-					</div>
-					<div class="form-group">						
-						<textarea type="text" class="form-control" placeholder="added accessories" name="accessories"></textarea>
-					</div>
-					<div class="form-group">						
-						<textarea type="text" class="form-control" placeholder="comments questions" name="questions"></textarea>
-					</div>
-					
-					<h3 class="txt-title">I am Interested in this Vehicle</h3>
-					
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Unit Name" value="<?php echo $motorcycle['title'];?>" readonly name="motorcycle">
-					</div>
-						<input type="hidden" name="product_id" value="<?php echo $motorcycle['id'];?>">
-					<div class="col-md-12 text-center" style="float:none;">
-						<input type="submit" class="btn bttn" value="Submit">
-					</div>
-				</div>								
-			</form>					
-		</div>	  
-	</div>
-</div>
+<?php
+if ($image_url == "" || is_null($image_url) || $image_url == $media_url) {
+	$image_url = "/assets/image_unavailable.png";
+}
+
+$this->view('modals/major_unit_detail_modal.php', array(
+	'motorcycle'       => $motorcycle,
+	'motorcycle_image' => $image_url,
+));
+?>
 
 <script language="javascript">
 	function fbshareCurrentPage()
@@ -464,7 +403,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 
 		var thumbItem = 9;
 		var screen_width = $(document).width();
-		
+
 		if (screen_width < 480) {
 			// mobile screen
 			thumbItem = 4;
@@ -490,7 +429,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 			loop:true,
 			onSliderLoad: function() {
 				$('#image-gallery').removeClass('cS-hidden');
-			}, 
+			},
 			pause:<?php echo defined('MAJOR_UNIT_PAUSE_TIME') ? MAJOR_UNIT_PAUSE_TIME : 2000; ?>
 		});
 	});
@@ -522,7 +461,7 @@ echo $CI->load->view("showvideo_function", array(), false);
 </script>
 
 <?php //include('footer.php'); ?>
-	
+
 <style>
     .lSSlideOuter .lSPager.lSGallery img {
         display: block;
