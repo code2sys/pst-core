@@ -209,7 +209,7 @@ if (!defined('DISABLE_TOP_RATED')) {
     define('DISABLE_TOP_RATED', false);
 }
 
-if (!DISABLE_TOP_RATED) {
+if (FALSE) { // Brandt said to just remove this on 05-25-18. 
     ?>
     <?php if (count(array_keys($topRated)) > 0): ?>
         <?php
