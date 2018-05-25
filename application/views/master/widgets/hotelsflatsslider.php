@@ -44,7 +44,12 @@ if (count($rotating_things) > 0) {
     mustache_tmpl_set($template, "global_counter", $hotels_flats_counter);
 
     // set the HTML pieces
-    mustache_tmpl_set($template, "rotating_things", $rotating_things);
+    foreach ($rotating_things as $r) {
+        mustache_tmpl_iterate($template, "rotating_things");
+        $r["item_extra_class"] = array_key_exists("item_extra_class", $r) ? r["item_extra_class"] : $item_extra_class;
+        $r["box_extra_class"] = array_key_exists("box_extra_class", $r) ? r["box_extra_class"] : $box_extra_class;
+        mustache_tmpl_set($template, "rotating_things", $r);
+    }
 
     // just pass all these through...
     foreach (array("header_class", "header_text", "extra_master_classes", "wrapper_id", "header_link", "header_link_text", "div_extra_classes", "item_extra_class", "box_extra_class") as $key) {
