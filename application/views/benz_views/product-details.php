@@ -368,19 +368,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 if ($image_url == "" || is_null($image_url) || $image_url == $media_url) {
 	$image_url = "/assets/image_unavailable.png";
 }
-
-$this->view('modals/major_unit_detail_modal.php', array(
-	'motorcycle'       => $motorcycle,
-	'motorcycle_image' => $image_url,
-));
 ?>
-
-<script type="application/javascript">
-// Show Major Unit Detail modal
-setTimeout(function () {
-	$('#major-unit-detail-modal_<?php echo $motorcycle['id']; ?>').modal('show');
-}, 5000);
-</script>
 
 <script language="javascript">
 	function fbshareCurrentPage()
@@ -479,3 +467,26 @@ echo $CI->load->view("showvideo_function", array(), false);
     }
 
 </style>
+
+<?php
+$this->view('modals/major_unit_detail_modal.php', array(
+	'motorcycle'       => $motorcycle,
+	'motorcycle_image' => $image_url,
+));
+
+$this->view('modals/customer_exit_modal.php');
+?>
+
+<script type="application/javascript">
+$(document).ready(function () {
+	// Show Major Unit Detail modal
+	setTimeout(function () {
+		var siteModalsState = JSON.parse(localStorage.getItem('siteModalsState')) || {};
+
+		// If user has already made a form submission on another modal, don't show this modal
+		if (siteModalsState['hasContactedSales']) return;
+
+		$('#major-unit-detail-modal_<?php echo $motorcycle['id']; ?>').modal('show');
+	}, 5000);
+});
+</script>

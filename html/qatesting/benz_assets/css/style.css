@@ -2,6 +2,8 @@
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 @font-face {
@@ -2148,6 +2150,120 @@ p.creditCar_b.loct a i{
     letter-spacing: 1px;
 }
 
+/* Customer Exit - Body Title */
+.modal#customer-exit-modal .modal-body-title {
+    margin: 32px 0;
+    font-family: 'Bungee Inline', sans-serif;
+    font-size: 3rem;
+    line-height: 0rem;
+    color: #000000;
+    text-align: center;
+    text-transform: uppercase;
+    -webkit-transform: scale(1, 1.5);
+    -moz-transform:    scale(1, 1.5);
+    -ms-transform:     scale(1, 1.5);
+    -o-transform:      scale(1, 1.5);
+    transform:         scale(1, 1.5);
+}
+
+.modal#customer-exit-modal .modal-body-title > span {
+    display: inline-block;
+    height: 32px;
+    padding: 0 8px;
+    margin: 0 16px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 500;
+    line-height: 2.4rem;
+    border: 3px solid black;
+    border-left: 0;
+    border-right: 0;
+    vertical-align: middle;
+    -webkit-transform: scale(1.5, 0.9);
+    -moz-transform:    scale(1.5, 0.9);
+    -ms-transform:     scale(1.5, 0.9);
+    -o-transform:      scale(1.5, 0.9);
+    transform:         scale(1.5, 0.9);
+}
+
+@media (min-width: 768px) {
+    .modal#customer-exit-modal .modal-body-title {
+        font-size: 6rem;
+    }
+
+    .modal#customer-exit-modal .modal-body-title > span {
+        height: 48px;
+        font-size: 3.8rem;
+        line-height: 3.4rem;
+        border-width: 6px;
+    }
+}
+
+.modal#customer-exit-modal .modal-body-subtitle {
+    position: relative;
+    padding: 1px 0;
+    color: #ffffff;
+    text-align: center;
+    background-color: #9f9c9e;
+}
+
+.modal#customer-exit-modal .modal-body-subtitle::before {
+    position: absolute;
+    top: calc(50% - 3px);
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background-color: #ffffff;
+    content: '';
+}
+
+.modal#customer-exit-modal .modal-body-subtitle > span {
+    position: relative;
+    padding: 0 8px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background-color: #9f9c9e;
+}
+
+.modal#customer-exit-modal .modal-body-message {
+    position: relative;
+}
+
+.modal#customer-exit-modal .modal-body-message::before {
+    position: absolute;
+    top: -8px;
+    right: 0;
+    width: 64px;
+    height: 64px;
+    background: #000000;
+    content: '';
+}
+
+.modal#customer-exit-modal .modal-body-message > span {
+    position: relative;
+    display: block;
+    padding: 8px 16px;
+    margin: 24px 8px 0 0;
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: #000000;
+    border: 8px solid #ffffff;
+    border-bottom: none;
+    border-left: none;
+}
+
+@media (min-width: 768px) {
+    .modal#customer-exit-modal .modal-body-message > span {
+        font-size: 3rem;
+    }
+}
+
 /* Unit Details */
 .modal .modal-unit-details {
     margin-bottom: 16px;
@@ -2191,7 +2307,7 @@ p.creditCar_b.loct a i{
 }
 
 /* Modal Form */
-.modal .modal-form-container {
+.modal .modal-form-container form {
     padding: 16px;
     background-color: #c3c1c3;
     color: #000000;
@@ -2240,6 +2356,46 @@ p.creditCar_b.loct a i{
     color: #ffffff;
     text-transform: uppercase;
     background: #ff0000;
+}
+
+/* Customer Exit - Modal Form */
+.modal#customer-exit-modal .modal-form-container form {
+    padding: 0;
+    background-color: transparent;
+}
+
+.modal#customer-exit-modal .modal-form-field-outer-container {
+    position: relative;
+}
+
+.modal#customer-exit-modal .modal-form-field-outer-container::before {
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 64px;
+    height: 64px;
+    background: #000000;
+    content: '';
+}
+
+.modal#customer-exit-modal .modal-form-field-inner-container {
+    position: relative;
+    display: block;
+    padding: 16px;
+    margin: 0 0 0 8px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #ffffff;
+    background-color: #555555;
+    border: 8px solid #ffffff;
+    border-top: none;
+    border-right: none;
+}
+
+.modal#customer-exit-modal .modal-form-container input[type=submit] {
+    margin-top: 16px;
 }
 
 /* Modal Body Footer */

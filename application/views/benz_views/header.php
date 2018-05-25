@@ -38,6 +38,7 @@ $SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
 	<!--Motercycle Content End-->
 
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400,500">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bungee+Inline">
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/style.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/bootstrap.min.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/owl.carousel.css" />

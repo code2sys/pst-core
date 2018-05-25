@@ -12,7 +12,7 @@
 			</div>
 			<?php endif; ?>
 			<!-- END VALIDATION ERROR -->
-			
+
 			<!-- PROCESS ERROR -->
 			<?php if(@$processingError): ?>
 			<div class="process_error">
@@ -23,7 +23,7 @@
 			</div>
 			<?php endif; ?>
 			<!-- END PROCESS ERROR -->
-			
+
 		  <!-- SUCCESS -->
 		  <?php if(@$success): ?>
 			<div class="success">
@@ -34,8 +34,8 @@
 			</div>
 			<?php endif; ?>
 			<!-- END SUCCESS -->
-  
-  	
+
+
   	<!-- Service FORM-->
 		<?php echo form_open(secure_site_url('/pages/index/servicerequest'), array('class' => 'form_standard', 'id' => 'form_example', 'autocomplete' => 'off')); ?>
 			<div class="name_box_full">
@@ -156,7 +156,7 @@
 								<textarea name="workdone" placeholder="Work Done" rows="3" cols="50" style="height:50px;width:98%;"><?php echo $_POST['workdone'];?></textarea>
 							</td>
 						</tr>
-						
+
 					</table>
 				</div>
 			</div>
@@ -176,3 +176,5 @@
 			}
 		});
 	</script>
+
+<?php $this->view('modals/customer_exit_modal.php'); ?>
