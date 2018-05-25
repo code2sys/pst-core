@@ -1062,7 +1062,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
 
     function refundProcess()
     {
-        var refundAmount = parseInt(jQuery('input[name=refund_amount]').val());
+        var refundAmount = parseFloat(jQuery('input[name=refund_amount]').val());
         var transaction = jQuery('input[name=transaction_id]:checked').val();
         if( refundAmount <= 0 ) {
             alert('Please Enter amount to refund.');
@@ -1074,13 +1074,16 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
         }
         var orderId = $('input[name="order_id"]').attr('value');
         var data = $('#order_info').serialize();
-        $.post(base_url + 'admin/order_edit/'+orderId,
-            data,
+        $.post(base_url + 'admin/order_refund/'+orderId,
+            {
+                transaction_id: transaction,
+                refund_amount : refundAmount
+            },
             function (status)
             {
-                window.location.replace(base_url + 'admin/order_edit/' + orderId);
+                console.log(status);
+                window.location.href = base_url + 'admin/order_edit/' + orderId + "/" + (new Date()).getTime();
             });
-
     }
 
 
