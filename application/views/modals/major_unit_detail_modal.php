@@ -9,11 +9,11 @@
 				<p class="modal-body-title">Get Out-The-Door Price</p>
 
 				<div class="modal-unit-details row">
-					<div class="col-sm-5">
+					<div class="col-sm-4">
 						<img class="img-responsive center-block" src="<?php echo $motorcycle_image; ?>"/>
 					</div>
 
-					<div class="col-sm-7">
+					<div class="col-sm-8">
 						<ul>
 							<li><strong><?php echo $motorcycle['title']; ?></strong></li>
 							<li>Color: <?php echo $motorcycle['color']; ?></li>
@@ -34,9 +34,9 @@
 
 					<div class="col-xs-12 col-sm-8">
 						<div class="modal-form-container">
-							<p>Fill out the form below to get your free out-the-door price!</p>
-
 							<?php echo form_open('welcome/productEnquiry', array('class' => 'form_standard')); ?>
+								<p>Fill out the form below to get your<br>free out-the-door price!</p>
+
 								<div class="form-group">
 									<label for="firstName">First&nbsp;Name:</label>
 									<input id="firstName" class="form-control" type="text" name="firstName" required>
@@ -83,3 +83,14 @@
 		</div>
 	</div>
 </div>
+
+<script type="application/javascript">
+$(document).ready(function () {
+	// Record the modal form submission so we don't show more sales modals
+	$('.modal form input[type=submit]').click(function () {
+		var siteModalsState = JSON.parse(localStorage.getItem('siteModalsState')) || {};
+		siteModalsState['hasContactedSales'] = true;
+		localStorage.setItem('siteModalsState', JSON.stringify(siteModalsState));
+	});
+});
+</script>

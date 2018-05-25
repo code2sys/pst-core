@@ -30,7 +30,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 			<div class="menu-section">
 				<ul class="nav navbar-nav menu-dti">
 					<li><a href="#" data-toggle="modal" data-target="#major-unit-detail-modal_<?php echo $motorcycle['id']; ?>">GET A QUOTE</a></li>
-					<li><a href="#" data-toggle="modal" data-target="#major-unit-detail-modal_<?php echo $motorcycle['id']; ?>">TRADE VALUE</a></li>
+					<li><a href="#" data-toggle="modal" data-target="#trade-in-value-modal_<?php echo $motorcycle['id']; ?>">TRADE VALUE</a></li>
 					<li style="margin-right:10px;" data-toggle="modal" data-target="#myModal"><a href="#"><?php if (defined('WORDING_SCHEDULE_TEST_DRIVE')) { echo WORDING_SCHEDULE_TEST_DRIVE; } else { ?>SCHEDULE TEST DRIVE<?php } ?></a></li>
 					<li><a href="/pages/index/financerequest"><?php
                             if (!defined('GET_FINANCING_WORDING')) {
@@ -368,19 +368,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 if ($image_url == "" || is_null($image_url) || $image_url == $media_url) {
 	$image_url = "/assets/image_unavailable.png";
 }
-
-$this->view('modals/major_unit_detail_modal.php', array(
-	'motorcycle'       => $motorcycle,
-	'motorcycle_image' => $image_url,
-));
 ?>
-
-<script type="application/javascript">
-// Show Major Unit Detail modal
-setTimeout(function () {
-	$('#major-unit-detail-modal_<?php echo $motorcycle['id']; ?>').modal('show');
-}, 5000);
-</script>
 
 <script language="javascript">
 	function fbshareCurrentPage()
@@ -479,3 +467,31 @@ echo $CI->load->view("showvideo_function", array(), false);
     }
 
 </style>
+
+<?php
+$this->view('modals/major_unit_detail_modal.php', array(
+	'motorcycle'       => $motorcycle,
+	'motorcycle_image' => $image_url,
+));
+$this->view('modals/trade_in_value_modal.php', array('motorcycle' => $motorcycle));
+$this->view('modals/customer_exit_modal.php');
+?>
+
+<script type="application/javascript">
+$(document).ready(function () {
+	// Show Major Unit Detail modal
+	setTimeout(function () {
+		var siteModalsState = JSON.parse(localStorage.getItem('siteModalsState')) || {};
+
+		// If user has already made a form submission on another modal, don't show this modal
+		if (siteModalsState['hasContactedSales']) return;
+
+		$('.modal').modal('hide');
+
+		// Fixes Bootstrap bug
+		setTimeout(function () {
+			$('#major-unit-detail-modal_<?php echo $motorcycle['id']; ?>').modal('show');
+		}, 500);
+	}, 5000);
+});
+</script>

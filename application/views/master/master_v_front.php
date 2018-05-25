@@ -15,7 +15,7 @@ $meta_description = "";
 if (isset($descr) && $descr != "") {
         $meta_description = $descr;
 } else if (isset($pageRec) && is_array($pageRec) && array_key_exists("descr", $pageRec) && $pageRec["descr"] != "") {
-        $meta_description = $pageRec["descr"];        
+        $meta_description = $pageRec["descr"];
 } else if (isset($pageRec) && is_array($pageRec) && array_key_exists("metatags", $pageRec) && $pageRec["metatags"] != "") {
         $meta_description = $pageRec["metatags"];
 }
@@ -48,18 +48,20 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 	?>
 
 	<?php echo @$metatag; ?>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400,500">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bungee+Inline">
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/style.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/bootstrap.min.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/owl.carousel.css" />
 	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/owl.theme.css" />
-	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/owl.transitions.css" />	
-	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/font-awesome.css" />	
-	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/responsive.css" />	
-	
+	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/owl.transitions.css" />
+	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/font-awesome.css" />
+	<link rel="stylesheet" href="<?php echo $new_assets_url; ?>css/responsive.css" />
+
 
 	<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>-->
 	<script src="<?php echo $new_assets_url; ?>js/bootstrap.min.js"></script>
-	<script src="<?php echo $new_assets_url; ?>js/owl.carousel.js"></script>		
+	<script src="<?php echo $new_assets_url; ?>js/owl.carousel.js"></script>
 
 	<script>
 		$(document).ready(function(){
@@ -68,18 +70,18 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 			});
 		});
 	</script>
-	
+
 	<script>
 		var environment = '<?php echo ENVIRONMENT; ?>';
 		var base_url = '<?php echo base_url(); ?>';
 		var s_base_url = '<?php echo $s_baseURL; ?>';
 		shopping_cart_count = <?php echo @$_SESSION['cart']['qty'] ? $_SESSION['cart']['qty'] : 0; ?>;
 	</script>
-	
+
 	<?php echo @$header; ?>
 	<link rel="stylesheet" href="<?php echo jsite_url("/basebranding.css"); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url("/custom.css"); ?>" />
-	
+
 	<style>
 		#top-cat img{
 			min-height:135px;
@@ -121,7 +123,7 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 			<?php foreach( $bannerImages as $image ) { ?>
                     <div class="item"><a href="<?php echo $image['banner_link'];?>"><img src="/media/<?php echo $image['image']; ?>"></a></div>
 			<?php } ?>
-		  <!--<div class="item"><img src="<?php echo $new_assets_url; ?>images/banner2.png"></div> 
+		  <!--<div class="item"><img src="<?php echo $new_assets_url; ?>images/banner2.png"></div>
 		  <div class="item"><img src="<?php echo $new_assets_url; ?>images/banner3.png"></div>-->
 		</div>
 		<div class="clear"></div>
@@ -134,7 +136,7 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
     ), true);
 
     ?>
-        
+
         <?php if (@$topVideo) { ?>
 	<div class="sw brd">
 		<div class="container_b">
@@ -148,12 +150,12 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
                                     </li>
                                 <?php } ?>
                             </ul>
-                        </div>				
+                        </div>
                     </div>
                 </div>
             </div>
         <?php } ?>
-        
+
         <?php if (!empty($featuredCategories)) { ?>
             <div class="sw brd">
                 <div class="container_b">
@@ -170,7 +172,7 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 						</li>
 						<?php } ?>
 					</ul>
-				</div>				
+				</div>
 			</div>
 		</div>
 	</div>
@@ -237,7 +239,7 @@ if (FALSE) { // Brandt said to just remove this on 05-25-18.
 
 
 	<div class="sw podct">
-		<div class="container_b">						
+		<div class="container_b">
 			<div class="row">
 
 
@@ -247,25 +249,25 @@ if (FALSE) { // Brandt said to just remove this on 05-25-18.
 						<?php echo $notice;?>
 					</div>
 				</div>
-			</div>			
+			</div>
 		</div>
 	</div>
-	
-	<?php echo @$footer; ?>	
+
+	<?php echo @$footer; ?>
 
 
-<script>		
+<script>
 function showSubNav( from ){
 
 	/*if( $("#nav"+from).is(":visible") ){
-	
+
 		$("#nav"+from).hide();
-	
+
 	}else{*/
-	
-		$(".SubNavs").hide();	
+
+		$(".SubNavs").hide();
 		$("#nav"+from).show();
-	
+
 	/*}*/
 
 }
@@ -282,7 +284,7 @@ $.post(s_base_url + 'welcome/load_login/', {}, function(returnData)
 	});
 */
 }
-	
+
 function openCreateAccount()
 {
 	window.location.replace('<?php echo $s_baseURL.'checkout/account'; ?>');
@@ -301,7 +303,7 @@ $.post(s_base_url + 'welcome/load_new_user/', {}, function(returnData)
 
 <script>
 $(document).ready(function() {
-	
+
 	$('.panel-title').click(function() {
 		var id = $(this).data('id');
 		var not = $(this).data('not');
@@ -312,7 +314,7 @@ $(document).ready(function() {
 	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
  		$("body").css("display","table");
 	}
-	
+
 	$( ".topNavAnchors" ).hover(
 	  function() {
 		showSubNav( $(this).attr("id") );
@@ -379,7 +381,7 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
     });
 
    });
-   
+
    function setMainSearch(event, section, id)
    {
 	   event.preventDefault();
@@ -395,7 +397,7 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
 			window.location.href = base_url + 'shopping/productlist' + newURL;
 		});
    }
-   
+
    function setNamedSearch(event, section, id, name)
    {
 	   event.preventDefault();
@@ -411,7 +413,7 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
 			window.location.href = base_url + 'shopping/productlist' + newURL;
 		});
    }
-   
+
    function setNamedSearchBrandt(event, section, id, name)
    {
 	   event.preventDefault();
@@ -427,7 +429,7 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
 			//window.location.href = base_url + 'shopping/productlist' + newURL;
 		});
    }
-   
+
    function setSearch(search)
    {
 	   var base_url = '<?php echo base_url(); ?>';
@@ -448,13 +450,13 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
 			window.location.href = base_url + 'shopping/search_product/?search=' + search;
 		});
    }
-   
+
    function removeHeaderSearch() {
 	   $.post(base_url + 'ajax/removeHeaderSearch/',{},
 		function(newURL) {
 		});
 	}
-   
+
    function removeMainSearch(section, id)
    {
 	   $.post(base_url + 'ajax/removeSearch/',
@@ -467,7 +469,7 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
 		{
 			window.location.href = base_url + 'shopping/productlist' + newURL;
 		});
-		
+
    }
 
 
@@ -479,7 +481,7 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
 <?php
 
 $CI =& get_instance();
-echo $CI->load->view("master/tracking", array( 
+echo $CI->load->view("master/tracking", array(
 	"store_name" => $store_name	,
 	"product" => @$product,
 	"ga_ecommerce" => true,
@@ -512,5 +514,6 @@ echo $CI->load->view("showvideo_function", array(), false);
 	?>
 <?php echo jget_store_block("bottom_body"); ?>
 
+	<?php $this->view('modals/customer_exit_modal.php'); ?>
 </body>
 </html>
