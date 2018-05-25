@@ -87,6 +87,10 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 		#top-cat .ftrdb{
 			min-height:240px;
 		}
+
+        #home_top_rated_products .owl-buttons {
+            display: none;
+        }
 	</style>
     <?php echo jget_store_block("bottom_header"); ?>
 
