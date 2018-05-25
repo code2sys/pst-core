@@ -101,7 +101,9 @@ echo $CI->load->view("braintree", array(
             $("#hotels-flats-2").owlCarousel({
                 items : 3,
                 lazyLoad : true,
-                navigation : true
+                navigation : true,
+                autoPlay: true,
+                autoPlayTimeout:3000
             });
 
         });
