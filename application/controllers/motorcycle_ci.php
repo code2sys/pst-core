@@ -194,7 +194,7 @@ class Motorcycle_CI extends Welcome {
         // echo $id.'<br>';
         // echo $title;exit;
         if ($id == null) {
-            redirect('welcome/benzProduct');
+            redirect('Motorcycle_List?fltr=new');
         }
 
         // $this->load->view('benz_views/header.php');

@@ -52,7 +52,10 @@ if (isset($keywords) && $keywords != "") {
 
         ?>
 
-        <!-- CSS LINKS -->		
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400,500">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bungee+Inline">
+
+        <!-- CSS LINKS -->
         <link rel="stylesheet" href="<?php echo $assets; ?>/css_front/media.css" type="text/css" />
         <link rel="stylesheet" href="<?php echo $assets; ?>/css/nav.css" type="text/css" />
         <link rel="stylesheet" href="<?php echo $assets; ?>/css/style.css" type="text/css" />
@@ -70,14 +73,14 @@ if (isset($keywords) && $keywords != "") {
         <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/bootstrap.min.css" />
         <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/owl.carousel.css" />
         <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/owl.theme.css" />
-        <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/owl.transitions.css" />	
+        <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/owl.transitions.css" />
         <link rel="stylesheet" href="<?php echo $new_assets_url1; ?>css/font-awesome.css" />
         <link rel="stylesheet" href="/qatesting/benz_assets/css/jquery.fancybox.css" />
 
 
 
 
-        <!-- END CSS LINKS --> 
+        <!-- END CSS LINKS -->
         <script>
             $(document).ready(function() {
                 $("li").click(function(){
@@ -137,15 +140,15 @@ if (isset($keywords) && $keywords != "") {
         <!-- NAVIGATION JS -->
         <script>
             $( document ).ready( function( $ ) {
-		
+
                 $('body').addClass('js');
-	
+
                 $('.menu-link').click(function(e) {
                     e.preventDefault();
                     $('.menu-link').toggleClass('active');
                     $('#menu').toggleClass('active');
                 });
-	
+
                 $('.has-submenu > a').click(function(e) {
                     e.preventDefault();
                     $(this).toggleClass('active').next('ul').toggleClass('active');
@@ -158,15 +161,15 @@ if (isset($keywords) && $keywords != "") {
         <!-- ACCOUNT NAVIGATION JS -->
         <script>
             $( document ).ready( function( $ ) {
-		
+
                 $('body').addClass('js');
-	
+
                 $('.acct_menu-link').click(function(e) {
                     e.preventDefault();
                     $('.acct_menu-link').toggleClass('active');
                     $('#acct_menu').toggleClass('active');
                 });
-	
+
                 $('.has-submenu > a').click(function(e) {
                     e.preventDefault();
                     $(this).toggleClass('active').next('ul').toggleClass('active');
@@ -186,9 +189,9 @@ if (isset($keywords) && $keywords != "") {
                 $(".toggle_container").hide();
                 $("h4.expand_heading").show(function()
                 {
-                    $(this).addClass("active"); 
-                }, 
-                function () 
+                    $(this).addClass("active");
+                },
+                function ()
                 {
                     $(this).removeClass("active");
                 }
@@ -197,7 +200,7 @@ if (isset($keywords) && $keywords != "") {
                     $(this).next(".toggle_container").slideToggle("fast");
                 });
                 $(".expand_all").toggle(function(){
-                    $(this).addClass("expanded"); 
+                    $(this).addClass("expanded");
                 }, function () {
                     $(this).removeClass("expanded");
                 });
@@ -210,7 +213,7 @@ if (isset($keywords) && $keywords != "") {
 
         <script src="/qatesting/benz_assets/js/jquery.fancybox.pack.js" ></script>
 
-        <!-- 	POPUP JS 
+        <!-- 	POPUP JS
         <script src="<?php echo $assets; ?>/js/jquery.simplemodal.js"></script>
         <script src="<?php echo $assets; ?>/js/custom.js"></script>
         <!-- END POPUP JS -->
@@ -286,7 +289,7 @@ if (isset($keywords) && $keywords != "") {
                                         }
                                         ?>
 
-                            </ul>        
+                            </ul>
                         </div>
                     </div>
 
@@ -343,7 +346,7 @@ foreach ($title1 as $k => $v) {
         </div>
         <!-- END WRAPPER ==========================================================================-->
 
-<?php echo @$footer; ?>	
+<?php echo @$footer; ?>
 
         <style>
             .bnz-nv{
@@ -351,7 +354,7 @@ foreach ($title1 as $k => $v) {
             }
         </style>
 
-        <script>		
+        <script>
             function showSubNav( from ){
                 $(".SubNavs").hide();
                 $("#nav"+from).show();
@@ -365,7 +368,7 @@ foreach ($title1 as $k => $v) {
             {
                 window.location.replace('<?php echo $s_baseURL . 'checkout/account'; ?>');
             }
-	
+
             function openCreateAccount()
             {
                 window.location.replace('<?php echo $s_baseURL . 'checkout/account'; ?>');
@@ -374,11 +377,11 @@ foreach ($title1 as $k => $v) {
 
         <script>
             $(document).ready(function() {
-	
+
                 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
                     $("body").css("display","table");
                 }
-	
+
                 $( ".topNavAnchors" ).hover(
                 function() {
                     showSubNav( $(this).attr("id") );
@@ -410,7 +413,7 @@ foreach ($title1 as $k => $v) {
                     }
                 });
             });
-   
+
             function setMainSearch(event, section, id)
             {
                 event.preventDefault();
@@ -426,8 +429,8 @@ foreach ($title1 as $k => $v) {
                     window.location.href = base_url + 'shopping/productlist' + newURL;
                 });
             }
-   
-   
+
+
             function setNamedSearchBrandt(event, section, id, name)
             {
                 event.preventDefault();
@@ -443,7 +446,7 @@ foreach ($title1 as $k => $v) {
                     //window.location.href = base_url + 'shopping/productlist' + newURL;
                 });
             }
-   
+
             function setSearch(search)
             {
                 //search = search.replace(/\W/g, ' ')
@@ -463,13 +466,13 @@ foreach ($title1 as $k => $v) {
                     window.location.href = base_url + 'shopping/search_product/?search=' + search;
                 });
             }
-   
+
             function removeHeaderSearch() {
                 $.post(base_url + 'ajax/removeHeaderSearch/',{},
                 function(newURL) {
                 });
             }
-   
+
             function removeMainSearch(section, id)
             {
                 $.post(base_url + 'ajax/removeSearch/',
@@ -482,7 +485,7 @@ foreach ($title1 as $k => $v) {
                 {
                     window.location.href = base_url + 'shopping/productlist' + newURL;
                 });
-		
+
             }
 
 

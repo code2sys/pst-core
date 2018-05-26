@@ -108,7 +108,7 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
                     <?php foreach ($brands as $k => $brand) { ?>
                         <?php $key = array_search($brand['make'], $brnds); ?>
                         <div class="checkbox checkbox-primary sdCheckbox brandfltr">
-                            <input id="brand<?php echo $k; ?>" class="styled" name="brand[]" value="<?php echo $brand['make']; ?>" type="checkbox" 
+                            <input id="brand<?php echo $k; ?>" class="styled" name="brand[]" value="<?php echo $brand['make']; ?>" type="checkbox"
                                    <?php echo $brnds[$key] == $brand['make'] ? 'checked' : ''; ?>>
                             <label for="brand<?php echo $k; ?>"><?php echo $brand['make']; ?></label>
                         </div>
@@ -123,13 +123,13 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
                     <?php foreach ($years as $k => $year) { ?>
                         <?php $key = array_search($year['year'], $yr); ?>
                         <div class="checkbox checkbox-primary sdCheckbox">
-                            <input id="year<?php echo $k; ?>" class="styled" name="year[]" value="<?php echo $year['year']; ?>" type="checkbox" 
+                            <input id="year<?php echo $k; ?>" class="styled" name="year[]" value="<?php echo $year['year']; ?>" type="checkbox"
                                    <?php echo $yr[$key] == $year['year'] ? 'checked' : ''; ?>>
                             <label for="year<?php echo $k; ?>"><?php echo $year['year']; ?></label>
                         </div>
                     <?php } ?>
                 </div>
-                <div class="filter-inner"> 	  				
+                <div class="filter-inner">
                     <p class="parg-txt">Vehicle</p>
                     <?php
                     $vhcls = explode('$', $_GET['vehicles']);
@@ -168,7 +168,7 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
             ), true);
             ?>
 
-        </div>			
+        </div>
         <!--here -->
         <div class="next">
             <div class="bikeControlRow row">
@@ -253,87 +253,14 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
                         ?>
                     </div>
 
-                    <div class="modal fade pop" id="myModal<?php echo $motorcycle['id']; ?>">
-                        <div class="modal-dialog area">	  
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <div class="clo" data-dismiss="modal">get a quote</div>			 
-                                </div>
-                                <?php echo form_open('welcome/productEnquiry', array('class' => 'form_standard')); ?>
-                                <div class="modal-body" id="scol">				
-                                    <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="first name" name="firstName" required="">
-                                        <div class="formRequired">*</div>
-                                    </div>
-                                    <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="last name" name="lastName" required="">
-                                        <div class="formRequired">*</div>
-                                    </div>
-                                    <div class="form-group">						
-                                        <input type="email" class="form-control" placeholder="email" name="email" required="">
-                                        <div class="formRequired">*</div>
-                                    </div>
-                                    <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="phone" name="phone">
-                                    </div>
-                                    <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="address" name="address">
-                                    </div>
-                                    <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="city" name="city">
-                                    </div>
-                                    <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="state" name="state">
-                                    </div>
-                                    <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="zip code" name="zipcode">
-                                    </div>
-                    <?php if (!defined('DISABLE_TEST_DRIVE') || !DISABLE_TEST_DRIVE): ?>
-                                    <h3 class="txt-title"><?php if (defined('WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE')) { echo WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE; } else { ?>Want to Schedule a Test Drive?<?php } ?></h3>
+                    <?php
+                    $this->view('modals/major_unit_detail_modal.php', array(
+                        'motorcycle'       => $motorcycle,
+                        'motorcycle_image' => $motorcycle_image,
+                    ));
+                    $this->view('modals/trade_in_value_modal.php', array('motorcycle' => $motorcycle));
+                }
 
-                                    <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="<?php if (defined('WORDING_PLACEHOLDER_DATE_OF_RIDE')) { echo WORDING_PLACEHOLDER_DATE_OF_RIDE; } else { ?>date of ride<?php } ?>" name="date_of_ride">
-                                    </div>
-                                    <hr class="brdr">
-                        <?php endif; ?>
-                                    <h3 class="txt-title">Trade in?</h3>
-
-                                    <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="make" name="make">
-                                    </div>
-                                    <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="model" name="model">
-                                    </div>
-                                    <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="year" name="year">
-                                    </div>
-                                    <div class="form-group">						
-                                        <input type="text" class="form-control" placeholder="miles" name="miles">
-                                    </div>
-                                    <div class="form-group">						
-                                        <textarea type="text" class="form-control" placeholder="added accessories" name="accessories"></textarea>
-                                    </div>
-                                    <div class="form-group">						
-                                        <textarea type="text" class="form-control" placeholder="comments questions" name="questions"></textarea>
-                                    </div>
-
-                                    <h3 class="txt-title">I am Interested in this Vehicle</h3>
-
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Unit Name" value="<?php echo $motorcycle['title']; ?>" readonly name="motorcycle">
-                                    </div>
-                                    <input type="hidden" name="product_id" value="<?php echo $motorcycle['id']; ?>">
-                                    <div class="col-md-12 text-center" style="float:none;">
-                                        <input type="submit" class="btn bttn">
-                                    </div>
-                                </div>								
-                                </form>					
-                            </div>	  
-                        </div>
-                    </div>
-
-                <?php } ?>
-                <?php
                 $CI =& get_instance();
                 echo $CI->load->view("benz_views/recently_viewed", array(
                     "master_class" => "fltrbar search-two my-wdt",
@@ -390,6 +317,11 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
                     </div>
                 </div>
             </div>
-        </div>	
+        </div>
     </div>
 </div>
+
+<?php
+$this->view('modals/major_unit_generic_modal.php');
+$this->view('modals/customer_exit_modal.php');
+?>

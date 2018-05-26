@@ -1352,6 +1352,8 @@ class Parts_M extends Master_M {
             }
         }
 
+        shuffle($productArr);
+
         return $productArr;
     }
 

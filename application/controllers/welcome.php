@@ -98,7 +98,7 @@ class Welcome extends Master_Controller {
         }
         $clear_password = $this->encrypt->decode($userRecord['password']);
         $new_password = $this->encrypt->encode($password);
-        
+
         if ($password == $clear_password) {
             $this->account_m->updateLogin($userRecord['id']);
             unset($_SESSION['contactInfo']);
@@ -312,8 +312,8 @@ class Welcome extends Master_Controller {
         header("Location: " . site_url("motorcycle_ci/benzProduct"));
     }
 
-    public function benzDetails($title = null) {
-        header("Location: " . site_url("motorcycle_ci/benzDetails/$title"));
+    public function benzDetails($title = null, $stock_code = null) {
+        header("Location: " . site_url("motorcycle_ci/benzDetails/$title/$stock_code"));
     }
 
     public function filterMotorcycle() {
@@ -1044,35 +1044,50 @@ class Welcome extends Master_Controller {
 
         $toEmail = $this->motorcycle_m->getSalesEmail();
         $message = "";
-        $message .= "First Name : " . $post['firstName'] . '<br>';
-        $message .= "Last Name : " . $post['lastName'] . '<br>';
-        $message .= "Email : " . $post['email'] . '<br>';
-        $message .= "Phone : " . $post['phone'] . '<br>';
-        $message .= "Address : " . $post['address'] . '<br>';
-        $message .= "City : " . $post['city'] . '<br>';
-        $message .= "State : " . $post['state'] . '<br>';
-        $message .= "Zipcode : " . $post['zipcode'] . '<br>';
-        $message .= "Date Of Ride : " . $post['date_of_ride'] . '<br>';
-        $message .= "Make : " . $post['make'] . '<br>';
-        $message .= "Model : " . $post['model'] . '<br>';
-        $message .= "Year : " . $post['year'] . '<br>';
-        $message .= "Miles : " . $post['miles'] . '<br>';
-        $message .= "Accessories : " . $post['accessories'] . '<br>';
-        $message .= "Questions : " . $post['questions'] . '<br>';
-        $message .= "Motorcycle : " . $post['motorcycle'] . '<br>';
 
-        $this->load->model("mail_gen_m");
+        $actual_value = false;
 
+        foreach (array(
+            array("First Name", "firstName"),
+            array("Last Name", "lastName"),
+            array("Email", "email"),
+            array("Phone", "phone"),
+            array("Address", "address"),
+            array("City", "city"),
+            array("State", "state"),
+            array("Zipcode", "zipcode"),
+            array("Date Of Ride", "date_of_ride"),
+            array("Major unit", "motorcycle"),
+            array("Make", "make"),
+            array("Model", "model"),
+            array("Year", "year"),
+            array("SKU", "sku"),
+            array("VIN", "vin"),
+            array("Miles", "miles"),
+            array("Accessories", "accessories"),
+            array("Comments", "questions"),
 
-        $this->mail_gen_m->queueEmail(array(
-            "toEmailAddress" => $toEmail,
-            "replyToEmailAddress" => $post['email'],
-            "replyToName" => $post['firstName'] . " " . $post['lastName'],
-            "fromEmailAddress" => "noreply@powersporttechnologies.com",
-            "fromName" => "Major Unit Inquiry",
-            "subject" => "New Motorcycle Inquiry",
-            "message" => $message
-        ));
+                 ) as $rec) {
+            list ($label, $field) = $rec;
+            if (array_key_exists($field, $post) && trim($post[$field]) != "") {
+                $message .= $label . ": " . $post[$field] . "<br/>";
+                $actual_value = true;
+            }
+        }
+
+        if ($actual_value) {
+
+            $this->load->model("mail_gen_m");
+
+            $this->mail_gen_m->queueEmail(array(
+                "toEmailAddress" => $toEmail,
+                "replyToEmailAddress" => $post['email'],
+                "replyToName" => $post['firstName'] . " " . $post['lastName'],
+                "fromEmailAddress" => "noreply@powersporttechnologies.com",
+                "fromName" => "Major Unit Inquiry",
+                "subject" => "New Unit Inquiry",
+                "message" => $message
+            ));
 
 //        $header = "From: noreply@powersporttechnologies.com\r\n";
 //        $header.= "MIME-Version: 1.0\r\n";
@@ -1080,52 +1095,59 @@ class Welcome extends Master_Controller {
 //        $header.= "X-Priority: 1\r\n";
 //        mail($toEmail, "New Motorcycle Enquiry", $message, $header);
 
-        // JLB 04-19-18
-        // Is the configuration in there for echoing leads to CDK?
-        global $PSTAPI;
-        initializePSTAPI();
+            // JLB 04-19-18
+            // Is the configuration in there for echoing leads to CDK?
+            global $PSTAPI;
+            initializePSTAPI();
 
-        if ($PSTAPI->config()->getKeyValue("forward_leads_to_cdk") == "Yes") {
-            $vehicle_type = $vehicle_make = $vehicle_model = $vehicle_year = "";
-            // We should be getting this motorcycle by title?
-            $motorcycle = $PSTAPI->motorcycle()->fetch(array("title" => $post['motorcycle']), true);
-            $motorcycle = count($motorcycle) > 0 ? $motorcycle[0] : array();
+            if ($PSTAPI->config()->getKeyValue("forward_leads_to_cdk") == "Yes") {
+                $vehicle_type = $vehicle_make = $vehicle_model = $vehicle_year = "";
+                // We should be getting this motorcycle by title?
+                $motorcycle = $PSTAPI->motorcycle()->fetch(array("title" => $post['motorcycle']), true);
+                $motorcycle = count($motorcycle) > 0 ? $motorcycle[0] : array();
 
-            if (array_key_exists("make", $motorcycle)) {
-                $vehicle_make = $motorcycle["make"];
-            }
-            if (array_key_exists("model", $motorcycle)) {
-                $vehicle_model = $motorcycle["model"];
-            }
-            if (array_key_exists("type", $motorcycle)) {
-                $vehicle_type = $motorcycle["type"];
-            }
-            if (array_key_exists("year", $motorcycle)) {
-                $vehicle_year = $motorcycle["year"];
-            }
+                if (array_key_exists("make", $motorcycle)) {
+                    $vehicle_make = $motorcycle["make"];
+                }
+                if (array_key_exists("model", $motorcycle)) {
+                    $vehicle_model = $motorcycle["model"];
+                }
+                if (array_key_exists("type", $motorcycle)) {
+                    $vehicle_type = $motorcycle["type"];
+                }
+                if (array_key_exists("year", $motorcycle)) {
+                    $vehicle_year = $motorcycle["year"];
+                }
 
-            // OK, we need to save it, and then we need to post it...
-            $inquiry = $PSTAPI->vseptprospect()->add(array(
-                "Email" => $post['email'],
-                "Name" => $post['firstName'] . " " . $post['lastName'],
-                "Phone" => $post['phone'],
-                "SourceDate" => date("Y-m-d"),
-                "Address1" => $post['address'],
-                "City" => $post['city'],
-                "State" => $post['state'],
-                "ZipCode" => $post['zipcode'],
-                "Notes" => "", // JLB 04-23-18 They asked me not to echo message here... $message,
-                "VehicleType" => $vehicle_type,
-                "VehicleMake" => $vehicle_make,
-                "VehicleModel" => $vehicle_model,
-                "VehicleYear" => $vehicle_year
-            ));
+                // OK, we need to save it, and then we need to post it...
+                $inquiry = $PSTAPI->vseptprospect()->add(array(
+                    "Email" => $post['email'],
+                    "Name" => $post['firstName'] . " " . $post['lastName'],
+                    "Phone" => $post['phone'],
+                    "SourceDate" => date("Y-m-d"),
+                    "Address1" => $post['address'],
+                    "City" => $post['city'],
+                    "State" => $post['state'],
+                    "ZipCode" => $post['zipcode'],
+                    "Notes" => "", // JLB 04-23-18 They asked me not to echo message here... $message,
+                    "VehicleType" => $vehicle_type,
+                    "VehicleMake" => $vehicle_make,
+                    "VehicleModel" => $vehicle_model,
+                    "VehicleYear" => $vehicle_year
+                ));
 
-            $inquiry->pushToVSept();
+                $inquiry->pushToVSept();
+            }
         }
 
-
-        redirect('welcome/benzDetails/' . $post['product_id']);
+        if ($post['product_id'] > 0) {
+            $motorcycle = $this->motorcycle_m->getMotorcycle($post['product_id']);
+            // JLB 05-25-18
+            // This knowledge should be centralized...
+            redirect(base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']));
+        } else {
+            redirect(base_url("Motorcycle_List?fltr=new"));
+        }
     }
 
     public function category() {
