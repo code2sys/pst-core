@@ -312,8 +312,8 @@ class Welcome extends Master_Controller {
         header("Location: " . site_url("motorcycle_ci/benzProduct"));
     }
 
-    public function benzDetails($title = null) {
-        header("Location: " . site_url("motorcycle_ci/benzDetails/$title"));
+    public function benzDetails($title = null, $stock_code = null) {
+        header("Location: " . site_url("motorcycle_ci/benzDetails/$title/$stock_code"));
     }
 
     public function filterMotorcycle() {
@@ -1140,7 +1140,7 @@ class Welcome extends Master_Controller {
             }
         }
 
-        redirect('welcome/benzDetails/' . $post['product_id']);
+        redirect('/benzDetails/' . $post['product_id']);
     }
 
     public function category() {
