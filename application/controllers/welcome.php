@@ -1143,7 +1143,7 @@ class Welcome extends Master_Controller {
         // JLB 05-25-18
         // This knowledge should be centralized...
         $motorcycle = $this->motorcycle_m->getMotorcycle($post['product_id']);
-        redirect(base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']);
+        redirect(base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']));
 //        redirect('/benzDetails/' . $post['product_id']);
     }
 
