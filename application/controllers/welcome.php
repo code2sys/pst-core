@@ -1140,11 +1140,14 @@ class Welcome extends Master_Controller {
             }
         }
 
-        // JLB 05-25-18
-        // This knowledge should be centralized...
-        $motorcycle = $this->motorcycle_m->getMotorcycle($post['product_id']);
-        redirect(base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']));
-//        redirect('/benzDetails/' . $post['product_id']);
+        if ($post['product_id'] > 0) {
+            $motorcycle = $this->motorcycle_m->getMotorcycle($post['product_id']);
+            // JLB 05-25-18
+            // This knowledge should be centralized...
+            redirect(base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']));
+        } else {
+            redirect(base_url("Motorcycle_List?fltr=new"));
+        }
     }
 
     public function category() {
