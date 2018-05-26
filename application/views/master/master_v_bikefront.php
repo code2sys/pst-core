@@ -226,6 +226,7 @@ echo $CI->load->view("master/widgets/motorcycles", array(
 <div class="sw podct">
     <div class="container_b">
         <div class="row">
+            <?php if (false): ?>
             <div class="col-md-12 col-sm-12 sldr-section">
                 <h1 class="best mrgnbtm65">Top<span> Rated </span> Products</h1>
                 <div id="hotels-flats-1" class="owl-carousel">
@@ -246,7 +247,7 @@ echo $CI->load->view("master/widgets/motorcycles", array(
                     <?php } ?>
                 </div>
             </div>
-            <?php if (false): ?>
+
                 <div class="col-md-3 testi pull-right fb-frem">
                     <h3> Get Social</h3>
                     <span>&nbsp;</span>
