@@ -89,7 +89,9 @@ $(document).ready(function () {
 
 		// Fixes Bootstrap bug
 		setTimeout(function () {
-			$('#customer-exit-modal').modal('show');
+		    if (!$(".modal").is(":visible")) {
+                $('#customer-exit-modal').modal('show');
+            }
 		}, 500);
 	});
 
