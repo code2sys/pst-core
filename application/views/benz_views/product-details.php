@@ -25,7 +25,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
 				<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
 				<a href="<?php echo base_url('Motorcycle_List'); ?>?fltr=<?php echo $motorcycle['condition'] == 1 ? 'new' : 'pre-owned'; ?>">Motorcycle List</a>
 				<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
-				<a href="<?php echo base_url('welcome/benzDetails/'.$motorcycle['id']); ?>"><?php echo $motorcycle['title'];?></a>
+				<a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']); ?>"><?php echo $motorcycle['title'];?></a>
 			</nav>
 			<div class="menu-section">
 				<ul class="nav navbar-nav menu-dti">
