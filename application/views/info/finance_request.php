@@ -10,7 +10,7 @@
 			</div>
 			<?php endif; ?>
 			<!-- END VALIDATION ERROR -->
-			
+
 			<!-- PROCESS ERROR -->
 			<?php if(@$processingError): ?>
 			<div class="process_error">
@@ -21,7 +21,7 @@
 			</div>
 			<?php endif; ?>
 			<!-- END PROCESS ERROR -->
-			
+
 		  <!-- SUCCESS -->
 		  <?php if(@$success): ?>
 			<div class="success">
@@ -32,8 +32,8 @@
 			</div>
 			<?php endif; ?>
 			<!-- END SUCCESS -->
-  
-  	
+
+
   	<!-- Finance FORM-->
 			<div class="name_box_full" style="background:rgba(153, 153, 153, 0.28);padding: 30px;">
 				<div class="clear"></div>
@@ -158,7 +158,7 @@
 								<span><b>*</b></span>
 							</td>
 						</tr>
-						
+
 						<tr>
 							<td colspan="2">
 								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Contact Information:</b></p>
@@ -276,9 +276,9 @@
 								<span><b>*</b></span>
 							</td>
 						</tr>
-                        
-                        
-                        
+
+
+
 						<tr class="joint-row">
 							<td colspan="2">
 								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Contact Information:</b></p>
@@ -396,8 +396,8 @@
 								<span><b>*</b></span>
 							</td>
 						</tr>
-						
-                        
+
+
 
 
 						<tr>
@@ -817,9 +817,9 @@
 								<input name="banking_info[ac_type1]" placeholder="" value="<?php echo $_POST['banking_info']['ac_type1'];?>" />
 							</td>
 						</tr>
-						
-                        
-                        
+
+
+
 						<tr class="joint-row">
 							<td colspan="2">
 								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Co-Applicant Banking Information:</b></p>
@@ -857,11 +857,11 @@
 								<input name="co_banking_info[ac_type1]" placeholder="" value="<?php echo $_POST['co_banking_info']['ac_type1'];?>" />
 							</td>
 						</tr>
-						
-                        
 
-                        
-                        
+
+
+
+
 						<tr>
 							<td colspan="2">
 								<p style="padding:5px;margin: 10px 0px 10px 0px;color:#ccc;background: #555;"><b>Applicant Employer Information:</b></p>
@@ -1410,7 +1410,7 @@
 					<div style="margin-left: -27px;width: 108%;padding-top: 10px;border-top: 2px solid #555555;margin-top: 10px;">
 						<p>* indicates requires field</p>
 					</div>
-					
+
 				</div>
 			</div>
 			<div style="width:100%;text-align:center;margin-top: 40px;">
@@ -1504,3 +1504,5 @@
 
 		});
 	</script>
+
+<?php $this->view('modals/customer_exit_modal.php'); ?>

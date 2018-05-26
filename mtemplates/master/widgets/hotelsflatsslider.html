@@ -1,0 +1,25 @@
+<div class="sw {{extra_master_classes}}" {{#wrapper_id}}id="{{wrapper_id}}"{{/wrapper_id}}>
+    <div class="container_b">
+        {{#header_text}}<h1 class="{{header_class}}"> {{{header_text}}} {{#header_link}}<span><a href="{{header_link}}">{{{header_link_text}}}</a></span>{{/header_link}}</h1>{{/header_text}}
+        <div id="factored-hotels-flats{{global_counter}}" class="owl-carousel {{div_extra_classes}}">
+            {{#rotating_things}}
+            <div class="item {{item_extra_class}}">
+                <div class="item-box {{box_extra_class}}">
+                    {{{rendered_html}}}
+                </div>
+            </div>
+            {{/rotating_things}}
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    $(document).ready(function() {
+        $("#factored-hotels-flats{{global_counter}}").owlCarousel({
+            items : 4,
+            lazyLoad : true,
+            navigation : true,
+            autoPlay: true,
+            autoPlayTimeout:3000
+        });
+    })
+</script>
