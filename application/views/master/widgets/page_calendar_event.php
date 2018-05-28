@@ -45,15 +45,13 @@
             eventLimit: true, // allow "more" link when too many events
             events: <?php echo json_encode(array_map(function($x) {
                 $x["id"] = $x["page_calendar_event_id"];
-                $data = array(
-                    "title" => $x["title"],
-                    "start" => $x["start"],
-                    "id" => $x["page_calendar_event_id"]
-                );
 
                 if ($x["start"] == $x["end"] || $x["end"] <= "0000-00-00 00:00:00") {
                     unset($x["end"]);
                 }
+
+                $x["extra_link"] = $x["url"];
+                unset($x["url"]);
 
                 return $x;
             }, array_values(array_filter($events, function($x) {
@@ -69,7 +67,7 @@
                 $("#hover_box .title").text(calEvent.title);
                 // position it...
                 var offset = window.getTruePosition(jsEvent.target);
-                var parentOffset = window.getTruePosition(document.getElementById("page_calendar_widget_holder"));
+                var parentOffset = window.getTruePosition(document.getElementById("page_calendar_widget_holder<?php echo $page_section_id;?>"));
 
                 var hb = document.getElementById("hover_box");
                 hb.style.left = (offset.x - parentOffset.x) + "px";
@@ -87,48 +85,55 @@
                     var leading = false;
 
                     if (address1 && address1 != '') {
-                        $("#hover_box .where .address1").html(address1);
+                        $("#hover_box<?php echo $page_section_id;?> .where .address1").html(address1);
                         leading = true;
                     } else {
-                        $("#hover_box .where .address1").html("");
+                        $("#hover_box<?php echo $page_section_id;?> .where .address1").html("");
                     }
                     if (address2 && address2 != '') {
-                        $("#hover_box .where .address2").html((leading ? "<br/>" : "") + address2);
+                        $("#hover_box<?php echo $page_section_id;?> .where .address2").html((leading ? "<br/>" : "") + address2);
                         leading = true;
                     } else {
-                        $("#hover_box .where .address2").html("");
+                        $("#hover_box<?php echo $page_section_id;?> .where .address2").html("");
                     }
                     if (city && city != '') {
-                        $("#hover_box .where .city").html((leading ? "<br/>" : "") + city);
+                        $("#hover_box<?php echo $page_section_id;?> .where .city").html((leading ? "<br/>" : "") + city);
                         leading = true;
                     } else {
-                        $("#hover_box .where .city").html("");
+                        $("#hover_box<?php echo $page_section_id;?> .where .city").html("");
                     }
                     if (state && state != '') {
-                        $("#hover_box .where .state").html((leading ? ", " : "") + state);
+                        $("#hover_box<?php echo $page_section_id;?> .where .state").html((leading ? ", " : "") + state);
                         leading = true;
                     } else {
-                        $("#hover_box .where .state").html("");
+                        $("#hover_box<?php echo $page_section_id;?> .where .state").html("");
                     }
                     if (zip && zip != '') {
-                        $("#hover_box .where .zip").html((leading ? " " : "") + zip);
+                        $("#hover_box<?php echo $page_section_id;?> .where .zip").html((leading ? " " : "") + zip);
                         leading = true;
                     } else {
-                        $("#hover_box .where .zip").html("");
+                        $("#hover_box<?php echo $page_section_id;?> .where .zip").html("");
                     }
 
 
-                    $("#hover_box .where").show();
+                    $("#hover_box<?php echo $page_section_id;?> .where").show();
                 } else {
-                    $("#hover_box .where").hide();
+                    $("#hover_box<?php echo $page_section_id;?> .where").hide();
                 }
 
                 // when...
+                $("#hover_box<?php echo $page_section_id;?> .start").html(calEvent.start.format("m/d/Y g:i a"));
+                if (calEvent.start != calEvent.end) {
+                    $("#hover_box<?php echo $page_section_id;?> .end").html(" to " . calEvent.end.format("m/d/Y g:i a"));
+                } else {
+                    // just the start...
+                    $("#hover_box<?php echo $page_section_id;?> .end").hide();
+                }
 
-                $("#hover_box").show();
+                $("#hover_box<?php echo $page_section_id;?>").show();
             },
             eventMouseout: function(calEvent, jsEvent, view) {
-                $("#hover_box").hide();
+                $("#hover_box<?php echo $page_section_id;?>").hide();
             }
         });
 
@@ -142,8 +147,8 @@
     }
 
 </style>
-<div class="page_calendar_widget_holder" id="page_calendar_widget_holder">
-<div id="hover_box" style="display:none">
+<div class="page_calendar_widget_holder" id="page_calendar_widget_holder<?php echo $page_section_id;?>">
+<div id="hover_box<?php echo $page_section_id;?>" style="display:none">
     <h1 class="title"></h1>
 
     <div class="when">
@@ -163,7 +168,7 @@
     .page_calendar_widget_holder {
         position: relative;
     }
-    #hover_box {
+    #hover_box<?php echo $page_section_id;?> {
         border-color: black;
         background-color: white;
         font-size: 12px;
@@ -175,14 +180,15 @@
         z-index: 1000;
 
     }
-    #hover_box .title {
+    #hover_box<?php echo $page_section_id;?> .title {
         font-size: 16px;
         font-weight: bold;
     }
 
-    #hover_box .when,
-    #hover_box .where {
+    #hover_box<?php echo $page_section_id;?> .when,
+    #hover_box<?php echo $page_section_id;?> .where {
         text-indent: -10px;
-        margin-left: 10px
+        margin-left: 10px;
+        padding-bottom: 12px;
     }
 </style>
