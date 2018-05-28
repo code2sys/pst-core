@@ -39,7 +39,7 @@
             },
             eventMouseover: function(calEvent, jsEvent, view) {
                 console.log(["Hover on event", calEvent, jsEvent, view]);
-                console.log(["Target element", $(calEvent.target).offset(), calEvent.target.offsetLeft, calEvent.target.offsetTop]);
+                console.log(["Target element", $(calEvent.target).offset()]);
                 // fill  them in
                 $("#hover_box .title").text(calEvent.title);
                 // position it...
