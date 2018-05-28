@@ -60,7 +60,69 @@
             eventClick: function(calEvent, jsEvent, view) {
                 console.log(["Click on event", calEvent, jsEvent, view]);
                 $("#hover_box<?php echo $page_section_id;?>").hide();
-                $("#page_calendar_modal<?php echo $page_section_id;?> .modal-body-title").text(calEvent.title);
+                $("#page_calendar_modal<?php echo $page_section_id;?> .modal-body-title").html(calEvent.title);
+
+                // description
+                if (calEvent.description && calEvent.description != '') {
+                    $("#page_calendar_modal<?php echo $page_section_id;?> .modal-body-subtitle").html(calEvent.description);
+                } else {
+                    $("#page_calendar_modal<?php echo $page_section_id;?> .modal-body-subtitle").html("");
+                }
+
+                // link
+
+                // where
+
+                var address1 = calEvent.address1;
+                var address2 = calEvent.address2;
+                var city = calEvent.city;
+                var state = calEvent.state;
+                var zip = calEvent.zip;
+
+                if ((address1 && address1 != '') || (address2 && address2 != '') || (city && city != '') || (address1 && address1 != '') || (state && state != '') || (zip && zip != '') ) {
+
+                    var leading = false;
+
+                    if (address1 && address1 != '') {
+                        $("#page_calendar_modal<?php echo $page_section_id;?> .where .address1").html(address1);
+                        leading = true;
+                    } else {
+                        $("#page_calendar_modal<?php echo $page_section_id;?> .where .address1").html("");
+                    }
+                    if (address2 && address2 != '') {
+                        $("#page_calendar_modal<?php echo $page_section_id;?> .where .address2").html((leading ? "<br/>" : "") + address2);
+                        leading = true;
+                    } else {
+                        $("#page_calendar_modal<?php echo $page_section_id;?> .where .address2").html("");
+                    }
+                    if (city && city != '') {
+                        $("#page_calendar_modal<?php echo $page_section_id;?> .where .city").html((leading ? "<br/>" : "") + city);
+                        leading = true;
+                    } else {
+                        $("#page_calendar_modal<?php echo $page_section_id;?> .where .city").html("");
+                    }
+                    if (state && state != '') {
+                        $("#page_calendar_modal<?php echo $page_section_id;?> .where .state").html((leading ? ", " : "") + state);
+                        leading = true;
+                    } else {
+                        $("#page_calendar_modal<?php echo $page_section_id;?> .where .state").html("");
+                    }
+                    if (zip && zip != '') {
+                        $("#page_calendar_modal<?php echo $page_section_id;?> .where .zip").html((leading ? " " : "") + zip);
+                        leading = true;
+                    } else {
+                        $("#page_calendar_modal<?php echo $page_section_id;?> .where .zip").html("");
+                    }
+
+
+                    $("#page_calendar_modal<?php echo $page_section_id;?> .where").show();
+                } else {
+                    $("#page_calendar_modal<?php echo $page_section_id;?> .where").hide();
+                }
+
+
+                // when
+
                 setTimeout(function () {
                     $('#page_calendar_modal<?php echo $page_section_id;?>').modal('show');
                 }, 500);
@@ -183,8 +245,28 @@
 
                 <p class="modal-body-title"></p>
 
+                <p class="modal-body-subtitle">Looking for Your Next Adventure?</p>
 
-            </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="modal-form-instructions">
+
+                            <div class="when modal-form-instructions">
+                                <strong>When</strong> <br/>
+                                <span class="start"></span>
+                                <span class="end"></span>
+                            </div>
+                            <div class="where modal-form-instructions">
+                                <strong>Where</strong><br/>
+                                <span class="address1"></span><span class="address2"></span><span class="city"></span><span class="state"></span><span class="zip"></span>
+                            </div>
+                            <div class="extra_link">
+                                <strong>More Information</strong><br/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
         </div>
     </div>
 </div>
