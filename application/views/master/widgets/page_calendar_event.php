@@ -69,7 +69,7 @@
                 var offset = window.getTruePosition(jsEvent.target);
                 var parentOffset = window.getTruePosition(document.getElementById("page_calendar_widget_holder<?php echo $page_section_id;?>"));
 
-                var hb = document.getElementById("hover_box");
+                var hb = document.getElementById("hover_box<?php echo $page_section_id;?>");
                 hb.style.left = (offset.x - parentOffset.x) + "px";
                 hb.style.top = (offset.y - parentOffset.y + 24) + "px";
 
