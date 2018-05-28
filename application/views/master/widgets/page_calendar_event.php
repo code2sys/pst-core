@@ -49,7 +49,13 @@
                 console.log("Found offset");
                 console.log(offset);
 
-                $("#hover_box").offset(offset);
+                var cw = $(".content_wrap")
+                var cw_offset = cw.offset();
+
+                $("#hover_box").offset({
+                    top: offset.top - cw_offset.top + 24,
+                    left: offset.left - cw_offset.left - 24
+                });
                 console.log("Hoverbox offset");
                 console.log($("#hover_box").offset());
 
@@ -103,13 +109,13 @@
         z-index: 1000;
 
     }
-    #hoverbox .title {
+    #hover_box .title {
         font-size: 16px;
         font-weight: bold;
     }
 
-    #hoverbox .when,
-    #hoverbox .where {
+    #hover_box .when,
+    #hover_box .where {
         text-indent: -10px;
         margin-left: 10px
     }
