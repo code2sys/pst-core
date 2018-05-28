@@ -73,8 +73,8 @@
                 var parentOffset = window.getTruePosition(document.getElementById("page_calendar_widget_holder"));
                 console.log(["Offset", offset, "Parent Offset", parentOffset]);
                 var hb = document.getElementById("hover_box");
-                hb.offsetLeft = offset.x - parentOffset.x;
-                hb.offsetTop = offset.y - parentOffset.y;
+                hb.style.left = (offset.x - parentOffset.x) + "px";
+                hb.style.top = (offset.y - parentOffset.y + 16) + "px";
 
                 $("#hover_box").show();
             },
