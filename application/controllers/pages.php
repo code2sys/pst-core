@@ -1101,6 +1101,7 @@ class Pages extends Master_Controller {
             "city" => array_key_exists("city", $_REQUEST) ? $_REQUEST["city"] : ""
         ));
 
+        error_log(print_r($_REQUEST));
 
         header("Location: /pages/edit/${pageId}");
     }
