@@ -124,7 +124,7 @@
                 // when...
                 $("#hover_box<?php echo $page_section_id;?> .start").html(calEvent.start.format("m/d/Y g:i a"));
                 if (calEvent.start != calEvent.end) {
-                    $("#hover_box<?php echo $page_section_id;?> .end").html(" to " . calEvent.end.format("m/d/Y g:i a"));
+                    $("#hover_box<?php echo $page_section_id;?> .end").html(" to " + calEvent.end.format("m/d/Y g:i a"));
                 } else {
                     // just the start...
                     $("#hover_box<?php echo $page_section_id;?> .end").hide();
