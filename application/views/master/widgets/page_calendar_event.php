@@ -72,10 +72,9 @@
                 var offset = window.getTruePosition(jsEvent.target);
                 var parentOffset = window.getTruePosition(document.getElementById("page_calendar_widget_holder"));
                 console.log(["Offset", offset, "Parent Offset", parentOffset]);
-                $("#hover_box").offset({
-                    left: offset.x - parentOffset.x,
-                    top: offset.y - parentOffset.y
-                });
+                var hb = document.getElementById("hover_box");
+                hb.offsetLeft = offset.x - parentOffset.x;
+                hb.offsetTop = offset.y - parentOffset.y;
 
                 $("#hover_box").show();
             },
