@@ -42,28 +42,9 @@
                 // fill  them in
                 $("#hover_box .title").text(calEvent.title);
                 // position it...
-
-                // display them..
-                var offset = $(jsEvent.currentTarget).offset();
-                var width = $(jsEvent.currentTarget).width();
-                console.log("Found offset");
-                console.log(offset);
-
-                var cw = $(".content_wrap")
-                var cw_offset = cw.offset();
-                console.log("Setting offset to");
-                console.log({
-                    top: offset.top - cw_offset.top + 24,
-                    left: offset.left - cw_offset.left - 24
-                });
-
-                $("#hover_box").offset({
-                    top: offset.top - cw_offset.top + 24,
-                    left: offset.left - cw_offset.left - 24
-                });
-                console.log("Hoverbox offset");
-                console.log($("#hover_box").offset());
-
+                $("#hover_box").css("left", calEvent.screenX);
+                $("#hover_box").css("top", calEvent.screeY);
+                
                 $("#hover_box").css("display", "block");
             },
             eventMouseout: function(calEvent, jsEvent, view) {
@@ -105,7 +86,7 @@
 </div>
 <style>
     .page_calendar_widget_holder {
-        position: relative; 
+        position: relative;
     }
     #hover_box {
         border-color: black;
@@ -113,7 +94,7 @@
         font-size: 12px;
         width: 200px;
         max-width: 80%;
-        position: absolute;
+        position: fixed;
         border: 2px solid gray;
         padding: 6px;
         z-index: 1000;
