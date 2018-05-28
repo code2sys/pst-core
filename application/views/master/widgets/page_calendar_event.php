@@ -64,6 +64,7 @@
                 $("#hover_box").css("display", "none");
             },
             eventMouseover: function(calEvent, jsEvent, view) {
+                console.log([calEvent]);
                 // fill  them in
                 $("#hover_box .title").text(calEvent.title);
                 // position it...
