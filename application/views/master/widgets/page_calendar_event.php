@@ -70,10 +70,11 @@
                 $("#hover_box .title").text(calEvent.title);
                 // position it...
                 var offset = window.getTruePosition(jsEvent.target);
-                console.log(["Offset", offset]);
+                var parentOffset = window.getTruePosition(document.getElementById("page_calendar_widget_holder"));
+                console.log(["Offset", offset, "Parent Offset", parentOffset]);
                 $("#hover_box").offset({
-                    left: offset.x,
-                    top: offset.y
+                    left: offset.x - parentOffset.x,
+                    top: offset.y - parentOffset.y
                 });
 
                 $("#hover_box").show();
@@ -94,7 +95,7 @@
     }
 
 </style>
-<div class="page_calendar_widget_holder">
+<div class="page_calendar_widget_holder" id="page_calendar_widget_holder">
 <div id="hover_box" style="display:none">
     <h1 class="title"></h1>
 
