@@ -71,7 +71,7 @@
                 // position it...
                 var offset = window.getTruePosition(jsEvent.target);
                 console.log(["Offset", offset]);
-                $("#hover_box").offset($offset);
+                $("#hover_box").offset(offset);
 
                 $("#hover_box").show();
             },
