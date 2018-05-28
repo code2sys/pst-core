@@ -268,7 +268,7 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="modal-form-instructions">
+                        <div class="">
                             <div class="description downspace">
                             </div>
 
