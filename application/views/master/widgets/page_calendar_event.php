@@ -92,7 +92,6 @@
 
 </style>
 <div class="page_calendar_widget_holder">
-<div id='calendar<?php echo $page_section_id;?>'></div>
 <div id="hover_box" style="display:none">
     <h1 class="title"></h1>
 
@@ -111,6 +110,7 @@
     </div>
 
 </div>
+<div id='calendar<?php echo $page_section_id;?>'></div>
 </div>
 <style>
     .page_calendar_widget_holder {
