@@ -93,13 +93,13 @@
                         $("#hover_box .where .address1").html("");
                     }
                     if (address2 && address2 != '') {
-                        $("#hover_box .where .address2").html((leading ? ", " : "") + address2);
+                        $("#hover_box .where .address2").html((leading ? "<br/>" : "") + address2);
                         leading = true;
                     } else {
                         $("#hover_box .where .address2").html("");
                     }
                     if (city && city != '') {
-                        $("#hover_box .where .city").html((leading ? ", " : "") + city);
+                        $("#hover_box .where .city").html((leading ? "<br/>" : "") + city);
                         leading = true;
                     } else {
                         $("#hover_box .where .city").html("");
