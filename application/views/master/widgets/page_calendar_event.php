@@ -82,6 +82,7 @@
     }
 
 </style>
+<div class="page_calendar_widget_holder">
 <div id='calendar<?php echo $page_section_id;?>'></div>
 <div id="hover_box" style="display:none">
     <h1 class="title"></h1>
@@ -101,6 +102,7 @@
     </div>
 
 </div>
+</div>
 <style>
     #hover_box {
         border-color: black;
@@ -108,7 +110,7 @@
         font-size: 12px;
         width: 200px;
         max-width: 80%;
-        position: absolute;
+        position: relative;
         border: 2px solid gray;
         padding: 6px;
         z-index: 1000;
