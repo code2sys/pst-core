@@ -257,7 +257,7 @@
 <div class="modal fade pop" id="page_calendar_modal<?php echo $page_section_id;?>">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body modal-body-dark">
+            <div class="modal-body modal-body-calendar">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -317,6 +317,25 @@
     }
 
     #page_calendar_modal<?php echo $page_section_id;?> .downspace {
+        padding-bottom: 12px;
+    }
+
+    #page_calendar_modal<?php echo $page_section_id;?> .modal-body-calendar {
+        padding-bottom: 12px;
+    }
+    #page_calendar_modal<?php echo $page_section_id;?> .modal-body-calendar .modal-body-title {
+        text-align: center;
+        font-size: 150%;
+        font-weight: bold;
+    }
+    #page_calendar_modal<?php echo $page_section_id;?> .modal-body-calendar .modal-body-subtitle {
+        text-align: center;
+        font-size: 125%;
+        font-weight: bold;
+    }
+    #page_calendar_modal<?php echo $page_section_id;?> .modal-body-calendar .where,
+    #page_calendar_modal<?php echo $page_section_id;?> .modal-body-calendar .extra_link,
+    {
         padding-bottom: 12px;
     }
 </style>
