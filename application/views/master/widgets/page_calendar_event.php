@@ -278,7 +278,7 @@
                             </div>
                             <div class="extra_link downspace">
                                 <strong>More Information</strong><br/>
-                                <a href=""></a>
+                                <a href="" target="_blank"></a>
                             </div>
                         </div>
                     </div>
