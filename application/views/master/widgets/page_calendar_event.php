@@ -64,23 +64,70 @@
                 $("#hover_box").css("display", "none");
             },
             eventMouseover: function(calEvent, jsEvent, view) {
-                console.log(["Hover on event", calEvent, jsEvent, view]);
-                console.log(["Target element", $(calEvent.target).offset()]);
                 // fill  them in
                 $("#hover_box .title").text(calEvent.title);
                 // position it...
                 var offset = window.getTruePosition(jsEvent.target);
                 var parentOffset = window.getTruePosition(document.getElementById("page_calendar_widget_holder"));
-                console.log(["Offset", offset, "Parent Offset", parentOffset]);
+
                 var hb = document.getElementById("hover_box");
                 hb.style.left = (offset.x - parentOffset.x) + "px";
                 hb.style.top = (offset.y - parentOffset.y + 24) + "px";
 
+                // address
+                var address1 = calEvent.address1;
+                var address2 = calEvent.address2;
+                var city = calEvent.city;
+                var state = calEvent.state;
+                var zip = calEvent.zip;
+
+                if ((address1 && address1 != '') || (address2 && address2 != '') || (city && city != '') || (address1 && address1 != '') || (state && state != '') || (zip && zip != '') ) {
+
+                    var leading = false;
+
+                    if (address1 && address1 != '') {
+                        $("#hover_box .where .address1").html(address1);
+                        leading = true;
+                    } else {
+                        $("#hover_box .where .address1").html("");
+                    }
+                    if (address2 && address2 != '') {
+                        $("#hover_box .where .address2").html((leading ? ", " : "") + address2);
+                        leading = true;
+                    } else {
+                        $("#hover_box .where .address2").html("");
+                    }
+                    if (city && city != '') {
+                        $("#hover_box .where .city").html((leading ? ", " : "") + city);
+                        leading = true;
+                    } else {
+                        $("#hover_box .where .city").html("");
+                    }
+                    if (state && state != '') {
+                        $("#hover_box .where .state").html((leading ? ", " : "") + state);
+                        leading = true;
+                    } else {
+                        $("#hover_box .where .state").html("");
+                    }
+                    if (zip && zip != '') {
+                        $("#hover_box .where .zip").html((leading ? " " : "") + zip);
+                        leading = true;
+                    } else {
+                        $("#hover_box .where .zip").html("");
+                    }
+
+
+                    $("#hover_box .where").show();
+                } else {
+                    $("#hover_box .where").hide();
+                }
+
+                // when...
+
                 $("#hover_box").show();
             },
             eventMouseout: function(calEvent, jsEvent, view) {
-                console.log(["Out of the event", calEvent, jsEvent, view]);
-                $("#hover_box").css("display", "none");
+                $("#hover_box").hide();
             }
         });
 
