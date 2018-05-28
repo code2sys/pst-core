@@ -70,6 +70,14 @@
                 }
 
                 // link
+                if (calEvent.extra_link && calEvent.extra_link != '') {
+                    $("#page_calendar_modal<?php echo $page_section_id;?> .extra_link a").attr("href", calEvent.extra_link);
+                    $("#page_calendar_modal<?php echo $page_section_id;?> .extra_link a").text(calEvent.extra_link);
+                    $("#page_calendar_modal<?php echo $page_section_id;?> .extra_link").show();
+                } else {
+                    $("#page_calendar_modal<?php echo $page_section_id;?> .extra_link").hide();
+                }
+
 
                 // where
 
@@ -270,6 +278,7 @@
                             </div>
                             <div class="extra_link downspace">
                                 <strong>More Information</strong><br/>
+                                <a href=""></a>
                             </div>
                         </div>
                     </div>
