@@ -74,7 +74,7 @@
                 console.log(["Offset", offset, "Parent Offset", parentOffset]);
                 var hb = document.getElementById("hover_box");
                 hb.style.left = (offset.x - parentOffset.x) + "px";
-                hb.style.top = (offset.y - parentOffset.y + 16) + "px";
+                hb.style.top = (offset.y - parentOffset.y + 24) + "px";
 
                 $("#hover_box").show();
             },
