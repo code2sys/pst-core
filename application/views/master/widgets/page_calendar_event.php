@@ -167,7 +167,7 @@
         border-color: black;
         background-color: white;
         font-size: 12px;
-        width: 200px;
+        min-width: 200px;
         max-width: 80%;
         position: absolute;
         border: 2px solid gray;
