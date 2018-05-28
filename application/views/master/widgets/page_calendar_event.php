@@ -64,14 +64,16 @@
 
                 // description
                 if (calEvent.description && calEvent.description != '') {
-                    $("#page_calendar_modal<?php echo $page_section_id;?> .modal-body-subtitle").html(calEvent.description);
+                    $("#page_calendar_modal<?php echo $page_section_id;?> .description").html(calEvent.description);
                 } else {
-                    $("#page_calendar_modal<?php echo $page_section_id;?> .modal-body-subtitle").html("");
+                    $("#page_calendar_modal<?php echo $page_section_id;?> .description").html("");
                 }
 
                 // link
 
                 // where
+
+
 
                 var address1 = calEvent.address1;
                 var address2 = calEvent.address2;
@@ -122,6 +124,15 @@
 
 
                 // when
+                var when_string = calEvent.start.format("dddd, MMMM Do YYYY, h:mm a");
+                if (calEvent.start != calEvent.end) {
+                    if (calEvent.start.format("MMMM Do YYYY") != calEvent.end.format("MMMM Do YYYY")) {
+                        when_string += " to " + calEvent.end.format("MMMM Do YYYY, h:mm a");
+                    } else {
+                        when_string += " to " + calEvent.end.format("h:mm:ss a");
+                    }
+                }
+                $("#page_calendar_modal<?php echo $page_section_id;?> .when").html(when_string);
 
                 setTimeout(function () {
                     $('#page_calendar_modal<?php echo $page_section_id;?>').modal('show');
@@ -245,18 +256,20 @@
 
                 <p class="modal-body-title"></p>
 
-                <p class="modal-body-subtitle">Looking for Your Next Adventure?</p>
+                <p class="modal-body-subtitle when">Looking for Your Next Adventure?</p>
 
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="modal-form-instructions">
+                            <div class="description">
+                            </div>
 
-                            <div class="when modal-form-instructions">
+                            <div class="when">
                                 <strong>When</strong> <br/>
                                 <span class="start"></span>
                                 <span class="end"></span>
                             </div>
-                            <div class="where modal-form-instructions">
+                            <div class="where">
                                 <strong>Where</strong><br/>
                                 <span class="address1"></span><span class="address2"></span><span class="city"></span><span class="state"></span><span class="zip"></span>
                             </div>
