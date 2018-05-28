@@ -59,7 +59,11 @@
             })))); ?>,
             eventClick: function(calEvent, jsEvent, view) {
                 console.log(["Click on event", calEvent, jsEvent, view]);
-                $("#hover_box<?php echo $page_section_id;?>").css("display", "none");
+                $("#hover_box<?php echo $page_section_id;?>").hide();
+                $("#page_calendar_modal<?php echo $page_section_id;?> .modal-body-title").text(calEvent.title);
+                setTimeout(function () {
+                    $('#page_calendar_modal<?php echo $page_section_id;?>').modal('show');
+                }, 500);
             },
             eventMouseover: function(calEvent, jsEvent, view) {
                 console.log([calEvent]);
@@ -168,6 +172,23 @@
 </div>
 <div id='calendar<?php echo $page_section_id;?>'></div>
 </div>
+
+<div class="modal fade pop" id="page_calendar_modal<?php echo $page_section_id;?>">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body modal-body-dark">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <p class="modal-body-title"></p>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     .page_calendar_widget_holder {
         position: relative;
