@@ -104,13 +104,16 @@
 </div>
 </div>
 <style>
+    .page_calendar_widget_holder {
+        position: relative; 
+    }
     #hover_box {
         border-color: black;
         background-color: white;
         font-size: 12px;
         width: 200px;
         max-width: 80%;
-        position: relative;
+        position: absolute;
         border: 2px solid gray;
         padding: 6px;
         z-index: 1000;
