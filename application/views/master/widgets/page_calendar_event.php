@@ -93,7 +93,7 @@
         font-size: 12px;
         width: 200px;
         max-width: 80%;
-        position: fixed;
+        position: absolute;
         border: 2px solid gray;
         padding: 6px;
         z-index: 1000;
