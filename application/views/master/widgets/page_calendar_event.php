@@ -153,11 +153,7 @@
     </div>
     <div class="where">
         <strong>Where</strong><br/>
-        <span class="address1"></span>
-        <span class="state"></span>
-        <span class="city"></span>
-        <span class="state"></span>
-        <span class="zip"></span>
+        <span class="address1"></span><span class="address2"></span><span class="city"></span><span class="state"></span><span class="zip"></span>
     </div>
 
 </div>
