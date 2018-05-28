@@ -98,12 +98,12 @@
 
             $("#add_form_end").on("change", function(event) {
 
-                $("#add_form_end_jqxDateTimeInput").val(event.args.date);
+                $("#add_form_end_jqxDateTimeInput").val(moment(event.args.date).format("M/D/Y h:m a"));
             });
 
             $("#add_form_start").on("change", function(event) {
 
-                $("#add_form_start_jqxDateTimeInput").val(event.args.date);
+                $("#add_form_start_jqxDateTimeInput").val(moment(event.args.date).format("M/D/Y h:m a"));
             });
 
             $("#edit_form").on("submit", function(e) {
