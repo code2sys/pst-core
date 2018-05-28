@@ -3,6 +3,8 @@
 <script src="/assets/insourced/jquery-ui.js"></script>
 <link rel="stylesheet" href="/assets/css_front/jquery.dataTables.min.css" type="text/css" >
 <script src="/assets/js_front/jquery.dataTables.min.js"></script>
+<script src="/assets/js_front/moment.js"></script>
+
 
 <link rel="stylesheet" href="/assets/jqwidgets/styles/jqx.base.css" type="text/css" />
 <script type="text/javascript" src="/assets/jqwidgets/js/jqxcore.js"></script>
