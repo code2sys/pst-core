@@ -5,6 +5,32 @@
 <script src='/assets/js_front/fullcalendar.min.js'></script>
 <script type="application/javascript">
 
+    window.getTruePosition = function (el) {
+        var xPos = 0;
+        var yPos = 0;
+
+        while (el) {
+            if (el.tagName == "BODY") {
+                // deal with browser quirks with body/window/document and page scroll
+                var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+                var yScroll = el.scrollTop || document.documentElement.scrollTop;
+
+                xPos += (el.offsetLeft - xScroll + el.clientLeft);
+                yPos += (el.offsetTop - yScroll + el.clientTop);
+            } else {
+                // for all other non-BODY elements
+                xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+                yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+            }
+
+            el = el.offsetParent;
+        }
+        return {
+            x: xPos,
+            y: yPos
+        };
+    };
+
     $(document).ready(function() {
 
         $('#calendar<?php echo $page_section_id;?>').fullCalendar({
@@ -43,6 +69,9 @@
                 // fill  them in
                 $("#hover_box .title").text(calEvent.title);
                 // position it...
+                var offset = window.getTruePosition(jsEvent.target);
+                console.log(["Offset", offset]);
+                $("#hover_box").offset($offset);
 
                 $("#hover_box").show();
             },
