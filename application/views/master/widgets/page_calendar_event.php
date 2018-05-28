@@ -39,13 +39,12 @@
             },
             eventMouseover: function(calEvent, jsEvent, view) {
                 console.log(["Hover on event", calEvent, jsEvent, view]);
+                console.log(["Target element", $(calEvent.target).offset(), calEvent.target.offsetLeft, calEvent.target.offsetTop]);
                 // fill  them in
                 $("#hover_box .title").text(calEvent.title);
                 // position it...
-                $("#hover_box").css("left", calEvent.screenX);
-                $("#hover_box").css("top", calEvent.screeY);
-                
-                $("#hover_box").css("display", "block");
+
+                $("#hover_box").show();
             },
             eventMouseout: function(calEvent, jsEvent, view) {
                 console.log(["Out of the event", calEvent, jsEvent, view]);
