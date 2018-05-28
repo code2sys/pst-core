@@ -261,19 +261,14 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="modal-form-instructions">
-                            <div class="description">
+                            <div class="description downspace">
                             </div>
 
-                            <div class="when">
-                                <strong>When</strong> <br/>
-                                <span class="start"></span>
-                                <span class="end"></span>
-                            </div>
-                            <div class="where">
+                            <div class="where downspace">
                                 <strong>Where</strong><br/>
                                 <span class="address1"></span><span class="address2"></span><span class="city"></span><span class="state"></span><span class="zip"></span>
                             </div>
-                            <div class="extra_link">
+                            <div class="extra_link downspace">
                                 <strong>More Information</strong><br/>
                             </div>
                         </div>
@@ -309,6 +304,10 @@
     #hover_box<?php echo $page_section_id;?> .where {
         text-indent: -10px;
         margin-left: 10px;
+        padding-bottom: 12px;
+    }
+
+    #page_calendar_modal<?php echo $page_section_id;?> .downspace {
         padding-bottom: 12px;
     }
 </style>
