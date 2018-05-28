@@ -611,13 +611,13 @@
             });
 
             $("#add_form_<?php echo $section['page_section_id']; ?>_end").on("change", function(event) {
-
                 $("#add_form_<?php echo $section['page_section_id']; ?>_end_jqxDateTimeInput").val(moment(event.args.date).format("M/D/Y h:m a"));
+                console.log(["Input value - end time", $("#add_form_<?php echo $section['page_section_id']; ?>_end_jqxDateTimeInput").val()]);
             });
 
             $("#add_form_<?php echo $section['page_section_id']; ?>_start").on("change", function(event) {
-
                 $("#add_form_<?php echo $section['page_section_id']; ?>_start_jqxDateTimeInput").val(moment(event.args.date).format("M/D/Y h:m a"));
+                console.log(["Input value - start time", $("#add_form_<?php echo $section['page_section_id']; ?>_start_jqxDateTimeInput").val()]);
             });
 
             $("#add_form_<?php echo $section['page_section_id']; ?>").on("submit", function(e) {
