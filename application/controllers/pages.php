@@ -1016,6 +1016,14 @@ class Pages extends Master_Controller {
     /*
      * These are for the calendar...
      */
+    protected function _calendarCleanDateTime($input) {
+        // Tue May 29 2018 18:25:00 GMT-0400 (EDT)
+        if (FALSE !== ($p = strpos($input, "GMT"))) {
+            $input =substr($input, 0, $p - 1);
+        }
+        return $input;
+    }
+
     public function calendar_addEvent($page_id, $page_section_id) {
         $this->enforceAdmin("pages");
         global $PSTAPI;
@@ -1024,8 +1032,8 @@ class Pages extends Master_Controller {
         $PSTAPI->pagecalendarevent()->add(array(
             "title" => array_key_exists("title", $_REQUEST) ? $_REQUEST["title"] : "",
             "description" => array_key_exists("description", $_REQUEST) ? $_REQUEST["description"] : "",
-            "start" => array_key_exists("start", $_REQUEST) && $_REQUEST["start"] != "" ? date("Y-m-d H:i:s", strtotime($_REQUEST["start"])) : null,
-            "end" => array_key_exists("end", $_REQUEST) && $_REQUEST["end"] != "" ? date("Y-m-d H:i:s", strtotime($_REQUEST["end"])) : null,
+            "start" => array_key_exists("start", $_REQUEST) && $_REQUEST["start"] != "" ? date("Y-m-d H:i:s", strtotime($this->_calendarCleanDateTime($_REQUEST["start"]))) : null,
+            "end" => array_key_exists("end", $_REQUEST) && $_REQUEST["end"] != "" ? date("Y-m-d H:i:s", strtotime($this->_calendarCleanDateTime($_REQUEST["end"]))) : null,
             "url" => array_key_exists("url", $_REQUEST) ? $_REQUEST["url"] : "",
             "address1" => array_key_exists("address1", $_REQUEST) ? $_REQUEST["address1"] : "",
             "address2" => array_key_exists("address2", $_REQUEST) ? $_REQUEST["address2"] : "",
@@ -1093,8 +1101,8 @@ class Pages extends Master_Controller {
         $PSTAPI->pagecalendarevent()->update($page_calendar_event_id, array(
             "title" => array_key_exists("title", $_REQUEST) ? $_REQUEST["title"] : "",
             "description" => array_key_exists("description", $_REQUEST) ? $_REQUEST["description"] : "",
-            "start" => array_key_exists("start", $_REQUEST) && $_REQUEST["start"] != "" ? date("Y-m-d H:i:s", strtotime($_REQUEST["start"])) : null,
-            "end" => array_key_exists("end", $_REQUEST) && $_REQUEST["end"] != "" ? date("Y-m-d H:i:s", strtotime($_REQUEST["end"])) : null,
+            "start" => array_key_exists("start", $_REQUEST) && $_REQUEST["start"] != "" ? date("Y-m-d H:i:s", strtotime($this->_calendarCleanDateTime($_REQUEST["start"]))) : null,
+            "end" => array_key_exists("end", $_REQUEST) && $_REQUEST["end"] != "" ? date("Y-m-d H:i:s", strtotime($this->_calendarCleanDateTime($_REQUEST["end"]))) : null,
             "url" => array_key_exists("url", $_REQUEST) ? $_REQUEST["url"] : "",
             "address1" => array_key_exists("address1", $_REQUEST) ? $_REQUEST["address1"] : "",
             "address2" => array_key_exists("address2", $_REQUEST) ? $_REQUEST["address2"] : "",
