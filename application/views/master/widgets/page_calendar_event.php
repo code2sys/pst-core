@@ -51,6 +51,11 @@
 
                 var cw = $(".content_wrap")
                 var cw_offset = cw.offset();
+                console.log("Setting offset to");
+                console.log({
+                    top: offset.top - cw_offset.top + 24,
+                    left: offset.left - cw_offset.left - 24
+                });
 
                 $("#hover_box").offset({
                     top: offset.top - cw_offset.top + 24,
