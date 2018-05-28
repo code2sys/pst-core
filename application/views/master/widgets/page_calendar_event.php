@@ -59,12 +59,12 @@
             })))); ?>,
             eventClick: function(calEvent, jsEvent, view) {
                 console.log(["Click on event", calEvent, jsEvent, view]);
-                $("#hover_box").css("display", "none");
+                $("#hover_box<?php echo $page_section_id;?>").css("display", "none");
             },
             eventMouseover: function(calEvent, jsEvent, view) {
                 console.log([calEvent]);
                 // fill  them in
-                $("#hover_box .title").text(calEvent.title);
+                $("#hover_box<?php echo $page_section_id;?> .title").text(calEvent.title);
                 // position it...
                 var offset = window.getTruePosition(jsEvent.target);
                 var parentOffset = window.getTruePosition(document.getElementById("page_calendar_widget_holder<?php echo $page_section_id;?>"));
