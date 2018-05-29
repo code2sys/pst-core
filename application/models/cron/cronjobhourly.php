@@ -138,7 +138,8 @@ class CronJobHourly extends AbstractCronJob
     }
 
 	public function fixBrandSlugs() {
-        $query = $this->db->query("Select * from brand where slug = '' or slug is null");
+	    // return str_replace(array(" ", ".", ",", "'", "&"), array("_", "", "", "", "_and_"), $name);
+        $query = $this->db->query("Select * from brand where slug = '' or slug is null or slug like '% %' or slug like '%.%' or slug like '%,%' or slug like '%&%' or slug like '%\'%'");
 
         foreach ($query->result_array() as $row) {
             print "Brand missing slug: " . $row["brand_id"] . " " . $row["name"] . "\n";
