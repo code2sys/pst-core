@@ -649,6 +649,10 @@ class Productuploadermodel extends CI_Model {
             }
             foreach ($n as $m) {
                 if ($m < count($row)) {
+                    if ($row[$m] == "" || is_null($row[$m])) {
+                        continue;
+                    }
+
                     if (array_key_exists($k, $result)) {
                         if (!is_array($result[$k])) {
                             $result[$k] = array($result[$k]);
