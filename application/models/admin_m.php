@@ -1173,8 +1173,8 @@ class Admin_M extends Master_M {
 
     public function deleteBrand($id) {
         // JLB 05-29-18
-        // We have to delete from the manufacturer table, if it is an MX, which means this could ripple, but you said DELETE!
-        $this->db->query("Delete from manufacturer where brand_id = ? and brand_id in (select brand_id from brand where mx = 0)", array($id));
+//        // We have to delete from the manufacturer table, if it is an MX, which means this could ripple, but you said DELETE!
+//        $this->db->query("Delete from manufacturer where brand_id = ? and brand_id in (select brand_id from brand where mx = 0)", array($id));
 
         $where = array('brand_id' => $id);
         $this->deleteRecord('brand', $where);
