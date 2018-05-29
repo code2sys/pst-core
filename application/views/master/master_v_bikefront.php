@@ -558,6 +558,6 @@ echo $CI->load->view("master/bottom_footer", array(
 ));
 ?>
 <?php echo jget_store_block("bottom_body"); ?>
-
+<?php $this->view('modals/customer_exit_modal.php'); ?>
 </body>
 </html>
