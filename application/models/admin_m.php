@@ -1136,6 +1136,23 @@ class Admin_M extends Master_M {
             $post['brand_id'] = $this->createRecord('brand', $data, FALSE);
         }
         $this->updateBrandMarkUp($post['brand_id']);
+
+
+        // JLB 05-29-18
+        $query = $this->db->query("Select manufacturer_id from manufacturer where brand_id = ?", array($post['brand_id']));
+        $manufacturer_id = 0;
+        foreach ($query->result_array() as $row) {
+            $manufacturer_id = $row["manufacturer_id"];
+        }
+
+        if ($manufacturer_id == 0) {
+            // we must add it!
+            $this->db->query("Insert into manufacturer (brand_id, name) values (?, ?)", array($post['brand_id'], $data['name']));
+        } else if ($data['mx'] == 0) {
+            // we must update it!
+            $this->db->query("Update manufacturer set name = ? where brand_id = ?", array($data['name'], $post['brand_id']));
+        }
+
     }
 
     public function updateBrandMarkUp($brand_id) {
