@@ -688,8 +688,6 @@ class Productuploadermodel extends CI_Model {
     // Reference: Controllers/Adminproduct::product_add_save
     protected function sub_apply($row, $distributor_id, $partvariation_id = 0) {
 
-        file_put_contents(tempnam("/tmp", "dump_of_row_"), print_r($row, true));
-
         // you should plow through all of it - name, manufacturer, description, categories... that's what we put into product_add_save...
         $part_name = trim($row["part"]);
         $manufacturer = trim($row["manufacturer"]);
