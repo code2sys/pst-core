@@ -654,7 +654,7 @@ class Portalmodel extends Master_M {
         return $results;
     }
 
-    public function getDataStructure($part_id, $subset) {
+    public function getDataStructure($part_id, $subset = "") {
         $results = array();
         if ($subset != "") {
             switch ($subset) {
