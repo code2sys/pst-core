@@ -658,6 +658,8 @@ class Productuploadermodel extends CI_Model {
                 }
             }
         }
+        file_put_contents(tempnam("/tmp", "explodeToAssoc_"), print_r($inverted_column, true) . " " . print_r($row, true)  . " " . print_r($result, true));
+
         return $result;
     }
 
