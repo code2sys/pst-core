@@ -1006,7 +1006,7 @@ class Parts_M extends Master_M {
         return substr($returnURL, 0, -1);
     }
 
-    public function getBrands($filterArr) {
+    public function getBrands($filterArr = array()) {
         $unbrandedFilter = $filterArr;
         unset($unbrandedFilter['brand']);
         if (empty($unbrandedFilter)) {
