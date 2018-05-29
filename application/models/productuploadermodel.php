@@ -650,7 +650,9 @@ class Productuploadermodel extends CI_Model {
             foreach ($n as $m) {
                 if ($m < count($row)) {
                     if (array_key_exists($k, $result)) {
-                        $result[$k] = array($k);
+                        if (!is_array($result[$k])) {
+                            $result[$k] = array($result[$k]);
+                        }
                         $result[$k][] = $row[$m];
                     } else {
                         $result[$k] = $row[$m];
