@@ -1147,10 +1147,10 @@ class Admin_M extends Master_M {
 
         if ($manufacturer_id == 0) {
             // we must add it!
-            $this->db->query("Insert into manufacturer (brand_id, name) values (?, ?)", array($post['brand_id'], $data['name']));
+            $this->db->query("Insert into manufacturer (brand_id, name, label) values (?, ?)", array($post['brand_id'], $data['name'], $data['name']));
         } else if ($data['mx'] == 0) {
             // we must update it!
-            $this->db->query("Update manufacturer set name = ? where brand_id = ?", array($data['name'], $post['brand_id']));
+            $this->db->query("Update manufacturer set name = ?, label = ? where brand_id = ?", array($data['name'],$data['name'], $post['brand_id']));
         }
 
     }
