@@ -649,8 +649,14 @@ class Productuploadermodel extends CI_Model {
             }
             foreach ($n as $m) {
                 if ($m < count($row)) {
+                    if ($row[$m] == "" || is_null($row[$m])) {
+                        continue;
+                    }
+
                     if (array_key_exists($k, $result)) {
-                        $result[$k] = array($k);
+                        if (!is_array($result[$k])) {
+                            $result[$k] = array($result[$k]);
+                        }
                         $result[$k][] = $row[$m];
                     } else {
                         $result[$k] = $row[$m];
@@ -658,6 +664,8 @@ class Productuploadermodel extends CI_Model {
                 }
             }
         }
+        file_put_contents(tempnam("/tmp", "explodeToAssoc_"), print_r($inverted_column, true) . " " . print_r($row, true)  . " " . print_r($result, true));
+
         return $result;
     }
 
@@ -679,6 +687,7 @@ class Productuploadermodel extends CI_Model {
 
     // Reference: Controllers/Adminproduct::product_add_save
     protected function sub_apply($row, $distributor_id, $partvariation_id = 0) {
+
         // you should plow through all of it - name, manufacturer, description, categories... that's what we put into product_add_save...
         $part_name = trim($row["part"]);
         $manufacturer = trim($row["manufacturer"]);
@@ -833,7 +842,7 @@ class Productuploadermodel extends CI_Model {
             }
 
             // Now, the answer...
-            $this->db->query("Insert into partnumberpartquestion (partquestion_id, partnumber_id, answer) values (?, ?, ?) on duplicate key update answer = values(answer), partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id)", array($partquestion_id, $partnumber_id, $row["answer"]));
+            $this->db->query("Insert into partnumberpartquestion (partquestion_id, partnumber_id, answer, mx) values (?, ?, ?, 0) on duplicate key update answer = values(answer), partnumberpartquestion_id = last_insert_id(partnumberpartquestion_id)", array($partquestion_id, $partnumber_id, $row["answer"]));
 
             $this->db->query("Insert into partquestionanswer (partquestion_id, answer) values (?, ?) on duplicate key update partquestionanswer_id = last_insert_id(partquestionanswer_id)", array($partquestion_id, $row["answer"]));
         }
