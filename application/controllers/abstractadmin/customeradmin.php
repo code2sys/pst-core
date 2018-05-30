@@ -213,7 +213,7 @@ abstract class Customeradmin extends Financeadmin {
         parent::__construct();
 
         if (!defined('ENABLE_CUSTOMER_PRICING')) {
-            define('ENABLE_CUSTOMER_PRICING', false);
+            define('ENABLE_CUSTOMER_PRICING', true);
         }
     }
 
