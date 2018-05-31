@@ -80,6 +80,7 @@ class Lightspeedparts extends REST_Controller {
             }
         }
 
+        exit();
         $this->response($data, 200);
     }
 
