@@ -86,6 +86,14 @@ class Format {
     // Format XML for output
     public function to_xml($data = null, $structure = null, $basenode = 'xml')
     {
+        // JLB 05-31-18
+        // I have no idea how else to jam something in here...
+        global $REAL_BASE_NODE_XML;
+        if (isset($REAL_BASE_NODE_XML) && $REAL_BASE_NODE_XML != "") {
+            $basenode = $REAL_BASE_NODE_XML;
+        }
+
+
         if ($data === null and ! func_num_args())
         {
             $data = $this->_data;

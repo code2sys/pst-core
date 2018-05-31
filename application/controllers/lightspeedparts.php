@@ -10,9 +10,31 @@ require_once(__DIR__ . "/../libraries/REST_Controller.php");
 
 class Lightspeedparts extends REST_Controller {
 
+    protected function _getContentType() {
+        $headers = getallheaders();
+        return array_key_exists("CONTENT-TYPE", $headers) ? $headers["CONTENT-TYPE"] : "application/json";
+    }
+
+
+    protected function _fidgetFormat() {
+        $format = $this->_getContentType();
+
+        if (preg_match("/xml/i", $format)) {
+            $this->response->format = "xml";
+            return "xml";
+        } else {
+            $this->response->format = "json";
+            return "json";
+        }
+    }
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->format = $this->_fidgetFormat();
+    }
 
     function index_get() {
-        $this->response->format = "json";
         $this->response(array(
             "success" => 1,
             "method" => "GET"
@@ -20,7 +42,6 @@ class Lightspeedparts extends REST_Controller {
     }
 
     function index_post() {
-        $this->response->format = "json";
         $this->response(array(
             "success" => 1,
             "method" => "POST"
