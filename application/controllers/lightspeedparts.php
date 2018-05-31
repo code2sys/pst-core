@@ -36,16 +36,14 @@ class Lightspeedparts extends REST_Controller {
     }
 
     function index_get() {
-        $this->response(array(
-            "success" => 1,
-            "method" => "GET"
-        ), 200);
+        $this->index_post();
     }
 
     function index_post() {
+        global $REAL_BASE_NODE_XML;
+        $REAL_BASE_NODE_XML= "versions";
         $this->response(array(
-            "success" => 1,
-            "method" => "POST"
+            "version" => 1.0
         ), 200);
     }
 
