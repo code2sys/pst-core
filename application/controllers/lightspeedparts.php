@@ -12,6 +12,7 @@ class Lightspeedparts extends REST_Controller {
 
     protected function _getContentType() {
         $headers = getallheaders();
+        print_r($headers);
         return array_key_exists("CONTENT-TYPE", $headers) ? $headers["CONTENT-TYPE"] : "application/json";
     }
 
