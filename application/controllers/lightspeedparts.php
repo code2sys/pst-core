@@ -33,18 +33,55 @@ class Lightspeedparts extends REST_Controller {
     {
         parent::__construct();
         $this->_fidgetFormat();
+
+        global $PSTAPI;
+        initializePSTAPI();
     }
 
-    function index_get() {
+    public function index_get() {
         $this->index_post();
     }
 
-    function index_post() {
+    public function index_post() {
         global $REAL_BASE_NODE_XML;
         $REAL_BASE_NODE_XML = "versions";
         $this->response(array(
-            "1.0", "2.0", "2.5"
+            "version" => 1.0
         ), 200);
     }
+
+    public function taxrules_get() {
+        $this->_subtaxrules();
+    }
+
+    public function taxrules_post() {
+        $this->_subtaxrules();
+    }
+
+    protected function _subtaxrules() {
+        $format = $this->_fidgetFormat();
+
+        // Now, we need the tax rules...
+        global $PSTAPI;
+        $taxes = $PSTAPI->taxes()->fetch(array("active" => 1), true);
+
+        global $REAL_BASE_NODE_XML;
+        $REAL_BASE_NODE_XML = "taxRule";
+
+        $data = array();
+        foreach ($taxes as $tax) {
+            if ($tax["tax_value"] > 0) {
+                $node = array(
+                    "taxRuleID" => $tax["id"],
+                    "description" => $tax["Country"] . " - " . $tax["state"] . " - " . $tax["mailcode"]
+                );
+
+                    $data[] = $node;
+            }
+        }
+
+        $this->response($data, 200);
+    }
+
 
 }
