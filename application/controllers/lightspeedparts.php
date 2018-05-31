@@ -12,6 +12,7 @@ class Lightspeedparts extends REST_Controller {
 
 
     function index_get() {
+        $this->response->format = "json";
         $this->response(array(
             "success" => 1,
             "method" => "GET"
@@ -19,6 +20,7 @@ class Lightspeedparts extends REST_Controller {
     }
 
     function index_post() {
+        $this->response->format = "json";
         $this->response(array(
             "success" => 1,
             "method" => "POST"
