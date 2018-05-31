@@ -43,7 +43,7 @@ class Lightspeedparts extends REST_Controller {
         global $REAL_BASE_NODE_XML;
         $REAL_BASE_NODE_XML = "versions";
         $this->response(array(
-            "version" => "1.0"
+            "version" => array("1.0", "2.0")
         ), 200);
     }
 
