@@ -31,7 +31,7 @@ class Lightspeedparts extends REST_Controller {
     public function __construct()
     {
         parent::__construct();
-        $this->format = $this->_fidgetFormat();
+        $this->_fidgetFormat();
     }
 
     function index_get() {
