@@ -22,10 +22,10 @@ class Lightspeedparts extends REST_Controller {
 
         if (preg_match("/xml/i", $format)) {
             $this->response->format = "xml";
-            return "xml";
+            $this->_jlb_format = "xml";
         } else {
             $this->response->format = "json";
-            return "json";
+            $this->_jlb_format = "json";
         }
     }
 
@@ -45,9 +45,14 @@ class Lightspeedparts extends REST_Controller {
     public function index_post() {
         global $REAL_BASE_NODE_XML;
         $REAL_BASE_NODE_XML = "versions";
-        $this->response(array(
-            "version" => 1.0
-        ), 200);
+
+        $data = array("1.0");
+        $format = $this->_jlb_format;
+        if ($format == "json") {
+            $data["versions"] = $data;
+        }
+
+        $this->response($data, 200);
     }
 
     public function taxrules_get() {
@@ -59,7 +64,7 @@ class Lightspeedparts extends REST_Controller {
     }
 
     protected function _subtaxrules() {
-        $format = $this->_fidgetFormat();
+        $format = $this->_jlb_format;
 
         // Now, we need the tax rules...
         global $PSTAPI;
