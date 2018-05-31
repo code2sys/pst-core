@@ -76,8 +76,12 @@ class Lightspeedparts extends REST_Controller {
                     "description" => $tax["country"] . " - " . $tax["state"] . " - " . $tax["mailcode"] . " - " . $tax["id"]
                 );
 
-                    $data[] = $node;
+                $data[] = $node;
             }
+        }
+
+        if ($format == "json") {
+            $data = array("taxRules" => $data);
         }
 
         $this->response($data, 200);
