@@ -73,7 +73,7 @@ class Lightspeedparts extends REST_Controller {
             if ($tax["tax_value"] > 0) {
                 $node = array(
                     "taxRuleID" => $tax["id"],
-                    "description" => $tax["country"] . " - " . $tax["state"] . " - " . $tax["mailcode"]
+                    "description" => $tax["country"] . " - " . $tax["state"] . " - " . $tax["mailcode"] . " - " . $tax["id"]
                 );
 
                     $data[] = $node;
