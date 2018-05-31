@@ -66,7 +66,7 @@ class Lightspeedparts extends REST_Controller {
         $taxes = $PSTAPI->taxes()->fetch(array("active" => 1), true);
 
         global $REAL_BASE_NODE_XML;
-        $REAL_BASE_NODE_XML = "taxRule";
+        $REAL_BASE_NODE_XML = "taxRules";
 
         $data = array();
         foreach ($taxes as $tax) {
