@@ -53,6 +53,7 @@ $route['dirtbikeparts'] = 'dirtbikeparts/index';
 $route['vtwin'] = 'vtwin/index';
 $route['marine'] = 'marine/index';
 $route['checkout'] = 'checkout/index';
+$route['lightspeedparts'] = 'lightspeedparts';
 
 $route['atvparts'] = 'atvparts/index';
 $route['utvparts'] = 'utvparts/index';
