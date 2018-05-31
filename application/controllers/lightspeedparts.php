@@ -49,7 +49,7 @@ class Lightspeedparts extends REST_Controller {
         $data = array("1.0");
         $format = $this->_jlb_format;
         if ($format == "json") {
-            $data["versions"] = $data;
+            $data = array("versions" => $data);
         }
 
         $this->response($data, 200);
