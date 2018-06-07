@@ -992,6 +992,7 @@ class Portalmodel extends Master_M {
 
         global $PSTAPI;
         initializePSTAPI();
+        $PSTAPI->partimage()->renumberOrdinals(array("part_id" => $part_id));
         $partimage = $PSTAPI->partimage()->addNextOrdinal(array(
             "part_id" => $part_id,
             "original_filename" => $upload['name'],
