@@ -1,5 +1,6 @@
 <script src="/assets/dropzone.js"></script>
 <link rel="stylesheet" href="/assets/dropzone.css">
+<script type="application/javascript" src="/assets/underscore/underscore-min.js" ></script>
 <!-- MAIN CONTENT =======================================================================================-->
 <div class="content_wrap">
     <div class="content">
@@ -169,6 +170,31 @@
 
         showWarningFn();
 
+
+        $(".image_list_holder").sortable({
+            "stop" : _.debounce(function(event, ui) {
+                // print them, in order.
+                var elements = $(".image_list_holder .productimage");
+                var ids_in_order = [];
+                for (var i = 0; i < elements.length; i++) {
+                    if (elements[i].dataset.partimageId) {
+                        ids_in_order.push(elements[i].dataset.partimageId);
+                    }
+                }
+                console.log(["ids_in_order", ids_in_order]);
+
+                // now, post it.
+                $.ajax({
+                    "url" : "/adminproduct/product_image_reorder/<?php echo $part_id; ?>",
+                    "type" : "POST",
+                    "data" : {
+                        "ids_in_order" : ids_in_order
+                    },
+                    "dataType" : "json"
+                });
+            })
+        });
+
         new Dropzone("#mydropzone");
         Dropzone.options.mydropzone = {
             maxFilesize: 2,
@@ -201,6 +227,7 @@
                     console.log("Error: " + err);
                 }
             });
+
 
         }, 4000);
     });
