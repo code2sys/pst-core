@@ -617,9 +617,9 @@ class Adminproduct extends Admin {
             for ($i = 0; $i < count($ids_in_order); $i++) {
                 $partimage_id = $ids_in_order[$i];
                 $PSTAPI->partimage()->update($partimage_id, array(
-                    "ordinal" => $i
+                    "ordinal" => $i + 1
                 ));
-                error_log("Part $partimage_id value $i");
+//                error_log("Part $partimage_id value $i");
             }
             print json_encode(array("success" => 1, "success_message" => "Images reordered successfully."));
         }
