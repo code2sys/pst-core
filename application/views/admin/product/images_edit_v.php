@@ -188,7 +188,7 @@
                     "type" : "POST",
                     "data" : {
                         "ids_in_order" : ids_in_order
-                    }
+                    },
                     "dataType" : "json"
                 });
             }
