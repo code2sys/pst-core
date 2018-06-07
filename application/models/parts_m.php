@@ -290,9 +290,9 @@ class Parts_M extends Master_M {
     }
 
     public function getPartImages($partId) {
-        $where = array('part_id' => $partId);
-        $images = $this->selectRecords('partimage', $where);
-        return $images;
+        global $PSTAPI;
+        initializePSTAPI();
+        return $PSTAPI->fetchOrdered(array("part_id" => $partId), true);
     }
 
     public function getQuestionAnswerByNumber_old($partnumber) {
