@@ -202,6 +202,16 @@
                 }
             });
 
+            $(".image_list_holder").sortable({
+                change : function(event, ui) {
+                    // print them, in order.
+                    var elements = $(".image_list_holder .productimage");
+                    for (var i = 0; i < elements.length; i++) {
+                        console.log(elements[i].dataset.partimageId);
+                    }
+                }
+            })
+
         }, 4000);
     });
 </script>
