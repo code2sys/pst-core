@@ -600,33 +600,31 @@ class Adminproduct extends Admin {
     }
 
     public function product_image_reorder($part_id) {
-        public function product_image_remove($part_id, $partimage_id) {
-            if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
-                redirect('');
-            }
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
 
-            $product = $this->admin_m->getAdminProduct($part_id);
+        $product = $this->admin_m->getAdminProduct($part_id);
 
-            if (!array_key_exists("part_id", $product) && $product["mx"] != 0) {
-                print json_encode(array("success" => 0, "error_message" => "Image not found."));
-            } else {
-                global $PSTAPI;
-                initializePSTAPI();
+        if (!array_key_exists("part_id", $product) && $product["mx"] != 0) {
+            print json_encode(array("success" => 0, "error_message" => "Image not found."));
+        } else {
+            global $PSTAPI;
+            initializePSTAPI();
 
-                // we need to figure out what's the deal with these images...
-                $ids_in_order = $_REQUEST["ids_in_order"];
-                for ($i = 0; $i < count($ids_in_order); $i++) {
-                    $partimage_id = $ids_in_order[$i];
-                    $partimage = $this->Portalmodel->getPartImage($partimage_id);
+            // we need to figure out what's the deal with these images...
+            $ids_in_order = $_REQUEST["ids_in_order"];
+            for ($i = 0; $i < count($ids_in_order); $i++) {
+                $partimage_id = $ids_in_order[$i];
+                $partimage = $this->Portalmodel->getPartImage($partimage_id);
 
-                    if ($partimage["part_id"] == $part_id) {
-                        $PSTAPI->partimage()->update($partimage_id, array(
-                            "ordinal" => $i
-                        ));
-                    }
+                if ($partimage["part_id"] == $part_id) {
+                    $PSTAPI->partimage()->update($partimage_id, array(
+                        "ordinal" => $i
+                    ));
                 }
-                print json_encode(array("success" => 1, "success_message" => "Images reordered successfully."));
             }
+            print json_encode(array("success" => 1, "success_message" => "Images reordered successfully."));
         }
     }
 
