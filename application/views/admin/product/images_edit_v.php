@@ -172,25 +172,27 @@
 
         $(".image_list_holder").sortable({
             change : function(event, ui) {
-                // print them, in order.
-                var elements = $(".image_list_holder .productimage");
-                var ids_in_order = [];
-                for (var i = 0; i < elements.length; i++) {
-                    if (elements[i].dataset.partimageId) {
-                        ids_in_order.push(elements[i].dataset.partimageId);
+                setTimeout(function() {
+                    // print them, in order.
+                    var elements = $(".image_list_holder .productimage");
+                    var ids_in_order = [];
+                    for (var i = 0; i < elements.length; i++) {
+                        if (elements[i].dataset.partimageId) {
+                            ids_in_order.push(elements[i].dataset.partimageId);
+                        }
                     }
-                }
-                console.log(["ids_in_order", ids_in_order]);
+                    console.log(["ids_in_order", ids_in_order]);
 
-                // now, post it.
-                $.ajax({
-                    "url" : "/adminproduct/product_image_reorder/<?php echo $part_id; ?>",
-                    "type" : "POST",
-                    "data" : {
-                        "ids_in_order" : ids_in_order
-                    },
-                    "dataType" : "json"
-                });
+                    // now, post it.
+                    $.ajax({
+                        "url" : "/adminproduct/product_image_reorder/<?php echo $part_id; ?>",
+                        "type" : "POST",
+                        "data" : {
+                            "ids_in_order" : ids_in_order
+                        },
+                        "dataType" : "json"
+                    });
+                }, 500);
             }
         });
 
