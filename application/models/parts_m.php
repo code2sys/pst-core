@@ -290,9 +290,9 @@ class Parts_M extends Master_M {
     }
 
     public function getPartImages($partId) {
-        $where = array('part_id' => $partId);
-        $images = $this->selectRecords('partimage', $where);
-        return $images;
+        global $PSTAPI;
+        initializePSTAPI();
+        return $PSTAPI->partimage()->fetchOrdered(array("part_id" => $partId), true);
     }
 
     public function getQuestionAnswerByNumber_old($partnumber) {
@@ -1290,6 +1290,7 @@ class Parts_M extends Master_M {
             $this->db->limit($limit);
         $productArr = $this->selectRecords('part', $where);
 
+
         if (!empty($productArr)) {
             foreach ($productArr as &$rec) {
                 $rec['activeRide'] = FALSE;
@@ -1297,7 +1298,7 @@ class Parts_M extends Master_M {
                 if ((@$_SESSION['garage']) && ($this->validMachines($rec['part_id'], @$_SESSION['activeMachine'])))
                     $rec['activeRide'] = TRUE;
                 $where = array('part_id' => $rec['part_id']);
-                $rec['images'] = $this->selectRecords('partimage', $where);
+                $rec['images'] = $this->getPartImages($rec['part_id']);
                 $rec['reviews'] = $this->getAverageReviews($rec['part_id']);
                 $rec['stock_code'] = $this->getStockCodeByPartId($rec['part_id']);
             }
@@ -1346,8 +1347,7 @@ class Parts_M extends Master_M {
                 $rec['price'] = $this->getPriceRange($rec['part_id']);
                 if ((@$_SESSION['garage']) && ($this->validMachines($rec['part_id'], @$_SESSION['activeMachine'])))
                     $rec['activeRide'] = TRUE;
-                $where = array('part_id' => $rec['part_id']);
-                $rec['images'] = $this->selectRecords('partimage', $where);
+                $rec['images'] = $this->getPartImages($rec['part_id']);
                 $rec['stock_code'] = $this->getStockCodeByPartId($rec['part_id']);
             }
         }
@@ -1406,8 +1406,7 @@ class Parts_M extends Master_M {
                 $product['price'] = $this->getPriceRange($product['part_id']);
                 if ((@$_SESSION['garage']) && ($this->validMachines($product['part_id'])))
                     $product['activeRide'] = TRUE;
-                $where = array('part_id' => $product['part_id']);
-                $product['images'] = $this->selectRecords('partimage', $where);
+                $product['images'] = $this->getPartImages($product['part_id']);
                 $product['reviews'] = $this->getAverageReviews($product['part_id']);
                 $product['stock_code'] = $this->getStockCodeByPartId($product['part_id']);
             }
@@ -1474,8 +1473,7 @@ class Parts_M extends Master_M {
                 $product['price'] = $this->getPriceRange($product['part_id']);
                 if ((@$_SESSION['garage']) && ($this->validMachines($product['part_id'], @$_SESSION['activeMachine'])))
                     $product['activeRide'] = TRUE;
-                $where = array('part_id' => $product['part_id']);
-                $product['images'] = $this->selectRecords('partimage', $where);
+                $product['images'] = $this->getPartImages($product['part_id']);
                 $product['reviews'] = $this->getAverageReviews($product['part_id']);
                 $product['stock_code'] = $this->getStockCodeByPartId($product['part_id']);
             }
@@ -1521,8 +1519,7 @@ class Parts_M extends Master_M {
                 $product['price'] = $this->getPriceRange($product['part_id']);
                 if ((@$_SESSION['garage']) && ($this->validMachines($product['part_id'], @$_SESSION['activeMachine'])))
                     $product['activeRide'] = TRUE;
-                $where = array('part_id' => $product['part_id']);
-                $product['images'] = $this->selectRecords('partimage', $where);
+                $product['images'] = $this->getPartImages($product['part_id']);
                 $product['reviews'] = $this->getAverageReviews($product['part_id']);
                 $product['stock_code'] = $this->getStockCodeByPartId($product['part_id']);
             }
@@ -1568,8 +1565,7 @@ class Parts_M extends Master_M {
                 $product['price'] = $this->getPriceRange($product['part_id']);
                 if ((@$_SESSION['garage']) && ($this->validMachines($product['part_id'], @$_SESSION['activeMachine'])))
                     $product['activeRide'] = TRUE;
-                $where = array('part_id' => $product['part_id']);
-                $product['images'] = $this->selectRecords('partimage', $where);
+                $product['images'] = $this->getPartImages($product['part_id']);
                 $product['reviews'] = $this->getAverageReviews($product['part_id']);
                 $product['stock_code'] = $this->getStockCodeByPartId($product['part_id']);
             }
@@ -1588,8 +1584,7 @@ class Parts_M extends Master_M {
                 $product['price'] = $this->getPriceRange($product['part_id']);
                 if ((@$_SESSION['garage']) && ($this->validMachines($product['part_id'], @$_SESSION['activeMachine'])))
                     $product['activeRide'] = TRUE;
-                $where = array('part_id' => $product['part_id']);
-                $product['images'] = $this->selectRecords('partimage', $where);
+                $product['images'] = $this->getPartImages($product['part_id']);
                 $product['reviews'] = $this->getAverageReviews($product['part_id']);
                 $product['stock_code'] = $this->getStockCodeByPartId($product['part_id']);
             }
@@ -1625,8 +1620,7 @@ class Parts_M extends Master_M {
                 $product['price'] = $this->getPriceRange($id);
                 if ((@$_SESSION['garage']) && ($this->validMachines($product['part_id'], @$_SESSION['activeMachine'])))
                     $product['activeRide'] = TRUE;
-                $where = array('part_id' => $product['part_id']);
-                $product['images'] = $this->selectRecords('partimage', $where);
+                $product['images'] = $this->getPartImages($product['part_id']);
                 $product['reviews'] = $this->getAverageReviews($product['part_id']);
                 $product['stock_code'] = $this->getStockCodeByPartId($product['part_id']);
                 $returnArr['products'][] = $product;
@@ -2348,8 +2342,7 @@ class Parts_M extends Master_M {
 
                 //$rec['price'] = $this->calculateMarkup($rec['price_min'], $rec['price_max'], $rec['sale_min'], $rec['sale_max'], @$_SESSION['userRecord']['markup'], $rec['dealer_sale_min'], $rec['dealer_sale_max'], $rec['cnt']);
 
-                $where = array('part_id' => $rec['part_id']);
-                $rec['images'] = $this->selectRecords('partimage', $where);
+                $rec['images'] = $this->getPartImages($rec['part_id']);
                 $rec['reviews'] = $this->getAverageReviews($rec['part_id']);
             }
         }
@@ -2437,8 +2430,7 @@ class Parts_M extends Master_M {
         $records = $this->selectRecords('reviews', $where);
         if (is_null($partId) && isset($records) && is_array($records)) {
             foreach ($records as &$rec) {
-                $where = array('part_id' => $rec['part_id']);
-                $rec['images'] = $this->selectRecords('partimage', $where);
+                $rec['images'] = $this->getPartImages($rec['part_id']);
             }
         }
         return $records;
@@ -2808,8 +2800,7 @@ class Parts_M extends Master_M {
                 } else
                     $rec['price'] = $this->calculateMarkup($rec['price_min'], $rec['price_max'], $rec['sale_min'], $rec['sale_max'], @$_SESSION['userRecord']['markup']);
 
-                $where = array('part_id' => $rec['part_id']);
-                $rec['images'] = $this->selectRecords('partimage', $where);
+                $rec['images'] = $this->getPartImages($rec['part_id']);
                 $rec['reviews'] = $this->getAverageReviews($rec['part_id']);
             }
         }
