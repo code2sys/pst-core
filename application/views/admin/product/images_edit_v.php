@@ -1,5 +1,6 @@
 <script src="/assets/dropzone.js"></script>
 <link rel="stylesheet" href="/assets/dropzone.css">
+<script type="application/javascript" src="/assets/underscore/underscore-min.js" ></script>
 <!-- MAIN CONTENT =======================================================================================-->
 <div class="content_wrap">
     <div class="content">
@@ -171,7 +172,7 @@
 
 
         $(".image_list_holder").sortable({
-            change : function(event, ui) {
+            change : _.debounce(function(event, ui) {
                 setTimeout(function() {
                     // print them, in order.
                     var elements = $(".image_list_holder .productimage");
@@ -193,7 +194,7 @@
                         "dataType" : "json"
                     });
                 }, 500);
-            }
+            })
         });
 
         new Dropzone("#mydropzone");
