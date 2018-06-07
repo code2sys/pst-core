@@ -436,8 +436,9 @@ class Portalmodel extends Master_M {
     }
 
     public function getPartImages($part_id) {
-        $query = $this->db->query("Select * from partimage where part_id = ?", array($part_id));
-        return $query->result_array();
+        global $PSTAPI;
+        initializePSTAPI();
+        return $PSTAPI->partimage()->fetchOrdered(array("part_id" => $part_id), true);
     }
 
     public function fetchQuestions($part_id) {
