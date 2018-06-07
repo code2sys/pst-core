@@ -436,8 +436,9 @@ class Portalmodel extends Master_M {
     }
 
     public function getPartImages($part_id) {
-        $query = $this->db->query("Select * from partimage where part_id = ?", array($part_id));
-        return $query->result_array();
+        global $PSTAPI;
+        initializePSTAPI();
+        return $PSTAPI->partimage()->fetchOrdered(array("part_id" => $part_id), true);
     }
 
     public function fetchQuestions($part_id) {
@@ -971,14 +972,10 @@ class Portalmodel extends Master_M {
     }
 
     public function getPartImage($partimage_id) {
-        $results = array();
-
-        $query = $this->db->query("Select * from partimage where partimage_id = ?", array($partimage_id));
-        foreach ($query->result_array() as $row) {
-            return $row;
-        }
-
-        return $results;
+        global $PSTAPI;
+        initializePSTAPI();
+        $partimage = $PSTAPI->partimage()->get($partimage_id);
+        return is_null($partimage) ? array() : $partimage->to_array();
     }
 
     public function addImage($part_id, $upload) {
@@ -994,9 +991,17 @@ class Portalmodel extends Master_M {
         $image->setMaxDimension(144);
         $image->save(STORE_DIRECTORY . "/html/storeimages/" . $thumbnail_file, IMAGETYPE_PNG);
 
-        $this->db->query("insert into partimage (part_id, original_filename, path) values (?, ?, ?)", array($part_id, $upload['name'], "store/" . $image_file));
-        $partimage_id = $this->db->insert_id();
-        return $partimage_id;
+        global $PSTAPI;
+        initializePSTAPI();
+        $PSTAPI->partimage()->renumberOrdinals(array("part_id" => $part_id));
+        $partimage = $PSTAPI->partimage()->addNextOrdinal(array(
+            "part_id" => $part_id,
+            "original_filename" => $upload['name'],
+            "path" => "store/$image_file"
+        ), array(
+            "part_id" => $part_id
+        ));
+        return $partimage->id();
     }
 
     public function removePartQuestion($partquestion_id) {
