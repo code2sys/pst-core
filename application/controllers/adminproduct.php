@@ -616,13 +616,10 @@ class Adminproduct extends Admin {
             $ids_in_order = $_REQUEST["ids_in_order"];
             for ($i = 0; $i < count($ids_in_order); $i++) {
                 $partimage_id = $ids_in_order[$i];
-                $partimage = $this->Portalmodel->getPartImage($partimage_id);
-
-                if ($partimage["part_id"] == $part_id) {
-                    $PSTAPI->partimage()->update($partimage_id, array(
-                        "ordinal" => $i
-                    ));
-                }
+                $PSTAPI->partimage()->update($partimage_id, array(
+                    "ordinal" => $i
+                ));
+                error_log("Part $partimage_id value $i");
             }
             print json_encode(array("success" => 1, "success_message" => "Images reordered successfully."));
         }
