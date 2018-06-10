@@ -829,6 +829,11 @@ class Productuploadermodel extends CI_Model {
 
         // JLB 06-10-18
         // If it's new, then we need to include a blank question / blank answer
+        if ($part_new && !array_key_exists("question", $row)) {
+            $row["question"] = "";
+            $row["answer"] = "";
+        }
+
         if (array_key_exists("question", $row) && ($part_new || $row["question"] != "")) {
             // OK, is there a question for this that is not a product question?
             $partquestion_id = 0;
