@@ -687,6 +687,7 @@ class Productuploadermodel extends CI_Model {
 
     // Reference: Controllers/Adminproduct::product_add_save
     protected function sub_apply($row, $distributor_id, $partvariation_id = 0) {
+        $part_new = $partvariation_id == 0;
 
         // you should plow through all of it - name, manufacturer, description, categories... that's what we put into product_add_save...
         $part_name = trim($row["part"]);
@@ -826,7 +827,14 @@ class Productuploadermodel extends CI_Model {
             $this->db->query("Update partnumber set $values_string where partnumber_id = ? limit 1", $values_array);
         }
 
-        if (array_key_exists("question", $row) && $row["question"] != "") {
+        // JLB 06-10-18
+        // If it's new, then we need to include a blank question / blank answer
+        if ($part_new && !array_key_exists("question", $row)) {
+            $row["question"] = "";
+            $row["answer"] = "";
+        }
+
+        if (array_key_exists("question", $row) && ($part_new || $row["question"] != "")) {
             // OK, is there a question for this that is not a product question?
             $partquestion_id = 0;
 
