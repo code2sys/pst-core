@@ -237,6 +237,14 @@ class CronControl extends Master_Controller {
 
     protected $_preserveMachineMotoType;
     protected function _getMachineTypeMotoType($machine_type, $offroad_flag) {
+        if (is_null($offroad_flag)) {
+            $offroad_flag = 0;
+        }
+
+        if ($offroad_flag !== 1) {
+            $offroad_flag = 0;
+        }
+
         if (!isset($this->_preserveMachineMotoType)) {
             $this->_preserveMachineMotoType = array();
         }
