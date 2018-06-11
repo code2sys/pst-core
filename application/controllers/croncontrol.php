@@ -303,7 +303,7 @@ class CronControl extends Master_Controller {
                 if ($debug > 0) {
                     print "Requesting product line: " . $c["crs_machinetype"] . ", " . $c["crs_make_id"] . ", " . $c["year"] . "\n";
                 }
-                $this->addProductLine($c["crs_machinetype"], $c["crs_make_id"], "N", $c["year"], $c["year"]);
+                $this->addProductLine($c["crs_machinetype"], $c["crs_make_id"], "N", $c["year"], $c["year"], $debug);
             }
 
             // we should delete all other things hanging around
@@ -346,12 +346,18 @@ class CronControl extends Master_Controller {
 	 * "A": Adds them
 	 *
 	 */
-	public function addProductLine($machine_type, $make_id, $mode = "C", $starting_year = 0, $ending_year = 0) {
+	public function addProductLine($machine_type, $make_id, $mode = "C", $starting_year = 0, $ending_year = 0, $debug = 0) {
         $this->load->model("CRS_m");
 
         $uniqid = uniqid("");
 
+        if ($debug > 0) {
+            print "Fetching trims \n";
+        }
+
+
         if ($mode == "C") {
+
             $matching_motorcycles = $this->CRS_m->getTrims(array(
                 "current" => true,
                 "make_id" => $make_id,
@@ -372,9 +378,15 @@ class CronControl extends Master_Controller {
                     "year" => $y
                 )));
             }
+
         } else {
             throw new Exception("You must provide a starting year.");
         }
+
+        if ($debug > 0) {
+            print "Fetched trims.\n";
+        }
+
 
         // clear the unique IDs...
         $this->db->query("Update motorcycle set uniqid = '' where crs_machinetype = ? and crs_make_id = ? and `condition` = 1 and source = 'PST'", array($machine_type, $make_id));
@@ -396,6 +408,10 @@ class CronControl extends Master_Controller {
             $crs_trim = $m["trim"];
             $crs_display_name = $m["display_name"];
             $crs_trim_id = $m["trim_id"];
+
+            if ($debug > 0) {
+                print "Processing Trim $crs_trim_id make $crs_make model $crs_model \n";
+            }
 
             // Is there one of these?
             $query = $this->db->query("Select * from motorcycle where `condition` = 1 and crs_trim_id = ? and (source = 'PST' or deleted = 0)", array($crs_trim_id));
