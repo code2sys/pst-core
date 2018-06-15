@@ -2,7 +2,7 @@
 $new_assets_url = jsite_url( "/qatesting/newassets/" );
 $CI =& get_instance();
 $CI->load->helper("mustache_helper");
-$footer_template = mustache_tmpl_open("master/widgets/real_footer.html");
+$footer_template = mustache_tmpl_open("benz_views/real_footer.html");
 
 
 mustache_tmpl_set($footer_template, "store_name", $store_name['company']);
