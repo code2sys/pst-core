@@ -16,16 +16,16 @@ if (!isset($hide_search)) {
 
 $CI =& get_instance();
 $CI->load->helper("mustache_helper");
-$template = mustache_tmpl_open("search_placeholder.html");
-mustache_tmpl_set($template, "HIDE_SEARCH", $hide_search);
-mustache_tmpl_set($template, "base_url", base_url());
-mustache_tmpl_set($template, "SEARCH_PLACEHOLDER_WORDING", SEARCH_PLACEHOLDER_WORDING);
+$search_placeholder_template = mustache_tmpl_open("search_placeholder.html");
+mustache_tmpl_set($search_placeholder_template, "HIDE_SEARCH", $hide_search);
+mustache_tmpl_set($search_placeholder_template, "base_url", base_url());
+mustache_tmpl_set($search_placeholder_template, "SEARCH_PLACEHOLDER_WORDING", SEARCH_PLACEHOLDER_WORDING);
 
 
 if (array_key_exists("sm_show_upper_link", $SMSettings) && $SMSettings["sm_show_upper_link"] == 1) {
-    mustache_tmpl_set($template, "search_holder", $CI->load->view("social_link_buttons", array("SMSettings" => $SMSettings), true));
+    mustache_tmpl_set($search_placeholder_template, "search_holder", $CI->load->view("social_link_buttons", array("SMSettings" => $SMSettings), true));
 } else {
-    mustache_tmpl_set($template, "search_holder", false);
+    mustache_tmpl_set($search_placeholder_template, "search_holder", false);
 }
 
-echo mustache_tmpl_parse($template);
+echo mustache_tmpl_parse($search_placeholder_template);
