@@ -14,23 +14,18 @@ if (!isset($hide_search)) {
     $hide_search = false;
 }
 
-?>
-<div class="searchHolder search-one">
-    <?php if (!$hide_search): ?>
-    <form action="<?php echo base_url(); ?>shopping/productlist" method="post" id="moto_search" class="form_standard">
-        <input id="search" name="search" placeholder="<?php echo SEARCH_PLACEHOLDER_WORDING; ?>" class="search-bx" style="float:left;" />
-        <a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
-    </form>
-    <?php endif; ?>
-    <div class="clear"></div>
-</div>
+$CI =& get_instance();
+$CI->load->helper("mustache_helper");
+$template = mustache_tmpl_open("search_placeholder.html");
+mustache_tmpl_set($template, "HIDE_SEARCH", $hide_search);
+mustache_tmpl_set($template, "base_url", base_url());
+mustache_tmpl_set($template, "SEARCH_PLACEHOLDER_WORDING", SEARCH_PLACEHOLDER_WORDING);
 
-<?php
+
 if (array_key_exists("sm_show_upper_link", $SMSettings) && $SMSettings["sm_show_upper_link"] == 1) {
-    ?>
-    <div class="supper_social searchHolder">
-        <?php echo $CI->load->view("social_link_buttons", array("SMSettings" => $SMSettings), true); ?>
-    </div>
-    <?php
+    mustache_tmpl_set($template, "search_holder", $CI->load->view("social_link_buttons", array("SMSettings" => $SMSettings), true));
+} else {
+    mustache_tmpl_set($template, "search_holder", false);
 }
-?>
+
+echo mustache_tmpl_parse($template);

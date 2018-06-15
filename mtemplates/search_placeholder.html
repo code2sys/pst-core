@@ -1,0 +1,15 @@
+<div class="searchHolder search-one">
+    {{^HIDE_SEARCH}}
+    <form action="{{base_url}}shopping/productlist" method="post" id="moto_search" class="form_standard">
+        <input id="search" name="search" placeholder="{{SEARCH_PLACEHOLDER_WORDING}}" class="search-bx" style="float:left;" />
+        <a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
+    </form>
+    {{/HIDE_SEARCH}}
+    <div class="clear"></div>
+</div>
+
+{{#search_holder}}
+<div class="supper_social searchHolder">
+    {{{search_holder}}}
+</div>
+{{/search_holder}}
