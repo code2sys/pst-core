@@ -67,7 +67,7 @@ if (!isset($SMSettings)) {
     $CI->load->model("admin_m");
     $SMSettings = $CI->admin_m->getSMSettings();
 }
-if (array_key_exists("sm_show_upper_link", $SMSettings) && $SMSettings["sm_show_upper_link"] == 1) {
+if (array_key_exists("sm_show_upper_link", $SMSettings)) {
     mustache_tmpl_set($template, "search_holder", $CI->load->view("social_link_buttons", array("SMSettings" => $SMSettings), true));
 } else {
     mustache_tmpl_set($template, "search_holder", false);
