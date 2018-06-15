@@ -63,5 +63,15 @@ if (array_key_exists("userRecord", $_SESSION) && $_SESSION["userRecord"]) {
     mustache_tmpl_set($template, "userRecord_show", false);
 }
 
+if (!isset($SMSettings)) {
+    $CI->load->model("admin_m");
+    $SMSettings = $CI->admin_m->getSMSettings();
+}
+if (array_key_exists("sm_show_upper_link", $SMSettings)) {
+    mustache_tmpl_set($template, "search_holder", $CI->load->view("social_link_buttons", array("SMSettings" => $SMSettings), true));
+} else {
+    mustache_tmpl_set($template, "search_holder", false);
+}
+
 
 echo mustache_tmpl_parse($template);
