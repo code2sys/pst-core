@@ -38,5 +38,6 @@ mustache_tmpl_set($footer_template, "braintree", $CI->load->view("braintree", ar
     "store_name" =>	$store_name
 ), true));
 
+jtemplate_add_store_hours($footer_template, $store_name);
 
 echo mustache_tmpl_parse($footer_template);

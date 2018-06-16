@@ -73,5 +73,5 @@ if (array_key_exists("sm_show_upper_link", $SMSettings)) {
     mustache_tmpl_set($template, "social_link_buttons", false);
 }
 
-
+jtemplate_add_store_hours($template, $store_name);
 echo mustache_tmpl_parse($template);

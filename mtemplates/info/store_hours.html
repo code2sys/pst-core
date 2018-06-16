@@ -1,0 +1,63 @@
+{{#store_hours_use_free_form}}
+
+<h1>Store Hours</h1>
+
+<div class="store_hours">
+    {{{store_hours_free_form_blob}}}
+</div>
+
+<p>&nbsp;</p>
+
+{{/store_hours_use_free_form}}
+{{#store_hours_defined}}
+
+<h1>Store Hours</h1>
+<div class="store_hours">
+
+    {{#store_hours_monday}}
+    <div>
+        <strong>Monday: </strong> {{{store_hours_monday}}}
+    </div>
+    {{/store_hours_monday}}
+    {{#store_hours_tuesday}}
+    <div>
+        <strong>Tuesday: </strong> {{{store_hours_tuesday}}}
+    </div>
+    {{/store_hours_tuesday}}
+    {{#store_hours_wednesday}}
+    <div>
+        <strong>Wednesday: </strong> {{{store_hours_wednesday}}}
+    </div>
+    {{/store_hours_wednesday}}
+    {{#store_hours_thursday}}
+    <div>
+        <strong>Thursday: </strong> {{{store_hours_thursday}}}
+    </div>
+    {{/store_hours_thursday}}
+    {{#store_hours_friday}}
+    <div>
+        <strong>Friday: </strong> {{{store_hours_friday}}}
+    </div>
+    {{/store_hours_friday}}
+    {{#store_hours_saturday}}
+    <div>
+        <strong>Saturday: </strong> {{{store_hours_saturday}}}
+    </div>
+    {{/store_hours_saturday}}
+    {{#store_hours_sunday}}
+    <div>
+        <strong>Sunday: </strong> {{{store_hours_sunday}}}
+    </div>
+    {{/store_hours_sunday}}
+
+    {{#store_hours_note}}
+    <div class="hours_note">
+        {{{store_hours_note}}}
+    </div>
+    {{/store_hours_note}}
+</div>
+
+
+<p>&nbsp;</p>
+
+{{/store_hours_defined}}
