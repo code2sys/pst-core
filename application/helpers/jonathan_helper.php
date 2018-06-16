@@ -254,7 +254,8 @@ function jtemplate_add_store_hours(&$template, $store_name = null) {
                 "friday_hours" => "store_hours_friday",
                 "saturday_hours" => "store_hours_saturday",
                 "sunday_hours" => "store_hours_sunday",
-                "hours_note" => "store_hours_note"
+                "hours_note" => "store_hours_note",
+        "store_hours_defined" => "store_hours_defined"
 
              ) as $k => $v) {
         mustache_tmpl_set($template, $v, $store_name[$k]);
