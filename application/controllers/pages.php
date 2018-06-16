@@ -331,7 +331,7 @@ class Pages extends Master_Controller {
                 $CI =& get_instance();
                 $CI->load->model("admin_m");
                 $store_name = $CI->admin_m->getAdminShippingProfile();
-                $this->_mainData['widgetBlock'] .= $this->load->view('info/store_hours', $store_name, TRUE);
+                $this->_mainData['widgetBlock'] .= $this->load->view('info/store_hours', array("store_name" => $store_name), TRUE);
 
 
 				$this->_mainData['widgetBlock'] .= $this->loadGoggleMaps();

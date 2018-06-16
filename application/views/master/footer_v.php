@@ -54,5 +54,5 @@ mustache_tmpl_set($template, "braintree", $CI->load->view("braintree", array(
 
 mustache_tmpl_set($template, "assets", $assets);
 mustache_tmpl_set($template, "top_parent", $top_parent);
-
+jtemplate_add_store_hours($template, $store_name);
 echo mustache_tmpl_parse($template);

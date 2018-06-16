@@ -249,6 +249,8 @@ if (isset($keywords) &&	$keywords != "") {
 
     mustache_tmpl_set($template, "new_assets_url1", $new_assets_url1);
 
+    jtemplate_add_store_hours($template, $store_name);
+
 
     echo mustache_tmpl_parse($template);
 

@@ -77,5 +77,5 @@ mustache_tmpl_set($template, "showvideo_function", $CI->load->view("showvideo_fu
             // Really, a clusterfuck of bad design on this page...and it's duplicated in header.php and in a few other spots.
  */
 
-
+jtemplate_add_store_hours($template, $store_name);
 echo mustache_tmpl_parse($template);
