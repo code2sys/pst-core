@@ -209,16 +209,56 @@ function jserve_file($source_file_path, $filename, $mime_type) {
     This initializes the API object...
  */
 
- function initializePSTAPI() {
-     global $PSTAPI;
+function initializePSTAPI() {
+    global $PSTAPI;
 
-     if (!isset($PSTAPI)) {
-         // we have to make a PDO object...
+    if (!isset($PSTAPI)) {
+        // we have to make a PDO object...
         $dbh = new PDO("mysql:dbname=" . DATABASE_NAME . ";host=" . DATABASE_HOSTNAME, DATABASE_USER, DATABASE_PASS);
 
-         // then make it!
-         $PSTAPI = new PST\API($dbh);
-     }
-    
- }
+        // then make it!
+        $PSTAPI = new PST\API($dbh);
+    }
 
+}
+
+/*
+ * Kyle wanted the store hours several places, so here we go.
+ */
+
+function jtemplate_add_store_hours(&$template, $store_name = null) {
+    if (is_null($store_name)) {
+        $CI =& get_instance();
+        $CI->load->model("admin_m");
+        $store_name = $CI->admin_m->getAdminShippingProfile();
+    }
+
+    $store_name["free_form_hours"] == ($store_name["free_form_hours"] > 0) && $store_name["free_form_hour_blob"] != "";
+    $store_name["store_hours_defined"] = !$store_name["free_form_hours"] && ($store_name["monday_hours"] != "" || $store_name["tuesday_hours"] != "" || $store_name["wednesday_hours"] != "" || $store_name["thursday_hours"] != "" || $store_name["friday_hours"] != "" || $store_name["saturday_hours"] != "" || $store_name["sunday_hours"] != "" || trim($store_name["hours_note"]) != "");
+
+    foreach (array("monday_hours", "tuesday_hours", "wednesday_hours", "thursday_hours", "friday_hours", "saturday_hours", "sunday_hours", "hours_note") as $k) {
+        $store_name[$k] = trim($store_name[$k]);
+        if ($store_name[$k] == "") {
+            $store_name[$k] = false;
+        }
+    }
+
+
+    foreach (array(
+                "free_form_hours" => "store_hours_use_free_form",
+                "free_form_hour_blob" => "store_hours_free_form_blob",
+                "monday_hours" => "store_hours_monday",
+                "tuesday_hours" => "store_hours_tuesday",
+                "wednesday_hours" => "store_hours_wednesday",
+                "thursday_hours" => "store_hours_thursday",
+                "friday_hours" => "store_hours_friday",
+                "saturday_hours" => "store_hours_saturday",
+                "sunday_hours" => "store_hours_sunday",
+                "hours_note" => "store_hours_note",
+        "store_hours_defined" => "store_hours_defined"
+
+             ) as $k => $v) {
+        mustache_tmpl_set($template, $v, $store_name[$k]);
+    }
+
+}
