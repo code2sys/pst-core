@@ -260,5 +260,4 @@ function jtemplate_add_store_hours(&$template, $store_name = null) {
         mustache_tmpl_set($template, $v, $store_name[$k]);
     }
 
-    mustache_tmpl_set($template, "the_current_year", date("Y"));
 }
