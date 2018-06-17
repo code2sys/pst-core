@@ -243,7 +243,6 @@ function jtemplate_add_store_hours(&$template, $store_name = null) {
         }
     }
 
-
     foreach (array(
                 "free_form_hours" => "store_hours_use_free_form",
                 "free_form_hour_blob" => "store_hours_free_form_blob",
@@ -255,10 +254,11 @@ function jtemplate_add_store_hours(&$template, $store_name = null) {
                 "saturday_hours" => "store_hours_saturday",
                 "sunday_hours" => "store_hours_sunday",
                 "hours_note" => "store_hours_note",
-        "store_hours_defined" => "store_hours_defined"
+        "store_hours_defined" => "store_hours_defined",
 
              ) as $k => $v) {
         mustache_tmpl_set($template, $v, $store_name[$k]);
     }
 
+    mustache_tmpl_set($template, "the_current_year", date("Y"));
 }
