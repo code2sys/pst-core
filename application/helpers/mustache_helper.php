@@ -52,5 +52,8 @@ function mustache_tmpl_iterate(&$template, $loop) {
 
 function mustache_tmpl_parse(&$template) {
     global $PST_MUSTACHE;
+    if (!array_key_exists("the_current_year", $template["data"])) {
+        mustache_tmpl_set($template, "the_current_year", date("Y"));
+    }
     return $PST_MUSTACHE->render($template["template"], $template["data"]);
 }

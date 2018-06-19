@@ -51,5 +51,5 @@ mustache_tmpl_set($template, "top_parent", $top_parent);
 
 // this is the only thing different from footer_v.php as far as I can tell.
 mustache_tmpl_set($template, "s_assets", $s_assets);
-
+jtemplate_add_store_hours($template, $store_name);
 echo mustache_tmpl_parse($template);
