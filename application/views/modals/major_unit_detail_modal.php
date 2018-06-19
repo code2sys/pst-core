@@ -25,14 +25,12 @@ if (isset($motorcycle) && array_key_exists("id", $motorcycle) && $motorcycle["id
     }
 
 } else {
-    error_log("major_unit_detail A");
     mustache_tmpl_set($major_unit_detail_modal_template, "motorcycle", false);
 
     // JLB: I don't want this thing shown more than once.
     global $majorUnitGenericModal;
 
     if (!isset($majorUnitGenericModal)) {
-        error_log("major_unit_detail B");
         $majorUnitGenericModal = false;
     }
     $show_template = !$majorUnitGenericModal;
@@ -43,7 +41,6 @@ mustache_tmpl_set($major_unit_detail_modal_template, "form_open_string", form_op
 mustache_tmpl_set($major_unit_detail_modal_template, "form_close_string", form_close());
 
 if ($show_template) {
-    error_log("major_unit_detail C");
     echo mustache_tmpl_parse($major_unit_detail_modal_template);
 }
 
