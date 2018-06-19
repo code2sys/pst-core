@@ -40,6 +40,8 @@ if (isset($motorcycle) && array_key_exists("id", $motorcycle) && $motorcycle["id
 mustache_tmpl_set($major_unit_detail_modal_template, "form_open_string", form_open('welcome/productEnquiry', array('class' => 'form_standard')));
 mustache_tmpl_set($major_unit_detail_modal_template, "form_close_string", form_close());
 
-echo mustache_tmpl_parse($major_unit_detail_modal_template);
+if ($show_template) {
+    echo mustache_tmpl_parse($major_unit_detail_modal_template);
+}
 
 echo $CI->load->view("modals/major_unit_detail_modal_global_include", array(), true);
