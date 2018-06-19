@@ -8,7 +8,9 @@ if (!isset($majorUnitGenericModal)) {
 }
 
 if (!$majorUnitGenericModal) {
-    echo $CI->load->view("modals/major_unit_detail_modal", array(), true);
+    echo $CI->load->view("modals/major_unit_detail_modal", array(
+            "motorcycle" => array()
+    ), true);
     ?>
     <script type="application/javascript">
         $(document).ready(function () {
