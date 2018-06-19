@@ -7,6 +7,8 @@ $CI->load->helper("mustache_helper");
 
 $major_unit_detail_modal_template = mustache_tmpl_open("modals/major_unit_detail_modal.html");
 
+$show_template = true;
+
 // Do we have the motorcycle variables?
 if (isset($motorcycle) && array_key_exists("id", $motorcycle) && $motorcycle["id"] > 0) {
     mustache_tmpl_set($major_unit_detail_modal_template, "motorcycle", true);
@@ -24,6 +26,15 @@ if (isset($motorcycle) && array_key_exists("id", $motorcycle) && $motorcycle["id
 
 } else {
     mustache_tmpl_set($major_unit_detail_modal_template, "motorcycle", false);
+
+    // JLB: I don't want this thing shown more than once.
+    global $majorUnitGenericModal;
+
+    if (!isset($majorUnitGenericModal)) {
+        $majorUnitGenericModal = false;
+    }
+    $show_template = !$majorUnitGenericModal;
+    $majorUnitGenericModal = true;
 }
 
 mustache_tmpl_set($major_unit_detail_modal_template, "form_open_string", form_open('welcome/productEnquiry', array('class' => 'form_standard')));
