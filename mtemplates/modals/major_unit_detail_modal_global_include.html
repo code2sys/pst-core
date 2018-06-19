@@ -1,0 +1,10 @@
+<script type="application/javascript">
+    $(document).ready(function () {
+        // Record the modal form submission so we don't show more sales modals
+        $('.modal form input[type=submit]').click(function () {
+            var siteModalsState = JSON.parse(localStorage.getItem('siteModalsState')) || {};
+            siteModalsState['hasContactedSales'] = true;
+            localStorage.setItem('siteModalsState', JSON.stringify(siteModalsState));
+        });
+    });
+</script>

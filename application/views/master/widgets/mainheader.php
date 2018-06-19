@@ -72,3 +72,6 @@ mustache_tmpl_set($template, "social_link_buttons", $CI->load->view("social_link
 
 jtemplate_add_store_hours($template, $store_name);
 echo mustache_tmpl_parse($template);
+
+// JLB - this is to add in the modal for the quote form to be universally available...
+echo $CI->load->view("modals/major_unit_detail_modal", array(), true);
