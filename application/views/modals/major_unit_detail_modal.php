@@ -31,4 +31,4 @@ mustache_tmpl_set($major_unit_detail_modal_template, "form_close_string", form_c
 
 echo mustache_tmpl_parse($major_unit_detail_modal_template);
 
-echo $CI->load->view("models/major_unit_detail_modal_global_include", array(), true);
+echo $CI->load->view("modals/major_unit_detail_modal_global_include", array(), true);
