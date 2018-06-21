@@ -32,7 +32,7 @@ class Ebay_M extends Master_M {
     protected $_dieSilentlyIfBad;
     protected $store_zip_code;
     protected $store_name;
-    protected $debug;
+    public $debug;
 
     public function getFeedResults() {
         $query = $this->db->query("select sku, title, error, error_string, long_error_string from ebay_feed_item;");
@@ -119,33 +119,62 @@ class Ebay_M extends Master_M {
 
     /*********END*********/
 
-    public function generateEbayFeed($products_count, $upload_to_ebay = false, $store_) {
+    public function generateEbayFeed($products_count, $upload_to_ebay = false, $debug = false) {
         //$products = $this->ebaylistings_no_variation(0, $products_count, 1);
         $temp_file = STORE_DIRECTORY . "/ebay_feed.xml"; // tempnam("/tmp", "ebay_");
         $handle = fopen($temp_file, "w");
+
+        if ($debug) {
+            print "Output started to ebay_feed.xml\n";
+        }
+
         $this->startXML($handle);
+
+        if ($debug) {
+            print "Output finished to ebay_feed.xml\n";
+        }
 
         // now, we must get products...
 		$newArray = [];
 		$offset = 0;
         $limit = $products_count == 0 ? 1500 : $products_count;
 
+        if ($debug) {
+            print "Begin Run \n";
+        }
         $this->beginRun();
 
         do {
-            $products = $this->ebayListings($offset, $limit, 1, $upload_to_ebay);
+            $products = $this->ebayListings($offset, $limit, 1, $upload_to_ebay, $debug);
+            if ($debug) {
+                print count($products) . " Returned by ebayListings function \n";
+            }
 
             if (count($products) > 0) {
+
                 $ebay_format_data = $this->convertToEbayFormat($products);
                 $ebay_format_data_new = $ebay_format_data;
                 $this->addIncrementalParts($handle, $ebay_format_data_new);
                 $offset += $limit;
+                if ($debug) {
+                    print "Offset is now: " . $offset . "\n";
+                }
             }
 
         } while(count($products) > 0);
 
+        if ($debug) {
+            print "Closing XML \n";
+        }
         $this->closeXML($handle);
-        $this->cleanXML($temp_file, 1);
+        if ($debug) {
+            print "Cleaning XML \n";
+        }
+        $this->cleanXML($temp_file, 1, $debug);
+
+        if ($debug) {
+            print "All done\n";
+        }
     }
 
 
@@ -164,10 +193,17 @@ class Ebay_M extends Master_M {
         fputs($handle, $uploadXML);
     }
 
-    protected function cleanXML($source_filename, $store_feed = false) {
+    protected function cleanXML($source_filename, $store_feed = false, $debug = false) {
         $uploadXML = file_get_contents($source_filename);
+        if ($debug) {
+            print "CleanXML cleaning started; upload XML length: " . strlen($uploadXML);
+        }
         $unicode = ["\x01", "\x00", "\x02"];
         $uploadXML = str_replace($unicode, "", str_replace("&B", "&amp;B", str_replace("&G", "&amp;G", $uploadXML)));
+
+        if ($debug) {
+            print "CleanXML cleaning done; upload XML length: " . strlen($uploadXML);
+        }
 
         if ($store_feed == true) {
             $file_path = STORE_DIRECTORY . '/ebayFeeds/ebayfeed_un.xml';
@@ -176,6 +212,11 @@ class Ebay_M extends Master_M {
             }
 //            $myfile = fopen($file_path, "w");
             file_put_contents($file_path, $uploadXML, LOCK_EX);
+
+            if ($debug) {
+                print "Put contents in ebayfeed_un.xml\n";
+            }
+
             $xml = file_get_contents($file_path, LOCK_EX);
             $doc = new DOMDocument();
             $doc->preserveWhiteSpace = FALSE;
@@ -189,8 +230,12 @@ class Ebay_M extends Master_M {
             $doc->save($file);
         }
 
+        if ($debug) {
+            print "About to call sendBulkXML\n";
+        }
+
         //$this->pr($uploadXML);
-        $this->sendBulkXML($uploadXML, "AddFixedPriceItem");
+        $this->sendBulkXML($uploadXML, "AddFixedPriceItem", $debug);
     }
 
     protected function closeXML(&$handle) {
@@ -647,7 +692,7 @@ class Ebay_M extends Master_M {
         }
     }
 
-    public function ebayListings($offset = 0, $limit = 1000, $return_csv = FALSE, $send_to_ebay = FALSE) {
+    public function ebayListings($offset = 0, $limit = 1000, $return_csv = FALSE, $send_to_ebay = FALSE, $debug = false) {
         // Filter quantity of 0, Price in 1 row only
         $nocat=0;
         $catg=0;
@@ -707,6 +752,9 @@ class Ebay_M extends Master_M {
         $query = $this->db->query($sql);
         $parts = $query->result_array();
 
+        if ($debug) {
+            print "eBayListing: parts returned: " . count($parts) . "\n";
+        }
 
         $query->free_result();
         $paypal_email = $this->get_paypalemail();
@@ -1062,8 +1110,16 @@ class Ebay_M extends Master_M {
                 }
             }
         }
+
+        if ($debug) {
+            print "eBayListing: Bottom of the big loop.\n";
+        }
+
         if(!$send_to_ebay) {
         } else {
+            if ($debug) {
+                print "Returning CSV file \n";
+            }
 
             if ($return_csv) {
                 return $finalArray;
@@ -1313,7 +1369,7 @@ class Ebay_M extends Master_M {
 	}
 
 	
-	private function sendBulkXML($xml, $job_type) {
+	private function sendBulkXML($xml, $job_type, $debug) {
 		
 		
 		require '../vendor/autoload.php';
@@ -1344,22 +1400,33 @@ class Ebay_M extends Master_M {
 		$exchangeService = $sdk->createBulkDataExchange();
 		$transferService = $sdk->createFileTransfer();
 		$merchantData = new MerchantData\MerchantData();
+
+		if ($debug) {
+		    print "Created the objects in sendBulkXML \n";
+        }
+
 		/**
 		 * Before anything can be uploaded a request needs to be made to obtain a job ID and file reference ID.
 		 * eBay needs to know the job type and a way to identify it.
 		 */
-		if($this->clear_jobs()) {			
-			$createUploadJobRequest = new BulkDataExchange\Types\CreateUploadJobRequest();
+		if($this->clear_jobs($debug)) {
+
+            if ($debug) {
+                print "sendBulkXML: Inside clear_jobs conditional  \n";
+            }
+
+
+            $createUploadJobRequest = new BulkDataExchange\Types\CreateUploadJobRequest();
 			$createUploadJobRequest->uploadJobType = $job_type;
 			$createUploadJobRequest->UUID = uniqid();
 			/**
 			 * Send the request.
 			 */
-			if ($this->debug) {
+			if ($this->debug || $debug) {
                 print('Requesting job Id from eBay...');
             }
 			$createUploadJobResponse = $exchangeService->createUploadJob($createUploadJobRequest);
-			if ($this->debug) {
+			if ($this->debug || $debug) {
                 print("Done\n");
             }
 
@@ -1409,12 +1476,12 @@ class Ebay_M extends Master_M {
 			/**
 			 * Now upload the file.
 			 */
-			if ($this->debug) {
+			if ($this->debug || $debug) {
                 print('Uploading fixed price item requests...');
             }
 
 			$uploadFileResponse = $transferService->uploadFile($uploadFileRequest);
-			if ($this->debug) {
+			if ($this->debug || $debug) {
                 print("Done\n");
             }
 
@@ -1434,11 +1501,11 @@ class Ebay_M extends Master_M {
 				 */
 				$startUploadJobRequest = new BulkDataExchange\Types\StartUploadJobRequest();
 				$startUploadJobRequest->jobId = $job['jobId'];
-				if ($this->debug) {
+				if ($this->debug || $debug) {
                     print('Request processing of fixed price items...');
                 }
 				$startUploadJobResponse = $exchangeService->startUploadJob($startUploadJobRequest);
-				if ($this->debug) {
+				if ($this->debug || $debug) {
                     print("Done\n");
                 }
 
@@ -1470,7 +1537,7 @@ class Ebay_M extends Master_M {
 							}
 						}
 						if ($getJobStatusResponse->ack !== 'Failure') {
-						    if ($this->debug) {
+						    if ($this->debug || $debug) {
                                 printf("Status is %s\n", $getJobStatusResponse->jobProfile[0]->jobStatus);
                             }
 							switch ($getJobStatusResponse->jobProfile[0]->jobStatus) {
@@ -1494,11 +1561,11 @@ class Ebay_M extends Master_M {
 						$downloadFileRequest = new FileTransfer\Types\DownloadFileRequest();
 						$downloadFileRequest->fileReferenceId = $downloadFileReferenceId;
 						$downloadFileRequest->taskReferenceId = $job['jobId'];
-						if ($this->debug) {
+						if ($this->debug || $debug) {
                             print('Downloading fixed price item responses...');
                         }
 						$downloadFileResponse = $transferService->downloadFile($downloadFileRequest);
-						if ($this->debug) {
+						if ($this->debug || $debug) {
                             print("Done\n");
                         }
 						if (isset($downloadFileResponse->errorMessage)) {
@@ -1529,7 +1596,7 @@ class Ebay_M extends Master_M {
                                             foreach ($responses as $response) {
 											if (isset($response->Errors)) {
 												foreach ($response->Errors as $error) {
-												    if ($this->debug) {
+												    if ($this->debug || $debug) {
                                                         printf(
                                                             "2195 %s: %s\n%s\n\n",
                                                             $error->SeverityCode === MerchantData\Enums\SeverityCodeType::C_ERROR ? 'Error' : 'Warning',
@@ -1543,7 +1610,7 @@ class Ebay_M extends Master_M {
 												}
 											}
 											if ($response->Ack !== 'Failure') {
-											    if ($this->debug) {
+											    if ($this->debug || $debug) {
                                                     printf(
                                                         "The item was listed to eBay with the Item number %s\n",
                                                         $response->ItemID
@@ -1565,7 +1632,7 @@ class Ebay_M extends Master_M {
 		
 	}
 	
-	private function clear_jobs() {
+	private function clear_jobs($debug) {
 				
 		try {
 			$service = new Services\BulkDataExchangeService($this->cred['Setting']);
@@ -1611,7 +1678,7 @@ class Ebay_M extends Master_M {
 			$upTo = 0;
 			if(isset($response->jobProfile)) {
 				foreach($response->jobProfile as $job) {
-				    if ($this->debug) {
+				    if ($this->debug || $debug) {
                         printf(
                             "ID: %s\nType: %s\nStatus: %s\nInput File Reference ID: %s\nFile Reference ID: %s\nPercent Complete: %s\nCreated: %s\nCompleted: %s\n\n",
                             $job->jobId,

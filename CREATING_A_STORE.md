@@ -105,3 +105,7 @@ For the JBDev directory, which was muffsmotorsports.powersporttechnologies.com i
 certbot certonly --webroot --webroot-path=/var/www/stores/CMCycles/html -d cmcycles.powersporttechnologies.com
 
 
+ReCaptcha
+---------
+
+If you have a new domain, it must be given a new recaptcha credential. You should be able to go to with recaptchapst@gmail.com to do it. Then, put it in environment.php.
