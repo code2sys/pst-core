@@ -2,6 +2,14 @@
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
 
+    // JLB 06-21-18
+    // Who knew that you couldn't just ask for a run?
+    public function runEbay($debug = 0) {
+        $this->load->model("ebay_m");
+        $this->ebay_m->debug = ($debug > 0);
+        $this->ebay_m->generateEbayFeed(0, 1, $debug > 0);
+    }
+
     // JLB 04-25-18
     // This is designed to review everything for CRS...a deep cleaning
     public function deepCleanCRS() {
