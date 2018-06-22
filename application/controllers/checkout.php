@@ -216,16 +216,7 @@ class Checkout extends Master_Controller {
 	    // //$this->form_validation->set_rules('exp_date_yr', 'Exp. Date Year', 'required|numeric|max_length[2]|callback__validateCreditCardExpirationDate|xss_clean');
 	  	// $this->form_validation->set_rules('cvv', 'CVC', 'required|numeric|callback__validateCVV|xss_clean');
 
-        $validation_result = $this->form_validation->run();
-        if (array_key_exists("failed_validation", $_SESSION) && $_SESSION["failed_validation"] > 0) {
-            if (!jverifyRecaptcha()) {
-                return false;
-            } else {
-                return $validation_result;
-            }
-        } else {
-            return $validation_result;
-        }
+        return $this->form_validation->run();
 	}
 	
 	private function validatePaypalForm()
@@ -813,7 +804,13 @@ var sa_products = { '.$rating.' };
 		
 		// Needed for Order Record creation
 		$_SESSION['newOrderNum'] = $this->account_m->recordOrderCreation($_SESSION['contactInfo'], $_SESSION['cart'], $user_id);
-		if($this->validateCCInfoUpdate() === TRUE)
+
+        if (array_key_exists("failed_validation", $_SESSION) && $_SESSION["failed_validation"] > 0 && !jverifyRecaptcha()) {
+            $this->_mainData['processingError'] = 'ReCAPTCHA failure. Please try again.';
+        } else
+
+
+        if($this->validateCCInfoUpdate() === TRUE)
 		{
 			$code = $this->input->post('shippingValue');
 			$value = $_SESSION['postalOptions'][$code]['value'];
