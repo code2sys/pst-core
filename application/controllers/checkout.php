@@ -812,6 +812,10 @@ var sa_products = { '.$rating.' };
 
         if($this->validateCCInfoUpdate() === TRUE)
 		{
+            if (array_key_exists("failed_validation", $_SESSION) && $_SESSION["failed_validation"] > 0) {
+                $_SESSION["failed_validation"] = 0;
+            }
+
 			$code = $this->input->post('shippingValue');
 			$value = $_SESSION['postalOptions'][$code]['value'];
 			$_SESSION['cart']['shipping']['finalPrice'] = $value;
