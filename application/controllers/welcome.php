@@ -828,7 +828,7 @@ class Welcome extends Master_Controller {
         foreach ($xml->ROW->children() as $field) {
             $headers[] = $field->getName();
         }
-        $csv_filename = str_replace('xml', 'csv', $filename);
+        $csv_filename = str_replace('xml', 'csv', $f);
         $file = $this->getCsvDirectory() . '/' . $csv_filename;
         if (file_exists($file)) {
             unlink($file);
