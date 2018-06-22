@@ -55,5 +55,6 @@ function mustache_tmpl_parse(&$template) {
     if (!array_key_exists("the_current_year", $template["data"])) {
         mustache_tmpl_set($template, "the_current_year", date("Y"));
     }
+    mustache_tmpl_set($template, "RECAPTCHA_KEY", RECAPTCHA_KEY);
     return $PST_MUSTACHE->render($template["template"], $template["data"]);
 }
