@@ -37,10 +37,10 @@ if (isset($motorcycle) && array_key_exists("id", $motorcycle) && $motorcycle["id
     $majorUnitGenericModal = true;
 }
 
-mustache_tmpl_set($major_unit_detail_modal_template, "form_open_string", form_open('welcome/productEnquiry', array('class' => 'form_standard')));
-mustache_tmpl_set($major_unit_detail_modal_template, "form_close_string", form_close());
-
 if ($show_template) {
+    mustache_tmpl_set($major_unit_detail_modal_template, "form_open_string", form_open('welcome/productEnquiry', array('class' => 'form_standard')));
+    mustache_tmpl_set($major_unit_detail_modal_template, "form_close_string", form_close());
+    mustache_tmpl_set($major_unit_detail_modal_template, "form_action_url", base_url("welcome/productEnquiry"));
     echo mustache_tmpl_parse($major_unit_detail_modal_template);
 }
 

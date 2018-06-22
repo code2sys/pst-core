@@ -94,6 +94,8 @@
                                 <textarea id="{{#motorcycle}}major-unit-detail-modal_{{motorcycle_id}}{{/motorcycle}}{{^motorcycle}}major-unit-generic-modal{{/motorcycle}}_questions" class="form-control" type="text" name="questions"></textarea>
                             </div>
 
+                            <div class="g-recaptcha" data-sitekey="{{RECAPTCHA_KEY}}"></div>
+
                             <div class="text-center">
                                 <input class="btn" type="submit" value="Submit">
                             </div>
@@ -107,3 +109,13 @@
         </div>
     </div>
 </div>
+
+<script type="application/javascript">
+    (function() {
+        // There was code here present in every modal...that is over in major_unit_detail_modal_global_include.html.
+        $("#{{#motorcycle}}major-unit-detail-modal_{{motorcycle_id}}{{/motorcycle}}{{^motorcycle}}major-unit-generic-modal{{/motorcycle}} form").on("submit", function(e) {
+            e.preventDefault();
+            submitEnquiryFormModal("{{#motorcycle}}major-unit-detail-modal_{{motorcycle_id}}{{/motorcycle}}{{^motorcycle}}major-unit-generic-modal{{/motorcycle}}", "{{form_action_url}}");
+        });
+    })();
+</script>
