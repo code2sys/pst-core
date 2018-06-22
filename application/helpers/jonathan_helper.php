@@ -278,6 +278,7 @@ function jverifyRecaptcha($response = null) {
     }
 
     error_log("Response " . $response . " Server " . $_SERVER['REMOTE_ADDR']);
+    error_log("Key: " . RECAPTCHA_KEY);
 
     $recaptcha = new \ReCaptcha\ReCaptcha(RECAPTCHA_KEY);
     $resp = $recaptcha->verify($response, $_SERVER['REMOTE_ADDR']);
