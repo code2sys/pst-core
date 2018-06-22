@@ -22,7 +22,8 @@
         "php": ">=7.0",
     	"dts/ebay-sdk": "~0.1",
         "dts/ebay-sdk-php": "@stable",
-	"pst/objectlib" : "dev-master"
+    	"pst/objectlib" : "dev-master",
+        "google/recaptcha": "~1.1"
     },
     "config" : {
         "secure-http" : false

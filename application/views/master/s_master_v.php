@@ -57,7 +57,7 @@ if (isset($keywords) &&	$keywords != "") {
 	
 
 	<!-- jQuery library -->
-	<script src='https://www.google.com/recaptcha/api.js'></script>
+
 
 	<script>
 		var s_base_url = '<?php echo $s_baseURL; ?>';

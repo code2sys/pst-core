@@ -261,3 +261,28 @@ function jtemplate_add_store_hours(&$template, $store_name = null) {
     }
 
 }
+
+
+/*
+ * There was no enforcement of recaptcha...
+ *
+ * TODO: We really should do something with the error codes
+ * https://developers.google.com/recaptcha/docs/verify#error-code-reference
+ * https://github.com/google/recaptcha/blob/master/examples/example-captcha.php
+ *
+ */
+
+function jverifyRecaptcha($response = null) {
+    if (is_null($response)) {
+        $response = array_key_exists('g-recaptcha-response', $_REQUEST) ? $_REQUEST['g-recaptcha-response'] : "";
+    }
+
+
+    $recaptcha = new \ReCaptcha\ReCaptcha(RECAPTCHA_SECRET);
+    $resp = $recaptcha->verify($response, $_SERVER['REMOTE_ADDR']);
+    if ($resp->isSuccess()) {
+        return true;
+    } else {
+        return false;
+    }
+}
