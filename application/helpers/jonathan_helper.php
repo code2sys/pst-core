@@ -277,12 +277,9 @@ function jverifyRecaptcha($response = null) {
         $response = array_key_exists('g-recaptcha-response', $_REQUEST) ? $_REQUEST['g-recaptcha-response'] : "";
     }
 
-    error_log("Response " . $response . " Server " . $_SERVER['REMOTE_ADDR']);
-    error_log("Key: " . RECAPTCHA_SECRET);
 
     $recaptcha = new \ReCaptcha\ReCaptcha(RECAPTCHA_SECRET);
     $resp = $recaptcha->verify($response, $_SERVER['REMOTE_ADDR']);
-    error_log(print_r($resp, true));
     if ($resp->isSuccess()) {
         return true;
     } else {
