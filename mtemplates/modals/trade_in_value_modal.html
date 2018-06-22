@@ -90,7 +90,7 @@
                 <div class="g-recaptcha" data-sitekey="{{RECAPTCHA_KEY}}"></div>
 
                 <div class="col-md-12 text-center" style="float:none;">
-                    <input type="submit" class="btn bttn">
+                    <button type="submit" class="btn bttn">Submit</button>
                 </div>
                 {{{form_close}}}
             </div>
@@ -105,6 +105,12 @@
         // There was code here present in every modal...that is over in major_unit_detail_modal_global_include.html.
         $("#trade-in-value-modal_{{motorcycle_id}} form").on("submit", function(e) {
             e.preventDefault();
+            e.stopPropagation();
+            submitEnquiryFormModal("trade-in-value-modal_{{motorcycle_id}}", "{{form_action_url}}");
+        });
+        $("#trade-in-value-modal_{{motorcycle_id}} form button").on("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             submitEnquiryFormModal("trade-in-value-modal_{{motorcycle_id}}", "{{form_action_url}}");
         });
     })();
