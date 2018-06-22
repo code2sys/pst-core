@@ -409,3 +409,6 @@ $config['composer_autoload'] = TRUE;
 if (!defined('RECAPTCHA_KEY')) {
     define('RECAPTCHA_KEY', '6LdtHWAUAAAAAJ9M6TSwI-379w0I_gb7KN9LlTFQ');
 }
+if (!defined('RECAPTCHA_SECRET')) {
+    define('RECAPTCHA_SECRET', '6LdtHWAUAAAAADLNhDoHW2OVCedTWQZ38aqcu-nu');
+}
