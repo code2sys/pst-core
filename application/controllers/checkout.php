@@ -208,13 +208,24 @@ class Checkout extends Master_Controller {
 	
 	private function validateCCInfoUpdate()
 	{
+
 	  	$this->load->library('form_validation');
 	  	$this->form_validation->set_rules('shippingValue', 'Shipping Value', 'required|xss_clean');
 	  	// $this->form_validation->set_rules('credit-card-number', 'Credit Card Number', 'required|callback__validateCreditcard_number|xss_clean');
 	  	// $this->form_validation->set_rules('exp_date_mn', 'Exp. Date Month', 'required|max_length[7]|xss_clean');
 	    // //$this->form_validation->set_rules('exp_date_yr', 'Exp. Date Year', 'required|numeric|max_length[2]|callback__validateCreditCardExpirationDate|xss_clean');
 	  	// $this->form_validation->set_rules('cvv', 'CVC', 'required|numeric|callback__validateCVV|xss_clean');
-	  	return $this->form_validation->run();
+
+        $validation_result = $this->form_validation->run();
+        if (array_key_exists("failed_validation", $_SESSION) && $_SESSION["failed_validation"] > 0) {
+            if (!jverifyRecaptcha()) {
+                return false;
+            } else {
+                return $validation_result;
+            }
+        } else {
+            return $validation_result;
+        }
 	}
 	
 	private function validatePaypalForm()
