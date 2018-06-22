@@ -27,4 +27,5 @@ if (!defined('DISABLE_TEST_DRIVE') || !DISABLE_TEST_DRIVE) {
     mustache_tmpl_set($trade_in_value_modal, "ENABLE_TEST_DRIVE", false);
 }
 
+mustache_tmpl_set($trade_in_value_modal, "form_action_url", base_url("welcome/productEnquiry"));
 echo mustache_tmpl_parse($trade_in_value_modal);

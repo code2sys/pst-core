@@ -48,6 +48,7 @@
                                 <textarea id="questions" class="form-control" type="text" name="questions"></textarea>
                             </div>
 
+
                             <div class="g-recaptcha" data-sitekey="{{RECAPTCHA_KEY}}"></div>
 
                         </div>
@@ -98,6 +99,9 @@
         });
 
         // There was code here present in every modal...that is over in major_unit_detail_modal_global_include.html.
-
+        $("#customer-exit-modal form").on("submit", function(e) {
+            e.preventDefault();
+            submitEnquiryFormModal("customer-exit-modal", "{{form_action_url}}");
+        });
     });
 </script>

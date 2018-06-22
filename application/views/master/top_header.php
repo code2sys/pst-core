@@ -51,4 +51,5 @@ if (isset($store_name)) {
 <?php endif; ?>
 
 <script src='https://www.google.com/recaptcha/api.js'></script>
+<script src="<?php echo base_url("/assets/scriptlibrary.js"); ?>"></script>
 

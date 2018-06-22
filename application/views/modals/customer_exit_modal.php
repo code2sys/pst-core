@@ -21,6 +21,7 @@ $customerExitModal = true;
 if ($show_template) {
     mustache_tmpl_set($customer_exit_modal, "form_open_string", form_open('welcome/productEnquiry', array('class' => 'form_standard')));
     mustache_tmpl_set($customer_exit_modal, "form_close_string", form_close());
+    mustache_tmpl_set($customer_exit_modal, "form_action_url", base_url("welcome/productEnquiry"));
     echo mustache_tmpl_parse($customer_exit_modal);
     echo $CI->load->view("modals/major_unit_detail_modal_global_include", array(), true);
 }
