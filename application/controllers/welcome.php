@@ -1048,7 +1048,7 @@ class Welcome extends Master_Controller {
             $post = $this->input->post();
 
             if (!array_key_exists("email", $post) || trim($post["email"]) == "" || !filter_var($post["email"], FILTER_VALIDATE_EMAIL)) {
-                $result["error_message"] = "Please provide a valid email address so we can contact you.";
+                $result["error_message"] = "Please provide a valid email address so we can contact you. (" . $post["email"] . ")";
             } else {
 
                 $this->load->model('motorcycle_m');
