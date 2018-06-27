@@ -6,6 +6,7 @@ function serializeForm(form) {
         var e = form.elements[i];
         if(!e.name || !e.value) continue; // Shortcut, may not be suitable for values = 0 (considered as false)
         switch (e.type) {
+            case 'email':
             case 'text':
             case 'textarea':
             case 'password':
