@@ -1046,57 +1046,62 @@ class Welcome extends Master_Controller {
         if (jverifyRecaptcha()) {
 
             $post = $this->input->post();
-            $this->load->model('motorcycle_m');
+
+            if (!array_key_exists("email", $post) || trim($post["email"]) == "" || !filter_var($post["email"], FILTER_VALIDATE_EMAIL)) {
+                $result["error_message"] = "Please provide a valid email address so we can contact you.";
+            } else {
+
+                $this->load->model('motorcycle_m');
 
 
-            $this->motorcycle_m->saveEnquiry($post);
+                $this->motorcycle_m->saveEnquiry($post);
 
-            $toEmail = $this->motorcycle_m->getSalesEmail();
-            $message = "";
+                $toEmail = $this->motorcycle_m->getSalesEmail();
+                $message = "";
 
-            $actual_value = false;
+                $actual_value = false;
 
-            foreach (array(
-                         array("First Name", "firstName"),
-                         array("Last Name", "lastName"),
-                         array("Email", "email"),
-                         array("Phone", "phone"),
-                         array("Address", "address"),
-                         array("City", "city"),
-                         array("State", "state"),
-                         array("Zipcode", "zipcode"),
-                         array("Date Of Ride", "date_of_ride"),
-                         array("Major unit", "motorcycle"),
-                         array("Make", "make"),
-                         array("Model", "model"),
-                         array("Year", "year"),
-                         array("SKU", "sku"),
-                         array("VIN", "vin"),
-                         array("Miles", "miles"),
-                         array("Accessories", "accessories"),
-                         array("Comments", "questions"),
+                foreach (array(
+                             array("First Name", "firstName"),
+                             array("Last Name", "lastName"),
+                             array("Email", "email"),
+                             array("Phone", "phone"),
+                             array("Address", "address"),
+                             array("City", "city"),
+                             array("State", "state"),
+                             array("Zipcode", "zipcode"),
+                             array("Date Of Ride", "date_of_ride"),
+                             array("Major unit", "motorcycle"),
+                             array("Make", "make"),
+                             array("Model", "model"),
+                             array("Year", "year"),
+                             array("SKU", "sku"),
+                             array("VIN", "vin"),
+                             array("Miles", "miles"),
+                             array("Accessories", "accessories"),
+                             array("Comments", "questions"),
 
-                     ) as $rec) {
-                list ($label, $field) = $rec;
-                if (array_key_exists($field, $post) && trim($post[$field]) != "") {
-                    $message .= $label . ": " . $post[$field] . "<br/>";
-                    $actual_value = true;
+                         ) as $rec) {
+                    list ($label, $field) = $rec;
+                    if (array_key_exists($field, $post) && trim($post[$field]) != "") {
+                        $message .= $label . ": " . $post[$field] . "<br/>";
+                        $actual_value = true;
+                    }
                 }
-            }
 
-            if ($actual_value) {
+                if ($actual_value) {
 
-                $this->load->model("mail_gen_m");
+                    $this->load->model("mail_gen_m");
 
-                $this->mail_gen_m->queueEmail(array(
-                    "toEmailAddress" => $toEmail,
-                    "replyToEmailAddress" => $post['email'],
-                    "replyToName" => $post['firstName'] . " " . $post['lastName'],
-                    "fromEmailAddress" => "noreply@powersporttechnologies.com",
-                    "fromName" => "Major Unit Inquiry",
-                    "subject" => "New Unit Inquiry",
-                    "message" => $message
-                ));
+                    $this->mail_gen_m->queueEmail(array(
+                        "toEmailAddress" => $toEmail,
+                        "replyToEmailAddress" => $post['email'],
+                        "replyToName" => $post['firstName'] . " " . $post['lastName'],
+                        "fromEmailAddress" => "noreply@powersporttechnologies.com",
+                        "fromName" => "Major Unit Inquiry",
+                        "subject" => "New Unit Inquiry",
+                        "message" => $message
+                    ));
 
 //        $header = "From: noreply@powersporttechnologies.com\r\n";
 //        $header.= "MIME-Version: 1.0\r\n";
@@ -1104,52 +1109,53 @@ class Welcome extends Master_Controller {
 //        $header.= "X-Priority: 1\r\n";
 //        mail($toEmail, "New Motorcycle Enquiry", $message, $header);
 
-                // JLB 04-19-18
-                // Is the configuration in there for echoing leads to CDK?
-                global $PSTAPI;
-                initializePSTAPI();
+                    // JLB 04-19-18
+                    // Is the configuration in there for echoing leads to CDK?
+                    global $PSTAPI;
+                    initializePSTAPI();
 
-                if ($PSTAPI->config()->getKeyValue("forward_leads_to_cdk") == "Yes") {
-                    $vehicle_type = $vehicle_make = $vehicle_model = $vehicle_year = "";
-                    // We should be getting this motorcycle by title?
-                    $motorcycle = $PSTAPI->motorcycle()->fetch(array("title" => $post['motorcycle']), true);
-                    $motorcycle = count($motorcycle) > 0 ? $motorcycle[0] : array();
+                    if ($PSTAPI->config()->getKeyValue("forward_leads_to_cdk") == "Yes") {
+                        $vehicle_type = $vehicle_make = $vehicle_model = $vehicle_year = "";
+                        // We should be getting this motorcycle by title?
+                        $motorcycle = $PSTAPI->motorcycle()->fetch(array("title" => $post['motorcycle']), true);
+                        $motorcycle = count($motorcycle) > 0 ? $motorcycle[0] : array();
 
-                    if (array_key_exists("make", $motorcycle)) {
-                        $vehicle_make = $motorcycle["make"];
-                    }
-                    if (array_key_exists("model", $motorcycle)) {
-                        $vehicle_model = $motorcycle["model"];
-                    }
-                    if (array_key_exists("type", $motorcycle)) {
-                        $vehicle_type = $motorcycle["type"];
-                    }
-                    if (array_key_exists("year", $motorcycle)) {
-                        $vehicle_year = $motorcycle["year"];
-                    }
+                        if (array_key_exists("make", $motorcycle)) {
+                            $vehicle_make = $motorcycle["make"];
+                        }
+                        if (array_key_exists("model", $motorcycle)) {
+                            $vehicle_model = $motorcycle["model"];
+                        }
+                        if (array_key_exists("type", $motorcycle)) {
+                            $vehicle_type = $motorcycle["type"];
+                        }
+                        if (array_key_exists("year", $motorcycle)) {
+                            $vehicle_year = $motorcycle["year"];
+                        }
 
-                    // OK, we need to save it, and then we need to post it...
-                    $inquiry = $PSTAPI->vseptprospect()->add(array(
-                        "Email" => $post['email'],
-                        "Name" => $post['firstName'] . " " . $post['lastName'],
-                        "Phone" => $post['phone'],
-                        "SourceDate" => date("Y-m-d"),
-                        "Address1" => $post['address'],
-                        "City" => $post['city'],
-                        "State" => $post['state'],
-                        "ZipCode" => $post['zipcode'],
-                        "Notes" => "", // JLB 04-23-18 They asked me not to echo message here... $message,
-                        "VehicleType" => $vehicle_type,
-                        "VehicleMake" => $vehicle_make,
-                        "VehicleModel" => $vehicle_model,
-                        "VehicleYear" => $vehicle_year
-                    ));
+                        // OK, we need to save it, and then we need to post it...
+                        $inquiry = $PSTAPI->vseptprospect()->add(array(
+                            "Email" => $post['email'],
+                            "Name" => $post['firstName'] . " " . $post['lastName'],
+                            "Phone" => $post['phone'],
+                            "SourceDate" => date("Y-m-d"),
+                            "Address1" => $post['address'],
+                            "City" => $post['city'],
+                            "State" => $post['state'],
+                            "ZipCode" => $post['zipcode'],
+                            "Notes" => "", // JLB 04-23-18 They asked me not to echo message here... $message,
+                            "VehicleType" => $vehicle_type,
+                            "VehicleMake" => $vehicle_make,
+                            "VehicleModel" => $vehicle_model,
+                            "VehicleYear" => $vehicle_year
+                        ));
 
-                    $inquiry->pushToVSept();
+                        $inquiry->pushToVSept();
+                    }
                 }
-            }
 
-            $result["success"] = true;
+                $result["success"] = true;
+            }
         } else {
             $result["error_message"] = "Sorry, ReCAPTCHA failed.";
         }
