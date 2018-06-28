@@ -64,17 +64,17 @@ if (isset($bannerImages) && count($bannerImages) > 0) {
         "bannerImages" => $bannerImages
     ), true));
 }
-if (isset($featured) && count($featured) > 0) {
+if (isset($featured) && is_array($featured) && count($featured) > 0) {
     mustache_tmpl_set($master_v_front_template, "motorcycles_widget", $CI->load->view("master/widgets/motorcycles", array(
         "featured" => $featured
     ), true));
 }
-if (isset($topVideo) && count($topVideo) > 0) {
+if (isset($topVideo) && is_array($topVideo) && count($topVideo) > 0) {
     mustache_tmpl_set($master_v_front_template, "top_video_widget", $CI->load->view("master/widgets/homepage_top_videos", array(
         "topVideo" => $topVideo
     ), true));
 }
-if (isset($featuredCategories) && count($featuredCategories) > 0) {
+if (isset($featuredCategories) && is_array($featuredCategories) && count($featuredCategories) > 0) {
     mustache_tmpl_set($master_v_front_template, "featured_categories_widget", $CI->load->view("master/widgets/homepage_featured_categories", array(
         "featuredCategories" => $featuredCategories
     ), true));
