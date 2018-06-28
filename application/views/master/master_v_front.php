@@ -114,7 +114,7 @@ mustache_tmpl_set($master_v_front_template, "ride_selection_js", $CI->load->view
     "product" => isset($product) ? $product : null,
 
 ), true));
-mustache_tmpl_set($master_v_front_template, "showvideo_function", $CI->load->view("showvideo_function", array(), false));
+mustache_tmpl_set($master_v_front_template, "showvideo_function", $CI->load->view("showvideo_function", array(), true));
 mustache_tmpl_set($master_v_front_template, "custom_js_url", jsite_url('/custom.js'));
 mustache_tmpl_set($master_v_front_template, "bottom_footer", $CI->load->view("master/bottom_footer", array(
     "store_name" => $store_name
