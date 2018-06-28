@@ -7,7 +7,7 @@
  */
 
 
-if (sset($notice) && $notice != "") {
+if (isset($notice) && $notice != "") {
     $CI =& get_instance();
     $CI->load->helper("mustache_helper");
     $homepage_featured_categories_template = mustache_tmpl_open("master/widgets/homepage_notice_widget.html");
