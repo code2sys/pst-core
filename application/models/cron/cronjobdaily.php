@@ -11,7 +11,7 @@ class CronJobDaily extends AbstractCronJob
         // And now, generate the eBay feed
         $this->load->model("ebay_m");
         $credentials = $this->ebay_m->sub_getEbayAuthSettingsFromDb();
-        if (array_key_exists("ebay_app_id", $credentials) && $credentials["ebay_app_id"] != "") {
+        if ((array_key_exists("ebay_app_id", $credentials) && $credentials["ebay_app_id"] != "") || (count($credentials) > 0 && array_key_exists("ebay_app_id", $credentials[0]) && $credentials[0]["ebay_app_id"] != "")) {
             $this->db->query("Insert into ebay_feed_log (run_at, run_by, status) values (now(), 'cron', 0)"); // Let the regular routine handle it!
         }
 
