@@ -1,0 +1,16 @@
+<div class="sw brd">
+    <div class="container_b">
+        <div class="featured-listings">
+            <h3> OUR TOP Videos </h3>
+            <div class="panel-body">
+                <ul class="lstng" id="top-video">
+                    {{#topvideo}}
+                    <li class="ftrdb">
+                        <iframe src="https://www.youtube.com/embed/{{video_url}}" frameborder="0" style="width: 90%;height:220px;" allowfullscreen></iframe>
+                    </li>
+                    {{/topvideo}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
