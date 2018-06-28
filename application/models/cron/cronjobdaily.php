@@ -7,6 +7,14 @@ class CronJobDaily extends AbstractCronJob
 
 	public function runJob()
 	{
+
+        // And now, generate the eBay feed
+        $this->load->model("ebay_m");
+        $credentials = $this->ebay_m->sub_getEbayAuthSettingsFromDb();
+        if ((array_key_exists("ebay_app_id", $credentials) && $credentials["ebay_app_id"] != "") || (count($credentials) > 0 && array_key_exists("ebay_app_id", $credentials[0]) && $credentials[0]["ebay_app_id"] != "")) {
+            $this->db->query("Insert into ebay_feed_log (run_at, run_by, status) values (now(), 'cron', 0)"); // Let the regular routine handle it!
+        }
+
         $this->markCloseoutDate();
 		$this->priceToSaleCleanUp();
 		$this->catAndBrandCleanUp();
@@ -19,14 +27,6 @@ class CronJobDaily extends AbstractCronJob
         $this->admin_m->update_cycletrader_feeds_log($data);
         // and generate that google feed!
         sub_googleSalesXMLNew();
-        // And now, generate the eBay feed
-        $this->load->model("ebay_m");
-        $credentials = $this->ebay_m->sub_getEbayAuthSettingsFromDb();
-        if (array_key_exists("ebay_app_id", $credentials) && $credentials["ebay_app_id"] != "") {
-            $csv = $this->ebay_m->generateEbayFeed(0, 1);
-            $data = array('run_by' => 'cron', 'status' => '1');
-            $this->ebay_m->update_ebay_feeds_log($data);
-        }
 	}
 	
 	private function priceToSaleCleanUp()
