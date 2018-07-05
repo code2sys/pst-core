@@ -120,15 +120,13 @@ class CronJobHourly extends AbstractCronJob
         if ($this->ebay_m->checkForFatalErrors($error_message)) {
             // JLB 09-06-17 Only do this if there aren't any immediate fatal errors to address. Otherwise, this is stupid.
 
-            $query = $this->db->query("select * from ebay_feed_log where run_by = 'admin' and status = 0");
+            $query = $this->db->query("select * from ebay_feed_log where status = 0");
             $results = $query->result_array();
 
             if (count($results) > 0) {
                 // do the eBay thing...
                 $this->ebay_m->generateEbayFeed(0, 1);
-                foreach ($results as $row) {
-                    $this->db->query("Update ebay_feed_log set status = 1 where id = ?", $row["id"]);
-                }
+                $this->db->query("Update ebay_feed_log set status = 1 where status = 0");
             }
         }
     }

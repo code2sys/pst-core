@@ -248,7 +248,7 @@ class Portalmodel extends Master_M {
 										  MAX(partnumber.price) AS price_max,
 										  MIN(partnumber.cost) AS cost_min, 
 										  MAX(partnumber.cost) AS cost_max,
-										  MIN(partnumber.markup) AS markup from part left join partpartnumber using (part_id) left join partnumber using (partnumber_id) left join (select partvariation.*, concat(distributor.name, ' ', partvariation.part_number) as partlabel from partvariation join distributor using (distributor_id)) zpartvariation using (partnumber_id) left join partimage using (part_id) $where group by part.part_id $orderBy limit $limit offset $offset ");
+										  MIN(partnumber.markup) AS markup from part left join partpartnumber using (part_id) left join partnumber using (partnumber_id) left join (select partvariation.*, concat(distributor.name, ' ', partvariation.part_number) as partlabel from partvariation join distributor using (distributor_id)) zpartvariation using (partnumber_id) left join partimage on part.part_id = partimage.part_id AND partimage.ordinal <= 1 $where group by part.part_id $orderBy limit $limit offset $offset ");
         $rows = $query->result_array();
 
         return array($rows, $total_count, $filtered_count);
@@ -436,8 +436,9 @@ class Portalmodel extends Master_M {
     }
 
     public function getPartImages($part_id) {
-        $query = $this->db->query("Select * from partimage where part_id = ?", array($part_id));
-        return $query->result_array();
+        global $PSTAPI;
+        initializePSTAPI();
+        return $PSTAPI->partimage()->fetchOrdered(array("part_id" => $part_id), true);
     }
 
     public function fetchQuestions($part_id) {
@@ -971,14 +972,10 @@ class Portalmodel extends Master_M {
     }
 
     public function getPartImage($partimage_id) {
-        $results = array();
-
-        $query = $this->db->query("Select * from partimage where partimage_id = ?", array($partimage_id));
-        foreach ($query->result_array() as $row) {
-            return $row;
-        }
-
-        return $results;
+        global $PSTAPI;
+        initializePSTAPI();
+        $partimage = $PSTAPI->partimage()->get($partimage_id);
+        return is_null($partimage) ? array() : $partimage->to_array();
     }
 
     public function addImage($part_id, $upload) {
@@ -994,9 +991,17 @@ class Portalmodel extends Master_M {
         $image->setMaxDimension(144);
         $image->save(STORE_DIRECTORY . "/html/storeimages/" . $thumbnail_file, IMAGETYPE_PNG);
 
-        $this->db->query("insert into partimage (part_id, original_filename, path) values (?, ?, ?)", array($part_id, $upload['name'], "store/" . $image_file));
-        $partimage_id = $this->db->insert_id();
-        return $partimage_id;
+        global $PSTAPI;
+        initializePSTAPI();
+        $PSTAPI->partimage()->renumberOrdinals(array("part_id" => $part_id));
+        $partimage = $PSTAPI->partimage()->addNextOrdinal(array(
+            "part_id" => $part_id,
+            "original_filename" => $upload['name'],
+            "path" => "store/$image_file"
+        ), array(
+            "part_id" => $part_id
+        ));
+        return $partimage->id();
     }
 
     public function removePartQuestion($partquestion_id) {
@@ -1004,9 +1009,14 @@ class Portalmodel extends Master_M {
     }
 
     public function removeImage($partimage_id) {
-        $image = $this->getPartImage($partimage_id);
+        // delete it
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $image = $PSTAPI->partimage()->get($partimage_id);
+
         $store_directory = STORE_DIRECTORY . "/html/storeimages/";
-        $base_name = basename($image["path"]);
+        $base_name = basename($image->get("path"));
 
         $file = $store_directory . $base_name;
         if (file_exists($file) && is_file($file)) {
@@ -1018,8 +1028,8 @@ class Portalmodel extends Master_M {
             unlink($file);
         }
 
-        // delete it
-        $this->db->query("Delete from partimage where partimage_id = ?", array($partimage_id));
+        $image->remove();
+        $PSTAPI->partimage()->renumberOrdinals(array("part_id" => $image->get("part_id")));
     }
 
     public function fetchPartQuestions($part_id) {

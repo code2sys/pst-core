@@ -195,7 +195,7 @@
 						</tr>
 					</table>
 					<?php if(@validation_errors() || @$processingError): if(@$_SESSION['failed_validation']): $_SESSION['failed_validation']++; else: $_SESSION['failed_validation'] = 1; endif; ?>
-						<div class="g-recaptcha" data-sitekey="6Lc22wMTAAAAAE3FDQa5VE0uk4ac2rxE3kIl_XHa"></div>
+						<div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_KEY; ?>"></div>
 					<?php endif; ?>
 					
 					<button type="submit" class="input_button_purple" style="float:right;">Process Your Order</button>

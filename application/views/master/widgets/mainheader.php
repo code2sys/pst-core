@@ -63,5 +63,17 @@ if (array_key_exists("userRecord", $_SESSION) && $_SESSION["userRecord"]) {
     mustache_tmpl_set($template, "userRecord_show", false);
 }
 
+if (!isset($SMSettings)) {
+    $CI->load->model("admin_m");
+    $SMSettings = $CI->admin_m->getSMSettings();
+}
 
+mustache_tmpl_set($template, "social_link_buttons", $CI->load->view("social_link_buttons", array("SMSettings" => $SMSettings), true));
+
+jtemplate_add_store_hours($template, $store_name);
 echo mustache_tmpl_parse($template);
+
+// JLB - this is to add in the modal for the quote form to be universally available...
+echo $CI->load->view("modals/major_unit_detail_modal", array(
+    "motorcycle" => array()
+), true);

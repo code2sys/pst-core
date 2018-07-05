@@ -2,6 +2,14 @@
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
 
+    // JLB 06-21-18
+    // Who knew that you couldn't just ask for a run?
+    public function runEbay($debug = 0) {
+        $this->load->model("ebay_m");
+        $this->ebay_m->debug = ($debug > 0);
+        $this->ebay_m->generateEbayFeed(0, 1, $debug > 0);
+    }
+
     // JLB 04-25-18
     // This is designed to review everything for CRS...a deep cleaning
     public function deepCleanCRS() {
@@ -237,6 +245,14 @@ class CronControl extends Master_Controller {
 
     protected $_preserveMachineMotoType;
     protected function _getMachineTypeMotoType($machine_type, $offroad_flag) {
+        if (is_null($offroad_flag)) {
+            $offroad_flag = 0;
+        }
+
+        if ($offroad_flag !== 1) {
+            $offroad_flag = 0;
+        }
+
         if (!isset($this->_preserveMachineMotoType)) {
             $this->_preserveMachineMotoType = array();
         }
@@ -280,6 +296,10 @@ class CronControl extends Master_Controller {
      * This is to check for CRS migration
      */
     public function checkForCRSMigration($debug = 0) {
+        if ($debug > 0) {
+            error_reporting(E_ALL);
+        }
+
         // Is there anything pending?
         $query = $this->db->query("select * from crspull_feed_log where status = 0");
         $results = $query->result_array();
@@ -303,7 +323,7 @@ class CronControl extends Master_Controller {
                 if ($debug > 0) {
                     print "Requesting product line: " . $c["crs_machinetype"] . ", " . $c["crs_make_id"] . ", " . $c["year"] . "\n";
                 }
-                $this->addProductLine($c["crs_machinetype"], $c["crs_make_id"], "N", $c["year"], $c["year"]);
+                $this->addProductLine($c["crs_machinetype"], $c["crs_make_id"], "N", $c["year"], $c["year"], $debug);
             }
 
             // we should delete all other things hanging around
@@ -346,12 +366,18 @@ class CronControl extends Master_Controller {
 	 * "A": Adds them
 	 *
 	 */
-	public function addProductLine($machine_type, $make_id, $mode = "C", $starting_year = 0, $ending_year = 0) {
+	public function addProductLine($machine_type, $make_id, $mode = "C", $starting_year = 0, $ending_year = 0, $debug = 0) {
         $this->load->model("CRS_m");
 
         $uniqid = uniqid("");
 
+        if ($debug > 0) {
+            print "Fetching trims \n";
+        }
+
+
         if ($mode == "C") {
+
             $matching_motorcycles = $this->CRS_m->getTrims(array(
                 "current" => true,
                 "make_id" => $make_id,
@@ -372,9 +398,15 @@ class CronControl extends Master_Controller {
                     "year" => $y
                 )));
             }
+
         } else {
             throw new Exception("You must provide a starting year.");
         }
+
+        if ($debug > 0) {
+            print "Fetched trims.\n";
+        }
+
 
         // clear the unique IDs...
         $this->db->query("Update motorcycle set uniqid = '' where crs_machinetype = ? and crs_make_id = ? and `condition` = 1 and source = 'PST'", array($machine_type, $make_id));
@@ -396,6 +428,10 @@ class CronControl extends Master_Controller {
             $crs_trim = $m["trim"];
             $crs_display_name = $m["display_name"];
             $crs_trim_id = $m["trim_id"];
+
+            if ($debug > 0) {
+                print "Processing Trim $crs_trim_id make $crs_make model $crs_model \n";
+            }
 
             // Is there one of these?
             $query = $this->db->query("Select * from motorcycle where `condition` = 1 and crs_trim_id = ? and (source = 'PST' or deleted = 0)", array($crs_trim_id));

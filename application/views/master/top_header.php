@@ -50,3 +50,6 @@ if (isset($store_name)) {
     <?php echo $additional_tracking_code; ?>
 <?php endif; ?>
 
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<script src="<?php echo base_url("/assets/scriptlibrary.js"); ?>?v=2"></script>
+

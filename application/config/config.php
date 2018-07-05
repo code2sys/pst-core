@@ -405,3 +405,10 @@ $config['proxy_ips'] = '';
 $config['wording_error_no_machine_selected'] = 'You currently do not have a machine selected. Please add a machine by using the shop by machine feature or selecting a machine from the fitment tab.';
 $config['wording_error_machine_does_not_match'] = 'Your machine does not match this item.  Please change your active machine above to add this item to cart.';
 $config['composer_autoload'] = TRUE;  
+
+if (!defined('RECAPTCHA_KEY')) {
+    define('RECAPTCHA_KEY', '6LdtHWAUAAAAAJ9M6TSwI-379w0I_gb7KN9LlTFQ');
+}
+if (!defined('RECAPTCHA_SECRET')) {
+    define('RECAPTCHA_SECRET', '6LdtHWAUAAAAADLNhDoHW2OVCedTWQZ38aqcu-nu');
+}

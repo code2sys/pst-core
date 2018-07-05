@@ -1,96 +1,31 @@
-<div class="modal fade pop" id="trade-in-value-modal_<?php echo $motorcycle['id']; ?>">
-	<div class="modal-dialog area" style="width:380px !important;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<div class="clo" data-dismiss="modal">get a quote</div>
-			</div>
+<?php
 
-			<div class="modal-body" id="scol">
-				<?php echo form_open('welcome/productEnquiry', array('class' => 'form_standard')); ?>
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="first name" name="firstName" required="">
-						<div class="formRequired">*</div>
-					</div>
+$CI =& get_instance();
 
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="last name" name="lastName" required="">
-						<div class="formRequired">*</div>
-					</div>
+$CI =& get_instance();
+$CI->load->helper("mustache_helper");
 
-					<div class="form-group">
-						<input type="email" class="form-control" placeholder="email" name="email" required="">
-						<div class="formRequired">*</div>
-					</div>
+$trade_in_value_modal = mustache_tmpl_open("modals/trade_in_value_modal.html");
 
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="phone" name="phone">
-					</div>
+mustache_tmpl_set($trade_in_value_modal, "motorcycle_id", $motorcycle["id"]);
+mustache_tmpl_set($trade_in_value_modal, "motorcycle_title", $motorcycle["title"]);
 
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="address" name="address">
-					</div>
+mustache_tmpl_set($trade_in_value_modal, "form_open_string", form_open('welcome/productEnquiry', array('class' => 'form_standard')));
+mustache_tmpl_set($trade_in_value_modal, "form_close_string", form_close());
 
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="city" name="city">
-					</div>
 
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="state" name="state">
-					</div>
+if (!defined('DISABLE_TEST_DRIVE') || !DISABLE_TEST_DRIVE) {
+    mustache_tmpl_set($trade_in_value_modal, "ENABLE_TEST_DRIVE", true);
 
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="zip code" name="zipcode">
-					</div>
+    if (defined('WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE')) {
+        mustache_tmpl_set($trade_in_value_modal, "WORDING_PLACEHOLDER_DATE_OF_RIDE", WORDING_PLACEHOLDER_DATE_OF_RIDE);
+    } else {
+        mustache_tmpl_set($trade_in_value_modal, "WORDING_PLACEHOLDER_DATE_OF_RIDE", false);
+    }
 
-					<?php if (!defined('DISABLE_TEST_DRIVE') || !DISABLE_TEST_DRIVE): ?>
-						<h3 class="txt-title"><?php if (defined('WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE')) { echo WORDING_WANT_TO_SCHEDULE_A_TEST_DRIVE; } else { ?>Want to Schedule a Test Drive?<?php } ?></h3>
+} else {
+    mustache_tmpl_set($trade_in_value_modal, "ENABLE_TEST_DRIVE", false);
+}
 
-						<div class="form-group">
-							<input type="text" class="form-control" placeholder="<?php if (defined('WORDING_PLACEHOLDER_DATE_OF_RIDE')) { echo WORDING_PLACEHOLDER_DATE_OF_RIDE; } else { ?>date of ride<?php } ?>" name="date_of_ride">
-						</div>
-
-						<hr class="brdr">
-					<?php endif; ?>
-
-					<h3 class="txt-title">Trade in?</h3>
-
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="make" name="make">
-					</div>
-
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="model" name="model">
-					</div>
-
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="year" name="year">
-					</div>
-
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="miles" name="miles">
-					</div>
-
-					<div class="form-group">
-						<textarea type="text" class="form-control" placeholder="added accessories" name="accessories"></textarea>
-					</div>
-
-					<div class="form-group">
-						<textarea type="text" class="form-control" placeholder="comments questions" name="questions"></textarea>
-					</div>
-
-					<h3 class="txt-title">I am Interested in this Vehicle</h3>
-
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Unit Name" value="<?php echo $motorcycle['title']; ?>" readonly name="motorcycle">
-					</div>
-
-					<input type="hidden" name="product_id" value="<?php echo $motorcycle['id']; ?>">
-
-					<div class="col-md-12 text-center" style="float:none;">
-						<input type="submit" class="btn bttn">
-					</div>
-				<?php echo form_close(); ?>
-			</div>
-		</div>
-	</div>
-</div>
+mustache_tmpl_set($trade_in_value_modal, "form_action_url", base_url("welcome/productEnquiry"));
+echo mustache_tmpl_parse($trade_in_value_modal);
