@@ -322,6 +322,21 @@ class Pages_M extends Master_M
         $where = array('pageId' => $pageId);
         $this->db->order_by('order ASC');
         $records = $this->selectRecords('slider', $where);
+
+        // JLB 07-05-18
+        // Kyle needed some more information here...
+        foreach ($records as &$rec) {
+            if (substr($rec["image"], 0, strlen("bannerlibrary_")) == "bannerlibrary_") {
+                $rec["banner"] = true;
+                $rec["filename"] = urlencode(substr($rec["image"], strlen("bannerlibrary_") + 1));
+                $rec["url"] = jsite_url("bannerlibrary/" . $rec["filename"], true);
+            } else {
+                $rec["banner"] = false;
+                $rec["filename"] = urlencode($rec["image"]);
+                $rec["url"] = jsite_url("media/" . $rec["filename"], true);
+            }
+        }
+
         return $records;
     }
 	
