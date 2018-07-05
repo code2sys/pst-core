@@ -1,0 +1,19 @@
+<div class="sw brd">
+    <div class="container_b">
+        <div class="featured-listings">
+            <h3> OUR TOP Categories </h3>
+            <!--<a class="rdrct-lnk" href="<?php echo site_url('Motorcycle_Gear_Brands');?>">Shop all brands </a>-->
+            <div class="panel-body">
+                <ul class="lstng" id="top-cat">
+                    {{#featuredCategories}}
+                    <li class="ftrdb">
+                        <a class="brnd-nm" href="javascript:void(0)" onclick="setMainSearch(event, 'category', '{{category_id}}');" id="{{category_id}}" >
+                            <img src="{{url}}"><span class="bn">{{{name}}}</span>
+                        </a>
+                    </li>
+                    {{/featuredCategories}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

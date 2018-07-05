@@ -1,0 +1,27 @@
+<div class="sw brd container_for_top_brands">
+    <div class="container_b" id="our_top_brands">
+        <div class="featured-listings">
+            <h3> OUR TOP BRANDS </h3>
+            <a class="rdrct-lnk" href="{{shop_all_brands_link}}">Shop all brands </a>
+            <div class="panel-body">
+                <ul class="lstng">
+                    {{#featuredBrands}}
+                    <li class="ftrdb">
+                        <a class="brnd-nm" href="{{slug_url}}">
+                            <div class="spannerbox">
+                                {{#image_url}}
+                                <img src="{{image_url}}">
+                                {{/image_url}}
+                            </div>
+                            <div class="labelbox">
+                                <span class="">{{{name}}}</span>
+                            </div>
+                        </a>
+                    </li>
+                    {{/featuredBrands}}
+                </ul>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+</div>
