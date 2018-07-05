@@ -328,11 +328,11 @@ class Pages_M extends Master_M
         foreach ($records as &$rec) {
             if (substr($rec["image"], 0, strlen("bannerlibrary_")) == "bannerlibrary_") {
                 $rec["banner"] = true;
-                $rec["filename"] = urlencode(substr($rec["image"], strlen("bannerlibrary_") ));
+                $rec["filename"] = str_replace(" ", "%20", substr($rec["image"], strlen("bannerlibrary_") ));
                 $rec["url"] = jsite_url("bannerlibrary/" . $rec["filename"], true);
             } else {
                 $rec["banner"] = false;
-                $rec["filename"] = urlencode($rec["image"]);
+                $rec["filename"] = $rec["image"];
                 $rec["url"] = jsite_url("media/" . $rec["filename"], true);
             }
         }
