@@ -328,7 +328,7 @@ class Pages_M extends Master_M
         foreach ($records as &$rec) {
             if (substr($rec["image"], 0, strlen("bannerlibrary_")) == "bannerlibrary_") {
                 $rec["banner"] = true;
-                $rec["filename"] = urlencode(substr($rec["image"], strlen("bannerlibrary_") + 1));
+                $rec["filename"] = urlencode(substr($rec["image"], strlen("bannerlibrary_") ));
                 $rec["url"] = jsite_url("bannerlibrary/" . $rec["filename"], true);
             } else {
                 $rec["banner"] = false;
