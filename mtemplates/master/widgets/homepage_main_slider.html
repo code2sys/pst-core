@@ -1,7 +1,7 @@
 <div class="sw slider">
     <div id="owl-demo" class="owl-carousel owl-theme">
         {{#bannerimages}}
-        <div class="item"><a href="{{banner_link}}"><img src="/media/{{image}}"></a></div>
+        <div class="item" data-image-filename="{{filename}}" data-image-source="{{#banner}}bannerlibrary{{/banner}}{{^banner}}adminuplaod{{/banner}}">{{#banner_link}}<a href="{{banner_link}}">{{/banner_link}}<img src="{{url}}">{{#banner_link}}</a>{{/banner_link}}</div>
         {{/bannerimages}}
     </div>
     <div class="clear"></div>
