@@ -9,7 +9,63 @@ class Shopping extends Master_Controller {
 
 
     public function receiveFromHLSM() {
-        print_r($_REQUEST);
+        $action = array_key_exists("action", $_REQUEST) ? $_REQUEST["action"] : "";
+        $hlsmno = array_key_exists("hlmsno", $_REQUEST) ? $_REQUEST["hlmsno"] : 0;
+        $transferid = array_key_exists("transferid", $_REQUEST) ? $_REQUEST["transferid"] : 0;
+
+        global $PSTAPI;
+        initializePSTAPI();
+        $transfer = $PSTAPI->hlsmxmlfeed()->get($transferid);
+
+        if ($action == "hlsmtransfer" && !is_null($transfer) && $transfer->get("hlsmno") == $hlsmno) {
+            if (!array_key_exists("hlsmtransfers", $_SESSION)) {
+                $_SESSION["hlsmtransfers"] = array();
+            }
+
+            if (!in_array($transfer->id(), $_SESSION["hlsmtransfers"])) {
+                // it cannot be claimed...
+                if ($transfer->get("claimed") > 0) {
+                    print "Transfer failed - replay.";
+                    exit();
+                }
+                $_SESSION["hlsmtransfers"][] = $transfer->id();
+            }
+
+            if ($transfer->get("claimed") == 0) {
+                $transfer->set("claimed", 1);
+                $transfer->save();
+
+                // get all the partnumbers
+                $partnumbers = $transfer->getPartNumbersForCart();
+
+                // Put them in the cart
+                foreach ($partnumbers as $pn) {
+                    $_SESSION['cart'][$pn["partnumber"]] = array(
+                        "part_id" => $pn["part_id"],
+                        "display_name" => $pn["name"],
+                        "images" => null,
+                        "partnumber" => $pn["partnumber"],
+                        "qty" => $pn["qty"],
+                        "price" => $pn["price"],
+                        "type" => "cart"
+                    );
+
+                }
+
+                // This is just copied from shopping/item...
+                if (@$_SESSION['userRecord']['id'])
+                    $this->parts_m->updateCart();
+
+                redirect('shopping/cart');
+
+
+            }
+
+
+        } else {
+            print "Transfer failed - unrecognized.";
+        }
+
     }
 
     protected $_pagination = 6;
