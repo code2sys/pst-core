@@ -29,6 +29,12 @@ class Hlsmfeed extends CI_Controller {
             // now, attempt to convert it...
             if ($obj->convertFromRaw()) {
                 print $obj->id();
+
+                // Convert them...
+                $rows = $PSTAPI->hlsmxmlfeedrow()->fetch(array("hlsmxmlfeed_id" => $obj->id()));
+                foreach ($rows as $row) {
+                    $row->convertToPartVariation();
+                }
             } else {
                 print 0;
             }
