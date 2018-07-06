@@ -7,6 +7,11 @@ require_once(APPPATH . 'controllers/Master_Controller.php');
 
 class Shopping extends Master_Controller {
 
+
+    public function receiveFromHLSM() {
+        print_r($_REQUEST);
+    }
+
     protected $_pagination = 6;
     protected $_adpdtLimit = 48;
 
