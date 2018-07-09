@@ -812,7 +812,7 @@ var sa_products = { '.$rating.' };
             global $PSTAPI;
             foreach ($_SESSION["hlsmtransfers"] as $tid) {
                 $PSTAPI->hlsmxmlfeed()->update($tid, array(
-                    "order_id" => $_SESSION['orderNum']
+                    "order_id" => $_SESSION['newOrderNum']
                 ));
             }
         }
