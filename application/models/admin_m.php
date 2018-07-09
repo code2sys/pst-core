@@ -1717,6 +1717,7 @@ class Admin_M extends Master_M {
                 unset($data['protect']);
                 unset($data['customerdistributor_id']);
                 unset($data['from_lightspeed']);
+                unset($data['from_hlsm']);
                 $this->db->insert('partdealervariation', $data);
             }
 
@@ -1793,6 +1794,7 @@ class Admin_M extends Master_M {
                 unset($data['protect']);
                 unset($data['customerdistributor_id']);
                 unset($data['from_lightspeed']);
+                unset($data['from_hlsm']);
                 $this->db->insert('partdealervariation', $data);
 
                 $dt = array('protect' => 1);

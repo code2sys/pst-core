@@ -11,7 +11,10 @@ class Hlsmfeed extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        if (!defined('ENABLE_HLSM_FEED') && ENABLE_HLSM_FEED) {
+        $this->load->model("admin_m");
+        $store_name = $this->admin_m->getAdminShippingProfile();
+        $partsfinder_link = $store_name["partsfinder_link"];
+        if ($partsfinder_link  == "") {
             redirect("/");
         }
     }
