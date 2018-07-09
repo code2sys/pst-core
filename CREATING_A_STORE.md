@@ -47,31 +47,32 @@ Add in the Symlinks
 --------------------
 
 <pre>
-ln -s ../core/adminer.php .
-ln -s ../core/application .
-ln -s ../core/Checkout/ .
-ln -s ../core/lib/ .
-ln -s ../core/qatesting_application/ .
-ln -s ../core/simpleimage.php  .
-ln -s ../core/system/ .
-ln -s ../core/mcache/ .
-ln -s ../core/mtemplates/ .
-ln -s ../core/vendor/ .
+ln -s /var/www/core/adminer.php .
+ln -s /var/www/core/application .
+ln -s /var/www/core/Checkout/ .
+ln -s /var/www/core/lib/ .
+ln -s /var/www/core/qatesting_application/ .
+ln -s /var/www/core/simpleimage.php  .
+ln -s /var/www/core/system/ .
+ln -s /var/www/core/mcache/ .
+ln -s /var/www/core/mtemplates/ .
+ln -s /var/www/core/vendor/ .
 cd html
-ln -s ../../core/html/assets/ .
-ln -s ../../core/html/basebranding.css  .
-ln -s ../../core/html/qatesting/ .
+ln -s /var/www/core/html/assets/ .
+ln -s /var/www/core/html/basebranding.css  .
+ln -s /var/www/core/html/qatesting/ .
+ln -s /var/www/productionbanners bannerlibrary
 </pre>
 
 You also need to link the banner library to html/bannerlibrary.
-ln -s /var/www/productionbanners html/bannerlibrary
+ln -s /var/www/productionbanners bannerlibrary
 
 And fix ownership
 chown -R customer1ftp.customer1ftp .
 chmod -R g+w .
 
 Get a dev cert if you need one:
-certbot certonly --webroot --webroot-path=/var/www/stores/pdi/html -d sierranevadapowersport.com
+certbot certonly --webroot --webroot-path=/var/www/stores/hc/html -d hc.powersporttechnologies.com
 
 Virtual Host Configuration
 ---------------------------

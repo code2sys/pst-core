@@ -54,6 +54,8 @@ $route['vtwin'] = 'vtwin/index';
 $route['marine'] = 'marine/index';
 $route['checkout'] = 'checkout/index';
 
+$route['hlsmfeed/receive'] = 'hlsmfeed/receive';
+
 $route['atvparts'] = 'atvparts/index';
 $route['utvparts'] = 'utvparts/index';
 $route['admin'] = 'admin/index';
