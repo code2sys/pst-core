@@ -805,6 +805,19 @@ var sa_products = { '.$rating.' };
 		// Needed for Order Record creation
 		$_SESSION['newOrderNum'] = $this->account_m->recordOrderCreation($_SESSION['contactInfo'], $_SESSION['cart'], $user_id);
 
+		// JLB 07-08-18
+        // Record these...
+        if (array_key_exists("hlsmtransfers", $_SESSION) && is_array($_SESSION["hlsmtransfers"]) && count($_SESSION["hlsmtransfers"]) > 0) {
+            initializePSTAPI();
+            global $PSTAPI;
+            foreach ($_SESSION["hlsmtransfers"] as $tid) {
+                $PSTAPI->hlsmxmlfeed()->update($tid, array(
+                    "order_id" => $_SESSION['newOrderNum']
+                ));
+            }
+        }
+
+
         if (array_key_exists("failed_validation", $_SESSION) && $_SESSION["failed_validation"] > 0 && !jverifyRecaptcha()) {
             $this->_mainData['processingError'] = 'ReCAPTCHA failure. Please try again.';
         } else
@@ -1077,6 +1090,7 @@ var sa_products = { '.$rating.' };
 	
 	private function completeOrder($guest_user_id=0)
 	{
+	    $_SESSION["hlsmtransfers"] = array(); // JLB 07-08-18 - Just clear this list. It has run its course.
 		$this->account_m->recordPaidTransaction($_SESSION['newOrderNum'], $_SESSION['cart']);
 		$this->load->model('order_m');
 		$this->order_m->updateStatus($_SESSION['newOrderNum'], 'Approved', 'System order');

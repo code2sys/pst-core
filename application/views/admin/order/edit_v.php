@@ -649,7 +649,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
                                                         <?php echo @$dist['distributor_name'] ? $dist['distributor_name'] : $distributors[$distRec['distributor_id']]; ?>
                                                     </td>
                                                     <td>
-                                                        <?php echo $distRec['quantity_available']; ?>
+                                                        <?php echo $product["from_hlsm"] > 0 ? "N/A" : $distRec['quantity_available']; ?>
                                                     </td>
                                                     <td>
                                                         <?php
