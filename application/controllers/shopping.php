@@ -63,7 +63,7 @@ class Shopping extends Master_Controller {
 
 
         } else {
-            print "Transfer failed - unrecognized.";
+            print "Transfer failed - unrecognized. ($action, $transferid, $hlsmno)";
         }
 
     }
