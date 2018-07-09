@@ -10,7 +10,7 @@ class Shopping extends Master_Controller {
 
     public function receiveFromHLSM() {
         $action = array_key_exists("action", $_REQUEST) ? $_REQUEST["action"] : "";
-        $hlsmno = array_key_exists("hlmsno", $_REQUEST) ? $_REQUEST["hlmsno"] : 0;
+        $hlsmno = array_key_exists("hlsmno", $_REQUEST) ? $_REQUEST["hlsmno"] : 0;
         $transferid = array_key_exists("transferid", $_REQUEST) ? $_REQUEST["transferid"] : 0;
 
         global $PSTAPI;
