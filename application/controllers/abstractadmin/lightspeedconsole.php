@@ -11,7 +11,7 @@ require_once(__DIR__ . "/individualpageadmin.php");
 abstract class Lightspeedconsole extends Individualpageadmin {
 
 
-    public function lightspeedconsole() {
+    public function view_lightspeedconsole() {
         if (!$this->checkValidAccess('lightspeedconsole') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
