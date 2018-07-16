@@ -58,6 +58,8 @@
                     console.log(['Success', data]);
                     if ($("input[name='content_type']:checked").val() == "text/xml") {
                         $("#rawOutput pre").text(xmlToString(data));
+                        console.log("xml");
+                        console.log(xmlToString(data));
                     } else {
 
                     }
