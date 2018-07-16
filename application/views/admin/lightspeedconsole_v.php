@@ -423,7 +423,7 @@
                         $("#rawOutput pre").text(xmlToString(data));
                         console.log("xml");
                         console.log(xmlToString(data));
-                        $("#prettyOutput").text(vkbeautify.xml(xmlToString(data), 8));
+                        $("#prettyOutput").text(vkbeautify.xml(xmlToString(data), "<br/>"));
                     } else {
                         $("#rawOutput pre").text(JSON.stringify(data));
                         $("#prettyOutput").text(JSON.stringify(data, null, 8));
