@@ -22,4 +22,5 @@ abstract class Lightspeedconsole extends Individualpageadmin {
         $this->_mainData['lightspeed_feed_password'] = $PSTAPI->config()->getKeyValue('lightspeed_feed_password', '');
         $this->renderMasterPage('admin/master_v', 'admin/lightspeedconsole_v', $this->_mainData);
     }
+
 }
