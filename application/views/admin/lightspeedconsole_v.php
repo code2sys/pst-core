@@ -18,7 +18,7 @@
 
         <p>Raw Output</p>
 
-        <div id="rawOutput" style="overflow-y: auto; height: 400px; padding: 6px; color: #eeeeee; border: 2px dashed black"><pre></pre></div>
+        <div id="rawOutput" style="overflow-y: auto; height: 400px; padding: 12px; background-color: #eeeeee; border: 2px dashed black"><pre></pre></div>
 
     </div>
 </div>
