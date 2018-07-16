@@ -89,6 +89,7 @@ class Order_M extends Master_M {
                               partnumber.sale,
                               order_product.price as sale,
                               partvariation.stock_code,
+                              partvariation.from_hlsm,
                               order_product.product_sku,
                               order_product.dealer_qty,
                               order_product.distributor_qty,

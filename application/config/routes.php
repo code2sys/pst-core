@@ -55,6 +55,8 @@ $route['marine'] = 'marine/index';
 $route['checkout'] = 'checkout/index';
 $route['lightspeedparts'] = 'lightspeedparts';
 
+$route['hlsmfeed/receive'] = 'hlsmfeed/receive';
+
 $route['atvparts'] = 'atvparts/index';
 $route['utvparts'] = 'utvparts/index';
 $route['admin'] = 'admin/index';

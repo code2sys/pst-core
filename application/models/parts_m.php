@@ -1809,6 +1809,7 @@ class Parts_M extends Master_M {
             $this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
         }
         $this->db->where("partvariation.from_lightspeed", 0, FALSE);
+        $this->db->where("partvariation.from_hlsm", 0, FALSE);
 
         $records = $this->selectRecords('partnumber');
         $count = count($records);
@@ -2210,6 +2211,7 @@ class Parts_M extends Master_M {
 										  MAX(partnumber.sale) AS sale_max', FALSE);
         $this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
         $this->db->where("partvariation.from_lightspeed", 0, FALSE);
+        $this->db->where("partvariation.from_hlsm", 0, FALSE);
         $records = $this->selectRecords('partnumber');
 
         //echo $this->db->last_query();
@@ -2248,6 +2250,7 @@ class Parts_M extends Master_M {
                 $this->db->select('partnumber, partnumber.dealer_sale,partnumber.price, partnumber.sale, partdealervariation.quantity_available as dealer_quantity, partvariation.quantity_available');
                 $this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
                 $this->db->where("partvariation.from_lightspeed", 0, FALSE);
+                $this->db->where("partvariation.from_hlsm", 0, FALSE);
                 $this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id', 'left');
                 $partNumberRec1 = $this->selectRecords('partnumber', $where);
 
@@ -2300,6 +2303,7 @@ class Parts_M extends Master_M {
 
                 $this->db->where("partvariation.partnumber_id = '" . $rec['partnumber_id'] . "'");
                 $this->db->where("partvariation.from_lightspeed", 0, FALSE);
+                $this->db->where("partvariation.from_hlsm", 0, FALSE);
                 $partDistributorInventory = $this->selectRecord('partvariation');
 
                 if ($partDealerInventory['quantity_available'] == '0' || !@$partDealerInventory) {
