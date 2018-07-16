@@ -18,19 +18,36 @@
 
         <p>Raw Output</p>
 
-        <div id="rawOutput" style="overflow-y: auto; height: 400px; padding: 6px; color: #eeeeee; border: 2px dashed black"></div>
+        <div id="rawOutput" style="overflow-y: auto; height: 400px; padding: 6px; color: #eeeeee; border: 2px dashed black"><pre></pre></div>
 
     </div>
 </div>
 <script type="application/javascript">
     (function() {
 
+
+
         $("#version_discovery_service").on("click", function(e) {
             e.preventDefault();
             e.stopPropagation();
 
             // Make an AJAX call to the base URL and then put the result into Raw Output
-
+            $.ajax({
+                url: "<?php echo site_url('lightspeedparts'); ?>",
+                headers: {
+                    "Authorization" : "Basic " + btoa($("input[name='username']").val() + ":" + $("input[name='password']").val()),
+                    "Content-Type" : $("input[name='content_type']:checked").val()
+                },
+                method: 'POST',
+                data: {},
+                success: function(data) {
+                    console.log(['Success', data]);
+                    $("#rawOutput pre").text(data);
+                },
+                error: function(data) {
+                    console.log(['Error', data]);
+                }
+            })
         })
 
     })();
