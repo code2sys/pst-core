@@ -13,6 +13,7 @@
         </form>
 
         <button id="version_discovery_service">Version Discovery Service</button>
+        <button id="tax_rules">Pull Tax Rules</button>
 
 
 
@@ -402,15 +403,10 @@
 
     (function() {
 
-
-
-        $("#version_discovery_service").on("click", function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Make an AJAX call to the base URL and then put the result into Raw Output
+        var submitClick = function(url) {
+// Make an AJAX call to the base URL and then put the result into Raw Output
             $.ajax({
-                url: "<?php echo site_url('lightspeedparts'); ?>",
+                url: "<?php echo site_url('lightspeedparts'); ?>/" + url,
                 headers: {
                     "Authorization" : "Basic " + btoa($("input[name='username']").val() + ":" + $("input[name='password']").val()),
                     "Content-Type" : $("input[name='content_type']:checked").val()
@@ -435,7 +431,20 @@
                     $("#prettyOutput pre").html("");
                 }
             })
-        })
+        };
+
+
+        $("#version_discovery_service").on("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            submitClick("");
+        });
+
+        $("#tax_rules").on("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            submitClick("TaxRules");
+        });
 
     })();
 </script>
