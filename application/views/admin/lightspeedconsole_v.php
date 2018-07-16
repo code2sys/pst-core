@@ -23,6 +23,20 @@
     </div>
 </div>
 <script type="application/javascript">
+    function xmlToString(xmlData) {
+
+        var xmlString;
+        //IE
+        if (window.ActiveXObject){
+            xmlString = xmlData.xml;
+        }
+        // code for Mozilla, Firefox, Opera, etc.
+        else{
+            xmlString = (new XMLSerializer()).serializeToString(xmlData);
+        }
+        return xmlString;
+    }
+
     (function() {
 
 
@@ -42,7 +56,11 @@
                 data: {},
                 success: function(data) {
                     console.log(['Success', data]);
-                    $("#rawOutput pre").text(data);
+                    if ($("input[name='content_type']:checked").val() == "text/xml") {
+                        $("#rawOutput pre").text(xmlToString(data));
+                    } else {
+
+                    }
                 },
                 error: function(data) {
                     console.log(['Error', data]);
