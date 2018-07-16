@@ -9,7 +9,7 @@
             <p><label>Username: </label> <input type="text" name="username" size="20" value="<?php echo htmlentities($lightspeed_feed_username); ?>"/></p>
             <p><label>Password: </label> <input type="text" name="password" size="20" value="<?php echo htmlentities($lightspeed_feed_password); ?>" /></p>
             <p>URL: <?php echo site_url('lightspeedparts'); ?></p>
-            <p>Mode: <label><input type="radio" name="content_type" value="text/xml">XML</label> <label><input type="radio" name="content_type" value="application/json">JSON</label></p>
+            <p>Mode: <label><input type="radio" name="content_type" value="text/xml">XML</label> <label><input type="radio" checked="checked" name="content_type" value="application/json">JSON</label></p>
         </form>
 
         <button id="version_discovery_service">Version Discovery Service</button>
