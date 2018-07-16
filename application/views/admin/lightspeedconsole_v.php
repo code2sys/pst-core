@@ -21,7 +21,7 @@
         <div id="rawOutput" style="overflow-y: auto; height: 400px; padding: 12px; background-color: #eeeeee; border: 2px dashed black"><pre></pre></div>
 
         <p>Pretty Output</p>
-        <div id="prettyOutput" style="overflow-y: auto; height: 400px; padding: 12px; background-color: #ddddff; border: 2px dashed black"></div>
+        <div id="prettyOutput" style="overflow-y: auto; height: 400px; padding: 12px; background-color: #ddddff; border: 2px dashed black"><pre></pre></div>
 
     </div>
 </div>
@@ -423,16 +423,16 @@
                         $("#rawOutput pre").text(xmlToString(data));
                         console.log("xml");
                         console.log(xmlToString(data));
-                        $("#prettyOutput").text(vkbeautify.xml(xmlToString(data), "<br/>"));
+                        $("#prettyOutput pre").text(vkbeautify.xml(xmlToString(data), 8));
                     } else {
                         $("#rawOutput pre").text(JSON.stringify(data));
-                        $("#prettyOutput").text(JSON.stringify(data, null, 8));
+                        $("#prettyOutput pre").text(JSON.stringify(data, null, 8));
                     }
                 },
                 error: function(data) {
                     console.log(['Error', data]);
                     $("#rawOutput pre").text("ERROR: " + data.responseText);
-                    $("#prettyOutput").html("");
+                    $("#prettyOutput pre").html("");
                 }
             })
         })
