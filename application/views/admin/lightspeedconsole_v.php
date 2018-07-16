@@ -61,7 +61,7 @@
                         console.log("xml");
                         console.log(xmlToString(data));
                     } else {
-
+                        $("#rawOutput pre").text(JSON.stringify(data));
                     }
                 },
                 error: function(data) {
