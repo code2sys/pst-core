@@ -17,6 +17,30 @@ class Lightspeedparts extends REST_Controller {
     }
 
 
+    protected function _verifyAuthorization() {
+        $headers = getallheaders();
+        $authorization = array_key_exists("AUTHORIZATION", $headers) ? $headers['AUTHORIZATION'] : "";
+
+        if ($authorization == "") {
+            $this->response(array(
+                "error" => "No authorization header received."
+            ), 403);
+            exit();
+        } else {
+            $base64 = substr($authorization, 6);
+            global $PSTAPI;
+            $lightspeed_feed_username = $PSTAPI->config()->getKeyValue('lightspeed_feed_username', '');
+            $lightspeed_feed_password = $PSTAPI->config()->getKeyValue('lightspeed_feed_password', '');
+
+            if ($base64 != base64_encode($lightspeed_feed_username . ":" . $lightspeed_feed_password)) {
+                $this->response(array(
+                    "error" => "Invalid authorization header received."
+                ), 403);
+                exit();
+            }
+        }
+    }
+
     protected function _fidgetFormat() {
         $format = $this->_getContentType();
 
