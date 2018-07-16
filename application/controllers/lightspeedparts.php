@@ -60,6 +60,7 @@ class Lightspeedparts extends REST_Controller {
 
         global $PSTAPI;
         initializePSTAPI();
+        $this->_verifyAuthorization();
     }
 
     public function index_get() {
