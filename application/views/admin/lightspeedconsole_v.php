@@ -66,6 +66,7 @@
                 },
                 error: function(data) {
                     console.log(['Error', data]);
+                    $("#rawOutput pre").text("ERROR: " + data.responseText);
                 }
             })
         })
