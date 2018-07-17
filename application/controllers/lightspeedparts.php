@@ -35,7 +35,7 @@ class Lightspeedparts extends REST_Controller {
 
             $error = ($error != "") ? "<responseMessage>" . $error . "</responseMessage>" : "";
 
-            print '<?xml version="1.0" encoding="utf-8"?><acknowledgeResponse><responseStatus>FAILURE</responseStatus>${error}</acknowledgeResponse>';
+            print '<?xml version="1.0" encoding="utf-8"?><acknowledgeResponse><responseStatus>FAILURE</responseStatus>' . $error . '</acknowledgeResponse>';
             exit();
         } else {
             $data = array(
