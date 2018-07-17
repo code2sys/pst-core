@@ -17,6 +17,39 @@ class Lightspeedparts extends REST_Controller {
     }
 
 
+    protected function _printSuccess() {
+        if ($this->_jlb_format == "xml") {
+            header("Content-Type: text/xml");
+            print '<?xml version="1.0" encoding="utf-8"?><acknowledgeResponse><responseStatus>SUCCESS</responseStatus></acknowledgeResponse>';
+            exit();
+        } else {
+            $this->response(array(
+                "responseStatus" => "SUCCESS"
+            ), 200);
+        }
+    }
+
+    protected function _printFailure($error = "") {
+        if ($this->_jlb_format == "xml") {
+            header("Content-Type: text/xml");
+
+            $error = ($error != "") ? "<responseMessage>" . $error . "</responseMessage>" : "";
+
+            print '<?xml version="1.0" encoding="utf-8"?><acknowledgeResponse><responseStatus>FAILURE</responseStatus>${error}</acknowledgeResponse>';
+            exit();
+        } else {
+            $data = array(
+                "responseStatus" => "FAILURE"
+            );
+
+            if ($error != "") {
+                $data["message"] = $error;
+            }
+
+            $this->response($data, 200);
+        }
+    }
+
     protected function _verifyAuthorization() {
         $headers = getallheaders();
         $authorization = array_key_exists("AUTHORIZATION", $headers) ? $headers['AUTHORIZATION'] : "";
@@ -117,5 +150,72 @@ class Lightspeedparts extends REST_Controller {
         $this->response($data, 200);
     }
 
+    // This is acknowledgement of outstanding items...
+    public function acknowledgerequest_post() {
+        $this->_acknowledgeRequest();
+    }
+
+    public function acknowledgerequest_get() {
+        $this->_acknowledgeRequest();
+    }
+
+    protected function _acknowledgeRequest() {
+        // Step 1: Get the input...
+        $clean_input = $this->_getCleanInput();
+
+        // Next, we are expecting an id, which is an order ID, and to do something with it...
+        if (array_key_exists("id", $clean_input)) {
+            global $PSTAPI;
+            $order = $PSTAPI->order()->get($clean_input["id"]);
+
+            if (is_null($order)) {
+                $this->_printFailure("Invalid ID");
+                exit();
+            }
+
+            switch ($clean_input["responseType"]) {
+                case "WEB_ORDER":
+                    $order->set("ack_pending_by_lightspeed", 1);
+                    $order->set("ack_pending_by_lightspeed_timestamp", date("Y-m-d H:i:s", strtotime($clean_input["date"])));
+                    $order->save();
+                    break;
+
+                case "WEB_ORDER_CANCELLATION":
+                    $order->set("ack_cancel_by_lightspeed", 1);
+                    $order->set("ack_cancel_by_lightspeed_timestamp", date("Y-m-d H:i:s", strtotime($clean_input["date"])));
+                    $order->save();
+                    break;
+            }
+
+            // I suppose there could be issues...
+            if (array_key_exists("responseIssues", $clean_input)) {
+                foreach ($clean_input["responseIssues"] as $rec) {
+                    $PSTAPI->orderresponseissue()->add(array(
+                        "order_id" => $order->id(),
+                        "code" => $rec["code"],
+                        "message" => $rec["message"],
+                        "responseStatus" => $rec["responseStatus"]
+                    ));
+                }
+            }
+
+            $this->_printSuccess();
+        } else {
+            $this->_printFailure("No ID Received.");
+        }
+    }
+
+
+    // TODO: I need you to hammer the XML into the exact same structure as the JSON...
+    protected function _getCleanInput()
+    {
+        $this->_fidgetFormat();
+        $input = file_get_contents("php://input");
+        if ($this->_jlb_format == "xml") {
+            return simplexml_load_string($input);
+        } else {
+            return json_decode($input, true);
+        }
+    }
 
 }

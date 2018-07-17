@@ -2,6 +2,14 @@
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
 
+    // JLB 07-17-18
+    // We need to be able to run this manually, sometimes
+    public function introspectForLightspeed() {
+        global $PSTAPI;
+        initializePSTAPI();
+        $PSTAPI->order()->introspectLightspeed();
+    }
+
     // JLB 06-21-18
     // Who knew that you couldn't just ask for a run?
     public function runEbay($debug = 0) {
@@ -145,6 +153,7 @@ class CronControl extends Master_Controller {
 	public function hourly()
 	{
 	    $this->checkForCRSMigration(); // let's put it on the front...
+        $this->introspectForLightspeed(); // shift them flags!
 		$this->_runJob('hourly');
 	}
 

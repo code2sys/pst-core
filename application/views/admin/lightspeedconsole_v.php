@@ -10,11 +10,16 @@
             <p><label>Password: </label> <input type="text" name="password" size="20" value="<?php echo htmlentities($lightspeed_feed_password); ?>" /></p>
             <p>URL: <?php echo site_url('lightspeedparts'); ?></p>
             <p>Mode: <label><input type="radio" name="content_type" value="text/xml">XML</label> <label><input type="radio" checked="checked" name="content_type" value="application/json">JSON</label></p>
-        </form>
 
         <button id="version_discovery_service">Version Discovery Service</button>
         <button id="tax_rules">Pull Tax Rules</button>
 
+            <p><strong>Item Acknowledgment</strong><textarea name="acknowledgement"></textarea></p>
+
+
+            <button id="acknowledge">Acknowledge</button>
+
+        </form>
 
 
         <p>Raw Output</p>
@@ -403,7 +408,9 @@
 
     (function() {
 
-        var submitClick = function(url) {
+        var submitClick = function(url, data) {
+            data = data || {};
+
 // Make an AJAX call to the base URL and then put the result into Raw Output
             $.ajax({
                 url: "<?php echo site_url('lightspeedparts'); ?>/" + url,
@@ -412,7 +419,7 @@
                     "Content-Type" : $("input[name='content_type']:checked").val()
                 },
                 method: 'POST',
-                data: {},
+                data: data,
                 success: function(data) {
                     console.log(['Success', data]);
                     if ($("input[name='content_type']:checked").val() == "text/xml") {
@@ -432,6 +439,12 @@
                 }
             })
         };
+
+        $("#acknowledgement").on("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            submitClick("AcknowledgeRequest", $("textarea[name=acknowledgement]").val());
+        });
 
 
         $("#version_discovery_service").on("click", function(e) {
