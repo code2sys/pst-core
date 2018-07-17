@@ -33,6 +33,10 @@
             <button id="cancel_sell">Item Cancel or Sell</button>
 
 
+            <p><strong>Void</strong> <textarea name="void"></textarea></p>
+
+            <button id="void">Void Order</button>
+
         </form>
 
 
@@ -464,6 +468,12 @@
             e.preventDefault();
             e.stopPropagation();
             submitClick("Order/" + $("input[name='order_id']").val() + "/Shipment", $("textarea[name=shipment]").val());
+        });
+
+        $("#void").on("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            submitClick("Order/" + $("input[name='order_id']").val() + "", $("textarea[name=void]").val());
         });
 
         $("#acknowledge").on("click", function(e) {

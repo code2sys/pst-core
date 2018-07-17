@@ -224,17 +224,22 @@ class Lightspeedparts extends REST_Controller {
         return $input;
     }
 
-    public function order_get($order_id, $action, $item_id = 0) {
+    public function order_get($order_id, $action = "", $item_id = 0) {
         $this->_sub_order($order_id, $action, $item_id);
     }
 
-    public function order_post($order_id, $action, $item_id = 0) {
+    public function order_post($order_id, $action = "", $item_id = 0) {
         $this->_sub_order($order_id, $action, $item_id);
     }
 
     protected function _sub_order($order_id, $action, $item_id = 0) {
         $action = strtolower($action);
         switch($action) {
+            case "":
+                // this is a void...
+                $this->_sub_order_void($order_id);
+                break;
+
             case "shipment":
                 $this->_sub_order_shipment($order_id);
                 break;
@@ -276,7 +281,7 @@ class Lightspeedparts extends REST_Controller {
         $item = $item[0];
 
         // OK, now, we need to know the action...
-        switch($input["action"]) {
+        switch(strtoupper($input["action"])) {
             case "CANCEL":
                 // I guess this maps to refunded?
                 if ($item->get("status") != "Refunded" && $item->get("status") != "Shipped") {
@@ -338,6 +343,27 @@ class Lightspeedparts extends REST_Controller {
 
         $this->_printSuccess();
     }
+
+
+    protected function _sub_order_void($order_id) {
+        $input = $this->_getCleanInput();
+        global $PSTAPI;
+        $order = $PSTAPI->order()->get($order_id);
+
+        if (is_null($order)) {
+            $this->_printFailure("Invalid ID");
+            exit();
+        }
+
+        if (array_key_exists("action", $input) && strtolower($input["action"]) == "void") {
+            $order->void($input["date"], $input["reason"]);
+            $this->_printSuccess();
+        } else {
+            $this->_printFailure("Unknown Action: " . $input["action"]);
+        }
+
+    }
+
 
     protected function _sub_order_shipment($order_id) {
         // get the input!
