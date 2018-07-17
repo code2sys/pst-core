@@ -224,24 +224,119 @@ class Lightspeedparts extends REST_Controller {
         return $input;
     }
 
-    public function order_get($order_id, $action) {
-        $this->_sub_order($order_id, $action);
+    public function order_get($order_id, $action, $item_id = 0) {
+        $this->_sub_order($order_id, $action, $item_id);
     }
 
-    public function order_post($order_id, $action) {
-        $this->_sub_order($order_id, $action);
+    public function order_post($order_id, $action, $item_id = 0) {
+        $this->_sub_order($order_id, $action, $item_id);
     }
 
-    protected function _sub_order($order_id, $action) {
+    protected function _sub_order($order_id, $action, $item_id = 0) {
         $action = strtolower($action);
         switch($action) {
             case "shipment":
                 $this->_sub_order_shipment($order_id);
                 break;
 
+            case "item":
+                $this->_sub_order_item($order_id, $item_id);
+                break;
+
             default:
                 $this->_printFailure("Unknown action: " . $action);
         }
+    }
+
+    protected function _sub_order_item($order_id, $item_id) {
+        // get the input!
+        $input = $this->_getCleanInput();
+        if (array_key_exists("itemNumber", $input)) {
+            $item_id = $input["itemNumber"];
+        }
+
+        global $PSTAPI;
+        $order = $PSTAPI->order()->get($order_id);
+
+        if (is_null($order)) {
+            $this->_printFailure("Invalid ID");
+            exit();
+        }
+
+        // OK, now, the next thing should be order item...which should belong to this order...
+        $item = $PSTAPI->orderProduct()->fetch(array(
+            "order_id" => $order_id,
+            "lightspeed_partnumber" => $item_id
+        ));
+
+        if (count($item) == 0) {
+            $this->_printFailure("Invalid Item ID");
+            exit();
+        }
+        $item = $item[0];
+
+        // OK, now, we need to know the action...
+        switch($input["action"]) {
+            case "CANCEL":
+                // I guess this maps to refunded?
+                if ($item->get("status") != "Refunded" && $item->get("status") != "Shipped") {
+                    $item->set("status", "Refunded");
+                    $item->save();
+
+                    // If they are all refunded, we have to clear them out...
+                    $items = $PSTAPI->orderProduct()->fetch(array(
+                        "order_id" => $order_id
+                    ));
+
+                    $not_refunded = false;
+                    foreach ($items as $i) {
+                        if ($i->get("status") != "Refunded") {
+                            $not_refunded = true;
+                        }
+                    }
+
+                    if (!$not_refunded) {
+                        $PSTAPI->orderStatus()->add(array(
+                            "order_id" => $order_id,
+                            "status" => "Refunded",
+                            "datetime" => time(),
+                            "notes" => "Lightspeed Item Cancel"
+                        ));
+                    }
+                } else if ($item->get("status") == "Shipped") {
+                    $this->_printFailure("Recorded already as shipped.");
+                    exit();
+                }
+                break;
+
+            case "SELL":
+                // I guess this maps to blank?
+                if ($item->get("status") == "Refunded") {
+                    $this->_printFailure("Item was already marked as refunded.");
+                } else if ($item->get("status") == "Shipped") {
+                    $this->_printFailure("Item was already marked as shipped.");
+                } else if ($item->get("status") == "Back Order") {
+                    // I assume it has been found, so clear it?
+                    $item->set("status", "");
+                    $item->save();
+                }
+                break;
+
+            default:
+                $this->_printFailure("Unrecognized action: " . $item["action"]);
+                exit();
+        }
+
+
+        // record this...
+        $PSTAPI->orderproductlightspeedaction()->add(array(
+            "order_product_id" => $item->id(),
+            "action" => $input["action"],
+            "quantity" => $input["quantity"],
+            "lightspeed_date" => date("Y-m-d H:i:s", strtotime($input["date"]))
+        ));
+
+        $this->_printSuccess();
     }
 
     protected function _sub_order_shipment($order_id) {

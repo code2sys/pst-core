@@ -28,6 +28,11 @@
 
             <button id="shipment">Shipment</button>
 
+            <p><strong>Item Cancel/Sell Record</strong> <textarea name="item_cancel_sell"></textarea></p>
+
+            <button id="cancel_sell">Item Cancel or Sell</button>
+
+
         </form>
 
 
