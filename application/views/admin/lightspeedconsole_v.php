@@ -440,7 +440,7 @@
             })
         };
 
-        $("#acknowledgement").on("click", function(e) {
+        $("#acknowledge").on("click", function(e) {
             e.preventDefault();
             e.stopPropagation();
             submitClick("AcknowledgeRequest", $("textarea[name=acknowledgement]").val());
