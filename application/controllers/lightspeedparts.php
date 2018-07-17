@@ -233,7 +233,31 @@ class Lightspeedparts extends REST_Controller {
     }
 
     protected function _sub_order($order_id, $action) {
-        error_log("Order ID" . $order_id . " Action " . $action);
+        $action = strtolower($action);
+        switch($action) {
+            case "shipment":
+                $this->_sub_order_shipment($order_id);
+                break;
+
+            default:
+                $this->_printFailure("Unknown action: " . $action);
+        }
+    }
+
+    protected function _sub_order_shipment($order_id) {
+        // get the input!
+        $input = $this->_getCleanInput();
+        global $PSTAPI;
+        $order = $PSTAPI->order()->get($order_id);
+
+        if (is_null($order)) {
+            $this->_printFailure("Invalid ID");
+            exit();
+        }
+
+        // OK, we have some information; so we have to stick things on the order itself, and then we have to try to mark products.
+        // We also are going to record this into the lightspeed_shipment table...
+        $order->lightspeedShip($input["date"], $input["shipmentCarrier"], $input["shipmentMethod"], $input["trackingNumber"], $input["items"]);
         $this->_printSuccess();
     }
 }
