@@ -214,7 +214,7 @@ class Lightspeedparts extends REST_Controller {
         error_log("Raw input");
         error_log($input);
         if ($this->_jlb_format == "xml") {
-            $input = simplexml_load_string($input);
+            $input = json_decode(json_encode(simplexml_load_string($input)), true);
         } else {
             $input = json_decode($input, true);
         }
