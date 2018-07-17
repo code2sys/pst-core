@@ -214,10 +214,14 @@ class Lightspeedparts extends REST_Controller {
         error_log("Raw input");
         error_log($input);
         if ($this->_jlb_format == "xml") {
-            return simplexml_load_string($input);
+            $input = simplexml_load_string($input);
         } else {
-            return json_decode($input, true);
+            $input = json_decode($input, true);
         }
+
+        error_log("Structured input: ");
+        error_log(print_r($input, true));
+        return $input;
     }
 
 }
