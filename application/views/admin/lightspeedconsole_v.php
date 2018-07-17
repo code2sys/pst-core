@@ -26,7 +26,7 @@
 
             <p><strong>Shipment Record:</strong> <textarea name="shipment"></textarea></p>
 
-            <button id="shipment"></button>
+            <button id="shipment">Shipment</button>
 
         </form>
 
@@ -452,7 +452,7 @@
         $("#shipment").on("click", function(e) {
             e.preventDefault();
             e.stopPropagation();
-            submitClick("Order/" + $("input[name='order_id']") + "/Shipment", $("textarea[name=shipment]").val());
+            submitClick("Order/" + $("input[name='order_id']").val() + "/Shipment", $("textarea[name=shipment]").val());
         });
 
         $("#acknowledge").on("click", function(e) {
