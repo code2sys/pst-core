@@ -224,4 +224,16 @@ class Lightspeedparts extends REST_Controller {
         return $input;
     }
 
+    public function order_get($order_id, $action) {
+        $this->_sub_order($order_id, $action);
+    }
+
+    public function order_post($order_id, $action) {
+        $this->_sub_order($order_id, $action);
+    }
+
+    protected function _sub_order($order_id, $action) {
+        error_log("Order ID" . $order_id . " Action " . $action);
+        $this->_printSuccess();
+    }
 }

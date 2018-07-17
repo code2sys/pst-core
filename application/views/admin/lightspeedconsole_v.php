@@ -19,6 +19,15 @@
 
             <button id="acknowledge">Acknowledge</button>
 
+            <p><strong>Order ID: </strong> <input name="order_id" /></p>
+
+
+
+
+            <p><strong>Shipment Record:</strong> <textarea name="shipment"></textarea></p>
+
+            <button id="shipment"></button>
+
         </form>
 
 
@@ -439,6 +448,12 @@
                 }
             })
         };
+
+        $("#shipment").on("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            submitClick("Order/" + $("input[name='order_id']") + "/Shipment", $("textarea[name=shipment]").val());
+        });
 
         $("#acknowledge").on("click", function(e) {
             e.preventDefault();
