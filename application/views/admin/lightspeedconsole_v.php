@@ -454,6 +454,12 @@
             })
         };
 
+        $("#cancel_sell").on("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            submitClick("Order/" + $("input[name='order_id']").val() + "/Item", $("textarea[name=item_cancel_sell]").val());
+        });
+
         $("#shipment").on("click", function(e) {
             e.preventDefault();
             e.stopPropagation();
