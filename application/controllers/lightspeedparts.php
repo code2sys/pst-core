@@ -211,6 +211,8 @@ class Lightspeedparts extends REST_Controller {
     {
         $this->_fidgetFormat();
         $input = file_get_contents("php://input");
+        error_log("Raw input");
+        error_log($input);
         if ($this->_jlb_format == "xml") {
             return simplexml_load_string($input);
         } else {
