@@ -160,11 +160,11 @@ class Lightspeedparts extends REST_Controller {
                 $order->toXMLStruct($order_node);
             }
 
-            $cancellations = $xml_data->addChild("cancellations");
+            $cancellation_node = $xml_data->addChild("cancellations");
 
             foreach ($cancellations as $x) {
                 list($date, $comment) = $x->getCancellationDate();
-                $web_order = $cancellations->addChild("webOrderCancellation");
+                $web_order = $cancellation_node->addChild("webOrderCancellation");
                 $web_order->addChild("orderId", htmlspecialchars($x->id()));
                 $web_order->addChild("date", htmlspecialchars($date));
                 $web_order->addChild("comment", htmlspecialchars($comment));
