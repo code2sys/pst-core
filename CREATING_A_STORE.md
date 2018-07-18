@@ -74,6 +74,7 @@ chmod -R g+w .
 Get a dev cert if you need one:
 certbot certonly --webroot --webroot-path=/var/www/stores/hc/html -d hc.powersporttechnologies.com
 
+
 Virtual Host Configuration
 ---------------------------
 

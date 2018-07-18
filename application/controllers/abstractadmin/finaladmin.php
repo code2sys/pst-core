@@ -9,8 +9,8 @@
  *
  */
 
-require_once(__DIR__ . "/individualpageadmin.php");
+require_once(__DIR__ . "/lightspeedconsole.php");
 
-abstract class Finaladmin extends Individualpageadmin {
+abstract class Finaladmin extends Lightspeedconsole {
 
 }
