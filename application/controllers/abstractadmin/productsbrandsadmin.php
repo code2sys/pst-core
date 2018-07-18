@@ -972,7 +972,10 @@ abstract class Productsbrandsadmin extends Customeradmin {
 
         // We need some settings - e.g., we have to have a lightspeed login set, lightspeed has to be enabled, and then we need a little control for the mode when lightspeed parts come in as active or inactive by default....
 
-
+        global $PSTAPI;
+        initializePSTAPI();
+        $this->_mainData['lightspeed_feed_username'] = $PSTAPI->config()->getKeyValue('lightspeed_feed_username', '');
+        $this->_mainData['lightspeed_feed_password'] = $PSTAPI->config()->getKeyValue('lightspeed_feed_password', '');
 
         $this->load->model("Lightspeedsuppliercode_m");
         $this->Lightspeedsuppliercode_m->registerMissingSuppliers();
@@ -996,14 +999,14 @@ abstract class Productsbrandsadmin extends Customeradmin {
         $this->Lightspeed_m->setActiveOnAdd($_REQUEST["lightspeed_active_load"]);
         $this->Lightspeed_m->setUnitCycleTraderDefault($_REQUEST["unitCycleTraderDefault"]);
         $this->Lightspeed_m->setLightSpeedPartPricingRule($_REQUEST["lightSpeedPartPricingRule"]);
+        global $PSTAPI;
+        initializePSTAPI();
 
 
         // JLB 04-19-18
         // We have new settings for the lead generation transfer to CDK
         // Observe that we are transitioning styles in the code to the new object library...
         $cdk_lead_transfer_keys = array("forward_leads_to_cdk", "vsept_dealership_id");
-        global $PSTAPI;
-        initializePSTAPI();
         foreach ($cdk_lead_transfer_keys as $k)  {
             $$k = $val = $_REQUEST[$k];
             $PSTAPI->config()->setKeyValue($k, $val);
