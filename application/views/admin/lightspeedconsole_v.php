@@ -499,7 +499,7 @@
         $("#outstanding").on("click", function(e) {
             e.preventDefault();
             e.stopPropagation();
-            submitClick("AcknowledgeRequest");
+            submitClick("OutstandingActivity");
         });
 
     })();
