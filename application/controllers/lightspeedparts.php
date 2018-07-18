@@ -155,9 +155,9 @@ class Lightspeedparts extends REST_Controller {
             header("Content-Type: text/xml");
             // Build it up...
             $xml_data = new SimpleXMLElement('<?xml version="1.0"?><outstandingActivityResponse></outstandingActivityResponse>');
-            $orders = $xml_data->addChild("orders");
+            $order_node = $xml_data->addChild("orders");
             foreach ($orders as $order) {
-                print $order->toXMLStruct($orders);
+                $order->toXMLStruct($order_node);
             }
 
             $cancellations = $xml_data->addChild("cancellations");
@@ -173,7 +173,7 @@ class Lightspeedparts extends REST_Controller {
             $temp_file = tempnam("/tmp", "xml_output");
             $xml_data->asXML($temp_file);
             print file_get_contents($temp_file);
-            unlink($temp_file);
+            // unlink($temp_file);
 
         }
     }
