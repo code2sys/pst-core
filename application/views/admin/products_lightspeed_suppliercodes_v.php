@@ -50,6 +50,29 @@ $success = $CI->session->flashdata("success");
         <div class="clear"></div>
 
         <?php if ($lightspeed_configured): ?>
+            <h2>Lightspeed Order Feed</h2>
+
+            <div class="tab_content">
+                <p>Lightspeed Order Feed is a service of Lightspeed whereby Lightspeed polls your store periodically to check for orders. Lightspeed will also communicate back to your store with updates as orders are processed through Lightspeed. The API is hosted on your ecommerce store. The following credentials need to be provided to Lightspeed to integrate with this service:</p>
+
+                <div class="hidden_table">
+                    <table>
+                        <tr>
+                            <td><strong>Lightspeed API URL</strong></td>
+                            <td><?php echo site_url('lightspeedparts'); ?></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lightspeed Username</strong></td>
+                            <td><?php echo htmlentities($lightspeed_feed_username); ?></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lightspeed Password</strong></td>
+                            <td><?php echo htmlentities($lightspeed_feed_password); ?></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
             <h2>Settings</h2>
 
 
