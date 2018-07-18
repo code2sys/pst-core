@@ -113,6 +113,71 @@ class Lightspeedparts extends REST_Controller {
         $this->response($data, 200);
     }
 
+    public function outstandingactivity_get() {
+        $this->_subOutstandingActivity();
+    }
+
+    public function outstandingactivity_post() {
+        $this->_subOutstandingActivity();
+    }
+
+    // To match their format, we are going to have to print the XML ourselves...drat.
+    protected function _subOutstandingActivity() {
+        global $PSTAPI;
+        $orders = $PSTAPI->order()->fetch(array(
+            "pending_to_lightspeed" => 1,
+            "ack_pending_by_lightspeed" => 0,
+            "cancel_to_lightspeed" => 0
+        ));
+
+        $cancellations = $PSTAPI->order()->fetch(array(
+            "cancel_to_lightspeed" => 1,
+            "ack_cancel_by_lightspeed" => 0
+        ));
+
+        $format = $this->_jlb_format;
+
+        if ($format == "json") {
+            $this->response(array(
+                "orders" => array_map(function($x) {
+                    return $x->toJSONArray();
+                }, $orders),
+                "cancellations" => array_map(function($x) {
+                    list($date, $comment) = $x->getCancellationDate();
+                    return array(
+                        "orderID" => $x->id(),
+                        "date" => $date,
+                        "comment" => $comment
+                    );
+                }, $cancellations)
+            ), 200);
+        } else {
+            header("Content-Type: text/xml");
+            // Build it up...
+            $xml_data = new SimpleXMLElement('<?xml version="1.0"?><outstandingActivityResponse></outstandingActivityResponse>');
+            $orders = $xml_data->addChild("orders");
+            foreach ($orders as $order) {
+                print $order->toXMLStruct($orders);
+            }
+
+            $cancellations = $xml_data->addChild("cancellations");
+
+            foreach ($cancellations as $x) {
+                list($date, $comment) = $x->getCancellationDate();
+                $web_order = $cancellations->addChild("webOrderCancellation");
+                $web_order->addChild("orderId", htmlspecialchars($x->id()));
+                $web_order->addChild("date", htmlspecialchars($date));
+                $web_order->addChild("comment", htmlspecialchars($comment));
+            }
+
+            $temp_file = tempnam("/tmp", "xml_output");
+            $xml_data->asXML($temp_file);
+            print file_get_contents($temp_file);
+            unlink($temp_file);
+
+        }
+    }
+
     public function taxrules_get() {
         $this->_subtaxrules();
     }
@@ -133,14 +198,12 @@ class Lightspeedparts extends REST_Controller {
 
         $data = array();
         foreach ($taxes as $tax) {
-            if ($tax["tax_value"] > 0) {
-                $node = array(
-                    "taxRuleID" => $tax["id"],
-                    "description" => $tax["country"] . " - " . $tax["state"] . " - " . $tax["mailcode"] . " - " . $tax["id"]
-                );
+            $node = array(
+                "taxRuleID" => $tax["id"],
+                "description" => $tax["country"] . " - " . $tax["state"] . " - " . $tax["mailcode"] . " - " . $tax["id"]
+            );
 
-                $data[] = $node;
-            }
+            $data[] = $node;
         }
 
         if ($format == "json") {

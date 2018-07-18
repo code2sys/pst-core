@@ -13,6 +13,7 @@
 
         <button id="version_discovery_service">Version Discovery Service</button>
         <button id="tax_rules">Pull Tax Rules</button>
+        <button id="outstanding">Pull Outstanding Activities</button>
 
             <p><strong>Item Acknowledgment</strong><textarea name="acknowledgement"></textarea></p>
 
@@ -493,6 +494,12 @@
             e.preventDefault();
             e.stopPropagation();
             submitClick("TaxRules");
+        });
+
+        $("#outstanding").on("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            submitClick("AcknowledgeRequest");
         });
 
     })();
