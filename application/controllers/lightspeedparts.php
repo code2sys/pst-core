@@ -358,7 +358,7 @@ class Lightspeedparts extends REST_Controller {
 
                     $not_refunded = false;
                     foreach ($items as $i) {
-                        if ($i->get("status") != "Refunded") {
+                        if ($i->get("status") != "Refunded" && $i->get("price") >= 0) {
                             $not_refunded = true;
                         }
                     }
