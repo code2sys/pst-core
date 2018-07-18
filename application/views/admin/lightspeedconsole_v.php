@@ -187,7 +187,7 @@
                 if(ar[ix].search(/\/>/) > -1 ) {
                     str = !inComment ? str += shift[deep]+ar[ix] : str += ar[ix];
                 } else
-                // <? xml ... ?> //
+                // < xml ... > //
                 if(ar[ix].search(/<\?/) > -1) {
                     str += shift[deep]+ar[ix];
                 } else
