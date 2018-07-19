@@ -72,7 +72,13 @@ chown -R customer1ftp.customer1ftp .
 chmod -R g+w .
 
 Get a dev cert if you need one:
-certbot certonly --webroot --webroot-path=/var/www/stores/hc/html -d hc.powersporttechnologies.com
+certbot certonly --webroot --webroot-path=/var/www/stores/faultline/html -d faultline.powersporttechnologies.com
+
+Over in portal
+
+add to storedb and 
+
+insert into dealer (name, dbhandle, directorypath, hostname) values ('Faultline', 'faultline_v1', '/var/www/stores/faultline', 'customer1.powersporttechnologies.com');
 
 
 Virtual Host Configuration
