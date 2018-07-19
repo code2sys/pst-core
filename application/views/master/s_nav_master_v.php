@@ -220,6 +220,14 @@ if (isset($keywords) &&	$keywords != "") {
     $template = mustache_tmpl_open("master/s_nav_master_v.html");
 
     mustache_tmpl_set($template, "SUPPORT_PHONE_NUMBER", SUPPORT_PHONE_NUMBER);
+mustache_tmpl_set($template, "street_address", $store_name['street_address']);
+mustache_tmpl_set($template, "address_2", $store_name['address_2']);
+mustache_tmpl_set($template, "city", $store_name['city']);
+mustache_tmpl_set($template, "state", $store_name['state']);
+mustache_tmpl_set($template, "zip", $store_name['zip']);
+mustache_tmpl_set($template, "phone", $store_name['phone']);
+mustache_tmpl_set($template, "email", $store_name['email']);
+mustache_tmpl_set($template, "new_assets_url", $new_assets_url);
 
     if (array_key_exists("userRecord", $_SESSION) && $_SESSION["userRecord"]) {
         mustache_tmpl_set($template, "userRecord_show", true);
