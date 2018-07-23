@@ -2623,7 +2623,7 @@ class Parts_M extends Master_M {
             $row = $get->row();
             $categories = $this->getParentCategores($row->category_id);
 
-            if (!empty($categories) && (isset($categories[TOP_LEVEL_CAT_UTV_PARTS]) || isset($categories[TOP_LEVEL_CAT_STREET_BIKES]) || isset($categories[TOP_LEVEL_CAT_DIRT_BIKES]) || isset($categories[TOP_LEVEL_CAT_ATV_PARTS]) || isset($categories[TOP_LEVEL_CAT_MARINE]))) {
+            if (!empty($categories) && (isset($categories[TOP_LEVEL_CAT_UTV_PARTS]) || isset($categories[TOP_LEVEL_CAT_STREET_BIKES]) || isset($categories[TOP_LEVEL_CAT_DIRT_BIKES]) || isset($categories[TOP_LEVEL_CAT_ATV_PARTS]) || isset($categories[TOP_LEVEL_CAT_MARINE]) || isset($categories[TOP_LEVEL_CAT_VTWIN_PARTS]))) {
                 reset($categories);
                 $first_key = key($categories);
                 $data['navCategories'] = $this->getCategories($first_key);

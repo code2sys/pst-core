@@ -46,6 +46,9 @@ function jonathan_prepareGlobalPrimaryNavigation() {
         $active_primary_navigation[$i]["external_attr"] = $active_primary_navigation[$i]["external"] > 0 ? " target='_blank' " : "";
         $active_primary_navigation[$i]["mobile_label"] = $active_primary_navigation[$i]["mobile_label"] != "" ? $active_primary_navigation[$i]["mobile_label"] : $active_primary_navigation[$i]["label"];
 
+        if ($active_primary_navigation[$i]["category_id"] > 0 && defined('COMPUTE_EXTENDED_NAVIGATION') && COMPUTE_EXTENDED_NAVIGATION) {
+            $active_primary_navigation[$i]["subnavigation"] = $CI->parts_m->getCategories($active_primary_navigation[$i]["category_id"]);
+        }
     }
 
     return $active_primary_navigation;
