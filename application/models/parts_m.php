@@ -595,10 +595,10 @@ class Parts_M extends Master_M {
                         $this->db->where($where);
                         $this->db->from('partcategory');
                         $count = $this->db->count_all_results();
-                        $url = $this->categoryReturnURL($sub['category_id']);
+                        $url = $this->categoryReturnURL($sub['category_id'], $sub['long_name']);
                         $insideArray[$sub['category_id']] = array('name' => $sub['name'] . " (" . $count . ")", 'link' => $url);
                     }
-                    $finalRecords[$rec['category_id']] = array('label' => $rec['name'], 'subcats' => $insideArray);
+                    $finalRecords[$rec['category_id']] = array('label' => $rec['name'], 'subcats' => $insideArray, 'link' => $this->categoryReturnURL($rec['category_id'], $rec['long_name']), 'name' => $rec['name']);
                 } else
                     $finalRecords[$rec['category_id']] = $rec['name'];
             }
@@ -619,16 +619,27 @@ class Parts_M extends Master_M {
         return $record['category_id'];
     }
 
-    public function categoryReturnURL($categoryId) {
-        $returnURL = '/';
-        $this->load->model('parts_m');
-        $categories = $this->parts_m->getParentCategores($categoryId);
-        if (is_array($categories)) {
-            foreach ($categories as $cat)
-                $returnURL .= $this->tag_creating($cat) . '_';
+    public function categoryReturnURL($categoryId, $long_name = '') {
+        if ($long_name != "") {
+            $returnURL = "/";
+            $pieces = explode(">", $long_name);
+            foreach ($pieces as $p) {
+                if ($returnURL != "/") {
+                    $returnURL .= "_";
+                }
+                $returnURL .= $this->tag_creating($p);
+            }
+            return $returnURL;
+        } else {
+            $returnURL = '/';
+            $this->load->model('parts_m');
+            $categories = $this->parts_m->getParentCategores($categoryId);
+            if (is_array($categories)) {
+                foreach ($categories as $cat)
+                    $returnURL .= $this->tag_creating($cat) . '_';
+            }
+            return substr($returnURL, 0, -1);
         }
-        return substr($returnURL, 0, -1);
-        ;
     }
 
     public function tag_creating($url) {
@@ -2623,7 +2634,7 @@ class Parts_M extends Master_M {
             $row = $get->row();
             $categories = $this->getParentCategores($row->category_id);
 
-            if (!empty($categories) && (isset($categories[TOP_LEVEL_CAT_UTV_PARTS]) || isset($categories[TOP_LEVEL_CAT_STREET_BIKES]) || isset($categories[TOP_LEVEL_CAT_DIRT_BIKES]) || isset($categories[TOP_LEVEL_CAT_ATV_PARTS]) || isset($categories[TOP_LEVEL_CAT_MARINE]))) {
+            if (!empty($categories) && (isset($categories[TOP_LEVEL_CAT_UTV_PARTS]) || isset($categories[TOP_LEVEL_CAT_STREET_BIKES]) || isset($categories[TOP_LEVEL_CAT_DIRT_BIKES]) || isset($categories[TOP_LEVEL_CAT_ATV_PARTS]) || isset($categories[TOP_LEVEL_CAT_MARINE]) || isset($categories[TOP_LEVEL_CAT_VTWIN_PARTS]))) {
                 reset($categories);
                 $first_key = key($categories);
                 $data['navCategories'] = $this->getCategories($first_key);
