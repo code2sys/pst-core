@@ -55,7 +55,6 @@ function jonathan_prepareGlobalPrimaryNavigation() {
                     }
                 }
             }
-            error_log(print_r($active_primary_navigation[$i]["subnavigation"], true));
         }
     }
 
