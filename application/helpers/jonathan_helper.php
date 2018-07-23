@@ -48,6 +48,9 @@ function jonathan_prepareGlobalPrimaryNavigation() {
 
         if ($active_primary_navigation[$i]["category_id"] > 0 && defined('COMPUTE_EXTENDED_NAVIGATION') && COMPUTE_EXTENDED_NAVIGATION) {
             $active_primary_navigation[$i]["subnavigation"] = $CI->parts_m->getCategories($active_primary_navigation[$i]["category_id"]);
+            if (array_key_exists("subcats", $active_primary_navigation[$i])) {
+                $active_primary_navigation[$i]["subcats"] = array_values($active_primary_navigation[$i]["subcats"]);
+            }
             error_log(print_r($active_primary_navigation[$i]["subnavigation"], true));
         }
     }
