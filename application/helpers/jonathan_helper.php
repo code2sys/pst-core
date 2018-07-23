@@ -47,6 +47,7 @@ function jonathan_prepareGlobalPrimaryNavigation() {
         $active_primary_navigation[$i]["mobile_label"] = $active_primary_navigation[$i]["mobile_label"] != "" ? $active_primary_navigation[$i]["mobile_label"] : $active_primary_navigation[$i]["label"];
 
         if ($active_primary_navigation[$i]["category_id"] > 0 && defined('COMPUTE_EXTENDED_NAVIGATION') && COMPUTE_EXTENDED_NAVIGATION) {
+            $CI->load->model("parts_m");
             $active_primary_navigation[$i]["subnavigation"] = array_values($CI->parts_m->getCategories($active_primary_navigation[$i]["category_id"]));
             if (count($active_primary_navigation[$i]["subnavigation"]) > 0) {
                 for ($j = 0; $j < count($active_primary_navigation[$i]["subnavigation"]); $j++) {
