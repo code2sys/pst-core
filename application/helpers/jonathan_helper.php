@@ -48,6 +48,7 @@ function jonathan_prepareGlobalPrimaryNavigation() {
 
         if ($active_primary_navigation[$i]["category_id"] > 0 && defined('COMPUTE_EXTENDED_NAVIGATION') && COMPUTE_EXTENDED_NAVIGATION) {
             $active_primary_navigation[$i]["subnavigation"] = $CI->parts_m->getCategories($active_primary_navigation[$i]["category_id"]);
+            error_log(print_r($active_primary_navigation[$i]["subnavigation"], true));
         }
     }
 
