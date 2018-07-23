@@ -46,6 +46,17 @@ function jonathan_prepareGlobalPrimaryNavigation() {
         $active_primary_navigation[$i]["external_attr"] = $active_primary_navigation[$i]["external"] > 0 ? " target='_blank' " : "";
         $active_primary_navigation[$i]["mobile_label"] = $active_primary_navigation[$i]["mobile_label"] != "" ? $active_primary_navigation[$i]["mobile_label"] : $active_primary_navigation[$i]["label"];
 
+        if ($active_primary_navigation[$i]["category_id"] > 0 && defined('COMPUTE_EXTENDED_NAVIGATION') && COMPUTE_EXTENDED_NAVIGATION) {
+            $active_primary_navigation[$i]["subnavigation"] = array_values($CI->parts_m->getCategories($active_primary_navigation[$i]["category_id"]));
+            if (count($active_primary_navigation[$i]["subnavigation"]) > 0) {
+                for ($j = 0; $j < count($active_primary_navigation[$i]["subnavigation"]); $j++) {
+                    if (array_key_exists("subcats", $active_primary_navigation[$i]["subnavigation"][$j])) {
+                        $active_primary_navigation[$i]["subnavigation"][$j]["subcats"] = array_values($active_primary_navigation[$i]["subnavigation"][$j]["subcats"]);
+                    }
+                }
+            }
+            error_log(print_r($active_primary_navigation[$i]["subnavigation"], true));
+        }
     }
 
     return $active_primary_navigation;
