@@ -5,7 +5,7 @@
             {{#nav_categories}}
             <li class="bnz-nv"><a class="topNavAnchors" onclick="removeHeaderSearch();" href="{{#subnav}}javascript:;{{/subnav}}{{^subnav}}{{base_url}}shopping/productlist{{link}}" id="{{county}}" onClick="{{#subnav}}showSubNav({{county}});{{/subnav}}">{{name}}</a>
                 {{#separator}}<span>|</span>{{/separator}}
-                {{subnav}}
+                {{#subnav}}
                 <ul id="nav{{county}}" class="active SubNavs" style="display:none;">
                     <span class="toolTip"></span>
                     {{#subcats}}
