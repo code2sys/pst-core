@@ -2201,7 +2201,8 @@ class Parts_M extends Master_M {
         }
         //echo $filterArr['search'][0];
         if (isset($filterArr['search'][0]) && $filterArr['search'][0] != '') {
-            $this->db->order_by('srch');
+            // $this->db->order_by('srch');
+            $this->db->order_by('part.part_id desc');
         } else {
             //$this->db->order_by('label', 'random');
             $this->db->order_by('ordering');
