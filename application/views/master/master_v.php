@@ -261,37 +261,11 @@ if (isset($keywords) && $keywords != "") {
                     <div class="clear"></div>
     <?php } else { ?>
                     <div class="clear"></div>
-                    <div class="productNav" style="margin-top: 2px;">
-                        <div class="productNavCont">
-                            <ul style="width: 100%; margin: 0 auto; padding: 0px;">
-        <?php
-        if (!empty($nav_categories)) {
-            $county = 1;
-            foreach ($nav_categories as $keyy => $navRow) {
-                ?>
-                                        <li class="bnz-nv"><a class="topNavAnchors" onclick="removeHeaderSearch();" href="javascript:;" id="<?php echo $county; ?>" onClick="showSubNav(<?php echo $county; ?>);"><?php echo $navRow['label']; ?></a>
-                                        <?php if ($county < count($nav_categories)) { ?>
-                                                <span>|</span>
-                                        <?php } ?>
-                                            <?php if (!empty($navRow['subcats'])) { ?>
-
-                                                <ul id="nav<?php echo $county; ?>" class="active SubNavs" style="display:none;">
-                                                    <span class="toolTip"></span>
-                                                <?php foreach ($navRow['subcats'] as $subNavRow) { ?>
-                                                        <li><a onclick="removeHeaderSearch();" href="<?php echo base_url() . "shopping/productlist" . $subNavRow['link']; ?>"><?php echo $subNavRow['name']; ?></a></li>
-                    <?php } ?>
-                                                </ul>
-                                                    <?php } ?>
-                                        </li>
-                                                <?php
-                                                $county++;
-                                            }
-                                        }
-                                        ?>
-
-                            </ul>
-                        </div>
-                    </div>
+                    <?php
+                    echo $CI->load->view("master/widgets/nav_categories", array(
+                            "nav_categories" => $nav_categories
+                    ), true);
+                    ?>
 
     <?php } ?>
 
