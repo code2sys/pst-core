@@ -49,7 +49,7 @@ function jonathan_prepareGlobalPrimaryNavigation() {
         if ($active_primary_navigation[$i]["category_id"] > 0 && defined('COMPUTE_EXTENDED_NAVIGATION') && COMPUTE_EXTENDED_NAVIGATION) {
             $CI->load->model("parts_m");
             $active_primary_navigation[$i]["subnavigation"] = array_values($CI->parts_m->getCategories($active_primary_navigation[$i]["category_id"]));
-            $active_primary_navigation[$i]["subnav_rendered"] = $CI->load->view("nav_categories", array(
+            $active_primary_navigation[$i]["subnav_rendered"] = $CI->load->view("master/widgets/nav_categories", array(
                 "nav_categories" => $active_primary_navigation[$i]["subnav_rendered"]
             ), true);
             if (count($active_primary_navigation[$i]["subnavigation"]) > 0) {
