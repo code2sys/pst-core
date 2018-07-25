@@ -1,0 +1,19 @@
+<div class="productNav" style="margin-top: 2px;">
+    <div class="productNavCont">
+        <ul style="width: 100%; margin: 0 auto; padding: 0px;">
+            {{#nav_categories}}
+            <li class="bnz-nv"><a class="topNavAnchors" onclick="removeHeaderSearch();" href="{{#subnav}}javascript:;{{/subnav}}{{^subnav}}{{base_url}}shopping/productlist{{link}}" id="{{county}}" onClick="{{#subnav}}showSubNav({{county}});{{/subnav}}">{{name}}</a>
+                {{#separator}}<span>|</span>{{/separator}}
+                {{subnav}}
+                <ul id="nav{{county}}" class="active SubNavs" style="display:none;">
+                    <span class="toolTip"></span>
+                    {{#subcats}}
+                    <li><a onclick="removeHeaderSearch();" href="{{base_url}}shopping/productlist{{link}}">{{name}}</a></li>
+                    {{/subcats}}
+                </ul>
+                {{/subnav}}
+            </li>
+            {{/nav_categories}}
+        </ul>
+    </div>
+</div>
