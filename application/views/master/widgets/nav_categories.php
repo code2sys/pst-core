@@ -15,7 +15,8 @@ if (isset($nav_categories) && is_array($nav_categories) && !empty($nav_categorie
         if ($exclude_subnav) {
             $navRow["subnav"] = false;
         } else {
-            $navRow["subnav"] = array_values($navRow["subnav"]);
+            $navRow["subcats"] = array_values($navRow["subcats"]);
+            $navRow["subnav"] = count($navRow["subcats"]) > 0;
         }
         $navRow["separator"] = $county < count($nav_categories);
         mustache_tmpl_set($template, "nav_categories", $navRow);
