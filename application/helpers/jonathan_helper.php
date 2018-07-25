@@ -52,6 +52,7 @@ function jonathan_prepareGlobalPrimaryNavigation() {
             $active_primary_navigation[$i]["subnav_rendered"] = $CI->load->view("master/widgets/nav_categories", array(
                 "nav_categories" => $active_primary_navigation[$i]["subnav_rendered"]
             ), true);
+            error_log($active_primary_navigation[$i]["subnav_rendered"]);
             if (count($active_primary_navigation[$i]["subnavigation"]) > 0) {
                 for ($j = 0; $j < count($active_primary_navigation[$i]["subnavigation"]); $j++) {
                     if (array_key_exists("subcats", $active_primary_navigation[$i]["subnavigation"][$j])) {
