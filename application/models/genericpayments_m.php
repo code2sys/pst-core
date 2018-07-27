@@ -35,6 +35,7 @@ class Genericpayments_m extends CI_Model {
     public function init($store_name) {
         error_log("Init: " );
         error_log(print_r($store_name, true));
+        error_log("Merchant type for init: " . $store_name["merchant_type"]);
         switch($store_name["merchant_type"]) {
             case "Stripe":
                 $this->init_stripe($store_name);
