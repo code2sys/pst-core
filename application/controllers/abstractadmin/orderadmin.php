@@ -325,6 +325,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
     }
 
     public function order_edit_bounce($order_id, $timestamp) {
+        $this->session->set_flashdata("error", $this->session->flashdata("error"));
         header("Location: " . site_url("admin/order_edit/$order_id"));
     }
 
