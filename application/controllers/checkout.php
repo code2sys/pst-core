@@ -858,7 +858,7 @@ var sa_products = { '.$rating.' };
 			} elseif( $this->genericpayments_m->isSuccess($result)) {
 			    $transaction = $this->genericpayments_m->getTransactionID($result);
 				$this->load->model('admin_m');
-                $transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction->id, 'transaction_date' => time(), "processor" => $store_name["merchant_type"]);
+                $transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction, 'transaction_date' => time(), "processor" => $store_name["merchant_type"]);
                 $transaction['amount'] = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'],2);
                 $this->admin_m->addOrderTransaction($transaction);
                                 
@@ -936,7 +936,7 @@ var sa_products = { '.$rating.' };
 			} elseif( $this->genericpayments_m->sale($result)) {
                 $transaction = $this->genericpayments_m->getTransactionID($result);
 				$this->load->model('admin_m');
-				$transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction->id, 'transaction_date' => time(), "processor" => $store_name["merchant_type"]);
+				$transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction, 'transaction_date' => time(), "processor" => $store_name["merchant_type"]);
 				// JLB 08-13-17 WTF? Why would you format this thing into a number_format to shove it into a database decimal column unless you were wanting it to break above $999.
 				//$transaction['amount'] = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'],2);
 				$transaction['amount'] = $_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'];

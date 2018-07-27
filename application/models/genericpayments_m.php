@@ -167,7 +167,6 @@ class Genericpayments_m extends CI_Model {
     }
 
     protected function getTransactionID_stripe(&$sale_result) {
-        error_log(print_r($sale_result, true));
         return $sale_result->id; // https://stripe.com/docs/api#retrieve_charge
     }
 
