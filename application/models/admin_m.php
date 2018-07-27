@@ -3003,6 +3003,7 @@ class Admin_M extends Master_M {
     }
 
     public function updateOrderPaymentByAdmin($orderId, $order) {
+
         $data = array('order_id' => $orderId, 'amount' => $order['sales_price'], 'braintree_transaction_id' => $order['braintree_transaction_id'], 'transaction_date' => time());
         //$where = array('id' => $orderId);
         $this->createRecord('order_transaction', $data, FALSE);

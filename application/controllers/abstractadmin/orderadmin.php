@@ -340,8 +340,10 @@ abstract class Orderadmin extends Productsbrandsadmin {
             $success = $this->_doRefund($id, $_REQUEST['transaction_id'], floatVal($_REQUEST['refund_amount']),$error, $result_transaction_id, $processor);
 
             if ($success) {
-                $arr = array('braintree_transaction_id' => $result_transaction_id, 'sales_price' => '-'.$_REQUEST['refund_amount'], "processor" => $processor);
-                $this->admin_m->updateOrderPaymentByAdmin( $id, $arr );
+                $arr = array('braintree_transaction_id' => $result_transaction_id, 'amount' => '-'.$_REQUEST['refund_amount'], "processor" => $processor, "transaction_date" => time(), "order_id" => $id);
+                global $PSTAPI;
+                initializePSTAPI();
+                $PSTAPI->ordertransaction()->add($arr);
                 $this->session->set_flashdata('success', 'Refunded successfully.');
             } else {
                 $this->session->set_flashdata('error',$error);
