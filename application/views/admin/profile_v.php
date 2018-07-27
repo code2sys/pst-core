@@ -458,7 +458,40 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 
                         </script>
 
-						<tr>
+                        <tr>
+                            <td style="width:30%;"><b>Payment Processor:</b></td>
+                            <td><label><input type="radio" name='merchant_type' value="Braintree" <?php if($address['merchant_type']=="Braintree") echo 'checked="checked"'; ?> />Braintree</label>
+                                <label><input type="radio" name='merchant_type' value="Stripe" <?php if($address['merchant_type']=="Stripe") echo 'checked="checked"'; ?> /> Stripe</label>
+                            </td>
+                        </tr>
+
+						<tr class="Stripe_ProcessorSettings ProcessorSettings">
+							<td colspan="2">
+								<table width="100%" style="background-color:white;">
+									<tr>
+										<td colspan="2">
+											<img src="https://stripe.com/img/about/logos/logos/blue.png" style="width: 233px; height: auto;" alt="Stripe" />
+										</td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>Stripe Publishable API Key:</b></td>
+										<td><?php echo form_input(array('name' => 'stripe_api_key',
+										  'value' => @$address['stripe_api_key'],
+										  'class' => 'text large',
+										  'placeholder' => 'Stripe Publishable API Key')); ?></td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>Stripe Secret API Key:</b></td>
+										<td><?php echo form_input(array('name' => 'stripe_secret_api_key',
+										  'value' => @$address['stripe_secret_api_key'],
+										  'class' => 'text large',
+										  'placeholder' => 'Stripe Secret API Key')); ?></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+
+                        <tr class="Braintree_ProcessorSettings ProcessorSettings">
 							<td colspan="2">
 								<table width="100%" style="background-color:white;">
 									<tr>
@@ -468,35 +501,49 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 									</tr>
 									<tr>
 										<td style="width:30%;"><b>Merchant ID:</b></td>
-										<td><?php echo form_input(array('name' => 'merchant_id', 
-										  'value' => @$address['merchant_id'], 
+										<td><?php echo form_input(array('name' => 'merchant_id',
+										  'value' => @$address['merchant_id'],
 										  'class' => 'text large',
 										  'placeholder' => 'Merchant ID')); ?></td>
 									</tr>
 									<tr>
 										<td style="width:30%;"><b>Public Key:</b></td>
-										<td><?php echo form_input(array('name' => 'public_key', 
-										  'value' => @$address['public_key'], 
+										<td><?php echo form_input(array('name' => 'public_key',
+										  'value' => @$address['public_key'],
 										  'class' => 'text large',
 										  'placeholder' => 'Public Key')); ?></td>
 									</tr>
 									<tr>
 										<td style="width:30%;"><b>Private Key:</b></td>
-										<td><?php echo form_input(array('name' => 'private_key', 
-										  'value' => @$address['private_key'], 
+										<td><?php echo form_input(array('name' => 'private_key',
+										  'value' => @$address['private_key'],
 										  'class' => 'text large',
 										  'placeholder' => 'Private Key')); ?></td>
 									</tr>
 									<tr>
 										<td style="width:30%;"><b>Environment:</b></td>
-										<td><?php echo form_input(array('name' => 'environment', 
-										  'value' => @$address['environment'], 
+										<td><?php echo form_input(array('name' => 'environment',
+										  'value' => @$address['environment'],
 										  'class' => 'text large',
 										  'placeholder' => 'Environment')); ?></td>
 									</tr>
 								</table>
 							</td>
 						</tr>
+
+                        <script type="application/javascript">
+                            (function() {
+                                var merchant_typeFN = function() {
+                                    $(".ProcessorSettings").hide();
+                                    var val = $("input[name='merchant_type']:checked").val();
+                                    if (val && val != "") {
+                                        $("." + val + "_ProcessorSettings").show();
+                                    }
+                                };
+                                $("input[name='merchant_type']").on("click", merchant_typeFN);
+                                merchant_typeFN();
+                            })();
+                        </script>
 
 						<tr>
 							<td colspan="2">
