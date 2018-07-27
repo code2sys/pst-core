@@ -844,62 +844,27 @@ var sa_products = { '.$rating.' };
 			$total = str_replace(',','', $total);
 			// include('lib/Braintree.php');
 			$this->load->model('admin_m');
+			$this->load->model("genericpayments_m");
 			$store_name = $this->admin_m->getAdminShippingProfile();
-			Braintree_Configuration::environment($store_name['environment']);
-			Braintree_Configuration::merchantId($store_name['merchant_id']);
-			Braintree_Configuration::publicKey($store_name['public_key']);
-			Braintree_Configuration::privateKey($store_name['private_key']);
-			$result = Braintree_Transaction::sale(['amount' => $total,
-												   'paymentMethodNonce' => $_POST["payment_method_nonce"],
-												   'options' => ['submitForSettlement' => True  ],
-												   'deviceData' => $_POST['device_data'],
-												   'customer' => [
-														'firstName' => $_SESSION['contactInfo']['first_name'],
-														'lastName' => $_SESSION['contactInfo']['last_name'],
-														'company' => $_SESSION['contactInfo']['company'],
-														'phone' => $_SESSION['contactInfo']['phone'],
-														'email' => $_SESSION['contactInfo']['email']
-													  ],
-													'billing' => [
-														'firstName' => $_SESSION['contactInfo']['first_name'],
-														'lastName' => $_SESSION['contactInfo']['last_name'],
-														'company' => $_SESSION['contactInfo']['company'],
-														'streetAddress' => $_SESSION['contactInfo']['street_address'],
-														'extendedAddress' => $_SESSION['contactInfo']['address_2'],
-														'locality' => $_SESSION['contactInfo']['state_shipping'],
-														'postalCode' => $_SESSION['contactInfo']['zip']
-													],
-													'shipping' => [
-														'firstName' => $_SESSION['shippingInfo']['first_name'],
-														'lastName' => $_SESSION['shippingInfo']['last_name'],
-														'company' => $_SESSION['shippingInfo']['company'],
-														'streetAddress' => $_SESSION['shippingInfo']['street_address'],
-														'extendedAddress' => $_SESSION['shippingInfo']['address_2'],
-														'locality' => $_SESSION['contactInfo']['state_shipping'],
-														'postalCode' => $_SESSION['shippingInfo']['zip']
-													],
-												   'channel' => 'MxConnectionLLC_SP_PayPalEC_BT']
-												  );
+			$this->genericpayments_m->init($store_name);
+            $result = $this->genericpayments_m->sale($total);
+
 
 			if($total <= 0)
 			{
 				$this->_mainData['processingError'] = "We apologize but we are experiencing Technical difficulties with this order.  Please call us at 1-844-2Go-Moto for assistance.";
 				$this->load->model('order_m');
 				$this->order_m->updateStatus($_SESSION['newOrderNum'], 'Declined', 'Zero Balance at Payment Submit!');
-			} elseif( @$result->success ) {
-                                $transaction = $result->transaction;
-                                //$arr = array('braintree_transaction_id' => $transaction->id);
-                                
+			} elseif( $this->genericpayments_m->sale($result)) {
+			    $transaction = $this->genericpayments_m->getTransactionID($result);
 				$this->load->model('admin_m');
-				//$this->admin_m->updateOrderPaymentByAdmin( $_SESSION['newOrderNum'], $arr );
-                                
-                                $transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction->id, 'transaction_date' => time());
-                                $transaction['amount'] = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'],2);
-                                $this->admin_m->addOrderTransaction($transaction);
+                $transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction->id, 'transaction_date' => time(), "processor" => $store_name["merchant_type"]);
+                $transaction['amount'] = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'],2);
+                $this->admin_m->addOrderTransaction($transaction);
                                 
 				$this->completeOrder(@$user_id);
 			} else {
-				$this->_mainData['processingError'] = "Your payment has failed to process.  " .@$response ."<br />Please check your billing information and card and try again.";
+				$this->_mainData['processingError'] = "Your payment has failed to process.  " . $this->genericpayments_m->getErrorMessage($result) ."<br />Please check your billing information and card and try again.";
 				$this->load->model('order_m');
 				$this->order_m->updateStatus($_SESSION['newOrderNum'], 'Declined', "Payment Not Verified!");
 			}
@@ -923,7 +888,11 @@ var sa_products = { '.$rating.' };
 
 	}
 	
-	
+	// JLB 07-27-18
+    // Let me just give this a giant WHAT THE FUCK
+    // Why are there two of these functions, almost identical, back-to-back?
+    // I am trying to ram in Stripe, and this is the BS I encounter.
+    // As far as I can tell, this one doesn't include the address...and I do not know why.
 	public function new_payment($failedCCPayment = NULL)
 	{
 		$user_id = $guest_user_id = @$_SESSION['guestUser']['id'];
@@ -948,27 +917,22 @@ var sa_products = { '.$rating.' };
 			
 			$total = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'], 2);
 			$this->load->model('admin_m');
+            $this->load->model("genericpayments_m");
 			$store_name = $this->admin_m->getAdminShippingProfile();
 			//include('lib/Braintree.php');
-			Braintree_Configuration::environment($store_name['environment']);
-			Braintree_Configuration::merchantId($store_name['merchant_id']);
-			Braintree_Configuration::publicKey($store_name['public_key']);
-			Braintree_Configuration::privateKey($store_name['private_key']);
-			$result = Braintree_Transaction::sale(['amount' => $total,
-												   'paymentMethodNonce' => $_SESSION["paypal_nonce"],
-												   'options' => ['submitForSettlement' => True  ],
-												   'channel' => 'MxConnectionLLC_SP_PayPalEC_BT']
-												  );
+            $this->genericpayments_m->init($store_name);
+            $result = $this->genericpayments_m->sale($total);
+
 
 			if($total <= 0)
 			{
 				$this->_mainData['processingError'] = "We apologize but we are experiencing Technical difficulties with this order.  Please call us at 1-844-2Go-Moto for assistance.";
 				$this->load->model('order_m');
 				$this->order_m->updateStatus($_SESSION['newOrderNum'], 'Declined', 'Zero Balance at Payment Submit!');
-			} elseif( @$result->success ) {
-                $transaction = $result->transaction;
+			} elseif( $this->genericpayments_m->sale($result)) {
+                $transaction = $this->genericpayments_m->getTransactionID($result);
 				$this->load->model('admin_m');
-				$transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction->id, 'transaction_date' => time());
+				$transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction->id, 'transaction_date' => time(), "processor" => $store_name["merchant_type"]);
 				// JLB 08-13-17 WTF? Why would you format this thing into a number_format to shove it into a database decimal column unless you were wanting it to break above $999.
 				//$transaction['amount'] = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'],2);
 				$transaction['amount'] = $_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'];
@@ -978,7 +942,7 @@ var sa_products = { '.$rating.' };
 				// echo '<pre>';
 				// print_r($result);
 				// echo '</pre>';exit;
-				$this->_mainData['processingError'] = "Your payment has failed to process.  " .@$response ."<br />Please check your billing information and card and try again.";
+				$this->_mainData['processingError'] = "Your payment has failed to process.  " . $this->genericpayments_m->getErrorMessage($result) ."<br />Please check your billing information and card and try again.";
 				$this->load->model('order_m');
 				$this->order_m->updateStatus($_SESSION['newOrderNum'], 'Declined', "Payment Not Verified!");
 			}

@@ -179,7 +179,10 @@ class Shopping extends Master_Controller {
         $this->_mainData['rideSelector'] = $this->load->view('widgets/ride_select_v', $this->_mainData, TRUE);
         $this->_mainData['new_header'] = 1;
         $this->_mainData['cart'] = 1;
-		
+
+        // Now, tell me, is this PayPal? It is only PayPal if this is Braintree
+
+
         $this->setNav('master/navigation_v', 2);
         $this->setFooterView('master/footer_v.php');
         $this->renderMasterPage('master/master_v', 'account/cart_v_new', $this->_mainData);

@@ -16,6 +16,10 @@ class Braintree_lib{
             $CI =& get_instance();
             $store_name = $CI->admin_m->getAdminShippingProfile();
 
+            if ($store_name["merchant_type"] != "Braintree") {
+                return ""; // This is not enabled...Don't try.
+            }
+
             Braintree_Configuration::environment($store_name['environment']);
             Braintree_Configuration::merchantId($store_name['merchant_id']);
             Braintree_Configuration::publicKey($store_name['public_key']);
