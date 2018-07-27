@@ -102,7 +102,7 @@ class Genericpayments_m extends CI_Model {
             ];
 
             if (array_key_exists("shippingInfo", $_SESSION) && array_key_exists("first_name", $_SESSION["shippingInfo"]) && $_SESSION["shippingInfo"]["first_name"] != "") {
-                $data["shipping"][] = [
+                $data["shipping"] = [
                     'firstName' => $_SESSION['shippingInfo']['first_name'],
                     'lastName' => $_SESSION['shippingInfo']['last_name'],
                     'company' => $_SESSION['shippingInfo']['company'],
@@ -113,8 +113,6 @@ class Genericpayments_m extends CI_Model {
                 ];
             }
         }
-
-        error_log(print_r($data, true));
 
         return Braintree_Transaction::sale($data);
     }

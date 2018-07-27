@@ -850,9 +850,6 @@ var sa_products = { '.$rating.' };
             $result = $this->genericpayments_m->sale($total);
 
 
-            print_r($result); exit();
-
-
 			if($total <= 0)
 			{
 				$this->_mainData['processingError'] = "We apologize but we are experiencing Technical difficulties with this order.  Please call us at 1-844-2Go-Moto for assistance.";
