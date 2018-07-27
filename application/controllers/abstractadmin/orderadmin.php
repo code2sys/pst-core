@@ -409,7 +409,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
                 $this->order_m->addProductToOrder($part['partnumber'], $id, $qty, $part['part_id']);
             } else {
                 if(!$this->order_m->checkPartNumber($newPartNumber, $qty, $id)) {
-                    $this->session->set_flashdata('error',"Product Not Found. ($newPartNumber;$id)");
+                    $this->session->set_flashdata('error',"Product Not Found.");
                 }
             }
 
