@@ -78,7 +78,7 @@ class Genericpayments_m extends CI_Model {
     protected function sale_braintree($total, $short = false) {
         $data = [
             'amount' => $total,
-            'paymentMethodNonce' => $_POST["payment_method_nonce"],
+            'paymentMethodNonce' => (array_key_exists("payment_method_nonce", $_POST) && $_POST["payment_method_nonce"] != "") ? $_POST["payment_method_nonce"] : (array_key_exists("paypal_nonce", $_SESSION) ? $_SESSION["paypal_nonce"] : ""),
             'options' => ['submitForSettlement' => True  ],
             'deviceData' => $_POST['device_data'],
             'channel' => 'MxConnectionLLC_SP_PayPalEC_BT'
