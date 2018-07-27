@@ -1,6 +1,14 @@
 <?php
 //require_once( echo site_url()  . 'lib/Braintree.php');
 require(__DIR__ . "/../braintree_clienttoken.php");
+
+/*
+ * Just an FYI - I think whoever did this thing with Braintree is the biggest fucking hack.
+ * So, there's the PayPal button, which appears on the cart, which appears to cut off everything..or does it?
+ * It sure looks like it just bypasses most everything in a PARALLEL execution of the checkout process.
+ *
+ */
+
 ?>
 <!-- CONTENT WRAP =========================================================================-->
 	<div class="content_wrap">
@@ -91,7 +99,8 @@ require(__DIR__ . "/../braintree_clienttoken.php");
 			$new_assets_url1 = jsite_url("/qatesting/benz_assets/");
 			?>
 			<!-- END CART WRAP -->
-			
+
+            <?php if (isset($clientToken) && $clientToken != ""): ?>
 			<script src="https://www.paypalobjects.com/api/button.js?"
 			  data-merchant="braintree"
 			  data-id="paypal-button"
@@ -104,6 +113,7 @@ require(__DIR__ . "/../braintree_clienttoken.php");
 			  data-id="paypal-credit-button"
 			  data-button="credit"
 			></script>
+            <?php endif; ?>
 			
 			<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/custom-widget-pst.com.css" />
 
@@ -119,7 +129,8 @@ require(__DIR__ . "/../braintree_clienttoken.php");
     <form id="checkout" class="form-horizontal" method="post" action="/checkout/paypalpayment">
       <div id="payment-form"></div>
     </form>
-   
+
+<?php if (isset($clientToken) && $clientToken != ""): ?>
 <script src="https://js.braintreegateway.com/web/3.6.3/js/paypal.min.js"></script>
 <script>
   var ppButton = document.getElementById('paypal-button');
@@ -135,7 +146,7 @@ require(__DIR__ . "/../braintree_clienttoken.php");
 	  ppButton.addEventListener('click', function () {
 		paypalInstance.tokenize({
 		  flow: 'checkout',
-		  amount: 10.00,
+		  amount: <?php echo $total; ?>,
 		  currency: 'USD',
 		  enableShippingAddress: true,
 		}, function (err, payload) {
@@ -168,7 +179,7 @@ require(__DIR__ . "/../braintree_clienttoken.php");
 	  ppCreditButton.addEventListener('click', function () {
 		paypalInstance.tokenize({
 		  flow: 'checkout',
-		  amount: 10.00,
+		  amount: <?php echo $total; ?>,
 		  currency: 'USD',
 		  offerCredit: true, // Use PayPal Credit
 		  enableShippingAddress: true,
@@ -197,7 +208,7 @@ require(__DIR__ . "/../braintree_clienttoken.php");
 	});
 });
 </script>
-
+<?php endif; ?>
 
    
 <script>
