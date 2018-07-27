@@ -855,7 +855,7 @@ var sa_products = { '.$rating.' };
 				$this->_mainData['processingError'] = "We apologize but we are experiencing Technical difficulties with this order.  Please call us at 1-844-2Go-Moto for assistance.";
 				$this->load->model('order_m');
 				$this->order_m->updateStatus($_SESSION['newOrderNum'], 'Declined', 'Zero Balance at Payment Submit!');
-			} elseif( $this->genericpayments_m->sale($result)) {
+			} elseif( $this->genericpayments_m->isSuccess($result)) {
 			    $transaction = $this->genericpayments_m->getTransactionID($result);
 				$this->load->model('admin_m');
                 $transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction->id, 'transaction_date' => time(), "processor" => $store_name["merchant_type"]);
