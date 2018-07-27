@@ -474,11 +474,18 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 										</td>
 									</tr>
 									<tr>
-										<td style="width:30%;"><b>Stripe API Key:</b></td>
+										<td style="width:30%;"><b>Stripe Publishable API Key:</b></td>
 										<td><?php echo form_input(array('name' => 'stripe_api_key',
 										  'value' => @$address['stripe_api_key'],
 										  'class' => 'text large',
-										  'placeholder' => 'Stripe API Key')); ?></td>
+										  'placeholder' => 'Stripe Publishable API Key')); ?></td>
+									</tr>
+									<tr>
+										<td style="width:30%;"><b>Stripe Secret API Key:</b></td>
+										<td><?php echo form_input(array('name' => 'stripe_secret_api_key',
+										  'value' => @$address['stripe_secret_api_key'],
+										  'class' => 'text large',
+										  'placeholder' => 'Stripe Secret API Key')); ?></td>
 									</tr>
 								</table>
 							</td>

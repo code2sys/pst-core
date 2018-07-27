@@ -58,7 +58,7 @@ class Genericpayments_m extends CI_Model {
     }
 
     protected function init_stripe($store_name) {
-        \Stripe\Stripe::setApiKey($store_name["stripe_api_key"]);
+        \Stripe\Stripe::setApiKey($store_name["stripe_secret_api_key"]);
 
     }
 
