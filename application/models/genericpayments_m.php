@@ -167,7 +167,7 @@ class Genericpayments_m extends CI_Model {
         $result = Braintree_Transaction::refund($transaction_id, $amount);
 
         if( !is_null($result) && is_object($result) && $result->success ) {
-            return array($result->transaction, "");
+            return array($result->transaction->id, "");
         } else {
             return array("", "Error: " . $result->message);
         }
