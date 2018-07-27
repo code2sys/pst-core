@@ -116,7 +116,7 @@ class Genericpayments_m extends CI_Model {
     protected function sale_stripe($total, $short = false) {
 // Token is created using Checkout or Elements!
 // Get the payment token ID submitted by the form:
-        $token = $_POST['stripeToken'];
+        $token = $_POST['device_data'];
 
         $charge = \Stripe\Charge::create([
             'amount' => round(100.0 * $total, 0), // They want cents!
