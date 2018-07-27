@@ -179,7 +179,8 @@ $CI =& get_instance();
                         echo $CI->load->view("checkout/payment_info_stripe", array(
                             "order_number" => $_SESSION['newOrderNum'],
                             "stripe_api_key" => $store_name["stripe_api_key"],
-                            "company_name" => $store_name["company"]
+                            "company_name" => $store_name["company"],
+                            "email" =>  $contactInfo['email']
                         ), true);
                         break;
 

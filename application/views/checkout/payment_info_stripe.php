@@ -19,9 +19,11 @@
     document.getElementById('stripeCheckoutButton').addEventListener('click', function(e) {
         // Open Checkout with further options:
         handler.open({
-            name: '<?php echo htmlentities($company_name); ?>',
+            name: '<?php echo htmlspecialchars($company_name); ?>',
             description: 'Order #<?php echo $order_number; ?>',
-            amount: Math.round(caltotal * 100)
+            amount: Math.round(caltotal * 100),
+            email: '<?php echo htmlspecialchars($email); ?>',
+            zipCode: true
         });
         e.preventDefault();
     });
