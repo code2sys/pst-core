@@ -160,7 +160,6 @@ $CI =& get_instance();
 				</div>
 			</div>
 			<!-- END CREDIT CARD -->
-        </form>
 
 
 			
@@ -192,8 +191,10 @@ $CI =& get_instance();
 
                 ?>
             </div>
+        </form>
 
-			<div class="clear"></div>
+
+                <div class="clear"></div>
 			<!-- END CREDIT CARD -->
 				
 			<!-- END CHECK OUT -->
