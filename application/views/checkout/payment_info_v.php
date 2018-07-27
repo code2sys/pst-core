@@ -187,7 +187,8 @@ $CI =& get_instance();
                 }
 
                 ?>
-		
+            </div>
+
 			<div class="clear"></div>
 			<!-- END CREDIT CARD -->
 				
