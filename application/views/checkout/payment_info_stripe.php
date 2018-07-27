@@ -21,7 +21,7 @@
         handler.open({
             name: '<?php echo STYLED_HOSTNAME; ?>',
             description: 'Order #<?php echo $order_number; ?>',
-            amount: caltotal
+            amount: Math.round(caltotal * 100)
         });
         e.preventDefault();
     });
