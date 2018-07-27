@@ -333,7 +333,7 @@ class Checkout extends Master_Controller {
 		}
 		if(!@$_SESSION['userRecord'] && !@$_SESSION['guestUser'])
 		{
-			redirect($this->_mainData['s_baseURL'] .'welcome/new_account_checkout');
+			redirect($this->_mainData['s_baseURL'] .'welcome/new_account');
 		}
 		
 		// Main Page Info
