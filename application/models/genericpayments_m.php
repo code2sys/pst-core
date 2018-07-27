@@ -219,8 +219,7 @@ class Genericpayments_m extends CI_Model {
                 break;
 
             default:
-                $sale_result->message;
-                return "";
+                return $sale_result->message;
         }
 
     }
