@@ -474,11 +474,11 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 										</td>
 									</tr>
 									<tr>
-										<td style="width:30%;"><b>Strip API Key:</b></td>
+										<td style="width:30%;"><b>Stripe API Key:</b></td>
 										<td><?php echo form_input(array('name' => 'stripe_api_key',
 										  'value' => @$address['stripe_api_key'],
 										  'class' => 'text large',
-										  'placeholder' => 'Strip API Key')); ?></td>
+										  'placeholder' => 'Stripe API Key')); ?></td>
 									</tr>
 								</table>
 							</td>
