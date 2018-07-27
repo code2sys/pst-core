@@ -547,8 +547,16 @@ class Welcome extends Master_Controller {
         echo $tableView;
     }
 
-    public function new_account($form = NULL) {
+    public function new_account_checkout($form = null) {
+        $this->_subNewAccount($form, true);
+    }
 
+    public function new_account($form = NULL)
+    {
+        $this->_subNewAccount($form, false);
+    }
+
+    protected function _subNewAccount($form, $checkout = false) {
         if ($form == 'create') {
             if ($this->validateNewUser(1) === TRUE) {
                 $this->load->model('account_m');
@@ -581,9 +589,9 @@ class Welcome extends Master_Controller {
 
         $this->load->helper('easy_captcha_helper');
         $this->_mainData['captcha'] = getCaptchaDisplayElements();
-        if (is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')))
+        if ($checkout) {
             $master = 's_master_v';
-        else {
+        } else {
             $master = 's_nav_master_v';
             $this->setNav('master/navigation_v', 0);
             $this->load->model('parts_m');
