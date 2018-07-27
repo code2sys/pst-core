@@ -1082,7 +1082,7 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
             function (status)
             {
                 console.log(status);
-                window.location.href = base_url + 'admin/order_edit/' + orderId + "/" + (new Date()).getTime();
+                window.location.href = base_url + 'admin/order_edit_bounce/' + orderId + "/" + (new Date()).getTime();
             });
     }
 

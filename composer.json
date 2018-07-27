@@ -1,7 +1,7 @@
 {
     "name": "pst/core",
     "license": "Proprietary",
-    "description" : "This was originally developed by Jessica @ Cloverfield with developers from Benzaitens Group. David Mathewes has been focusing on integrations - things like eBay and Lightspeed.",
+    "description" : "This was originally developed by Jessica @ Cloverfield with developers from Benzaitens Group. Dave Matthewes (dbmathewes@gmail.com) is no longer active on the project.",
     "repositories": [{
         "type": "composer",
         "url": "http://support1.powersporttechnologies.com/satis/"
@@ -10,10 +10,6 @@
         {
             "name": "Jonathan L Brown",
             "email": "jonathan@orbro.com"
-        },
-        {
-            "name" : "David Mathewes",
-            "email" : "dbmathewes@gmail.com"
         }
     ],
     "require": {
@@ -23,7 +19,8 @@
     	"dts/ebay-sdk": "~0.1",
         "dts/ebay-sdk-php": "@stable",
     	"pst/objectlib" : "dev-master",
-        "google/recaptcha": "~1.1"
+        "google/recaptcha": "~1.1",
+        "stripe/stripe-php" : "~6.11"
     },
     "config" : {
         "secure-http" : false

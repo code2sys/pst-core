@@ -324,28 +324,64 @@ abstract class Orderadmin extends Productsbrandsadmin {
         $this->renderMasterPage('admin/master_v', 'admin/order/list_v', $this->_mainData);
     }
 
+    public function order_edit_bounce($order_id, $timestamp) {
+        $this->session->set_flashdata("error", $this->session->flashdata("error"));
+        header("Location: " . site_url("admin/order_edit/$order_id"));
+    }
+
     public function order_refund($id) {
         if (!$this->checkValidAccess('orders') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
 
-        // JLB -I don't know why this is here.
-        $clientToken = $this->braintree_lib->create_client_token();
-
-        $post = $this->input->post();
         if(array_key_exists("transaction_id", $_REQUEST) && $_REQUEST['transaction_id'] != "" && array_key_exists("refund_amount", $_REQUEST)  && $_REQUEST['refund_amount'] > 0) {
-            $result = Braintree_Transaction::refund($_REQUEST['transaction_id'], $_REQUEST['refund_amount']);
+            $error = "";
+            $result_transaction_id = "";
+            $processor = "";
+            $success = $this->_doRefund($id, $_REQUEST['transaction_id'], floatVal($_REQUEST['refund_amount']),$error, $result_transaction_id, $processor);
 
-            if( @$result->success ) {
-                $transaction = $result->transaction;
-                $arr = array('braintree_transaction_id' => $transaction->id, 'sales_price' => '-'.$_REQUEST['refund_amount']);
-                $this->admin_m->updateOrderPaymentByAdmin( $id, $arr );
+            if ($success) {
+                $arr = array('braintree_transaction_id' => $result_transaction_id, 'amount' => '-'.$_REQUEST['refund_amount'], "processor" => $processor, "transaction_date" => time(), "order_id" => $id);
+                global $PSTAPI;
+                initializePSTAPI();
+                $PSTAPI->ordertransaction()->add($arr);
+                $this->session->set_flashdata('success', 'Refunded successfully.');
             } else {
-                $error = $result->message;
                 $this->session->set_flashdata('error',$error);
             }
         }
     }
+
+    // JLB 07-27-18
+    // This has been real frustrating.
+    // Whoever decided there should be multiple ways to accomplish a refund should be hung.
+    protected function _doRefund($order_id, $transaction_id, $refund_amount, &$error_message, &$result_transaction_id, &$processor) {
+        // We have to get the transaction, make sure it's for this order, and also make sure it's for the current processor and they haven't switched processors.
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $matches = $PSTAPI->ordertransaction()->fetch(array(
+            "order_id" => $order_id,
+            "braintree_transaction_id" => $transaction_id
+        ), true);
+
+        if (count($matches) > 1) {
+            $error_message = "Internal error - multiple transactions match this ID.";
+            return false;
+        } if (count($matches) > 0 && floatVal($matches[0]["amount"]) > 0) {
+            // OK, we found one, we have to attempt to refund it.
+            $this->load->model("genericpayments_m");
+            $store_name = $this->admin_m->getAdminShippingProfile();
+            $this->genericpayments_m->initToProcessor($store_name, $matches[0]["processor"]);
+            $processor = $matches[0]["processor"];
+            list($result_transaction_id, $error_message) = $this->genericpayments_m->refund($transaction_id, $refund_amount);
+            return $error_message == "";
+        } else {
+            $error_message = "Sorry, that transaction is not found.";
+            return false;
+        }
+    }
+
 
     public function order_edit($id = 'new', $newPartNumber = NULL, $qty = 1) {
         if (!$this->checkValidAccess('orders') && !@$_SESSION['userRecord']['admin']) {
@@ -362,7 +398,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
         $this->load->model('order_m');
         $this->_mainData['distributors'] = $this->order_m->getDistributors();
 
-        if (!is_null($newPartNumber) && ($id != 'new')) {
+        if (!is_null($newPartNumber) && ($newPartNumber != "") && ($id != 'new')) {
 
             $this->load->model('parts_m');
             $part = $this->order_m->getPartIdByPartNumber($newPartNumber);
@@ -376,7 +412,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
                 $this->order_m->addProductToOrder($part['partnumber'], $id, $qty, $part['part_id']);
             } else {
                 if(!$this->order_m->checkPartNumber($newPartNumber, $qty, $id)) {
-                    $this->session->set_flashdata('error','Product Not Found.');
+                    $this->session->set_flashdata('error',"Product Not Found.");
                 }
             }
 
@@ -385,28 +421,18 @@ abstract class Orderadmin extends Productsbrandsadmin {
 
         $store_name = $this->admin_m->getAdminShippingProfile();
         if( $this->input->post()) {
-            $clientToken = $this->braintree_lib->create_client_token();
-
             $post = $this->input->post();
             if(@$post['transaction_id'] && $post['refund_amount'] > 0) {
-                $result = Braintree_Transaction::refund($post['transaction_id'], $post['refund_amount']);
+                $error = "";
+                $result_transaction_id = "";
+                $processor = "";
+                $success = $this->_doRefund($id, $_REQUEST['transaction_id'], floatVal($_REQUEST['refund_amount']),$error, $result_transaction_id, $processor);
 
-                if( @$result->success ) {
-                    $transaction = $result->transaction;
-                    $arr = array('braintree_transaction_id' => $transaction->id, 'sales_price' => '-'.$this->input->post('refund_amount'));
+                if( $success ) {
+                    $arr = array('braintree_transaction_id' => $result_transaction_id, 'sales_price' => '-'.$this->input->post('refund_amount'), "processor" => $processor);
                     $this->admin_m->updateOrderPaymentByAdmin( $id, $arr );
-                    //$this->admin_m->updateOrderStatusByAdmin( $id, 'Approved' );
-                    //$this->load->model('order_m');
-                    //$this->order_m->updateStatus($id, 'Approved', 'Ajax Update');
-                    //redirect('admin/order_edit/'.$id);
                 } else {
-                    $error = $result->message;
                     $this->session->set_flashdata('error',$error);
-
-                    //$this->load->model('order_m');
-                    //$this->order_m->updateStatus($id, 'Declined', 'Ajax Update');
-
-                    //redirect('admin/order_edit/'.$id);
                 }
                 exit; // JLB 01-10-18 WTF is this???
             }

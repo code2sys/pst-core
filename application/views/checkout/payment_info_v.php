@@ -1,7 +1,15 @@
 <?php
-//require_once( echo site_url()  . 'lib/Braintree.php');
-require(__DIR__ . "/../braintree_clienttoken.php");
+
+$CI =& get_instance();
+
+
 ?>
+<script type="application/javascript">
+    var caltotal = <?php echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice']), 2, '.', ''); ?>;
+    var orig_caltotal = caltotal;
+
+
+</script>
 	<!-- CONTENT WRAP =========================================================================-->
 	<div class="content_wrap">
 		
@@ -164,67 +172,29 @@ require(__DIR__ . "/../braintree_clienttoken.php");
 				<div class="clear"></div>
 				<br>
 				
-				<div class="hidden_table">
-					<div class="pay">
-						<p>Field marked with a * are required</p>
-						
-						<div class="fld1" style="margin-top:50px;">
-						  <label for="card-number" style="width:30%;float:left;">Card Number *</label>
-						  <div id="card-number" class="fld" style="width:60%;float:left;height:20px;background:white;border:1px solid;border-radius:2px;"></div>
-						</div>
+                <?php
+                switch ($store_name["merchant_type"]) {
+                    case "Stripe":
+                        echo $CI->load->view("checkout/payment_info_stripe", array(
+                            "order_number" => $_SESSION['newOrderNum'],
+                            "stripe_api_key" => $store_name["stripe_api_key"],
+                            "company_name" => $store_name["company"],
+                            "email" =>  $contactInfo['email']
+                        ), true);
+                        break;
 
-						<div class="fld1" style="margin-top:100px;">
-						  <label for="cvv" style="width:30%;float:left;">CVV *</label>
-						  <div id="cvv" class="fld" style="width:60%;float:left;height:20px;background:white;border:1px solid;border-radius:2px;"></div>
-						</div>
+                    default: // Braintree
+                        echo $CI->load->view("checkout/payment_info_paymentdetails_v", array(
 
-						<div class="fld1" style="margin-top:150px;">
-						  <label for="expiration-date" style="width:30%;float:left;">Expiration Date *</label>
-						  <div id="expiration-date" class="fld" style="width:60%;float:left;height:20px;background:white;border:1px solid;border-radius:2px;"></div>
-						</div>
-						<!--<table width="100%" cellpadding="6">
-							<tr>
-								<td><b>First Name On Card:*</b></td>
-								<td><input id="name" name="cc_first_name" class="text large" value="<?php echo set_value('cc_first_name'); ?>" /></td>
-							</tr>
-							<tr>
-								<td><b>Last Name On Card:*</b></td>
-								<td><input id="name" name="cc_last_name" class="text medium" value="<?php echo set_value('cc_last_name'); ?>" /></td>
-							</tr>
-							<tr>
-								<td><b>Card No:*</b></td>
-								<td><input id="name" name="cc" class="text large" value="<?php echo set_value('cc'); ?>"/></td>
-							</tr>
-							<tr>
-								<td><b>Exp. Month:*</b></td>
-								<td>
-									<?php echo form_dropdown('exp_date_mn', $months, set_select('exp_date_mn')); ?>
-								</td>
-							</tr>
-							<tr>
-								<td><b>Exp. Year:*</b></td>
-								<td>
-									<?php echo form_dropdown('exp_date_yr', $years, set_select('exp_date_yr')); ?>
-								</td>
-							</tr>
-							<tr>
-								<td><b>CVV:*</b></td>
-								<td><input id="name" name="cvc" class="text mini" value="<?php echo set_value('cvc'); ?>" /></td>
-							</tr>
-						</table>-->
-						<?php if(@validation_errors() || @$processingError): if(@$_SESSION['failed_validation']): $_SESSION['failed_validation']++; else: $_SESSION['failed_validation'] = 1; endif; ?>
-							<div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_KEY; ?>"></div>
-						<?php endif; ?>
-						
-						<input type="submit" class="input_button_purple" style="float:right;margin-top:50px;" value="Process Your Order">
-						<!--<button type="submit" class="input_button_purple" style="float:right;">Process Your Order</button>-->
-						<div class="clear"></div>
-					</div>
-				</form>
-				</div>
-			</div>
-		
-			<div class="clear"></div>
+                        ), true);
+                }
+
+                ?>
+            </div>
+        </form>
+
+
+                <div class="clear"></div>
 			<!-- END CREDIT CARD -->
 				
 			<!-- END CHECK OUT -->
@@ -248,97 +218,21 @@ require(__DIR__ . "/../braintree_clienttoken.php");
 </script>
 
 <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
-<script src="https://js.braintreegateway.com/web/3.7.0/js/client.min.js"></script>
-<script src="https://js.braintreegateway.com/web/3.7.0/js/hosted-fields.min.js"></script>
-<script src="https://js.braintreegateway.com/web/3.7.0/js/data-collector.min.js"></script>
-<script>
-  var form = document.querySelector('#form_example');
-  var submit = document.querySelector('input[type="submit"]');
-  
-  braintree.client.create({
-	authorization: '<?php echo $clientToken;?>'
-  }, function (clientErr, clientInstance) {
-	if (clientErr) {
-	  console.error(clientErr);
-	  return;
-	}
-	
-	// This example shows Hosted Fields, but you can also use this
-	// client instance to create additional components here, such as
-	braintree.hostedFields.create({
-	  client: clientInstance,
-	  styles: {
-		'input': {
-		  'font-size': '14px'
-		},
-		'input.invalid': {
-		  'color': 'red'
-		},
-		'input.valid': {
-		  'color': 'green'
-		}
-	  },
-	  fields: {
-		number: {
-		  selector: '#card-number',
-		  placeholder: '4111 1111 1111 1111'
-		},
-		cvv: {
-		  selector: '#cvv',
-		  placeholder: '123'
-		},
-		expirationDate: {
-		  selector: '#expiration-date',
-		  placeholder: '10/2019'
-		}
-	  }
-	}, function (hostedFieldsErr, hostedFieldsInstance) {
-	  if (hostedFieldsErr) {
-		console.error(hostedFieldsErr);
-		return;
-	  }
+<?php
 
-	  submit.removeAttribute('disabled');
+switch ($store_name["merchant_type"]) {
+    case "Stripe":
 
-	  form.addEventListener('submit', function (event) {
-		event.preventDefault();
+        break;
 
-		hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
-		  if (tokenizeErr) {
-			console.error(tokenizeErr);
-			//alert('All fields are required.');
-			$('.fld').css('border', '1px solid red');
-			return;
-		  }
+    default: // Braintree
+        echo $CI->load->view("checkout/payment_info_braintree_v", array(
 
-		  // If this was a real integration, this is where you would
-		  // send the nonce to your server.
-		  var addNonce = "<input type='hidden' id='payment_method_nonce' name='payment_method_nonce' value='"+ payload.nonce +"'>";
-		  $("#form_example").append(addNonce);
-		  console.log('Got a nonce: ' + payload.nonce);
-		  HTMLFormElement.prototype.submit.call(form);
-		});
-	  }, false);
-	});
-		// PayPal or Data Collector.
-	braintree.dataCollector.create({
-		client: clientInstance,
-		kount: true
-	}, function (err, dataCollectorInstance) {
-		if (err) {
-			//alert(err);
-			return;
-		} else {
-			//alert(dataCollectorInstance.deviceData)
-		}
-		// At this point, you should access the dataCollectorInstance.deviceData value and provide it
-		// to your server, e.g. by injecting it into your form as a hidden input.
-	    var addNonce = "<input type='hidden' id='device_data' name='device_data' value='"+ dataCollectorInstance.deviceData +"'>";
-	    $("#form_example").append(addNonce);
-		var deviceData = dataCollectorInstance.deviceData;
-	});
-  });
-</script>
+        ), true);
+}
+
+
+?>
 
 <script>
 $(document).ready(function(){
@@ -354,13 +248,15 @@ $(document).ready(function(){
 </script>
 
 <script>
-	$('#total').html('<?php echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] + $arr['value']), 2, '.', ''); ?>');
-	//$('#paypal_amt').val('<?php echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] + $arr['value']), 2, '.', ''); ?>');
+	//$('#total').html('<?php //echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] + $arr['value']), 2, '.', ''); ?>//');
+	////$('#paypal_amt').val('<?php //echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] + $arr['value']), 2, '.', ''); ?>//');
 	
 	function changeTotal(value)
 	{
-		caltotal = <?php echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice']), 2, '.', ''); ?> + value;
+		caltotal = orig_caltotal + value;
 		$('#total').html(caltotal.toFixed(2));
 		//$('#paypal_amt').val(caltotal.toFixed(2));
 	}
+
+	changeTotal(<?php echo $arr['value']; ?>);
 </script>
