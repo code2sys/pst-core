@@ -32,6 +32,11 @@ class Genericpayments_m extends CI_Model {
     protected $merchant_type;
 
 
+    public function initToProcessor($store_name, $processor) {
+        $store_name["merchant_type"] = $processor;
+        $this->init($store_name);
+    }
+
     public function init($store_name) {
         switch($store_name["merchant_type"]) {
             case "Stripe":
@@ -128,9 +133,41 @@ class Genericpayments_m extends CI_Model {
         return $charge;
     }
 
-    public function refund() {
+    public function refund($transaction_id, $amount) {
+        switch ($this->merchant_type) {
+            case "Stripe":
+                return $this->refund_stripe($transaction_id, $amount);
+                break;
+
+            default:
+                return $this->refund_braintree($transaction_id, $amount);
+        }
 
     }
+
+    protected function refund_stripe($transaction_id, $amount) {
+        $re = \Stripe\Refund::create(array(
+            "charge" => $transaction_id,
+            "amount" => $amount
+        ));
+
+        if (!is_null($re) && is_object($re) && $re->status == "succeeded") {
+            return array($re->id, "");
+        } else {
+            return array("", "Error: Refund Failed");
+        }
+    }
+
+    protected function refund_braintree($transaction_id, $amount) {
+        $result = Braintree_Transaction::refund($transaction_id, $amount);
+
+        if( !is_null($result) && is_object($result) && $result->success ) {
+            return array($result->transaction, "");
+        } else {
+            return array("", "Error: " . $result->message);
+        }
+    }
+
 
     public function isSuccess(&$sale_result) {
         switch ($this->merchant_type) {
@@ -177,7 +214,7 @@ class Genericpayments_m extends CI_Model {
                 break;
 
             default:
-                // TODO - there was nothing in Braintree...
+                $sale_result->message;
                 return "";
         }
 
