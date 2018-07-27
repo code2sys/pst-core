@@ -146,15 +146,20 @@ class Genericpayments_m extends CI_Model {
     }
 
     protected function refund_stripe($transaction_id, $amount) {
-        $re = \Stripe\Refund::create(array(
-            "charge" => $transaction_id,
-            "amount" => round($amount * 100.0, 0)
-        ));
+        try {
+            $re = \Stripe\Refund::create(array(
+                "charge" => $transaction_id,
+                "amount" => round($amount * 100.0, 0)
+            ));
 
-        if (!is_null($re) && is_object($re) && $re->status == "succeeded") {
-            return array($re->id, "");
-        } else {
-            return array("", "Error: Refund Failed");
+            if (!is_null($re) && is_object($re) && $re->status == "succeeded") {
+                return array($re->id, "");
+            } else {
+                return array("", "Error: Refund Failed");
+            }
+
+        } catch (\Exception $e) {
+            return array("", "Exception: " . $e->getMessage());
         }
     }
 
