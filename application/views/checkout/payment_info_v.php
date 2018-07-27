@@ -174,7 +174,7 @@ $CI =& get_instance();
 				<br>
 				
                 <?php
-                switch ($store_name["merchant_type"] == "Braintree") {
+                switch ($store_name["merchant_type"]) {
                     case "Stripe":
                         echo $CI->load->view("checkout/payment_info_stripe", array(
                             "order_number" => $_SESSION['newOrderNum'],
