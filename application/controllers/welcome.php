@@ -37,6 +37,19 @@ class Welcome extends Master_Controller {
         }
     }
 
+    function _validResetUsername($username) {
+        $valid = $this->account_m->verifyUsername($username);
+        if ($valid && $valid['status'] == 1) {
+            return TRUE;
+        } else if ($valid && $valid['status'] == 0) {
+            $this->form_validation->set_message('_validResetUsername', 'Your account is not active please contact your administrator.');
+            return FALSE;
+        } else {
+            $this->form_validation->set_message('_validResetUsername', 'You have provided an invalid Username.');
+            return FALSE;
+        }
+    }
+
     function _uniqueUsername($username) {
         $valid = $this->account_m->verifyUsername($username);
         if ($valid) {
@@ -154,7 +167,7 @@ class Welcome extends Master_Controller {
 
     private function validateForgotPassword() {
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('email', 'Email Address', 'required|callback__validUsername|xss_clean');
+        $this->form_validation->set_rules('email', 'Email Address', 'required|callback__validResetUsername|xss_clean');
         return $this->form_validation->run();
     }
 
@@ -547,14 +560,22 @@ class Welcome extends Master_Controller {
         echo $tableView;
     }
 
-    public function new_account($form = NULL) {
+    public function new_account_checkout($form = null) {
+        $this->_subNewAccount($form, true);
+    }
 
+    public function new_account($form = NULL)
+    {
+        $this->_subNewAccount($form, false);
+    }
+
+    protected function _subNewAccount($form, $checkout = false) {
         if ($form == 'create') {
             if ($this->validateNewUser(1) === TRUE) {
                 $this->load->model('account_m');
                 $this->account_m->createNewAccount($this->input->post());
                 $this->validateLogin();
-                if (is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')))
+                if ($checkout /* is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')) */)
                     redirect('checkout');
                 elseif (@$_SESSION['url'])
                     redirect($_SESSION['url']);
@@ -564,7 +585,7 @@ class Welcome extends Master_Controller {
         }
         elseif ($form == 'login') {
             if ($this->validateLogin() === TRUE) {
-                if (is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')))
+                if ($checkout /* is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')) */)
                     redirect('checkout');
                 else
                     redirect(@$_SESSION['url']);
@@ -581,9 +602,9 @@ class Welcome extends Master_Controller {
 
         $this->load->helper('easy_captcha_helper');
         $this->_mainData['captcha'] = getCaptchaDisplayElements();
-        if (is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')))
+        if ($checkout) {
             $master = 's_master_v';
-        else {
+        } else {
             $master = 's_nav_master_v';
             $this->setNav('master/navigation_v', 0);
             $this->load->model('parts_m');
@@ -604,7 +625,7 @@ class Welcome extends Master_Controller {
         $this->_mainData['session_url'] = $session_url;
         $page_view = 'account/signup_v';
 
-        if (is_numeric(strpos(@$_SESSION['url'], 'cart'))) {
+        if ($checkout /* is_numeric(strpos(@$_SESSION['url'], 'cart')) */) {
             $page_view = 'account/signup_new_v';
         }
 
