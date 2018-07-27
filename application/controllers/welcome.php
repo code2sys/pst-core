@@ -37,6 +37,19 @@ class Welcome extends Master_Controller {
         }
     }
 
+    function _validResetUsername($username) {
+        $valid = $this->account_m->verifyUsername($username);
+        if ($valid && $valid['status'] == 1) {
+            return TRUE;
+        } else if ($valid && $valid['status'] == 0) {
+            $this->form_validation->set_message('_validResetUsername', 'Your account is not active please contact your administrator.');
+            return FALSE;
+        } else {
+            $this->form_validation->set_message('_validResetUsername', 'You have provided an invalid Username.');
+            return FALSE;
+        }
+    }
+
     function _uniqueUsername($username) {
         $valid = $this->account_m->verifyUsername($username);
         if ($valid) {
@@ -154,7 +167,7 @@ class Welcome extends Master_Controller {
 
     private function validateForgotPassword() {
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('email', 'Email Address', 'required|callback__validUsername|xss_clean');
+        $this->form_validation->set_rules('email', 'Email Address', 'required|callback__validResetUsername|xss_clean');
         return $this->form_validation->run();
     }
 
@@ -579,12 +592,12 @@ class Welcome extends Master_Controller {
             }
         }
         elseif ($form == 'forgot') {
- //           if ($this->validateForgotPassword() !== FALSE) {
-//                $success = $this->sendForgotPasswordEmail($this->input->post('email'));
-//                if (!$success) {
-//                    $this->_mainData['processError'] = TRUE;
-//                }
-  //          }
+            if ($this->validateForgotPassword() !== FALSE) {
+                $success = $this->sendForgotPasswordEmail($this->input->post('email'));
+                if (!$success) {
+                    $this->_mainData['processError'] = TRUE;
+                }
+            }
         }
 
         $this->load->helper('easy_captcha_helper');
