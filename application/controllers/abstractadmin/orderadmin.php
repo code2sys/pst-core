@@ -324,6 +324,10 @@ abstract class Orderadmin extends Productsbrandsadmin {
         $this->renderMasterPage('admin/master_v', 'admin/order/list_v', $this->_mainData);
     }
 
+    public function order_edit_bounce($order_id, $timestamp) {
+        header("Location: " . site_url("admin/order_edit/$order_id"));
+    }
+
     public function order_refund($id) {
         if (!$this->checkValidAccess('orders') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
@@ -338,6 +342,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
             if ($success) {
                 $arr = array('braintree_transaction_id' => $result_transaction_id, 'sales_price' => '-'.$_REQUEST['refund_amount'], "processor" => $processor);
                 $this->admin_m->updateOrderPaymentByAdmin( $id, $arr );
+                $this->session->set_flashdata('success', 'Refunded successfully.');
             } else {
                 $this->session->set_flashdata('error',$error);
             }
