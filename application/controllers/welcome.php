@@ -26,7 +26,8 @@ class Welcome extends Master_Controller {
         $valid = $this->account_m->verifyUsername($username);
         if ($valid && $valid['status'] == 1) {
             $valid['timestamp'] = time();
-            $_SESSION['userRecord'] = $valid;
+            $_SESSION['userRecord'] = [];
+            $_SESSION['provisional_userRecord'] = $valid;
             return TRUE;
         } else if ($valid && $valid['status'] == 0) {
             $this->form_validation->set_message('_validUsername', 'Your account is not active please contact your administrator.');
@@ -105,9 +106,9 @@ class Welcome extends Master_Controller {
         $this->load->library('encrypt');
         unset($_SESSION['activeMachine']);
         unset($_SESSION['garage']);
-        $userRecord = @$_SESSION['userRecord'];
+        $userRecord = array_key_exists("provisional_userRecord", $_SESSION) ? $_SESSION["provisional_userRecord"] : array();
         if (empty($userRecord['password'])) {
-            return TRUE;
+            return FALSE; // I do not know why this would be here
         }
         $clear_password = $this->encrypt->decode($userRecord['password']);
         $new_password = $this->encrypt->encode($password);
@@ -123,6 +124,7 @@ class Welcome extends Master_Controller {
                 }
             }
 
+            $_SESSION["userRecord"] = $_SESSION["provisional_userRecord"];
             return TRUE;
         } else {
             $this->form_validation->set_message('_processLogin', "You have provided an invalid Password.");
