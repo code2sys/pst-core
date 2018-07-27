@@ -5,7 +5,9 @@ $CI =& get_instance();
 
 ?>
 <script type="application/javascript">
-    var caltotal = <?php echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] + $arr['value']), 2, '.', ''); ?>;
+    var caltotal = <?php echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice']), 2, '.', ''); ?>;
+    var orig_caltotal = caltotal;
+
 
 </script>
 	<!-- CONTENT WRAP =========================================================================-->
@@ -244,13 +246,15 @@ $(document).ready(function(){
 </script>
 
 <script>
-	$('#total').html('<?php echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] + $arr['value']), 2, '.', ''); ?>');
-	//$('#paypal_amt').val('<?php echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] + $arr['value']), 2, '.', ''); ?>');
+	//$('#total').html('<?php //echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] + $arr['value']), 2, '.', ''); ?>//');
+	////$('#paypal_amt').val('<?php //echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] + $arr['value']), 2, '.', ''); ?>//');
 	
 	function changeTotal(value)
 	{
-		caltotal = <?php echo number_format(($cart['transAmount'] + @$_SESSION['cart']['tax']['finalPrice']), 2, '.', ''); ?> + value;
+		caltotal = orig_caltotal + value;
 		$('#total').html(caltotal.toFixed(2));
 		//$('#paypal_amt').val(caltotal.toFixed(2));
 	}
+
+	changeTotal(<?php echo $arr['value']; ?>);
 </script>
