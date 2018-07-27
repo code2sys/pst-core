@@ -797,6 +797,7 @@ var sa_products = { '.$rating.' };
   
 	public function payment($failedCCPayment = NULL)
 	{
+        $store_name = $this->admin_m->getAdminShippingProfile();
 		$user_id = $guest_user_id = @$_SESSION['guestUser']['id'];
 		if( empty($user_id) ){
 			$user_id = @$_SESSION['userRecord']['id'];
@@ -845,7 +846,6 @@ var sa_products = { '.$rating.' };
 			// include('lib/Braintree.php');
 			$this->load->model('admin_m');
 			$this->load->model("genericpayments_m");
-			$store_name = $this->admin_m->getAdminShippingProfile();
 			$this->genericpayments_m->init($store_name);
             $result = $this->genericpayments_m->sale($total);
 
@@ -884,6 +884,7 @@ var sa_products = { '.$rating.' };
 		$this->_mainData['cart'] = $_SESSION['cart'];
 		$this->_mainData['contactInfo'] = $_SESSION['contactInfo'];
 		$this->_mainData['shippingInfo'] = $_SESSION['shippingInfo'];
+		$this->_mainData["store_name"] = $store_name;
 		$this->renderMasterPage('master/s_master_v', 'checkout/payment_info_v', $this->_mainData);
 
 	}
@@ -893,6 +894,9 @@ var sa_products = { '.$rating.' };
     // Why are there two of these functions, almost identical, back-to-back?
     // I am trying to ram in Stripe, and this is the BS I encounter.
     // As far as I can tell, this one doesn't include the address...and I do not know why.
+    //
+    // From what I can tell, new_payment is used when you use the magic PayPal buttons. I know I would simply never use these as a customer.
+    // The process seems insane. Why do you enter your PayPal FIRST? Before you even know shipping?
 	public function new_payment($failedCCPayment = NULL)
 	{
 		$user_id = $guest_user_id = @$_SESSION['guestUser']['id'];

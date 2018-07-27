@@ -31,6 +31,7 @@ class Genericpayments_m extends CI_Model {
 
     protected $merchant_type;
 
+
     public function init($store_name) {
         switch($store_name["merchant_type"]) {
             case "Stripe":
@@ -54,6 +55,7 @@ class Genericpayments_m extends CI_Model {
     }
 
     protected function init_stripe($store_name) {
+        \Stripe\Stripe::setApiKey($store_name["stripe_api_key"]);
 
     }
 
@@ -112,7 +114,18 @@ class Genericpayments_m extends CI_Model {
     }
 
     protected function sale_stripe($total, $short = false) {
+// Token is created using Checkout or Elements!
+// Get the payment token ID submitted by the form:
+        $token = $_POST['stripeToken'];
 
+        $charge = \Stripe\Charge::create([
+            'amount' => $total,
+            'currency' => 'usd',
+            'description' => 'Order #' . $_SESSION["newOrderNum"],
+            'source' => $token,
+        ]);
+
+        return $charge;
     }
 
     public function refund() {
@@ -135,7 +148,7 @@ class Genericpayments_m extends CI_Model {
     }
 
     protected function isSuccess_stripe(&$sale_result) {
-
+        return $sale_result.status == "succeeded";
     }
 
     public function getTransactionID(&$sale_result) {
@@ -154,11 +167,19 @@ class Genericpayments_m extends CI_Model {
     }
 
     protected function getTransactionID_stripe(&$sale_result) {
-
+        return $sale_result.id; // https://stripe.com/docs/api#retrieve_charge
     }
 
     public function getErrorMessage(&$sale_result) {
-        // TODO - there was nothing in Braintree...
-        return "";
+        switch ($this->merchant_type) {
+            case "Stripe":
+                return $sale_result.failure_message;
+                break;
+
+            default:
+                // TODO - there was nothing in Braintree...
+                return "";
+        }
+
     }
 }
