@@ -119,11 +119,13 @@ class Genericpayments_m extends CI_Model {
         $token = $_POST['stripeToken'];
 
         $charge = \Stripe\Charge::create([
-            'amount' => $total,
+            'amount' => round(100.0 * $total, 0), // They want cents!
             'currency' => 'usd',
             'description' => 'Order #' . $_SESSION["newOrderNum"],
             'source' => $token,
         ]);
+
+        error_log(print_r($charge, true));
 
         return $charge;
     }
