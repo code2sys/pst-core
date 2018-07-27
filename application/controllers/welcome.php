@@ -612,7 +612,7 @@ class Welcome extends Master_Controller {
         $this->_mainData['session_url'] = $session_url;
         $page_view = 'account/signup_v';
 
-        if (is_numeric(strpos(@$_SESSION['url'], 'cart'))) {
+        if ($checkout /* is_numeric(strpos(@$_SESSION['url'], 'cart')) */) {
             $page_view = 'account/signup_new_v';
         }
 
