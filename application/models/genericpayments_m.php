@@ -60,6 +60,7 @@ class Genericpayments_m extends CI_Model {
     }
 
     public function sale($total, $short = false) {
+        error_log("Calling sale with merchant type " . $this->merchant_type);
         switch ($this->merchant_type) {
             case "Stripe":
                 return $this->sale_stripe($total, $short);
