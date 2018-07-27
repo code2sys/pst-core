@@ -205,6 +205,8 @@ class Genericpayments_m extends CI_Model {
     }
 
     protected function getTransactionID_braintree(&$sale_result) {
+        error_log("Braintree transaction: " . $sale_result->transaction);
+        error_log(print_r($sale_result, true));
         return $sale_result->transaction ;
     }
 
