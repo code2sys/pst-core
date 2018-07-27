@@ -849,8 +849,8 @@ var sa_products = { '.$rating.' };
 			$this->genericpayments_m->init($store_name);
             $result = $this->genericpayments_m->sale($total);
 
-            error_log("Result:");
-            error_log(print_r($result, true));
+
+            print_r($result); exit();
 
 
 			if($total <= 0)
