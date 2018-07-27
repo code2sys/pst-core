@@ -579,12 +579,12 @@ class Welcome extends Master_Controller {
             }
         }
         elseif ($form == 'forgot') {
-//            if ($this->validateForgotPassword() !== FALSE) {
+            if ($this->validateForgotPassword() !== FALSE) {
 //                $success = $this->sendForgotPasswordEmail($this->input->post('email'));
 //                if (!$success) {
 //                    $this->_mainData['processError'] = TRUE;
 //                }
-//            }
+            }
         }
 
         $this->load->helper('easy_captcha_helper');
