@@ -390,7 +390,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
         $this->load->model('order_m');
         $this->_mainData['distributors'] = $this->order_m->getDistributors();
 
-        if (!is_null($newPartNumber) && ($id != 'new')) {
+        if (!is_null($newPartNumber) && ($newPartNumber != "") && ($id != 'new')) {
 
             $this->load->model('parts_m');
             $part = $this->order_m->getPartIdByPartNumber($newPartNumber);
