@@ -220,7 +220,7 @@ $CI =& get_instance();
 <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
 <?php
 
-switch ($store_name["merchant_type"] == "Braintree") {
+switch ($store_name["merchant_type"]) {
     case "Stripe":
 
         break;
