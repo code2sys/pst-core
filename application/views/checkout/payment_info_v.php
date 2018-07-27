@@ -174,14 +174,14 @@ $CI =& get_instance();
                 <?php
                 switch ($store_name["merchant_type"] == "Braintree") {
                     case "Stripe":
-                        echo $CI->load->view("checkout/payment_info_strip", array(
+                        echo $CI->load->view("checkout/payment_info_stripe", array(
                             "order_number" => $_SESSION['newOrderNum'],
                             "stripe_api_key" => $store_name["stripe_api_key"]
                         ), true);
                         break;
 
                     default: // Braintree
-                        echo $CI->load->view("checkout/payment_inf_paymentdetails_v", array(
+                        echo $CI->load->view("checkout/payment_info_paymentdetails_v", array(
 
                         ), true);
                 }
