@@ -176,7 +176,8 @@ $CI =& get_instance();
                     case "Stripe":
                         echo $CI->load->view("checkout/payment_info_stripe", array(
                             "order_number" => $_SESSION['newOrderNum'],
-                            "stripe_api_key" => $store_name["stripe_api_key"]
+                            "stripe_api_key" => $store_name["stripe_api_key"],
+                            "company_name" => $store_name["company"]
                         ), true);
                         break;
 

@@ -19,7 +19,7 @@
     document.getElementById('stripeCheckoutButton').addEventListener('click', function(e) {
         // Open Checkout with further options:
         handler.open({
-            name: '<?php echo STYLED_HOSTNAME; ?>',
+            name: '<?php echo htmlentities($company_name); ?>',
             description: 'Order #<?php echo $order_number; ?>',
             amount: Math.round(caltotal * 100)
         });
