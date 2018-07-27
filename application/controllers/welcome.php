@@ -562,7 +562,7 @@ class Welcome extends Master_Controller {
                 $this->load->model('account_m');
                 $this->account_m->createNewAccount($this->input->post());
                 $this->validateLogin();
-                if (is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')))
+                if ($checkout /* is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')) */)
                     redirect('checkout');
                 elseif (@$_SESSION['url'])
                     redirect($_SESSION['url']);
@@ -572,7 +572,7 @@ class Welcome extends Master_Controller {
         }
         elseif ($form == 'login') {
             if ($this->validateLogin() === TRUE) {
-                if (is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')))
+                if ($checkout /* is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')) */)
                     redirect('checkout');
                 else
                     redirect(@$_SESSION['url']);
