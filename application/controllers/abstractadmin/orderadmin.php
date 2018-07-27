@@ -329,10 +329,6 @@ abstract class Orderadmin extends Productsbrandsadmin {
             redirect('');
         }
 
-        // JLB -I don't know why this is here.
-        $clientToken = $this->braintree_lib->create_client_token();
-
-        $post = $this->input->post();
         if(array_key_exists("transaction_id", $_REQUEST) && $_REQUEST['transaction_id'] != "" && array_key_exists("refund_amount", $_REQUEST)  && $_REQUEST['refund_amount'] > 0) {
             $error = "";
             $result_transaction_id = "";
@@ -358,7 +354,7 @@ abstract class Orderadmin extends Productsbrandsadmin {
 
         $matches = $PSTAPI->ordertransaction()->fetch(array(
             "order_id" => $order_id,
-            "transaction_id" => $transaction_id
+            "braintree_transaction_id" => $transaction_id
         ), true);
 
         if (count($matches) > 1) {
@@ -417,28 +413,18 @@ abstract class Orderadmin extends Productsbrandsadmin {
 
         $store_name = $this->admin_m->getAdminShippingProfile();
         if( $this->input->post()) {
-            $clientToken = $this->braintree_lib->create_client_token();
-
             $post = $this->input->post();
             if(@$post['transaction_id'] && $post['refund_amount'] > 0) {
-                $result = Braintree_Transaction::refund($post['transaction_id'], $post['refund_amount']);
+                $error = "";
+                $result_transaction_id = "";
+                $processor = "";
+                $success = $this->_doRefund($id, $_REQUEST['transaction_id'], floatVal($_REQUEST['refund_amount']),$error, $result_transaction_id, $processor);
 
-                if( @$result->success ) {
-                    $transaction = $result->transaction;
-                    $arr = array('braintree_transaction_id' => $transaction->id, 'sales_price' => '-'.$this->input->post('refund_amount'));
+                if( $success ) {
+                    $arr = array('braintree_transaction_id' => $result_transaction_id, 'sales_price' => '-'.$this->input->post('refund_amount'), "processor" => $processor);
                     $this->admin_m->updateOrderPaymentByAdmin( $id, $arr );
-                    //$this->admin_m->updateOrderStatusByAdmin( $id, 'Approved' );
-                    //$this->load->model('order_m');
-                    //$this->order_m->updateStatus($id, 'Approved', 'Ajax Update');
-                    //redirect('admin/order_edit/'.$id);
                 } else {
-                    $error = $result->message;
                     $this->session->set_flashdata('error',$error);
-
-                    //$this->load->model('order_m');
-                    //$this->order_m->updateStatus($id, 'Declined', 'Ajax Update');
-
-                    //redirect('admin/order_edit/'.$id);
                 }
                 exit; // JLB 01-10-18 WTF is this???
             }
