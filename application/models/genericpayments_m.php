@@ -149,7 +149,7 @@ class Genericpayments_m extends CI_Model {
     }
 
     protected function isSuccess_stripe(&$sale_result) {
-        return $sale_result.status == "succeeded";
+        return $sale_result->status == "succeeded";
     }
 
     public function getTransactionID(&$sale_result) {
