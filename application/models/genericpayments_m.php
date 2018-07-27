@@ -33,9 +33,6 @@ class Genericpayments_m extends CI_Model {
 
 
     public function init($store_name) {
-        error_log("Init: " );
-        error_log(print_r($store_name, true));
-        error_log("Merchant type for init: " . $store_name["merchant_type"]);
         switch($store_name["merchant_type"]) {
             case "Stripe":
                 $this->init_stripe($store_name);
@@ -129,8 +126,6 @@ class Genericpayments_m extends CI_Model {
             'source' => $token,
         ]);
 
-        error_log(print_r($charge, true));
-
         return $charge;
     }
 
@@ -173,13 +168,13 @@ class Genericpayments_m extends CI_Model {
     }
 
     protected function getTransactionID_stripe(&$sale_result) {
-        return $sale_result.id; // https://stripe.com/docs/api#retrieve_charge
+        return $sale_result->id; // https://stripe.com/docs/api#retrieve_charge
     }
 
     public function getErrorMessage(&$sale_result) {
         switch ($this->merchant_type) {
             case "Stripe":
-                return $sale_result.failure_message;
+                return $sale_result->failure_message;
                 break;
 
             default:
