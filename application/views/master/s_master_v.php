@@ -115,7 +115,7 @@ if (isset($keywords) &&	$keywords != "") {
 			</style>
 			<!-- LOGO -->
 			<div class="logo">
-				<img src="/logo.png">
+				<a href="<?php echo site_url(""); ?>"><img src="/logo.png"></a>
 			</div>
 			<div id="desktop_cart">
 				<?php if(@$accountAddress['phone']){?>

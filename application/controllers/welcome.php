@@ -26,13 +26,27 @@ class Welcome extends Master_Controller {
         $valid = $this->account_m->verifyUsername($username);
         if ($valid && $valid['status'] == 1) {
             $valid['timestamp'] = time();
-            $_SESSION['userRecord'] = $valid;
+            $_SESSION['userRecord'] = [];
+            $_SESSION['provisional_userRecord'] = $valid;
             return TRUE;
         } else if ($valid && $valid['status'] == 0) {
             $this->form_validation->set_message('_validUsername', 'Your account is not active please contact your administrator.');
             return FALSE;
         } else {
             $this->form_validation->set_message('_validUsername', 'You have provided an invalid Username.');
+            return FALSE;
+        }
+    }
+
+    function _validResetUsername($username) {
+        $valid = $this->account_m->verifyUsername($username);
+        if ($valid && $valid['status'] == 1) {
+            return TRUE;
+        } else if ($valid && $valid['status'] == 0) {
+            $this->form_validation->set_message('_validResetUsername', 'Your account is not active please contact your administrator.');
+            return FALSE;
+        } else {
+            $this->form_validation->set_message('_validResetUsername', 'You have provided an invalid Username.');
             return FALSE;
         }
     }
@@ -57,7 +71,16 @@ class Welcome extends Master_Controller {
             $this->form_validation->set_message('_validPasswordUsername', 'You have provided an invalid Username.');
             return FALSE;
         }
-        return TRUE;
+
+        $valid = $this->account_m->verifyUsername($username);
+        if ($valid && $valid['status'] == 1) {
+            $valid['timestamp'] = time();
+            $_SESSION['userRecord'] = [];
+            $_SESSION['provisional_userRecord'] = $valid;
+            return TRUE;
+        } else {
+            return FALSE;
+        }
     }
 
     function _validEmail($email) {
@@ -82,6 +105,9 @@ class Welcome extends Master_Controller {
     function _updatePassword($password) {
         $this->load->library('encrypt');
         $password = $this->encrypt->encode($password);
+        if (array_key_exists("provisional_userRecord", $_SESSION)) {
+            $_SESSION["provisional_userRecord"]["password"] = $password;
+        }
         $data['password'] = $password;
         $data['username'] = $_POST['email'];
         $this->form_validation->set_message('_updatePassword', 'There has been an error attempting to update your password.');
@@ -92,9 +118,9 @@ class Welcome extends Master_Controller {
         $this->load->library('encrypt');
         unset($_SESSION['activeMachine']);
         unset($_SESSION['garage']);
-        $userRecord = @$_SESSION['userRecord'];
+        $userRecord = array_key_exists("provisional_userRecord", $_SESSION) ? $_SESSION["provisional_userRecord"] : array();
         if (empty($userRecord['password'])) {
-            return TRUE;
+            return FALSE; // I do not know why this would be true!
         }
         $clear_password = $this->encrypt->decode($userRecord['password']);
         $new_password = $this->encrypt->encode($password);
@@ -110,6 +136,7 @@ class Welcome extends Master_Controller {
                 }
             }
 
+            $_SESSION["userRecord"] = $_SESSION["provisional_userRecord"];
             return TRUE;
         } else {
             $this->form_validation->set_message('_processLogin', "You have provided an invalid Password.");
@@ -118,14 +145,15 @@ class Welcome extends Master_Controller {
         }
     }
 
-    private function _createLogin($post) {
-        if ($this->account_m->recordExists('user', array('username' => @$post['username']))) {
-            $this->load->library('encrypt');
-            $post['password'] = $this->encrypt->encode($post['password']);
-            $this->account_m->createUser($post);
-        }
-        echo "Your password has been created!";
-    }
+    // JLB - I think this is unused, anywhere.
+//    private function _createLogin($post) {
+//        if ($this->account_m->recordExists('user', array('username' => @$post['username']))) {
+//            $this->load->library('encrypt');
+//            $post['password'] = $this->encrypt->encode($post['password']);
+//            $this->account_m->createUser($post);
+//        }
+//        echo "Your password has been created!";
+//    }
 
     function _sku_exists($sku) {
         if (strpos($sku, 'coupon') !== FALSE) {
@@ -154,7 +182,7 @@ class Welcome extends Master_Controller {
 
     private function validateForgotPassword() {
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('email', 'Email Address', 'required|callback__validUsername|xss_clean');
+        $this->form_validation->set_rules('email', 'Email Address', 'required|callback__validResetUsername|xss_clean');
         return $this->form_validation->run();
     }
 
@@ -511,7 +539,7 @@ class Welcome extends Master_Controller {
         $data['error'] = FALSE;
         if ($this->validateNewUser(0) !== FALSE) {
             $this->load->model('account_m');
-            $this->account_m->createNewAccount($this->input->post());
+            $this->account_m->createNewAccount($this->input->post(), true);
             $this->validateLogin();
             $data['success_message'] = 'Your account has been created.';
             $_SESSION['newAccount'] = TRUE;
@@ -547,14 +575,27 @@ class Welcome extends Master_Controller {
         echo $tableView;
     }
 
-    public function new_account($form = NULL) {
+    public function new_account_checkout($form = null) {
+        $this->_subNewAccount($form, true);
+    }
 
+    public function new_account($form = NULL)
+    {
+        $this->_subNewAccount($form, false);
+    }
+
+    protected function _subNewAccount($form, $checkout = false) {
         if ($form == 'create') {
             if ($this->validateNewUser(1) === TRUE) {
                 $this->load->model('account_m');
-                $this->account_m->createNewAccount($this->input->post());
-                $this->validateLogin();
-                if (is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')))
+                $this->account_m->createNewAccount($this->input->post(), true);
+
+                // JLB 07-27-18
+                // Some numbnuts used this as a side effect...but it's also over in forgotPassword
+                // And they were using it to set up the user account...but that meant that you just had to guess
+                // a username right to get into forgot password.!
+                //                $this->validateLogin();
+                if ($checkout /* is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')) */)
                     redirect('checkout');
                 elseif (@$_SESSION['url'])
                     redirect($_SESSION['url']);
@@ -564,7 +605,7 @@ class Welcome extends Master_Controller {
         }
         elseif ($form == 'login') {
             if ($this->validateLogin() === TRUE) {
-                if (is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')))
+                if ($checkout /* is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')) */)
                     redirect('checkout');
                 else
                     redirect(@$_SESSION['url']);
@@ -581,9 +622,9 @@ class Welcome extends Master_Controller {
 
         $this->load->helper('easy_captcha_helper');
         $this->_mainData['captcha'] = getCaptchaDisplayElements();
-        if (is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')))
+        if ($checkout) {
             $master = 's_master_v';
-        else {
+        } else {
             $master = 's_nav_master_v';
             $this->setNav('master/navigation_v', 0);
             $this->load->model('parts_m');
@@ -604,7 +645,7 @@ class Welcome extends Master_Controller {
         $this->_mainData['session_url'] = $session_url;
         $page_view = 'account/signup_v';
 
-        if (is_numeric(strpos(@$_SESSION['url'], 'cart'))) {
+        if ($checkout /* is_numeric(strpos(@$_SESSION['url'], 'cart')) */) {
             $page_view = 'account/signup_new_v';
         }
 
@@ -675,6 +716,8 @@ class Welcome extends Master_Controller {
                 $this->_mainData['tempCode'] = $tempCode;
                 if ($this->validateNewPassword($tempCode) !== FALSE) {
                     $this->_mainData['success'] = TRUE;
+                    header("Location: " . site_url(""));
+                    exit();
                 }
             } else
                 $this->_mainData['processingError'] = TRUE;

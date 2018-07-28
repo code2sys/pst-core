@@ -189,7 +189,7 @@ class Account_M extends Master_M
     //$record = $this->selectRecord('user', $where); 
   }
   
- public function createNewAccount($data)
+ public function createNewAccount($data, $logmein = false)
  {
     $this->load->library('encrypt');
     $contactData = array(
@@ -212,6 +212,16 @@ class Account_M extends Master_M
                       'billing_id' =>          @$billingId
                       );
     $userId = $this->createRecord('user', $userData, FALSE);
+
+    if ($logmein) {
+        $valid = $this->verifyUsername($data['email']);
+        if ($valid && $valid['status'] == 1) {
+            $valid['timestamp'] = time();
+            $_SESSION['userRecord'] = $valid;
+        }
+
+    }
+
      return $userId;
   }
   
