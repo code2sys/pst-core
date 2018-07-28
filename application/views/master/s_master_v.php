@@ -76,6 +76,8 @@ if (isset($keywords) &&	$keywords != "") {
 	<!-- Flexisel JS -->
 	<script type="text/javascript" src="<?php echo $s_assets; ?>/js/jquery.flexisel.js"></script>
 
+    <link rel="stylesheet" href="<?php echo jsite_url("qatesting/newassets/stylesheet/style.css"); ?>" />
+    <link rel="stylesheet" href="<?php echo jsite_url("qatesting/newassets/stylesheet/custom.css"); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url("/basebranding.css"); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url("/custom.css"); ?>" />
     <?php echo jget_store_block("bottom_header"); ?>

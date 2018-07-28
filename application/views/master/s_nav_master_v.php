@@ -197,6 +197,9 @@ if (isset($keywords) &&	$keywords != "") {
 <!-- END POPUP JS -->
 
 <?php echo @$header; ?>
+
+    <link rel="stylesheet" href="<?php echo jsite_url("qatesting/newassets/stylesheet/style.css"); ?>" />
+    <link rel="stylesheet" href="<?php echo jsite_url("qatesting/newassets/stylesheet/custom.css"); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url("/basebranding.css"); ?>" />
 	<link rel="stylesheet" href="<?php echo jsite_url("/custom.css"); ?>" />
     <?php echo jget_store_block("bottom_header"); ?>
@@ -209,9 +212,6 @@ if (isset($keywords) &&	$keywords != "") {
 <!-- WRAPPER ==============================================================================-->
 <div class="wrap">
 	
-
-		<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/style.css" />
-		<link rel="stylesheet" href="<?php echo $new_assets_url;?>stylesheet/custom.css" />
 
 
     <?php
