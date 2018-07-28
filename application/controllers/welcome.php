@@ -108,7 +108,7 @@ class Welcome extends Master_Controller {
         unset($_SESSION['garage']);
         $userRecord = array_key_exists("provisional_userRecord", $_SESSION) ? $_SESSION["provisional_userRecord"] : array();
         if (empty($userRecord['password'])) {
-            return FALSE; // I do not know why this would be here
+            return FALSE; // I do not know why this would be true!
         }
         $clear_password = $this->encrypt->decode($userRecord['password']);
         $new_password = $this->encrypt->encode($password);
@@ -133,14 +133,15 @@ class Welcome extends Master_Controller {
         }
     }
 
-    private function _createLogin($post) {
-        if ($this->account_m->recordExists('user', array('username' => @$post['username']))) {
-            $this->load->library('encrypt');
-            $post['password'] = $this->encrypt->encode($post['password']);
-            $this->account_m->createUser($post);
-        }
-        echo "Your password has been created!";
-    }
+    // JLB - I think this is unused, anywhere.
+//    private function _createLogin($post) {
+//        if ($this->account_m->recordExists('user', array('username' => @$post['username']))) {
+//            $this->load->library('encrypt');
+//            $post['password'] = $this->encrypt->encode($post['password']);
+//            $this->account_m->createUser($post);
+//        }
+//        echo "Your password has been created!";
+//    }
 
     function _sku_exists($sku) {
         if (strpos($sku, 'coupon') !== FALSE) {
@@ -526,7 +527,7 @@ class Welcome extends Master_Controller {
         $data['error'] = FALSE;
         if ($this->validateNewUser(0) !== FALSE) {
             $this->load->model('account_m');
-            $this->account_m->createNewAccount($this->input->post());
+            $this->account_m->createNewAccount($this->input->post(), true);
             $this->validateLogin();
             $data['success_message'] = 'Your account has been created.';
             $_SESSION['newAccount'] = TRUE;
@@ -575,7 +576,8 @@ class Welcome extends Master_Controller {
         if ($form == 'create') {
             if ($this->validateNewUser(1) === TRUE) {
                 $this->load->model('account_m');
-                $this->account_m->createNewAccount($this->input->post());
+                $this->account_m->createNewAccount($this->input->post(), true);
+
                 $this->validateLogin();
                 if ($checkout /* is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')) */)
                     redirect('checkout');
