@@ -72,8 +72,15 @@ class Welcome extends Master_Controller {
             return FALSE;
         }
 
-        $_SESSION['provisional_userRecord'] = $valid;
-        return TRUE;
+        $valid = $this->account_m->verifyUsername($username);
+        if ($valid && $valid['status'] == 1) {
+            $valid['timestamp'] = time();
+            $_SESSION['userRecord'] = [];
+            $_SESSION['provisional_userRecord'] = $valid;
+            return TRUE;
+        } else {
+            return FALSE;
+        }
     }
 
     function _validEmail($email) {
