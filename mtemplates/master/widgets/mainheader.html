@@ -71,7 +71,7 @@
             {{#userRecord_show}}
                 <a href="#" onClick="return false" class="dummylink">Welcome: {{userRecord_firstname}} |</a>
 
-                    {{#userRecord_admin}}
+                    {{^userRecord_admin}}
                     <a href="{{s_baseURL}}checkout/account">Account</a>
                     {{/userRecord_admin}}
                     {{#userRecord_admin}}
