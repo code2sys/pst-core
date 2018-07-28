@@ -716,6 +716,8 @@ class Welcome extends Master_Controller {
                 $this->_mainData['tempCode'] = $tempCode;
                 if ($this->validateNewPassword($tempCode) !== FALSE) {
                     $this->_mainData['success'] = TRUE;
+                    header("Location: " . site_url(""));
+                    exit();
                 }
             } else
                 $this->_mainData['processingError'] = TRUE;
