@@ -578,7 +578,11 @@ class Welcome extends Master_Controller {
                 $this->load->model('account_m');
                 $this->account_m->createNewAccount($this->input->post(), true);
 
-                $this->validateLogin();
+                // JLB 07-27-18
+                // Some numbnuts used this as a side effect...but it's also over in forgotPassword
+                // And they were using it to set up the user account...but that meant that you just had to guess
+                // a username right to get into forgot password.!
+                //                $this->validateLogin();
                 if ($checkout /* is_numeric(strpos(@$_SESSION['url'], 'cart')) || is_numeric(strpos(@$_SESSION['url'], 'checkout')) */)
                     redirect('checkout');
                 elseif (@$_SESSION['url'])
