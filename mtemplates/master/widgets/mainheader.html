@@ -67,10 +67,9 @@
         <div class="mblacnt-log">
 
             {{#userRecord_show}}
-            <b>Welcome: {{userRecord_firstname}}</b> <span class="fltR seperator_b">|</span> <b><a href="{{s_baseURL}}welcome/logout"><u>Logout</u></a></b>
+            <a href="#" onClick="return false">Welcome: {{userRecord_firstname}}</a> <a href="{{s_baseURL}}welcome/logout">Logout</a>
             {{#userRecord_admin}}
-            <span class="fltR seperator_b">|</span>
-            <a href="/admin"><b><u>Admin Panel</u></b></a>
+            | <a href="/admin"> Admin Panel</a>
             {{/userRecord_admin}}
 
             {{/userRecord_show}}
