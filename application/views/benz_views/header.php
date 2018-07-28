@@ -88,6 +88,11 @@ $SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
         }
     </style>
 
+    <link rel="stylesheet" href="<?php echo jsite_url("qatesting/newassets/stylesheet/style.css"); ?>" />
+    <link rel="stylesheet" href="<?php echo jsite_url("qatesting/newassets/stylesheet/custom.css"); ?>" />
+
+
+
     <?php echo jget_store_block("bottom_header"); ?>
     <?php echo jget_store_block("moto_bottom_header"); ?>
 </head>
