@@ -214,7 +214,12 @@ class Account_M extends Master_M
     $userId = $this->createRecord('user', $userData, FALSE);
 
     if ($logmein) {
-        $_SESSION['userRecord'] = $this->verifyUsername($data['email']);
+        $valid = $this->verifyUsername($data['email']);
+        if ($valid && $valid['status'] == 1) {
+            $valid['timestamp'] = time();
+            $_SESSION['userRecord'] = $valid;
+        }
+
     }
 
      return $userId;
