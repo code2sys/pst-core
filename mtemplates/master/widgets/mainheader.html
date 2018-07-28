@@ -65,7 +65,22 @@
             </div>
         </div>
         <div class="mblacnt-log">
+
+            {{#userRecord_show}}
+            <b>Welcome: {{userRecord_firstname}}</b> <span class="fltR seperator_b">|</span> <b><a href="{{s_baseURL}}welcome/logout"><u>Logout</u></a></b>
+            {{#userRecord_admin}}
+            <span class="fltR seperator_b">|</span>
+            <a href="/admin"><b><u>Admin Panel</u></b></a>
+            {{/userRecord_admin}}
+
+            {{/userRecord_show}}
+            {{^userRecord_show}}
             <a href="javascript:void(0);" onclick="openLogin();"> <i class="fa fa-user usr" aria-hidden="true"></i> Login/create account</a>
+            {{/userRecord_show}}
+
+            <div class="clear"></div>
+
+
         </div>
         {{{search_placeholder}}}
         <div class="clear"></div>
