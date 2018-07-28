@@ -105,6 +105,9 @@ class Welcome extends Master_Controller {
     function _updatePassword($password) {
         $this->load->library('encrypt');
         $password = $this->encrypt->encode($password);
+        if (array_key_exists("provisional_userRecord", $_SESSION)) {
+            $_SESSION["provisional_userRecord"]["password"] = $password;
+        }
         $data['password'] = $password;
         $data['username'] = $_POST['email'];
         $this->form_validation->set_message('_updatePassword', 'There has been an error attempting to update your password.');
