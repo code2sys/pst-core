@@ -125,7 +125,7 @@ function updateCart(sku)
 			else
 			alert('Please Select at least one product to proceed');
 		<?php else: ?>
-		window.location.replace(s_base_url + 'welcome/new_account');
+		window.location.replace(s_base_url + 'welcome/new_account_checkout');
 		<?php endif; ?>
 }
 

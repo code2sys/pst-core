@@ -138,7 +138,7 @@ td:first-child{
 			<div id="section11" class="cart_wrap_left" style="background: none; border:none; padding: 18px; width: 30%;">
 					
 					<div style="background: #F9F9F9; border: 1px #CCC solid; padding: 4%;border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; margin-bottom:15px;">
-					<form action="<?php echo $s_baseURL.'welcome/new_account/login'; ?>" method="post" id="form_example" class="form_standard">
+					<form action="<?php echo $s_baseURL.'welcome/new_account_checkout/login'; ?>" method="post" id="form_example" class="form_standard">
 			<h3 style="float:left;margin:5px 0 0;">
 				<i class="fa fa-home"></i> Login to Your Account
 			</h3>
@@ -189,7 +189,7 @@ td:first-child{
 									3. Click on the Reset Password button in the email.<br />
 									You can then reset your password.
 								</p>
-								<form action="<?php echo $s_baseURL.'welcome/new_account/forgot'; ?>" method="post" id="form_example" class="form_standard">
+								<form action="<?php echo $s_baseURL.'welcome/new_account_checkout/forgot'; ?>" method="post" id="form_example" class="form_standard">
 				          <p><b>Email Address</b></p>
 									<input id="name" name="email" value="<?php echo @$username; ?>" placeholder="Enter Email Address" class="text reg" />
 								<p style="margin-top:4%;text-align:center;">
@@ -213,7 +213,7 @@ td:first-child{
 			<div id="section22" class="cart_wrap_left" style="background: none; border:none; padding: 18px; width: 30%;">
 			
 			<div style="background: #F9F9F9; border: 1px #CCC solid; padding: 4%;border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;">
-					<form action="<?php echo $s_baseURL.'welcome/new_account/create'; ?>" method="post" class="form_standard">
+					<form action="<?php echo $s_baseURL.'welcome/new_account_checkout/create'; ?>" method="post" class="form_standard">
 
 				<h3 style="float:left;margin:5px 0 0;">
 					<i class="fa fa-list"></i> Create an Account
