@@ -71,6 +71,8 @@ class Welcome extends Master_Controller {
             $this->form_validation->set_message('_validPasswordUsername', 'You have provided an invalid Username.');
             return FALSE;
         }
+
+        $_SESSION['provisional_userRecord'] = $valid;
         return TRUE;
     }
 
