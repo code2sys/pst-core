@@ -2057,7 +2057,7 @@ class Parts_M extends Master_M {
         $custom_where .= "partvariation.manufacturer_part_number = '" . implode("' OR partvariation.manufacturer_part_number = '", array_map("addslashes", $srchTrm)) . "' OR ";
 
         $relevance_bit =' MATCH(part.name) AGAINST("' . addslashes(trim(str_replace('-', ' ', $trimmed))) . '")';
-        $custom_where .=  $relevance_bit;
+        $custom_where .=  $relevance_bit . ")";
         $relevance_bit .= ' as relevance, ';
         return $custom_where;
     }
