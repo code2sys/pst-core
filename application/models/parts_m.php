@@ -2148,7 +2148,7 @@ class Parts_M extends Master_M {
                 $custom_where = $this->_searchCustomWhere($filterArr, $relevance_bit);
 
                 $this->db->where($custom_where);
-                $this->db->order_by("relevance");
+                $this->db->order_by("relevance desc");
             }
         } else {
             $filterArr['search'][0] = '';
