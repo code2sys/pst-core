@@ -334,3 +334,18 @@ function jverifyRecaptcha($response = null) {
     }
 }
 
+
+
+// JLB: I moved this from product_band_v
+if (!function_exists('tag_creating')) {
+    function tag_creating($url)
+    {
+        $url = str_replace(array(' - ', ' '), '-', $url);
+        $url = preg_replace('~[^\\pL0-9_-]+~u', '', $url);
+        $url = trim($url, "-");
+        $url = iconv("utf-8", "us-ascii//TRANSLIT", $url);
+        $url = strtolower($url);
+        $url = preg_replace('~[^-a-z0-9_-]+~', '', $url);
+        return $url;
+    }
+}
