@@ -2181,11 +2181,10 @@ class Parts_M extends Master_M {
         $this->db->group_by('part_id');
         $this->db->where('partnumber.price > 0');
         $this->db->select('part.call_for_price, part.name as label, partnumber.partnumber_id, part.universal_fitment, 
-        $relevance_bit
+        ' . $relevance_bit . '  
 										  count(partnumber) as cnt,
 										  part.part_id,
 										  part.featured as featured,
-										  "' . $filterArr['search'][0] . '" as srch,
 										  partvariation.stock_code,
 										  MIN(partnumber.dealer_sale) AS dealer_sale_min,
 										  MAX(partnumber.dealer_sale) AS dealer_sale_max,
