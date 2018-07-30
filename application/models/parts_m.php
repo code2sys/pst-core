@@ -2143,12 +2143,16 @@ class Parts_M extends Master_M {
         }
 
         $relevance_bit = "";
+        $custom_where = "";
         if (@$filterArr['search']) {
             if (is_array($filterArr['search'])) {
                 $custom_where = $this->_searchCustomWhere($filterArr, $relevance_bit);
+                if ($custom_where != "" ) {
+                    $this->db->where($custom_where);
+                    $this->db->order_by("relevance desc");
+                }
 
-                $this->db->where($custom_where);
-                $this->db->order_by("relevance desc");
+
             }
         } else {
             $filterArr['search'][0] = '';
@@ -2171,11 +2175,7 @@ class Parts_M extends Master_M {
                 $this->db->limit($limit);
         }
         //echo $filterArr['search'][0];
-        if (isset($filterArr['search'][0]) && $filterArr['search'][0] != '') {
-            // $this->db->order_by('srch');
-//            $this->db->order_by('part.part_id desc');
-        } else {
-            //$this->db->order_by('label', 'random');
+        if ($custom_where == '') {
             $this->db->order_by('ordering');
         }
         $this->db->group_by('part_id');
