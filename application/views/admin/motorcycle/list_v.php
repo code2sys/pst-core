@@ -220,8 +220,8 @@
 
 
         $(document).on("change", "input.editable_sale_price", function(e) {
-            var motorcycle_id = e.target.dataSet.motorcycleId;
-            var price = e.target.value;
+            var motorcycle_id = $(e.target).attr("data-motorcycle-id");
+            var price = $(e.target).val();
 
 
             $.ajax({
