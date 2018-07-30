@@ -1048,7 +1048,7 @@ class Parts_M extends Master_M {
             }
         }
         else {
-            $records = $this->getSearchResults($unbrandedFilter, NULL);
+            $records = $this->getSearchResults($unbrandedFilter, NULL, NULL);
             $finalRecords = array();
             if ($records) {
                 foreach ($records as $rec) {
