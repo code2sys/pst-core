@@ -9,18 +9,7 @@ $is_search_results = $band['label'] == 'Search Results' || 'Search Results' == s
 
 require(__DIR__ . "/../fitment_common.php");
 
-if (!function_exists('tag_creating')) {
-    function tag_creating($url)
-    {
-        $url = str_replace(array(' - ', ' '), '-', $url);
-        $url = preg_replace('~[^\\pL0-9_-]+~u', '', $url);
-        $url = trim($url, "-");
-        $url = iconv("utf-8", "us-ascii//TRANSLIT", $url);
-        $url = strtolower($url);
-        $url = preg_replace('~[^-a-z0-9_-]+~', '', $url);
-        return $url;
-    }
-}
+
 ?>
 <!-- CONTENT -->
 <div class="content_section">

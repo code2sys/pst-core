@@ -89,6 +89,7 @@
                     <th><b>Type</b></th>
                     <th><b>Image</b></th>
                     <th><b>Title</b></th>
+                    <th><b>Model</b></th>
                     <th><b>Featured</b></th>
                     <th><b>Active</b></th>
                     <th><b>MSRP</b></th>
@@ -97,6 +98,7 @@
                     <th><b>Mileage</b></th>
                     <th><b>Source</b></th>
                     <th><b>Stock Status</b></th>
+                    <th><b>Cycle Trader</b></th>
                     <th><b>Action</b></th>
                 </tr>
                 </thead>
@@ -121,14 +123,17 @@
             "serverSide" : true,
             "ajax" : {
                 "url" : "<?php echo base_url("admin/minventory_ajax"); ?>",
-                "type" : "POST"
+                "type" : "POST",
+                "cache" : false
             },
             "data" : [],
             "paging" : true,
             "info" : true,
             "stateSave" : true,
             "columns" : [
-                { "width" : "15%" },
+                null,
+                null,
+                null,
                 null,
                 null,
                 null,
@@ -213,5 +218,31 @@
             e.preventDefault();
             submitAjaxAction(e.target.dataset.motorcycleId, "inactive");
         });
+
+
+        $(document).on("change", "input.editable_sale_price", function(e) {
+            var motorcycle_id = $(e.target).attr("data-motorcycle-id");
+            var price = $(e.target).val();
+
+
+            $.ajax({
+                "type" : "POST",
+                "dataType": "json",
+                "url" : "<?php echo site_url("admin/minventory_ajax_updateprice"); ?>/" + motorcycle_id,
+                "data" : {
+                    "sale_price" : price
+                },
+                "success" : function(data) {
+                    // OK, we need to make the table refresh
+                    if (data.success) {
+                        // Do nothing...
+                    } else {
+                        // throw the error.
+                        alert("Error: " + data.error_message);
+                    }
+                }
+            });
+
+        })
     });
 </script>

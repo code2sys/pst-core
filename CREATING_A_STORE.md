@@ -78,7 +78,7 @@ Over in portal
 
 add to storedb and 
 
-insert into dealer (name, dbhandle, directorypath, hostname) values ('Faultline', 'faultline_v1', '/var/www/stores/faultline', 'customer1.powersporttechnologies.com');
+insert into dealer (name, dbhandle, directorypath, hostname) values ('allambs', 'allambs_v1', '/var/www/stores/allambs', 'customer1.powersporttechnologies.com');
 
 
 Virtual Host Configuration
