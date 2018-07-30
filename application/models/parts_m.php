@@ -2059,8 +2059,9 @@ class Parts_M extends Master_M {
         $custom_where .= "partvariation.manufacturer_part_number = '" . implode("' OR partvariation.manufacturer_part_number = '", array_map("addslashes", $srchTrm)) . "' OR ";
 
         $relevance_bit =' MATCH(part.name) AGAINST("' . addslashes(trim(str_replace('-', ' ', $trimmed))) . '")';
-        $custom_where .=  $relevance_bit . ")";
-        $relevance_bit .= ' as relevance, ';
+        $second_relevance_bit = ' MATCH(brand.title) AGAINST("' . addslashes(trim(str_replace('-', ' ', $trimmed))) . '")';
+        $custom_where .=  $relevance_bit . ' OR ' . $second_relevance_bit . ')';
+        $relevance_bit .= ' as relevance, ' . $second_relevance_bit . ' as second_relevance';
         return $custom_where;
     }
 
@@ -2112,8 +2113,11 @@ class Parts_M extends Master_M {
             $this->db->where($where, NULL, FALSE);
         }
 
+        $this->db->join('partbrand', 'partbrand.part_id = part.part_id');
+        $this->db->join('brand', 'partbrand.brand_id = brand.brand_id');
+
+
         if (@$filterArr['brand']) {
-            $this->db->join('partbrand', 'partbrand.part_id = part.part_id');
             $this->db->where('partbrand.brand_id = ' . $filterArr['brand']);
         }
 
@@ -2151,7 +2155,7 @@ class Parts_M extends Master_M {
                 $custom_where = $this->_searchCustomWhere($filterArr, $relevance_bit);
                 if ($custom_where != "" ) {
                     $this->db->where($custom_where);
-                    $this->db->order_by("relevance desc");
+                    $this->db->order_by("second_relavnce * 10 + relevance desc");
                 }
 
 
