@@ -575,7 +575,7 @@ abstract class Motorcycleadmin extends Firstadmin
                 $p["featured"] > 0 ? "Yes" : "No",
                 $p["status"] > 0 ? "Yes" : "No",
                 $p["retail_price"],
-                $p["sale_price"],
+                "<input type='text' size='16' name='sale_price' data-motorcycle-id='" . $p['id'] . "' value='" . htmlspecialchars($p["sale_price"]) . "' class='editable_sale_price' />",
                 $p["condition"] == 1 ? "New" : "Used",
                 $p["mileage"],
                 $p["source"],
