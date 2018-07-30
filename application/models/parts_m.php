@@ -1777,8 +1777,10 @@ class Parts_M extends Master_M {
             $this->db->where($where, NULL, FALSE);
         }
 
+        $this->db->join('partbrand', 'partbrand.part_id = part.part_id');
+        $this->db->join("brand", "partbrand.brand_id = brand.brand_id");
+
         if (@$filterArr['brand']) {
-            $this->db->join('partbrand', 'partbrand.part_id = part.part_id');
             $this->db->where('partbrand.brand_id = ' . $filterArr['brand']);
         }
 
