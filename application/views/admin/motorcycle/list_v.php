@@ -90,6 +90,7 @@
                     <th><b>Image</b></th>
                     <th><b>Title</b></th>
                     <th><b>Featured</b></th>
+                    <th><b>Manager Special</b></th>
                     <th><b>Active</b></th>
                     <th><b>MSRP</b></th>
                     <th><b>Sale Price</b></th>
@@ -129,6 +130,7 @@
             "info" : true,
             "stateSave" : true,
             "columns" : [
+                null,
                 null,
                 null,
                 null,
