@@ -507,7 +507,7 @@ class Motorcycle_M extends Master_M {
     public function enhancedGetMotorcycles($filter = NULL, $orderBy = NULL, $limit = 20, $offset = 0) {
         $this->load->helper("jonathan");
 
-        $where = jonathan_generate_likes(array("motorcycle.title", "motorcycle.make", "model", "motorcycle_category.name", "motorcycle.year", "motorcycle_type.name", "motorcycle.stock_status", "motorcycle.sku"), $filter, "WHERE");
+        $where = jonathan_generate_likes(array("motorcycle.title", "motorcycle.make", "motorcycle.model", "motorcycle_category.name", "motorcycle.year", "motorcycle_type.name", "motorcycle.stock_status", "motorcycle.sku", "motorcyclespec.final_value"), $filter, "WHERE");
 
         $total_count = 0;
         $query = $this->db->query("Select count(*) as cnt from motorcycle where deleted = 0");
@@ -520,7 +520,7 @@ class Motorcycle_M extends Master_M {
         if ($where != "") {
             $where .= " AND motorcycle.deleted = 0 ";
             // $query = $this->db->query("Select count(distinct part_id) as cnt from part left join partpartnumber using (part_id) left join partnumber  using (partnumber_id)  left join (select partvariation.*, concat(distributor.name, ' ', partvariation.part_number) as partlabel from partvariation join distributor using (distributor_id)) zpartvariation using (partnumber_id) left join partimage using (part_id) $where");
-            $query = $this->db->query("Select count(distinct motorcycle.id) as cnt from motorcycle join motorcycle_category on motorcycle.category = motorcycle_category.id join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id $where");
+            $query = $this->db->query("Select count(distinct motorcycle.id) as cnt from motorcycle join motorcycle_category on motorcycle.category = motorcycle_category.id join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id left join motorcyclespec on motorcycle.id = motorcyclespec.motorcycle_id AND motorcyclespec.attribute_name = 'MfrModelID' AND motorcyclespec.hidden = 0  $where");
             foreach ($query->result_array() as $row) {
                 $filtered_count = $row["cnt"];
             }
