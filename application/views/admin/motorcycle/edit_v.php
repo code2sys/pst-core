@@ -665,7 +665,7 @@ $cstdata = (array) json_decode($product['data']);
 		
 		var cst = parseInt($('.ttl-cst').val());
 		var sale = parseInt($('.sl-prc').val());
-		var mrgn = parseFloat((cst*100)/sale).toFixed(2);
+		var mrgn = parseFloat(((sale - cst)*100)/sale).toFixed(2);
 		$('.mrgn').val(mrgn);
 		if( cst > 0 && sale > 0 ) {
 			$('.prft').val(sale-cst);
