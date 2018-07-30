@@ -529,6 +529,7 @@ abstract class Motorcycleadmin extends Firstadmin
             "motorcycle.mileage",
             "motorcycle.source",
             "motorcycle.stock_status",
+            "motorcycle.cycletrader_feed_status",
             "motorcycle.title"
         );
 
@@ -577,6 +578,7 @@ abstract class Motorcycleadmin extends Firstadmin
                 $p["mileage"],
                 $p["source"],
                 $p["stock_status"],
+                $p["cycletrader_feed_status"] > 0 ? "Yes" : "No",
                 "<span class='nowrap'><a href='#' class='edit-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-edit'></i>&nbsp;Edit</a></span><br/> " ./* edit */ /* delete */ /* active */ /* inactive */
                 "<span class='nowrap'><a href='#' class='remove-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-remove'></i>&nbsp;Remove</a></span><br/> " .
                 ($p["status"] > 0 ? "<span class='nowrap'><a href='#' class='inactive-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-play'></i>&nbsp;Active</a></span><br/> " : "<span class='nowrap'><a href='#' class='active-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-pause'></i>&nbsp;Inactive</a></span><br/> ")
