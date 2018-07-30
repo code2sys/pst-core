@@ -519,7 +519,6 @@ class Shopping extends Master_Controller {
         // JLB: Bypass #1: If you enter the brand name, then go to the brand page.
 
         $brand_match = $PSTAPI->brand()->fetch(array(
-            "active" => 1,
             "name" => $trimmed_search
         ), true);
 
@@ -530,7 +529,6 @@ class Shopping extends Master_Controller {
         }
 
         $brand_match = $PSTAPI->brand()->fetch(array(
-            "active" => 1,
             "title" => $trimmed_search
         ), true);
 
