@@ -217,5 +217,31 @@
             e.preventDefault();
             submitAjaxAction(e.target.dataset.motorcycleId, "inactive");
         });
+
+
+        $(document).on("change", "input.editable_sale_price", function(e) {
+            var motorcycle_id = e.target.dataSet.motorcycleId;
+            var price = e.target.value;
+
+
+            $.ajax({
+                "type" : "POST",
+                "dataType": "json",
+                "url" : "<?php echo site_url("admin/minventory_ajax_updateprice"); ?>/" + motorcycle_id,
+                "data" : {
+                    "sale_price" : price
+                },
+                "success" : function(data) {
+                    // OK, we need to make the table refresh
+                    if (data.success) {
+                        // Do nothing...
+                    } else {
+                        // throw the error.
+                        alert("Error: " + data.error_message);
+                    }
+                }
+            });
+
+        })
     });
 </script>

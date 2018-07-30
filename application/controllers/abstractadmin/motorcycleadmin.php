@@ -17,6 +17,42 @@ require_once(__DIR__ . "/firstadmin.php");
 abstract class Motorcycleadmin extends Firstadmin
 {
 
+    public function minventory_ajax_updateprice($motorcycle_id) {
+        $price = floatVal(array_key_exists("sale_price", $_REQUEST) ? preg_replace("/[^0-9\.]/", "", $_REQUEST["sale_price"]) : 0.00);
+
+        $result = array(
+            "success" => false,
+            "success_message" => "",
+            "error_message" => "Sorry, no valid price received."
+        );
+
+        if ($price > 0) {
+            global $PSTAPI;
+            initializePSTAPI();
+
+            $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
+
+            if (is_null($motorcycle)) {
+                $result["error_message"] = "Sorry, motorcycle not found.";
+            } else {
+                $data = json_decode($motorcycle->get("data"), true);
+                $motorcycle->set("retail_price", $price);
+
+                $motorcycle->set("profit", $data["total_cost"] - $price);
+                if ($data["total_cost"] > 0) {
+                    $motorcycle->set("margin", round($data["total_cost"] * 100.0 / $price, 2));
+                } else {
+                    $motorcycle->set("margin", 0);
+                }
+
+                $motorcycle->save();
+                $result["success"] = true;
+            }
+        }
+
+        print json_encode($result);
+    }
+
     protected function validateMotorcycleDesc() {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('descr', 'Description', 'required|max_length[5000]|xss_clean');
