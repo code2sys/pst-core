@@ -38,7 +38,7 @@ abstract class Motorcycleadmin extends Firstadmin
                 $data = json_decode($motorcycle->get("data"), true);
                 $motorcycle->set("retail_price", $price);
 
-                $motorcycle->set("profit", $data["total_cost"] - $price);
+                $motorcycle->set("profit", $price -  $data["total_cost"]);
                 if ($data["total_cost"] > 0) {
                     $motorcycle->set("margin", round($data["total_cost"] * 100.0 / $price, 2));
                 } else {
