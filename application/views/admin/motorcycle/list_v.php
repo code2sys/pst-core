@@ -129,7 +129,7 @@
             "info" : true,
             "stateSave" : true,
             "columns" : [
-                { "width" : "15%" },
+                null,
                 null,
                 null,
                 null,
