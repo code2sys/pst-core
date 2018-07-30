@@ -123,12 +123,6 @@ $cstdata = (array) json_decode($product['data']);
                         </td>
                     </tr>
                     <tr>
-                        <td style="width:50px;"><b>Manager Special:</b></td>
-                        <td>
-                            <?php echo form_checkbox('manager_special', 1, $product['manager_special']); ?>
-                        </td>
-                    </tr>
-                    <tr>
                         <td style="width:50px;"><b>Cycle trader:</b></td>
                         <td>
                             <?php echo form_checkbox('cycletrader_feed_status', 1, $product['cycletrader_feed_status']); ?>
