@@ -2043,7 +2043,7 @@ class Parts_M extends Master_M {
     }
     
     protected function _searchCustomWhere($filterArr, &$relevance_bit) {
-        $trimmed = trim($filterArr['search'][0]);
+        $trimmed = str_replace(array('"', "'"), "", trim($filterArr['search'][0]));
         if (trim($filterArr['search'][0]) == '') {
             return "";
         }
