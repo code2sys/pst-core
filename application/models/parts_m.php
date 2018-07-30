@@ -2061,7 +2061,7 @@ class Parts_M extends Master_M {
         $relevance_bit =' MATCH(part.name) AGAINST("' . addslashes(trim(str_replace('-', ' ', $trimmed))) . '")';
         $second_relevance_bit = ' MATCH(brand.title) AGAINST("' . addslashes(trim(str_replace('-', ' ', $trimmed))) . '")';
         $custom_where .=  $relevance_bit . ' OR ' . $second_relevance_bit . ')';
-        $relevance_bit .= ' as relevance, ' . $second_relevance_bit . ' as second_relevance';
+        $relevance_bit .= ' as relevance, ' . $second_relevance_bit . ' as second_relevance, ';
         return $custom_where;
     }
 
