@@ -1804,7 +1804,9 @@ class Parts_M extends Master_M {
                 // a different search in both cases...
                 $relevance_bit = "";
                 $custom_where = $this->_searchCustomWhere($filterArr, $relevance_bit);
-                $this->db->where($custom_where);
+                if ($custom_where != "") {
+                    $this->db->where($custom_where);
+                }
             }
         }
 
