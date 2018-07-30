@@ -123,7 +123,8 @@
             "serverSide" : true,
             "ajax" : {
                 "url" : "<?php echo base_url("admin/minventory_ajax"); ?>",
-                "type" : "POST"
+                "type" : "POST",
+                "cache" : false
             },
             "data" : [],
             "paging" : true,
