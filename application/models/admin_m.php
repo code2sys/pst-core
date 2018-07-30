@@ -2694,6 +2694,7 @@ class Admin_M extends Master_M {
         }
 
         $featured = ($post['featured'] == 1) ? 1 : 0;
+        $post['manager_special'] = ($post['manager_special'] == 1) ? 1 : 0;
         $post['category'] = $category['id'];
         $post['featured'] = $featured;
         $status = ($post['status'] == 1) ? 1 : 0;

@@ -1048,7 +1048,7 @@ class Parts_M extends Master_M {
             }
         }
         else {
-            $records = $this->getSearchResults($unbrandedFilter, NULL);
+            $records = $this->getSearchResults($unbrandedFilter, NULL, NULL);
             $finalRecords = array();
             if ($records) {
                 foreach ($records as $rec) {
@@ -1777,8 +1777,10 @@ class Parts_M extends Master_M {
             $this->db->where($where, NULL, FALSE);
         }
 
+        $this->db->join('partbrand', 'partbrand.part_id = part.part_id');
+        $this->db->join("brand", "partbrand.brand_id = brand.brand_id");
+
         if (@$filterArr['brand']) {
-            $this->db->join('partbrand', 'partbrand.part_id = part.part_id');
             $this->db->where('partbrand.brand_id = ' . $filterArr['brand']);
         }
 
@@ -1802,8 +1804,11 @@ class Parts_M extends Master_M {
                 // JLB 02-19-18
                 // I am fairly certain the geniuses who made this were using
                 // a different search in both cases...
-                $custom_where = $this->_searchCustomWhere($filterArr);
-                $this->db->where($custom_where);
+                $relevance_bit = "";
+                $custom_where = $this->_searchCustomWhere($filterArr, $relevance_bit);
+                if ($custom_where != "") {
+                    $this->db->where($custom_where);
+                }
             }
         }
 
@@ -2041,54 +2046,24 @@ class Parts_M extends Master_M {
         }
     }
     
-    protected function _searchCustomWhere($filterArr) {
+    protected function _searchCustomWhere($filterArr, &$relevance_bit) {
+        $trimmed = $filterArr['search'][0];
+        if ($trimmed == '') {
+            return "";
+        }
+
+
         $custom_where = "(";
         //$field = " FIELD(`ord`,".implode(',',$filterArr['search']).')';
-        $srchTrm = explode(' ', $filterArr['search'][0]);
+        $srchTrm = explode(' ', $trimmed);
 
         $custom_where .= "partvariation.part_number = '" . implode("' OR partvariation.part_number = '", array_map("addslashes", $srchTrm)) . "' OR ";
         $custom_where .= "partvariation.manufacturer_part_number = '" . implode("' OR partvariation.manufacturer_part_number = '", array_map("addslashes", $srchTrm)) . "' OR ";
 
-
-        $searchTerm = '';
-
-        // JLB 02-19-18
-        // I admit I have no idea why they are doing this. It looks like they're dancing around plural or not plural.
-        $end = end($srchTrm);
-        unset($srchTrm[count($srchTrm) - 1]);
-        $end1 = trim($end, 's');
-        if ($end1 == $end) {
-            $end1 = '';
-        }
-        $searchTerm = implode(' ', $srchTrm) . " " . $end . " " . $end1;
-        $searchTerm1 = implode(' ', $srchTrm) . " " . $end . " " . $end1;
-        //echo $searchTerm;exit;
-        //$srchField = implode(' ', $filterArr['search']);
-        //foreach($filterArr['search'] as $search)
-        //{
-        //echo strlen(trim($searchTerm));
-        // JLB 02-19-18 WTF is the point of this first one? I assume that this was something that they hardcoded to get past testing?
-//                if (strpos(trim($searchTerm), 'cl-17') !== false || strpos(trim($searchTerm), 'cl 17') !== false) {
-//                    $searchTerm = 'hjc 2015 cl-17';
-//                    $custom_where .= " part.name like '%" . trim($searchTerm) . "%' OR";
-//                } else\
-        $this->load->helper("jonathan");
-        if (strlen(trim($searchTerm)) < 5 || strpos(trim($searchTerm), '-') !== false) {
-            $custom_where .= " part.name like '%" . trim(jonathan_escape_for_likes($searchTerm1, "=")) . "%' ESCAPE '=' OR ";
-        } else {
-            $custom_where .= ' MATCH(part.name) AGAINST("' . addslashes(trim(str_replace('-', ' ', $searchTerm))) . '") OR ';
-        }
-        if (strpos($searchTerm1, '-') !== false) {
-            //$srchTrm1 = explode(' ', $filterArr['search'][0]);
-            //foreach($srchTrm1 as $k => $v) {
-            //$custom_where .= " part.name like '%".$searchTerm1."%' OR";
-            //}
-        }
-
-        //$custom_where .= ' part.name like "%'.strtoupper(trim($search)).'%" OR';
-        //$this->db->like('part.name',strtoupper(trim($search)));
-        //}
-        $custom_where = rtrim($custom_where, 'OR ') . ')';
+        $relevance_bit =' MATCH(part.name) AGAINST("' . addslashes(trim(str_replace('-', ' ', $trimmed))) . '")';
+        $second_relevance_bit = ' MATCH(brand.title) AGAINST("' . addslashes(trim(str_replace('-', ' ', $trimmed))) . '")';
+        $custom_where .=  $relevance_bit . ' OR ' . $second_relevance_bit . ')';
+        $relevance_bit .= ' as relevance, ' . $second_relevance_bit . ' as second_relevance, ';
         return $custom_where;
     }
 
@@ -2140,8 +2115,11 @@ class Parts_M extends Master_M {
             $this->db->where($where, NULL, FALSE);
         }
 
+        $this->db->join('partbrand', 'partbrand.part_id = part.part_id');
+        $this->db->join('brand', 'partbrand.brand_id = brand.brand_id');
+
+
         if (@$filterArr['brand']) {
-            $this->db->join('partbrand', 'partbrand.part_id = part.part_id');
             $this->db->where('partbrand.brand_id = ' . $filterArr['brand']);
         }
 
@@ -2172,12 +2150,17 @@ class Parts_M extends Master_M {
             }
         }
 
+        $relevance_bit = "";
+        $custom_where = "";
         if (@$filterArr['search']) {
             if (is_array($filterArr['search'])) {
-                $custom_where = $this->_searchCustomWhere($filterArr);
+                $custom_where = $this->_searchCustomWhere($filterArr, $relevance_bit);
+                if ($custom_where != "" ) {
+                    $this->db->where($custom_where);
+                    $this->db->order_by("second_relevance * 10 + relevance desc, part.name");
+                }
 
-                $this->db->where($custom_where);
-                //$this->db->order_by($field);
+
             }
         } else {
             $filterArr['search'][0] = '';
@@ -2200,20 +2183,16 @@ class Parts_M extends Master_M {
                 $this->db->limit($limit);
         }
         //echo $filterArr['search'][0];
-        if (isset($filterArr['search'][0]) && $filterArr['search'][0] != '') {
-            // $this->db->order_by('srch');
-            $this->db->order_by('part.part_id desc');
-        } else {
-            //$this->db->order_by('label', 'random');
+        if ($custom_where == '') {
             $this->db->order_by('ordering');
         }
         $this->db->group_by('part_id');
         $this->db->where('partnumber.price > 0');
         $this->db->select('part.call_for_price, part.name as label, partnumber.partnumber_id, part.universal_fitment, 
+        ' . $relevance_bit . '  
 										  count(partnumber) as cnt,
 										  part.part_id,
 										  part.featured as featured,
-										  "' . $filterArr['search'][0] . '" as srch,
 										  partvariation.stock_code,
 										  MIN(partnumber.dealer_sale) AS dealer_sale_min,
 										  MAX(partnumber.dealer_sale) AS dealer_sale_max,

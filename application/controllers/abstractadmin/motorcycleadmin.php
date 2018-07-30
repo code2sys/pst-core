@@ -17,6 +17,42 @@ require_once(__DIR__ . "/firstadmin.php");
 abstract class Motorcycleadmin extends Firstadmin
 {
 
+    public function minventory_ajax_updateprice($motorcycle_id) {
+        $price = floatVal(array_key_exists("sale_price", $_REQUEST) ? preg_replace("/[^0-9\.]/", "", $_REQUEST["sale_price"]) : 0.00);
+
+        $result = array(
+            "success" => false,
+            "success_message" => "",
+            "error_message" => "Sorry, no valid price received."
+        );
+
+        if ($price > 0) {
+            global $PSTAPI;
+            initializePSTAPI();
+
+            $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
+
+            if (is_null($motorcycle)) {
+                $result["error_message"] = "Sorry, motorcycle not found.";
+            } else {
+                $data = json_decode($motorcycle->get("data"), true);
+                $motorcycle->set("sale_price", $price);
+
+                $motorcycle->set("profit", $price -  $data["total_cost"]);
+                if ($data["total_cost"] > 0) {
+                    $motorcycle->set("margin", round(($price -  floatVal($data["total_cost"])) * 100.0 / $price, 2));
+                } else {
+                    $motorcycle->set("margin", 0);
+                }
+
+                $motorcycle->save();
+                $result["success"] = true;
+            }
+        }
+
+        print json_encode($result);
+    }
+
     protected function validateMotorcycleDesc() {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('descr', 'Description', 'required|max_length[5000]|xss_clean');
@@ -520,8 +556,9 @@ abstract class Motorcycleadmin extends Firstadmin
             "motorcycle_category.name",
             "motorcycle_type.name",
             "motorcycle.title",
-            "motorcycle.title",
+            "motorcycle.model",
             "motorcycle.featured",
+            "motorcycle.manager_special",
             "motorcycle.status",
             "motorcycle.retail_price",
             "motorcycle.sale_price",
@@ -529,6 +566,7 @@ abstract class Motorcycleadmin extends Firstadmin
             "motorcycle.mileage",
             "motorcycle.source",
             "motorcycle.stock_status",
+            "motorcycle.cycletrader_feed_status",
             "motorcycle.title"
         );
 
@@ -569,14 +607,16 @@ abstract class Motorcycleadmin extends Firstadmin
                 $p["type_name"],
                 "<img style='width: 60px; height: auto;' src='" . ( $p["image_name"] != "" ? ($p["external"] > 0 ? $p["image_name"] : ("/media/" . $p["image_name"])) : "data:image/jpeg;base64,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" ) . "' />",
                 $p["title"],
+                $p["model"],
                 $p["featured"] > 0 ? "Yes" : "No",
                 $p["status"] > 0 ? "Yes" : "No",
                 $p["retail_price"],
-                $p["sale_price"],
+                "<input type='text' size='16' name='sale_price' data-motorcycle-id='" . $p['id'] . "' value='" . htmlspecialchars($p["sale_price"]) . "' class='editable_sale_price' />",
                 $p["condition"] == 1 ? "New" : "Used",
                 $p["mileage"],
                 $p["source"],
                 $p["stock_status"],
+                $p["cycletrader_feed_status"] > 0 ? "Yes" : "No",
                 "<span class='nowrap'><a href='#' class='edit-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-edit'></i>&nbsp;Edit</a></span><br/> " ./* edit */ /* delete */ /* active */ /* inactive */
                 "<span class='nowrap'><a href='#' class='remove-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-remove'></i>&nbsp;Remove</a></span><br/> " .
                 ($p["status"] > 0 ? "<span class='nowrap'><a href='#' class='inactive-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-play'></i>&nbsp;Active</a></span><br/> " : "<span class='nowrap'><a href='#' class='active-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-pause'></i>&nbsp;Inactive</a></span><br/> ")

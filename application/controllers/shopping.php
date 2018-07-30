@@ -508,14 +508,52 @@ class Shopping extends Master_Controller {
     /*     * ***************************** Search Function Start ********************************* */
 
     public function search_product() {
-        $_SESSION['url'] = 'shopping/search_product/';
         $metaTag = '';
-        $listParameters['search'][] = trim($_GET['search']);
-        //$listParameters['search'][] = trim($_GET['search'], 's');
-        $listParameters1['search'][] = trim($_GET['search']);
-        //$listParameters1['search'][] = trim($_GET['search'], 's');
+        $trimmed_search = trim(str_replace(array('"', "'"), '', $_GET['search']));
+        $listParameters['search'][] = $trimmed_search;
+        $listParameters1['search'][] = $trimmed_search;
 
-        if (empty($listParameters) || empty($_GET['search']))
+        global $PSTAPI;
+        initializePSTAPI();
+
+        // JLB: Bypass #1: If you enter the brand name, then go to the brand page.
+
+        $brand_match = $PSTAPI->brand()->fetch(array(
+            "name" => $trimmed_search
+        ), true);
+
+        if (count($brand_match) == 1) {
+            // GO TO IT...
+            header("Location: " . site_url($brand_match[0]["slug"]));
+            exit();
+        }
+
+        $brand_match = $PSTAPI->brand()->fetch(array(
+            "title" => $trimmed_search
+        ), true);
+
+        if (count($brand_match) == 1) {
+            // GO TO IT...
+            header("Location: " . site_url($brand_match[0]["slug"]));
+            exit();
+        }
+
+        // JLB: Bypass #2: If you enter a product name, exactly, then you go to that product.
+        $part_match = $PSTAPI->part()->fetch(array(
+            "name" => $trimmed_search
+        ), true);
+
+
+        if (count($part_match) == 1) {
+            // GO TO IT...
+            header("Location: " . site_url("shopping/item/" . $part_match[0]["part_id"] . "/" . tag_creating($part_match[0]["name"])));
+            exit();
+        }
+
+        $_SESSION['url'] = 'shopping/search_product/';
+
+
+        if (empty($listParameters) || empty($_GET['search']) || $trimmed_search == "")
             redirect();
         $this->loadSidebar('widgets/garage_v');
         // Filter options for current search
@@ -544,12 +582,6 @@ class Shopping extends Master_Controller {
         $this->_mainData['machines'] = $this->parts_m->getMachinesDd();
         $this->_mainData['rideSelector'] = $this->load->view('widgets/ride_select_v', $this->_mainData, TRUE);
 
-        // MAIN SECTION
-        //$this->_mainData['band'] = $this->parts_m->getRecentlyViewed(0,  @$_SESSION['recentlyViewed'], 4);
-        //$this->_mainData['recentlyViewedBand'] = $this->load->view('widgets/product_band_v', $this->_mainData, TRUE);
-        //unset($this->_mainData['band']);
-        //$this->_mainData['band']['products'] = $this->parts_m->getSearchResults($listParameters, NULL);
-        // Created Variables for it in Category section, but calling it here to take advantage of breadcrumbs.
         $this->loadSidebar('widgets/category_filter_v');
         $this->loadSidebar('widgets/brand_filter_v');
         $this->loadSidebar('widgets/question_filter_v');
