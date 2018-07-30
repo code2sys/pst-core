@@ -509,7 +509,7 @@ class Shopping extends Master_Controller {
 
     public function search_product() {
         $metaTag = '';
-        $trimmed_search = trim($_GET['search']);
+        $trimmed_search = trim(str_replace(array('"', "'"), '', $_GET['search']));
         $listParameters['search'][] = $trimmed_search;
         $listParameters1['search'][] = $trimmed_search;
 
