@@ -1,12 +1,30 @@
 <div class="searchHolder search-one">
     {{^HIDE_SEARCH}}
-    <form action="{{base_url}}shopping/productlist" method="post" id="moto_search" class="form_standard">
+    <form action="{{base_url}}shopping/productlist" method="post" id="moto_search" class="form_standard moto_search_form">
         <input id="search" name="search" placeholder="{{SEARCH_PLACEHOLDER_WORDING}}" class="search-bx" style="float:left;" />
-        <a href="javascript:void(0);" class="goBtn_b" onClick="setSearch($('#search').val());">Go!</a>
+        <a href="javascript:void(0);" class="goBtn_b">Go!</a>
     </form>
     {{/HIDE_SEARCH}}
     <div class="clear"></div>
 </div>
+
+<script type="application/javascript">
+    (function() {
+
+
+        $("form.moto_search_form").on("submit", function(e) {
+            setSearch($(e.target).children().first().val());
+        });
+
+        $("form.moto_search_form .goBtn_b").on("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            setSearch($(e.target).prev().val());
+        });
+
+    })();
+
+</script>
 
 {{#search_holder}}
 <div class="supper_social searchHolder">
