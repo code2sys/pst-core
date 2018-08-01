@@ -58,7 +58,9 @@ $SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
 	<script src="<?php echo $new_assets_url; ?>js/lightslider.js"></script>
 	<script src="<?php echo $new_assets_url; ?>js/jquery.fancybox.pack.js"></script>
 
-
+    <script>
+        var base_url = '<?php echo base_url(); ?>';
+    </script>
 	<script>
 	$(document).ready(function(){
 		$(".sidebar-menu").click(function(){
