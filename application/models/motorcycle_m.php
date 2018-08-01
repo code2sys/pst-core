@@ -507,7 +507,7 @@ class Motorcycle_M extends Master_M {
     public function enhancedGetMotorcycles($filter = NULL, $orderBy = NULL, $limit = 20, $offset = 0) {
         $this->load->helper("jonathan");
 
-        $where = jonathan_generate_likes(array("motorcycle.title", "motorcycle.make", "motorcycle.model", "motorcycle_category.name", "motorcycle.year", "motorcycle_type.name", "motorcycle.stock_status", "motorcycle.sku"), $filter, "WHERE");
+        $where = jonathan_generate_likes(array("motorcycle.title", "motorcycle.make", "motorcycle.model", "motorcycle_category.name", "motorcycle.year", "motorcycle_type.name", "motorcycle.stock_status", "motorcycle.sku", "motorcyclespec.final_value"), $filter, "WHERE");
 
         $total_count = 0;
         $query = $this->db->query("Select count(*) as cnt from motorcycle where deleted = 0");
@@ -520,7 +520,7 @@ class Motorcycle_M extends Master_M {
         if ($where != "") {
             $where .= " AND motorcycle.deleted = 0 ";
             // $query = $this->db->query("Select count(distinct part_id) as cnt from part left join partpartnumber using (part_id) left join partnumber  using (partnumber_id)  left join (select partvariation.*, concat(distributor.name, ' ', partvariation.part_number) as partlabel from partvariation join distributor using (distributor_id)) zpartvariation using (partnumber_id) left join partimage using (part_id) $where");
-            $query = $this->db->query("Select count(distinct motorcycle.id) as cnt from motorcycle join motorcycle_category on motorcycle.category = motorcycle_category.id join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id $where");
+            $query = $this->db->query("Select count(distinct motorcycle.id) as cnt from motorcycle join motorcycle_category on motorcycle.category = motorcycle_category.id join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id left join motorcyclespec on motorcycle.id = motorcyclespec.motorcycle_id AND motorcyclespec.attribute_name = 'MfrModelID' AND motorcyclespec.hidden = 0  $where");
             foreach ($query->result_array() as $row) {
                 $filtered_count = $row["cnt"];
             }
@@ -529,7 +529,7 @@ class Motorcycle_M extends Master_M {
         }
 
         // Finally, run it!
-        $query = $this->db->query("Select motorcycle.id, motorcycle.sku, motorcycle_category.name as category_name, motorcycle_type.name as type_name, motorcycle.title, motorcycle.featured, motorcycle.status, motorcycle.condition, motorcycle.retail_price, motorcycle.sale_price, motorcycle.condition, IfNull(motorcycle.mileage, 0) as mileage, motorcycle.source, motorcycleimage.image_name, motorcycleimage.external, motorcycle.stock_status, motorcycle.cycletrader_feed_status, motorcycle.manager_special, motorcycle.model from motorcycle join motorcycle_category on motorcycle.category = motorcycle_category.id join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id left join (select motorcycle_id, min(priority_number) as priority_number from motorcycleimage where disable = 0 group by motorcycle_id ) thumbnail_motorcycleimage on motorcycle.id = thumbnail_motorcycleimage.motorcycle_id left join motorcycleimage on thumbnail_motorcycleimage.motorcycle_id = motorcycleimage.motorcycle_id AND thumbnail_motorcycleimage.priority_number = motorcycleimage.priority_number  $where group by motorcycle.id $orderBy limit $limit offset $offset ");
+        $query = $this->db->query("Select motorcycle.id, motorcycle.sku, motorcycle_category.name as category_name, motorcycle_type.name as type_name, motorcycle.title, motorcycle.featured, motorcycle.status, motorcycle.condition, motorcycle.retail_price, motorcycle.sale_price, motorcycle.condition, IfNull(motorcycle.mileage, 0) as mileage, motorcycle.source, motorcycleimage.image_name, motorcycleimage.external, motorcycle.stock_status, motorcycle.cycletrader_feed_status, motorcycle.manager_special, motorcyclespec.final_value as model from motorcycle join motorcycle_category on motorcycle.category = motorcycle_category.id join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id left join (select motorcycle_id, min(priority_number) as priority_number from motorcycleimage where disable = 0 group by motorcycle_id ) thumbnail_motorcycleimage on motorcycle.id = thumbnail_motorcycleimage.motorcycle_id left join motorcycleimage on thumbnail_motorcycleimage.motorcycle_id = motorcycleimage.motorcycle_id AND thumbnail_motorcycleimage.priority_number = motorcycleimage.priority_number left join motorcyclespec on motorcycle.id = motorcyclespec.motorcycle_id AND motorcyclespec.attribute_name = 'MfrModelID' AND motorcyclespec.hidden = 0  $where group by motorcycle.id $orderBy limit $limit offset $offset ");
         $rows = $query->result_array();
 
         return array($rows, $total_count, $filtered_count);
