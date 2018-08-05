@@ -107,7 +107,7 @@
 
 
 <script type="application/javascript">
-    (function() {
+    $(document).on("ready", function() {
 
         var thisWidget = grecaptcha.render('trade_in_recaptcha_{{motorcycle_id}}', {
             'sitekey' : '{{RECAPTCHA_KEY}}'
@@ -132,5 +132,5 @@
             });
         });
 
-    })();
+    });
 </script>
