@@ -6,6 +6,12 @@
             </div>
 
             <div class="modal-body" id="scol">
+
+                <div class="ackbody" style="border: 1px solid green; background-color: #ddffdd; padding: 24px; font-weight: bold; font-size: 125%; text-align: center; display: none">
+                    Message Received - Thank You
+                </div>
+
+                <div class="mainbody">
                 {{{form_open_string}}}
                 <div class="form-group">
                     <input type="text" class="form-control clear_on_submit" placeholder="first name" name="firstName" required="">
@@ -82,7 +88,7 @@
                 <h3 class="txt-title">I am Interested in this Vehicle</h3>
 
                 <div class="form-group">
-                    <input type="text" class="form-control clear_on_submit" placeholder="Unit Name" value="{{motorcycle_title}}" readonly name="motorcycle">
+                    <input type="text" class="form-control" placeholder="Unit Name" value="{{motorcycle_title}}" readonly name="motorcycle">
                 </div>
 
                 <input type="hidden" name="product_id" value="{{motorcycle_id}}">
@@ -93,6 +99,7 @@
                     <input type="submit" class="btn bttn">
                 </div>
                 {{{form_close_string}}}
+                </div>
             </div>
         </div>
     </div>
@@ -113,6 +120,15 @@
             submitEnquiryFormModal("trade-in-value-modal_{{motorcycle_id}}", "{{form_action_url}}", function() {
                 $("#trade-in-value-modal_{{motorcycle_id}} form input.clear_on_submit").val("");
                 grecaptcha.reset(thisWidget);
+
+                $("#trade-in-value-modal_{{motorcycle_id}} .mainbody").hide();
+                $("#trade-in-value-modal_{{motorcycle_id}} .ackbody").show();
+
+                setTimeout(function() {
+                    $("#trade-in-value-modal_{{motorcycle_id}} .ackbody").hide();
+                    $("#trade-in-value-modal_{{motorcycle_id}} .mainbody").show();
+                    $("#trade-in-value-modal_{{motorcycle_id}}").modal("hide");
+                }, 750);
             });
         });
 
