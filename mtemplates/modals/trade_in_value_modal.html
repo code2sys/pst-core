@@ -87,7 +87,7 @@
 
                 <input type="hidden" name="product_id" value="{{motorcycle_id}}">
 
-                <div class="g-recaptcha" data-sitekey="{{RECAPTCHA_KEY}}" id="trade_in_recaptcha_{{motorcycle_id}}"></div>
+                <div  id="trade_in_recaptcha_{{motorcycle_id}}"></div>
 
                 <div class="col-md-12 text-center" style="float:none;">
                     <input type="submit" class="btn bttn">
@@ -102,13 +102,17 @@
 <script type="application/javascript">
     (function() {
 
+        var thisWidget = grecaptcha.render('trade_in_recaptcha_{{motorcycle_id}}', {
+            'sitekey' : '{{RECAPTCHA_KEY}}'
+        });
+
         // There was code here present in every modal...that is over in major_unit_detail_modal_global_include.html.
         $("#trade-in-value-modal_{{motorcycle_id}} form").on("submit", function(e) {
             e.preventDefault();
             e.stopPropagation();
             submitEnquiryFormModal("trade-in-value-modal_{{motorcycle_id}}", "{{form_action_url}}", function() {
                 $("#trade-in-value-modal_{{motorcycle_id}} form input.clear_on_submit").val("");
-                grecaptcha.reset("trade_in_recaptcha_{{motorcycle_id}}");
+                grecaptcha.reset(thisWidget);
             });
         });
 
