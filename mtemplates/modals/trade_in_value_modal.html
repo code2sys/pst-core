@@ -118,7 +118,7 @@
             e.preventDefault();
             e.stopPropagation();
             submitEnquiryFormModal("trade-in-value-modal_{{motorcycle_id}}", "{{form_action_url}}", function() {
-                $("#trade-in-value-modal_{{motorcycle_id}} form input.clear_on_submit").val("");
+                // $("#trade-in-value-modal_{{motorcycle_id}} form input.clear_on_submit").val("");
                 grecaptcha.reset(thisWidget);
 
                 $("#trade-in-value-modal_{{motorcycle_id}} .mainbody").hide();
