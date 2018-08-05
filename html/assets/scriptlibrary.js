@@ -35,7 +35,7 @@ function serializeForm(form) {
     The purpose of this is to submit the enquiry form modal; if there is an error, we alert the error message and stay put.
     Otherwise, we close the modal.
  */
-function submitEnquiryFormModal(modal_id, url) {
+function submitEnquiryFormModal(modal_id, url, success_callback) {
     if (!url) {
         url = "/welcome/productEnquiry";
     }
@@ -53,8 +53,13 @@ function submitEnquiryFormModal(modal_id, url) {
             dataType: "json",
             success: function(response) {
                 if (response.success) {
-                    // shut it down!
-                    $("#" + modal_id).modal("hide");
+
+                    if (success_callback) {
+                        success_callback();
+                    } else {
+                        // shut it down!
+                        $("#" + modal_id).modal("hide");
+                    }
                 } else {
                     // I would ideally like a nice spot to slip this into the form instead of a JavaScript alert.
                     alert(response.error_message);
