@@ -53,11 +53,12 @@ function submitEnquiryFormModal(modal_id, url, success_callback) {
             dataType: "json",
             success: function(response) {
                 if (response.success) {
-                    // shut it down!
-                    $("#" + modal_id).modal("hide");
 
                     if (success_callback) {
                         success_callback();
+                    } else {
+                        // shut it down!
+                        $("#" + modal_id).modal("hide");
                     }
                 } else {
                     // I would ideally like a nice spot to slip this into the form instead of a JavaScript alert.
