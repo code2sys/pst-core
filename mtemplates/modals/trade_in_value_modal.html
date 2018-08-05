@@ -106,7 +106,10 @@
         $("#trade-in-value-modal_{{motorcycle_id}} form").on("submit", function(e) {
             e.preventDefault();
             e.stopPropagation();
-            submitEnquiryFormModal("trade-in-value-modal_{{motorcycle_id}}", "{{form_action_url}}");
+            submitEnquiryFormModal("trade-in-value-modal_{{motorcycle_id}}", "{{form_action_url}}", function() {
+                $("#trade-in-value-modal_{{motorcycle_id}} form input").val("");
+                grecaptcha.reset();
+            });
         });
 
     })();
