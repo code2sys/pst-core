@@ -122,5 +122,8 @@ mustache_tmpl_set($master_v_front_template, "bottom_footer", $CI->load->view("ma
 mustache_tmpl_set($master_v_front_template, "bottom_body", jget_store_block("bottom_body"));
 mustache_tmpl_set($master_v_front_template, "customer_exit_modal", $this->load->view('modals/customer_exit_modal.php', array(), true));
 
+
+mustache_tmpl_set($master_v_front_template, "trade_in_value_modal_generic", $CI->load->view("modals/trade_in_value_modal", array(), true));
+
 echo mustache_tmpl_parse($master_v_front_template);
 
