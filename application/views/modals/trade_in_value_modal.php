@@ -7,8 +7,10 @@ $CI->load->helper("mustache_helper");
 
 $trade_in_value_modal = mustache_tmpl_open("modals/trade_in_value_modal.html");
 
-mustache_tmpl_set($trade_in_value_modal, "motorcycle_id", $motorcycle["id"]);
-mustache_tmpl_set($trade_in_value_modal, "motorcycle_title", $motorcycle["title"]);
+if (isset($motorcycle) && is_array($motorcycle) && $motorcycle['id'] > 0) {
+    mustache_tmpl_set($trade_in_value_modal, "motorcycle_id", $motorcycle["id"]);
+    mustache_tmpl_set($trade_in_value_modal, "motorcycle_title", $motorcycle["title"]);
+}
 
 mustache_tmpl_set($trade_in_value_modal, "form_open_string", form_open('welcome/productEnquiry', array('class' => 'form_standard')));
 mustache_tmpl_set($trade_in_value_modal, "form_close_string", form_close());
