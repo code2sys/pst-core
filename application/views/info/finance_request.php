@@ -124,7 +124,11 @@
 							<td>
 								<select name="year">
 									<option value="">Select Year</option>
-									<?php for($i=1990;$i<=date('Y');$i++) { ?>
+									<?php
+                                    $current_year = intVal(date("Y"));
+
+                                    // I don't know why 1990..it was there...
+                                    for($i=$current_year + 1;$i >= 1990;$i--) { ?>
 									<option value="<?php echo $i;?>" <?php echo set_value('year') == $i ? 'selected' : '';?>><?php echo $i;?></option>
 									<?php } ?>
 								</select>
