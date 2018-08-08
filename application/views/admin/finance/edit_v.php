@@ -119,12 +119,17 @@ if ($application['joint'] > 0) {
 								<label for="year" >Year</label>
 							</td>
 							<td>
-								<select name="year">
-									<option value="">Select Year</option>
-									<?php for($i=1990;$i<=date('Y');$i++) { ?>
-									<option value="<?php echo $i;?>" <?php echo $application['year'] == $i ? 'selected' : '';?>><?php echo $i;?></option>
-									<?php } ?>
-								</select>
+                                <select name="year">
+                                    <option value="">Select Year</option>
+                                    <?php
+                                    $current_year = intVal(date("Y"));
+
+                                    // I don't know why 1990..it was there...
+                                    // Dumbass did a copy paste here - can you believe that crap?
+                                    for($i=$current_year + 1;$i >= 1990;$i--) { ?>
+                                        <option value="<?php echo $i;?>" <?php echo set_value('year') == $i ? 'selected' : '';?>><?php echo $i;?></option>
+                                    <?php } ?>
+                                </select>
 								<span><b>*</b></span>
 							</td>
 						</tr>
