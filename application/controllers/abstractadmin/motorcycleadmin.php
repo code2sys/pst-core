@@ -102,7 +102,7 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->renderMasterPage('admin/master_v', 'admin/motorcycle/edit_v', $this->_mainData);
     }
 
-    public function update_motorcycle($id) {
+    public function update_motorcycle($id = 0) {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
