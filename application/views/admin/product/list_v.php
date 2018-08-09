@@ -49,6 +49,7 @@
                     <th><b>Title</b></th>
                     <th><b>Dealer Only?</b></th>
                     <th><b>Featured</b></th>
+                    <th><b>Visible In Store</b></th>
                     <th><b>$ Cost</b></th>
                     <th><b>$ Retail</b></th>
                     <th><b>$ Markup</b></th>
@@ -85,6 +86,7 @@
             "stateSave" : true,
             "columns" : [
                 { "width" : "15%" },
+                null,
                 null,
                 null,
                 null,
