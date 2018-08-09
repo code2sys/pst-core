@@ -83,6 +83,13 @@
                         </td>
                     </tr>
                     <tr>
+                        <td><b>Visible In Store:</b></td>
+                        <td>
+                            <label><input type="radio" name="invisible" value="0" <?php if ($product['invisible'] == 0): ?>checked="checked"<?php endif; ?>>Yes, visible in store</label>
+                            <label><input type="radio" name="invisible" value="1" <?php if ($product['invisible'] > 0): ?>checked="checked"<?php endif; ?>>No, invisible in store</label>
+                        </td>
+                    </tr>
+                    <tr>
                         <td><b>Feature Brand Product:</b></td>
                         <td>
                             <?php echo form_checkbox('featured_brand', 1, $product['featured_brand']); ?>

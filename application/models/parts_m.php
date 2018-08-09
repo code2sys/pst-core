@@ -1799,6 +1799,8 @@ class Parts_M extends Master_M {
             }
         }
 
+        $this->db->where("part.invisible", 0);
+
         if (@$filterArr['search']) {
             if (is_array($filterArr['search'])) {
                 // JLB 02-19-18
@@ -2092,6 +2094,7 @@ class Parts_M extends Master_M {
         $this->db->join('partpartnumber', 'partpartnumber.partnumber_id = partnumber.partnumber_id');
         $this->db->join('part', 'part.part_id = partpartnumber.part_id');
         $this->setHighLevelSearchCriteria($filterArr, $dealPercent, $categories);
+        $this->db->where("part.invisible", 0);
 
 
         if (@$filterArr['category']) {
