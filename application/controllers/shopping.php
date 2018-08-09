@@ -746,6 +746,13 @@ class Shopping extends Master_Controller {
 
     /*     * ***************************** Brand Function End ********************************* */
     public function item($partId = NULL) {
+        global $PSTAPI;
+        initializePSTAPI();
+        $part = $PSTAPI->part()->get($partId);
+        if (!is_null($part) && $part->get("invisible") > 0) {
+            $partId = null; // Make it null so we don't show this screen.
+        }
+
 
         // echo '<pre>';
         // print_r($_SESSION);
