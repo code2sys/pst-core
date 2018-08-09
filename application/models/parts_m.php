@@ -1297,7 +1297,7 @@ class Parts_M extends Master_M {
             $this->db->where($where, NULL, FALSE);
         }
         $this->db->select('part.part_id, name as label, part.call_for_price, part.universal_fitment');
-        $where = array('featured' => 1);
+        $where = array('featured' => 1, "invisible" => 0);
         $this->db->group_by('part.part_id');
         if (is_numeric($limit))
             $this->db->limit($limit);
@@ -1348,6 +1348,7 @@ class Parts_M extends Master_M {
         $this->db->select('part.part_id, name as label, AVG(reviews.rating) as rating, reviews.review, part.call_for_price, part.universal_fitment');
         $this->db->join('reviews', 'reviews.part_id = part.part_id');
         $where = array();
+        $this->db->where("invisible", 0);
         $this->db->group_by('part.part_id');
         $this->db->order_by('rating DESC');
         if (is_numeric($limit))
