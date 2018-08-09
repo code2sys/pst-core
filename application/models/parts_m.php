@@ -685,6 +685,7 @@ class Parts_M extends Master_M {
                             $custom_where .= ' MATCH(part.name) AGAINST("' . trim($searchTerm) . '") OR';
                             $custom_where = rtrim($custom_where, 'OR') . ')';
                             $this->db->where($custom_where);
+                            $this->db->where("part.invisible", 0);
 
                             //foreach($filterArr['search'] as $search)
                             //{
@@ -718,6 +719,7 @@ class Parts_M extends Master_M {
                                         foreach ($filterArr['search'] as $search) {
                                             $this->db->like('part.name', strtoupper($search));
                                         }
+                                        $this->db->where("part.invisible", 0);
                                     }
                                 }
                                 $this->db->from('partcategory');
