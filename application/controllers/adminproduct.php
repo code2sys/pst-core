@@ -171,7 +171,7 @@ class Adminproduct extends Admin {
                 $p["price_min"] != "" ? ($p["price_min"] != $p["price_max"] ? '$' . $p['price_min'] . ' - ' . $p['price_max'] : '$' . $p['price_min']): "",
                 $p['markup'],
                 $p["sale_min"] != "" ? ($p["sale_min"] != $p["sale_max"] ? '$' . $p['sale_min'] . ' - ' . $p['sale_max'] : '$' . $p['sale_min']): "",
-                '<a href="' . base_url('adminproduct/product_edit/' . $p['part_id']) . '"><i class="fa fa-edit"></i>&nbsp;<b>Edit</b></a>' . ($p['mx'] == 0 ? ' | <a href="' . base_url('adminproduct/product_remove/' . $p['part_id']) . '"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a>' : '')
+                '<a href="' . base_url('adminproduct/product_edit/' . $p['part_id']) . '"><i class="fa fa-edit"></i>&nbsp;<b>Edit</b></a>' . ($p['mx'] == 0 ? ' | <a href="' . base_url('adminproduct/product_remove/' . $p['part_id']) . '"><i class="fa fa-times"></i>&nbsp;<b>Delete</b></a>' : '') . ($p["invisible"] > 0 ? (' | <a href="' . base_url('adminproduct/product_show/' . $p['part_id']) . '"><i class="fa fa-play"></i>&nbsp;<b>Show In Store</b></a>') : (' | <a href="' . base_url('adminproduct/product_hide/' . $p['part_id']) . '"><i class="fa fa-pause"></i>&nbsp;<b>Hide In Store</b></a>'))
             );
         }
 
@@ -196,6 +196,54 @@ class Adminproduct extends Admin {
         $this->db->query("Delete from part where mx = 0 and part_id = ?", array($part_id));
 
         $_SESSION["jonathan_product_message"] = "Product removed successfully.";
+
+        redirect('adminproduct/product');
+    }
+
+    public function product_show($part_id) {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        // OK, we need to go see if that part is, in fact, an MX part...
+        global $PSTAPI;
+        initializePSTAPI();
+        $part = $PSTAPI->part()->get($part_id);
+
+        if (!is_null($part)) {
+            $part->set("invisible", 0);
+            if ($part->get("protect") > 0 && $part->get("protected_because_invisible") > 0) {
+                $part->set("protect", 0);
+                $part->set("protected_because_invisible", 0);
+            }
+            $part->save();
+        }
+
+        $_SESSION["jonathan_product_message"] = "Product marked visible.";
+
+        redirect('adminproduct/product');
+    }
+
+    public function product_hide($part_id) {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        // OK, we need to go see if that part is, in fact, an MX part...
+        global $PSTAPI;
+        initializePSTAPI();
+        $part = $PSTAPI->part()->get($part_id);
+
+        if (!is_null($part)) {
+            $part->set("invisible", 1);
+            if ($part->get("protect") == 0) {
+                $part->set("protect", 1);
+                $part->set("protected_because_invisible", 1);
+            }
+            $part->save();
+        }
+
+        $_SESSION["jonathan_product_message"] = "Product marked invisible.";
 
         redirect('adminproduct/product');
     }
