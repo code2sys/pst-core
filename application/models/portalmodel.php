@@ -241,6 +241,7 @@ class Portalmodel extends Master_M {
 										  part.name, 
 										  part.featured, 
 										  part.mx, 
+										  part.invisible,
 										  group_concat(distinct zpartvariation.partlabel order by partlabel separator ', ') as partnumber, 
 										  MIN(If(partnumber.dealer_sale > 0, partnumber.dealer_sale, partnumber.sale)) AS sale_min, 
 										  MAX(If(partnumber.dealer_sale > 0, partnumber.dealer_sale, partnumber.sale)) AS sale_max,
