@@ -540,7 +540,8 @@ class Shopping extends Master_Controller {
 
         // JLB: Bypass #2: If you enter a product name, exactly, then you go to that product.
         $part_match = $PSTAPI->part()->fetch(array(
-            "name" => $trimmed_search
+            "name" => $trimmed_search,
+            "invisible" => 0
         ), true);
 
 
