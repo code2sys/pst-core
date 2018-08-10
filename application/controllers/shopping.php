@@ -559,7 +559,7 @@ class Shopping extends Master_Controller {
         $_SESSION['url'] = 'shopping/search_product/';
 
 
-        if (empty($listParameters) || empty($_GET['search']) || $trimmed_search == "")
+        if (empty($listParameters) || (!array_key_exists("brand_bypass", $_GET) && empty($_GET['search']) || $trimmed_search == ""))
             redirect();
         $this->loadSidebar('widgets/garage_v');
         // Filter options for current search
