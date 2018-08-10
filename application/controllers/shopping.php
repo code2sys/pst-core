@@ -548,7 +548,7 @@ class Shopping extends Master_Controller {
                 $brand = $PSTAPI->brand()->get($_GET["brand_id"]);
                 if (!is_null($brand)) {
                     $this->_mainData["brandMain"] = $brand->to_array();
-                    $this->_mainData["title"] = $brand->get("title");
+                    $this->_mainData["title"] = $brand->get("title") . " - ";
                 }
 
             }
