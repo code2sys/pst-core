@@ -507,7 +507,8 @@ class Shopping extends Master_Controller {
 
     /*     * ***************************** Search Function Start ********************************* */
 
-    public function search_product() {
+    public function search_product()
+    {
         $metaTag = '';
         $trimmed_search = trim(str_replace(array('"', "'"), '', $_GET['search']));
         $listParameters['search'][] = $trimmed_search;
@@ -517,25 +518,31 @@ class Shopping extends Master_Controller {
         initializePSTAPI();
 
         // JLB: Bypass #1: If you enter the brand name, then go to the brand page.
+        if (!array_key_exists("brand_bypass", $_GET) || $_GET["brand_bypass"] == 0) {
+            $brand_match = $PSTAPI->brand()->fetch(array(
+                "name" => $trimmed_search
+            ), true);
 
-        $brand_match = $PSTAPI->brand()->fetch(array(
-            "name" => $trimmed_search
-        ), true);
+            if (count($brand_match) == 1) {
+                // GO TO IT...
+                header("Location: " . site_url($brand_match[0]["slug"]));
+                exit();
+            }
 
-        if (count($brand_match) == 1) {
-            // GO TO IT...
-            header("Location: " . site_url($brand_match[0]["slug"]));
-            exit();
-        }
+            $brand_match = $PSTAPI->brand()->fetch(array(
+                "title" => $trimmed_search
+            ), true);
 
-        $brand_match = $PSTAPI->brand()->fetch(array(
-            "title" => $trimmed_search
-        ), true);
-
-        if (count($brand_match) == 1) {
-            // GO TO IT...
-            header("Location: " . site_url($brand_match[0]["slug"]));
-            exit();
+            if (count($brand_match) == 1) {
+                // GO TO IT...
+                header("Location: " . site_url($brand_match[0]["slug"]));
+                exit();
+            }
+        } else {
+            if (array_key_exists("brand_id", $_GET)) {
+                $listParameters['brand'] = intVal($_GET['brand_id']);
+                $listParameters1['brand'] = intVal($_GET['brand_id']);
+            }
         }
 
         // JLB: Bypass #2: If you enter a product name, exactly, then you go to that product.
@@ -554,13 +561,14 @@ class Shopping extends Master_Controller {
         $_SESSION['url'] = 'shopping/search_product/';
 
 
-        if (empty($listParameters) || empty($_GET['search']) || $trimmed_search == "")
+        if (empty($listParameters) || (!array_key_exists("brand_bypass", $_GET) && (empty($_GET['search']) || $trimmed_search == ""))) {
             redirect();
+        }
         $this->loadSidebar('widgets/garage_v');
         // Filter options for current search
 
         $this->_mainData['category'] = $this->parts_m->getSearchCategories($listParameters);
-        $this->_mainData['brand'] = $this->parts_m->getBrands($listParameters);
+        $this->_mainData['brand'] = array_key_exists("brand_bypass", $_GET) ? array() : $this->parts_m->getBrands($listParameters);
         unset($this->_mainData['band']);
 
         // ACTUAL PRODUCT SEARCH IS DONE IN THIS MODEL FUNCTION
@@ -568,8 +576,10 @@ class Shopping extends Master_Controller {
         //usort($this->_mainData['band']['products'], 'sortByOrder');
         $this->_mainData['questions'] = $this->parts_m->getFilterQuestions($listParameters);
         $this->_mainData['band']['label'] = 'Search Results';
+
         $_SESSION['breadcrumbs'] = $listParameters;
-        $this->_mainData['breadcrumbs'] = $listParameters;
+
+        $this->_mainData['breadcrumbs'] = $_SESSION['breadcrumbs'];
         //$_SESSION['breadcrumbs'] = array('search' => array($_GET['search']));
         //$this->_mainData['breadcrumbs'] = array('search' => array($_GET['search']));
 
@@ -686,7 +696,7 @@ class Shopping extends Master_Controller {
                 else
                     $value = strip_tags($value);
             }
-            $this->_mainData['category'] = $this->parts_m->getSearchCategoriesBrand($listParameters, 1000);
+            $this->_mainData['category'] = $this->parts_m->newGetSearchCategoriesBrand($record['brand_id']);
 
             $listParameters['extra'] = 'featured';
             $featured = $this->parts_m->getSearchResults($listParameters, $this->getActiveMachine(), 1000);
@@ -738,6 +748,9 @@ class Shopping extends Master_Controller {
 
             $this->setNav('master/navigation_v', 0);
             $this->_mainData['new_header'] = 1;
+            $this->_mainData['brand_id'] = $record['brand_id'];
+            $this->_mainData['brand_slug'] = $record['slug'];
+            $this->_mainData['brandName'] = $record['name'];
 
             $this->setFooterView('master/footer_v.php');
             $this->renderMasterPage('master/master_v_brand_list', 'info/product_list_v_brand', $this->_mainData);

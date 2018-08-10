@@ -918,6 +918,65 @@ class Parts_M extends Master_M {
         return $finalArray;
     }
 
+    /**
+     * @param $brand_id
+     * @return array of records category_id => array("label", "count", "parentId", "link")
+     */
+    public function newGetSearchCategoriesBrand($brand_id) {
+        global $PSTAPI;
+        initializePSTAPI();
+        $brand_categories = $PSTAPI->brand()->getBrandCategories($brand_id);
+        $leaf_categories = $this->_filterLeafCategoriesOnly($brand_categories);
+
+        // Sort them, by the name...
+        usort($leaf_categories, function($a, $b) {
+            return strnatcasecmp($a["name"], $b["name"]);
+        });
+
+        // Now, assemble them into the final thing..
+        $seen_names = array();
+        $finalArray = array();
+
+        foreach ($leaf_categories as $lc) {
+            $name = strtolower($lc["name"]);
+
+            if (!array_key_exists($name, $seen_names)) {
+                $seen_names[$name] = true;
+                $finalArray[$lc["category_id"]] = array(
+                    "label" => $lc["name"],
+                    "id" => $lc["category_id"],
+                    "count" => 0,
+                    "parentId" => $lc["parent_category_id"],
+                    "link" => $this->categoryReturnURL(NULL, $lc["long_name"])
+                );
+            }
+        }
+
+        return $finalArray;
+    }
+
+    // The purpose of this is, given a list of categories, to remove the ones that are parents, so you are left with just the leaves.
+    // JLB Note: I bet you could sort it, look at the long name, and do this in a single pass.
+    protected function _filterLeafCategoriesOnly($categories) {
+        $clean_categories = array();
+
+        $seen_as_parents = array();
+
+        foreach ($categories as $c) {
+            if ($c["parent_category_id"] > 0) {
+                $seen_as_parents[$c["parent_category_id"]] = true;
+            }
+        }
+
+        foreach ($categories as $c) {
+            if (!array_key_exists($c["category_id"], $seen_as_parents)) {
+                $clean_categories[] = $c;
+            }
+        }
+
+        return $clean_categories;
+    }
+
     public function getSearchCategoriesBrand($filterArr) {
         $uncategoryFilter = $filterArr;
         unset($uncategoryFilter['category']);

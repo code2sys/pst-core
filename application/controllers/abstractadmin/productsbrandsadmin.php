@@ -529,7 +529,7 @@ abstract class Productsbrandsadmin extends Customeradmin {
             $this->load->model('parts_m');
             $this->_mainData['age_gender'] = $this->parts_m->age_gender();
             $listParameters = array('brand' => $brandData['brand_id']);
-            $this->_mainData['categories'] = $this->parts_m->getSearchCategoriesBrand($listParameters, 1000);
+            $this->_mainData['categories'] = $this->parts_m->newGetSearchCategoriesBrand($brandData['brand_id']);
             $this->_mainData['sizechart'] = $this->admin_m->getSizeChart($id);
             $this->_mainData['id'] = $id;
         }
