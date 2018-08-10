@@ -747,6 +747,7 @@ class Shopping extends Master_Controller {
             $this->setNav('master/navigation_v', 0);
             $this->_mainData['new_header'] = 1;
             $this->_mainData['brand_id'] = $record['brand_id'];
+            $this->_mainData['brand_slug'] = $record['slug'];
 
             $this->setFooterView('master/footer_v.php');
             $this->renderMasterPage('master/master_v_brand_list', 'info/product_list_v_brand', $this->_mainData);
