@@ -34,12 +34,15 @@ require(__DIR__ . "/../fitment_common.php");
                         $category = 'extra'; ?>
 
                         <a href="javascript:void(0);" onclick="removeMainSearch('<?php echo $category; ?>', '<?php echo $value; ?>' )" style="color:#F00;"><i class="fa fa-times"></i></a> <?php echo $value; ?> &nbsp; |  &nbsp; <?php
+                        // JLB: I am not to blame. Some schmendrick ACTUALLY USES the colon-delimited start-end ones in a run of pure code. I don't get it.
                     elseif(($value != @$breadcrumbs['brand']) && ($value != @$breadcrumbs['featured']) && ($value != @$breadcrumbs['deal'])):
-                        if(is_array($value)):
-                            foreach($value as $id => $subname):
+                        if(is_array($value)) {
+                            foreach($value as $id => $subname) {
+                                if (trim($subname) == "") {
+                                    continue; // skip if blank.
+                                }
 
                                 if($name == 'question'): ?>
-
                                     <a href="javascript:void(0);" onclick="removeMainSearch('question', '<?php echo $id; ?>' )" style="color:#F00;"><i class="fa fa-times"></i>
                                     </a>
                                     <?php
@@ -48,7 +51,8 @@ require(__DIR__ . "/../fitment_common.php");
                                     </a>
                                 <?php endif;
                                 echo ucwords(preg_replace('/([A-Z])/',"\n".'$1',$subname)); ?> &nbsp; |  &nbsp; <?php
-                            endforeach;  endif;
+                            }
+                        }
 
                     elseif($name == 'brand'):
                         $category = 'brand'; ?>
