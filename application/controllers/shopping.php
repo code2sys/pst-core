@@ -542,6 +542,14 @@ class Shopping extends Master_Controller {
             if (array_key_exists("brand_id", $_GET)) {
                 $listParameters['brand'] = intVal($_GET['brand_id']);
                 $listParameters1['brand'] = intVal($_GET['brand_id']);
+
+                global $PSTAPI;
+                initializePSTAPI();
+                $brand = $PSTAPI->brand()->get($_GET["brand_id"]);
+                if (!is_null($brand)) {
+                    $this->_mainData["brandMain"] = $brand->to_array();
+                }
+
             }
         }
 
