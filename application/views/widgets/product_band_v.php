@@ -16,7 +16,7 @@ require(__DIR__ . "/../fitment_common.php");
     <!-- FEATURED PRODUCTS -->
     <div class="section_head">
         <h4><?php echo $band['label']; ?></h4>
-        <?php //print_r($breadcrumbs); ?>
+        <!-- <?php print_r($breadcrumbs); ?> -->
         <?php if(!empty($breadcrumbs) && $is_search_results): ?>
             <!-- BREADCRUMBS -->
             <div style="float:right; font-size:12px;">
