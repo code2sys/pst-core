@@ -576,8 +576,10 @@ class Shopping extends Master_Controller {
         //usort($this->_mainData['band']['products'], 'sortByOrder');
         $this->_mainData['questions'] = $this->parts_m->getFilterQuestions($listParameters);
         $this->_mainData['band']['label'] = 'Search Results';
+
         $_SESSION['breadcrumbs'] = $listParameters;
-        $this->_mainData['breadcrumbs'] = $listParameters;
+
+        $this->_mainData['breadcrumbs'] = $_SESSION['breadcrumbs'];
         //$_SESSION['breadcrumbs'] = array('search' => array($_GET['search']));
         //$this->_mainData['breadcrumbs'] = array('search' => array($_GET['search']));
 
@@ -694,7 +696,7 @@ class Shopping extends Master_Controller {
                 else
                     $value = strip_tags($value);
             }
-            $this->_mainData['category'] = $this->parts_m->getSearchCategoriesBrand($listParameters, 1000);
+            $this->_mainData['category'] = $this->parts_m->newGetSearchCategoriesBrand($record['brand_id']);
 
             $listParameters['extra'] = 'featured';
             $featured = $this->parts_m->getSearchResults($listParameters, $this->getActiveMachine(), 1000);
@@ -747,6 +749,8 @@ class Shopping extends Master_Controller {
             $this->setNav('master/navigation_v', 0);
             $this->_mainData['new_header'] = 1;
             $this->_mainData['brand_id'] = $record['brand_id'];
+            $this->_mainData['brand_slug'] = $record['slug'];
+            $this->_mainData['brandName'] = $record['name'];
 
             $this->setFooterView('master/footer_v.php');
             $this->renderMasterPage('master/master_v_brand_list', 'info/product_list_v_brand', $this->_mainData);
