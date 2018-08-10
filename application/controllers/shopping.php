@@ -517,25 +517,26 @@ class Shopping extends Master_Controller {
         initializePSTAPI();
 
         // JLB: Bypass #1: If you enter the brand name, then go to the brand page.
+        if (!array_key_exists("brand_bypass", $_GET) || $_GET["brand_bypass"] == 0) {
+            $brand_match = $PSTAPI->brand()->fetch(array(
+                "name" => $trimmed_search
+            ), true);
 
-        $brand_match = $PSTAPI->brand()->fetch(array(
-            "name" => $trimmed_search
-        ), true);
+            if (count($brand_match) == 1) {
+                // GO TO IT...
+                header("Location: " . site_url($brand_match[0]["slug"]));
+                exit();
+            }
 
-        if (count($brand_match) == 1) {
-            // GO TO IT...
-            header("Location: " . site_url($brand_match[0]["slug"]));
-            exit();
-        }
+            $brand_match = $PSTAPI->brand()->fetch(array(
+                "title" => $trimmed_search
+            ), true);
 
-        $brand_match = $PSTAPI->brand()->fetch(array(
-            "title" => $trimmed_search
-        ), true);
-
-        if (count($brand_match) == 1) {
-            // GO TO IT...
-            header("Location: " . site_url($brand_match[0]["slug"]));
-            exit();
+            if (count($brand_match) == 1) {
+                // GO TO IT...
+                header("Location: " . site_url($brand_match[0]["slug"]));
+                exit();
+            }
         }
 
         // JLB: Bypass #2: If you enter a product name, exactly, then you go to that product.
