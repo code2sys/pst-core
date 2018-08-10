@@ -694,7 +694,7 @@ class Shopping extends Master_Controller {
                 else
                     $value = strip_tags($value);
             }
-            $this->_mainData['category'] = $this->parts_m->getSearchCategoriesBrand($listParameters, 1000);
+            $this->_mainData['category'] = $this->parts_m->newGetSearchCategoriesBrand($record['brand_id']);
 
             $listParameters['extra'] = 'featured';
             $featured = $this->parts_m->getSearchResults($listParameters, $this->getActiveMachine(), 1000);
