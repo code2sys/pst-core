@@ -627,9 +627,14 @@ class Shopping extends Master_Controller {
             if (!is_null($brand)) {
                 $this->_mainData["brandMain"] = $brand->to_array();
                 $this->_mainData["title"] = 'All ' . $brand->get("title") . ' Products ';
-                $this->_masterPageVars["title"] = $this->_mainData["title"] . " - " . $this->_masterPageVars["title"];
-            }
 
+                $activeMachine = $this->getActiveMachine();
+                if (!is_null($activeMachine)) {
+                    $this->_mainData["title"] .= ' for ' . $activeMachine['name'];
+                }
+
+                $this->setMasterPageVars('title', $this->_mainData["title"]);
+            }
         }
 
         $this->setFooterView('master/footer_v.php');
