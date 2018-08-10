@@ -541,6 +541,7 @@ class Shopping extends Master_Controller {
         } else {
             if (array_key_exists("brand_id", $_GET)) {
                 $listParameters['brand'] = intVal($_GET['brand_id']);
+                $listParameters1['brand'] = intVal($_GET['brand_id']);
             }
         }
 
