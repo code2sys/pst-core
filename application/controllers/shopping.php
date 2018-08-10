@@ -543,14 +543,6 @@ class Shopping extends Master_Controller {
                 $listParameters['brand'] = intVal($_GET['brand_id']);
                 $listParameters1['brand'] = intVal($_GET['brand_id']);
 
-                global $PSTAPI;
-                initializePSTAPI();
-                $brand = $PSTAPI->brand()->get($_GET["brand_id"]);
-                if (!is_null($brand)) {
-                    $this->_mainData["brandMain"] = $brand->to_array();
-                    $this->_mainData["title"] = $brand->get("title") . " - ";
-                }
-
             }
         }
 
@@ -626,6 +618,18 @@ class Shopping extends Master_Controller {
         $this->_mainData['pages'] = $this->pages_m->getPages(1, 'footer');
 
         $this->_mainData['new_header'] = 1;
+
+
+        if (array_key_exists("brand_id", $_GET)) {
+            global $PSTAPI;
+            initializePSTAPI();
+            $brand = $PSTAPI->brand()->get($_GET["brand_id"]);
+            if (!is_null($brand)) {
+                $this->_mainData["brandMain"] = $brand->to_array();
+                $this->_mainData["title"] = $brand->get("title") . " - ";
+            }
+
+        }
 
         $this->setFooterView('master/footer_v.php');
         $this->renderMasterPage('master/master_v', 'info/product_list_v', $this->_mainData);
