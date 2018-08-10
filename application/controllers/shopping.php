@@ -578,14 +578,6 @@ class Shopping extends Master_Controller {
         $this->_mainData['band']['label'] = 'Search Results';
 
         $_SESSION['breadcrumbs'] = $listParameters;
-        if (array_key_exists("brand_id", $_GET)) {
-            global $PSTAPI;
-            initializePSTAPI();
-            $brand = $PSTAPI->brand()->get($_GET["brand_id"]);
-            if (!is_null($brand)) {
-                $_SESSION['breadcrumbs']["brand"] = $brand->to_array();
-            }
-        }
 
         $this->_mainData['breadcrumbs'] = $_SESSION['breadcrumbs'];
         //$_SESSION['breadcrumbs'] = array('search' => array($_GET['search']));

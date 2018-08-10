@@ -62,7 +62,14 @@ require(__DIR__ . "/../fitment_common.php");
                         }
 
                     } elseif($name == 'brand') {
-                        $category = 'brand'; ?>
+                        $category = 'brand';
+                        global $PSTAPI;
+                        initializePSTAPI();
+                        $brand = $PSTAPI->brand()->get($value);
+                        if (!is_null($brand)) {
+                            $value = $brand->get("name");
+                        }
+                        ?>
 
                         <a href="javascript:void(0);"
                            onclick="removeMainSearch('<?php echo $category; ?>', '<?php echo $value; ?>' )"
