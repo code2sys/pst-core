@@ -576,6 +576,16 @@ class Shopping extends Master_Controller {
         //usort($this->_mainData['band']['products'], 'sortByOrder');
         $this->_mainData['questions'] = $this->parts_m->getFilterQuestions($listParameters);
         $this->_mainData['band']['label'] = 'Search Results';
+
+        if (array_key_exists("brand_id", $_GET)) {
+            global $PSTAPI;
+            initializePSTAPI();
+            $brand = $PSTAPI->brand()->get($_GET["brand_id"]);
+            if (!is_null($brand)) {
+                $listParamets["brand"] = $brand->to_array();
+            }
+        }
+
         $_SESSION['breadcrumbs'] = $listParameters;
         $this->_mainData['breadcrumbs'] = $listParameters;
         //$_SESSION['breadcrumbs'] = array('search' => array($_GET['search']));
