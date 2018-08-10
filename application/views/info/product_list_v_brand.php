@@ -24,7 +24,7 @@ foreach ($title1 as $k => $v) {
     <!-- MAIN CONTENT -->
     <div class="main_content fl-wdh">
         <div style="float: right">
-            <a href="<?php echo base_url("shopping/search_product"); ?>?brand_bypass=1&brand_id=<?php echo $brand_id; ?>" class="button">View All <?php echo trim($brandName); ?> Products</a>
+            <a href="<?php echo base_url("shopping/search_product"); ?>?brand_bypass=1&brand_id=<?php echo $brand_id; ?>" class="button" style="margin-bottom: 6px">View All <?php echo trim($brandName); ?> Products</a>
         </div>
 		<?php if( $sizechart_status == 1 ) { ?>
 		<p class="rulerimg">
