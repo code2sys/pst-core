@@ -291,6 +291,7 @@ foreach ($title1 as $k => $v) {
         $disTitle .= $v . ' ';
     }
 }
+echo "<!-- Title $title Dis Title $disTitle -->";
 ?>
             <div class="cntnr-ttl">
             <?php if ($this->uri->total_segments() !== 0) { ?>
