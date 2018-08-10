@@ -22,22 +22,27 @@ require(__DIR__ . "/../fitment_common.php");
             <div style="float:right; font-size:12px;">
                 | &nbsp;
                 <?php foreach($breadcrumbs as $name => $value ):
-                    if(($name == 'category') && (is_array($value))):
+                    if(($name == 'category') && (is_array($value))) {
                         $i = 0;
-                        foreach($value as $id => $subname): $i++;?>
-                            <a href="javascript:void(0);" onclick="setMainSearch(event, 'category', '<?php echo $id; ?>');" id="<?php echo $id; ?>"><?php echo $subname; ?></a>  <?php if(count($value) == $i ): ?> &nbsp; | &nbsp;  <?php else: ?>><?php endif; ?>
+                        foreach ($value as $id => $subname): $i++; ?>
+                            <a href="javascript:void(0);"
+                               onclick="setMainSearch(event, 'category', '<?php echo $id; ?>');"
+                               id="<?php echo $id; ?>"><?php echo $subname; ?></a>  <?php if (count($value) == $i): ?> &nbsp; | &nbsp;  <?php else: ?>><?php endif; ?>
 
                         <?php endforeach;
 
 
-                    elseif($name == 'extra'):
+                    } elseif($name == 'extra') {
                         $category = 'extra'; ?>
 
-                        <a href="javascript:void(0);" onclick="removeMainSearch('<?php echo $category; ?>', '<?php echo $value; ?>' )" style="color:#F00;"><i class="fa fa-times"></i></a> <?php echo $value; ?> &nbsp; |  &nbsp; <?php
+                        <a href="javascript:void(0);"
+                           onclick="removeMainSearch('<?php echo $category; ?>', '<?php echo $value; ?>' )"
+                           style="color:#F00;"><i
+                                    class="fa fa-times"></i></a> <?php echo $value; ?> &nbsp; |  &nbsp; <?php
                         // JLB: I am not to blame. Some schmendrick ACTUALLY USES the colon-delimited start-end ones in a run of pure code. I don't get it.
-                    elseif(($value != @$breadcrumbs['brand']) && ($value != @$breadcrumbs['featured']) && ($value != @$breadcrumbs['deal'])):
-                        if(is_array($value)) {
-                            foreach($value as $id => $subname) {
+                    } elseif(($value != @$breadcrumbs['brand']) && ($value != @$breadcrumbs['featured']) && ($value != @$breadcrumbs['deal'])) {
+                        if (is_array($value)) {
+                            foreach ($value as $id => $subname) {
                                 if (trim($subname) != "") {
                                     if ($name == 'question'): ?>
                                         <a href="javascript:void(0);"
@@ -56,15 +61,18 @@ require(__DIR__ . "/../fitment_common.php");
                             }
                         }
 
-                    elseif($name == 'brand'):
+                    } elseif($name == 'brand') {
                         $category = 'brand'; ?>
 
-                        <a href="javascript:void(0);" onclick="removeMainSearch('<?php echo $category; ?>', '<?php echo $value; ?>' )" style="color:#F00;"><i class="fa fa-times"></i></a> <?php echo $_SESSION['search'][$category]['name']; ?> &nbsp; |  &nbsp; <?php
-                    elseif(@$breadcrumbs['featured']): ?>
+                        <a href="javascript:void(0);"
+                           onclick="removeMainSearch('<?php echo $category; ?>', '<?php echo $value; ?>' )"
+                           style="color:#F00;"><i
+                                    class="fa fa-times"></i></a> <?php echo $_SESSION['search'][$category]['name']; ?> &nbsp; |  &nbsp; <?php
+                    } elseif(@$breadcrumbs['featured']) { ?>
                         FEATURED PRODUCTS
-                    <?elseif(@$breadcrumbs['deal']): ?>
+                    <? } elseif(@$breadcrumbs['deal']) { ?>
                         SITE DEALS
-                    <?php endif;  endforeach; ?>
+                    <?php }  endforeach; ?>
 
             </div>
             <!-- END BREADCRUMBS -->
