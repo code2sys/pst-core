@@ -560,11 +560,7 @@ class Shopping extends Master_Controller {
         $_SESSION['url'] = 'shopping/search_product/';
 
 
-        if (empty($listParameters) || (!array_key_exists("brand_bypass", $_GET) && empty($_GET['search']) || $trimmed_search == "")) {
-            print "Dying here\n";
-            print_r($_GET);
-            print_r($listParameters);
-            exit();
+        if (empty($listParameters) || (!array_key_exists("brand_bypass", $_GET) && (empty($_GET['search']) || $trimmed_search == ""))) {
             redirect();
         }
         $this->loadSidebar('widgets/garage_v');
