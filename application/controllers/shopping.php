@@ -568,7 +568,7 @@ class Shopping extends Master_Controller {
         // Filter options for current search
 
         $this->_mainData['category'] = $this->parts_m->getSearchCategories($listParameters);
-        $this->_mainData['brand'] = $this->parts_m->getBrands($listParameters);
+        $this->_mainData['brand'] = array_key_exists("brand_bypass", $_GET) ? array() : $this->parts_m->getBrands($listParameters);
         unset($this->_mainData['band']);
 
         // ACTUAL PRODUCT SEARCH IS DONE IN THIS MODEL FUNCTION
