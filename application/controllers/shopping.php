@@ -587,7 +587,7 @@ class Shopping extends Master_Controller {
             }
         }
 
-        $this->_mainData['breadcrumbs'] = $listParameters;
+        $this->_mainData['breadcrumbs'] = $_SESSION['breadcrumbs'];
         //$_SESSION['breadcrumbs'] = array('search' => array($_GET['search']));
         //$this->_mainData['breadcrumbs'] = array('search' => array($_GET['search']));
 
