@@ -67,14 +67,14 @@ require(__DIR__ . "/../fitment_common.php");
                         initializePSTAPI();
                         $brand = $PSTAPI->brand()->get($value);
                         if (!is_null($brand)) {
-                            $value = $brand->get("name");
+                            $name = $brand->get("name");
                         }
                         ?>
 
                         <a href="javascript:void(0);"
-                           onclick="removeMainSearch('<?php echo $category; ?>', '<?php echo $value; ?>' )"
+                           onclick="removeMainSearch('brand', '<?php echo $value; ?>' )"
                            style="color:#F00;"><i
-                                    class="fa fa-times"></i></a> <?php echo $_SESSION['search'][$category]['name']; ?> &nbsp; |  &nbsp; <?php
+                                    class="fa fa-times"></i></a> <?php echo $name; ?> &nbsp; |  &nbsp; <?php
                     } elseif(@$breadcrumbs['featured']) { ?>
                         FEATURED PRODUCTS
                     <? } elseif(@$breadcrumbs['deal']) { ?>
