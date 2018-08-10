@@ -38,19 +38,21 @@ require(__DIR__ . "/../fitment_common.php");
                     elseif(($value != @$breadcrumbs['brand']) && ($value != @$breadcrumbs['featured']) && ($value != @$breadcrumbs['deal'])):
                         if(is_array($value)) {
                             foreach($value as $id => $subname) {
-                                if (trim($subname) == "") {
-                                    continue; // skip if blank.
-                                }
-
-                                if($name == 'question'): ?>
-                                    <a href="javascript:void(0);" onclick="removeMainSearch('question', '<?php echo $id; ?>' )" style="color:#F00;"><i class="fa fa-times"></i>
-                                    </a>
+                                if (trim($subname) != "") {
+                                    if ($name == 'question'): ?>
+                                        <a href="javascript:void(0);"
+                                           onclick="removeMainSearch('question', '<?php echo $id; ?>' )"
+                                           style="color:#F00;"><i class="fa fa-times"></i>
+                                        </a>
                                     <?php
-                                else: ?>
-                                    <a href="javascript:void(0);" onclick="removeMainSearch('search', '<?php echo $id; ?>' )" style="color:#F00;"><i class="fa fa-times"></i>
-                                    </a>
-                                <?php endif;
-                                echo ucwords(preg_replace('/([A-Z])/',"\n".'$1',$subname)); ?> &nbsp; |  &nbsp; <?php
+                                    else: ?>
+                                        <a href="javascript:void(0);"
+                                           onclick="removeMainSearch('search', '<?php echo $id; ?>' )"
+                                           style="color:#F00;"><i class="fa fa-times"></i>
+                                        </a>
+                                    <?php endif;
+                                    echo ucwords(preg_replace('/([A-Z])/', "\n" . '$1', $subname)); ?> &nbsp; |  &nbsp; <?php
+                                }
                             }
                         }
 
