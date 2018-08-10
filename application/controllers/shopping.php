@@ -537,6 +537,10 @@ class Shopping extends Master_Controller {
                 header("Location: " . site_url($brand_match[0]["slug"]));
                 exit();
             }
+        } else {
+            if (array_key_exists("brand_id", $_GET)) {
+                $listParameters['brand'] = intVal($_GET['brand_id']);
+            }
         }
 
         // JLB: Bypass #2: If you enter a product name, exactly, then you go to that product.
@@ -739,6 +743,7 @@ class Shopping extends Master_Controller {
 
             $this->setNav('master/navigation_v', 0);
             $this->_mainData['new_header'] = 1;
+            $this->_mainData['brand_id'] = $record['brand_id'];
 
             $this->setFooterView('master/footer_v.php');
             $this->renderMasterPage('master/master_v_brand_list', 'info/product_list_v_brand', $this->_mainData);
