@@ -928,6 +928,11 @@ class Parts_M extends Master_M {
         $brand_categories = $PSTAPI->brand()->getBrandCategories($brand_id);
         $leaf_categories = $this->_filterLeafCategoriesOnly($brand_categories);
 
+        // Sort them, by the name...
+        usort($leaf_categories, function($a, $b) {
+            return strnatcasecmp($a["name"], $b["name"]);
+        });
+
         // Now, assemble them into the final thing..
         $seen_names = array();
         $finalArray = array();
