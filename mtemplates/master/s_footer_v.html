@@ -35,10 +35,12 @@
             {{{social_link_buttons}}}
 
             <h3 class="nwsltr">newsletter</h3>
-            <form action="" method="post" id="form_example" class="form_standard">
+            <p class="hide" id="newsletter_success">You have been added to the list!</p>
+            <form action="" class="form_standard" onSubmit="submitNewsletter(); return false;">
                 <input type="text" id="newsletter" name="newsletter">
-                <input type="button" value="SUBMIT" onclick="submitNewsletter();">
+                <input type="button" value="SUBMIT" onClick="submitNewsletter(); return false;">
             </form>
+
         </div>
         <div class="img-footer">
             <a href="#"><img src="/assets/benz_assets/images/powered-logo.png"  class="powerlogo-a"/></a>

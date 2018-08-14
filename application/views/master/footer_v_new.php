@@ -36,10 +36,11 @@ $new_assets_url1 = jsite_url( "/qatesting/benz_assets/");
                 ), true);
                 ?>
 				<h3 class="nwsltr">newsletter</h3>
-				<form action="" method="post" id="form_example" class="form_standard">
-					<input type="text" id="newsletter" name="newsletter">
-					<input type="button" value="SUBMIT" onclick="submitNewsletter();">
-				</form>
+                <form action="" class="form_standard" onSubmit="submitNewsletter();">
+                    <input type="text" id="newsletter" name="newsletter">
+                    <input type="button" value="SUBMIT" >
+                </form>
+
 			</div>
 			<div class="img-footer">
 				<a href="http://powersporttechnologies.com"><img src="<?php echo $new_assets_url; ?>images/powered-logo.png"  class="powerlogo-a"/>	
