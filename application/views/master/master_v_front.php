@@ -128,7 +128,7 @@ mustache_tmpl_set($master_v_front_template, "trade_in_value_modal_generic", $CI-
 // these are just here, you know.
 for ($i = 1; $i <= 3; $i++) {
     $name = "master_v_front_extra$i";
-    $$name = mustache_tmpl_load("master/$name");
+    $$name = mustache_tmpl_open("master/$name");
     mustache_tmpl_set($master_v_front_template, $name, mustache_tmpl_parse($$name));
 }
 
