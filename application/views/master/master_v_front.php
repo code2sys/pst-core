@@ -125,5 +125,12 @@ mustache_tmpl_set($master_v_front_template, "customer_exit_modal", $this->load->
 
 mustache_tmpl_set($master_v_front_template, "trade_in_value_modal_generic", $CI->load->view("modals/trade_in_value_modal", array(), true));
 
+// these are just here, you know.
+for ($i = 1; $i <= 3; $i++) {
+    $name = "master_v_front_extra$i";
+    $$name = mustache_tmpl_open("master/${name}.html");
+    mustache_tmpl_set($master_v_front_template, $name, mustache_tmpl_parse($$name));
+}
+
 echo mustache_tmpl_parse($master_v_front_template);
 
