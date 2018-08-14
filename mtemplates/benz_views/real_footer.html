@@ -40,5 +40,25 @@ $new_assets_url = jsite_url( "/qatesting/newassets/" );
         <hr class="ftr-line">
     </div>
 </div>
+<script>
 
+    //var script = document.createElement('script');
+    //script.src = "https://seal.godaddy.com/getSeal?sealID=qc3WD7lClpbpLfFD7HDpLCx8bXBkOWSZP9ImCkgNS7VqSnVbHcLTJJrA6sG";
+    //script.type = "text/javascript";
+    //setTimeout(function() {
+    //	document.getElementById("siteseal").innerHTML = script.outerHTML;
+    //}, 2000);
+    function submitNewsletter()
+    {
+        $.post(base_url + 'ajax/updateNewsletterList/',
+            {
+                'email' : $('#newsletter').val(),
+                'ajax' : true
+            },
+            function()
+            {
+                $('#newsletter_success').show();
+            });
+    }
+</script>
 {{{braintree}}}
