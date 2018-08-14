@@ -182,6 +182,9 @@ a.loginLink_b {
     font-weight: normal;
     margin: 5px 0 10px 0;
 }
+.one-fifth #newsletter_success {
+    color: white;
+}
 .one-fifth h3 span {
     color: #3478ce;
 }
