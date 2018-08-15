@@ -280,7 +280,7 @@ class Lightspeed_M extends Master_M {
         initializePSTAPI();
 
         $final_sku = $stock_number;
-        $results = $PSTAPI->motorcycle()->fetch(array("sku" => $stock_number));
+        $results = $PSTAPI->motorcycle()->fetch(array("sku" => $stock_number), true);
         if (count($results) > 0) {
             if (!is_null($results[0]["lightspeed_dealerID"]) && $results[0]["lightspeed_dealerID"] != "" && $results[0]["lightspeed_dealerID"] != $dealer_cmf) {
                 $final_sku = $stock_number . "-" . $dealer_cmf;
