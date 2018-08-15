@@ -43,6 +43,9 @@ class CRSCron_M extends Master_M
     }
 
     public function refreshCRSData($motorcycle_id = 0, $deep_cleaning = false) {
+        // YOu have to blow this up in case it deletes.
+        $this->motorcycle_attributegroups = array();
+
         global $PSTAPI;
         initializePSTAPI();
 
