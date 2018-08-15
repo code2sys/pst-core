@@ -43,6 +43,9 @@ class CRSCron_M extends Master_M
     }
 
     public function refreshCRSData($motorcycle_id = 0, $deep_cleaning = false) {
+        // YOu have to blow this up in case it deletes.
+        $this->motorcycle_attributegroups = array();
+
         global $PSTAPI;
         initializePSTAPI();
 
@@ -136,13 +139,24 @@ class CRSCron_M extends Master_M
                     }
                 }
 
-                $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, ?, 1, ?, 'PST')", array(
-                    $motorcycle_id,
-                    $p["photo_url"],
-                    $p["photo_label"],
-                    $ordinal,
-                    $p["version_number"]
+                $PSTAPI->motorcycleimage()->add(array(
+                    "motorcycle_id" => $motorcycle_id,
+                    "image_name" => $p["photo_url"],
+                    "date_added" => date("Y-m-d H:i:s"),
+                    "description" => $p["photo_label"],
+                    "priority_number" => $ordinal,
+                    "version_number" => $p["version_number"],
+                    "external" => 1,
+                    "source" => "PST"
                 ));
+//
+//                $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, ?, 1, ?, 'PST')", array(
+//                    $motorcycle_id,
+//                    $p["photo_url"],
+//                    $p["photo_label"],
+//                    $ordinal,
+//                    $p["version_number"]
+//                ));
             }
 
             if ($deep_cleaning) {
