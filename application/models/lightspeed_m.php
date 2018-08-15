@@ -275,6 +275,22 @@ class Lightspeed_M extends Master_M {
         return $color;
     }
 
+    protected function _getMatchingBikes($stock_number, $dealer_cmf, &$final_sku) {
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $final_sku = $stock_number;
+        $results = $PSTAPI->motorcycle()->fetch(array("sku" => $stock_number), true);
+        if (count($results) > 0) {
+            if (!is_null($results[0]["lightspeed_dealerID"]) && $results[0]["lightspeed_dealerID"] != "" && $results[0]["lightspeed_dealerID"] != $dealer_cmf) {
+                $final_sku = $stock_number . "-" . $dealer_cmf;
+                $results = $PSTAPI->motorcycle()->fetch(array("sku" => $final_sku, "lightspeed_dealerID" => $dealer_cmf), true);
+            }
+        }
+
+        return $results;
+    }
+
     public function preserveMajorUnitsChangedField($field) {
         $CI =& get_instance();
         $CI->load->model("CRS_m");
@@ -297,9 +313,10 @@ class Lightspeed_M extends Master_M {
             $bikes = json_decode($call);
 
             foreach ($bikes as $bike) {
-                $results = $PSTAPI->motorcycle()->fetch(array("sku" => $bike->StockNumber));
+                $sku = $bike->StockNumber;
+                $results = $this->_getMatchingBikes($bike->StockNumber, $dealer->Cmf, $sku);
                 if (count($results) > 0) {
-                    $motorcycle_array = $this->_subUnpackMajorUnit($bike);
+                    $motorcycle_array = $this->_subUnpackMajorUnit($bike, $dealer->Cmf);
                     // OK, we have to see if this field is the same or not...
                     if ($motorcycle_array[$field] != $results[0]->get($field)) {
                         $results[0]->set("customer_set_" . $field, 1);
@@ -311,7 +328,7 @@ class Lightspeed_M extends Master_M {
         }
     }
 
-    protected function _subUnpackMajorUnit(&$bike) {
+    protected function _subUnpackMajorUnit(&$bike, $cmf) {
         $bike->NewUsed = ($bike->NewUsed=="U")?2:1;
         $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . ($bike->CodeName != "" ? $bike->CodeName : $bike->Model);
 
@@ -322,8 +339,9 @@ class Lightspeed_M extends Master_M {
         $bike->Color = $this->cleanColors($bike->Color);
 
         return array(
-            'lightspeed_dealerID' => $bike->DealerId,
+            'lightspeed_dealerID' => $cmf,
             'sku' => $bike->StockNumber,
+            'real_sku' => $bike->StockNumber,
             'vin_number' => $bike->VIN,
             'lightspeed_location' => $bike->Location,
             'mileage' => $bike->Odometer,
@@ -377,7 +395,7 @@ class Lightspeed_M extends Master_M {
             foreach($bikes as $bike) {
                 $scrub_trim = false;
                 $last_known_trim = 0;
-                $motorcycle_array = $this->_subUnpackMajorUnit($bike);
+                $motorcycle_array = $this->_subUnpackMajorUnit($bike, $dealer->Cmf);
                 $motorcycle_array["lightspeed_timestamp"] = $ts;
 
                 if (isset($bike->OnHold) && trim($bike->OnHold) != "") {
@@ -388,14 +406,10 @@ class Lightspeed_M extends Master_M {
                     continue; // It has been removed.
                 }
 
-                $where = array(
-                    "sku" => $bike->StockNumber
-                );
-
-
                 $update_array = array(
-                    'lightspeed_dealerID' => $bike->DealerId,
+                    'lightspeed_dealerID' => $dealer->Cmf,
                     'sku' => $bike->StockNumber,
+                    'real_sku' => $bike->StockNumber,
 //                    'vin_number' => $bike->VIN,
                     'lightspeed_location' => $bike->Location,
                     'lightspeed_timestamp' => $ts,
@@ -415,9 +429,13 @@ class Lightspeed_M extends Master_M {
 
                 global $PSTAPI;
                 initializePSTAPI();
-                $results = $PSTAPI->motorcycle()->fetch(array("sku" => $bike->StockNumber), true);
-//                $results = $this->selectRecords('motorcycle', $where);
-                if($results) {
+                $sku = $bike->StockNumber;
+                $results = $this->_getMatchingBikes($sku, $update_array['lightspeed_dealerID'], $sku);
+                // This might change in here. We therefore need to use the changed one.
+                $update_array["sku"] = $sku;
+                $motorcycle_array["sku"] = $sku;
+
+                if(count($results) > 0) {
                     $last_known_trim = $results[0]["crs_trim_id"];
                     if ($results[0]["customer_set_price"] > 0) {
                         // OK, the customer set the price...so we can't do this...unless it matches exctly
@@ -454,11 +472,11 @@ class Lightspeed_M extends Master_M {
                     foreach (array("vin_number", "make", "model", "year") as $k) {
                         if (array_key_exists($k, $update_array) && $results[0][$k] != $update_array[$k]) {
                             $scrub_trim = true;
-                            print "Scrub trim on " . $bike->StockNumber . " for key $k change from " . $results[0][$k] . " to " .  $motorcycle_array[$k] . "\n";
+                            print "Scrub trim on " . $sku . " for key $k change from " . $results[0][$k] . " to " .  $motorcycle_array[$k] . "\n";
                         }
                     }
 
-                    $where = array('sku' => $bike->StockNumber);
+                    $where = array('sku' => $sku);
                     $motorcycle = $this->updateRecord('motorcycle', $update_array, $where, FALSE);
                     if ($motorcycle === FALSE) {
                         print "Could not update: " . print_r($update_array, true) . "\n";
@@ -631,6 +649,10 @@ class Lightspeed_M extends Master_M {
 
         protected $_preserveMachineMotoType;
     protected function _getMachineTypeMotoType($machine_type, $offroad_flag) {
+        if (is_null($offroad_flag)) {
+            $offroad_flag = 0;
+        }
+
         if (!isset($this->_preserveMachineMotoType)) {
             $this->_preserveMachineMotoType = array();
         }
