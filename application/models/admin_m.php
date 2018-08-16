@@ -2780,9 +2780,7 @@ class Admin_M extends Master_M {
             $data["customer_set_description"] = 1;
         }
 
-        if ($this->isNewLocation($id, $post["location_description"])) {
-            $data["customer_set_location"] = 1;
-        }
+
 
         $where = array('id' => $id);
         $this->updateRecord('motorcycle', $data, $where, FALSE);

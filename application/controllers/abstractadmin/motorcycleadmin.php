@@ -166,6 +166,14 @@ abstract class Motorcycleadmin extends Firstadmin
                     }
 
                 }
+
+                if (array_key_exists("location_description", $post) && $post["location_description"] != $motorcycle->get("location_description")) {
+                    $post["customer_set_location"] = 1;
+                }
+            } else {
+                if (array_key_exists("location_description", $post) && $post["location_description"] != "") {
+                    $post["customer_set_location"] = 1;
+                }
             }
 
             $id = $this->admin_m->updateMotorcycle($id, $post);
