@@ -126,6 +126,10 @@
                 "type" : "POST",
                 "cache" : false
             },
+            colVis: {
+                order: 'alfa',
+                'buttonText': 'Show/Hide Columns'
+            },
             "data" : [],
             "paging" : true,
             "info" : true,
