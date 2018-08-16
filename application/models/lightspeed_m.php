@@ -330,6 +330,11 @@ class Lightspeed_M extends Master_M {
 
     protected function _subUnpackMajorUnit(&$bike, $cmf) {
         global $lightspeedDealerMap;
+
+        if (!isset($lightspeedDealerMap) || !is_array($lightspeedDealerMap)) {
+            $lightspeedDealerMap = array(); 
+        }
+
         $bike->NewUsed = ($bike->NewUsed=="U")?2:1;
         $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . ($bike->CodeName != "" ? $bike->CodeName : $bike->Model);
 
