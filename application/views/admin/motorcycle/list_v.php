@@ -121,15 +121,10 @@
         $(".tabular_data table").dataTable({
             "processing" : true,
             "serverSide" : true,
-            buttons: [ 'colvis' ],
             "ajax" : {
                 "url" : "<?php echo base_url("admin/minventory_ajax"); ?>",
                 "type" : "POST",
                 "cache" : false
-            },
-            colVis: {
-                order: 'alfa',
-                'buttonText': 'Show/Hide Columns'
             },
             "data" : [],
             "paging" : true,
