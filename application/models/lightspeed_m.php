@@ -479,6 +479,16 @@ class Lightspeed_M extends Master_M {
                         }
                     }
 
+                    // JLB 08-16-18
+                    // Location edits should be preserved until they match.
+                    if ($results[0]["location_description"] != $update_array["location_description"]) {
+                        if ( $update_array["customer_set_location"] > 0 ) {
+                            unset($update_array["location_description"]); // you have to clear it out.
+                        }
+                    } else {
+                        $update_array["customer_set_location"] = 0;
+                    }
+
                     $where = array('sku' => $sku);
                     $motorcycle = $this->updateRecord('motorcycle', $update_array, $where, FALSE);
                     if ($motorcycle === FALSE) {
