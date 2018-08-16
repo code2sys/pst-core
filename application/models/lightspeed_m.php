@@ -329,6 +329,12 @@ class Lightspeed_M extends Master_M {
     }
 
     protected function _subUnpackMajorUnit(&$bike, $cmf) {
+        global $lightspeedDealerMap;
+
+        if (!isset($lightspeedDealerMap) || !is_array($lightspeedDealerMap)) {
+            $lightspeedDealerMap = array(); 
+        }
+
         $bike->NewUsed = ($bike->NewUsed=="U")?2:1;
         $bike->WebTitle = ($bike->WebTitle!="") ? $bike->WebTitle : $bike->ModelYear ." " . $bike->Make . " " . ($bike->CodeName != "" ? $bike->CodeName : $bike->Model);
 
@@ -338,7 +344,11 @@ class Lightspeed_M extends Master_M {
         $bike->WebPrice = ($bike->WebPrice <= 0) ? $bike->MSRP : $bike->WebPrice;
         $bike->Color = $this->cleanColors($bike->Color);
 
+        // I expect these will be integers, numeric
+        $location_description = (intVal($cmf) != 0 && array_key_exists(intVal($cmf), $lightspeedDealerMap)) ? $lightspeedDealerMap[intVal($cmf)] : "";
+
         return array(
+            "location_description" => $location_description,
             'lightspeed_dealerID' => $cmf,
             'sku' => $bike->StockNumber,
             'real_sku' => $bike->StockNumber,
@@ -408,23 +418,21 @@ class Lightspeed_M extends Master_M {
 
                 $update_array = array(
                     'lightspeed_dealerID' => $dealer->Cmf,
-                    'sku' => $bike->StockNumber,
-                    'real_sku' => $bike->StockNumber,
-//                    'vin_number' => $bike->VIN,
-                    'lightspeed_location' => $bike->Location,
-                    'lightspeed_timestamp' => $ts,
-//                    'mileage' => $bike->Odometer,
-                    'data' => $bike->data,
-//                    'color' => $bike->Color,
-                    'sale_price' => $bike->WebPrice,
-                    'retail_price' => $bike->MSRP,
-//                    'description' => $bike->WebDescription,
-//                    'call_on_price' => $bike->WebPriceHidden,
-//                    "destination_charge" => ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
+                    'sku' => $motorcycle_array["sku"],
+                    'real_sku' => $motorcycle_array["real_sku"],
+                    'lightspeed_location' => $motorcycle_array["lightspeed_location"],
+                    'lightspeed_timestamp' => $motorcycle_array["lightspeed_timestamp"],
+                    'data' => $motorcycle_array["data"],
+                    'sale_price' => $motorcycle_array["sale_price"],
+                    'retail_price' => $motorcycle_array["retail_price"],
                     "lightspeed" => 1,
                     "lightspeed_flag" => 1,
                     "source" => "Lightspeed"
                 );
+
+                if ($motorcycle_array["location_description"] != "") {
+                    $update_array["location_description"] = $motorcycle_array["location_description"];
+                }
 
 
                 global $PSTAPI;
@@ -474,6 +482,16 @@ class Lightspeed_M extends Master_M {
                             $scrub_trim = true;
                             print "Scrub trim on " . $sku . " for key $k change from " . $results[0][$k] . " to " .  $motorcycle_array[$k] . "\n";
                         }
+                    }
+
+                    // JLB 08-16-18
+                    // Location edits should be preserved until they match.
+                    if ($results[0]["location_description"] != $update_array["location_description"]) {
+                        if ( $results[0]["customer_set_location"] > 0 ) {
+                            unset($update_array["location_description"]); // you have to clear it out.
+                        }
+                    } else {
+                        $update_array["customer_set_location"] = 0;
                     }
 
                     $where = array('sku' => $sku);
