@@ -129,6 +129,7 @@ abstract class Motorcycleadmin extends Firstadmin
             if ($this->admin_m->isNewPrice($id, $post['retail_price'], $post['sale_price'])) {
                 $post["customer_set_price"] = 1;
             }
+
 //
 //            if ($this->admin_m->isNewDescription($id, $post["description"])) {
 //                $post["customer_set_description"] = 1;
