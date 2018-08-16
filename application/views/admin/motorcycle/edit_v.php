@@ -117,6 +117,13 @@ $cstdata = (array) json_decode($product['data']);
                         </td>
                     </tr>
                     <tr>
+                        <td style="width:50px;"><b>Location:</b></td>
+                        <td>
+                            <input type="text" name="location_description" value="<?php echo $product['location_description']==''?$_POST['location_description']:$product['location_description']; ?>" class="text small"><br/>
+                            <em>If no location description is provided, the city and state of the store profile address will be used.</em>
+                        </td>
+                    </tr>
+                    <tr>
                         <td style="width:50px;"><b>Feature:</b></td>
                         <td>
                             <?php echo form_checkbox('featured', 1, $product['featured']); ?>

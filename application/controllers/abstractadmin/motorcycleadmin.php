@@ -129,6 +129,7 @@ abstract class Motorcycleadmin extends Firstadmin
             if ($this->admin_m->isNewPrice($id, $post['retail_price'], $post['sale_price'])) {
                 $post["customer_set_price"] = 1;
             }
+
 //
 //            if ($this->admin_m->isNewDescription($id, $post["description"])) {
 //                $post["customer_set_description"] = 1;
@@ -164,6 +165,14 @@ abstract class Motorcycleadmin extends Firstadmin
                         }
                     }
 
+                }
+
+                if (array_key_exists("location_description", $post) && $post["location_description"] != $motorcycle->get("location_description")) {
+                    $post["customer_set_location"] = 1;
+                }
+            } else {
+                if (array_key_exists("location_description", $post) && $post["location_description"] != "") {
+                    $post["customer_set_location"] = 1;
                 }
             }
 
