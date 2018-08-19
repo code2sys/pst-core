@@ -334,7 +334,7 @@ class Pages extends Master_Controller {
                 $this->_mainData['widgetBlock'] .= $this->load->view('info/store_hours', array("store_name" => $store_name), TRUE);
 
 
-				$this->_mainData['widgetBlock'] .= $this->loadGoggleMaps();
+				$this->_mainData['widgetBlock'] .= $this->loadGoogleMaps();
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/contact_v', $this->_mainData, TRUE);
 				// $this->_mainData['widgetBlock'] .= $block;
 	  		}
@@ -348,7 +348,7 @@ class Pages extends Master_Controller {
 		  		// $block = $this->_mainData['widgetBlock'];
 				//$this->load->helper('easy_captcha_helper');
 				//$this->_mainData['captcha'] = getCaptchaDisplayElements();
-				//$this->_mainData['widgetBlock'] .= $this->loadGoggleMaps();
+				//$this->_mainData['widgetBlock'] .= $this->loadGoogleMaps();
 				$this->_mainData['showNotice'] = false;
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/service_request', $this->_mainData, TRUE);
 				$this->_mainData['ssl'] = true;
@@ -364,7 +364,7 @@ class Pages extends Master_Controller {
 		  		// $block = $this->_mainData['widgetBlock'];
 				//$this->load->helper('easy_captcha_helper');
 				//$this->_mainData['captcha'] = getCaptchaDisplayElements();
-				//$this->_mainData['widgetBlock'] .= $this->loadGoggleMaps();
+				//$this->_mainData['widgetBlock'] .= $this->loadGoogleMaps();
 				$this->_mainData['showNotice'] = false;
 				$this->_mainData['states'] = $this->load_states();
                 $this->_mainData['widgetBlock'] = '<h1 style="color:#3f51b5">' . $this->_mainData['pageRec']['label'] .'</h1>' . $this->_mainData['widgetBlock'];
@@ -530,15 +530,12 @@ class Pages extends Master_Controller {
 		}
   	}
 	
-  	private function loadGoggleMaps()
+  	private function loadGoogleMaps()
   	{
-		//echo $this->config->item('googleLocation');
-		//$googleLocation = $this->_mainData['store_name']['company'].','.$this->_mainData['store_name']['city'].'+'.$this->_mainData['store_name']['state'];
-		$googleLocation = $this->_mainData['store_name']['street_address'] . ($this->_mainData['store_name']['address_2'] != ""? ', ' . $this->_mainData['store_name']['address_2'] : ""). ',' .$this->_mainData['store_name']['city'].', '.$this->_mainData['store_name']['state'] . " " . $this->_mainData['store_name']['zip'];
-  		$str = '<iframe width="600" height="450" frameborder="0" style="border:0" 
-  								src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDUJ3ePr2rnfcvky1_M8Vc2pQ7k1JGIKcI&q='.urlencode($googleLocation).'">
-		</iframe>';
-		return $str;
+  	    return $this->load->view("info/pages/loadGoogleMaps", array(
+  	        "store_name" => $this->_mainData['store_name']
+        ), true);
+
   	}
   	
   	private function processContactForm()
