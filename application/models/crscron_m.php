@@ -42,7 +42,6 @@ class CRSCron_M extends Master_M
     }
 
     public function refreshCRSData($motorcycle_id = 0, $deep_cleaning = false) {
-        print "Call to refreshCRSData $motorcycle_id \n";
         // YOu have to blow this up in case it deletes.
         $this->motorcycle_attributegroups = array();
 
