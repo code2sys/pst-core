@@ -61,7 +61,6 @@ class CRSCron_M extends Master_M
         foreach ($matching_motorcycles as $m) {
             $motorcycle_id = $m["motorcycle_id"];
             $trim_id = $m["crs_trim_id"];
-            print "Motorcycle $motorcycle_id trim $trim_id \n";
             $version_number = $deep_cleaning ? 0 : $m["version_number"];
 
             $existing_attributes = $PSTAPI->motorcyclespec()->getForMotorcycle($motorcycle_id);
