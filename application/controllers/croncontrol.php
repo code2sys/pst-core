@@ -1,6 +1,23 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
+    // JLB 08-21-18
+    // We need something that just tries again to match the available bikes for CRS
+    public function matchIfYouCanCRS() {
+        global $PSTAPI;
+        initializePSTAPI();
+
+        // OK, the goal here is to query those bikes that have null trims
+        $motorcycles = $PSTAPI->motorcycle()->fetch(array(
+            "crs_trim_id" => null
+        ), true);
+
+        $this->load->model("CRS_m");
+
+        foreach ($motorcycles as $m) {
+            $this->CRS_m->matchIfYouCan($m["id"], $m["vin_number"], $m["make"], $m["model"], $m["year"], $m["codename"] == "" ? $m["title"] : $m["codename"], $m["retail_price"]) ;
+        }
+    }
 
     // JLB 07-17-18
     // We need to be able to run this manually, sometimes
