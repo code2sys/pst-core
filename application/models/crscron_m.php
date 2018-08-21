@@ -12,7 +12,6 @@ class CRSCron_M extends Master_M
 {
 
 
-
     protected $motorcycle_attributegroups;
     protected function _getAttributeGroup($motorcycle_id, $attributegroup_name, $attributegroup_number) {
         if (!isset($this->motorcycle_attributegroups)) {

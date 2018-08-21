@@ -11,6 +11,162 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class CRS_M extends Master_M
 {
 
+    public function scrubTrim($motorcycle_id) {
+        // What happens if this trim must go away?
+        // We have to clear the specs, we have to clear the CRS fields, and we have to remove the pictures.
+        global $PSTAPI;
+        initializePSTAPI();
+
+        // Clean up the specs
+        $specgroups = $PSTAPI->motorcyclespecgroup()->fetch(array("motorcycle_id" => $motorcycle_id));
+
+        foreach ($specgroups as $sg) {
+            $PSTAPI->motorcyclespec()->removeWhere(array(
+                "source" => "PST",
+                "motorcyclespecgroup_id" => $sg->id()
+            ));
+
+            if ($sg->get("source") == "PST") {
+                $specs = $PSTAPI->motorcyclespec()->fetch(array("motorcyclespecgroup_id" => $sg->id()), true);
+                if (count($specs) == 0) {
+                    $sg->remove();
+                }
+            }
+        }
+
+        // Clean up the photos...
+        $PSTAPI->motorcycleimage()->removeWhere(array(
+            "source" => "PST",
+            "motorcycle_id" => $motorcycle_id
+        ));
+
+        // clean it up...
+        $PSTAPI->motorcycle()->update($motorcycle_id, array(
+            "crs_trim_id" => null, "crs_machinetype" => null, "crs_model_id" => null, "crs_make_id" => null, "crs_year" => null, "crs_version_number" => 0
+        ));
+    }
+
+    public function getMachineTypeMotoType($machine_type, $offroad_flag)
+    {
+        return $this->_getMachineTypeMotoType($machine_type, $offroad_flag);
+    }
+
+
+
+    protected $_preserveMachineMotoType;
+    protected function _getMachineTypeMotoType($machine_type, $offroad_flag) {
+        if (is_null($offroad_flag)) {
+            $offroad_flag = 0;
+        }
+
+        if (!isset($this->_preserveMachineMotoType)) {
+            $this->_preserveMachineMotoType = array();
+        }
+
+        $key = sprintf("%s-%d", $machine_type, $offroad_flag);
+        if (array_key_exists($key, $this->_preserveMachineMotoType)) {
+            return $this->_preserveMachineMotoType[$key];
+        }
+
+        $type_id = 0;
+        $query = $this->db->query("Select id from motorcycle_type where crs_type = ? and offroad = ?", array($machine_type, $offroad_flag));
+        foreach ($query->result_array() as $row) {
+            $type_id = $row["id"];
+        }
+
+        if ($type_id == 0) {
+            throw new \Exception("Could not find a match for _getMachineTypeMotoType($machine_type, $offroad_flag)");
+        }
+
+        $this->_preserveMachineMotoType[$key] = $type_id;
+        return $type_id;
+    }
+
+
+    public function getStockMotoCategory($name = "Dealer") {
+        return $this->_getStockMotoCategory($name);
+    }
+
+    protected $stock_moto_category_cache;
+    protected function _getStockMotoCategory($name = "Dealer") {
+
+        if (!isset($this->stock_moto_category_cache) || !is_array($this->stock_moto_category_cache)) {
+            $this->stock_moto_category_cache = array();
+        }
+
+        if (array_key_exists($name, $this->stock_moto_category_cache)) {
+            return $this->stock_moto_category_cache[$name];
+        }
+
+        $query = $this->db->query("Select * from motorcycle_category where name = ?", array($name));
+        $id = 0;
+        foreach ($query->result_array() as $row) {
+            $id = $row["id"];
+        }
+
+        if ($id == 0) {
+            $this->db->query("Insert into motorcycle_category (name, date_added) values (?, now())", array($name));
+            $id = $this->db->insert_id();
+        }
+
+        $this->stock_moto_category_cache[$name] = $id;
+
+        return $id;
+    }
+
+    public function matchIfYouCan($motorcycle_id, $vin, $make, $model, $year, $codename, $msrp, $scrub_trim = false) {
+        $CI =& get_instance();
+        $CI->load->model("CRSCron_M");
+
+        // Now, what is the ID for this motorcycle?
+        $vin_match = $this->findBestFit($vin, $make, $model, $year, $codename, $msrp);
+
+        if (is_array($vin_match) && count($vin_match) > 0) {
+            $vin_match = $vin_match[0];
+        }
+
+        if ($scrub_trim) {
+            $this->scrubTrim($motorcycle_id);
+        }
+
+        if (array_key_exists("trim_id", $vin_match)) {
+
+            // we should definitely mark this
+            $this->db->query("Update motorcycle set crs_trim_id = ? where id = ? limit 1", array($vin_match["trim_id"], $motorcycle_id));
+
+            // what about the fields? transmission, engine_type,
+            $this->db->query("Update motorcycle set transmission = ? where id = ? and (transmission = '' or transmission is null)", array($vin_match["transmission"], $motorcycle_id));
+            $this->db->query("Update motorcycle set engine_type = ? where id = ? and (engine_type = '' or engine_type is null)", array($vin_match["engine_type"], $motorcycle_id));
+
+            // We insert the thumbnail, too?
+            if (array_key_exists("trim_photo", $vin_match) && $vin_match["trim_photo"] != "") {
+                $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source, crs_thumbnail) values (?, ?, now(), ?, 1, 1, ?, 'PST', 1) on duplicate key update source = 'PST'", array($motorcycle_id, $vin_match["trim_photo"], 'Trim Photo: ' . $vin_match['display_name'], $vin_match["version_number"]));
+            }
+
+            // refresh it...
+            $CI->CRSCron_M->refreshCRSData($motorcycle_id);
+
+
+            // Now, we attempt to fix the machine type...
+            $corrected_category = $this->_getMachineTypeMotoType($vin_match["machine_type"],  $vin_match["offroad"]);
+            if ($corrected_category > 0) {
+                $this->db->query("Update motorcycle set vehicle_type = ? where id = ? limit 1", array($corrected_category, $motorcycle_id));
+            }
+
+            // OK, we need to fix the category and we need to fix the type, if we've got it.
+            $corrected_category = 0;
+            $query2 = $this->db->query("Select value from motorcyclespec where motorcycle_id = ? and crs_attribute_id = 10011", array($motorcycle_id));
+            foreach ($query2->result_array() as $disRec) {
+                $corrected_category = $this->_getStockMotoCategory($disRec["value"]);
+            }
+            if ($corrected_category > 0) {
+                $this->db->query("Update motorcycle set category = ? where id = ? limit 1", array($corrected_category, $motorcycle_id));
+            }
+
+        }
+
+    }
+
 
 
 
