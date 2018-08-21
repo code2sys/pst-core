@@ -15,7 +15,7 @@ class CronControl extends Master_Controller {
         $this->load->model("CRS_m");
 
         foreach ($motorcycles as $m) {
-            $this->CRS_m->matchIfYouCan($m["motorcycle_id"], $m["vin_number"], $m["make"], $m["model"], $m["year"], $m["codename"] == "" ? $m["title"] : $m["codename"], $m["retail_price"]) ;
+            $this->CRS_m->matchIfYouCan($m["id"], $m["vin_number"], $m["make"], $m["model"], $m["year"], $m["codename"] == "" ? $m["title"] : $m["codename"], $m["retail_price"]) ;
         }
     }
 
