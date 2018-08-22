@@ -27,7 +27,7 @@ abstract class Motorcycleadmin extends Firstadmin
 
         global $PSTAPI;
         initializePSTAPI();
-        $motorcycle = $PSTAPI->get($motorcycle_id);
+        $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
 
         if (!is_null($motorcycle)) {
             $motorcycle->removeCRSTrim();
