@@ -214,33 +214,39 @@
     }
 
     $(document).ready(function() {
+        var getMotorcycleId = function(e) {
+            console.log(e);
+            console.log(e.target);
+            return e.target.dataset.motorcycleId;
+        };
+
         // We need to bind these actions
         $(".tabular_data").on("click", ".edit-button", function(e) {
             e.preventDefault();
-            submitAjaxAction(e.target.dataset.motorcycleId, "edit");
+            submitAjaxAction(getMotorcycleId(e), "edit");
         });
 
         $(".tabular_data").on("click", ".match-button", function(e) {
             e.preventDefault();
-            submitAjaxAction(e.target.dataset.motorcycleId, "match");
+            submitAjaxAction(getMotorcycleId(e), "match");
         });
 
         // We need to bind these actions
         $(".tabular_data").on("click", ".remove-button", function(e) {
             e.preventDefault();
-            submitAjaxAction(e.target.dataset.motorcycleId, "remove");
+            submitAjaxAction(getMotorcycleId(e), "remove");
         });
 
         // We need to bind these actions
         $(".tabular_data").on("click", ".active-button", function(e) {
             e.preventDefault();
-            submitAjaxAction(e.target.dataset.motorcycleId, "active");
+            submitAjaxAction(getMotorcycleId(e), "active");
         });
 
         // We need to bind these actions
         $(".tabular_data").on("click", ".inactive-button", function(e) {
             e.preventDefault();
-            submitAjaxAction(e.target.dataset.motorcycleId, "inactive");
+            submitAjaxAction(getMotorcycleId(e), "inactive");
         });
 
 
