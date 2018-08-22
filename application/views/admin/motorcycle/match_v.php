@@ -43,7 +43,7 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
         $trim = $CI->CRS_m->getTrim($product["crs_trim_id"]);
         if (count($trim) > 0) {
             $trim = $trim[0];
-            print "<strong>" . $trim["year"] . " " . $trim["make"] . " " . $trim["model"] . " " . $trim["trim"] . " (MSRP $" . $trim["msrp"] . ")</strong>.";
+            print " <strong>" . $trim["year"] . " " . $trim["make"] . " " . $trim["model"] . " " . $trim["trim"] . " (MSRP $" . $trim["msrp"] . ")</strong>.";
         } else {
             print ".";
         }
