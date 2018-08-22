@@ -47,7 +47,7 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
             print ".";
         }
         ?>
-        <a href="<?php echo site_url('admin/motorcycle_remove_trim/' . $id); ?>" onClick="return confirm('Are you sure?'); "><i class='fa fa-check'></i></a>
+        <a href="<?php echo site_url('admin/motorcycle_remove_trim/' . $id); ?>" onClick="return confirm('Are you sure?'); "><i class='fa fa-times'></i> Remove Match</a>
     </div>
     <?php endif; ?>
 
