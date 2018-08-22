@@ -217,7 +217,14 @@
         var getMotorcycleId = function(e) {
             console.log(e);
             console.log(e.target);
-            return e.target.dataset.motorcycleId;
+            var id = e.target.dataset.motorcycleId;
+
+            if (!id) {
+                if (e.currentTarget) {
+                    id = e.currentTarget.dataset.motorcycleId;
+                }
+            }
+            return id;
         };
 
         // We need to bind these actions
