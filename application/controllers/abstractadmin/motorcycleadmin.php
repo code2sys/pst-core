@@ -77,6 +77,29 @@ abstract class Motorcycleadmin extends Firstadmin
         return $this->form_validation->run();
     }
 
+    public function motorcycle_match($id) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($id)) {
+            redirect('admin/motorcycle_edit');
+        }
+
+        $this->_mainData['id'] = $id;
+
+        // We need enough information about the current motorcycle
+        // and then we're going to find ourselves pulling everything else from CRS
+
+
+        $this->_mainData['product'] = $this->admin_m->getAdminMotorcycle($id);
+        $this->load->model("motorcycle_m");
+
+
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/motorcycle/match_v', $this->_mainData);
+
+    }
+
     public function motorcycle_edit($id = NULL, $updated = null) {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
