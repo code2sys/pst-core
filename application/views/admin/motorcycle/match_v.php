@@ -101,11 +101,24 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
 
                     ?>
                 </select><br/>
-                <button type="button" class="btn btn-primary">Search</button>
+                <button type="button" class="btn btn-primary" id="csrsearch">Search</button>
             </div>
         </div>
     </div>
 
+    <div id="SearchResults" style="display: none">
+        <h3>Search Results</h3>
+
+        <div class="noresults" id="noresults" style="text-align: center; font-style: italic">
+            Sorry, there are no matches for that query.
+        </div>
+        <div class="results" id="results">
+
+
+
+        </div>
+
+    </div>
 
 
 </div>
@@ -114,9 +127,22 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
 <script type="application/javascript">
 $(document).on("ready", function() {
 
-    <?php if ($product["crs_trim_id"] > 0): ?>
-
-    <?php endif; ?>
+    $("#csrsearch").on("click", function() {
+        // get the values...
+        $.ajax({
+            "type" : "POST",
+            "dataType" : "json",
+            "url" : "<?php echo site_url("admin/motorcycle_ajax_proxysearch"); ?>",
+            "data" : {
+                "year" : <?php echo $product["year"]; ?>,
+                "machinetype" : $("#machinetype").val(),
+                "make_id" : $("#make").val()
+            },
+            "success" : function(data) {
+                console.log(["response", data]);
+            }
+        });
+    });
 
 
 });

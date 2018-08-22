@@ -17,6 +17,18 @@ require_once(__DIR__ . "/firstadmin.php");
 abstract class Motorcycleadmin extends Firstadmin
 {
 
+    public function motorcycle_ajax_proxysearch() {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        $this->load->model("CRS_m");
+        print json_encode($this->CRS_m->getTrimsByFitment(
+            array_key_exists("machinetype", $_REQUEST) ? $_REQUEST["machinetype"] : "",
+            array_key_exists("make_id", $_REQUEST) ? $_REQUEST["make_id"] : "",
+            array_key_exists("year", $_REQUEST) ? $_REQUEST["year"] : ""
+        ));
+    }
+
     public function motorcycle_remove_trim($motorcycle_id) {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
