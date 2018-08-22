@@ -114,6 +114,21 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
         </div>
         <div class="results" id="results">
 
+            <table border="0" id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Trim</th>
+                        <th>Name</th>
+                        <th>MSRP</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
 
 
         </div>
@@ -128,6 +143,18 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
 $(document).on("ready", function() {
 
     $("#csrsearch").on("click", function() {
+        Number.prototype.formatMoney = function(c, d, t){
+            var n = this,
+                c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
+
         // get the values...
         $.ajax({
             "type" : "POST",
@@ -140,6 +167,20 @@ $(document).on("ready", function() {
             },
             "success" : function(data) {
                 console.log(["response", data]);
+                $("#SearchResults").show();
+
+                if (Array.isArray(data) && data.length > 0) {
+                    var $t = $("#resultsTable tbody");
+                    $t.html("");
+                    // Now, add the rows...
+
+                    for (var i = 0; i < data.length; i++) {
+                        $t.append("<tr><td>" + data[i].year + "</td><td>" + data[i].make + "</td><td>" + data[i].model + "</td><td>" + data[i].trim + "</td><td>" + data[i].display_name + "</td><td>" + Number(data[i].msrp).formatMoney(2)  + "</td></tr>");
+                    }
+                } else {
+                    $("#noresults").show();
+                    $("#results").hide();
+                }
             }
         });
     });
