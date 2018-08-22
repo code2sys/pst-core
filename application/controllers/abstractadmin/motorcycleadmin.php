@@ -565,6 +565,7 @@ abstract class Motorcycleadmin extends Firstadmin
             "motorcycle_category.name",
             "motorcycle_type.name",
             "motorcycle.title",
+            "motorcycle.model",
             "motorcyclespec.final_value",
             "motorcycle.featured",
             "motorcycle.status",
