@@ -181,7 +181,7 @@ $(document).on("ready", function() {
                     // Now, add the rows...
 
                     for (var i = 0; i < data.length; i++) {
-                        $t.append("<tr><td>" + data[i].year + "</td><td>" + data[i].make + "</td><td>" + data[i].model + "</td><td>" + data[i].trim + "</td><td>" + data[i].display_name + "</td><td>" + Number(data[i].msrp).formatMoney(2)  + "</td><?php if ($product["crs_trim_id"] == 0) { ?><td><a href='<?php echo site_url('admin/motorcycle_ajax_matchtrim/<?php echo $id; ?>'); ?>/" + data[i].trim_id + "'><i class='fa fa-check'></i> Match</a></td><?php } ?></tr>");
+                        $t.append("<tr><td>" + data[i].year + "</td><td>" + data[i].make + "</td><td>" + data[i].model + "</td><td>" + data[i].trim + "</td><td>" + data[i].display_name + "</td><td>" + Number(data[i].msrp).formatMoney(2)  + "</td><?php if ($product["crs_trim_id"] == 0) { ?><td><a href='<?php echo site_url('admin/motorcycle_ajax_matchtrim/' . $id); ?>/" + data[i].trim_id + "'><i class='fa fa-check'></i> Match</a></td><?php } ?></tr>");
                     }
                 } else {
                     $("#noresults").show();
