@@ -123,6 +123,9 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
                         <th>Trim</th>
                         <th>Name</th>
                         <th>MSRP</th>
+                        <?php if ($product["crs_trim_id"] > 0) { ?>
+                        <th>Match</th>
+                        <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -170,12 +173,15 @@ $(document).on("ready", function() {
                 $("#SearchResults").show();
 
                 if (Array.isArray(data) && data.length > 0) {
+                    $("#noresults").hide();
+                    $("#results").show();
+
                     var $t = $("#resultsTable tbody");
                     $t.html("");
                     // Now, add the rows...
 
                     for (var i = 0; i < data.length; i++) {
-                        $t.append("<tr><td>" + data[i].year + "</td><td>" + data[i].make + "</td><td>" + data[i].model + "</td><td>" + data[i].trim + "</td><td>" + data[i].display_name + "</td><td>" + Number(data[i].msrp).formatMoney(2)  + "</td></tr>");
+                        $t.append("<tr><td>" + data[i].year + "</td><td>" + data[i].make + "</td><td>" + data[i].model + "</td><td>" + data[i].trim + "</td><td>" + data[i].display_name + "</td><td>" + Number(data[i].msrp).formatMoney(2)  + "</td><?php if ($product["crs_trim_id"] > 0) { ?><td><a href='<?php echo site_url('admin/motorcycle_ajax_matchtrim/<?php echo $id; ?>'); ?>/" + data[i].trim_id + "'><i class='fa fa-check'></i> Match</a></td><?php } ?></tr>");
                     }
                 } else {
                     $("#noresults").show();
