@@ -17,6 +17,57 @@ require_once(__DIR__ . "/firstadmin.php");
 abstract class Motorcycleadmin extends Firstadmin
 {
 
+    public function motorcycle_ajax_matchtrim($id, $trim_id) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $motorcycle = $PSTAPI->motorcycle()->get($id);
+
+        if (!is_null($motorcycle)) {
+            $motorcycle->set("crs_trim_id", intVal($trim_id));
+            $motorcycle->save();
+            $this->load->model("CRSCron_m");
+            $this->CRSCron_m->refreshCRSData($id, true);
+        }
+
+        redirect("admin/motorcycle_match/$id");
+    }
+
+    public function motorcycle_ajax_proxysearch() {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        $this->load->model("CRS_m");
+        print json_encode($this->CRS_m->getTrimsByFitment(
+            array_key_exists("machinetype", $_REQUEST) ? $_REQUEST["machinetype"] : "",
+            array_key_exists("make_id", $_REQUEST) ? $_REQUEST["make_id"] : "",
+            array_key_exists("year", $_REQUEST) ? $_REQUEST["year"] : ""
+        ));
+    }
+
+    public function motorcycle_remove_trim($motorcycle_id) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($motorcycle_id)) {
+            redirect('admin/motorcycle_edit');
+        }
+
+        global $PSTAPI;
+        initializePSTAPI();
+        $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
+
+        if (!is_null($motorcycle)) {
+            $motorcycle->removeCRSTrim();
+        }
+
+        redirect("admin/motorcycle_match/$motorcycle_id");
+    }
+
     public function minventory_ajax_updateprice($motorcycle_id) {
         $price = floatVal(array_key_exists("sale_price", $_REQUEST) ? preg_replace("/[^0-9\.]/", "", $_REQUEST["sale_price"]) : 0.00);
 
@@ -75,6 +126,29 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->form_validation->set_message('sku_not_in_use', 'That SKU is already in use.');
         $this->form_validation->set_rules('sku', 'Sku', 'required|sku_not_in_use');
         return $this->form_validation->run();
+    }
+
+    public function motorcycle_match($id) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($id)) {
+            redirect('admin/motorcycle_edit');
+        }
+
+        $this->_mainData['id'] = $id;
+
+        // We need enough information about the current motorcycle
+        // and then we're going to find ourselves pulling everything else from CRS
+
+
+        $this->_mainData['product'] = $this->admin_m->getAdminMotorcycle($id);
+        $this->load->model("motorcycle_m");
+
+
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/motorcycle/match_v', $this->_mainData);
+
     }
 
     public function motorcycle_edit($id = NULL, $updated = null) {
@@ -565,6 +639,7 @@ abstract class Motorcycleadmin extends Firstadmin
             "motorcycle_category.name",
             "motorcycle_type.name",
             "motorcycle.title",
+            "motorcycle.model",
             "motorcyclespec.final_value",
             "motorcycle.featured",
             "motorcycle.status",
@@ -575,6 +650,7 @@ abstract class Motorcycleadmin extends Firstadmin
             "motorcycle.source",
             "motorcycle.stock_status",
             "motorcycle.cycletrader_feed_status",
+            "matched",
             "motorcycle.title"
         );
 
@@ -625,6 +701,7 @@ abstract class Motorcycleadmin extends Firstadmin
                 $p["source"],
                 $p["stock_status"],
                 $p["cycletrader_feed_status"] > 0 ? "Yes" : "No",
+                $p["matched"] == "Yes" ? "<a href='#' class='match-button yes-match' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-check'></i></a>" : "<a href='#' class='match-button no-match' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-times'></i></a>",
                 "<span class='nowrap'><a href='#' class='edit-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-edit'></i>&nbsp;Edit</a></span><br/> " ./* edit */ /* delete */ /* active */ /* inactive */
                 "<span class='nowrap'><a href='#' class='remove-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-remove'></i>&nbsp;Remove</a></span><br/> " .
                 ($p["status"] > 0 ? "<span class='nowrap'><a href='#' class='inactive-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-play'></i>&nbsp;Active</a></span><br/> " : "<span class='nowrap'><a href='#' class='active-button' data-motorcycle-id='" . $p["id"] . "'><i class='fa fa-pause'></i>&nbsp;Inactive</a></span><br/> ")
