@@ -6,6 +6,17 @@
         background: -moz-linear-gradient(#00E 0%, #00C 100%);
         background: -ms-linear-gradient(#00E 0%, #00C 100%);
     }
+
+    .match-button.yes-match {
+        color: green !important;
+        text-decoration: none;
+    }
+
+    .match-button.no-match {
+        color: red !important;
+        text-decoration: none;
+    }
+
 </style>
 <!-- MAIN CONTENT =======================================================================================-->
 <div class="content_wrap">
@@ -99,6 +110,7 @@
                     <th><b>Source</b></th>
                     <th><b>Stock Status</b></th>
                     <th><b>Cycle Trader</b></th>
+                    <th><b>Matched</b></th>
                     <th><b>Action</b></th>
                 </tr>
                 </thead>
@@ -146,6 +158,7 @@
                 null,
                 null,
                 null,
+                null,
                 null
             ]
         });
@@ -165,6 +178,12 @@
         if (action == "edit") {
             // we just have to redirect it.
             window.location.href = "<?php echo site_url('admin/motorcycle_edit'); ?>/" + id;
+            return false; // all done..
+        }
+
+        if (action == "match") {
+            // we just have to redirect it.
+            window.location.href = "<?php echo site_url('admin/motorcycle_match'); ?>/" + id;
             return false; // all done..
         }
 
@@ -195,28 +214,46 @@
     }
 
     $(document).ready(function() {
+        var getMotorcycleId = function(e) {
+            console.log(e);
+            console.log(e.target);
+            var id = e.target.dataset.motorcycleId;
+
+            if (!id) {
+                if (e.currentTarget) {
+                    id = e.currentTarget.dataset.motorcycleId;
+                }
+            }
+            return id;
+        };
+
         // We need to bind these actions
         $(".tabular_data").on("click", ".edit-button", function(e) {
             e.preventDefault();
-            submitAjaxAction(e.target.dataset.motorcycleId, "edit");
+            submitAjaxAction(getMotorcycleId(e), "edit");
+        });
+
+        $(".tabular_data").on("click", ".match-button", function(e) {
+            e.preventDefault();
+            submitAjaxAction(getMotorcycleId(e), "match");
         });
 
         // We need to bind these actions
         $(".tabular_data").on("click", ".remove-button", function(e) {
             e.preventDefault();
-            submitAjaxAction(e.target.dataset.motorcycleId, "remove");
+            submitAjaxAction(getMotorcycleId(e), "remove");
         });
 
         // We need to bind these actions
         $(".tabular_data").on("click", ".active-button", function(e) {
             e.preventDefault();
-            submitAjaxAction(e.target.dataset.motorcycleId, "active");
+            submitAjaxAction(getMotorcycleId(e), "active");
         });
 
         // We need to bind these actions
         $(".tabular_data").on("click", ".inactive-button", function(e) {
             e.preventDefault();
-            submitAjaxAction(e.target.dataset.motorcycleId, "inactive");
+            submitAjaxAction(getMotorcycleId(e), "inactive");
         });
 
 
