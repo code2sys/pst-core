@@ -68,15 +68,20 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
 
             </div>
             <div style="display: table-cell; width: 50%; border: 1px solid #CCC; padding: 6px">
-                <strong>Match Search</strong>
+                <strong>Match Search</strong><br/>
 
                 <select name="make" id="make">
                     <option value="">-- Make --</option>
                     <?php
                     $makes = $CI->CRS_m->getMakes();
 
-                    print_r($makes);
+                    usort($makes, function($a, $b) {
+                        return strnatcasecmp($a["make"], $b["make"]);
+                    });
 
+                    foreach ($makes as $m) {
+                        print "<option value='" . $m["make_id"] . "'>" . $m["make"] . "</option>";
+                    }
 
                     ?>
                 </select><br/>
@@ -84,14 +89,17 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
                     <option value="">-- Product Type --</option>
                     <?php
                     $machinetype = $CI->CRS_m->getMachineType();
+                    $machinetype = $machinetype["records"];
 
-                    print_r($machinetype);
+                    usort($machinetype, function($a, $b) {
+                        return strnatcasecmp($a["machine_type"], $b["machine_type"]);
+                    });
 
+                    foreach ($machinetype as $m) {
+                        print "<option value='" . $m["machine_type"] . "'>" . $m["machine_type"] . "</option>";
+                    }
 
                     ?>
-                </select><br/>
-                <select name="make" id="make">
-                    <option value="">-- Make --</option>
                 </select><br/>
             </div>
         </div>
