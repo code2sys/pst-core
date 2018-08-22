@@ -6,6 +6,17 @@
         background: -moz-linear-gradient(#00E 0%, #00C 100%);
         background: -ms-linear-gradient(#00E 0%, #00C 100%);
     }
+
+    .match-button.yes-match {
+        color: green !important;
+        text-decoration: none;
+    }
+
+    .match-button.no-match {
+        color: red !important;
+        text-decoration: none;
+    }
+
 </style>
 <!-- MAIN CONTENT =======================================================================================-->
 <div class="content_wrap">
@@ -170,6 +181,12 @@
             return false; // all done..
         }
 
+        if (action == "match") {
+            // we just have to redirect it.
+            window.location.href = "<?php echo site_url('admin/motorcycle_match'); ?>/" + id;
+            return false; // all done..
+        }
+
         if (action == "remove") {
             if (!confirm("Are you sure? This will remove the unit record from the database.")) {
                 return false;
@@ -201,6 +218,11 @@
         $(".tabular_data").on("click", ".edit-button", function(e) {
             e.preventDefault();
             submitAjaxAction(e.target.dataset.motorcycleId, "edit");
+        });
+
+        $(".tabular_data").on("click", ".match-button", function(e) {
+            e.preventDefault();
+            submitAjaxAction(e.target.dataset.motorcycleId, "match");
         });
 
         // We need to bind these actions
