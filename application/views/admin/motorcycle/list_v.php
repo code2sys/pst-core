@@ -99,6 +99,7 @@
                     <th><b>Source</b></th>
                     <th><b>Stock Status</b></th>
                     <th><b>Cycle Trader</b></th>
+                    <th><b>Matched</b></th>
                     <th><b>Action</b></th>
                 </tr>
                 </thead>
@@ -131,6 +132,7 @@
             "info" : true,
             "stateSave" : true,
             "columns" : [
+                null,
                 null,
                 null,
                 null,
