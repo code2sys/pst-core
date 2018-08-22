@@ -51,6 +51,29 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
     </div>
     <?php endif; ?>
 
+    <div style="display: table">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 50%; border: 1px solid black; padding: 6px">
+                <strong>Unit Details</strong>
+
+                <ul>
+                    <li><em>Make:</em> <?php echo $product["make"]; ?></li>
+                    <li><em>Model:</em> <?php echo $product["model"]; ?></li>
+                    <li><em>Year:</em> <?php echo $product["year"]; ?></li>
+                    <?php if ($product["codename"] != ""): ?>
+                    <li><em>Lightspeed Codename:</em> <?php echo $product["codename"]; ?></li>
+                    <?php endif; ?>
+                </ul>
+
+            </div>
+            <div style="display: table-cell; width: 50%; border: 1px solid black; padding: 6px">
+                <strong>Match Search</strong>
+
+            </div>
+        </div>
+    </div>
+
+
 
 </div>
 
