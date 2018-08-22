@@ -101,6 +101,7 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
 
                     ?>
                 </select><br/>
+                <button type="button" class="btn btn-primary">Search</button>
             </div>
         </div>
     </div>
