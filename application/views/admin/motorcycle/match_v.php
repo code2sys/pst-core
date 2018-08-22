@@ -16,11 +16,7 @@ $CI->load->model("CRS_m");
 <script type="application/javascript" src="/assets/backbone/backbone-min.js" ></script>
 <script type="application/javascript" src="/assets/dropzone/dropzone.js" ></script>
 <script type="application/javascript" src="/assets/newjs/jquery-ui.min.js" ></script>
-<script type="text/template" id="ExistingMatchView">
-
-</script>
 <script type="text/template" id="AvailableTrimView">
-
 </script>
 <div class="content_wrap">
     <div class="content">
@@ -43,7 +39,15 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
 <div class="tab_content">
     <?php if ($product["crs_trim_id"] > 0): ?>
     <div class="existing_trim_holder">
-        <?php print_r($CI->CRS_m->getTrim($product["crs_trim_id"])); ?>
+        This unit is already matched<?php
+        $trim = $CI->CRS_m->getTrim($product["crs_trim_id"]);
+        if (count($trim) > 0) {
+            print "<strong>" . $trim["year"] . " " . $trim["make"] . " " . $trim["model"] . " " . $trim["trim"] . " (MSRP $" . $trim["msrp"] . ")</strong>.";
+        } else {
+            print ".";
+        }
+        ?>
+        <a href="<?php echo site_url('admin/motorcycle_remove_trim/' . $id); ?>" onClick="return confirm('Are you sure?'); "><i class='fa fa-check'></i></a>
     </div>
     <?php endif; ?>
 

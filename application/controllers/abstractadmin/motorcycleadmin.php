@@ -17,6 +17,25 @@ require_once(__DIR__ . "/firstadmin.php");
 abstract class Motorcycleadmin extends Firstadmin
 {
 
+    public function motorcycle_remove_trim($motorcycle_id) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($motorcycle_id)) {
+            redirect('admin/motorcycle_edit');
+        }
+
+        global $PSTAPI;
+        initializePSTAPI();
+        $motorcycle = $PSTAPI->get($motorcycle_id);
+
+        if (!is_null($motorcycle)) {
+            $motorcycle->removeCRSTrim();
+        }
+
+        redirect("admin/motorcycle_match/$motorcycle_id");
+    }
+
     public function minventory_ajax_updateprice($motorcycle_id) {
         $price = floatVal(array_key_exists("sale_price", $_REQUEST) ? preg_replace("/[^0-9\.]/", "", $_REQUEST["sale_price"]) : 0.00);
 
