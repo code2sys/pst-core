@@ -53,7 +53,7 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
 
     <div style="display: table; width: 100%;">
         <div style="display: table-row;">
-            <div style="display: table-cell; width: 50%; border: 1px solid black; padding: 6px">
+            <div style="display: table-cell; width: 50%; border: 1px solid #CCC; padding: 6px">
                 <strong>Unit Details</strong>
 
                 <ul>
