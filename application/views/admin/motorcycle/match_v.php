@@ -69,6 +69,29 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
             <div style="display: table-cell; width: 50%; border: 1px solid #CCC; padding: 6px">
                 <strong>Match Search</strong>
 
+                <select name="make" id="make">
+                    <option value="">-- Make --</option>
+                    <?php
+                    $makes = $CI->CRS_m->getMakes();
+
+                    print_r($makes);
+
+
+                    ?>
+                </select><br/>
+                <select name="machinetype" id="machinetype">
+                    <option value="">-- Product Type --</option>
+                    <?php
+                    $machinetype = $CI->CRS_m->getMachineType();
+
+                    print_r($machinetype);
+
+
+                    ?>
+                </select><br/>
+                <select name="make" id="make">
+                    <option value="">-- Make --</option>
+                </select><br/>
             </div>
         </div>
     </div>
