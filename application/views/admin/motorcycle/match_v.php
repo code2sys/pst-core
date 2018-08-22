@@ -66,7 +66,7 @@ echo $CI->load->view("admin/motorcycle/moto_head", array(
                 </ul>
 
             </div>
-            <div style="display: table-cell; width: 50%; border: 1px solid black; padding: 6px">
+            <div style="display: table-cell; width: 50%; border: 1px solid #CCC; padding: 6px">
                 <strong>Match Search</strong>
 
             </div>
