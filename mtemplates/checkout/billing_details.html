@@ -1,0 +1,59 @@
+
+<div class="cart_wrap_left">
+    <h3 style="float:left;margin:5px 0 0;">
+        <i class="fa fa-list"></i> 2. Billing Details
+    </h3>
+    <div class="clear"></div>
+    {{{billing_address_dropdown}}}
+    <br>
+    <p>Field marked with a * are required</p>
+    <div class="hidden_table">
+        <input name="guest" type="hidden" value="{{{g}}}" />
+        <table width="100%" cellpadding="6">
+            <tr>
+                <td><b>Company Name:</b></td>
+                <td>{{{company_name_input}}}</td>
+            </tr>
+            <tr>
+                <td><b>First Name:*</b></td>
+                <td>{{{first_name_input}}}</td>
+            </tr>
+            <tr>
+                <td><b>Last Name:*</b></td>
+                <td>{{{last_name_input}}}</td>
+            </tr>
+            <tr>
+                <td><b>Email Address:*</b></td>
+                <td>{{{email_address_input}}}</td>
+            </tr>
+            <tr>
+                <td><b>Phone:*</b></td>
+                <td>{{{phone_input}}}</td>
+            </tr>
+            <tr>
+                <td id="billing_street_address_label"><b>Address Line 1:*</b></td>
+                <td>{{{address_1_input}}}</td>
+            </tr>
+            <tr>
+                <td id="billing_address_2_label"><b>Address Line 2:</b></td>
+                <td>{{{address_2_input}}}</td>
+            </tr>
+            <tr>
+                <td id="billing_city_label"><b>City:*</b></td>
+                <td>{{{city_input}}}</td>
+            </tr>
+            <tr>
+                <td id="billing_state_label"><b>State:*</b></td>
+                <td>{{{state_input}}}</td>
+            </tr>
+            <tr>
+                <td id="billing_zip_label"><b>Zip:*</b></td>
+                <td>{{{zip_input}}}</td>
+            </tr>
+            <tr>
+                <td><b>Country:*</b></td>
+                <td>{{{country_input}}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
