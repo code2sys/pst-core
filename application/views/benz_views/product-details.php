@@ -27,24 +27,18 @@ $stock_status_mode = $CI->_getStockStatusMode();
 				<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
 				<a href="<?php echo base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']); ?>"><?php echo $motorcycle['title'];?></a>
 			</nav>
-			<div class="menu-section">
-				<ul class="nav navbar-nav menu-dti">
-					<li><a href="#" data-toggle="modal" data-target="#trade-in-value-modal_<?php echo $motorcycle['id']; ?>">GET A QUOTE</a></li>
-					<li><a href="#" data-toggle="modal" data-target="#trade-in-value-modal_<?php echo $motorcycle['id']; ?>">TRADE VALUE</a></li>
-					<li style="margin-right:10px;" data-toggle="modal" data-target="#trade-in-value-modal_<?php echo $motorcycle['id']; ?>"><a href="#"><?php if (defined('WORDING_SCHEDULE_TEST_DRIVE')) { echo WORDING_SCHEDULE_TEST_DRIVE; } else { ?>SCHEDULE TEST DRIVE<?php } ?></a></li>
-					<li><a href="/pages/index/financerequest"><?php
-                            if (!defined('GET_FINANCING_WORDING')) {
-                                define('GET_FINANCING_WORDING', 'GET FINANCING');
-                            }
-                            echo GET_FINANCING_WORDING;
-                            ?></a></li>
-					<!--<li><a href="#" data-toggle="modal" data-target="#myModal">GET FINANCING</a></li>-->
-					<li><a href="https://www.progressive.com/motorcycle/" target="_blank" >INSURANCE QUOTE</a></li>
-					<!--<li><a href="#">HISTORY REPORT</a></li>
-					<li><a href="#">SEND TO A FRIEND</a></li>-->
-					<li><a href="<?php echo site_url('pages/index/contactus') ?>" class="last">CONTACT US</a></li>
-				</ul>
-			</div>
+            <?php
+            $CI =& get_instance();
+            $CI->load->helper("mustache_helper");
+            $menu_section_template = mustache_tmpl_open("benz_views/product-details/menu-section.html");
+            mustache_tmpl_set($menu_section_template, "motorcycle_id", $motorcycle['id']);
+            mustache_tmpl_set($menu_section_template, "base_url", jsite_url("/"));
+            mustache_tmpl_set($menu_section_template, "WORDING_SCHEDULE_TEST_DRIVE", defined('WORDING_SCHEDULE_TEST_DRIVE') ? WORDING_SCHEDULE_TEST_DRIVE : "SCHEDULE TEST DRIVE");
+            mustache_tmpl_set($menu_section_template, "GET_FINANCING_WORDING", defined('GET_FINANCING_WORDING') ? GET_FINANCING_WORDING : 'GET FINANCING');
+            print mustache_tmpl_parse($menu_section_template);
+
+
+            ?>
 
 			<div class="col-md-8 col-xs-12 col-sm-7 pdig sect-sid">
 				<div class="clearfix" style="width:100%;">
