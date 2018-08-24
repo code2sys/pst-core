@@ -527,13 +527,17 @@ class Lightspeed_M extends Master_M {
                 }
 
                 $motorcycle_id = 0;
-                $query = $this->db->query("Select id from motorcycle where sku = ?", array($motorcycle_array["sku"]));
+                $crs_trim_id = 0;
+                $query = $this->db->query("Select id, crs_trim_id from motorcycle where sku = ?", array($motorcycle_array["sku"]));
                 foreach ($query->result_array() as $row) {
                     $motorcycle_id = $row["id"];
+                    $crs_trim_id = $row["crs_trim_id"];
                 }
 
                 // Now, what is the ID for this motorcycle?
-                $CI->CRS_m->matchIfYouCan($motorcycle_id, $bike->VIN, $bike->Make, $bike->Model, $bike->ModelYear, $bike->CodeName, $bike->MSRP, $scrub_trim);
+                if ($crs_trim_id == 0) {
+                    $CI->CRS_m->matchIfYouCan($motorcycle_id, $bike->VIN, $bike->Make, $bike->Model, $bike->ModelYear, $bike->CodeName, $bike->MSRP, $scrub_trim);
+                }
 
                 // Todo...
                 // Does this motorcycle have a zero group or a general group of settings? We need to be able to flag the settings group that comes from Lightspeed in some way...
