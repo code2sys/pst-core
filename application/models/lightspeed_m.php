@@ -347,6 +347,22 @@ class Lightspeed_M extends Master_M {
         // I expect these will be integers, numeric
         $location_description = (intVal($cmf) != 0 && array_key_exists(intVal($cmf), $lightspeedDealerMap)) ? $lightspeedDealerMap[intVal($cmf)] : "";
 
+        $make = $bike->Make;
+
+        $normalize_makes = array(
+            "can-am™" => "CAN-AM",
+            "canam" => "CAN-AM",
+            "ski doo" => "Ski-Doo",
+            "skidoo" => "Ski-Doo",
+            "seadoo" => "Sea-Doo",
+            "sea doo" => "Sea-Doo",
+            "artic cat" => "ARCTIC CAT"
+        );
+
+        if (array_key_exists(trim(strtolower($make)), $normalize_makes)) {
+            $make = $normalize_makes[trim(strtolower($make))];
+        }
+
         return array(
             "location_description" => $location_description,
             'lightspeed_dealerID' => $cmf,
@@ -372,7 +388,7 @@ class Lightspeed_M extends Master_M {
             "vehicle_type" => $this->fetchMotorcycleType($bike->UnitType),
             'category' => $this->fetchMotorcycleCategory($bike->UnitType), // TODO
             'year' => $bike->ModelYear,
-            'make' => $bike->Make,
+            'make' => $make,
             'model' => $bike->Model,
             'title' => $bike->WebTitle,
             "status" => $this->activeOnAdd() ? 1 : 0
@@ -536,7 +552,7 @@ class Lightspeed_M extends Master_M {
 
                 // Now, what is the ID for this motorcycle?
                 if ($crs_trim_id == 0) {
-                    $CI->CRS_m->matchIfYouCan($motorcycle_id, $bike->VIN, $bike->Make, $bike->Model, $bike->ModelYear, $bike->CodeName, $bike->MSRP, $scrub_trim);
+                    $CI->CRS_m->matchIfYouCan($motorcycle_id, $motorcycle_array["vin_number"], $motorcycle_array["make"], $bike->Model, $bike->ModelYear, $bike->CodeName, $bike->MSRP, $scrub_trim);
                 }
 
                 // Todo...
