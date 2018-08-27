@@ -39,7 +39,7 @@
 */
 
 $route['default_controller'] = "welcome";
-$route['404_override'] = '';  
+$route['404_override'] = 'my404';
 $route['Motorcycle_Gear_Brands'] = 'shopping/brands';
 $route['Motorcycle_List'] = 'motorcycle_ci/benzProduct';
 $route['Motorcycle_List/featured'] = 'motorcycle_ci/featuredNewProducts';
