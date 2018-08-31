@@ -130,7 +130,7 @@
 	.Qnt{width:21% !important;}
 	.outOfStockStatus{width:100% !important;}
 	.prodPurchaseCont{margin-top:0px !important;}
-	#dfrnstng{margin-top:-101px; margin-right:29px; float:right;}
+	#shoppingBuyButtonContainer{margin-top:-101px; margin-right:29px; float:right; width: 50%;}
 	.prdsnglbtn{font-size:17px !important; padding:13px 36px !important; float:right !important;}
 	.algnmd{width:50%; float:left; display:-webkit-flex; -webkit-flex-direction:column; display:flex; flex-direction:column;}
 	.algnmd .Qnt{order:3; flex:1; -webkit-flex:1;}
@@ -217,7 +217,7 @@
 	.szchart .cntnr{width:93% !important;}
 	/* SIZING CHART PAGE CSS ENDS HERE */
 	#desktop_cart{padding:5px 70px 0 0!important;}
-	
+
 }
 @media (min-width:480px) and (max-width:639px)
 {
@@ -350,7 +350,7 @@
 	.Qnt{width:21% !important;}
 	.outOfStockStatus{width:100% !important;}
 	.prodPurchaseCont{margin-top:0px !important;}
-	#dfrnstng{margin-top:-101px; margin-right:29px; float:right;}
+	#shoppingBuyButtonContainer{margin-top:-101px; margin-right:29px; float:right; width: 50%;}
 	.prdsnglbtn{font-size:17px !important; padding:13px 36px !important; float:right !important;}
 	.algnmd{width:50%; float:left; display:-webkit-flex; -webkit-flex-direction:column; display:flex; flex-direction:column;}
 	.algnmd .Qnt{order:3; flex:1; -webkit-flex:1;}
@@ -437,6 +437,9 @@
 	.szchart .cntnr{width:93% !important;}
 	/* SIZING CHART PAGE CSS ENDS HERE */
 	#desktop_cart{padding:5px 70px 0 0!important;}
+
+
+
 
 }
 @media (min-width:640px) and (max-width:767px)
@@ -570,7 +573,7 @@
 	.Qnt{width:21% !important;}
 	.outOfStockStatus{width:100% !important;}
 	.prodPurchaseCont{margin-top:0px !important;}
-	#dfrnstng{margin-top:-101px; margin-right:29px; float:right;}
+	#shoppingBuyButtonContainer{margin-top:-101px; margin-right:29px; float:right; width: 50%}
 	.prdsnglbtn{font-size:17px !important; padding:13px 36px !important; float:right !important;}
 	.algnmd{width:50%; float:left; display:-webkit-flex; -webkit-flex-direction:column; display:flex; flex-direction:column;}
 	.algnmd .Qnt{order:3; flex:1; -webkit-flex:1;}
@@ -645,8 +648,67 @@
 	/* BRAND LIST PAGE CSS ENDS HERE */
 	.shpbrnd {width:33% !important;}
 	#desktop_cart{padding:5px 70px 0 0!important;}
+
+
+
 }
 
+@media (max-width: 1023px) {
+
+	/* JLB 08-31-18 For the product screen */
+	.questions_and_quantities_block .quantity_block,
+	.questions_and_quantities_block .questionSelector {
+		width: 50%;
+		display: block;
+		float: left;
+		clear: left;
+		margin-top: 6px;
+		margin-bottom: 6px;
+	}
+
+	.questions_and_quantities_block .questionSelector .answerString,
+	.questions_and_quantities_block .questionSelector .questionString {
+		display: block;
+		margin-bottom: 6px;
+	}
+
+	.questions_and_quantities_block .questionSelector select {
+		width: 100%;
+	}
+
+	.questions_and_quantities_block .quantity_selector {
+		font-size: 125%;
+	}
+
+	.priceDetaiSect .leftCol.priceHolder {
+		width: 100% !important;
+		float: none;
+	}
+
+	.questions_and_quantities_block .stock {
+		margin-top: 6px;
+	}
+
+}
+
+@media (min-width: 1024px) {
+	.questions_and_quantities_block .questionSelector .answerString,
+	.questions_and_quantities_block .questionSelector .questionString {
+		display: block;
+		float: left;
+		width: 50%;
+		margin-bottom: 6px;
+	}
+
+	.questions_and_quantities_block .questionSelector select {
+		width: 100% !important;
+	}
+
+	.questions_and_quantities_block .stock {
+		margin-top: 6px;
+	}
+
+}
 
 
 @media (min-width:768px) and (max-width:1023px)
