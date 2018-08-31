@@ -244,9 +244,27 @@ $qty_input = form_input(array('name' => 'qty',
                     // JLB 08-31-18
                     // This was a shitpile before I got here. It's still weird, but it's not as awful as it was!
                     if (isset($questions) && is_array($questions) && count($questions) > 0) {
+                        // Reassemble this into a structure that maps partquestion_id => an array of the question and answers, then display those answers
+                        $requestioned = array();
+                        foreach ($question as $question) {
+                            $partquestion_id = $question["partquestion_id"];
+                            if (!array_key_exists($partquestion_id, $requestioned)) {
+                                $requestioned[$partquestion_id] = array(
+                                    "question" => $question["question"],
+                                    "partquestion_id" => $partquestion_id,
+                                    "answers" => array(
+                                            array('0' => 'Select an option')
+                                    )
+                                );
+                            }
+                            $requestioned[$partquestion_id]["answers"][] = array(
+                                $question['partnumber'] => $question['answer']
+                            );
+                        }
+
                         $currentQuestion = "";
 
-                        foreach ($questions as $key => $quest) {
+                        foreach ($requestioned as $key => $quest) {
                             $currentQuestion = $quest['partquestion_id'];
  ?>
                             <div class="questionSelector">
