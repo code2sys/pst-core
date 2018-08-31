@@ -592,12 +592,12 @@ $CI =& get_instance();
                         }
 
                         if (partObj.dealer_quantity_available && parseInt(partObj.dealer_quantity_available, 10) > 0) {
-                            console.log("B Yes");
+                            console.log("B Yes partId");
                             $("#in_stock_" + partId + " .instock").show();
                             $("#in_stock_" + partId + " .online_only").hide();
 
                         } else {
-                            console.log("B No");
+                            console.log("B No partId");
                             $("#in_stock_" + partId + " .online_only").show();
                             $("#in_stock_" + partId + " .instock").hide();
                         }
@@ -649,12 +649,12 @@ $CI =& get_instance();
                                 }
 
                                 if (partObj.dealer_quantity_available && parseInt(partObj.dealer_quantity_available, 10) > 0) {
-                                    console.log("A Yes");
+                                    console.log("A Yes questionId");
                                     $("#in_stock_" + questionId + " .instock").show();
                                     $("#in_stock_" + questionId + " .online_only").hide();
 
                                 } else {
-                                    console.log("A No");
+                                    console.log("A No questionId");
                                     $("#in_stock_" + questionId + " .online_only").show();
                                     $("#in_stock_" + questionId + " .instock").hide();
                                 }
