@@ -10,6 +10,12 @@ $detect = new Mobile_Detect;
 $CI =& get_instance();
 
 $online_in_stock_string = '<span class="online_only hide" style="display: inline-block">Online Only</span><span class="instock hide"  style="display: inline-block">Available For Store Pickup</span>';
+$qty_input = form_input(array('name' => 'qty',
+    'value' => 1,
+    'maxlength' => 250,
+    'class' => 'text mini qtyInput',
+    'placeholder' => '0',
+    'id' => 'qty'));
 
 ?>
 <div class="container dtlpg" style="margin-top:30px;" id="mdcntnr">
@@ -303,7 +309,8 @@ $online_in_stock_string = '<span class="online_only hide" style="display: inline
                         ?>
                         <div class="algnmd"> 
                             <div class="leftCol mt10 Qnt">
-                                <div class="colSize">QTY :</div>
+                                <div class="colSize" style="display:inline-block">QTY: </div>
+                                <?php echo $qty_input; ?>
                             </div>
                             <div class="stock hide stckmd" id="out_of_stock_<?php echo $product['part_id']; ?>">
                                 <span class="outOfStockStatus">OUT OF STOCK - PLEASE CALL TO ORDER</span>
@@ -319,19 +326,10 @@ $online_in_stock_string = '<span class="online_only hide" style="display: inline
 
                     <?php if ($is_qty_displayed == 0) { ?>
                         <div class="leftCol mt10">
-                            <div class="colSize">QTY :</div>
+                            <div class="colSize" style="display:inline-block">QTY: </div>
+                            <?php echo $qty_input; ?>
                         </div>
                     <?php } ?>
-                    <div class="rightCol mt10" style="margin:-19px 59% 0px 0px; float:right; width:26% !important;">
-                        <?php
-                        echo form_input(array('name' => 'qty',
-                            'value' => 1,
-                            'maxlength' => 250,
-                            'class' => 'text mini qtyInput',
-                            'placeholder' => '0',
-                            'id' => 'qty'));
-                        ?>
-                    </div>
                     <div class="clear"></div>
                 </div>
 
