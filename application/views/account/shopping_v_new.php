@@ -188,7 +188,7 @@ $qty_input = form_input(array('name' => 'qty',
 
                     <?php else: ?>
 
-                    <div class="leftCol">
+                    <div class="leftCol priceHolder">
 
                         <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>"><?php
                             $original_price = $product['price']['sale_min'];
