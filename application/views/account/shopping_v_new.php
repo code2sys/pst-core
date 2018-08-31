@@ -255,7 +255,7 @@ $CI =& get_instance();
                                         <span class="outOfStockStatus">OUT OF STOCK - PLEASE CALL TO ORDER</span>
                                     </div>
                                     <div class="stock hide" id="in_stock_<?php echo $currentQuestion; ?>">
-                                        <span class="stockStatus">In Stock</span>
+                                        <span class="stockStatus">In Stock <span class="online_only hide">- Online Only</span><span class="instock hide">- Available For Store Pickup</span></span>
                                     </div>			
                                     <?php echo form_dropdown('question[]', $answers, @$_SESSION['cart'][$product['part_id']][$quest['partquestion_id']], 'style="", class="slctClr mb10 question ' . $currentQuestion . '", onchange="updatePrice(' . $currentQuestion . ');"'); ?>
                                 </div>
@@ -275,12 +275,12 @@ $CI =& get_instance();
                                 <span class="outOfStockStatus">OUT OF STOCK - PLEASE CALL TO ORDER</span>
                             </div>			
                             <div class="stock hide"  id="in_stock_<?php echo $currentQuestion; ?>">
-                                <span class="stockStatus">In Stock</span>
+                                <span class="stockStatus">In Stock <span class="online_only hide">- Online Only</span><span class="instock hide">- Available For Store Pickup</span></span>
                                 <div class="clear"></div>
                                 <div class="hide fltL mb10" id="low_stock_<?php echo $currentQuestion; ?>" style="display:inline;">
                                     - ONLY
                                     <div id="stock_qty_<?php echo $currentQuestion; ?>" style="display:inline;">1</div>
-                                    REMANING
+                                    REMAINING
                                 </div>
                                 <div class="clear"></div>
                             </div>
@@ -588,8 +588,16 @@ $CI =& get_instance();
                         if (partObj.quantity_available < 6)
                         {
                             $('#low_stock_' + partId).show();
-                            $('#in_stock_' + partId).show();
                             $('#stock_qty_' + partId).html(partObj.quantity_available);
+                        }
+
+                        if (partObj.dealer_quantity_available && partObj.dealer_quantity_available > 0) {
+                            $("#in_stock_" + partId + " .instock").show();
+                            $("#in_stock_" + partId + " .online_only").hide();
+
+                        } else {
+                            $("#in_stock_" + partId + " .online_only").show();
+                            $("#in_stock_" + partId + " .instock").hide();
                         }
                     } else
                     {
@@ -635,9 +643,18 @@ $CI =& get_instance();
                                 if (partObj.quantity_available < 6)
                                 {
                                     $('#low_stock_' + questionId).show();
-                                    $('#in_stock_' + questionId).show();
                                     $('#stock_qty_' + questionId).html(partObj.quantity_available);
                                 }
+
+                                if (partObj.dealer_quantity_available && partObj.dealer_quantity_available > 0) {
+                                    $("#in_stock_" + questionId + " .instock").show();
+                                    $("#in_stock_" + questionId + " .online_only").hide();
+
+                                } else {
+                                    $("#in_stock_" + questionId + " .online_only").show();
+                                    $("#in_stock_" + questionId + " .instock").hide();
+                                }
+
                             } else
                             {
                                 $('#out_of_stock_' + questionId).show();
