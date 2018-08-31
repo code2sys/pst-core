@@ -98,7 +98,7 @@ if (!function_exists('tag_creating')) {
                             $<?php echo $prod['price']['sale_min']; if(@$prod['price']['sale_max']): echo ' - $' . $prod['price']['sale_max'];  endif; ?>
                         </div><div class="discount">
                             <?php if(@$prod['price']['percentage']):?>
-                                You save $<?php echo ($prod['price']['retail_min'] - $prod['price']['sale_min']); if(@$prod['price']['sale_max']): echo ' - $' . ($prod['price']['retail_max'] - $prod['price']['sale_max']);  endif;?> (<?php echo number_format($prod['price']['percentage'], 0); ?>%)
+                                You save $<?php echo round($prod['price']['retail_min'] - $prod['price']['sale_min'], 2); if(@$prod['price']['sale_max']): echo ' - $' . round($prod['price']['retail_max'] - $prod['price']['sale_max'], 2);  endif;?> (<?php echo number_format($prod['price']['percentage'], 0); ?>%)
                             <?php  endif; ?>
                         </div>
                     </div>
@@ -193,7 +193,7 @@ if (!function_exists('tag_creating')) {
                             $<?php echo $prod['price']['sale_min']; if(@$prod['price']['sale_max']): echo ' - $' . $prod['price']['sale_max'];  endif; ?>
                         </div><div class="discount">
                             <?php if(@$prod['price']['percentage']):?>
-                                You save $<?php echo ($prod['price']['retail_min'] - $prod['price']['sale_min']); if(@$prod['price']['sale_max']): echo ' - $' . ($prod['price']['retail_max'] - $prod['price']['sale_max']);  endif;?> (<?php echo number_format($prod['price']['percentage'], 0); ?>%)
+                                You save $<?php echo round($prod['price']['retail_min'] - $prod['price']['sale_min'], 2); if(@$prod['price']['sale_max']): echo ' - $' . round($prod['price']['retail_max'] - $prod['price']['sale_max'], 2);  endif;?> (<?php echo number_format($prod['price']['percentage'], 0); ?>%)
                             <?php  endif; ?>
                         </div>
                     </div>
@@ -286,7 +286,7 @@ if (!function_exists('tag_creating')) {
                         $<?php echo $prod['price']['sale_min']; if(@$prod['price']['sale_max']): echo ' - $' . $prod['price']['sale_max'];  endif; ?>
                     </div><div class="discount">
                         <?php if(@$prod['price']['percentage']):?>
-                            You save $<?php echo ($prod['price']['retail_min'] - $prod['price']['sale_min']); if(@$prod['price']['sale_max']): echo ' - $' . ($prod['price']['retail_max'] - $prod['price']['sale_max']);  endif;?> (<?php echo number_format($prod['price']['percentage'], 0); ?>%)
+                            You save $<?php echo round($prod['price']['retail_min'] - $prod['price']['sale_min'], 2); if(@$prod['price']['sale_max']): echo ' - $' . round($prod['price']['retail_max'] - $prod['price']['sale_max'], 2);  endif;?> (<?php echo number_format($prod['price']['percentage'], 0); ?>%)
                         <?php  endif; ?>
                     </div>
                 </div>
@@ -384,7 +384,7 @@ if (!function_exists('tag_creating')) {
                             $<?php echo $prod['price']['sale_min']; if(@$prod['price']['sale_max']): echo ' - $' . $prod['price']['sale_max'];  endif; ?>
                         </div><div class="discount">
                             <?php if(@$prod['price']['percentage']):?>
-                                You save $<?php echo ($prod['price']['retail_min'] - $prod['price']['sale_min']); if(@$prod['price']['sale_max']): echo ' - $' . ($prod['price']['retail_max'] - $prod['price']['sale_max']);  endif;?> (<?php echo number_format($prod['price']['percentage'], 0); ?>%)
+                                You save $<?php echo round($prod['price']['retail_min'] - $prod['price']['sale_min'], 2); if(@$prod['price']['sale_max']): echo ' - $' . round($prod['price']['retail_max'] - $prod['price']['sale_max'], 2);  endif;?> (<?php echo number_format($prod['price']['percentage'], 0); ?>%)
                             <?php  endif; ?>
                         </div>
                     </div>
