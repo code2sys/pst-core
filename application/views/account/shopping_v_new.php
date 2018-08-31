@@ -554,12 +554,22 @@ $qty_input = form_input(array('name' => 'qty',
                 });
     }
 
-    function figureStockStatus(partObj) {
+    function figureStockStatusGroundState() {
         var $in_stock = $('#in_stock');
         var $out_stock = $('#out_of_stock');
         var $low_stock = $('#low_stock');
         $in_stock.hide();
         $out_stock.hide();
+        $low_stock.hide();
+        $("#submit_button").attr("onclick", "return false");
+    }
+
+    function figureStockStatus(partObj) {
+        var $in_stock = $('#in_stock');
+        var $out_stock = $('#out_of_stock');
+        var $low_stock = $('#low_stock');
+        figureStockStatusGroundState();
+
         $("#submit_button").attr("onclick", "submitCart()");
         console.log(partObj.quantity_available);
         if (partObj.quantity_available > 0)
@@ -612,6 +622,7 @@ $qty_input = form_input(array('name' => 'qty',
     function updatePrice(questionId)
     {
         $('#price').html("<?php echo $original_price; ?>");
+        figureStockStatusGroundState();
 
         $(".question").each(function ()
         {
