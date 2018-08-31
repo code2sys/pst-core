@@ -237,99 +237,62 @@ $qty_input = form_input(array('name' => 'qty',
                     </div>
 
                     <div class="clear"></div>
-
+                    <div class="questions_and_quantities_block">
                     <?php
                     $is_qty_displayed = 0;
-                    if (@$questions): $currentQuestion = '';
-                        foreach ($questions as $key => $quest):   // Building Question Options
-                            if ($quest['partquestion_id'] == $currentQuestion): $answers[$quest['partnumber']] = $quest['answer'];
-                                ?>
-                                <?php
-                            // First Time Through
-                            elseif ($currentQuestion == ''):
-                                ?> 
-                                <div class="leftCol">
-                                    <div class="colSize"><?php echo $quest['question']; ?> :</div>
-                                </div>
 
-                                <?php $answers = array('0' => 'Select an option', $quest['partnumber'] => $quest['answer']); ?>
-                                <?php
-                            // End old question and create New Question.  New Question will never be the first question.
-                            else:
-                                ?>
+                    // JLB 08-31-18
+                    // This was a shitpile before I got here. It's still weird, but it's not as awful as it was!
+                    if (isset($questions) && is_array($questions) && count($questions) > 0) {
+                        $currentQuestion = "";
 
-                                <div class="rightCol">
-                                    <div class="stock hide" id="out_of_stock_<?php echo $currentQuestion; ?>">
-                                        <span class="outOfStockStatus">OUT OF STOCK - PLEASE CALL TO ORDER</span>
-                                    </div>
-                                    <div class="stock hide" id="in_stock_<?php echo $currentQuestion; ?>">
-                                        <span class="stockStatus">In Stock</span>
-                                        <?php echo $online_in_stock_string; ?>
-
-                                    </div>			
-                                    <?php echo form_dropdown('question[]', $answers, @$_SESSION['cart'][$product['part_id']][$quest['partquestion_id']], 'style="", class="slctClr mb10 question ' . $currentQuestion . '", onchange="updatePrice(' . $currentQuestion . ');"'); ?>
-                                </div>
-                                <div class="clear"></div>
-                                <div class="leftCol">
-                                    <div class="colSize"><?php echo $quest['question']; ?> :</div>
-                                </div>
-                                <?php $answers = array('0' => 'Select an option', $quest['partnumber'] => $quest['answer']); ?>
-                            <?php
-                            endif;
+                        foreach ($questions as $key => $quest) {
                             $currentQuestion = $quest['partquestion_id'];
-                        endforeach;
-                        ?>
+ ?>
+                            <div class="questionSelector">
+                                <div class="question">
+                                    <?php echo $quest['question']; ?>:
+                                </div>
+                                <div class="answer">
+                                    <?php
+                                    $answers = array('0' => 'Select an option', $quest['partnumber'] => $quest['answer']);
+                                    echo form_dropdown('question[]', $answers, @$_SESSION['cart'][$product['part_id']][$quest['partquestion_id']], 'style="", class="questionSelector ' . $currentQuestion . '", onchange="updatePrice(' . $currentQuestion . ');"'); ?>
+                                </div>
+                                <div style="clear: both"></div>
+                            </div>
+                            <?php
+                        }
 
-                        <div class="rightCol">
-                            <div class="stock hide" id="out_of_stock_<?php echo $currentQuestion; ?>">
+                    }
+
+                    ?>
+
+                    <div class="quantity_block">
+                        <div class="quantity_selector">
+                                QTY:
+                                <?php echo $qty_input; ?>
+                        </div>
+
+                        <div class="quantity_description">
+                            <div class="stock hide" id="out_of_stock">
                                 <span class="outOfStockStatus">OUT OF STOCK - PLEASE CALL TO ORDER</span>
-                            </div>			
-                            <div class="stock hide"  id="in_stock_<?php echo $currentQuestion; ?>">
+                            </div>
+                            <div class="stock hide" id="in_stock">
                                 <span class="stockStatus">In Stock</span>
                                 <?php echo $online_in_stock_string; ?>
                                 <div class="clear"></div>
-                                <div class="hide fltL mb10" id="low_stock_<?php echo $currentQuestion; ?>" style="display:inline;">
-                                    - ONLY
-                                    <div id="stock_qty_<?php echo $currentQuestion; ?>" style="display:inline;">1</div>
+                                <div class="hide" id="low_stock" style="display:inline;">
+                                    ONLY
+                                    <div id="stock_qty" style="display:inline;">1</div>
                                     REMAINING
                                 </div>
                                 <div class="clear"></div>
                             </div>
-
-                            <?php
-                            // Last time Through
-                            echo form_dropdown('question[]', $answers, @$_SESSION['cart'][$product['part_id']][$quest['partquestion_id']], 'style="", class="slctClr mb10 question ' . $currentQuestion . '", onchange="updatePrice(' . $currentQuestion . ');" ');
-                            ?>
                         </div>
-                        <div class="clear"></div>
+                    </div>
 
-                        <?php
-                    else:
-                        $is_qty_displayed = 1;
-                        ?>
-                        <div class="algnmd"> 
-                            <div class="leftCol mt10 Qnt">
-                                <div class="colSize" style="display:inline-block">QTY: </div>
-                                <?php echo $qty_input; ?>
-                            </div>
-                            <div class="stock hide stckmd" id="out_of_stock_<?php echo $product['part_id']; ?>">
-                                <span class="outOfStockStatus">OUT OF STOCK - PLEASE CALL TO ORDER</span>
-                            </div>
-                            <div class="stock hide stckstts"  id="in_stock_<?php echo $product['part_id']; ?>">
-                                <span class="stockStatus">In Stock</span>
-                                <?php echo $online_in_stock_string; ?>
-                                <div class="stock hide" id="low_stock_<?php echo $product['part_id']; ?>" style="display:inline;"> - ONLY <div id="stock_qty_<?php echo $product['part_id']; ?>" style="display:inline;">1</div> REMANING</div>
-								<input type="hidden" name="partnumber" value="<?php echo $partnumbercustom;?>">
-                            </div>
-                        </div>
-                    <?php endif; ?>
+                    </div>
 
-                    <?php if ($is_qty_displayed == 0) { ?>
-                        <div class="leftCol mt10">
-                            <div class="colSize" style="display:inline-block">QTY: </div>
-                            <?php echo $qty_input; ?>
-                        </div>
-                    <?php } ?>
                     <div class="clear"></div>
                 </div>
 
@@ -568,6 +531,41 @@ $qty_input = form_input(array('name' => 'qty',
                 });
     }
 
+    function figureStockStatus(partObj) {
+        var $in_stock = $('#in_stock');
+        var $out_stock = $('#out_of_stock');
+        var $low_stock = $('#low_stock');
+        $in_stock.hide();
+        $out_stock.hide();
+        $("#submit_button").attr("onclick", "submitCart()");
+        console.log(partObj.quantity_available);
+        if (partObj.quantity_available > 0)
+        {
+            $in_stock.show();
+            $low_stock.hide();
+            if (partObj.quantity_available < 6)
+            {
+                $low_stock.show();
+                $('#stock_qty').html(partObj.quantity_available);
+            }
+
+            if (partObj.dealer_quantity_available && parseInt(partObj.dealer_quantity_available, 10) > 0) {
+                console.log("B Yes ");
+                $("#in_stock .instock").show();
+                $("#in_stock .online_only").hide();
+
+            } else {
+                console.log("B No  ");
+                $("#in_stock .online_only").show();
+                $("#in_stock .instock").hide();
+            }
+        } else
+        {
+            $out_stock.show();
+            $("#submit_button").attr("onclick", "outOfStockWarning()");
+        }
+    }
+
     function getStock(partId)
     {
 		//alert(partId);
@@ -579,37 +577,7 @@ $qty_input = form_input(array('name' => 'qty',
                 function (partRec)
                 {
                     var partObj = jQuery.parseJSON(partRec);
-                    //$('#productDetailForm').append('<input type="hidden" name="partnumber" value="'+partObj.partnumber+'" />');
-					//alert(partObj.partnumber);
-                    $('#in_stock_' + partId).hide();
-                    $('#out_of_stock_' + partId).hide();
-                    $("#submit_button").attr("onclick", "submitCart()");
-                    console.log(partObj.quantity_available);
-                    if (partObj.quantity_available > 0)
-                    {
-                        $('#in_stock_' + partId).show();
-                        $('#low_stock_' + partId).hide();
-                        if (partObj.quantity_available < 6)
-                        {
-                            $('#low_stock_' + partId).show();
-                            $('#stock_qty_' + partId).html(partObj.quantity_available);
-                        }
-
-                        if (partObj.dealer_quantity_available && parseInt(partObj.dealer_quantity_available, 10) > 0) {
-                            console.log("B Yes partId " + partId);
-                            $("#in_stock_" + partId + " .instock").show();
-                            $("#in_stock_" + partId + " .online_only").hide();
-
-                        } else {
-                            console.log("B No partId " + partId);
-                            $("#in_stock_" + partId + " .online_only").show();
-                            $("#in_stock_" + partId + " .instock").hide();
-                        }
-                    } else
-                    {
-                        $('#out_of_stock_' + partId).show();
-                        $("#submit_button").attr("onclick", "outOfStockWarning()");
-                    }
+                    figureStockStatus(partObj);
                 });
     }
 
@@ -638,36 +606,8 @@ $qty_input = form_input(array('name' => 'qty',
                             currentPrice = currentPrice.replace("$", "");
                             totalprice = parseFloat(currentPrice) + parseFloat(partObj.sale);
                             $('#price').html('$' + parseFloat(totalprice).toFixed(2));
-                            $('#in_stock_' + questionId).hide();
-                            $('#out_of_stock_' + questionId).hide();
-                            $("#submit_button").attr("onclick", "submitCart()");
-                            if (partObj.quantity_available > 0)
-                            {
 
-                                $('#in_stock_' + questionId).show();
-                                $('#low_stock_' + questionId).hide();
-                                if (partObj.quantity_available < 6)
-                                {
-                                    $('#low_stock_' + questionId).show();
-                                    $('#stock_qty_' + questionId).html(partObj.quantity_available);
-                                }
-
-                                if (partObj.dealer_quantity_available && parseInt(partObj.dealer_quantity_available, 10) > 0) {
-                                    console.log("A Yes questionId " + questionId);
-                                    $("#in_stock_" + questionId + " .instock").show();
-                                    $("#in_stock_" + questionId + " .online_only").hide();
-
-                                } else {
-                                    console.log("A No questionId " + questionId);
-                                    $("#in_stock_" + questionId + " .online_only").show();
-                                    $("#in_stock_" + questionId + " .instock").hide();
-                                }
-
-                            } else
-                            {
-                                $('#out_of_stock_' + questionId).show();
-                                $("#submit_button").attr("onclick", "outOfStockWarning()");
-                            }
+                            figureStockStatus(partObj);
                         });
             }
         });
