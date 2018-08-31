@@ -9,7 +9,7 @@ require_once 'Mobile_Detect.php';
 $detect = new Mobile_Detect;
 $CI =& get_instance();
 
-$online_in_stock_string = '<span class="online_only hide" style="display: block">Online Only</span><span class="instock hide"  style="display: block">Available For Store Pickup</span>';
+$online_in_stock_string = '<span class="online_only hide" style="display: inline-block">Online Only</span><span class="instock hide"  style="display: inline-block">Available For Store Pickup</span>';
 
 ?>
 <div class="container dtlpg" style="margin-top:30px;" id="mdcntnr">
