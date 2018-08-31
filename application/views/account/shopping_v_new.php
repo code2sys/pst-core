@@ -304,7 +304,7 @@ $CI =& get_instance();
                                 <span class="outOfStockStatus">OUT OF STOCK - PLEASE CALL TO ORDER</span>
                             </div>
                             <div class="stock hide stckstts"  id="in_stock_<?php echo $product['part_id']; ?>">
-                                <span class="stockStatus">In Stock</span>
+                                <span class="stockStatus">In Stock <span class="online_only hide">- Online Only</span><span class="instock hide">- Available For Store Pickup</span></span>
                                 <div class="stock hide" id="low_stock_<?php echo $product['part_id']; ?>" style="display:inline;"> - ONLY <div id="stock_qty_<?php echo $product['part_id']; ?>" style="display:inline;">1</div> REMANING</div>
 								<input type="hidden" name="partnumber" value="<?php echo $partnumbercustom;?>">
                             </div>
