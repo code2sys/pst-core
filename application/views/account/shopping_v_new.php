@@ -571,6 +571,26 @@ $qty_input = form_input(array('name' => 'qty',
         var $low_stock = $('#low_stock');
         figureStockStatusGroundState();
 
+
+        var proceed = true;
+        if ($(".question")[0])
+        {
+            $(".question").each(function ()
+            {
+
+                if ($(this).val() == 0)
+                {
+                    proceed = false;
+                }
+            });
+        }
+
+        if (!proceed) {
+            return; // nothing to do here. not all questions are filled in...
+        }
+
+
+
         $("#submit_button").attr("onclick", "submitCart()");
         console.log(partObj.quantity_available);
         if (partObj.quantity_available > 0)
