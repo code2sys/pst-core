@@ -591,11 +591,13 @@ $CI =& get_instance();
                             $('#stock_qty_' + partId).html(partObj.quantity_available);
                         }
 
-                        if (partObj.dealer_quantity_available && partObj.dealer_quantity_available > 0) {
+                        if (partObj.dealer_quantity_available && parseInt(partObj.dealer_quantity_available, 10) > 0) {
+                            console.log("B Yes");
                             $("#in_stock_" + partId + " .instock").show();
                             $("#in_stock_" + partId + " .online_only").hide();
 
                         } else {
+                            console.log("B No");
                             $("#in_stock_" + partId + " .online_only").show();
                             $("#in_stock_" + partId + " .instock").hide();
                         }
@@ -646,11 +648,13 @@ $CI =& get_instance();
                                     $('#stock_qty_' + questionId).html(partObj.quantity_available);
                                 }
 
-                                if (partObj.dealer_quantity_available && partObj.dealer_quantity_available > 0) {
+                                if (partObj.dealer_quantity_available && parseInt(partObj.dealer_quantity_available, 10) > 0) {
+                                    console.log("A Yes");
                                     $("#in_stock_" + questionId + " .instock").show();
                                     $("#in_stock_" + questionId + " .online_only").hide();
 
                                 } else {
+                                    console.log("A No");
                                     $("#in_stock_" + questionId + " .online_only").show();
                                     $("#in_stock_" + questionId + " .instock").hide();
                                 }
