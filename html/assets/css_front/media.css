@@ -764,7 +764,7 @@
 	}
 
 	.questions_and_quantities_block .questionSelector select {
-		width: 100%;
+		width: 100% !important;
 	}
 }
 
