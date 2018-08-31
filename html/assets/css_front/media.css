@@ -758,6 +758,7 @@
 	.questions_and_quantities_block .questionSelector .answer,
 	.questions_and_quantities_block .questionSelector .question {
 		display: block;
+		float: left;
 		width: 50%;
 		margin-bottom: 6px;
 	}
