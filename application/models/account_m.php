@@ -15,23 +15,30 @@ class Account_M extends Master_M
 		$partNumberRec = $this->selectRecord('partnumber', $where);
 		return @$partNumberRec;
 	}
-	
+
+	/*
+	 * JLB 08-31-18
+	 * I find the diffusion of specific knowledge to be disgusting:
+	 * There's code in shopping.php and ajax.php and even in the views that figures out which of these two to call, because,
+	 * if you look at getStockByPartID, it has no reason to return a single row...unless you've already checked it.
+	 * GROSS!
+	 */
+
 	public function getDealerPriceByPartNumber( $partNumber ) {
-		$where = array('partnumber' => $partNumber);
-		$this->db->select('partnumber.sale, partdealervariation.quantity_available, partdealervariation.stock_code, partnumber.dealer_sale as sale');
-		$this->db->join('partdealervariation', 'partdealervariation.partnumber_id = partnumber.partnumber_id');
-		$partNumberRec = $this->selectRecord('partnumber', $where);
-		return @$partNumberRec;
+  	    // JLB: As far as I can tell, the users of this input require a single array...yet the old code just used selectRecord...
+  	    global $PSTAPI;
+  	    initializePSTAPI();
+  	    $result = $PSTAPI->partnumber()->getDealerPriceByPartNumber($partNumber);
+  	    return count($result) > 0 ? $result[0] : FALSE; // It expects a false if no matches..
 	}
 	
 	public function getStockByPartId($partId)
 	{
-		$where = array('part.part_id' => $partId);
-		$this->db->join('partpartnumber', 'partpartnumber.part_id = part.part_id');
-		$this->db->join('partnumber', 'partnumber.partnumber_id = partpartnumber.partnumber_id');
-		$this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
-		$partNumberRec = $this->selectRecord('part', $where);
-		return $partNumberRec;
+	    // JLB: Same note as above. As far as I can tell, the users of this function expect one response...
+	    global $PSTAPI;
+	    initializePSTAPI();
+	    $result = $PSTAPI->part()->getStockByPartId($partId);
+	    return count($result) > 0 ? $result[0] : FALSE;
 	}
 	
 	public function getDealerStockByPartId( $partId ) {

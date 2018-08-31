@@ -9,6 +9,14 @@ require_once 'Mobile_Detect.php';
 $detect = new Mobile_Detect;
 $CI =& get_instance();
 
+$online_in_stock_string = '<span class="online_only hide" style="display: inline-block">Online Only</span><span class="instock hide"  style="display: inline-block">Available For Store Pickup</span>';
+$qty_input = form_input(array('name' => 'qty',
+    'value' => 1,
+    'maxlength' => 250,
+    'class' => 'text mini qtyInput',
+    'placeholder' => '0',
+    'id' => 'qty'));
+
 ?>
 <div class="container dtlpg" style="margin-top:30px;" id="mdcntnr">
     <div class="breadCrumb">
@@ -150,7 +158,7 @@ $CI =& get_instance();
                     }
 
                     ?>
-                    <div class="leftCol" style="width:auto">
+                    <div class="leftCol priceHolder" style="width:auto">
                         <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>">CALL FOR PRICE<br/>
                             <?php echo $store_name['phone'];?></span>
                     </div>
@@ -180,12 +188,16 @@ $CI =& get_instance();
 
                     <?php else: ?>
 
-                    <div class="leftCol">
+                    <div class="leftCol priceHolder">
 
-                        <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>">$<?php
-                            echo $product['price']['sale_min'];
-                            if (@$product['price']['sale_max']): echo ' - $' . $product['price']['sale_max'];
-                            endif;
+                        <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>"><?php
+                            $original_price = $product['price']['sale_min'];
+
+                            if (array_key_exists('sale_max', $product['price']) && $product['price']['sale_max'] != '' &&  $product['price']['sale_max'] != $original_price) {
+                                $original_price .= ' - $' . $product['price']['sale_max'];
+                            }
+                            $original_price = '$' . $original_price;
+                            echo $original_price;
                             ?></span>
                         <?php if (@$product['reviews']): ?>
                             <div class="ratingStars">
@@ -219,113 +231,92 @@ $CI =& get_instance();
                         <?php if (@$product['price']['percentage']): ?>
                             <div class="savePrice" style="<?php if (@$product['price']['sale_max']) { ?>font-size:11px;<?php } ?>">You <strong>save</strong>
                                 $<?php
-                                echo ($product['price']['retail_min'] - $product['price']['sale_min']);
-                                if (@$product['price']['sale_max']): echo ' - $' . ($product['price']['retail_max'] - $product['price']['sale_max']);
-                                endif;
-                                ?> (<?php echo number_format($product['price']['percentage'], 0); ?>%) 
+                                echo round($product['price']['retail_min'] - $product['price']['sale_min'], 2);
+                                if (@$product['price']['sale_max']) {
+                                    echo ' - $' . round($product['price']['retail_max'] - $product['price']['sale_max'], 2);
+                                }
+                                ?> (<?php echo number_format($product['price']['percentage'], 0); ?>%)
                                 <!--$31.99 (10%)--> </div>
                         <?php endif; ?>
                 <!--<span class="stockStatus">In Stock</span>-->
                     </div>
 
                     <div class="clear"></div>
-
+                    <div class="questions_and_quantities_block">
                     <?php
                     $is_qty_displayed = 0;
-                    if (@$questions): $currentQuestion = '';
-                        foreach ($questions as $key => $quest):   // Building Question Options
-                            if ($quest['partquestion_id'] == $currentQuestion): $answers[$quest['partnumber']] = $quest['answer'];
-                                ?>
-                                <?php
-                            // First Time Through
-                            elseif ($currentQuestion == ''):
-                                ?> 
-                                <div class="leftCol">
-                                    <div class="colSize"><?php echo $quest['question']; ?> :</div>
-                                </div>
 
-                                <?php $answers = array('0' => 'Select an option', $quest['partnumber'] => $quest['answer']); ?>
-                                <?php
-                            // End old question and create New Question.  New Question will never be the first question.
-                            else:
-                                ?>
+                    // JLB 08-31-18
+                    // This was a shitpile before I got here. It's still weird, but it's not as awful as it was!
+                    if (isset($questions) && is_array($questions) && count($questions) > 0) {
+                        // Reassemble this into a structure that maps partquestion_id => an array of the question and answers, then display those answers
+                        $requestioned = array();
+                        foreach ($questions as $question) {
+                            $partquestion_id = $question["partquestion_id"];
+                            if (!array_key_exists($partquestion_id, $requestioned)) {
+                                $requestioned[$partquestion_id] = array(
+                                    "question" => $question["question"],
+                                    "partquestion_id" => $partquestion_id,
+                                    "answers" => array(
+                                            '0' => 'Select an option'
+                                    )
+                                );
+                            }
+                            $requestioned[$partquestion_id]["answers"][ $question['partnumber'] ] = $question['answer'];
+                        }
 
-                                <div class="rightCol">
-                                    <div class="stock hide" id="out_of_stock_<?php echo $currentQuestion; ?>">
-                                        <span class="outOfStockStatus">OUT OF STOCK - PLEASE CALL TO ORDER</span>
-                                    </div>
-                                    <div class="stock hide" id="in_stock_<?php echo $currentQuestion; ?>">
-                                        <span class="stockStatus">In Stock</span>
-                                    </div>			
-                                    <?php echo form_dropdown('question[]', $answers, @$_SESSION['cart'][$product['part_id']][$quest['partquestion_id']], 'style="", class="slctClr mb10 question ' . $currentQuestion . '", onchange="updatePrice(' . $currentQuestion . ');"'); ?>
-                                </div>
-                                <div class="clear"></div>
-                                <div class="leftCol">
-                                    <div class="colSize"><?php echo $quest['question']; ?> :</div>
-                                </div>
-                                <?php $answers = array('0' => 'Select an option', $quest['partnumber'] => $quest['answer']); ?>
-                            <?php
-                            endif;
+                        print "<!-- Requestioned: ";
+                        print_r($requestioned);
+                        print "-->";
+
+                        $currentQuestion = "";
+
+                        foreach ($requestioned as $key => $quest) {
                             $currentQuestion = $quest['partquestion_id'];
-                        endforeach;
-                        ?>
+ ?>
+                            <div class="questionSelector">
+                                <div class="questionString">
+                                    <?php echo $quest['question']; ?>:
+                                </div>
+                                <div class="answerString">
+                                    <?php
+                                    echo form_dropdown('question[]', $quest['answers'], @$_SESSION['cart'][$product['part_id']][$quest['partquestion_id']], 'style="", class="question questionSelector ' . $currentQuestion . '", onchange="updatePrice(' . $currentQuestion . ');"'); ?>
+                                </div>
+                                <div style="clear: both"></div>
+                            </div>
+                            <?php
+                        }
 
-                        <div class="rightCol">
-                            <div class="stock hide" id="out_of_stock_<?php echo $currentQuestion; ?>">
+                    }
+
+                    ?>
+
+                    <div class="quantity_block">
+                        <div class="quantity_selector">
+                                QTY:
+                                <?php echo $qty_input; ?>
+                        </div>
+
+                        <div class="quantity_description">
+                            <div class="stock hide" id="out_of_stock">
                                 <span class="outOfStockStatus">OUT OF STOCK - PLEASE CALL TO ORDER</span>
-                            </div>			
-                            <div class="stock hide"  id="in_stock_<?php echo $currentQuestion; ?>">
+                            </div>
+                            <div class="stock hide" id="in_stock">
                                 <span class="stockStatus">In Stock</span>
+                                <?php echo $online_in_stock_string; ?>
                                 <div class="clear"></div>
-                                <div class="hide fltL mb10" id="low_stock_<?php echo $currentQuestion; ?>" style="display:inline;">
-                                    - ONLY
-                                    <div id="stock_qty_<?php echo $currentQuestion; ?>" style="display:inline;">1</div>
-                                    REMANING
+                                <div class="hide" id="low_stock" style="display:inline;">
+                                    ONLY
+                                    <div id="stock_qty" style="display:inline;">1</div>
+                                    REMAINING
                                 </div>
                                 <div class="clear"></div>
                             </div>
-
-                            <?php
-                            // Last time Through
-                            echo form_dropdown('question[]', $answers, @$_SESSION['cart'][$product['part_id']][$quest['partquestion_id']], 'style="", class="slctClr mb10 question ' . $currentQuestion . '", onchange="updatePrice(' . $currentQuestion . ');" ');
-                            ?>
                         </div>
-                        <div class="clear"></div>
-
-                        <?php
-                    else:
-                        $is_qty_displayed = 1;
-                        ?>
-                        <div class="algnmd"> 
-                            <div class="leftCol mt10 Qnt">
-                                <div class="colSize">QTY :</div>
-                            </div>
-                            <div class="stock hide stckmd" id="out_of_stock_<?php echo $product['part_id']; ?>">
-                                <span class="outOfStockStatus">OUT OF STOCK - PLEASE CALL TO ORDER</span>
-                            </div>
-                            <div class="stock hide stckstts"  id="in_stock_<?php echo $product['part_id']; ?>">
-                                <span class="stockStatus">In Stock</span>
-                                <div class="stock hide" id="low_stock_<?php echo $product['part_id']; ?>" style="display:inline;"> - ONLY <div id="stock_qty_<?php echo $product['part_id']; ?>" style="display:inline;">1</div> REMANING</div>
-								<input type="hidden" name="partnumber" value="<?php echo $partnumbercustom;?>">
-                            </div>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($is_qty_displayed == 0) { ?>
-                        <div class="leftCol mt10">
-                            <div class="colSize">QTY :</div>
-                        </div>
-                    <?php } ?>
-                    <div class="rightCol mt10" style="margin:-19px 59% 0px 0px; float:right; width:26% !important;">
-                        <?php
-                        echo form_input(array('name' => 'qty',
-                            'value' => 1,
-                            'maxlength' => 250,
-                            'class' => 'text mini qtyInput',
-                            'placeholder' => '0',
-                            'id' => 'qty'));
-                        ?>
                     </div>
+
+                    </div>
+
                     <div class="clear"></div>
                 </div>
 
@@ -337,7 +328,7 @@ $CI =& get_instance();
                             <a href="mailto:?subject=Check out this Part&amp;body=Check out this site <?php echo base_url('shopping/item/' . $product['part_id']); ?>." title="Share by Email" class="mailIcon"></a>
                         </div>
                     </div>
-                    <div class="rightCol" id="dfrnstng">
+                    <div class="rightCol" id="shoppingBuyButtonContainer">
                         <a href="javascript:void(0);" onclick="submitCart();" class="button prodBuyBtn prdsnglbtn" id="submit_button" style="text-decoration:none;">BUY</a>
                         <div class="clear" style="margin-top: 20px;"></div>
                         <a href="javascript:void(0);" onclick="submitWishlist();" style="text-decoration:none; color:#78909c;font-weight: bold;">Add to Wishlist</a>
@@ -564,6 +555,72 @@ $CI =& get_instance();
                 });
     }
 
+    function figureStockStatusGroundState() {
+        var $in_stock = $('#in_stock');
+        var $out_stock = $('#out_of_stock');
+        var $low_stock = $('#low_stock');
+        $(".error").hide();
+        $('#error_message').text('');
+        $in_stock.hide();
+        $out_stock.hide();
+        $low_stock.hide();
+    }
+
+    function figureStockStatus(partObj) {
+        var $in_stock = $('#in_stock');
+        var $out_stock = $('#out_of_stock');
+        var $low_stock = $('#low_stock');
+        figureStockStatusGroundState();
+
+
+        var proceed = true;
+        if ($(".question")[0])
+        {
+            $(".question").each(function ()
+            {
+
+                if ($(this).val() == 0)
+                {
+                    proceed = false;
+                }
+            });
+        }
+
+        if (!proceed) {
+            return; // nothing to do here. not all questions are filled in...
+        }
+
+
+
+        $("#submit_button").attr("onclick", "submitCart()");
+        console.log(partObj.quantity_available);
+        if (partObj.quantity_available > 0)
+        {
+            $in_stock.show();
+            $low_stock.hide();
+            if (partObj.quantity_available < 6)
+            {
+                $low_stock.show();
+                $('#stock_qty').html(partObj.quantity_available);
+            }
+
+            if (partObj.dealer_quantity_available && parseInt(partObj.dealer_quantity_available, 10) > 0) {
+                console.log("B Yes ");
+                $("#in_stock .instock").show();
+                $("#in_stock .online_only").hide();
+
+            } else {
+                console.log("B No  ");
+                $("#in_stock .online_only").show();
+                $("#in_stock .instock").hide();
+            }
+        } else
+        {
+            $out_stock.show();
+            $("#submit_button").attr("onclick", "outOfStockWarning()");
+        }
+    }
+
     function getStock(partId)
     {
 		//alert(partId);
@@ -575,27 +632,7 @@ $CI =& get_instance();
                 function (partRec)
                 {
                     var partObj = jQuery.parseJSON(partRec);
-                    //$('#productDetailForm').append('<input type="hidden" name="partnumber" value="'+partObj.partnumber+'" />');
-					//alert(partObj.partnumber);
-                    $('#in_stock_' + partId).hide();
-                    $('#out_of_stock_' + partId).hide();
-                    $("#submit_button").attr("onclick", "submitCart()");
-                    console.log(partObj.quantity_available);
-                    if (partObj.quantity_available > 0)
-                    {
-                        $('#in_stock_' + partId).show();
-                        $('#low_stock_' + partId).hide();
-                        if (partObj.quantity_available < 6)
-                        {
-                            $('#low_stock_' + partId).show();
-                            $('#in_stock_' + partId).show();
-                            $('#stock_qty_' + partId).html(partObj.quantity_available);
-                        }
-                    } else
-                    {
-                        $('#out_of_stock_' + partId).show();
-                        $("#submit_button").attr("onclick", "outOfStockWarning()");
-                    }
+                    figureStockStatus(partObj);
                 });
     }
 
@@ -606,7 +643,8 @@ $CI =& get_instance();
 
     function updatePrice(questionId)
     {
-        $('#price').html(0.00);
+        $('#price').html("<?php echo $original_price; ?>");
+        figureStockStatusGroundState();
 
         $(".question").each(function ()
         {
@@ -620,29 +658,10 @@ $CI =& get_instance();
                         function (partRec)
                         {
                             var partObj = jQuery.parseJSON(partRec);
-                            var currentPrice = $('#price').html();
-                            currentPrice = currentPrice.replace("$", "");
-                            totalprice = parseFloat(currentPrice) + parseFloat(partObj.sale);
+                            totalprice = parseFloat(partObj.sale);
                             $('#price').html('$' + parseFloat(totalprice).toFixed(2));
-                            $('#in_stock_' + questionId).hide();
-                            $('#out_of_stock_' + questionId).hide();
-                            $("#submit_button").attr("onclick", "submitCart()");
-                            if (partObj.quantity_available > 0)
-                            {
 
-                                $('#in_stock_' + questionId).show();
-                                $('#low_stock_' + questionId).hide();
-                                if (partObj.quantity_available < 6)
-                                {
-                                    $('#low_stock_' + questionId).show();
-                                    $('#in_stock_' + questionId).show();
-                                    $('#stock_qty_' + questionId).html(partObj.quantity_available);
-                                }
-                            } else
-                            {
-                                $('#out_of_stock_' + questionId).show();
-                                $("#submit_button").attr("onclick", "outOfStockWarning()");
-                            }
+                            figureStockStatus(partObj);
                         });
             }
         });
@@ -655,11 +674,8 @@ $CI =& get_instance();
         {
             $(".question").each(function ()
             {
-                // For Combos, check to see if any of them are out of stock before processing
-                questClassList = $(this).attr('class').split(/\s+/);
-                console.log(questClassList, questClassList[2]);
 
-                if (!$('#out_of_stock_' + questClassList[3]).is(":hidden"))
+                if (!$('#out_of_stock').is(":hidden"))
                 {
                     proceed = 'error';
                     $('.error').show();

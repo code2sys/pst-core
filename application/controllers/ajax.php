@@ -135,13 +135,6 @@ class Ajax extends Master_Controller {
         return $this->form_validation->run();
     }
 
-    // public function getPriceByPartNumber() {
-    // if ($this->validPartNumber() === TRUE) {
-    // $price = $this->account_m->getPriceByPartNumber($this->input->post('partnumber'));
-    // echo json_encode($price);
-    // }
-    // }
-
     public function getPriceByPartNumber() {
         if ($this->validPartNumber() === TRUE) {
             $partDealerNumberRec = $this->account_m->getDealerPriceByPartNumber($this->input->post('partnumber'));
