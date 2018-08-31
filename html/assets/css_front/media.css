@@ -766,6 +766,11 @@
 	.questions_and_quantities_block .questionSelector select {
 		width: 100% !important;
 	}
+
+	.questions_and_quantities_block .stock {
+		margin-top: 6px;
+	}
+
 }
 
 
