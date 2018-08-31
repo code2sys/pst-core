@@ -191,9 +191,12 @@ $qty_input = form_input(array('name' => 'qty',
                     <div class="leftCol">
 
                         <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>">$<?php
-                            echo $product['price']['sale_min'];
-                            if (@$product['price']['sale_max']): echo ' - $' . $product['price']['sale_max'];
-                            endif;
+                            $original_price = $product['price']['sale_min'];
+
+                            if (array_key_exists('sale_max', $product['price']) && $product['price']['sale_max'] != '' &&  $product['price']['sale_max'] != $original_price) {
+                                $original_price .= ' - $' . $product['price']['sale_max'];
+                            }
+                            echo $original_price;
                             ?></span>
                         <?php if (@$product['reviews']): ?>
                             <div class="ratingStars">
@@ -607,7 +610,7 @@ $qty_input = form_input(array('name' => 'qty',
 
     function updatePrice(questionId)
     {
-        $('#price').html(0.00);
+        $('#price').html("<?php echo $original_price; ?>");
 
         $(".question").each(function ()
         {
