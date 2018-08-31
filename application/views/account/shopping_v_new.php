@@ -558,6 +558,8 @@ $qty_input = form_input(array('name' => 'qty',
         var $in_stock = $('#in_stock');
         var $out_stock = $('#out_of_stock');
         var $low_stock = $('#low_stock');
+        $(".error").hide();
+        $('#error_message').text('');
         $in_stock.hide();
         $out_stock.hide();
         $low_stock.hide();
