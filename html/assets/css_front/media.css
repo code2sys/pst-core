@@ -472,6 +472,42 @@
 	/* SIZING CHART PAGE CSS ENDS HERE */
 	#desktop_cart{padding:5px 70px 0 0!important;}
 
+
+	/* JLB 08-31-18 For the product screen */
+	.questions_and_quantities_block .quantity_block,
+	.questions_and_quantities_block .questionSelector {
+		width: 50%;
+		display: block;
+		float: left;
+		clear: left;
+		margin-top: 6px;
+		margin-bottom: 6px;
+	}
+
+	.questions_and_quantities_block .questionSelector .answer,
+	.questions_and_quantities_block .questionSelector .question {
+		display: block;
+		margin-bottom: 6px;
+	}
+
+	.questions_and_quantities_block .questionSelector select {
+		width: 100%;
+	}
+
+	.questions_and_quantities_block .quantity_selector {
+		font-size: 125%;
+	}
+
+	.priceDetaiSect .leftCol.priceHolder {
+		width: 100% !important;
+		float: none;
+	}
+
+	.questions_and_quantities_block .stock {
+		margin-top: 6px;
+	}
+
+
 }
 @media (min-width:640px) and (max-width:767px)
 {	
@@ -679,6 +715,43 @@
 	/* BRAND LIST PAGE CSS ENDS HERE */
 	.shpbrnd {width:33% !important;}
 	#desktop_cart{padding:5px 70px 0 0!important;}
+
+
+	/* JLB 08-31-18 For the product screen */
+	.questions_and_quantities_block .quantity_block,
+	.questions_and_quantities_block .questionSelector {
+		width: 50%;
+		display: block;
+		float: left;
+		clear: left;
+		margin-top: 6px;
+		margin-bottom: 6px;
+	}
+
+	.questions_and_quantities_block .questionSelector .answer,
+	.questions_and_quantities_block .questionSelector .question {
+		display: block;
+		margin-bottom: 6px;
+	}
+
+	.questions_and_quantities_block .questionSelector select {
+		width: 100%;
+	}
+
+	.questions_and_quantities_block .quantity_selector {
+		font-size: 125%;
+	}
+
+	.priceDetaiSect .leftCol.priceHolder {
+		width: 100% !important;
+		float: none;
+	}
+
+	.questions_and_quantities_block .stock {
+		margin-top: 6px;
+	}
+
+
 }
 
 
