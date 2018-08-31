@@ -561,7 +561,6 @@ $qty_input = form_input(array('name' => 'qty',
         $in_stock.hide();
         $out_stock.hide();
         $low_stock.hide();
-        $("#submit_button").attr("onclick", "return false");
     }
 
     function figureStockStatus(partObj) {
