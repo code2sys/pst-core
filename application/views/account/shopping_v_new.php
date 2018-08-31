@@ -651,11 +651,8 @@ $qty_input = form_input(array('name' => 'qty',
         {
             $(".question").each(function ()
             {
-                // For Combos, check to see if any of them are out of stock before processing
-                questClassList = $(this).attr('class').split(/\s+/);
-                console.log(questClassList, questClassList[2]);
 
-                if (!$('#out_of_stock_' + questClassList[3]).is(":hidden"))
+                if (!$('#out_of_stock').is(":hidden"))
                 {
                     proceed = 'error';
                     $('.error').show();
