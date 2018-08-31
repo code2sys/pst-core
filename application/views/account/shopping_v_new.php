@@ -253,13 +253,11 @@ $qty_input = form_input(array('name' => 'qty',
                                     "question" => $question["question"],
                                     "partquestion_id" => $partquestion_id,
                                     "answers" => array(
-                                            array('0' => 'Select an option')
+                                            '0' => 'Select an option'
                                     )
                                 );
                             }
-                            $requestioned[$partquestion_id]["answers"][] = array(
-                                $question['partnumber'] => $question['answer']
-                            );
+                            $requestioned[$partquestion_id]["answers"][ $question['partnumber'] ] = $question['answer'];
                         }
 
                         print "<!-- Requestioned: ";
