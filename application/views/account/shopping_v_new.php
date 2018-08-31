@@ -341,7 +341,7 @@ $qty_input = form_input(array('name' => 'qty',
                             <a href="mailto:?subject=Check out this Part&amp;body=Check out this site <?php echo base_url('shopping/item/' . $product['part_id']); ?>." title="Share by Email" class="mailIcon"></a>
                         </div>
                     </div>
-                    <div class="rightCol" id="dfrnstng">
+                    <div class="rightCol" id="shoppingBuyButtonContainer">
                         <a href="javascript:void(0);" onclick="submitCart();" class="button prodBuyBtn prdsnglbtn" id="submit_button" style="text-decoration:none;">BUY</a>
                         <div class="clear" style="margin-top: 20px;"></div>
                         <a href="javascript:void(0);" onclick="submitWishlist();" style="text-decoration:none; color:#78909c;font-weight: bold;">Add to Wishlist</a>

@@ -130,7 +130,7 @@
 	.Qnt{width:21% !important;}
 	.outOfStockStatus{width:100% !important;}
 	.prodPurchaseCont{margin-top:0px !important;}
-	#dfrnstng{margin-top:-101px; margin-right:29px; float:right;}
+	#shoppingBuyButtonContainer{margin-top:-101px; margin-right:29px; float:right; width: 50%;}
 	.prdsnglbtn{font-size:17px !important; padding:13px 36px !important; float:right !important;}
 	.algnmd{width:50%; float:left; display:-webkit-flex; -webkit-flex-direction:column; display:flex; flex-direction:column;}
 	.algnmd .Qnt{order:3; flex:1; -webkit-flex:1;}
@@ -350,7 +350,7 @@
 	.Qnt{width:21% !important;}
 	.outOfStockStatus{width:100% !important;}
 	.prodPurchaseCont{margin-top:0px !important;}
-	#dfrnstng{margin-top:-101px; margin-right:29px; float:right;}
+	#shoppingBuyButtonContainer{margin-top:-101px; margin-right:29px; float:right; width: 50%;}
 	.prdsnglbtn{font-size:17px !important; padding:13px 36px !important; float:right !important;}
 	.algnmd{width:50%; float:left; display:-webkit-flex; -webkit-flex-direction:column; display:flex; flex-direction:column;}
 	.algnmd .Qnt{order:3; flex:1; -webkit-flex:1;}
@@ -570,7 +570,7 @@
 	.Qnt{width:21% !important;}
 	.outOfStockStatus{width:100% !important;}
 	.prodPurchaseCont{margin-top:0px !important;}
-	#dfrnstng{margin-top:-101px; margin-right:29px; float:right;}
+	#shoppingBuyButtonContainer{margin-top:-101px; margin-right:29px; float:right; width: 50%}
 	.prdsnglbtn{font-size:17px !important; padding:13px 36px !important; float:right !important;}
 	.algnmd{width:50%; float:left; display:-webkit-flex; -webkit-flex-direction:column; display:flex; flex-direction:column;}
 	.algnmd .Qnt{order:3; flex:1; -webkit-flex:1;}
