@@ -248,6 +248,10 @@
 		float: none;
 	}
 
+	.questions_and_quantities_block .stock {
+		margin-top: 6px;
+	}
+
 }
 @media (min-width:480px) and (max-width:639px)
 {
