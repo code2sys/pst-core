@@ -231,10 +231,11 @@ $qty_input = form_input(array('name' => 'qty',
                         <?php if (@$product['price']['percentage']): ?>
                             <div class="savePrice" style="<?php if (@$product['price']['sale_max']) { ?>font-size:11px;<?php } ?>">You <strong>save</strong>
                                 $<?php
-                                echo ($product['price']['retail_min'] - $product['price']['sale_min']);
-                                if (@$product['price']['sale_max']): echo ' - $' . ($product['price']['retail_max'] - $product['price']['sale_max']);
-                                endif;
-                                ?> (<?php echo number_format($product['price']['percentage'], 0); ?>%) 
+                                echo round($product['price']['retail_min'] - $product['price']['sale_min'], 2);
+                                if (@$product['price']['sale_max']) {
+                                    echo ' - $' . round($product['price']['retail_max'] - $product['price']['sale_max'], 2);
+                                }
+                                ?> (<?php echo number_format($product['price']['percentage'], 0); ?>%)
                                 <!--$31.99 (10%)--> </div>
                         <?php endif; ?>
                 <!--<span class="stockStatus">In Stock</span>-->
