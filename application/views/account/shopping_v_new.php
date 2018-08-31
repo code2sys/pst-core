@@ -158,7 +158,7 @@ $qty_input = form_input(array('name' => 'qty',
                     }
 
                     ?>
-                    <div class="leftCol" style="width:auto">
+                    <div class="leftCol priceHolder" style="width:auto">
                         <span class="prodPrice" id="price" style="<?php if (@$product['price']['sale_max']) { ?> font-size:24px;<?php } ?>">CALL FOR PRICE<br/>
                             <?php echo $store_name['phone'];?></span>
                     </div>
