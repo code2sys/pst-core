@@ -239,8 +239,8 @@
 		font-size: 125%;
 	}
 
-	.leftCol.priceHolder {
-		width: 100%;
+	.priceDetaiSect .leftCol.priceHolder {
+		width: 100% !important;
 		float: none;
 	}
 
