@@ -625,9 +625,7 @@ $qty_input = form_input(array('name' => 'qty',
                         function (partRec)
                         {
                             var partObj = jQuery.parseJSON(partRec);
-                            var currentPrice = $('#price').html();
-                            currentPrice = currentPrice.replace("$", "");
-                            totalprice = parseFloat(currentPrice) + parseFloat(partObj.sale);
+                            totalprice = parseFloat(partObj.sale);
                             $('#price').html('$' + parseFloat(totalprice).toFixed(2));
 
                             figureStockStatus(partObj);
