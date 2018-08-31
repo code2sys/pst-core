@@ -235,6 +235,10 @@
 		margin-bottom: 6px;
 	}
 
+	.questions_and_quantities_block .questionSelector select {
+		width: 100%;
+	}
+
 	.questions_and_quantities_block .quantity_selector {
 		font-size: 125%;
 	}
