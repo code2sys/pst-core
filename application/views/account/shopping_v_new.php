@@ -275,7 +275,7 @@ $qty_input = form_input(array('name' => 'qty',
                                 </div>
                                 <div class="answer">
                                     <?php
-                                    echo form_dropdown('question[]', $quest['answers'], @$_SESSION['cart'][$product['part_id']][$quest['partquestion_id']], 'style="", class="questionSelector ' . $currentQuestion . '", onchange="updatePrice(' . $currentQuestion . ');"'); ?>
+                                    echo form_dropdown('question[]', $quest['answers'], @$_SESSION['cart'][$product['part_id']][$quest['partquestion_id']], 'style="", class="question questionSelector ' . $currentQuestion . '", onchange="updatePrice(' . $currentQuestion . ');"'); ?>
                                 </div>
                                 <div style="clear: both"></div>
                             </div>
