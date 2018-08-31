@@ -26,12 +26,9 @@ class Account_M extends Master_M
 	
 	public function getStockByPartId($partId)
 	{
-		$where = array('part.part_id' => $partId);
-		$this->db->join('partpartnumber', 'partpartnumber.part_id = part.part_id');
-		$this->db->join('partnumber', 'partnumber.partnumber_id = partpartnumber.partnumber_id');
-		$this->db->join('partvariation', 'partvariation.partnumber_id = partnumber.partnumber_id');
-		$partNumberRec = $this->selectRecord('part', $where);
-		return $partNumberRec;
+	    global $PSTAPI;
+	    initializePSTAPI();
+	    return $PSTAPI->part()->getStockByPartId($partId);
 	}
 	
 	public function getDealerStockByPartId( $partId ) {
