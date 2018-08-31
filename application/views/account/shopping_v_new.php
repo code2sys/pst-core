@@ -246,7 +246,7 @@ $qty_input = form_input(array('name' => 'qty',
                     if (isset($questions) && is_array($questions) && count($questions) > 0) {
                         // Reassemble this into a structure that maps partquestion_id => an array of the question and answers, then display those answers
                         $requestioned = array();
-                        foreach ($question as $question) {
+                        foreach ($questions as $question) {
                             $partquestion_id = $question["partquestion_id"];
                             if (!array_key_exists($partquestion_id, $requestioned)) {
                                 $requestioned[$partquestion_id] = array(
@@ -261,6 +261,10 @@ $qty_input = form_input(array('name' => 'qty',
                                 $question['partnumber'] => $question['answer']
                             );
                         }
+
+                        print "<!-- Requestioned: ";
+                        print_r($requestioned);
+                        print "-->";
 
                         $currentQuestion = "";
 
