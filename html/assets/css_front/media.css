@@ -666,8 +666,8 @@
 		margin-bottom: 6px;
 	}
 
-	.questions_and_quantities_block .questionSelector .answer,
-	.questions_and_quantities_block .questionSelector .question {
+	.questions_and_quantities_block .questionSelector .answerString,
+	.questions_and_quantities_block .questionSelector .questionString {
 		display: block;
 		margin-bottom: 6px;
 	}
@@ -692,8 +692,8 @@
 }
 
 @media (min-width: 1024px) {
-	.questions_and_quantities_block .questionSelector .answer,
-	.questions_and_quantities_block .questionSelector .question {
+	.questions_and_quantities_block .questionSelector .answerString,
+	.questions_and_quantities_block .questionSelector .questionString {
 		display: block;
 		float: left;
 		width: 50%;

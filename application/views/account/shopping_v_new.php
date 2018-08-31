@@ -274,10 +274,10 @@ $qty_input = form_input(array('name' => 'qty',
                             $currentQuestion = $quest['partquestion_id'];
  ?>
                             <div class="questionSelector">
-                                <div class="question">
+                                <div class="questionString">
                                     <?php echo $quest['question']; ?>:
                                 </div>
-                                <div class="answer">
+                                <div class="answerString">
                                     <?php
                                     echo form_dropdown('question[]', $quest['answers'], @$_SESSION['cart'][$product['part_id']][$quest['partquestion_id']], 'style="", class="question questionSelector ' . $currentQuestion . '", onchange="updatePrice(' . $currentQuestion . ');"'); ?>
                                 </div>
