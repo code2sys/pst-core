@@ -1,0 +1,60 @@
+{{#motorcycles}}
+<div class="mid-r">
+    <span class="blok"></span>
+    <a href="{{url}}">
+        <div class="mid-r-img">
+            <div class="mid-r-logo">
+                <!--<img src="<?php echo $new_assets_url; ?>images/imgpsh_fullsize (6).png" width="152px;"/>-->
+            </div>
+            <div class="mid-r-img-veh">
+                <img src="{{motorcycle_image}}" width="px;"/>
+            </div>
+        </div>
+    </a>
+    <div class="mid-r-text">
+        <div class="mid-text-left">
+            <h3>{{{motorcycle_title}}}</h3>
+            {{{pricing_widget}}}
+        </div>
+        <div class="mid-text-right">
+            <p>condition :<span>{{condition}}</span></p>
+
+            {{#color}}
+            <p>color :<span>{{color}}</span></p>
+            {{/color}}
+
+            {{#engine_hours}}
+            <p>engine hours :<span>{{engine_hours}}</span></p>
+            {{/engine_hours}}
+
+            {{#sku}}
+            <p>stock :<span>{{sku}}</span></p>
+            {{/sku}}
+
+            {{#mileage}}
+            <p>mileage :<span>{{mileage}}</span></p>
+            {{/mileage}}
+
+            {{#engine_type}}
+            <p>Engine type :<span>{{engine_type}}</span></p>
+            {{/engine_type}}
+
+            {{#show_stock_status}}
+            <p>availability : <span style="font-weight: bold; color: {{stock_status_code}}">{{stock_status}}</span></p>
+            {{/show_stock_status}}
+
+            {{#location_description}}
+            <p>location : <span>{{{location_description}}}</span></p>
+            {{/location_description}}
+
+        </div>
+    </div>
+
+
+    {{{motorcycle_action_buttons}}}
+</div>
+
+{{{major_unit_detail_modal}}}
+{{{trade_in_value_modal}}}
+
+{{/motorcycles}}

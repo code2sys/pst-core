@@ -1,0 +1,67 @@
+
+    <h3 class="head-tx fiter-menu">FILTER BAR
+        <span class="glyphicon glyphicon-filter"></span>
+    </h3>
+
+    <div class="fltrbx section-fiter flat prdy-dv drop-blok">
+        <fieldset style="position:relative">
+            <div class="up-buttons">
+                {{#MOTORCYCLE_SHOP_NEW}}
+                <a href="{{#major_units_featured_only}}/Motorcycle_List/featured{{/major_units_featured_only}}{{^major_units_featured_only}}/Motorcycle_List{{/major_units_featured_only}}?fltr=new" class="benz_views-product up-buttons-2 {{#fltr_new_active}}active{{/fltr_new_active}}">new</a>
+                {{/MOTORCYCLE_SHOP_NEW}}
+                <a href="{{#major_units_featured_only}}/Motorcycle_List/featured_preowned{{/major_units_featured_only}}{{^major_units_featured_only}}/Motorcycle_List{{/major_units_featured_only}}?fltr=pre-owned" class="benz_views-product up-buttons-2 {{#fltr_preowned_active}}active{{/fltr_preowned_active}}">Pre-Owned</a>
+            </div>
+            <!--<span class="glyphicon glyphicon-search search-icon"></span>-->
+            <!--<input type="text" class="brandsearch sd-input it-4 js-searchable-box" placeholder="Search by Brand">-->
+        </fieldset>
+        <div class="filter-inner">
+            <p class="parg-txt">Search</p>
+            <form method="post" class="major_unit_search">
+                <input type="text" size="30" name="search_keywords" value="{{{major_unit_search_keywords}}}" class="search-bx major_unit_searchbox"/><br/>
+                <input type="submit" name="search_action" value="Search" class="bluebutton_b" />
+                <input type="submit" name="search_action" value="Clear" class="bluebutton_b" />
+            </form>
+        </div>
+
+        <div class="filter-inner brandsfilter">
+            <p class="parg-txt">Brand</p>
+            {{#brands}}
+            <div class="checkbox checkbox-primary sdCheckbox brandfltr">
+                <input id="brand{{k}}" class="styled" name="brand[]" value="{{brand_make}}" type="checkbox" {{#checked}}checked{{/checked}}>
+                <label for="brand{{k}}">{{brand_make}}</label>
+            </div>
+            {{/brands}}
+        </div>
+
+        <div class="filter-inner">
+            <p class="parg-txt">Year</p>
+            {{#years}}
+            <div class="checkbox checkbox-primary sdCheckbox">
+                <input id="year{{k}}" class="styled" name="year[]" value="{{{year}}}" type="checkbox" {{#checked}}checked{{/checked}} >
+                <label for="year{{k}}">{{{year}}}</label>
+            </div>
+            {{/years}}
+        </div>
+
+        <div class="filter-inner">
+            <p class="parg-txt">Vehicle</p>
+            {{#vehicles}}
+            <div class="checkbox checkbox-primary sdCheckbox">
+                <input id="vehicle{{vehicle_id}}" class="styled" name="vehicles[]" value="{{vehicle_id}}" type="checkbox" {{#checked}}checked{{/checked}}>
+                <label for="vehicle{{vehicle_id}}">{{{vehicle_name}}}</label>
+            </div>
+            {{/vehicles}}
+        </div>
+
+        <div class="filter-inner">
+            <p class="parg-txt">Categories</p>
+
+
+            {{#categories}}
+            <div class="checkbox checkbox-primary sdCheckbox">
+                <input id="category{{category_id}}" class="styled" name="category[]" value="{{category_id}}" type="checkbox" {{#checked}}checked{{/checked}}>
+                <label for="category{{category_id}}">{{{category_name}}}</label>
+            </div>
+            {{/categories}}
+        </div>
+    </div>

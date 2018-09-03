@@ -1,0 +1,9 @@
+<div class="bikeControlRow row">
+    <div class="col-md-4">Show <select name="bikeControlShow">{{#show_loop}}<option {{#selected}}selected="selected"{{/selected}}>{{show}}</option>{{/show_loop}}</select> Results</div>
+    <div class="col-md-4" style="text-align: center">Sort By: <select name="bikeControlSort">{{#control_loop}}<option value="{{value}}"  {{#selected}}selected="selected"{{/selected}}>{{label}}</option>{{/control_loop}}</select></div>
+
+    <div class="col-md-4" style="text-align: right">
+        <label><input type="checkbox" name="major_units_featured_only" value="1" {{#major_units_featured_only}}checked="checked"{{/major_units_featured_only}} /> Featured Only</label>
+    </div>
+
+</div>
