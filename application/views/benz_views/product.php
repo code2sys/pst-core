@@ -92,7 +92,8 @@ mustache_tmpl_set($template, "product_pagination", $this->load->view("benz_views
 mustache_tmpl_set($template, "product_motorcycleLoop", $this->load->view("benz_views/product_motorcycleLoop", array(
     "motorcycles" => $motorcycles,
     "stock_status_mode" => $stock_status_mode,
-    "new_assets_url" => $new_assets_url
+    "new_assets_url" => $new_assets_url,
+    "media_url" => $media_url
 ), true));
 
 
