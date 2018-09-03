@@ -53,12 +53,20 @@ if (array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned") {
 }
 
 // These float along the bottom.
-mustache_tmpl_set($template, "recently_viewed", $this->load->view("benz_views/recently_viewed", array(
-    "master_class" => "fltrbar search-two my-wdt",
-    "subclass" => "",
-    "innersubclass" => "",
-    "recentlyMotorcycle" => $recentlyMotorcycle
-), true));
+if (count($recentlyMotorcycle) > 0) {
+    mustache_tmpl_set($template, "recently_viewed", $this->load->view("benz_views/recently_viewed", array(
+        "master_class" => "fltrbar search-two my-wdt",
+        "subclass" => "",
+        "innersubclass" => "",
+        "recentlyMotorcycle" => $recentlyMotorcycle
+    ), true));
+    mustache_tmpl_set($template, "desktop_recently_viewed", $this->load->view("benz_views/recently_viewed", array(
+        "subclass" => "search-one flat fit-none",
+        "innersubclass" => "search-one fit-none",
+        "recentlyMotorcycle" => $recentlyMotorcycle,
+    ), true));
+
+}
 
 // This is the left filter bar
 mustache_tmpl_set($template, "product_fltr", $this->load->view("benz_views/product_fltr", array(

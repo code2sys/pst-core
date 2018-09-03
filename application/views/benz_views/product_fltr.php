@@ -70,10 +70,6 @@ foreach ($years as $k => $year) {
 }
 
 // there's a specifically-styled one
-mustache_tmpl_set($template, "recently_viewed", $this->load->view("benz_views/recently_viewed", array(
-    "subclass" => "search-one flat fit-none",
-    "innersubclass" => "search-one fit-none",
-    "recentlyMotorcycle" => $recentlyMotorcycle,
-), true));
+
 
 print mustache_tmpl_parse($template);
