@@ -60,12 +60,13 @@ if (count($recentlyMotorcycle) > 0) {
         "innersubclass" => "",
         "recentlyMotorcycle" => $recentlyMotorcycle
     ), true));
+
     mustache_tmpl_set($template, "desktop_recently_viewed", $this->load->view("benz_views/recently_viewed", array(
+        "master_class" => "",
         "subclass" => "search-one flat fit-none",
         "innersubclass" => "search-one fit-none",
         "recentlyMotorcycle" => $recentlyMotorcycle,
     ), true));
-
 }
 
 // This is the left filter bar
