@@ -306,7 +306,7 @@ class Motorcycle_M extends Master_M {
             $where["motorcycle.featured"] = 1;
         }
         if ($search_keywords != "") {
-            $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+            $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($search_keywords) . ')")', NULL, FALSE);
         }
         $this->db->join('motorcycle', 'motorcycle.category = motorcycle_category.id');
         $this->db->select('motorcycle_category.*');
