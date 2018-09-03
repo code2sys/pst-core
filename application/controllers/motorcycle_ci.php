@@ -116,7 +116,7 @@ class Motorcycle_CI extends Welcome {
         $this->load->model("motorcycle_m");
 
         $search_keywords = array_key_exists("search_keywords", $_REQUEST) ? $_REQUEST["search_keywords"] : "";
-        $major_units_featured_only = array_key_exists("featured_only", $_REQUEST) ? $_REQUEST["featured"] : 0;
+        $major_units_featured_only = array_key_exists("featured_only", $_REQUEST) ? $_REQUEST["featured_only"] : 0;
 
         $filter_data = array();
         $this->motorcycle_m->sub_assembleFilterInput($filter_data, $_REQUEST);
