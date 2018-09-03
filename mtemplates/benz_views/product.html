@@ -1,0 +1,42 @@
+<script type="application/javascript">
+    $(document).on("change", "select[name='bikeControlShow']", function(e) {
+        window.location.href = "/Motorcycle_Show/" + $("select[name='bikeControlShow']").val() + "/" + {{preowned_new_flag}};
+    });
+
+    $(document).on("change", "select[name='bikeControlSort']", function(e) {
+        window.location.href = "/Motorcycle_Sort/" + $("select[name='bikeControlSort']").val() + "/" + {{preowned_new_flag}};
+    });
+
+    $(document).on("change", "input[name='major_units_featured_only']", function() {
+        if ($("input[name='major_units_featured_only']:checked").length > 0) {
+            {{#fltr_preowned}}
+            window.location.href = "/Motorcycle_List/featured_preowned";
+            {{/fltr_preowned}}
+            {{^fltr_preowned}}
+            window.location.href = "/Motorcycle_List/featured";
+            {{/fltr_preowned}}
+        } else {
+            window.location.href = "/Motorcycle_Featured/0/" + {{preowned_new_flag}};
+        }
+    });
+</script>
+<div class="sw filbar-bx">
+    <div class="container_b">
+        <div class="fltrbar">
+            {{{product_fltr}}}
+            {{{desktop_recently_viewed}}}
+        </div>
+
+        <div class="next">
+            {{{product_bikeControlRow}}}
+
+            <div class="mid prdts">
+                {{{product_motorcycleLoop}}}
+
+                {{{recently_viewed}}}
+
+                {{{product_pagination}}}
+            </div>
+        </div>
+    </div>
+</div>
