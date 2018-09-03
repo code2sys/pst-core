@@ -99,6 +99,45 @@ class Motorcycle_CI extends Welcome {
         $this->benzProduct();
     }
 
+    /*
+     * This is designed to request things to have them sent down to you.
+     * fltr
+     * major_unit_search_keywords
+     * vehicles
+     * brands
+     * years
+     * categories
+     * featured_only
+     *
+     * The idea is to shove down
+     *
+     */
+    public function ajaxFilterQuery() {
+        $this->load->model("motorcycle_m");
+
+        $search_keywords = array_key_exists("search_keywords", $_REQUEST) ? $_REQUEST["search_keywords"] : "";
+        $major_units_featured_only = array_key_exists("featured_only", $_REQUEST) ? $_REQUEST["featured"] : 0;
+
+        $filter_data = array();
+        $this->motorcycle_m->sub_assembleFilterInput($filter_data, $_REQUEST);
+        $filter = $this->motorcycle_m->sub_assembleFilterFromRequest($filter_data);
+
+        // we need to assemble our own filter...
+
+        $result = array(
+            "search_keywords" => $search_keywords,
+            "featured_only" => $major_units_featured_only,
+            "filter" => $filter,
+            "vehicles" => $this->motorcycle_m->sub_getMotorcycleVehicle($filter, $major_units_featured_only, $search_keywords),
+            "brands" => $this->motorcycle_m->sub_getMotorcycleMake($filter, $major_units_featured_only, $search_keywords),
+            "years" => $this->motorcycle_m->sub_getMotorcycleYear($filter, $major_units_featured_only, $search_keywords),
+            "categories" => $this->motorcycle_m->sub_getMotorcycleCategory($filter, $major_units_featured_only, $search_keywords)
+        );
+
+        print json_encode($result);
+    }
+
+
     public function benzProduct() {
         if (array_key_exists("search_action", $_REQUEST) && $_REQUEST["search_action"] == "Clear") {
             $_REQUEST["search_keywords"] = "";

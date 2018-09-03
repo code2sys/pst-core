@@ -9,31 +9,40 @@ class Motorcycle_M extends Master_M {
         parent::__construct();
     }
 
-    public function assembleFilterFromRequest($copy_from_post = false) {
-        $filter = array();
-
-        if ($copy_from_post) {
-            foreach (array("fltr", "condition", "brands", "years", "categories", "vehicles") as $k) {
-                if (!array_key_exists($k, $_GET) && array_key_exists($k, $_POST)) {
-                    $_GET[$k] = $_POST[$k];
-                }
+    public function sub_assembleFilterInput(&$primary_source, &$secondary_source) {
+        foreach (array("fltr", "condition", "brands", "years", "categories", "vehicles") as $k) {
+            if (!array_key_exists($k, $primary_source) && array_key_exists($k, $secondary_source)) {
+                $primary_source[$k] = $secondary_source[$k];
             }
         }
+    }
+
+    public function assembleFilterFromRequest($copy_from_post = false)
+    {
+        if ($copy_from_post) {
+            $this->sub_assembleFilterInput($_GET, $_POST);
+        }
+
+        return $this->sub_assembleFilterFromRequest($_GET);
+    }
+
+    public function sub_assembleFilterFromRequest(&$data_source) {
+        $filter = array();
 
         /*
          * I reject the idea that vault is the default as a general principle. This seems like a horrible choice for the vault, since it is
          * supposed to be SPECIAL. JLB 06-04-17
          */
-        if (array_key_exists('fltr', $_GET)) {
+        if (array_key_exists('fltr', $data_source)) {
             //$filter['condition'] = $_GET['fltr'] == 'current' ? '1' : '2';
-            if ($_GET['fltr'] == 'new'){
+            if ($data_source['fltr'] == 'new'){
                 $filter['condition'] = '1';
             } else{
                 $filter['condition'] = '2';
             }
-        } else if (array_key_exists('condition', $_GET)) {
+        } else if (array_key_exists('condition', $data_source)) {
             //$filter['condition'] = $_GET['fltr'] == 'current' ? '1' : '2';
-            if ($_GET['condition'] == 'new'){
+            if ($data_source['condition'] == 'new'){
                 $filter['condition'] = '1';
             } else{
                 $filter['condition'] = '2';
@@ -42,10 +51,10 @@ class Motorcycle_M extends Master_M {
             $filter["condition"] = 1;
         }
 
-        $filter['brands'] = $this->processReturnValue($_GET['brands']);
-        $filter['years'] = $this->processReturnValue($_GET['years']);
-        $filter['categories'] = $this->processReturnValue($_GET['categories']);
-        $filter['vehicles'] = $this->processReturnValue($_GET['vehicles']);
+        $filter['brands'] = $this->processReturnValue($data_source['brands']);
+        $filter['years'] = $this->processReturnValue($data_source['years']);
+        $filter['categories'] = $this->processReturnValue($data_source['categories']);
+        $filter['vehicles'] = $this->processReturnValue($data_source['vehicles']);
 
         return $filter;
     }
@@ -287,13 +296,16 @@ class Motorcycle_M extends Master_M {
     }
 
     public function getMotorcycleCategory($filter = array(), $major_units_featured_only = 0) {
+        return $this->sub_getMotorcycleCategory($filter, $major_units_featured_only, array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : "");
+    }
+    public function sub_getMotorcycleCategory($filter = array(), $major_units_featured_only = 0, $search_keywords = "") {
         $where = $this->buildWhere($filter, false, false, true);
         $where['motorcycle_category.name != '] = '';
         $where["motorcycle.deleted"] = 0;
         if ($major_units_featured_only > 0) {
             $where["motorcycle.featured"] = 1;
         }
-        if (array_key_exists("major_unit_search_keywords", $_SESSION) && $_SESSION["major_unit_search_keywords"] != "") {
+        if ($search_keywords != "") {
             $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
         }
         $this->db->join('motorcycle', 'motorcycle.category = motorcycle_category.id');
@@ -320,12 +332,16 @@ class Motorcycle_M extends Master_M {
     }
 
     public function getMotorcycleVehicle($filter = array(), $major_units_featured_only = 0) {
+        return $this->sub_getMotorcycleVehicle($filter, $major_units_featured_only, array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : "");
+    }
+
+    public function sub_getMotorcycleVehicle($filter = array(), $major_units_featured_only = 0, $search_keywords = "") {
         $where = $this->buildWhere($filter, false, true);
         $where["motorcycle.deleted"] = 0;
         if ($major_units_featured_only > 0) {
             $where["motorcycle.featured"] = 1;
         }
-        if (array_key_exists("major_unit_search_keywords", $_SESSION) && $_SESSION["major_unit_search_keywords"] != "") {
+        if ($search_keywords != "") {
             $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
         }
         $this->db->join('motorcycle', 'motorcycle.vehicle_type = motorcycle_type.id');
@@ -335,13 +351,18 @@ class Motorcycle_M extends Master_M {
         return $record;
     }
 
-    public function getMotorcycleMake($filter = array(), $major_units_featured_only = 0) {
+    public function getMotorcycleMake($filter = array(), $major_units_featured_only = 0)
+    {
+        return $this->sub_getMotorcycleMake($filter, $major_units_featured_only, array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : "");
+    }
+
+    public function sub_getMotorcycleMake($filter = array(), $major_units_featured_only = 0, $search_keywords = "") {
         $where = $this->buildWhere($filter);
         $where["motorcycle.deleted"] = 0;
         if ($major_units_featured_only > 0) {
             $where["motorcycle.featured"] = 1;
         }
-        if (array_key_exists("major_unit_search_keywords", $_SESSION) && $_SESSION["major_unit_search_keywords"] != "") {
+        if ($search_keywords != "") {
             $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
         }
         $this->db->select('make');
@@ -351,12 +372,15 @@ class Motorcycle_M extends Master_M {
     }
 
     public function getMotorcycleYear($filter = array(), $major_units_featured_only = 0) {
+        return $this->sub_getMotorcycleYear($filter, $major_units_featured_only, array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : "");
+    }
+    public function sub_getMotorcycleYear($filter = array(), $major_units_featured_only = 0, $search_keywords = "") {
         $where = $this->buildWhere($filter, true);
         $where["motorcycle.deleted"] = 0;
         if ($major_units_featured_only > 0) {
             $where["motorcycle.featured"] = 1;
         }
-        if (array_key_exists("major_unit_search_keywords", $_SESSION) && $_SESSION["major_unit_search_keywords"] != "") {
+        if ($search_keywords != "") {
             $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
         }
         $this->db->select('year');
@@ -490,7 +514,7 @@ class Motorcycle_M extends Master_M {
      * @param $filter
      * @return mixed
      */
-    private function processReturnValue($value)
+    public function processReturnValue($value)
     {
         if (isset($value) && (is_array($value) || $value != "")) {
             if (!is_array($value)) {
