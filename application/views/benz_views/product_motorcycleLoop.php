@@ -38,7 +38,7 @@ foreach ($motorcycles as $motorcycle) {
         "url" => base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']),
         "motorcycle_type" => $motorcycle["type"],
         "motorcycle_url_title" => $motorcycle["url_title"],
-        "motorcycle_sku" => clean_complex_sku($motorcycle),
+        "motorcycle_sku" => $motorcycle["sku"],
         "motorcycle_image" => $motorcycle_image,
         "motorcycle_title" => $motorcycle["title"],
         "pricing_widget" => $CI->load->view("benz_views/pricing_widget", array(
@@ -56,7 +56,7 @@ foreach ($motorcycles as $motorcycle) {
         "stock_status" => $motorcycle['stock_status'],
         "stock_status_code" => $motorcycle['stock_status'] == 'In Stock' ? 'green' : 'red',
         "engine_type" => $motorcycle['engine_type'] != '' ? $motorcycle['engine_type'] : false,
-        "sku" => $motorcycle['sku'] != '' ? $motorcycle['sku'] : false,
+        "sku" => $motorcycle['sku'] != '' ? clean_complex_sku($motorcycle['sku']) : false,
         "engine_hours" => $motorcycle['engine_hours'] > 0 ? $motorcycle['engine_hours'] : false,
         "mileage" => $motorcycle['mileage'] > 0 ? $motorcycle['mileage'] : false,
         "color" => $motorcycle['color'] != "N/A" && $motorcycle['color'] != '' ? $motorcycle['color'] : false,
