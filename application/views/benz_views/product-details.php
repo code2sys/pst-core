@@ -174,7 +174,7 @@ $stock_status_mode = $CI->_getStockStatusMode();
                 <?php endif; ?>
 				<div class="dtal-txt">
 					<label>Stock Code :</label>
-					<span><?php echo $motorcycle['sku'];?></span>
+					<span><?php echo clean_complex_sku($motorcycle);?></span>
 				</div>
 				<div class="social-button">
 					<p class="scia-share">Share</p>

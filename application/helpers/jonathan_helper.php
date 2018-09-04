@@ -349,3 +349,13 @@ if (!function_exists('tag_creating')) {
         return $url;
     }
 }
+
+// JLB - need to not display the SKU if it's a complex SKU
+function clean_complex_sku($motorcycle) {
+    $sku = $motorcycle["sku"];
+    $real_sku = $motorcycle["real_sku"];
+    if ($real_sku != "" && $real_sku == substr($sku, 0, strlen($real_sku))) {
+        return $real_sku;
+    }
+    return $sku;
+}
