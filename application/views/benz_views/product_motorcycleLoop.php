@@ -56,7 +56,7 @@ foreach ($motorcycles as $motorcycle) {
         "stock_status" => $motorcycle['stock_status'],
         "stock_status_code" => $motorcycle['stock_status'] == 'In Stock' ? 'green' : 'red',
         "engine_type" => $motorcycle['engine_type'] != '' ? $motorcycle['engine_type'] : false,
-        "sku" => $motorcycle['sku'] != '' ? clean_complex_sku($motorcycle['sku']) : false,
+        "sku" => $motorcycle['sku'] != '' ? clean_complex_sku($motorcycle) : false,
         "engine_hours" => $motorcycle['engine_hours'] > 0 ? $motorcycle['engine_hours'] : false,
         "mileage" => $motorcycle['mileage'] > 0 ? $motorcycle['mileage'] : false,
         "color" => $motorcycle['color'] != "N/A" && $motorcycle['color'] != '' ? $motorcycle['color'] : false,
