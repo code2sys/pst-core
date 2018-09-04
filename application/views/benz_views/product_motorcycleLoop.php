@@ -38,7 +38,7 @@ foreach ($motorcycles as $motorcycle) {
         "url" => base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']),
         "motorcycle_type" => $motorcycle["type"],
         "motorcycle_url_title" => $motorcycle["url_title"],
-        "motorcycle_sku" => $motorcycle["sku"],
+        "motorcycle_sku" => clean_complex_sku($motorcycle),
         "motorcycle_image" => $motorcycle_image,
         "motorcycle_title" => $motorcycle["title"],
         "pricing_widget" => $CI->load->view("benz_views/pricing_widget", array(
