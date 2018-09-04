@@ -16,6 +16,7 @@ if (isset($motorcycle) && array_key_exists("id", $motorcycle) && $motorcycle["id
     mustache_tmpl_set($major_unit_detail_modal_template, "motorcycle_title", $motorcycle["title"]);
     mustache_tmpl_set($major_unit_detail_modal_template, "motorcycle_color", $motorcycle["color"]);
     mustache_tmpl_set($major_unit_detail_modal_template, "motorcycle_sku", $motorcycle["sku"]);
+    mustache_tmpl_set($major_unit_detail_modal_template, "motorcycle_display_sku", clean_complex_sku($motorcycle));
     mustache_tmpl_set($major_unit_detail_modal_template, "motorcycle_vin_number", $motorcycle["vin_number"]);
 
     if (isset($motorcycle_image) && $motorcycle_image != "") {
