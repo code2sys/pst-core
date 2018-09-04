@@ -16,7 +16,7 @@ $bikeControlSort = $_SESSION["bikeControlSort"];
 foreach (array(5, 10, 25, 50) as $show) {
     mustache_tmpl_iterate($template, "show_loop");
     mustache_tmpl_set($template, "show_loop", array(
-        "number" => $show,
+        "show" => $show,
         "selected" => $bikeControlShow == $show
     ));
 }
