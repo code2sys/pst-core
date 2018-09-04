@@ -50,7 +50,7 @@ if (@$motorcycles) {
                         <p>engine hours :<span><?php echo $motorcycle['engine_hours']; ?></span></p>
                     <?php } ?>
                     <?php if ($motorcycle['sku'] != '') { ?>
-                        <p>stock :<span><?php echo $motorcycle['sku']; ?></span></p>
+                        <p>stock :<span><?php echo clean_complex_sku($motorcycle); ?></span></p>
                     <?php } ?>
                     <?php if ($motorcycle['mileage'] > 0) { ?>
                         <p>mileage :<span><?php echo $motorcycle['mileage']; ?></span></p>
