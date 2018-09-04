@@ -2730,6 +2730,11 @@ class Admin_M extends Master_M {
                 $motorcycle_id = $id;
             }
         }
+
+        global $PSTAPI;
+        initializePSTAPI();
+        $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle_id);
+
         return $motorcycle_id;
     }
 
