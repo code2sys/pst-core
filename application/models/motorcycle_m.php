@@ -352,11 +352,11 @@ class Motorcycle_M extends Master_M {
         if ($major_units_featured_only > 0) {
             $where["motorcycle.featured"] = 1;
         }
+        $this->db->join('motorcycle', 'motorcycle.vehicle_type = motorcycle_type.id');
         if ($search_keywords != "") {
             $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description, motorcycle_type.name, motorcycle_category.name) AGAINST ("' . addslashes($search_keywords) . '")', NULL, FALSE);
             $this->db->join('motorcycle_category', 'motorcycle.category = motorcycle_category.id', 'left');
         }
-        $this->db->join('motorcycle', 'motorcycle.vehicle_type = motorcycle_type.id');
         $this->db->select('motorcycle_type.*');
         $this->db->group_by('motorcycle.vehicle_type');
         $record = $this->selectRecords('motorcycle_type', $where);
