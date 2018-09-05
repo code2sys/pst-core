@@ -130,7 +130,9 @@ class Genericpayments_m extends CI_Model {
             'source' => $token,
         ]);
 
+        $tempfile = tempnam("/tmp", "strip_charge_");
         error_log(print_r($charge, true));
+        file_put_contents($tempfile, print_r($charge, true));
 
         return $charge;
     }
