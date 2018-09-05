@@ -564,7 +564,11 @@ class Lightspeed_M extends Master_M {
                 $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
                 if ($motorcycle->get("crs_trim_id") > 0 && $motorcycle->get("customer_set_title") == 0) {
                     // OK, go get that trim display name...
-                    print_r($CI->CRS_m->getTrim($motorcycle->get("crs_trim_id")));
+                    $crs_trim = $CI->CRS_m->getTrim($motorcycle->get("crs_trim_id"));
+                    $motorcycle->set("title", $motorcycle->get("year") . " " . $motorcycle->get("make") . " " . $crs_trim["display_name"] . " " . $motorcycle->get("model"));
+                    global $PSTAPI;
+                    initializePSTAPI();
+                    $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle_id);
                 }
 
 
