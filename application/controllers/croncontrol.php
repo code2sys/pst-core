@@ -1,6 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
+    // JLB 09-04-18
+    // Accelerate all of these so that we can do the query on them...
+    public function denormalizeUnits() {
+        global $PSTAPI;
+        initializePSTAPI();
+        $PSTAPI->denormalizedmotorcycle()->moveAllMotorcycles();
+    }
+
     // JLB 08-21-18
     // We need something that just tries again to match the available bikes for CRS
     public function matchIfYouCanCRS() {
@@ -181,6 +189,9 @@ class CronControl extends Master_Controller {
 
 	    // First, run the lightspeed units
         $this->dailyLightspeedUnits();
+
+        // Denormalize everything
+        $this->denormalizeUnits();
 
         // Then, do the regular daily routine
 		$this->_runJob('daily');
