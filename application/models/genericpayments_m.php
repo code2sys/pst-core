@@ -130,6 +130,8 @@ class Genericpayments_m extends CI_Model {
             'source' => $token,
         ]);
 
+        error_log(print_r($charge, true));
+
         return $charge;
     }
 
