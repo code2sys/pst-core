@@ -130,9 +130,9 @@ class Genericpayments_m extends CI_Model {
             'source' => $token,
         ]);
 
-//        $tempfile = tempnam("/tmp", "strip_charge_");
-//        error_log(print_r($charge, true));
-//        file_put_contents($tempfile, print_r($charge, true));
+        $tempfile = tempnam("/tmp", "strip_charge_");
+        error_log(print_r($charge, true));
+        file_put_contents($tempfile, print_r($charge, true));
 
         return $charge;
     }
@@ -155,6 +155,10 @@ class Genericpayments_m extends CI_Model {
                 "charge" => $transaction_id,
                 "amount" => round($amount * 100.0, 0)
             ));
+
+            $tempfile = tempnam("/tmp", "strip_refund_");
+            error_log(print_r($re, true));
+            file_put_contents($tempfile, print_r($re, true));
 
             if (!is_null($re) && is_object($re) && $re->status == "succeeded") {
                 return array($re->id, "");
