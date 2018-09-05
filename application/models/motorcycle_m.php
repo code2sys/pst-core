@@ -126,12 +126,17 @@ class Motorcycle_M extends Master_M {
         if ($major_units_featured_only > 0) {
             $this->db->where("motorcycle.featured", 1, false); // JLB 03-15-18 Show only the featured ones if selected
         }
-        if (array_key_exists("major_unit_search_keywords", $_SESSION) && $_SESSION["major_unit_search_keywords"] != "") {
-            $relevance_search_extra = ' , MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')") as relevance ';
 
-            $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+        $this->db->join('denormalized_motorcycle dm', 'motorcycle.id = dm.motorcycle_id ');
+
+        if (array_key_exists("major_unit_search_keywords", $_SESSION) && $_SESSION["major_unit_search_keywords"] != "") {
+            $relevance_search_extra = ' , MATCH (dm.title, dm.description, dm.category, dm.type, dm.sku) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')") as relevance ';
+
+            $this->db->where('MATCH (dm.title, dm.description, dm.category, dm.type, dm.sku) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
 
             $this->db->order_by(" relevance desc ");
+        } else {
+            $this->db->order_by(" dm.numeric_sku desc ");
         }
         $this->db->group_by('motorcycle.id');
         $this->db->select("motorcycle.*,motorcycleimage.image_name, motorcycle_type.name  as type, motorcycleimage.external $relevance_search_extra ", FALSE);
@@ -290,8 +295,10 @@ class Motorcycle_M extends Master_M {
         if ($major_units_featured_only > 0) {
             $where["featured"] = 1;
         }
+        $this->db->join('denormalized_motorcycle dm', 'motorcycle.id = dm.motorcycle_id ');
         if (array_key_exists("major_unit_search_keywords", $_SESSION) && $_SESSION["major_unit_search_keywords"] != "") {
-            $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+            $this->db->where('MATCH (dm.title, dm.description, dm.category, dm.type, dm.sku) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+
         }
         $this->db->select('count(id)');
         $record = $this->selectRecord('motorcycle', $where);
@@ -308,10 +315,13 @@ class Motorcycle_M extends Master_M {
         if ($major_units_featured_only > 0) {
             $where["motorcycle.featured"] = 1;
         }
-        if ($search_keywords != "") {
-            $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($search_keywords) . '")', NULL, FALSE);
-        }
+
         $this->db->join('motorcycle', 'motorcycle.category = motorcycle_category.id');
+        $this->db->join('denormalized_motorcycle dm', 'motorcycle.id = dm.motorcycle_id ');
+        if ($search_keywords != "") {
+            $this->db->where('MATCH (dm.title, dm.description, dm.category, dm.type, dm.sku) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+
+        }
         $this->db->select('motorcycle_category.*');
         $this->db->group_by('motorcycle_category.name');
         $record = $this->selectRecords('motorcycle_category', $where);
@@ -324,8 +334,10 @@ class Motorcycle_M extends Master_M {
         if ($major_units_featured_only > 0) {
             $where["motorcycle.featured"] = 1;
         }
+        $this->db->join('denormalized_motorcycle dm', 'motorcycle.id = dm.motorcycle_id ');
         if (array_key_exists("major_unit_search_keywords", $_SESSION) && $_SESSION["major_unit_search_keywords"] != "") {
-            $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . '")', NULL, FALSE);
+            $this->db->where('MATCH (dm.title, dm.description, dm.category, dm.type, dm.sku) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+
         }
         $this->db->select('condition');
         $this->db->group_by('condition');
@@ -344,10 +356,13 @@ class Motorcycle_M extends Master_M {
         if ($major_units_featured_only > 0) {
             $where["motorcycle.featured"] = 1;
         }
-        if ($search_keywords != "") {
-            $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($search_keywords) . '")', NULL, FALSE);
-        }
         $this->db->join('motorcycle', 'motorcycle.vehicle_type = motorcycle_type.id');
+        $this->db->join('denormalized_motorcycle dm', 'motorcycle.id = dm.motorcycle_id ');
+        if ($search_keywords != "") {
+            $this->db->where('MATCH (dm.title, dm.description, dm.category, dm.type, dm.sku) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+
+        }
+
         $this->db->select('motorcycle_type.*');
         $this->db->group_by('motorcycle.vehicle_type');
         $record = $this->selectRecords('motorcycle_type', $where);
@@ -365,8 +380,10 @@ class Motorcycle_M extends Master_M {
         if ($major_units_featured_only > 0) {
             $where["motorcycle.featured"] = 1;
         }
+        $this->db->join('denormalized_motorcycle dm', 'motorcycle.id = dm.motorcycle_id ');
         if ($search_keywords != "") {
-            $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($search_keywords) . '")', NULL, FALSE);
+            $this->db->where('MATCH (dm.title, dm.description, dm.category, dm.type, dm.sku) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+
         }
         $this->db->select('make');
         $this->db->group_by('make');
@@ -383,8 +400,10 @@ class Motorcycle_M extends Master_M {
         if ($major_units_featured_only > 0) {
             $where["motorcycle.featured"] = 1;
         }
+        $this->db->join('denormalized_motorcycle dm', 'motorcycle.id = dm.motorcycle_id ');
         if ($search_keywords != "") {
-            $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($search_keywords) . '")', NULL, FALSE);
+            $this->db->where('MATCH (dm.title, dm.description, dm.category, dm.type, dm.sku) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+
         }
         $this->db->select('year');
         $this->db->group_by('year');
@@ -485,8 +504,10 @@ class Motorcycle_M extends Master_M {
         if ($major_units_featured_only > 0) {
             $where["motorcycle.featured"] = 1;
         }
+        $this->db->join('denormalized_motorcycle dm', 'motorcycle.id = dm.motorcycle_id ');
         if (array_key_exists("major_unit_search_keywords", $_SESSION) && $_SESSION["major_unit_search_keywords"] != "") {
-            $this->db->where('MATCH (motorcycle.sku, motorcycle.title, motorcycle.description) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+            $this->db->where('MATCH (dm.title, dm.description, dm.category, dm.type, dm.sku) AGAINST ("' . addslashes($_SESSION["major_unit_search_keywords"]) . ')")', NULL, FALSE);
+
         }
         $this->db->where("motorcycle.status", 1, FALSE);
         $this->db->where("motorcycle.deleted", 0, FALSE);

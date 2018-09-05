@@ -537,6 +537,9 @@ class Lightspeed_M extends Master_M {
                         print "Could not update: " . print_r($motorcycle_array, true) . "\n";
                     } else {
                         print "Updated: " . $motorcycle_array["sku"] . "\n";
+                        global $PSTAPI;
+                        initializePSTAPI();
+                        $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle["id"]);
                     }
 
                     $valid_count++;
