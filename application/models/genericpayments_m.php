@@ -130,9 +130,9 @@ class Genericpayments_m extends CI_Model {
             'source' => $token,
         ]);
 
-        $tempfile = tempnam("/tmp", "strip_charge_");
-        error_log(print_r($charge, true));
-        file_put_contents($tempfile, print_r($charge, true));
+//        $tempfile = tempnam("/tmp", "strip_charge_");
+//        error_log(print_r($charge, true));
+//        file_put_contents($tempfile, print_r($charge, true));
 
         return $charge;
     }
@@ -194,7 +194,7 @@ class Genericpayments_m extends CI_Model {
     }
 
     protected function isSuccess_stripe(&$sale_result) {
-        return $sale_result->status == "succeeded";
+        return $sale_result->status == "succeeded" || $sale_result->status == "paid";
     }
 
     public function getTransactionID(&$sale_result) {
