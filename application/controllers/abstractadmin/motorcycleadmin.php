@@ -198,6 +198,10 @@ abstract class Motorcycleadmin extends Firstadmin
                 $was_new = true;
                 // we need to assemble the title...
                 $post["title"] = $post["year"] . " " . $post["make"] . " " . $post["model"] . (array_key_exists("color", $post) ? " " . $post["color"] : "");
+            } else {
+                if ($post["title"] != $motorcycle["title"]) {
+                    $post["customer_set_title"]= 1;
+                }
             }
 
             // We need to get the current price 
