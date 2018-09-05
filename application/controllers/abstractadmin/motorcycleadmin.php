@@ -88,6 +88,7 @@ abstract class Motorcycleadmin extends Firstadmin
             } else {
                 $data = json_decode($motorcycle->get("data"), true);
                 $motorcycle->set("sale_price", $price);
+                $motorcycle->set("customer_set_price", 1); // Yes, they really set this thing!
 
                 $motorcycle->set("profit", $price -  $data["total_cost"]);
                 if ($data["total_cost"] > 0) {
