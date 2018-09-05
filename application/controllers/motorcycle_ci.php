@@ -143,12 +143,18 @@ class Motorcycle_CI extends Welcome {
             $_REQUEST["search_keywords"] = "";
         }
 
+        $squash_filter = false;
         if (!array_key_exists("search_keywords", $_REQUEST)) {
             if (!array_key_exists("major_unit_search_keywords", $_SESSION)) {
                 $_SESSION["major_unit_search_keywords"] = "";
             }
         } else {
-            $_SESSION["major_unit_search_keywords"] = trim($_REQUEST["search_keywords"]);
+            $new_search = trim($_REQUEST["search_keywords"]);
+            if (!array_key_exists("major_unit_search_keywords", $_SESSION) || $new_search != $_SESSION["major_unit_search_keywords"] ) {
+                $_SESSION["motorcycle_filter"] = array();
+                $squash_filter = true;
+            }
+            $_SESSION["major_unit_search_keywords"] = $new_search;
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -187,6 +193,12 @@ class Motorcycle_CI extends Welcome {
             $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
 
         }
+
+        if ($squash_filter) {
+            $filter = array();
+            $_SESSION["motorcycle_filter"] = array();
+        }
+
 
         $filter["status"] = 1;
         $this->_mainData['vehicles'] = $this->motorcycle_m->getMotorcycleVehicle($filter, $_SESSION["major_units_featured_only"]);
