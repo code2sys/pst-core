@@ -558,6 +558,16 @@ class Lightspeed_M extends Master_M {
                     $CI->CRS_m->matchIfYouCan($motorcycle_id, $motorcycle_array["vin_number"], $motorcycle_array["make"], $bike->Model, $bike->ModelYear, $bike->CodeName, $bike->MSRP, $scrub_trim);
                 }
 
+                // JLB 09-04-18
+                // IF we can get the trim, and they have not set the title, consider the display name.
+                // get it again
+                $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
+                if ($motorcycle->get("crs_trim_id") > 0 && $motorcycle->get("customer_set_title") == 0) {
+                    // OK, go get that trim display name...
+                    print_r($CI->CRS_m->getTrim($motorcycle->get("crs_trim_id")));
+                }
+
+
                 // Todo...
                 // Does this motorcycle have a zero group or a general group of settings? We need to be able to flag the settings group that comes from Lightspeed in some way...
                 // Finally, we need to optionally stick in the settings if they exist into this spec table...
