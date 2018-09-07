@@ -646,6 +646,7 @@ $qty_input = form_input(array('name' => 'qty',
         $('#price').html("<?php echo $original_price; ?>");
         figureStockStatusGroundState();
 
+        var carried_price = 0;
         $(".question").each(function ()
         {
             if ($(this).val() != 0)
@@ -659,7 +660,8 @@ $qty_input = form_input(array('name' => 'qty',
                         {
                             var partObj = jQuery.parseJSON(partRec);
                             totalprice = parseFloat(partObj.sale);
-                            $('#price').html('$' + parseFloat(totalprice).toFixed(2));
+                            carried_price = carried_price + totalprice;
+                            $('#price').html('$' + parseFloat(carried_price).toFixed(2));
 
                             figureStockStatus(partObj);
                         });
