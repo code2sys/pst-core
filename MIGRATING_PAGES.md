@@ -9,7 +9,7 @@ There was a task for the SS website to migrate service pages from Demo. Here's h
 <pre>
 for id in 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 
 do 
-php html/index.php cron/migratePage/ss_v1/eccc_v1/$id
+php html/index.php cron/migratePage/ss_v1/allambs_v1/$id
 done
 </pre>
 
@@ -32,9 +32,9 @@ Slider image to move:
 * Go to your media directory in your store and run something like this:
 
 <pre>
- for image in 1524670194.jpg  1524670748.jpg  1524671100.jpg  1524671450.jpg  1524672114.jpg  1524672593.jpg  1524672962.jpg  1524673320.jpg  1524673523.jpg  1524680042.jpg  1524680351.jpg  1524680539.jpg  1524680761.jpg  1524680955.jpg  1524681125.jpg  1524681457.jpg  1524681795.jpg  1524681942.jpg  1524682191.jpg  1524682420.jpg  1524682573.jpg  1524682789.jpg  1524682979.jpg  1524683291.jpg  1524683495.jpg 
+ for image in 1529423842.jpg 1529422190.jpg 1529422267.jpg 1529422328.jpg 1529422363.jpg 1529422399.jpg 1529422582.jpg 1529422622.jpg 1529422751.jpg 1529423075.jpg 1529423201.jpg 1529423260.jpg 1529423290.jpg 1529423327.jpg 1529423363.jpg 1529423396.jpg 1529423422.jpg 1529423469.jpg 1529423506.jpg 1529423537.jpg 1529423571.jpg 1529423605.jpg 1529423635.jpg 1529423667.jpg 1529423694.jpg 1529423725.jpg
  do
- wget http://demo.powersporttechnologies.com/media/$image
+ wget https://www.s-smotorsports.com/media/$image
  done
 </pre>
 
