@@ -1777,7 +1777,7 @@ class Parts_M extends Master_M {
         $this->fixCartForWOPPricing();
         $shoppingCart = json_encode($_SESSION['cart']);
         // JLB 09-07-18 - Debug
-        file_put_contents(tempnam("/tmp", "cart_"), $shoppingCart);
+//        file_put_contents(tempnam("/tmp", "cart_"), $shoppingCart);
         $data = array('cart' => $shoppingCart, 'user_id' => @$_SESSION['userRecord']['id']);
         $where = array('user_id' => @$_SESSION['userRecord']['id']);
         if (( @$_SESSION['userRecord']['id']) && ($this->recordExists('cart', $where)))

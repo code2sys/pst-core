@@ -846,12 +846,13 @@ class Shopping extends Master_Controller {
                 // Thus, what we have to do is recompute the price part.
                 // This is really and truly utterly horrible that they are even trusting input from the front end in this way.
                 // The original coder should be ashamed.
-//                global $PSTAPI;
-//                initializePSTAPI();
-//                if (count($post["question"]) > 1) {
-//                    // refigure that price, kemosabe.
-//                    $post["price"] = $PSTAPI->partnumber()->figureSalePrice($post["question"]);
-//                }
+                global $PSTAPI;
+                initializePSTAPI();
+                if (count($post["question"]) > 1) {
+                    // refigure that price, kemosabe.
+                    $post["price"] = $PSTAPI->partnumber()->figureSalePrice($post["question"]);
+                    $post["finalPrice"] = intVal($post["qty"]) * floatVal($post["price"]); // the dumbest shittery.
+                }
 
 
                 $_SESSION['cart'][$post['partnumber']] = $post;
