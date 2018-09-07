@@ -840,6 +840,20 @@ class Shopping extends Master_Controller {
 					$post['ftmnt'] = $_SESSION['activeMachine']['name'];
             }
             if ($post['type'] == 'cart') {  // ADD TO CART
+                // JLB 09-07-18
+                // They call me the fixxxer.
+                // The problem we had was that the price that was coming in was of the last item added to this...which meant you would undercharge on bundles.
+                // Thus, what we have to do is recompute the price part.
+                // This is really and truly utterly horrible that they are even trusting input from the front end in this way.
+                // The original coder should be ashamed.
+//                global $PSTAPI;
+//                initializePSTAPI();
+//                if (count($post["question"]) > 1) {
+//                    // refigure that price, kemosabe.
+//                    $post["price"] = $PSTAPI->partnumber()->figureSalePrice($post["question"]);
+//                }
+
+
                 $_SESSION['cart'][$post['partnumber']] = $post;
                 if (@$_SESSION['userRecord']['id'])
                     $this->parts_m->updateCart();
