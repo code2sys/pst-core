@@ -837,7 +837,9 @@ require(__DIR__ . "/../../braintree_clienttoken.php");
             <a href="javascript:void(0);" onclick="$.when(saveForLater()).done(refreshPage);" id="button">Save for Later</a>
             <!-- <a href="javascript:void(0);" onclick="addToBatch();" id="button">Add to Batch Order</a> -->
             <a href="javascript:void(0);" onclick="$.when(processOrder()).done(refreshPage);" id="button">Update To Processing</a>
+            <?php if (!defined('HIDE_SEND_TO_DISTRIBUTORS') || !HIDE_SEND_TO_DISTRIBUTORS): ?>
             <a href="javascript:void(0);" onclick="sendToPST();" id="button">Send To Distributors</a>
+            <?php endif; ?>
         </div>
 
         </form>
