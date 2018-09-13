@@ -62,7 +62,20 @@ class Motorcycle_CI extends Welcome {
             $featured = 0;
         }
         $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = $featured;
-        header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
+        header("Location: /Motorcycle_List" . $this->preSwitch($pre));
+    }
+
+    protected function preSwitch($pre) {
+        switch($pre) {
+            case 2:
+                return "?fltr=special";
+                break;
+            case 1:
+                return "?fltr=pre-owned";
+                break;
+            default:
+                return "";
+        }
     }
 
     public function benzProductSort($sort_number, $pre = 0) {
@@ -70,7 +83,7 @@ class Motorcycle_CI extends Welcome {
             $sort_number = 0;
         }
         $_SESSION["bikeControlSort"] = $sort_number;
-        header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
+        header("Location: /Motorcycle_List" . $this->preSwitch($pre));
 
     }
 
@@ -79,7 +92,7 @@ class Motorcycle_CI extends Welcome {
             $show_number = 5;
         }
         $_SESSION["bikeControlShow"] = $show_number;
-        header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
+        header("Location: /Motorcycle_List" . $this->preSwitch($pre));
     }
 
     /*
@@ -89,6 +102,13 @@ class Motorcycle_CI extends Welcome {
         $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
         $_REQUEST["fltr"] = "new";
         $_GET["fltr"] = "new";
+        $this->benzProduct();
+    }
+
+    public function featuredSpecialProducts() {
+        $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
+        $_REQUEST["fltr"] = "special";
+        $_GET["fltr"] = "special";
         $this->benzProduct();
     }
 

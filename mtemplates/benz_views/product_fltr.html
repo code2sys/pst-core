@@ -6,6 +6,7 @@
     <div class="fltrbx section-fiter flat prdy-dv drop-blok">
         <fieldset style="position:relative">
             <div class="up-buttons">
+                <a href="/Motorcycle_List?fltr=special&search_keywords=" class="benz_views-product up-buttons-2 {{#fltr_special_active}}active{{/fltr_special_active}}">Featured</a>
                 {{#MOTORCYCLE_SHOP_NEW}}
                 <a href="{{#major_units_featured_only}}/Motorcycle_List/featured{{/major_units_featured_only}}{{^major_units_featured_only}}/Motorcycle_List{{/major_units_featured_only}}?fltr=new&search_keywords=" class="benz_views-product up-buttons-2 {{#fltr_new_active}}active{{/fltr_new_active}}">new</a>
                 {{/MOTORCYCLE_SHOP_NEW}}
@@ -16,7 +17,7 @@
         </fieldset>
         <div class="filter-inner">
             <p class="parg-txt">Search</p>
-            <form method="post" class="major_unit_search" action="{{#major_units_featured_only}}/Motorcycle_List/featured{{/major_units_featured_only}}{{^major_units_featured_only}}/Motorcycle_List{{/major_units_featured_only}}?fltr={{#fltr_new_active}}new{{/fltr_new_active}}{{^fltr_new_active}}pre-owned{{/fltr_new_active}}&filterChange=1">
+            <form method="post" class="major_unit_search" action="{{#major_units_featured_only}}/Motorcycle_List/featured{{#fltr_preowned_active}}_preowned{{/fltr_preowned_active}}{{#fltr_special_active}}_special{{/fltr_special_active}}{{/major_units_featured_only}}{{^major_units_featured_only}}/Motorcycle_List{{/major_units_featured_only}}?fltr={{#fltr_new_active}}new{{/fltr_new_active}}{{#fltr_preowned_active}}pre-owned{{/fltr_preowned_active}}{{#fltr_special_active}}special{{/fltr_special_active}}&filterChange=1">
                 <input type="text" size="30" name="search_keywords" value="{{{major_unit_search_keywords}}}" class="search-bx major_unit_searchbox"/><br/>
                 <input type="submit" name="search_action" value="Search" class="bluebutton_b" />
                 <input type="submit" name="search_action" value="Clear" class="bluebutton_b" />

@@ -35,14 +35,19 @@ class Motorcycle_M extends Master_M {
          */
         if (array_key_exists('fltr', $data_source)) {
             //$filter['condition'] = $_GET['fltr'] == 'current' ? '1' : '2';
-            if ($data_source['fltr'] == 'new'){
+            // JLB 2018-09-13 - There's now SPECIAL
+            if ($data_source["fltr"] == "special") {
+                $filter["featured"] = 1;
+            } else if ($data_source['fltr'] == 'new'){
                 $filter['condition'] = '1';
             } else{
                 $filter['condition'] = '2';
             }
         } else if (array_key_exists('condition', $data_source)) {
             //$filter['condition'] = $_GET['fltr'] == 'current' ? '1' : '2';
-            if ($data_source['condition'] == 'new'){
+            if ($data_source["condition"] == "special") {
+                $filter["featured"] = 1;
+            } else if ($data_source['condition'] == 'new'){
                 $filter['condition'] = '1';
             } else{
                 $filter['condition'] = '2';
@@ -66,23 +71,10 @@ class Motorcycle_M extends Master_M {
             $this->db->where("condition", $where['condition']);
         }
 
-        // JLB 06-04-17
-        // It is my understanding the vault flag no longer is used.
-//        if( !empty($filter['vault']) ) {
-//            $where['vault'] = $filter['vault'];
-//        }
-
-        // JLB 06-05-17
-        // I cannot for the life of me understand why they wrote this one like this.
-//        if (@$filter['brands']) {
-//            $bwhere = ' (';
-//            foreach ($filter['brands'] as $brand) {
-//                $bwhere .= " motorcycle.make = '" . $brand."' OR";
-//            }
-//            $bwhere = rtrim($bwhere, 'OR');
-//            $bwhere .= ' ) ';
-//            $this->db->where($bwhere, NULL, FALSE);
-//        }
+        if (array_key_exists("featured", $filter)) {
+            $where['featured'] = $filter["featured"];
+            $this->db->where("featured", $where['featured']);
+        }
 
         if (@$filter['brands']) {
             $this->db->where_in('motorcycle.make', $filter['brands']);
@@ -102,17 +94,7 @@ class Motorcycle_M extends Master_M {
             $this->db->where_in('motorcycle.status', $filter['status']);
         }
     }
-//
-//    public function getMotorcycles( $filter = array() , $limit = 6, $offset = 0) {
-//        $where = $this->buildWhere($filter);
-//        $this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id', 'left');
-//        $this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
-//        $this->db->group_by('motorcycle.id');
-//        $this->db->select('motorcycle.*,motorcycleimage.image_name, motorcycle_type.name as type', FALSE);
-//        $this->db->limit($limit, $offset);
-//        $records = $this->selectRecords('motorcycle', $where);
-//        return $records;
-//    }
+
 
     public function getMotorcycles( $filter = array() , $limit = 5, $offset = 0, $sort_order = 1, $major_units_featured_only = 0) {
         $where = $this->buildWhere($filter);
@@ -229,61 +211,6 @@ class Motorcycle_M extends Master_M {
 
         return $record;
     }
-
-//
-//	public function getFilterMotorcycles( $filter, $limit ) {
-//
-//		if (@$filter['categories']) {
-//			$cwhere = ' (';
-//			foreach ($filter['categories'] as $category) {
-//				$cwhere .= " motorcycle.category = '" . $category."' OR";
-//			}
-//			$cwhere = rtrim($cwhere, 'OR');
-//			$cwhere .= ' ) ';
-//			$this->db->where($cwhere, NULL, FALSE);
-//		}
-//		if (@$filter['brands']) {
-//			$bwhere = ' (';
-//			foreach ($filter['brands'] as $brand) {
-//				$bwhere .= " motorcycle.make = '" . $brand."' OR";
-//			}
-//			$bwhere = rtrim($bwhere, 'OR');
-//			$bwhere .= ' ) ';
-//			$this->db->where($bwhere, NULL, FALSE);
-//		}
-//		if (@$filter['years']) {
-//			$ywhere = ' (';
-//			foreach ($filter['years'] as $year) {
-//				$ywhere .= " motorcycle.year = '" . $year."' OR";
-//			}
-//			$ywhere = rtrim($ywhere, 'OR');
-//			$ywhere .= ' ) ';
-//			$this->db->where($ywhere, NULL, FALSE);
-//		}
-//		if (@$filter['vehicles']) {
-//			$vwhere = ' (';
-//			foreach ($filter['vehicles'] as $vehicle) {
-//				$vwhere .= " motorcycle.vehicle_type = '" . $vehicle."' OR";
-//			}
-//			$vwhere = rtrim($vwhere, 'OR');
-//			$vwhere .= ' ) ';
-//			$this->db->where($vwhere, NULL, FALSE);
-//		}
-//		if ( $filter['condition'] != '' ) {
-//			$cndn = $filter['condition'] == 'new' ? '1' : '2';
-//			$cwhr = ' motorcycle.condition = '.$cndn;
-//			$this->db->where($cwhr, NULL, FALSE);
-//		}
-//
-//		$where = array();
-//		$this->db->join('motorcycle_type', 'motorcycle.vehicle_type = motorcycle_type.id', 'left');
-//		$this->db->join('motorcycleimage', 'motorcycleimage.motorcycle_id = motorcycle.id', 'left');
-//		$this->db->group_by('motorcycle.id');
-//		$this->db->select('motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type');
-//		$this->db->limit('6', $limit);
-//		$records = $this->selectRecords('motorcycle', $where);
-//		return $records;
-//	}
 
     public function getFilterTotal( $filter , $major_units_featured_only = 0) {
         $where = $this->buildWhere($filter);
@@ -492,6 +419,9 @@ class Motorcycle_M extends Master_M {
         $where = array();
         if( !empty($filter['condition']) ) {
             $where['condition'] = $filter['condition'];
+        }
+        if( !empty($filter['featured']) ) {
+            $where['featured'] = $filter['featured'];
         }
 
         if (@$filter['brands']) {

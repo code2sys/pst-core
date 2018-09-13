@@ -12,14 +12,20 @@ $media_url = jsite_url("/media/");
 // We have to retrofit this because the Benz guys never, ever thought to be consistent in naming.
 if (MOTORCYCLE_SHOP_NEW) {
     if (!array_key_exists("fltr", $_GET)) {
-        if (array_key_exists("condition", $filter) && $filter["condition"] == 1) {
+        if (array_key_exists("condition", $filter) && $filter["condition"] == 2) {
+            $_GET["fltr"] = "special";
+        } else if (array_key_exists("condition", $filter) && $filter["condition"] == 1) {
             $_GET["fltr"] = "new";
         } else {
             $_GET["fltr"] = "pre-owned";
         }
     }
 } else {
-    $_GET["fltr"] = "pre-owned";
+    if (array_key_exists("condition", $filter) && $filter["condition"] == 2) {
+        $_GET["fltr"] = "special";
+    } else {
+        $_GET["fltr"] = "pre-owned";
+    }
 }
 
 
@@ -47,6 +53,9 @@ $stock_status_mode = $CI->_getStockStatusMode();
 if (array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned") {
     mustache_tmpl_set($template, "fltr_preowned", 1);
     mustache_tmpl_set($template, "preowned_new_flag", 1);
+} else if (array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "special") {
+    mustache_tmpl_set($template, "fltr_special", 1);
+    mustache_tmpl_set($template, "preowned_new_flag", 2);
 } else {
     mustache_tmpl_set($template, "fltr_new", 1);
     mustache_tmpl_set($template, "preowned_new_flag", 0);

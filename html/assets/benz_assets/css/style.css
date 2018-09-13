@@ -693,10 +693,10 @@ h1.hdng {
     color: #fff;
     text-transform: capitalize;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 10px;
     text-align: center;
     padding: 10px 11px; 
-    margin: 6px 4px;
+    margin: 6px 1px;
     display: inline-block;
     position: relative;
     border-radius: 3px;
