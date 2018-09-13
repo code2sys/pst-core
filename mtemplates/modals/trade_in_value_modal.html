@@ -112,7 +112,7 @@
 
 
 <script type="application/javascript">
-    $(document).on("ready", function() {
+    $(window).on("load", function() {
 
         var thisWidget = grecaptcha.render('trade_in_recaptcha_{{motorcycle_id}}', {
             'sitekey' : '{{RECAPTCHA_KEY}}'
