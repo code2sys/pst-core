@@ -47,6 +47,9 @@ $stock_status_mode = $CI->_getStockStatusMode();
 if (array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "pre-owned") {
     mustache_tmpl_set($template, "fltr_preowned", 1);
     mustache_tmpl_set($template, "preowned_new_flag", 1);
+} else if (array_key_exists("fltr", $_REQUEST) && $_REQUEST["fltr"] == "special") {
+    mustache_tmpl_set($template, "fltr_preowned", 2);
+    mustache_tmpl_set($template, "preowned_new_flag", 2);
 } else {
     mustache_tmpl_set($template, "fltr_new", 1);
     mustache_tmpl_set($template, "preowned_new_flag", 0);

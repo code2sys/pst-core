@@ -65,12 +65,25 @@ class Motorcycle_CI extends Welcome {
         header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
     }
 
+    protected function preSwitch($pre) {
+        switch($pre) {
+            case 2:
+                return "?fltr=special";
+                break;
+            case 1:
+                return "?fltr=pre-owned";
+                break;
+            default:
+                return "";
+        }
+    }
+
     public function benzProductSort($sort_number, $pre = 0) {
         if (!in_array($sort_number, array(1,2,3,4))) {
             $sort_number = 0;
         }
         $_SESSION["bikeControlSort"] = $sort_number;
-        header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
+        header("Location: /Motorcycle_List" . $this->preSwitch($pre));
 
     }
 
@@ -79,7 +92,7 @@ class Motorcycle_CI extends Welcome {
             $show_number = 5;
         }
         $_SESSION["bikeControlShow"] = $show_number;
-        header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
+        header("Location: /Motorcycle_List" . $this->preSwitch($pre));
     }
 
     /*
