@@ -104,6 +104,13 @@ class Motorcycle_CI extends Welcome {
         $_GET["fltr"] = "new";
         $this->benzProduct();
     }
+    
+    public function featuredSpecialProducts() {
+        $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
+        $_REQUEST["fltr"] = "special";
+        $_GET["fltr"] = "special";
+        $this->benzProduct();
+    }
 
     public function featuredUsedProducts() {
         $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
