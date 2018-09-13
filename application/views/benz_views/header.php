@@ -311,7 +311,7 @@ echo $CI->load->view("benz_views/real_footer", array(
                 if (array_key_exists('fltr', $_GET) && $_GET['fltr'] == "pre-owned") {
                     echo site_url('Motorcycle_List/featured_preowned');
                 } else if (array_key_exists('fltr', $_GET) && $_GET['fltr'] == "special") {
-                        echo site_url('Motorcycle_List/featured_preowned');
+                        echo site_url('Motorcycle_List/featured_special');
                 } else {
                     echo site_url('Motorcycle_List/featured');
                 }
