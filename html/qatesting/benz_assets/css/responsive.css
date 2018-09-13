@@ -555,9 +555,12 @@ span.glyphicon-filter {
         line-height: 20px
     }
     .fltrbx .up-buttons .up-buttons-2 {
-        font-size:13px;
+        font-size:12px;
         padding:10px 20px;
-        margin:6px;
+        margin-top:6px;
+        margin-bottom:6px;
+        margin-left:2px;
+        margin-right:2px;
     }
     .fltrbx .up-buttons {
         text-align:center;
