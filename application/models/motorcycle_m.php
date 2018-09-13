@@ -304,6 +304,8 @@ class Motorcycle_M extends Master_M {
     public function getMotorcycleCategory($filter = array(), $major_units_featured_only = 0) {
         return $this->sub_getMotorcycleCategory($filter, $major_units_featured_only, array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : "");
     }
+
+
     public function sub_getMotorcycleCategory($filter = array(), $major_units_featured_only = 0, $search_keywords = "") {
         $where = $this->buildWhere($filter, false, false, true);
         $where['motorcycle_category.name != '] = '';
@@ -320,6 +322,22 @@ class Motorcycle_M extends Master_M {
         $this->db->select('motorcycle_category.*');
         $this->db->group_by('motorcycle_category.name');
         $record = $this->selectRecords('motorcycle_category', $where);
+        return $record;
+    }
+
+    public function sub_getMotorcycleDistinctModels($filter = array(), $major_units_featured_only = 0, $search_keywords = "") {
+        $where = $this->buildWhere($filter, false, false, true);
+        $where["motorcycle.deleted"] = 0;
+        if ($major_units_featured_only > 0) {
+            $where["motorcycle.featured"] = 1;
+        }
+        if ($search_keywords != "") {
+            $this->db->join('denormalized_motorcycle dm', 'motorcycle.id = dm.motorcycle_id ', 'left');
+            $this->db->where(jonathan_generate_likes(array("motorcycle.title", "motorcycle.make", "motorcycle.model", "dm.category", "motorcycle.year", "dm.type", "motorcycle.stock_status", "motorcycle.sku"), $_SESSION["major_unit_search_keywords"], ""), NULL, FALSE);
+        }
+        $this->db->distinct();
+        $this->db->select('motorcycle.model');
+        $record = $this->selectRecords('motorcycle', $where);
         return $record;
     }
 

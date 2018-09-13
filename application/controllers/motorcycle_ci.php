@@ -131,7 +131,8 @@ class Motorcycle_CI extends Welcome {
             "vehicles" => $this->motorcycle_m->sub_getMotorcycleVehicle($filter, $major_units_featured_only, $search_keywords),
             "brands" => $this->motorcycle_m->sub_getMotorcycleMake($filter, $major_units_featured_only, $search_keywords),
             "years" => $this->motorcycle_m->sub_getMotorcycleYear($filter, $major_units_featured_only, $search_keywords),
-            "categories" => $this->motorcycle_m->sub_getMotorcycleCategory($filter, $major_units_featured_only, $search_keywords)
+            "categories" => $this->motorcycle_m->sub_getMotorcycleCategory($filter, $major_units_featured_only, $search_keywords),
+            "models" => $this->motorcycle_m->sub_getMotorcycleDistinctModels($filter, $major_units_featured_only, $search_keywords)
         );
 
         print json_encode($result);
