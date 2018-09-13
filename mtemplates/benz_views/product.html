@@ -12,9 +12,12 @@
             {{#fltr_preowned}}
             window.location.href = "/Motorcycle_List/featured_preowned";
             {{/fltr_preowned}}
-            {{^fltr_preowned}}
+            {{#fltr_new}}
             window.location.href = "/Motorcycle_List/featured";
-            {{/fltr_preowned}}
+            {{/fltr_new}}
+            {{#fltr_special}}
+            window.location.href = "/Motorcycle_List/featured_special";
+            {{/fltr_special}}
         } else {
             window.location.href = "/Motorcycle_Featured/0/" + {{preowned_new_flag}};
         }
