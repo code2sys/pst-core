@@ -62,7 +62,7 @@ class Motorcycle_CI extends Welcome {
             $featured = 0;
         }
         $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = $featured;
-        header("Location: /Motorcycle_List" . ($pre > 0 ? "?fltr=pre-owned" : ""));
+        header("Location: /Motorcycle_List" . $this->preSwitch($pre));
     }
 
     protected function preSwitch($pre) {
