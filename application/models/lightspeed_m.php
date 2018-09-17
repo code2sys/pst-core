@@ -553,6 +553,11 @@ class Lightspeed_M extends Master_M {
                     $crs_trim_id = $row["crs_trim_id"];
                 }
 
+                if ($motorcycle_id == 0) {
+                    print "Could not find motorcycle for SKU: " . $motorcycle_array["sku"];
+                    continue;
+                }
+
                 // Now, what is the ID for this motorcycle?
                 if ($crs_trim_id == 0) {
                     $CI->CRS_m->matchIfYouCan($motorcycle_id, $motorcycle_array["vin_number"], $motorcycle_array["make"], $bike->Model, $bike->ModelYear, $bike->CodeName, $bike->MSRP, $scrub_trim);
