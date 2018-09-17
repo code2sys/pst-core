@@ -84,7 +84,7 @@ if (isset($keywords) &&	$keywords != "") {
 
 </head>
 
-<body class="body">
+<body class="body s_master_v">
 <?php echo jget_store_block("top_body"); ?>
 
 <!-- WRAPPER ==============================================================================-->
