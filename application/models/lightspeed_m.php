@@ -420,6 +420,8 @@ class Lightspeed_M extends Master_M {
             $bikes = json_decode($call);
 
             foreach($bikes as $bike) {
+
+
                 $scrub_trim = false;
                 $last_known_trim = 0;
                 $motorcycle_array = $this->_subUnpackMajorUnit($bike, $dealer->Cmf);
@@ -432,6 +434,14 @@ class Lightspeed_M extends Master_M {
                 if (isset($bike->UnitStatus) && trim($bike->UnitStatus) == "R") {
                     continue; // It has been removed.
                 }
+
+                // JLB 09-17-18
+                // Added because of Al Lambs Dallas Honda
+                // If the SKU is "TBA" or the SKU is "" or the SKU is null... do not add this bike.
+                if (!array_key_exists("sku", $motorcycle_array) || $motorcycle_array["sku"] == "" || $motorcycle_array["sku"] == "TBA") {
+                    continue; // skip this bike.
+                }
+
 
                 $update_array = array(
                     'lightspeed_dealerID' => $dealer->Cmf,
