@@ -226,7 +226,7 @@ if (isset($keywords) &&	$keywords != "") {
     <?php echo jget_store_block("bottom_header"); ?>
 </head>
 
-<body>
+<body class="body master_v_brand">
 <?php echo jget_store_block("top_body"); ?>
 <div id="loading-background" style="display:none;">
   <img src="<?php echo $new_assets_url;?>images/ajax-loader-black.gif" alt="Loading..." />

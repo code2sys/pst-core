@@ -99,7 +99,7 @@ $SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
     <?php echo jget_store_block("moto_bottom_header"); ?>
 </head>
 
-<body <?php if ($SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS): ?>class="benz_views_header simplified_mu_nav"<?php endif; ?>>
+<body class="body benz_views_header<?php if ($SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS): ?> simplified_mu_nav<?php endif; ?>">
 <?php echo jget_store_block("top_body"); ?>
 <?php echo jget_store_block("moto_top_body"); ?>
 <?php

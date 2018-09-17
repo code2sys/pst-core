@@ -101,7 +101,7 @@ $new_assets_url = jsite_url("/qatesting/benz_assets/");
 
 </head>
 
-<body>
+<body class="body master_v_bikefront">
 <?php echo jget_store_block("top_body"); ?>
 
 <?php
