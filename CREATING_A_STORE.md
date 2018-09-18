@@ -72,7 +72,7 @@ chown -R customer1ftp.customer1ftp .
 chmod -R g+w .
 
 Get a dev cert if you need one:
-certbot certonly --webroot --webroot-path=/var/www/stores/faultline/html -d faultline.powersporttechnologies.com
+certbot certonly --webroot --webroot-path=/var/www/stores/vp/html -d vp.powersporttechnologies.com
 
 Over in portal
 
