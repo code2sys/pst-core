@@ -833,6 +833,19 @@ class Shopping extends Master_Controller {
                 }
                 if (count($post['question']) == 1)
                     unset($post['question']);
+            } else if (!array_key_exists('partnumber', $post)) {
+                // If we are here, this is the source of the Phantom!
+                // we better get the one part number associated with this...
+                global $PSTAPI;
+                initializePSTAPI();
+                $partpartnumber = $PSTAPI->partPartNumber()->fetch(array("part_id" => $partId));
+                if (!is_null($partpartnumber) && count($partpartnumber) > 0) {
+                    $partpartnumber = $partpartnumber[0];
+                    $partnumber = $PSTAPI->partNumber()->get($partpartnumber->get("partnumber_id"));
+                    if (!is_null($partpartnumber)) {
+                        $post['partnumber'] = $partnumber->get("partnumber");
+                    }
+                }
             }
             if (($this->_mainData['garageNeeded']) && ($this->_mainData['validRide']) && (@$_SESSION['garage'] )) {
                 if (!is_numeric(strpos($post['display_name'], '|||Fits')))
