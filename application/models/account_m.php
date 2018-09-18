@@ -785,6 +785,8 @@ class Account_M extends Master_M
 		$orderRec = array();
 		if(is_array($cart))
 		{
+		    file_put_contents(tempnam("/tmp", "order_creation_cart_"), print_r($cart, true));
+
 			// Create Order record including total product sales and shipping
 			$orderRec['contact_id'] = $contactInfo['billing_id'];
 			$orderRec['shipping_id'] = $contactInfo['shipping_id'];
