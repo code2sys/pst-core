@@ -540,6 +540,7 @@ class Ajax extends Master_Controller {
                 $distributorArr = array('id' => $post['distributor_id'][$part], 'qty' => $post['distributor_qty'][$part], 'part_number' => $post['distributor_partnumber'][$part], 'distributor_name' => $distributorDtl['name'], 'dis_cost' => $distributorDtl['cost']);
                 $distributorStr = json_encode($distributorArr);
                 $products[$part]['distributor'] = $distributorStr;
+                $products[$part]['distributor_qty'] = $post['distributor_qty'][$part];
             }
         }
         return $products;
