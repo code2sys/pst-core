@@ -859,7 +859,10 @@ var sa_products = { '.$rating.' };
 			    $transaction = $this->genericpayments_m->getTransactionID($result);
 				$this->load->model('admin_m');
                 $transaction = array('order_id' => $_SESSION['newOrderNum'], 'braintree_transaction_id' => $transaction, 'transaction_date' => time(), "processor" => $store_name["merchant_type"]);
-                $transaction['amount'] = number_format($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'],2);
+                // JLB 09-18-18
+                // On 6/6/17, Pardy created a whole lot of pain. He used number_format when he meant to use ROUND.
+                // Thus, all orders above $999.99 went to $1. Don't do that.
+                $transaction['amount'] = round($_SESSION['cart']['transAmount'] + @$_SESSION['cart']['tax']['finalPrice'] +  $_SESSION['cart']['shipping']['finalPrice'],2);
                 $this->admin_m->addOrderTransaction($transaction);
                                 
 				$this->completeOrder(@$user_id);
