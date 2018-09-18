@@ -1,6 +1,45 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
+
+    // JLB 09-18-18
+    public function fixOrders() {
+        $query = $this->db->query("select `order`.id, `order_product`.part_id from `order` join order_product on `order`.id = order_product.order_id join order_transaction on `order`.id = order_transaction.order_id where order_product.product_sku = '';");
+
+        global $PSTAPI;
+        initializePSTAPI();
+
+        foreach ($query->result_array() as $row) {
+            $order_id = $row["id"];
+            $part_id = $row["part_id"];
+            print "Fixing order $order_id part $part_id \n";
+            $partpartnumber = $PSTAPI->partPartNumber()->fetch(array("part_id" => $part_id));
+            if (count($partpartnumber) == 1) {
+                $partnumber_id = $partpartnumber[0]->get("partnumber_id");
+                $partnumber = $PSTAPI->partnumber()->get($partnumber_id);
+                $mx_partnumber = $partnumber->get("partnumber");
+
+                // Step #1: Update the order product
+                $this->db->query("Update order_product set product_sku = ? where order_id = ? and part_id = ?", array(
+                    $mx_partnumber, $order_id, $part_id
+                ));
+
+                // Step #2: We have to get the part name
+                $part = $PSTAPI->part()->get($part_id);
+
+                $this->db->query("Insert into order_product_details (order_id, partnumber_id, name, answer, part_id, partnumber, question, sale, stock_code) values (?, ?, ?, '', ?, ?, '', ?, 'Normal')", array(
+                    $order_id, $partnumber->id(), $part->get("name"), $part_id, $mx_partnumber, $partnumber->get("price")
+                ));
+
+                print "Fixed order $order_id part $part_id \n";
+
+            } else {
+                print "Wrong number of partnumbers: " . count($partpartnumber) . "\n";
+            }
+        }
+
+    }
+
     // JLB 09-04-18
     // Accelerate all of these so that we can do the query on them...
     public function denormalizeUnits() {
