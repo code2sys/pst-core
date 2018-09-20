@@ -45,7 +45,9 @@
 						</tr>
 					</table>
 					<!-- END CONTENT -->
+                    <?php if (isset($emailShadowImg) && $emailShadowImg != ""): ?>
 					<img src="<?php echo @$emailShadowImg; ?>" border="0" width="630" />
+                    <?php endif; ?>
 				</td>
 			</tr>
 			<!-- END CONTENT CELL////////////////////////////////////////////////////////////-->
