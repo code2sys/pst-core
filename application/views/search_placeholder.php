@@ -28,4 +28,8 @@ if (array_key_exists("sm_show_upper_link", $SMSettings) && $SMSettings["sm_show_
     mustache_tmpl_set($search_placeholder_template, "search_holder", false);
 }
 
+if (array_key_exists("fltr", $_REQUEST)) {
+    mustache_tmpl_set($search_placeholder_template, "fltr", $_REQUEST["fltr"]);
+}
+
 echo mustache_tmpl_parse($search_placeholder_template);
