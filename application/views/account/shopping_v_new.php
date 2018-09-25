@@ -566,7 +566,27 @@ $qty_input = form_input(array('name' => 'qty',
         $low_stock.hide();
     }
 
+    // JLB 09-25-18
+    // Basically, we are going to have to keep a list of what part numbers are out of stock, and, if those are still alive, we have to reject them.
+    var stillOutOfStock = {};
+    function tailOutOfStock() {
+        $(".question").each(function ()
+        {
+
+            if (stillOutOfStock[$(this).val()])
+            {
+                $('#in_stock').hide();
+                $('#low_stock').hide();
+                $('#out_of_stock').show();
+            }
+        });
+    }
+
+    // JLB 09-25-18
+    // Why do they keep beign SO SLOPPY in naming? That's not a part. That's a part variation.
     function figureStockStatus(partObj) {
+
+
         var $in_stock = $('#in_stock');
         var $out_stock = $('#out_of_stock');
         var $low_stock = $('#low_stock');
@@ -623,6 +643,8 @@ $qty_input = form_input(array('name' => 'qty',
                 $("#submit_button").attr("onclick", "outOfStockWarning()");
             }
         }
+
+        return partObj.quantity_available > 0;
     }
 
     function getStock(partId)
@@ -655,9 +677,10 @@ $qty_input = form_input(array('name' => 'qty',
         {
             if ($(this).val() != 0)
             {
+                var $partnumber = $(this).val();
                 $.post(base_url + 'ajax/getPriceByPartNumber/',
                         {
-                            'partnumber': $(this).val(),
+                            'partnumber': $partnumber,
                             'ajax': true
                         },
                         function (partRec)
@@ -667,7 +690,8 @@ $qty_input = form_input(array('name' => 'qty',
                             carried_price = carried_price + totalprice;
                             $('#price').html('$' + parseFloat(carried_price).toFixed(2));
 
-                            figureStockStatus(partObj);
+                            stillOutOfStock[$partnumber] = !figureStockStatus(partObj);
+                            tailOutOfStock();
                         });
             }
         });
