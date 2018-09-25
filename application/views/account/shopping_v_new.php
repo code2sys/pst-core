@@ -618,8 +618,10 @@ $qty_input = form_input(array('name' => 'qty',
             }
         } else
         {
-            $out_stock.show();
-            $("#submit_button").attr("onclick", "outOfStockWarning()");
+            if (partObj.quantity_available <= 0) {
+                $out_stock.show();
+                $("#submit_button").attr("onclick", "outOfStockWarning()");
+            }
         }
     }
 
