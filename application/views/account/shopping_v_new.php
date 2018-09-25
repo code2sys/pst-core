@@ -587,6 +587,7 @@ $qty_input = form_input(array('name' => 'qty',
         }
 
         if (!proceed) {
+            console.log("Dying on proceed");
             return; // nothing to do here. not all questions are filled in...
         }
 
