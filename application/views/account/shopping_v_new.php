@@ -586,17 +586,17 @@ $qty_input = form_input(array('name' => 'qty',
             });
         }
 
-        if (!proceed) {
-            console.log(["partObj", partObj])
-            console.log("Dying on proceed");
-            return; // nothing to do here. not all questions are filled in...
-        }
+        // if (!proceed) {
+        //     console.log(["partObj", partObj])
+        //     console.log("Dying on proceed");
+        //     return; // nothing to do here. not all questions are filled in...
+        // }
 
 
 
         $("#submit_button").attr("onclick", "submitCart()");
         console.log(partObj.quantity_available);
-        if (partObj.quantity_available > 0)
+        if (proceed && partObj.quantity_available > 0)
         {
             $in_stock.show();
             $low_stock.hide();
