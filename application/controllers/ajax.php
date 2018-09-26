@@ -152,16 +152,18 @@ class Ajax extends Master_Controller {
     public function getStockByPartId() {
         if ($this->validPartId() === TRUE) {
             $partNumberRec = $this->account_m->getStockByPartId($this->input->post('partId'));
-            if ($partNumberRec['quantity_available'] > 0) {
-                echo json_encode($partNumberRec);
-            } else {
+            // JLB 09-26-18
+            // I do not know why it was like this.
+//            if ($partNumberRec['quantity_available'] > 0) {
+//                echo json_encode($partNumberRec);
+//            } else {
                 $partDealerNumberRec = $this->account_m->getDealerStockByPartId($this->input->post('partId'));
                 if (!empty($partDealerNumberRec) || $partDealerNumberRec['quantity_available'] > 0) {
                     echo json_encode($partDealerNumberRec);
                 } else {
                     echo json_encode($partNumberRec);
                 }
-            }
+//            }
         }
     }
 
