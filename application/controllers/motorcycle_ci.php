@@ -89,7 +89,7 @@ class Motorcycle_CI extends Welcome {
 
     public function benzProductShow($show_number, $pre = 0) {
         if (!in_array($show_number, array(5, 10, 25, 50))) {
-            $show_number = 5;
+            $show_number = ITEMS_ON_PAGE;
         }
         $_SESSION["bikeControlShow"] = $show_number;
         header("Location: /Motorcycle_List" . $this->preSwitch($pre));
@@ -188,7 +188,7 @@ class Motorcycle_CI extends Welcome {
             $_SESSION["bikeControlSort"] = 0;
         }
         if (!array_key_exists("bikeControlShow", $_SESSION)) {
-            $_SESSION["bikeControlShow"] = 5;
+            $_SESSION["bikeControlShow"] = ITEMS_ON_PAGE;
         }
 
         // JLB 11-27-17
@@ -308,7 +308,7 @@ class Motorcycle_CI extends Welcome {
             $_SESSION["bikeControlSort"] = 0;
         }
         if (!array_key_exists("bikeControlShow", $_SESSION)) {
-            $_SESSION["bikeControlShow"] = 5;
+            $_SESSION["bikeControlShow"] = ITEMS_ON_PAGE;
         }
 
         $this->load->model('motorcycle_m');
