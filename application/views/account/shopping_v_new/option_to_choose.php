@@ -158,7 +158,7 @@ $qty_input = form_input(array('name' => 'qty',
                     },
                     function (partRec)
                     {
-                        $("#question_quantity_description" + partQuestionId).show(); 
+                        $("#question_quantity_description" + partQuestionId).show();
                         var partObj = jQuery.parseJSON(partRec);
                         totalprice = parseFloat(partObj.sale);
                         carried_price = carried_price + totalprice;

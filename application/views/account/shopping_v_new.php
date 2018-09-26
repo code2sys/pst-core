@@ -245,7 +245,10 @@ $qty_input = form_input(array('name' => 'qty',
                 <?php
 
                 if (isset($questions) && is_array($questions) && count($questions) > 0) {
-                    echo $CI->load->view("account/shopping_v_new/option_to_choose", array(), true);
+                    echo $CI->load->view("account/shopping_v_new/option_to_choose", array(
+                        "original_price" => $original_price,
+                        "questions" => $questions
+                    ), true);
                 } else {
                     echo $CI->load->view("account/shopping_v_new/no_option_to_choose", array(
 
