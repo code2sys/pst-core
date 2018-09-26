@@ -412,3 +412,8 @@ if (!defined('RECAPTCHA_KEY')) {
 if (!defined('RECAPTCHA_SECRET')) {
     define('RECAPTCHA_SECRET', '6LdtHWAUAAAAADLNhDoHW2OVCedTWQZ38aqcu-nu');
 }
+
+// default number of items shown on the filter page 
+if (!defined('ITEMS_ON_PAGE')) {
+    define('ITEMS_ON_PAGE', 5);
+}
