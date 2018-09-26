@@ -92,6 +92,14 @@
 
             <?php endif; ?>
 
+            <?php
+
+            if (!defined('HIDE_EBAY_FEED')) {
+                define('HIDE_EBAY_FEED', false);
+            }
+
+            if (!HIDE_EBAY_FEED):
+            ?>
 
               <table width="100%" cellpadding="6">
                     <tr>
@@ -225,6 +233,8 @@
                 <button class="addmore" name="addmore">Add More Rows</button>
                 <button type="submit" name="save_ebay">Save</button>
             </form>
+
+            <?php endif; ?>
 
         </div>
     </div>
