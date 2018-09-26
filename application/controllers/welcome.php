@@ -127,6 +127,7 @@ class Welcome extends Master_Controller {
 
         if ($password == $clear_password) {
             $this->account_m->updateLogin($userRecord['id']);
+            $_SESSION["userRecord"] = $_SESSION["provisional_userRecord"];
             unset($_SESSION['contactInfo']);
             $this->load->model('parts_m');
             $newCart = $this->parts_m->getCart();
@@ -135,8 +136,6 @@ class Welcome extends Master_Controller {
                     $_SESSION['cart'][$key] = $cart;
                 }
             }
-
-            $_SESSION["userRecord"] = $_SESSION["provisional_userRecord"];
             return TRUE;
         } else {
             $this->form_validation->set_message('_processLogin', "You have provided an invalid Password.");
