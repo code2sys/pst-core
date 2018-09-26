@@ -545,6 +545,14 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                             })();
                         </script>
 
+                        <?php
+
+                        if (!defined('HIDE_EBAY_FEED')) {
+                            define('HIDE_EBAY_FEED', false);
+                        }
+
+                        if (!HIDE_EBAY_FEED):
+                        ?>
 						<tr>
 							<td colspan="2">
 								<table width="100%" style="background-color:white;">
@@ -597,6 +605,7 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 								</table>
 							</td>
 						</tr>
+                        <?php endif; ?>
 						
 						<tr>
 							<td colspan="2">
