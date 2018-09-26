@@ -1,3 +1,11 @@
+<?php
+$qty_input = form_input(array('name' => 'qty',
+    'value' => 1,
+    'maxlength' => 250,
+    'class' => 'text mini qtyInput',
+    'placeholder' => '0',
+    'id' => 'qty'));
+?>
 <div class="questions_and_quantities_block">
     <?php
 
@@ -202,7 +210,7 @@
         }
 
         cleanStockState();
-        
+
     }
 
 
