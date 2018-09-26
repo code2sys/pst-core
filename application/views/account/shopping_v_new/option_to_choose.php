@@ -193,7 +193,7 @@ $qty_input = form_input(array('name' => 'qty',
             if (partObj.quantity_available < 6)
             {
                 $low_stock.show();
-                $('#stock_qty' + partQuestionId)).html(partObj.quantity_available);
+                $('#stock_qty' + partQuestionId).html(partObj.quantity_available);
             }
 
             if (partObj.dealer_quantity_available && parseInt(partObj.dealer_quantity_available, 10) > 0) {
