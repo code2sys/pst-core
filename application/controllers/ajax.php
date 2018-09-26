@@ -159,6 +159,7 @@ class Ajax extends Master_Controller {
 //            } else {
                 $partDealerNumberRec = $this->account_m->getDealerStockByPartId($this->input->post('partId'));
                 if (!empty($partDealerNumberRec) || $partDealerNumberRec['quantity_available'] > 0) {
+                    $partDealerNumberRec["dealer_quantity_available"] = $partDealerNumberRec["quantity_available"]; // this controls the switch in the no_option_to_choose view.
                     echo json_encode($partDealerNumberRec);
                 } else {
                     echo json_encode($partNumberRec);
