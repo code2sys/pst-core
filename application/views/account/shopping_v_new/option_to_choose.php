@@ -1,9 +1,7 @@
 <div class="questions_and_quantities_block">
     <?php
-    $is_qty_displayed = 0;
 
-    // JLB 08-31-18
-    // This was a shitpile before I got here. It's still weird, but it's not as awful as it was!
+
     if (isset($questions) && is_array($questions) && count($questions) > 0) {
         // Reassemble this into a structure that maps partquestion_id => an array of the question and answers, then display those answers
         $requestioned = array();
@@ -36,10 +34,27 @@
                 </div>
                 <div class="answerString">
                     <?php
-                    echo form_dropdown('question[]', $quest['answers'], @$_SESSION['cart'][$product['part_id']][$quest['partquestion_id']], 'style="", class="question questionSelector ' . $currentQuestion . '", onchange="updatePrice(' . $currentQuestion . ');"'); ?>
+                    echo form_dropdown('question[]', $quest['answers'], @$_SESSION['cart'][$product['part_id']][$quest['partquestion_id']], 'style="" class="question questionSelector ' . $currentQuestion . '" onchange="updatePrice(' . $currentQuestion . ');" data-partquestion-id="' . $quest['partquestion_id'] . '"'); ?>
                 </div>
                 <div style="clear: both"></div>
             </div>
+            <div class="question_quantity_description" style="display: none" id="question_quantity_description<?php echo $quest['partquestion_id']; ?>">
+                <div class="stock hide out_of_stock" id="out_of_stock<?php echo $quest['partquestion_id']; ?>">
+                    <span class="outOfStockStatus">OUT OF STOCK - PLEASE CALL TO ORDER</span>
+                </div>
+                <div class="stock hide in_stock" id="in_stock<?php echo $quest['partquestion_id']; ?>">
+                    <span class="stockStatus">In Stock</span>
+                    <span class="online_only hide" style="display: inline-block" id="online_only<?php echo $quest['partquestion_id']; ?>">Online Only</span><span class="instock hide"  style="display: inline-block" id="instock<?php echo $quest['partquestion_id']; ?>">Available For Store Pickup</span>
+                    <div class="clear"></div>
+                    <div class="hide" id="low_stock" style="display:inline;">
+                        ONLY
+                        <div id="stock_qty" style="display:inline;">1</div>
+                        REMAINING
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+
             <?php
         }
 
@@ -53,63 +68,79 @@
             <?php echo $qty_input; ?>
         </div>
 
-        <div class="quantity_description">
-            <div class="stock hide out_of_stock" id="out_of_stock">
-                <span class="outOfStockStatus">OUT OF STOCK - PLEASE CALL TO ORDER</span>
-            </div>
-            <div class="stock hide in_stock" id="in_stock">
-                <span class="stockStatus">In Stock</span>
-                <?php echo $online_in_stock_string; ?>
-                <div class="clear"></div>
-                <div class="hide" id="low_stock" style="display:inline;">
-                    ONLY
-                    <div id="stock_qty" style="display:inline;">1</div>
-                    REMAINING
-                </div>
-                <div class="clear"></div>
-            </div>
-        </div>
+
     </div>
 
 </div>
 <script type="application/javascript">
-    function isOutOfStock() {
+    // The idea of this is to show all the little warnings, and, if something is not selected, show the big warning...but only if there's not already an error on the page.
+    function isOutOfStock(hide_error) {
         var proceed;
         if ($(".question")[0])
         {
             $(".question").each(function ()
             {
+                var partQuestionId = $(this).attr("data-partquestion-id");
 
-                if (!$('#out_of_stock').is(":hidden"))
+                if (!$('#out_of_stock' + partQuestionId).is(":hidden"))
                 {
                     proceed = 'error';
-                    $('.error').show();
-                    $('#error_message').text('One of the items you selected is OUT OF STOCK - PLEASE CALL TO ORDER.');
-                    return false;
+                    if (!hide_error) {
+                        $('.error').show();
+                        $('#error_message').text('One of the items you selected is OUT OF STOCK - PLEASE CALL TO ORDER.');
+                    }
                 }
                 // Make sure all necessary questions are answered before processing
+            });
+        }
+        return proceed == 'error' || isIncomplete(hide_error);
+    }
+
+    // Before, for some reason, it did this at the same time...which seemed a little silly, since the one error would clobber the other.
+    function isIncomplete() {
+        var proceed;
+        if ($(".question")[0])
+        {
+            $(".question").each(function ()
+            {
+                var partQuestionId = $(this).attr("data-partquestion-id");
 
                 if ($(this).val() == 0)
                 {
                     proceed = 'error';
-                    $('.error').show();
-                    $('#error_message').text('Please select a dropdown option for this part.');
-                    return false;
+                    if (!hide_error) {
+                        $('.error').show();
+                        $('#error_message').text('Please select a dropdown option for this part.');
+                    }
                 }
             });
         }
+        return proceed == 'error';
     }
 
+    //
+    function cleanStockState() {
+        if (isOutOfStock(true)) {
+            $("#submit_button").attr("onclick", "outOfStockWarning()");
+        } else {
+            $("#submit_button").attr("onclick", "submitCart()");
+
+        }
+    }
+
+    // JLB 09-26-18
+    // This suggests it's going to make several trips home, because we should be saving some state, somewhere.
     function updatePrice(questionId)
     {
         $('#price').html("<?php echo $original_price; ?>");
-        figureStockStatusGroundState();
 
         var carried_price = 0;
         $(".question").each(function ()
         {
             if ($(this).val() != 0)
             {
+                var partQuestionId = $(this).attr("data-partquestion-id");
+
                 var $partnumber = $(this).val();
                 $.post(base_url + 'ajax/getPriceByPartNumber/',
                     {
@@ -122,48 +153,29 @@
                         totalprice = parseFloat(partObj.sale);
                         carried_price = carried_price + totalprice;
                         $('#price').html('$' + parseFloat(carried_price).toFixed(2));
-
-                        stillOutOfStock[$partnumber] = !figureStockStatus(partObj);
-                        tailOutOfStock();
+                        figureStockStatus(partQuestionId, partObj);
                     });
+            } else {
+                $("#question_quantity_description" + partQuestionId).hide(); // just hide it. They've made no selection..
             }
         });
     }
 
     // JLB 09-25-18
     // Why do they keep beign SO SLOPPY in naming? That's not a part. That's a part variation.
-    function figureStockStatus(partObj) {
+    function figureStockStatusForPart(partQuestionId, partObj) {
 
 
-        var $in_stock = $('#in_stock');
-        var $out_stock = $('#out_of_stock');
-        var $low_stock = $('#low_stock');
-        figureStockStatusGroundState();
+        var $in_stock = $('#in_stock' + partQuestionId);
+        var $out_stock = $('#out_of_stock' + partQuestionId);
+        var $low_stock = $('#low_stock' + partQuestionId );
+        $(".error").hide();
+        $('#error_message').text('');
+        $in_stock.hide();
+        $out_stock.hide();
+        $low_stock.hide();
 
 
-        var proceed = true;
-        if ($(".question")[0])
-        {
-            $(".question").each(function ()
-            {
-
-                if ($(this).val() == 0)
-                {
-                    proceed = false;
-                }
-            });
-        }
-
-        // if (!proceed) {
-        //     console.log(["partObj", partObj])
-        //     console.log("Dying on proceed");
-        //     return; // nothing to do here. not all questions are filled in...
-        // }
-
-
-
-        $("#submit_button").attr("onclick", "submitCart()");
-        console.log(partObj.quantity_available);
         if (proceed && partObj.quantity_available > 0)
         {
             $in_stock.show();
@@ -175,12 +187,10 @@
             }
 
             if (partObj.dealer_quantity_available && parseInt(partObj.dealer_quantity_available, 10) > 0) {
-                console.log("B Yes ");
                 $("#in_stock .instock").show();
                 $("#in_stock .online_only").hide();
 
             } else {
-                console.log("B No  ");
                 $("#in_stock .online_only").show();
                 $("#in_stock .instock").hide();
             }
@@ -188,27 +198,12 @@
         {
             if (partObj.quantity_available <= 0) {
                 $out_stock.show();
-                $("#submit_button").attr("onclick", "outOfStockWarning()");
             }
         }
 
-        return partObj.quantity_available > 0;
+        cleanStockState();
+        
     }
 
-    // JLB 09-25-18
-    // Basically, we are going to have to keep a list of what part numbers are out of stock, and, if those are still alive, we have to reject them.
-    var stillOutOfStock = {};
-    function tailOutOfStock() {
-        $(".question").each(function ()
-        {
-
-            if (stillOutOfStock[$(this).val()])
-            {
-                $('#in_stock').hide();
-                $('#low_stock').hide();
-                $('#out_of_stock').show();
-            }
-        });
-    }
 
 </script>
