@@ -197,13 +197,13 @@ $qty_input = form_input(array('name' => 'qty',
             }
 
             if (partObj.dealer_quantity_available && parseInt(partObj.dealer_quantity_available, 10) > 0) {
-                $("#in_stock" + partQuestionId) + " .instock").show();
+                $("#in_stock" + partQuestionId + " .instock").show();
 
-                $("#in_stock" + partQuestionId) + " .online_only").hide();
+                $("#in_stock" + partQuestionId + " .online_only").hide();
 
             } else {
-                $("#in_stock" + partQuestionId) + " .online_only").show();
-                $("#in_stock" + partQuestionId) + " .instock").hide();
+                $("#in_stock" + partQuestionId + " .online_only").show();
+                $("#in_stock" + partQuestionId + " .instock").hide();
             }
         } else
         {
