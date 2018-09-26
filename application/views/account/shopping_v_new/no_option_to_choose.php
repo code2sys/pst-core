@@ -63,7 +63,7 @@ $qty_input = form_input(array('name' => 'qty',
 
 
         $("#submit_button").attr("onclick", "submitCart()");
-        console.log(partObj.quantity_available);
+        console.log(["partObj", partObj]);
         if (partObj.quantity_available > 0)
         {
             $in_stock.show();
