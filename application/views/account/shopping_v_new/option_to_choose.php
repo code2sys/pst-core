@@ -54,9 +54,9 @@ $qty_input = form_input(array('name' => 'qty',
                     <span class="stockStatus">In Stock</span>
                     <span class="online_only hide" style="display: inline-block" id="online_only<?php echo $quest['partquestion_id']; ?>">Online Only</span><span class="instock hide"  style="display: inline-block" id="instock<?php echo $quest['partquestion_id']; ?>">Available For Store Pickup</span>
                     <div class="clear"></div>
-                    <div class="hide" id="low_stock" style="display:inline;">
+                    <div class="hide" id="low_stock<?php echo $quest['partquestion_id']; ?>" style="display:inline;">
                         ONLY
-                        <div id="stock_qty" style="display:inline;">1</div>
+                        <div id="stock_qty<?php echo $quest['partquestion_id']; ?>" style="display:inline;">1</div>
                         REMAINING
                     </div>
                     <div class="clear"></div>
@@ -186,29 +186,28 @@ $qty_input = form_input(array('name' => 'qty',
         $low_stock.hide();
 
 
-        if (proceed && partObj.quantity_available > 0)
+        if (partObj.quantity_available > 0)
         {
             $in_stock.show();
             $low_stock.hide();
             if (partObj.quantity_available < 6)
             {
                 $low_stock.show();
-                $('#stock_qty').html(partObj.quantity_available);
+                $('#stock_qty' + partQuestionId)).html(partObj.quantity_available);
             }
 
             if (partObj.dealer_quantity_available && parseInt(partObj.dealer_quantity_available, 10) > 0) {
-                $("#in_stock .instock").show();
-                $("#in_stock .online_only").hide();
+                $("#in_stock" + partQuestionId) + " .instock").show();
+
+                $("#in_stock" + partQuestionId) + " .online_only").hide();
 
             } else {
-                $("#in_stock .online_only").show();
-                $("#in_stock .instock").hide();
+                $("#in_stock" + partQuestionId) + " .online_only").show();
+                $("#in_stock" + partQuestionId) + " .instock").hide();
             }
         } else
         {
-            if (partObj.quantity_available <= 0) {
-                $out_stock.show();
-            }
+            $out_stock.show();
         }
 
         cleanStockState();
