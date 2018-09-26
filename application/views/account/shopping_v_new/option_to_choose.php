@@ -163,7 +163,7 @@ $qty_input = form_input(array('name' => 'qty',
                         totalprice = parseFloat(partObj.sale);
                         carried_price = carried_price + totalprice;
                         $('#price').html('$' + parseFloat(carried_price).toFixed(2));
-                        figureStockStatus(partQuestionId, partObj);
+                        figureStockStatusForPart(partQuestionId, partObj);
                     });
             } else {
                 $("#question_quantity_description" + partQuestionId).hide(); // just hide it. They've made no selection..
