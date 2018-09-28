@@ -51,7 +51,10 @@ class Coupons_M extends Master_M
 	public function getCouponByCodeNew($code, $brand_id, $closeout)
 	{
 		$record = FALSE;
-		$where = array('couponCode' => $code, 'startDate <' => time(), 'endDate >' => time(), 'active' => 1, 'brand_id' => $brand_id, 'closeout' => $closeout);
+		$where = array('couponCode' => $code, 'startDate <' => time(), 'endDate >' => time(), 'active' => 1, 'closeout' => $closeout);
+		if( $brand_id!=0 ) {
+			$where['brand_id'] = $brand_id;
+		}
 		$record = $this->selectRecord('coupon', $where);
 		if(is_numeric($record['totalUses']) && ($record['totalUses'] <= $record['currentUses']))
 			return FALSE;
@@ -265,11 +268,15 @@ class Coupons_M extends Master_M
 			unset($cart['transAmount']);unset($cart['tax']);unset($cart['shipping']);unset($cart['qty']);
 			foreach($cart as $k=>$cartItem){
 			
-				if( !empty($coupon['brand_id']) && !empty($cartItem['part_id']) ){
+				if( !empty($cartItem['part_id']) ){
 
-					$brand = $this->getBrandByPartId($cartItem['part_id'])->result_array();
 					$closeout = $this->checkCloseoutStockCodeByPartId($cartItem['part_id']);
-					$brand_id = ( isset($brand[0]) && !empty($brand[0]['brand_id'])) ? $brand[0]['brand_id'] : 1;
+					if( !empty($coupon['brand_id']) ){
+						$brand = $this->getBrandByPartId($cartItem['part_id'])->result_array();
+						$brand_id = ( isset($brand[0]) && !empty($brand[0]['brand_id'])) ? $brand[0]['brand_id'] : 1;
+					}else{
+						$brand_id = 0;
+					}
 					
 					$coupon2 = $this->getCouponByCodeNew($post['qty'], $brand_id, $closeout);
 
@@ -277,8 +284,10 @@ class Coupons_M extends Master_M
 						if( empty($coupon['value']) ){
 							$itemsForPercentAge[$k] = $k;
 						}
-						$brand_to_do['brand_id'] = $brand_id;
-						$brand_to_do['closeout'] = $closeout;
+						if( !empty($coupon['brand_id']) ){
+							$brand_to_do['brand_id'] = $brand_id;
+							$brand_to_do['closeout'] = $closeout;
+						}
 					}else{
 						unset($cart[$k]);
 					}
@@ -338,7 +347,7 @@ class Coupons_M extends Master_M
 		return TRUE;
 	}
 	
-        public function addCouponToOrder( $post, $order ) {
+	public function addCouponToOrder( $post, $order ) {
 		$cart = @$order['products'];
 		$coupon = $this->getCouponByCode($post['couponCode']);
 		$itemsForPercentAge = array();
@@ -349,20 +358,26 @@ class Coupons_M extends Master_M
 			unset($cart['transAmount']);unset($cart['tax']);unset($cart['shipping']);unset($cart['qty']);
 			foreach($cart as $k=>$cartItem){
 			
-				if( !empty($coupon['brand_id']) && !empty($cartItem['part_id']) ){
+				if( !empty($cartItem['part_id']) ){
 
-					$brand = $this->getBrandByPartId($cartItem['part_id'])->result_array();
 					$closeout = $this->checkCloseoutStockCodeByPartId($cartItem['part_id']);
-					$brand_id = ( isset($brand[0]) && !empty($brand[0]['brand_id'])) ? $brand[0]['brand_id'] : 1;
-					
+					if( !empty($coupon['brand_id']) ){
+						$brand = $this->getBrandByPartId($cartItem['part_id'])->result_array();
+						$brand_id = ( isset($brand[0]) && !empty($brand[0]['brand_id'])) ? $brand[0]['brand_id'] : 1;
+					}else{
+						$brand_id = 0;
+					}
+	
 					$coupon2 = $this->getCouponByCodeNew($post['qty'], $brand_id, $closeout);
 
 					if( !empty($coupon2) ){
 						if( empty($coupon['value']) ){
 							$itemsForPercentAge[$k] = $k;
 						}
-						$brand_to_do['brand_id'] = $brand_id;
-						$brand_to_do['closeout'] = $closeout;
+						if( !empty($coupon['brand_id']) ){
+							$brand_to_do['brand_id'] = $brand_id;
+							$brand_to_do['closeout'] = $closeout;
+						}
 					}else{
 						unset($cart[$k]);
 					}
