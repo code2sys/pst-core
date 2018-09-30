@@ -20,6 +20,20 @@ class Admin_Content extends Master_Controller {
         //$this->output->enable_profiler(TRUE);
     }
 
+    public function get_lightspeed_unit_csv() {
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Cache-Control: public");
+        header("Content-Description: File Transfer");
+        header("Content-Type: text/csv");
+        header('Content-Disposition: attachment; filename="Lightspeed_Units_Export_' . date("YmdHis") . '.csv"');
+        header("Content-Transfer-Encoding: binary");
+
+        $this->load->model("Lightspeed_m");
+        $this->Lightspeed_m->get_units_csv();
+    }
+
     private function validateEmailSettingsForm() {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('post', 'POST', 'required|xss_clean');
