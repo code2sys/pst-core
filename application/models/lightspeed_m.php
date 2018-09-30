@@ -668,6 +668,55 @@ class Lightspeed_M extends Master_M {
 
     }
 
+    protected function extractStructureAsCSV($struct) {
+        $output = fopen("php://output", "w");
+        // We have to extract all the headers...
+        $headers  = array();
+        foreach ($struct as $s) {
+            foreach (array_keys($s) as $k) {
+                if (!in_array($k, $headers)) {
+                    $headers[] = $k;
+                }
+            }
+        }
+
+        fputcsv($output, $headers);
+
+        foreach ($struct as $s) {
+            $row = array();
+            foreach ($headers as $h) {
+                if (array_key_exists($h, $s)) {
+                     if (is_array($s[$h])) {
+                         $row[] = implode(",", $s[$h]);
+                     } else {
+                         $row[] = $s[$h];
+                     }
+                } else {
+                    $row[] = "";
+                }
+            }
+            fputcsv($output, $row);
+        }
+
+    }
+
+    public function get_units_csv() {
+
+        $string = "Dealer";
+        $call = $this->call($string);
+        $dealers = json_decode($call);
+
+        foreach($dealers as $dealer) {
+
+            echo "Dealer id: " . $dealer->Cmf . "\n";
+            $string = "Unit/".$dealer->Cmf;
+            $call = $this->call($string);
+            $call = json_decode($call, true);
+            $this->extractStructureAsCSV($call);
+
+        }
+    }
+
     /*
      * The idea of this one is to simply shore up the import process enough to populate the lightspeed table.
      * There has to be a second routine that makes those things right. Thus, you can pull these in all you want -
