@@ -85,6 +85,7 @@
                             <?php if ($lightspeed_major_unit_count > 0): ?>
                                 <td>Lightspeed Major Unit Count: <?php echo number_format($lightspeed_major_unit_count, 0); ?></td>
                             <?php endif; ?>
+                            <td><a href="<?php echo site_url('admin_content/get_lightspeed_unit_csv'); ?>">Request Major Unit CSV</a></a></td>
                         </tr>
                     <?php endif; ?>
                 </table>
