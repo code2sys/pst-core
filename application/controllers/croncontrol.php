@@ -627,6 +627,10 @@ class CronControl extends Master_Controller {
         $this->load->model("Lightspeed_m");
         $this->Lightspeed_m->get_parts_xml();
     }
+    public function getLightspeedUnitsCSV() {
+        $this->load->model("Lightspeed_m");
+        $this->Lightspeed_m->get_units_csv();
+    }
     public function getLightspeedParts() {
         $this->load->model("Lightspeed_m");
         $this->Lightspeed_m->get_parts();
