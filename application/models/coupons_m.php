@@ -51,7 +51,10 @@ class Coupons_M extends Master_M
 	public function getCouponByCodeNew($code, $brand_id, $closeout)
 	{
 		$record = FALSE;
-		$where = array('couponCode' => $code, 'startDate <' => time(), 'endDate >' => time(), 'active' => 1, 'closeout' => $closeout);
+		$where = array('couponCode' => $code, 'startDate <' => time(), 'endDate >' => time(), 'active' => 1);
+		if( $closeout!=0 ) {
+			$where['closeout'] = $closeout;
+		}
 		if( $brand_id!=0 ) {
 			$where['brand_id'] = $brand_id;
 		}
