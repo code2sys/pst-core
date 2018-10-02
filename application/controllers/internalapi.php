@@ -43,6 +43,17 @@ class Internalapi extends CI_Controller {
             $log_id = $PSTAPI->dealerTrackFeedLog()->begin($file["name"]);
 
 
+            $default_type = $PSTAPI->config()->getKeyValue("dealer_track_default_vehicle_type", 0);
+            if ($default_type == 0) {
+                $default_type = $this->Lightspeed_M->fetchMotorcycleType("motorcycle");
+            }
+
+            $default_category = $PSTAPI->config()->getKeyValue("dealer_track_default_category", 0);
+            if ($default_category == 0) {
+                $default_category = $this->Lightspeed_M->fetchMotorcycleCategory("Motorcycle");
+            }
+
+
             // Get the header
             $handle = fopen($file["tmp_name"], "r");
             $header = fgetcsv($handle);
@@ -53,7 +64,7 @@ class Internalapi extends CI_Controller {
                     $data[trim($header[$i])] = $row[$i];
                 }
 
-                $motorcycle_id = $PSTAPI->dealerTrackFeedLog()->processRow($data, $this->Lightspeed_M->fetchMotorcycleType("motorcycle"),$this->Lightspeed_M->fetchMotorcycleCategory("Motorcycle"));
+                $motorcycle_id = $PSTAPI->dealerTrackFeedLog()->processRow($data, $default_type, $default_category);
 
                 // Now, attempt to CSR this puppy.
                 $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
