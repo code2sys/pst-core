@@ -67,6 +67,7 @@ abstract class Motorcycleadmin extends Firstadmin
         global $PSTAPI;
         initializePSTAPI();
         foreach ($this->_dealerTrackConfigs() as $key => $default) {
+            error_log("Setting key: $key");
             $PSTAPI->config()->setKeyValue($key, array_key_exists($key, $_REQUEST) ? $_REQUEST[$key] : $default);
         }
 
