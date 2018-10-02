@@ -33,6 +33,7 @@ class Internalapi extends CI_Controller {
         $file = $_FILES["upload"];
 
         if ($file["size"] > 0) {
+            error_log("A");
             ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 
             global $PSTAPI;
@@ -41,7 +42,9 @@ class Internalapi extends CI_Controller {
             $this->load->model("CRS_m");
 
             // OK, start a new log entry
+            error_log("B");
             $log_id = $PSTAPI->dealerTrackFeedLog()->begin($file["name"]);
+            error_log("C - log ID: $log_id");
 
 
             // Get the header
@@ -49,9 +52,10 @@ class Internalapi extends CI_Controller {
             $header = fgetcsv($handle);
 
             while (FALSE !== ($row = fgetcsv($handle))) {
+                error_log("Considering row: " . $row["VIN"]);
                 $data = array();
                 for ($i = 0; $i < count($header); $i++) {
-                    $data[$header[$i]] = $row[$i];
+                    $data[trim($header[$i])] = $row[$i];
                 }
 
                 $motorcycle_id = $PSTAPI->dealerTrackFeedLog()->processRow($data);
@@ -70,16 +74,10 @@ class Internalapi extends CI_Controller {
                 $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle_id);
             }
 
-            // Now for each row
-
-                // Explode it into an associative map
-
-                // Add it, let the factory freshen as appropriate
-
-                // do the CRS data checkup for this
-
+            error_log("All done");
 
             // Delete the marked motorcycles that have not been refreshed...
+            $PSTAPI->dealerTrackFeedLog()->end($log_id);
             $this->load->model("CRSCron_M");
             $this->CRSCron_M->removeExtraCRSBikes();
 
