@@ -86,6 +86,11 @@ if (!is_null($pageIndex) && $pageIndex < 9)
                              <li><a href="<?php echo base_url('/admin/products_lightspeed_suppliercodes'); ?>"><i class="fa fa-motorcycle"></i>&nbsp;Lightspeed Controls</a></li>
                         <?php } ?>
                     <?php endif; ?>
+                    <?php if (defined('ENABLE_DEALER_TRACK') && ENABLE_DEALER_TRACK): ?>
+                        <?php if(in_array('products', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
+                            <li><a href="<?php echo base_url('/admin/dealer_track_controls'); ?>"><i class="fa fa-motorcycle"></i>&nbsp;Dealer Track Controls</a></li>
+                        <?php } ?>
+                    <?php endif; ?>
 
                     <!--<li><a href="<?php echo base_url('/admin/wishlists'); ?>" ><i class="fa fa-magic"></i>&nbsp;Wishlist</a></li> -->
                     <!--<li><a href="<?php echo base_url('/admin/closeout_rules'); ?>" ><i class="fa fa-cubes"></i>&nbsp;Closeout Schedule</a></li>-->
