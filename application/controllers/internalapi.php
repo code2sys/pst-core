@@ -27,13 +27,10 @@ class Internalapi extends CI_Controller {
 
     public function dealertrack() {
 
-        error_log(print_r($_REQUEST, true));
-        error_log(print_r($_FILES, true));
 
         $file = $_FILES["upload"];
 
         if ($file["size"] > 0) {
-            error_log("A");
             ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 
             global $PSTAPI;
@@ -43,9 +40,7 @@ class Internalapi extends CI_Controller {
             $this->load->model("Lightspeed_M");
 
             // OK, start a new log entry
-            error_log("B");
             $log_id = $PSTAPI->dealerTrackFeedLog()->begin($file["name"]);
-            error_log("C - log ID: $log_id");
 
 
             // Get the header
@@ -57,7 +52,6 @@ class Internalapi extends CI_Controller {
                 for ($i = 0; $i < count($header); $i++) {
                     $data[trim($header[$i])] = $row[$i];
                 }
-                error_log("Considering row: " . $data["VIN"]);
 
                 $motorcycle_id = $PSTAPI->dealerTrackFeedLog()->processRow($data, $this->Lightspeed_M->fetchMotorcycleType("motorcycle"),$this->Lightspeed_M->fetchMotorcycleCategory("Motorcycle"));
 
@@ -74,8 +68,6 @@ class Internalapi extends CI_Controller {
                 // denormalize that sucker.
                 $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle_id);
             }
-
-            error_log("All done");
 
             // Delete the marked motorcycles that have not been refreshed...
             $PSTAPI->dealerTrackFeedLog()->end($log_id);
