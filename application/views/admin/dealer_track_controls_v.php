@@ -83,7 +83,7 @@ $success = $CI->session->flashdata("success");
                                 <select name="dealer_track_default_vehicle_type">
                                     <?php
                                     // sort them...
-                                    usort($motorcycle_types, function($a, $b) {
+                                    usort($motorcycle_categories, function($a, $b) {
                                         return strnatcasecmp($a["name"], $b["name"]);
                                     });
 

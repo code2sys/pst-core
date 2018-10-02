@@ -74,7 +74,7 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->session->set_flashdata("success", "Dealer Track controls updated successfully.");
 
         // redirect..
-        header("Location: /admin/products_lightspeed_suppliercodes");
+        header("Location: /admin/dealer_track_controls");
     }
 
 
