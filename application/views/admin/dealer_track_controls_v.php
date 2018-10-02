@@ -57,7 +57,7 @@ $success = $CI->session->flashdata("success");
                             <td width="30%"><b>Delete If Not In Feed File:</b><br/>If a file is received, should it be treated as a complete export of Dealer Track major unit inventory, or as an incremental update?</td>
                             <td>
                                 <label><input type="radio" name="dealer_track_delete_if_not_in_upload" value="0" <?php if ($dealer_track_delete_if_not_in_upload == 0): ?>checked="checked"<?php endif; ?> /> No, treat the feed file as an incremental update; admin will manually delete major units.</label>
-                                <label><input type="radio" name="dealer_track_delete_if_not_in_upload" value="1" <?php if (dealer_track_delete_if_not_in_upload > 0): ?>checked="checked"<?php endif; ?> /> Yes, delete major units from Dealer Track that are no longer included in the feed file.</label>
+                                <label><input type="radio" name="dealer_track_delete_if_not_in_upload" value="1" <?php if ($dealer_track_delete_if_not_in_upload > 0): ?>checked="checked"<?php endif; ?> /> Yes, delete major units from Dealer Track that are no longer included in the feed file.</label>
                             </td>
                         </tr>
                         <tr>
@@ -80,7 +80,7 @@ $success = $CI->session->flashdata("success");
                         <tr>
                             <td width="30%"><b>Default Vehicle Category:</b>Dealer Track does not include a &quot;category&quot; field; please specify a default.</td>
                             <td>
-                                <select name="dealer_track_default_vehicle_type">
+                                <select name="dealer_track_default_category">
                                     <?php
                                     // sort them...
                                     usort($motorcycle_categories, function($a, $b) {
