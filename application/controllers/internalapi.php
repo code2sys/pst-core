@@ -52,11 +52,11 @@ class Internalapi extends CI_Controller {
             $header = fgetcsv($handle);
 
             while (FALSE !== ($row = fgetcsv($handle))) {
-                error_log("Considering row: " . $row["VIN"]);
                 $data = array();
                 for ($i = 0; $i < count($header); $i++) {
                     $data[trim($header[$i])] = $row[$i];
                 }
+                error_log("Considering row: " . $data["VIN"]);
 
                 $motorcycle_id = $PSTAPI->dealerTrackFeedLog()->processRow($data);
 
