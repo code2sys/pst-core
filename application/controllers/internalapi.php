@@ -27,6 +27,9 @@ class Internalapi extends CI_Controller {
 
     public function dealertrack() {
 
+        error_log(print_r($_REQUEST, true));
+        error_log(print_r($_FILES, true));
+
         $file = $_FILES["upload"];
 
         if ($file["size"] > 0) {

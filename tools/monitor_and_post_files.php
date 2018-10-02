@@ -100,7 +100,7 @@ if ($in_dir = opendir($incoming_directory)) {
              * $_FILES array of the accept script. and the at sign '@' is required before the
              * file name.
              */
-            $file_name_with_full_path = realpath($incoming_directory . "/" . $entry);
+            $file_name_with_full_path = realpath($target_file);
             $post = array('upload'=>'@'.$file_name_with_full_path);
 
             $ch = curl_init();
