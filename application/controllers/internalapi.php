@@ -40,6 +40,7 @@ class Internalapi extends CI_Controller {
             initializePSTAPI();
 
             $this->load->model("CRS_m");
+            $this->load->model("Lightspeed_M");
 
             // OK, start a new log entry
             error_log("B");
@@ -58,7 +59,7 @@ class Internalapi extends CI_Controller {
                 }
                 error_log("Considering row: " . $data["VIN"]);
 
-                $motorcycle_id = $PSTAPI->dealerTrackFeedLog()->processRow($data);
+                $motorcycle_id = $PSTAPI->dealerTrackFeedLog()->processRow($data, $this->Lightspeed_M->fetchMotorcycleType("motorcycle"),$this->Lightspeed_M->fetchMotorcycleCategory("Motorcycle"));
 
                 // Now, attempt to CSR this puppy.
                 $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
