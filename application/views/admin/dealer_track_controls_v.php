@@ -89,7 +89,7 @@ $success = $CI->session->flashdata("success");
 
                                     foreach ($motorcycle_categories as $m_rec):
                                         ?>
-                                        <option value="<?php echo $m_rec["id"]; ?>" <?php if ($dealer_track_default_vehicle_type == $m_rec["id"]): ?>selected="selected"<?php endif; ?>><?php echo $m_rec["name"]; ?></option>
+                                        <option value="<?php echo $m_rec["id"]; ?>" <?php if ($dealer_track_default_category == $m_rec["id"]): ?>selected="selected"<?php endif; ?>><?php echo $m_rec["name"]; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </td>
