@@ -501,33 +501,40 @@ class Welcome extends Master_Controller {
             $post = $this->input->post();
             $shoppingCart = @$_SESSION['cart'];
             $error = FALSE;
-            if ($plus == 'true')
-                ++$post['qty'];
-            if (!@$post['qty']) {
-                unset($_SESSION['cart'][$post['sku']]);
-                $this->load->model('parts_m');
-                $this->parts_m->updateCart();
+            $this->load->model('coupons_m');
+
+            if ($post['sku'] == 'coupon') {
+                $success = $this->coupons_m->addCoupon($post);
+                if (!$success)
+                    $error = 'Your coupon code is invalid or no longer active.<br />';
+
             } else {
-                if ($post['sku'] == 'coupon') {
-                    $this->load->model('coupons_m');
-                    $success = $this->coupons_m->addCoupon($post);
-                    if (!$success)
-                        $error = 'Your coupon code is invalid or no longer active.<br />';
+
+                if ($plus == 'true')
+                    ++$post['qty'];
+
+                if (!@$post['qty']) {
+                    unset($_SESSION['cart'][$post['sku']]);
+                } else {
+                    if (@$_SESSION['cart'][$post['sku']]) {
+                        $_SESSION['cart'][$post['sku']]['qty'] = $post['qty'];
+                        $_SESSION['cart'][$post['sku']]['finalPrice'] = $post['qty'] * $_SESSION['cart'][$post['sku']]['price'];
+                    } else {
+                        $this->processSKU($post, $plus);
+                    }
                 }
-                elseif (@$_SESSION['cart'][$post['sku']]) {
-                    $_SESSION['cart'][$post['sku']]['qty'] = $post['qty'];
-                    $_SESSION['cart'][$post['sku']]['finalPrice'] = $post['qty'] * $_SESSION['cart'][$post['sku']]['price'];
-                    return TRUE;
-                } else
-                    $this->processSKU($post, $plus);
+                $this->coupons_m->updateCartCoupons();
             }
+
+            $this->load->model('parts_m');
+            $this->parts_m->updateCart();
+
             if (!$error)
                 $returnCode = $this->_mainData['shoppingCart'];
             else {
                 $returnCode = '<div class="sidebar">' . $error . ' Please refresh the page to reload your original shopping cart.</div>';
-                $this->load->model('parts_m');
-                $this->parts_m->updateCart();
             }
+
         } else
             $returnCode = '<div class="sidebar">' . validation_errors() . ' Please refresh the page to reload your original shopping cart.</div>';
 
