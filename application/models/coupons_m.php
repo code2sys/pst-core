@@ -168,6 +168,10 @@ class Coupons_M extends Master_M
 	
 	public function processPercentageValue($coupon, $viewShipping, $total = NULL)
 	{
+		$coupon['wholesale'] = 0;
+		if ($coupon['brand_id']!=0) {
+			return $coupon; //should not be calculated here
+		}
 		if(is_null($total))
 		{
 			$this->load->model('checkout_m');
@@ -196,7 +200,7 @@ class Coupons_M extends Master_M
 	
 	public function processPercentageValueNew($itemsForPercentAge, $coupon, $viewShipping, $total = NULL)
 	{	
-	
+		$coupon['wholesale'] = 0;
 		if(is_null($total))
 		{
 			$this->load->model('checkout_m');
@@ -221,7 +225,7 @@ class Coupons_M extends Master_M
 		}
 		elseif(!@$coupon['wholesale'])
 			$coupon['wholesale'] = 0;
-	
+
 		return $coupon;
 	}
 	
@@ -262,10 +266,14 @@ class Coupons_M extends Master_M
 	public function addCoupon($post)
 	{	
 		$cart = @$_SESSION['cart'];
-		$coupon = $this->getCouponByCode($post['qty']);
+		if ($this->isCoupon($post)) {
+			$coupon = $post;
+		}else {
+			$coupon = $this->getCouponByCode($post['qty']);
+		}
 		$itemsForPercentAge = array();
 		$brand_to_do = array();
-		
+
 		if( !empty($cart) && !empty($coupon)){
 			
 			unset($cart['transAmount']);unset($cart['tax']);unset($cart['shipping']);unset($cart['qty']);
@@ -281,7 +289,7 @@ class Coupons_M extends Master_M
 						$brand_id = 0;
 					}
 					
-					$coupon2 = $this->getCouponByCodeNew($post['qty'], $brand_id, $closeout);
+					$coupon2 = $this->getCouponByCodeNew($coupon["couponCode"], $brand_id, $closeout);
 
 					if( !empty($coupon2) ){
 						if( empty($coupon['value']) ){
@@ -292,7 +300,7 @@ class Coupons_M extends Master_M
 							$brand_to_do['closeout'] = $closeout;
 						}
 					}else{
-						unset($cart[$k]);
+						//unset($cart[$k]);//why?
 					}
 				}
 				
@@ -314,12 +322,12 @@ class Coupons_M extends Master_M
 			
 		}
 		
-		$coupon = $this->getCouponByCode($post['qty']);
+		//$coupon = $this->getCouponByCode($post['qty']);
+		//if( !$coupon || empty($cart) ){
+		//	return FALSE;
+		//}
 
-		if( !$coupon || empty($cart) ){
-			return FALSE;
-		}
-		if(!@$_SESSION['cart'][$post['sku'].'_'.$coupon['couponCode']])
+		if(!@$_SESSION['cart']['coupon_'.$coupon['couponCode']])
 		{  
 			$coupon['qty'] = 1;
 			$coupon['display_name'] = 'Coupon '.$coupon['couponCode'];
@@ -342,10 +350,13 @@ class Coupons_M extends Master_M
 					return FALSE;
 				}
 			}
-			
-			$coupon['price'] = $coupon['wholesale'];
-			$coupon['finalPrice'] = $coupon['wholesale'];
-			$_SESSION['cart']['coupon_'.$coupon['couponCode']] = $coupon;
+			if ($coupon['wholesale']!=0) {
+				$coupon['price'] = $coupon['wholesale'];
+				$coupon['finalPrice'] = $coupon['wholesale'];
+				$_SESSION['cart']['coupon_'.$coupon['couponCode']] = $coupon;
+			} else {
+				return FALSE;
+			}
 		}
 		return TRUE;
 	}
@@ -533,7 +544,29 @@ class Coupons_M extends Master_M
 //            error_log("K");
 //		}
 	}
+
+
+	public function isCoupon($item)
+	{
+		return is_array($item) && array_key_exists("couponCode",$item) && !empty($item["couponCode"]);
+	}
 	
+	public function updateCartCoupons()
+	{
+		$coupons = [];
+
+		foreach ($_SESSION['cart'] as $key=>$item) {
+			if ($this->isCoupon($item)) {
+				$coupons[] = $item;
+				unset($_SESSION['cart'][$key]);
+			}
+		}
+
+		foreach ($coupons as $coupon) {
+			$this->addCoupon($coupon);
+		}
+	}
+
 	public function deleteCoupon($id)
 	{
 		$where = array('id' => $id);

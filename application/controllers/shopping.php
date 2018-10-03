@@ -869,6 +869,8 @@ class Shopping extends Master_Controller {
 
 
                 $_SESSION['cart'][$post['partnumber']] = $post;
+                $this->load->model('coupons_m');
+                $this->coupons_m->updateCartCoupons();
                 if (@$_SESSION['userRecord']['id'])
                     $this->parts_m->updateCart();
                 redirect('shopping/cart');
