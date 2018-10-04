@@ -19,7 +19,8 @@ $cstdata = (array) json_decode($product['data']);
             "stock_status" => @$product["stock_status"]
         ), true);
 
-        $suppress = $id > 0 && $product["crs_trim_id"] > 0;
+        //$suppress = $id > 0 && $product["crs_trim_id"] > 0;
+        $suppress = FALSE;
 
         ?>
 
