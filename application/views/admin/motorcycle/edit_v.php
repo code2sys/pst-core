@@ -199,11 +199,11 @@ $cstdata = (array) json_decode($product['data']);
 								<tr>
 									<td class="min-wdh"><b>Retail Price:</b></td>
 									<td class="inr-td scnd" style="width:120px;">
-										<input type="number" min="1" name="retail_price" value="<?php echo $product['retail_price']==''?$_POST['retail_price']:$product['retail_price']; ?>" class="text small small-hndr frst rt-prc">
+										<input type="number" step=".01" name="retail_price" value="<?php echo $product['retail_price']==''?$_POST['retail_price']:$product['retail_price']; ?>" class="text small small-hndr frst rt-prc">
 									</td>
 									<td style="width:75px;" class="min-wdh"><b>Sale Price:</b></td>
 									<td class="inr-td scnd">
-										<input type="number" name="sale_price" value="<?php echo $product['sale_price']=='' || $product['sale_price']=="0.00"?$_POST['sale_price']:$product['sale_price']; ?>" class="text small small-hndr sl-prc">
+										<input type="number" step=".01" name="sale_price" value="<?php echo $product['sale_price']=='' || $product['sale_price']=="0.00"?$_POST['sale_price']:$product['sale_price']; ?>" class="text small small-hndr sl-prc">
 									</td>
                                     <td class="inr-td scnd">
                                         <input type="checkbox" name="call_on_price" value="1" class="text small small-hndr sl-prc" id="call_on_price" <?php echo $product['call_on_price'] == '1' ? 'checked' : '';?>>
@@ -223,27 +223,27 @@ $cstdata = (array) json_decode($product['data']);
 								<tr>
 									<td class="min-wdh"><b>Total Cost:</b></td>
 									<td class="inr-td scnd" style="width:120px;">
-										<input type="number" min="1" name="total_cost" value="<?php echo $cstdata['total_cost']==''?$_POST['total_cost']:$cstdata['total_cost']; ?>" class="text small small-hndr frst bg sm-ttl ttl-cst" readonly>
+										<input type="number" min="0" name="total_cost" value="<?php echo $cstdata['total_cost']==''?$_POST['total_cost']:$cstdata['total_cost']; ?>" class="text small small-hndr frst bg sm-ttl ttl-cst" readonly>
 									</td>
 									<td style="width:75px;" class="min-wdh"><b>Unit Cost:</b></td>
 									<td class="inr-td scnd auto">
-										<input type="number" min="1" name="unit_cost" value="<?php echo $cstdata['unit_cost']==''?$_POST['unit_cost']:$cstdata['unit_cost']; ?>" class="text small small-hndr sm">
+										<input type="number" step=".01" min="0" name="unit_cost" value="<?php echo $cstdata['unit_cost']==''?$_POST['unit_cost']:$cstdata['unit_cost']; ?>" class="text small small-hndr sm">
 									</td>
 									<td style="width:50px;"><b>Parts:</b></td>
 									<td class="inr-td scnd auto">
-										<input type="number" min="1" name="parts" value="<?php echo $cstdata['parts']==''?$_POST['parts']:$cstdata['parts']; ?>" class="text small small-hndr sm">
+										<input type="number" min="0" name="parts" value="<?php echo $cstdata['parts']==''?$_POST['parts']:$cstdata['parts']; ?>" class="text small small-hndr sm">
 									</td>
 									<td style="width:50px;"><b>Service:</b></td>
 									<td class="inr-td scnd auto">
-										<input type="number" min="1" name="service" value="<?php echo $cstdata['service']==''?$_POST['service']:$cstdata['service']; ?>" class="text small small-hndr sm">
+										<input type="number" min="0" name="service" value="<?php echo $cstdata['service']==''?$_POST['service']:$cstdata['service']; ?>" class="text small small-hndr sm">
 									</td>
 									<td style="width:90px;" class="min-wdh"><b>Auction Fee:</b></td>
 									<td class="inr-td scnd auto">
-										<input type="number" min="1" name="auction_fee" value="<?php echo $cstdata['auction_fee']==''?$_POST['auction_fee']:$cstdata['auction_fee']; ?>" class="text small small-hndr sm">
+										<input type="number" min="0" name="auction_fee" value="<?php echo $cstdata['auction_fee']==''?$_POST['auction_fee']:$cstdata['auction_fee']; ?>" class="text small small-hndr sm">
 									</td>
 									<td style="width:40px;"><b>Misc:</b></td>
 									<td class="inr-td scnd auto">
-										<input type="number" min="1" name="misc" value="<?php echo $cstdata['misc']==''?$_POST['misc']:$cstdata['misc']; ?>" class="text small small-hndr sm">
+										<input type="number" min="0" name="misc" value="<?php echo $cstdata['misc']==''?$_POST['misc']:$cstdata['misc']; ?>" class="text small small-hndr sm">
 									</td>
 								</tr>
 							</table>
@@ -252,13 +252,13 @@ $cstdata = (array) json_decode($product['data']);
                     <tr>
                         <td style="width:50px;"><b>Margin:</b></td>
                         <td>
-                            <input type="number" min="1" name="margin" value="<?php echo $product['margin']==''?$_POST['margin']:$product['margin']; ?>" class="text small small-hndr bg mrgn" readonly>%
+                            <input type="number" min="0" name="margin" value="<?php echo $product['margin']==''?$_POST['margin']:$product['margin']; ?>" class="text small small-hndr bg mrgn" readonly>%
                         </td>
                     </tr>
                     <tr>
                         <td style="width:50px;"><b>Profit:</b></td>
                         <td>
-                            <input type="number" min="1" name="profit" value="<?php echo $product['profit']==''?$_POST['profit']:$product['profit']; ?>" class="text small small-hndr bg prft" readonly>
+                            <input type="number" min="0" name="profit" value="<?php echo $product['profit']==''?$_POST['profit']:$product['profit']; ?>" class="text small small-hndr bg prft" readonly>
                         </td>
                     </tr>
                 </table>
@@ -631,7 +631,7 @@ $cstdata = (array) json_decode($product['data']);
        var error = false;
 
        // do they have a sku?
-        var required_fields = ["vehicle_type", "make", "model", "year", "sku", "retail_price"];
+        var required_fields = ["vehicle_type", "make", "model", "year", "sku"];
 
         // If they are all blank, just refuse to do anything...
         var error_count = 0;
