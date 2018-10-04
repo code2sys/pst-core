@@ -371,7 +371,7 @@ class CronControl extends Master_Controller {
     /*
      * This is to check for CRS migration
      */
-    public function checkForCRSMigration($debug = 0) {
+    public function checkForCRSMigration($force = 0, $debug = 0) {
         if ($debug > 0) {
             error_reporting(E_ALL);
         }
@@ -379,7 +379,7 @@ class CronControl extends Master_Controller {
         // Is there anything pending?
         $query = $this->db->query("select * from crspull_feed_log where status = 0");
         $results = $query->result_array();
-        if (count($results) == 0) {
+        if (count($results) == 0 && $force == 0) {
             return;
         } else {
             $this->db->query("update crspull_feed_log set status = 1, processing_start = now() where status = 0");
