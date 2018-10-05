@@ -17,6 +17,70 @@ require_once(__DIR__ . "/firstadmin.php");
 abstract class Motorcycleadmin extends Firstadmin
 {
 
+    /*
+     * Dealer Track controls are really primitive:
+     * - There is a setting for the default category
+     * - There is a setting for the default vehicle type
+     * - There is a setting whether or not to treat the upload as comprehensive - i.e., delete bikes not listed in the upload
+     * - And there is a setting as to whether to make them active immediately or not.
+     *
+     * That's it.
+     *
+     */
+    public function dealer_track_controls() {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        // We need some settings - e.g., we have to have a lightspeed login set, lightspeed has to be enabled, and then we need a little control for the mode when lightspeed parts come in as active or inactive by default....
+
+        global $PSTAPI;
+        initializePSTAPI();
+        foreach ($this->_dealerTrackConfigs() as $key => $default) {
+            $this->_mainData[$key] = $PSTAPI->config()->getKeyValue($key, $default);
+        }
+
+        // We need to get the list of categories, and we need to get the list of vehicle types...
+        $this->_mainData["motorcycle_types"]  = $PSTAPI->motorcycleType()->fetch(array(), true);
+        $this->_mainData["motorcycle_categories"] = $PSTAPI->motorcycleCategory()->fetch(array(), true);
+
+
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/dealer_track_controls_v', $this->_mainData);
+    }
+
+    protected function _dealerTrackConfigs() {
+        return array(
+            "dealer_track_default_category" => "",
+            "dealer_track_default_vehicle_type" => "",
+            "dealer_track_delete_if_not_in_upload" => 1,
+            "dealer_track_active_immediately" => 0
+        );
+    }
+
+    public function save_dealer_track_controls() {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        // Just fetch those values, ram them into a config setting, set a setting, and redirect.
+        global $PSTAPI;
+        initializePSTAPI();
+        foreach ($this->_dealerTrackConfigs() as $key => $default) {
+            $value = array_key_exists($key, $_REQUEST) ? $_REQUEST[$key] : $default;
+            error_log("Setting key: $key to $value");
+            $PSTAPI->config()->setKeyValue($key, $value);
+        }
+
+        // now, set some sort of success flag...
+        $this->session->set_flashdata("success", "Dealer Track controls updated successfully.");
+
+        // redirect..
+        header("Location: /admin/dealer_track_controls");
+    }
+
+
+
     public function motorcycle_ajax_matchtrim($id, $trim_id) {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
