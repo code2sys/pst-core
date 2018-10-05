@@ -151,6 +151,7 @@ class CRS_M extends Master_M
             $corrected_category = $this->_getMachineTypeMotoType($vin_match["machine_type"],  $vin_match["offroad"]);
             if ($corrected_category > 0) {
                 $this->db->query("Update motorcycle set vehicle_type = ? where id = ? limit 1", array($corrected_category, $motorcycle_id));
+                error_log("Setting motorcycle $motorcycle_id to vehicle_type $corrected_category ");
             }
 
             // OK, we need to fix the category and we need to fix the type, if we've got it.
@@ -161,6 +162,7 @@ class CRS_M extends Master_M
             }
             if ($corrected_category > 0) {
                 $this->db->query("Update motorcycle set category = ? where id = ? limit 1", array($corrected_category, $motorcycle_id));
+                error_log("Setting motorcycle $motorcycle_id to category $corrected_category ");
             }
 
         }
