@@ -468,7 +468,7 @@ class Lightspeed_M extends Master_M {
                         }
                     }
 
-                    foreach (array("description", "vin_number", "mileage", "color", "call_on_price", "destination_charge", "condition", "category", "make", "model", "title", "year") as $k) {
+                    foreach (array("description", "vin_number", "mileage", "color", "call_on_price", "destination_charge", "condition", "category", "make", "model", "title", "year", "vehicle_type") as $k) {
                         $set_k = "customer_set_" . $k;
                         if ($results[0][$set_k] > 0) {
                             $comp_val = $results[0][$k];
