@@ -366,3 +366,21 @@ function clean_complex_sku($motorcycle) {
     }
     return $sku;
 }
+
+function normalize_incoming_make($make) {
+    $normalize_makes = array(
+        "can-am™" => "CAN-AM",
+        "canam" => "CAN-AM",
+        "ski doo" => "Ski-Doo",
+        "skidoo" => "Ski-Doo",
+        "seadoo" => "Sea-Doo",
+        "sea doo" => "Sea-Doo",
+        "artic cat" => "ARCTIC CAT"
+    );
+
+    if (array_key_exists(trim(strtolower($make)), $normalize_makes)) {
+        $make = $normalize_makes[trim(strtolower($make))];
+    }
+
+    return $make;
+}
