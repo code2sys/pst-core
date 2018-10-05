@@ -293,15 +293,14 @@ abstract class Motorcycleadmin extends Firstadmin
                     // What about category?
                     if (!is_null($val)) {
                         if ($k == "category") {
-                            $matching_category = $PSTAPI->motorcyclecategory()->get($motorcycle->get("category"));
-                            if (!is_null($matching_category) && strtolower($matching_category->get("name")) != strtolower($post['category'])) {
+                            if ($this->_checkCategoryChange($motorcycle, $post['category'])) {
                                 $post['customer_set_category'] = 1;
                             }
                         } else if ($k == "vehicle_type") {
-                            $matching_category = $PSTAPI->motorcycletype()->get($motorcycle->get("vehicle_type"));
-                            if (!is_null($matching_category) && strtolower($matching_category->get("name")) != strtolower($post['category'])) {
+                            if ($this->_checkTypeChange($motorcycle, $post['vehicle_type'])) {
                                 $post['customer_set_type'] = 1;
                             }
+
                         } else {
                             if ($motorcycle->get($k) != $val) {
                                 // OK, they change this value...
@@ -354,6 +353,30 @@ abstract class Motorcycleadmin extends Firstadmin
         }
 
 //        curl_request_async();
+    }
+
+    protected function _checkCategoryChange($motorcycle, $new_category) {
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $matching_category = $PSTAPI->motorcyclecategory()->get($motorcycle->get("category"));
+        if (!is_null($matching_category) && strtolower($matching_category->get("name")) != strtolower($new_category)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function _checkTypeChange($motorcycle, $new_category) {
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $matching_category = $PSTAPI->motorcycletype()->get($motorcycle->get("vehicle_type"));
+        if (!is_null($matching_category) && strtolower($matching_category->get("name")) != strtolower($new_category)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function motorcycle_description($id = NULL) {
@@ -1081,6 +1104,19 @@ abstract class Motorcycleadmin extends Firstadmin
             exit(0);
         } else {
             $motorcycle->set($_REQUEST["name"], $_REQUEST["value"]);
+
+            // JLB 10-05-18
+            // You have to record that these changed.
+            if ($_REQUEST["name"] == "category") {
+                if ($this->_checkCategoryChange($motorcycle, $_REQUEST["value"])) {
+                    $motorcycle->set("customer_set_category", 1);
+                }
+            } else if ($_REQUEST["name"] == "vehicle_type") {
+                if ($this->_checkTypeChange($motorcycle, $_REQUEST["value"])) {
+                    $motorcycle->set("customer_set_type", 1);
+                }
+            }
+
             $motorcycle->save();
             $result["success"] = true;
         }
