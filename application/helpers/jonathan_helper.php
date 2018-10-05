@@ -371,6 +371,7 @@ function normalize_incoming_make($make) {
     $normalize_makes = array(
         "can-am™" => "CAN-AM",
         "canam" => "CAN-AM",
+        "can am" => "CAN-AM",
         "ski doo" => "Ski-Doo",
         "skidoo" => "Ski-Doo",
         "seadoo" => "Sea-Doo",
