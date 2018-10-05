@@ -127,6 +127,12 @@
 </div>
 <!-- END MAIN CONTENT ==================================================================================-->
 
+<!-- 
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/css/jqueryui-editable.css" rel="stylesheet"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/js/jqueryui-editable.min.js"></script>
+-->
+<link href="<?=$assets?>/js/jqueryui-editable/css/jqueryui-editable.css" rel="stylesheet"/>
+<script src="<?=$assets?>/js/jqueryui-editable/js/jqueryui-editable.min.js"></script>
 
 <script type="application/javascript">
     $(window).load(function() {
@@ -142,6 +148,9 @@
             "paging" : true,
             "info" : true,
             "stateSave" : true,
+            "fnDrawCallback": function() {
+                $('.editable').editable();
+            },
             "columns" : [
                 null,
                 null,
@@ -280,6 +289,12 @@
                 }
             });
 
-        })
+        });
+
+        $.fn.editable.defaults.mode = 'inline';
+        $.fn.editableform.buttons =
+        '<a class="editable-submit" onclick="'+"$('.editableform')"+'.submit();"><i class="fa fa-check"></i></a>'+
+        '<a class="editable-cancel" ><i class="fa fa-times"></i></a>';
+
     });
 </script>
