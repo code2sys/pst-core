@@ -143,18 +143,53 @@ class CRS_M extends Master_M
                 $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source, crs_thumbnail) values (?, ?, now(), ?, 1, 1, ?, 'PST', 1) on duplicate key update source = 'PST'", array($motorcycle_id, $vin_match["trim_photo"], 'Trim Photo: ' . $vin_match['display_name'], $vin_match["version_number"]));
             }
 
-            // refresh it...
-            $CI->CRSCron_M->refreshCRSData($motorcycle_id);
+            $this->fixCatsByTrim($motorcycle_id, $vin_match);
+        }
+
+    }
+
+    public function fixCatsByTrim($motorcycle_id, $vin_match = null) {
+        $CI =& get_instance();
+
+        global $PSTAPI;
+        initializePSTAPI();
+        $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
+
+        if (is_null($motorcycle)) {
+            return;
+        }
+
+        if (is_null($vin_match)) {
+            // Is there a trim?
+            if ($motorcycle->get("crs_trim_id") > 0) {
+                // We have to get that trim...
+                $trim = $this->CRS_m->getTrim($motorcycle->get("crs_trim_id"));
+                // OK, we need to insert it...
+                if (count($trim) > 0) {
+                    $vin_match = $trim[0];
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
 
 
+        // refresh it...
+        $CI->CRSCron_M->refreshCRSData($motorcycle_id);
+
+        if ($motorcycle->get("customer_set_type") == 0) {
             // Now, we attempt to fix the machine type...
-            $corrected_category = $this->_getMachineTypeMotoType($vin_match["machine_type"],  $vin_match["offroad"]);
+            $corrected_category = $this->_getMachineTypeMotoType($vin_match["machine_type"], $vin_match["offroad"]);
             if ($corrected_category > 0) {
                 $this->db->query("Update motorcycle set vehicle_type = ? where id = ? limit 1", array($corrected_category, $motorcycle_id));
                 error_log("Setting motorcycle $motorcycle_id to vehicle_type $corrected_category ");
             }
+        }
 
-            // OK, we need to fix the category and we need to fix the type, if we've got it.
+        // OK, we need to fix the category and we need to fix the type, if we've got it.
+        if ($motorcycle->get("customer_set_category") == 0) {
             $corrected_category = 0;
             $query2 = $this->db->query("Select value from motorcyclespec where motorcycle_id = ? and crs_attribute_id = 10011", array($motorcycle_id));
             foreach ($query2->result_array() as $disRec) {
@@ -164,11 +199,8 @@ class CRS_M extends Master_M
                 $this->db->query("Update motorcycle set category = ? where id = ? limit 1", array($corrected_category, $motorcycle_id));
                 error_log("Setting motorcycle $motorcycle_id to category $corrected_category ");
             }
-
         }
-
     }
-
 
 
 

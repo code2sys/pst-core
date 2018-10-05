@@ -557,6 +557,8 @@ class Lightspeed_M extends Master_M {
                 // Now, what is the ID for this motorcycle?
                 if ($crs_trim_id == 0) {
                     $CI->CRS_m->matchIfYouCan($motorcycle_id, $motorcycle_array["vin_number"], $motorcycle_array["make"], $bike->Model, $bike->ModelYear, $bike->CodeName, $bike->MSRP, $scrub_trim);
+                } else {
+                    $CI->CRS_m->fixCatsByTrim($motorcycle_id);
                 }
 
                 // JLB 09-04-18

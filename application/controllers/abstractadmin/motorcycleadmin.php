@@ -283,7 +283,7 @@ abstract class Motorcycleadmin extends Firstadmin
                 initializePSTAPI();
                 $motorcycle = $PSTAPI->motorcycle()->get($id);
                 $scrub_trim = false;
-                foreach (array("description", "vin_number", "mileage", "color", "call_on_price", "destination_charge", "condition", "category", "make", "model", "title", "year") as $k) {
+                foreach (array("description", "vin_number", "mileage", "color", "call_on_price", "destination_charge", "condition", "category", "make", "model", "title", "year", "vehicle_type") as $k) {
                     $val = array_key_exists($k, $_REQUEST) ? $_REQUEST[$k] : null;
 
                     if (is_null($val) && in_array($k, array("call_on_price", "destination_charge"))) {
@@ -296,6 +296,11 @@ abstract class Motorcycleadmin extends Firstadmin
                             $matching_category = $PSTAPI->motorcyclecategory()->get($motorcycle->get("category"));
                             if (!is_null($matching_category) && strtolower($matching_category->get("name")) != strtolower($post['category'])) {
                                 $post['customer_set_category'] = 1;
+                            }
+                        } else if ($k == "vehicle_type") {
+                            $matching_category = $PSTAPI->motorcycletype()->get($motorcycle->get("vehicle_type"));
+                            if (!is_null($matching_category) && strtolower($matching_category->get("name")) != strtolower($post['category'])) {
+                                $post['customer_set_type'] = 1;
                             }
                         } else {
                             if ($motorcycle->get($k) != $val) {

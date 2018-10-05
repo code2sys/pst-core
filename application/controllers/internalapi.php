@@ -73,6 +73,9 @@ class Internalapi extends CI_Controller {
                 if ($motorcycle->get("crs_trim_id") == 0) {
                     $motorcycle_array = $motorcycle->to_array();
                     $this->CRS_m->matchIfYouCan($motorcycle_id, $motorcycle_array["vin_number"], $motorcycle_array["make"], $motorcycle_array["model"], $motorcycle_array["year"], $motorcycle_array["codename"], $motorcycle_array["retail_price"], false);
+                } else {
+                    // try to fix those categories, anyway.
+                    $this->CRS_m->fixCatsByTrim($motorcycle_id);
                 }
 
 
