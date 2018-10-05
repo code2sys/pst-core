@@ -480,7 +480,7 @@ class Reporting_M extends Master_M {
             $data['weight'] = '';
             $data['primarycolor'] = $motorcycle['color'];
             $data['secondarycolor'] = '';
-            $data['stocknumber'] = clean_complex_sku($motorcycle['sku']);
+            $data['stocknumber'] = clean_complex_sku($motorcycle);
             $data['description'] = '"' . $desc . '"';
             $data['dealername'] = $dealer_name;
             $data['dealerlocalphone'] = $dealer_phone_no;
