@@ -239,9 +239,20 @@ class CronControl extends Master_Controller {
         $this->dailyLightspeedParts();
 	}
 
+	public function cleanUpCRS() {
+        global $CRS_CLEANUP_QUERIES;
+
+        if (isset($CRS_CLEANUP_QUERIES) && is_array($CRS_CLEANUP_QUERIES) && count($CRS_CLEANUP_QUERIES) > 0) {
+            foreach ($CRS_CLEANUP_QUERIES as $q) {
+                $this->db->query($q);
+            }
+        }
+    }
+
 	public function weekly()
 	{
 		$this->_runJob('weekly');
+		$this->checkForCRSMigration(1);
 		$this->refreshCRSData();
 	}
 
@@ -412,6 +423,7 @@ class CronControl extends Master_Controller {
             print "Not found: $filename \n";
         }
 
+        $this->cleanUpCRS();
     }
 
     public function getExcludedTrimIDs() {
@@ -614,6 +626,7 @@ class CronControl extends Master_Controller {
 	public function refreshCRSData() {
 	    $this->load->model("CRSCron_m");
 	    $this->CRSCron_m->refreshCRSData();
+	    $this->cleanUpCRS();
     }
 
     /*

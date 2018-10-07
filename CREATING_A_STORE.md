@@ -78,7 +78,7 @@ Over in portal
 
 add to storedb and 
 
-insert into dealer (name, dbhandle, directorypath, hostname) values ('muller_v1', 'muller_v1', '/var/www/stores/muller', 'customer1.powersporttechnologies.com');
+insert into dealer (name, dbhandle, directorypath, hostname) values ('sudesh_v1', 'sudesh_v1', '/home/sudesh/sudeshdev.powersporttechnologies.com/store/', 'dev1.internal.powersporttechnologies.com');
 
 
 Virtual Host Configuration
