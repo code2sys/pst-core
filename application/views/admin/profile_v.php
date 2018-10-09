@@ -789,6 +789,36 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 
 <?php endif; ?>
 
+<?php if (defined('ENABLE_TRAFFICLOGPRO') && ENABLE_TRAFFICLOGPRO): ?>
+    <tr>
+        <td colspan="2">
+            <table width="100%" style="background-color:white;">
+                <tr>
+                    <td colspan="2">
+                        <strong><img src="/assets/Traffic_log_Pro_Logo.png" alt="Lightspeed DMS Integration" /></strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><em>Lightspeed DMS has an API for pulling major units (e.g., motorcycles). This requires a username and password to access.</em></td>
+                </tr>
+                <tr>
+                    <td style="width:30%;"><b>Traffic Log Pro API Key:</b></td>
+                    <td><?php echo form_input(array('name' => 'trafficLogProApiKey',
+                            'value' => @$address['trafficLogProApiKey'],
+                            'class' => 'text large')); ?></td>
+                </tr>
+                <tr>
+                    <td style="width:30%;"><b>Traffic Log Pro Dealership Code:</b></td>
+                    <td><?php echo form_input(array('name' => 'trafficLogProDealerCode',
+                            'value' => @$address['trafficLogProDealerCode'],
+                            'class' => 'text large')); ?></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+<?php endif; ?>
+
 
 						<tr>
 							<td></td>
