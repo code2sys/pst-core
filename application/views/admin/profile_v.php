@@ -799,7 +799,7 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2"><em>Lightspeed DMS has an API for pulling major units (e.g., motorcycles). This requires a username and password to access.</em></td>
+                    <td colspan="2"><em>Traffic log pro requires a API key and Dealership code to access.</em></td>
                 </tr>
                 <tr>
                     <td style="width:30%;"><b>Traffic Log Pro API Key:</b></td>
