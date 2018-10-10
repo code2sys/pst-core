@@ -1,0 +1,107 @@
+<h4>Highlights</h4>
+<hr>
+<div class="dtal-txt">
+    <label>location :</label>
+    <span>{{location_description}}</span>
+</div>
+{{#stock_status_big_flag}}
+<div class="dtal-txt">
+    <label>availability :</label>
+    <span style="font-weight: bold; color: {{#stock_status_in_stock}}green{{/stock_status_in_stock}}{{^stock_status_in_stock}}red{{/stock_status_in_stock}};">{{stock_status}}</span>
+</div>
+{{/stock_status_big_flag}}
+<div class="dtal-txt">
+    <label>Condition :</label>
+    <span>{{#condition1}}New{{/condition1}}{{^condition1}}Pre-Owned{{/condition1}}</span>
+</div>
+{{#year}}
+<div class="dtal-txt">
+    <label>year :</label>
+    <span>{{year}}</span>
+</div>
+{{/year}}
+{{#make}}
+<div class="dtal-txt">
+    <label>make :</label>
+    <span>{{make}}</span>
+</div>
+{{/make}}
+{{#model}}
+<div class="dtal-txt">
+    <label>model :</label>
+    <span>{{model}}</span>
+</div>
+{{/model}}
+{{#color}}
+<div class="dtal-txt">
+    <label>color :</label>
+    <span>{{color}}</span>
+</div>
+{{/color}}
+{{#type}}
+<div class="dtal-txt">
+    <label>vehicle type :</label>
+    <span>{{type}}</span>
+</div>
+{{/type}}
+{{#category}}
+<div class="dtal-txt">
+    <label>category :</label>
+    <span>{{category}}</span>
+</div>
+{{/category}}
+{{#mileage}}
+<div class="dtal-txt">
+    <label>mileage :</label>
+    <span>{{mileage}} Miles</span>
+</div>
+{{/mileage}}
+{{^mileage}}
+{{#engine_hours}}
+<div class="dtal-txt">
+    <label>Engine Hours :</label>
+    <span>{{engine_hours}}</span>
+</div>
+{{/engine_hours}}
+{{/mileage}}
+{{#engine_type}}
+<div class="dtal-txt">
+    <label>Engine Type :</label>
+    <span>{{engine_type}}</span>
+</div>
+{{/engine_type}}
+{{#transmission}}
+<div class="dtal-txt">
+    <label>transmission :</label>
+    <span>{{transmission}}</span>
+</div>
+{{/transmission}}
+{{#vin_number}}
+<div class="dtal-txt">
+    <label>Vin :</label>
+    <span>{{vin_number}}</span>
+</div>
+{{/vin_number}}
+<div class="dtal-txt">
+    <label>Stock Code :</label>
+    <span>{{clean_complex_SKU}}</span>
+</div>
+<div class="social-button">
+    <p class="scia-share">Share</p>
+    <a href="javascript:fbshareCurrentPage()" target="_blank" alt="Share on Facebook" class="face">
+        <span class="fa fa-facebook"></span>
+    </a>
+    <a href="javascript:tweetCurrentPage()" target="_blank" alt="Tweet this page" class="twitter">
+        <span class="fa fa-twitter"></span>
+    </a>
+    <script type="application/javascript">
+        /*
+        JLB 03-30-18 - Why not Zoidberg? Why not do them all the same?
+         */
+        document.write('<a href="mailto:?subject=Checkout this Part&amp;body=Check out this site ' + window.location.href + '." title="Share by Email" class="mail"><span class="glyphicon glyphicon-envelope"></span></a>');
+    </script>
+
+    <a href="javascript:googleCurrentPage()" target="_blank" class="plus">
+        <span class="fa fa-google-plus"></span>
+    </a>
+</div>
