@@ -273,7 +273,7 @@ class Coupons_M extends Master_M
 	     * - processPercentageValue operates on the whole cart, while processPercentageValueNew operates on a list of parts.
 	     * - The observed behavior is that it does the wrong thing in the case of a closeout = 0 coupon and a cart of 1+ closeout items.
 	     * - The moment you add an item that the coupon applies to, suddenly it does the right thing.
-	     * - There still is something real dumb about not rounding to dollars and cents. Why is it saying I could save 2-tenths of a cent? Because a moron didn't round when applying the coupon.
+	     * - There still is something real dumb about not rounding to dollars and cents. Why is it saying I could save 2-tenths of a cent? Because someone didn't round when applying the coupon.
 	     *
 	     * I think the fundamental problem is that there's no differentiation in the code as "Brad" (Oleg) left it between the case of it being a value-based coupon and it being a miss.
 	     *
@@ -380,8 +380,7 @@ class Coupons_M extends Master_M
 				$coupon['finalPrice'] = $coupon['wholesale'];
 				$_SESSION['cart']['coupon_'.$coupon['couponCode']] = $coupon;
 			} else {
-			    // JLB: This used to be a false...
-				return !$coupon_rejected_on_a_part;
+				return FALSE;
 			}
 		}
 		return TRUE;
