@@ -264,7 +264,22 @@ class Coupons_M extends Master_M
     }
 	
 	public function addCoupon($post)
-	{	
+	{
+	    /*
+	     * JLB 10-11-18
+	     * I am making an edit; I didn't write any of this code and I don't fully understand it.
+	     * But I am pretty sure I found the logical error:
+	     *
+	     * - processPercentageValue operates on the whole cart, while processPercentageValueNew operates on a list of parts.
+	     * - The observed behavior is that it does the wrong thing in the case of a closeout = 0 coupon and a cart of 1+ closeout items.
+	     * - The moment you add an item that the coupon applies to, suddenly it does the right thing.
+	     * - There still is something real dumb about not rounding to dollars and cents. Why is it saying I could save 2-tenths of a cent? Because someone didn't round when applying the coupon.
+	     *
+	     * I think the fundamental problem is that there's no differentiation in the code as "Brad" (Oleg) left it between the case of it being a value-based coupon and it being a miss.
+	     *
+	     */
+
+
 		$cart = @$_SESSION['cart'];
 		if ($this->isCoupon($post)) {
 			$coupon = $post;
@@ -274,6 +289,9 @@ class Coupons_M extends Master_M
 		$itemsForPercentAge = array();
 		$brand_to_do = array();
 
+		// JLB: I am going to track this thing.
+		$coupon_rejected_on_a_part = false;
+
 		if( !empty($cart) && !empty($coupon)){
 			
 			unset($cart['transAmount']);unset($cart['tax']);unset($cart['shipping']);unset($cart['qty']);
@@ -282,7 +300,7 @@ class Coupons_M extends Master_M
 				if( !empty($cartItem['part_id']) ){
 
 					$closeout = $this->checkCloseoutStockCodeByPartId($cartItem['part_id']);
-					if( !empty($coupon['brand_id']) ){
+					if( !empty($coupon['brand_id']) && $coupon['brand_id'] > 0){
 						$brand = $this->getBrandByPartId($cartItem['part_id'])->result_array();
 						$brand_id = ( isset($brand[0]) && !empty($brand[0]['brand_id'])) ? $brand[0]['brand_id'] : 1;
 					}else{
@@ -290,6 +308,7 @@ class Coupons_M extends Master_M
 					}
 					
 					$coupon2 = $this->getCouponByCodeNew($coupon["couponCode"], $brand_id, $closeout);
+					error_log("COUPON Brand ID $brand_id CLoseout $closeout Code " . $coupon["couponCode"]);
 
 					if( !empty($coupon2) ){
 						if( empty($coupon['value']) ){
@@ -301,6 +320,7 @@ class Coupons_M extends Master_M
 						}
 					}else{
 						//unset($cart[$k]);//why?
+                        $coupon_rejected_on_a_part = true;
 					}
 				}
 				
@@ -332,12 +352,15 @@ class Coupons_M extends Master_M
 			$coupon['qty'] = 1;
 			$coupon['display_name'] = 'Coupon '.$coupon['couponCode'];
 			$coupon['sku'] = 'coupon_'.$coupon['couponCode'];
-			if( empty($itemsForPercentAge) ){
+			if( !$coupon_rejected_on_a_part && empty($itemsForPercentAge) ){
 				$coupon = $this->processPercentageValue($coupon, FALSE);
-			}else{
+			}else if(count($itemsForPercentAge) > 0) {
 				$coupon = $this->processPercentageValueNew($itemsForPercentAge, $coupon, FALSE);
-			}
-			
+			} else {
+			    // JLB: This is the new case that says you have a coupon flopping...which means we have to zero it.
+                $coupon['wholesale'] = 0;
+            }
+
 			if($coupon['couponSpecialConstraintsId'])
 			{
 				$couponConstraints = json_decode($coupon['couponSpecialConstraintsId'], TRUE);
@@ -351,6 +374,8 @@ class Coupons_M extends Master_M
 				}
 			}
 			if ($coupon['wholesale']!=0) {
+			    // JLB: I think this has to be rounded.
+                $coupon['wholesale'] = round($coupon['wholesale'], 2); 
 				$coupon['price'] = $coupon['wholesale'];
 				$coupon['finalPrice'] = $coupon['wholesale'];
 				$_SESSION['cart']['coupon_'.$coupon['couponCode']] = $coupon;
