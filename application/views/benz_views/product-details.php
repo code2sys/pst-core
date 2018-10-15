@@ -85,116 +85,39 @@ $stock_status_mode = $CI->_getStockStatusMode();
 					echo $CI->load->view("benz_views/pricing_widget", array(
 						"motorcycle" => $motorcycle
 					), true);
+
+                    $info_block_template = mustache_tmpl_open("benz_views/product-details/info_block.html");
+
+                    // For some of these, we just set them...
+                    foreach (array(
+                            "year", "make", "model", "type", "category", "engine_type", "transmission", "vin_number", "color", "mileage", "engine_hours"
+                             ) as $key) {
+
+                        if (array_key_exists($key, $motorcycle) && !is_null($motorcycle[$key]) && $motorcycle[$key] != "") {
+                            if (!in_array($key, array("color", "mileage", "engine_hours")) || ($key == "color" && $motorcycle[$key] != 'N/A') || ($key == "mileage" && $motorcycle["mileage"] > 0)|| ($key == "engine_hours" && $motorcycle["engine_hours"] > 0)) {
+                                mustache_tmpl_set($info_block_template, $key, $motorcycle[$key]);
+                            }
+                        }
+                    }
+
+                    mustache_tmpl_set($info_block_template, "condition" . $motorcycle['condition'], true);
+                    mustache_tmpl_set($info_block_template, "stock_status", $motorcycle["stock_status"]);
+                    // but we also have to do the in stock
+                    mustache_tmpl_set($info_block_template, "stock_status_in_stock", $motorcycle["stock_status"] == "In Stock");
+                    mustache_tmpl_set($info_block_template, "stock_status_big_flag", (($motorcycle['stock_status'] == 'In Stock' && $stock_status_mode >= 2 ) || ($motorcycle['stock_status'] != 'In Stock' && ($stock_status_mode == 1  || $stock_status_mode == 3))));
+
+                    mustache_tmpl_set($info_block_template, "clean_complex_SKU", clean_complex_sku($motorcycle));
+
+                if ($motorcycle["location_description"] != "") {
+                    mustache_tmpl_set($info_block_template, "location_description", $motorcycle["location_description"]);
+
+                } else {
+                    mustache_tmpl_set($info_block_template, "location_description", $store_name['city'].', '.$store_name['state']);
+                }
+
+                    print mustache_tmpl_parse($info_block_template);
 				?>
-				<h4>Highlights</h4>
-				<hr>
-				<div class="dtal-txt">
-					<label>location :</label>
 
-					<span><?php if ($motorcycle["location_description"] != "") :?><?php echo $motorcycle["location_description"]; ?><?php else: ?><?php echo $store_name['city'].', '.$store_name['state'];?> <?php endif; ?></span>
-				</div>
-                <?php if (($motorcycle['stock_status'] == 'In Stock' && $stock_status_mode >= 2 ) || ($motorcycle['stock_status'] != 'In Stock' && ($stock_status_mode == 1  || $stock_status_mode == 3))): ?>
-                    <div class="dtal-txt">
-                        <label>availability :</label>
-                        <span style="font-weight: bold; color: <?php echo $motorcycle['stock_status'] == 'In Stock' ? 'green' : 'red'; ?>"><?php echo $motorcycle['stock_status'];?></span>
-                    </div>
-                <?php endif; ?>
-				<div class="dtal-txt">
-					<label>Condition :</label>
-					<span><?php echo $motorcycle['condition'] == '1' ? 'New' : 'Pre-Owned';?></span>
-				</div>
-				<div class="dtal-txt">
-					<label>year :</label>
-					<span><?php echo $motorcycle['year'];?></span>
-				</div>
-				<div class="dtal-txt">
-					<label>make :</label>
-					<span><?php echo $motorcycle['make'];?></span>
-				</div>
-				<div class="dtal-txt">
-					<label>model :</label>
-					<span><?php echo $motorcycle['model'];?></span>
-				</div>
-                <?php if ($motorcycle['color'] != 'N/A' && $motorcycle['color'] != ''): ?>
-				<div class="dtal-txt">
-					<label>color :</label>
-					<span><?php echo $motorcycle['color'];?></span>
-				</div>
-                <?php endif; ?>
-
-
-                <?php if ($motorcycle['type'] != ''): ?>
-				<div class="dtal-txt">
-					<label>vehicle type :</label>
-					<span><?php echo $motorcycle['type'];?></span>
-				</div>
-                <?php endif; ?>
-                <?php if ($motorcycle['category'] != ''): ?>
-				<div class="dtal-txt">
-					<label>category :</label>
-					<span><?php echo $motorcycle['category'];?></span>
-				</div>
-                <?php endif; ?>
-				<?php if( $motorcycle['mileage'] > 0 ) { ?>
-					<div class="dtal-txt">
-						<label>mileage :</label>
-						<span><?php echo $motorcycle['mileage'];?> Miles</span>
-					</div>
-				<?php } else if($motorcycle['engine_hours'] > 0) { ?>
-					<div class="dtal-txt">
-						<label>Engine Hours :</label>
-						<span><?php echo $motorcycle['engine_hours'];?></span>
-					</div>
-				<?php } ?>
-                <?php if ($motorcycle['engine_type'] != ""): ?>
-				<div class="dtal-txt">
-					<label>Engine Type :</label>
-					<span><?php echo $motorcycle['engine_type'];?></span>
-				</div>
-                <?php endif; ?>
-                <?php if ($motorcycle['transmission'] != ""): ?>
-				<div class="dtal-txt">
-					<label>transmission :</label>
-					<span><?php echo $motorcycle['transmission'];?></span>
-				</div>
-                <?php endif; ?>
-				<!--<div class="dtal-txt">
-					<label>width :</label>
-					<span>32.1 In.</span>
-				</div>
-				<div class="dtal-txt">
-					<label>Height</label>
-					<span>44.7 In.</span>
-				</div>-->
-                <?php if (!is_null($motorcycle['vin_number']) && trim($motorcycle['vin_number']) != ""): ?>
-				<div class="dtal-txt">
-					<label>Vin :</label>
-					<span><?php echo $motorcycle['vin_number'];?></span>
-				</div>
-                <?php endif; ?>
-				<div class="dtal-txt">
-					<label>Stock Code :</label>
-					<span><?php echo clean_complex_sku($motorcycle);?></span>
-				</div>
-				<div class="social-button">
-					<p class="scia-share">Share</p>
-					<a href="javascript:fbshareCurrentPage()" target="_blank" alt="Share on Facebook" class="face">
-						<span class="fa fa-facebook"></span>
-					</a>
-					<a href="javascript:tweetCurrentPage()" target="_blank" alt="Tweet this page" class="twitter">
-						<span class="fa fa-twitter"></span>
-					</a>
-                    <script type="application/javascript">
-                        /*
-                        JLB 03-30-18 - Why not Zoidberg? Why not do them all the same?
-                         */
-                        document.write('<a href="mailto:?subject=Checkout this Part&amp;body=Check out this site ' + window.location.href + '." title="Share by Email" class="mail"><span class="glyphicon glyphicon-envelope"></span></a>');
-                    </script>
-
-					<a href="javascript:googleCurrentPage()" target="_blank" class="plus">
-						<span class="fa fa-google-plus"></span>
-					</a>
-				</div>
 			</div>
 		</div>
 		<div class="col-md-12 col-xs-12 pdig padg-one" style="padding-top:50px;">
