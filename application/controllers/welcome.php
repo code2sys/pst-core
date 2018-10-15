@@ -1108,16 +1108,16 @@ class Welcome extends Master_Controller {
     
         $error = curl_errno($ch);
     
-    //  file_put_contents('temp.tmp', print_r($error, true), FILE_APPEND);
-    $DEBUG = "sendAsPost result: " . $result . "  ----  ";
-    //echo $DEBUG."<br/>";
+        //  file_put_contents('temp.tmp', print_r($error, true), FILE_APPEND);
+        $DEBUG = "sendAsPost result: " . $result . "  ----  ";
+        //echo $DEBUG."<br/>";
         
         //close connection
         curl_close($ch);
         return $result;
     }
 
-    public function getXml($post)
+    public function getXml($post, $apiDetails)
     {
 
         $date = date('Y-m-d');
@@ -1192,9 +1192,11 @@ class Welcome extends Master_Controller {
 
         $product_id = $post["product_id"];
         $this->load->model('motorcycle_m');
-
+        
         $product_detail = $this->motorcycle_m->getMotorcycle($product_id);
         
+        //product details
+            
         $prodcuct_year = $product_detail['year'];
         $prodcuct_make = $product_detail['make'];
         $prodcuct_vin_number = $product_detail['vin_number'];
@@ -1204,6 +1206,13 @@ class Welcome extends Master_Controller {
         $prodcuct_model = $product_detail['model'];
         $prodcuct_sale_price = $product_detail['sale_price'];
         $prodcuct_category = $product_detail['category'];
+
+         // traffic log pro API details
+
+        $trafficLogProDealerCode = $apiDetails['trafficLogProDealerCode'];
+        $trafficLogProApiKey = $apiDetails['trafficLogProApiKey'];
+
+
 
         }else{
 
@@ -1228,8 +1237,9 @@ class Welcome extends Master_Controller {
 
         $xml = "<?xml version=\"1.0\"?>" .
         "<feed>" .
-            "<apikey>b7757502-02a6-11e8-8bf4-0050568236dd</apikey>" .
-            "<dealer>D0002338</dealer>" .
+            "<apikey>".$trafficLogProApiKey."</apikey>" .
+            "<dealer>".$trafficLogProDealerCode
+            ."</dealer>" .
             "<date>".$date."</date> " .
             "<time>".$time."</time>" .
             "<lead>" .
@@ -1279,7 +1289,6 @@ class Welcome extends Master_Controller {
                 "<comment>".$questions_comment."</comment>" .
             "</lead>" .
         "</feed>";
-        echo $xml;die;
         return $xml;
     }
 
@@ -1301,23 +1310,30 @@ class Welcome extends Master_Controller {
             } else {
 
                 $this->load->model('motorcycle_m');
+                $this->load->model('admin_m');
 
                 $this->motorcycle_m->saveEnquiry($post);
+                $apiDetails = $this->admin_m->getAdminShippingProfile();
 
-
+               
                 //Traffic log pro API
 
-            if (array_key_exists("make", $post) || array_key_exists("product_id", $post)){
+            if ( (array_key_exists("make", $post) || array_key_exists("product_id", $post)) && (defined('ENABLE_TRAFFICLOGPRO') && ENABLE_TRAFFICLOGPRO) ){
 
-                    $payload = $this->getXml($post);
+                    $payload = $this->getXml($post, $apiDetails);
                     $trafficLogProRes = $this->sendAsPost(
                     'http://api.trafficlogpro.com/xml/',
                     array('data' => $payload)
                     );
+
+                     // convert the XML result into array
+                    // $array_data = json_decode(json_encode(simplexml_load_string($trafficLogProRes)), true);
+                    //if error code is 1 that's means something went wrong.
+
+                    // print_r($array_data['message']);
                     
             }
 
-                
 
                 $toEmail = $this->motorcycle_m->getSalesEmail();
                 $message = "";
