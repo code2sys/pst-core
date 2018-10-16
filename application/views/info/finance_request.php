@@ -32,7 +32,9 @@
 			</div>
 			<?php endif; ?>
 			<!-- END SUCCESS -->
+<?php if (defined('ENABLE_TRAFFICLOGPRO') && ENABLE_TRAFFICLOGPRO): ?>
 
+<?php endif; ?>
 
   	<!-- Finance FORM-->
 			<div class="name_box_full" style="background:rgba(153, 153, 153, 0.28);padding: 30px;">
@@ -1382,23 +1384,23 @@
 						</tr>
 						<tr>
 							<td><label for="name1" >Name</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[name2]" placeholder="" value="<?php echo $_POST['reference']['name2'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[name2]" placeholder="" value="<?php echo $_POST['reference']['name2'];?>" /><span><b>*</b></span></td>
 							<td><label for="phone1" >Phone</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[phone2]" placeholder="" value="<?php echo $_POST['reference']['phone2'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[phone2]" placeholder="" value="<?php echo $_POST['reference']['phone2'];?>" /><span><b>*</b></span></td>
 							<td><label for="city1" >City</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[city2]" placeholder="" value="<?php echo $_POST['reference']['city2'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[city2]" placeholder="" value="<?php echo $_POST['reference']['city2'];?>" /><span><b>*</b></span></td>
 							<td><label for="state1" >State</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[state2]" placeholder="" value="<?php echo $_POST['reference']['state2'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[state2]" placeholder="" value="<?php echo $_POST['reference']['state2'];?>" /><span><b>*</b></span></td>
 						</tr>
 						<tr>
 							<td><label for="name1" >Name</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[name3]" placeholder="" value="<?php echo $_POST['reference']['name3'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[name3]" placeholder="" value="<?php echo $_POST['reference']['name3'];?>" /><span><b>*</b></span></td>
 							<td><label for="phone1" >Phone</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[phone3]" placeholder="" value="<?php echo $_POST['reference']['phone3'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[phone3]" placeholder="" value="<?php echo $_POST['reference']['phone3'];?>" /><span><b>*</b></span></td>
 							<td><label for="city1" >City</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[city3]" placeholder="" value="<?php echo $_POST['reference']['city3'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[city3]" placeholder="" value="<?php echo $_POST['reference']['city3'];?>" /><span><b>*</b></span></td>
 							<td><label for="state1" >State</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[state3]" placeholder="" value="<?php echo $_POST['reference']['state3'];?>" /></td>
+							<td style="width:25%"><input style="width:60%" name="reference[state3]" placeholder="" value="<?php echo $_POST['reference']['state3'];?>" /><span><b>*</b></span></td>
 						</tr>
 						<tr>
 							<td><label for="name1" >Name</label></td>
