@@ -804,7 +804,7 @@
 								<label for="ac_type" >Account Types</label>
 							</td>
 							<td>
-								<input name="banking_info[ac_type]" placeholder="" value="<?php echo $_POST['banking_info']['ac_type'];?>" /><span><b>*</b></span>
+								<input name="banking_info[ac_type]" placeholder="" value="<?php echo $_POST['banking_info']['ac_type'];?>" /><?php if (!defined('BLUFFPOWERSPORTS_VIEW')): ?><span><b>*</b></span><?php endif; ?>
 							</td>
 						</tr>
 						<tr>
@@ -896,8 +896,8 @@
 								<label for="emp_addr" >Employer Address</label>
 							</td>
 							<td>
-								<input name="employer_info[emp_addr]" placeholder="" value="<?php echo $_POST['employer_info']['emp_addr'];?>" />
-								<span><b>*</b></span>
+								<input name="employer_info[emp_addr]" placeholder="" value="<?php echo $_POST['employer_info']['emp_addr'];?>" /><?php if (!defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?>
+								
 							</td>
 						</tr>
 						<tr>
@@ -1384,23 +1384,23 @@
 						</tr>
 						<tr>
 							<td><label for="name1" >Name</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[name2]" placeholder="" value="<?php echo $_POST['reference']['name2'];?>" /><span><b>*</b></span></td>
+							<td style="width:25%"><input style="width:60%" name="reference[name2]" placeholder="" value="<?php echo $_POST['reference']['name2'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
 							<td><label for="phone1" >Phone</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[phone2]" placeholder="" value="<?php echo $_POST['reference']['phone2'];?>" /><span><b>*</b></span></td>
+							<td style="width:25%"><input style="width:60%" name="reference[phone2]" placeholder="" value="<?php echo $_POST['reference']['phone2'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
 							<td><label for="city1" >City</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[city2]" placeholder="" value="<?php echo $_POST['reference']['city2'];?>" /><span><b>*</b></span></td>
+							<td style="width:25%"><input style="width:60%" name="reference[city2]" placeholder="" value="<?php echo $_POST['reference']['city2'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
 							<td><label for="state1" >State</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[state2]" placeholder="" value="<?php echo $_POST['reference']['state2'];?>" /><span><b>*</b></span></td>
+							<td style="width:25%"><input style="width:60%" name="reference[state2]" placeholder="" value="<?php echo $_POST['reference']['state2'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
 						</tr>
 						<tr>
 							<td><label for="name1" >Name</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[name3]" placeholder="" value="<?php echo $_POST['reference']['name3'];?>" /><span><b>*</b></span></td>
+							<td style="width:25%"><input style="width:60%" name="reference[name3]" placeholder="" value="<?php echo $_POST['reference']['name3'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
 							<td><label for="phone1" >Phone</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[phone3]" placeholder="" value="<?php echo $_POST['reference']['phone3'];?>" /><span><b>*</b></span></td>
+							<td style="width:25%"><input style="width:60%" name="reference[phone3]" placeholder="" value="<?php echo $_POST['reference']['phone3'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
 							<td><label for="city1" >City</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[city3]" placeholder="" value="<?php echo $_POST['reference']['city3'];?>" /><span><b>*</b></span></td>
+							<td style="width:25%"><input style="width:60%" name="reference[city3]" placeholder="" value="<?php echo $_POST['reference']['city3'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
 							<td><label for="state1" >State</label></td>
-							<td style="width:25%"><input style="width:60%" name="reference[state3]" placeholder="" value="<?php echo $_POST['reference']['state3'];?>" /><span><b>*</b></span></td>
+							<td style="width:25%"><input style="width:60%" name="reference[state3]" placeholder="" value="<?php echo $_POST['reference']['state3'];?>" /><span><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
 						</tr>
 						<tr>
 							<td><label for="name1" >Name</label></td>
