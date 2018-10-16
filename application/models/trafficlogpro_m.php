@@ -29,9 +29,9 @@ class Trafficlogpro_M extends Master_M {
                     array('data' => $payload)
                     );
 
-                     // convert the XML result into array
-                    $array_data = json_decode(json_encode(simplexml_load_string($trafficLogProRes)), true);
-                    //if error code is 1 that's means something went wrong.
+        // convert the XML result into array
+        $array_data = json_decode(json_encode(simplexml_load_string($trafficLogProRes)), true);
+        //if error code is 1 that's means something went wrong.
 
                     // print_r($array_data['message']);
         return $array_data;
