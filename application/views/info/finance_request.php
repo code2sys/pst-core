@@ -1393,6 +1393,7 @@
 							<td><label for="state1" >State</label></td>
 							<td style="width:25%"><input style="width:60%" name="reference[state1]" placeholder="" value="<?php echo $_POST['reference']['state1'];?>" /><span><b>*</b></span></td>
 						</tr>
+						<?php echo defined('BLUFFPOWERSPORTS_VIEW').'fdskjhfgk'; ?>
 						<tr>
 							<td><label for="name1" >Name</label></td>
 							<td style="width:25%"><input style="width:60%" name="reference[name2]" placeholder="" value="<?php echo $_POST['reference']['name2'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
