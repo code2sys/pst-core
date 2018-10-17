@@ -818,9 +818,6 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
     </tr>
 
 <?php endif; ?>
-<?php 
-
-echo ENABLE_TRAFFICLOGPRO.'dslkfjdf';?>
 
 
 						<tr>
