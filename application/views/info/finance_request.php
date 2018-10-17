@@ -999,6 +999,8 @@
 							</td>
 						</tr>
 
+						<?php if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW ): ?>
+
 						<tr>
 							<td>
 								<label for="income_frequency" >Sales Rep</label>
@@ -1007,6 +1009,8 @@
 								<input name="employer_info[sales_rep]" placeholder="" value="<?php echo $_POST['employer_info']['sales_rep'];?>" />
 							</td>
 						</tr>
+
+						<?php endif;?>
 
                         <tr class="prior_employment_history">
                             <td colspan="2">
