@@ -804,7 +804,7 @@
 								<label for="ac_type" >Account Types</label>
 							</td>
 							<td>
-								<input name="banking_info[ac_type]" placeholder="" value="<?php echo $_POST['banking_info']['ac_type'];?>" /><?php if (!defined('BLUFFPOWERSPORTS_VIEW')): ?><span><b>*</b></span><?php endif; ?>
+								<input name="banking_info[ac_type]" placeholder="" value="<?php echo $_POST['banking_info']['ac_type'];?>" /><?php if (!defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW): ?><span><b>*</b></span><?php endif; ?>
 							</td>
 						</tr>
 						<tr>
@@ -896,7 +896,7 @@
 								<label for="emp_addr" >Employer Address</label>
 							</td>
 							<td>
-								<input name="employer_info[emp_addr]" placeholder="" value="<?php echo $_POST['employer_info']['emp_addr'];?>" /><?php if (!defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?>
+								<input name="employer_info[emp_addr]" placeholder="" value="<?php echo $_POST['employer_info']['emp_addr'];?>" /><?php if (!defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW): ?><span><b>*</b></span><?php endif; ?>
 								
 							</td>
 						</tr>
@@ -1412,8 +1412,6 @@
 							<td style="width:25%"><input style="width:60%" name="reference[city3]" placeholder="" value="<?php echo $_POST['reference']['city3'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
 							<td><label for="state1" >State</label></td>
 							<td style="width:25%"><input style="width:60%" name="reference[state3]" placeholder="" value="<?php echo $_POST['reference']['state3'];?>" /><span><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
-
-							<?php echo defined('BLUFFPOWERSPORTS_VIEW').'sdfds'; ?>
 						</tr>
 						<tr>
 							<td><label for="name1" >Name</label></td>
