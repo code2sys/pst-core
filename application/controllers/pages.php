@@ -139,7 +139,7 @@ class Pages extends Master_Controller {
             echo "string";
             $this->form_validation->set_rules('employer_info[emp_addr]', 'Employer Address', 'required|xss_clean');
         }else{
-            echo "string";
+            echo "gfd";
         }
 		
 		$this->form_validation->set_rules('employer_info[emp_city]', 'Employer City', 'required|xss_clean');
