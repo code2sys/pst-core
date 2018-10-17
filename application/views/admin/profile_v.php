@@ -789,7 +789,7 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 
 <?php endif; ?>
 
-<?php if (defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW): ?>
+<?php if (defined('ENABLE_TRAFFICLOGPRO') && ENABLE_TRAFFICLOGPRO): ?>
     <tr>
         <td colspan="2">
             <table width="100%" style="background-color:white;">

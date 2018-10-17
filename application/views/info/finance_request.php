@@ -801,10 +801,10 @@
 						</tr>
 						<tr>
 							<td>
-								<label for="ac_type" >Account Types</label>
+								<label for="ac_type" >Account Typesss</label>
 							</td>
 							<td>
-								<input name="banking_info[ac_type]" placeholder="" value="<?php echo $_POST['banking_info']['ac_type'];?>" /><?php if (!defined('ENABLE_TRAFFICLOGPRO')): ?><span><b>*</b></span><?php endif; ?>
+								<input name="banking_info[ac_type]" placeholder="" value="<?php echo $_POST['banking_info']['ac_type'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW): ?><span><b>*</b></span><?php endif; ?>
 							</td>
 						</tr>
 						<tr>
