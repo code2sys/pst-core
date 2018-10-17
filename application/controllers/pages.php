@@ -135,7 +135,7 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('employer_info[occupation]', 'Occupation', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[emp_name]', 'Employer Name', 'required|xss_clean');
 
-        if (!defined('BLUFFPOWERSPORTS_VIEW')){
+        if (defined('BLUFFPOWERSPORTS_VIEW') && !BLUFFPOWERSPORTS_VIEW){
             $this->form_validation->set_rules('employer_info[emp_addr]', 'Employer Address', 'required|xss_clean');
         }
 		
@@ -229,7 +229,7 @@ class Pages extends Master_Controller {
         $this->form_validation->set_rules('reference[city1]', 'Reference City (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[state1]', 'Reference State (At least three reference is required; more are preferred.)', 'required|xss_clean');
 
-        if (defined('BLUFFPOWERSPORTS_VIEW')){
+        if (defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW){
 
         $this->form_validation->set_rules('reference[name2]', 'Reference Name (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[phone2]', 'Reference Phone (At least three reference is required; more are preferred.)', 'required|xss_clean');
@@ -244,7 +244,7 @@ class Pages extends Master_Controller {
 
         // They must specify a bank...
         $this->form_validation->set_rules('banking_info[bank_name]', 'Bank Name', 'required|xss_clean');
-        if (!defined('BLUFFPOWERSPORTS_VIEW')){
+        if (defined('BLUFFPOWERSPORTS_VIEW') && !BLUFFPOWERSPORTS_VIEW){
 
             $this->form_validation->set_rules('banking_info[ac_type]', 'Bank Account Types', 'required|xss_clean');
         }
