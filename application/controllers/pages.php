@@ -136,7 +136,10 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('employer_info[emp_name]', 'Employer Name', 'required|xss_clean');
 
         if (defined('BLUFFPOWERSPORTS_VIEW') && !BLUFFPOWERSPORTS_VIEW ){
+            echo "string";die;
             $this->form_validation->set_rules('employer_info[emp_addr]', 'Employer Address', 'required|xss_clean');
+        }else{
+            echo "dsadsaf";die;
         }
 		
 		$this->form_validation->set_rules('employer_info[emp_city]', 'Employer City', 'required|xss_clean');
