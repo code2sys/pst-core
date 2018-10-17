@@ -1403,7 +1403,7 @@
 							<td><label for="state1" >State</label></td>
 							<td style="width:25%"><input style="width:60%" name="reference[state2]" placeholder="" value="<?php echo $_POST['reference']['state2'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
 						</tr>
-						<!-- <tr>
+						<tr>
 							<td><label for="name1" >Name</label></td>
 							<td style="width:25%"><input style="width:60%" name="reference[name3]" placeholder="" value="<?php echo $_POST['reference']['name3'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
 							<td><label for="phone1" >Phone</label></td>
@@ -1412,7 +1412,9 @@
 							<td style="width:25%"><input style="width:60%" name="reference[city3]" placeholder="" value="<?php echo $_POST['reference']['city3'];?>" /><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
 							<td><label for="state1" >State</label></td>
 							<td style="width:25%"><input style="width:60%" name="reference[state3]" placeholder="" value="<?php echo $_POST['reference']['state3'];?>" /><span><?php if (defined('BLUFFPOWERSPORTS_VIEW') ): ?><span><b>*</b></span><?php endif; ?></td>
-						</tr> -->
+
+							<?php echo defined('BLUFFPOWERSPORTS_VIEW').'sdfds'; ?>
+						</tr>
 						<tr>
 							<td><label for="name1" >Name</label></td>
 							<td style="width:25%"><input style="width:60%" name="reference[name4]" placeholder="" value="<?php echo $_POST['reference']['name4'];?>" /></td>
