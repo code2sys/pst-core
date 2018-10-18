@@ -121,7 +121,8 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('condition', 'Condition', 'required|xss_clean');
 		$this->form_validation->set_rules('down_payment', 'Down Payment', 'required|xss_clean');
 		$this->form_validation->set_rules('contact_info[rphone]', 'Residence Phone', 'required|xss_clean');
-		$this->form_validation->set_rules('contact_info[ssno]', 'Social Security Number', 'required|xss_clean');
+		$this->form_validation->set_rules('contact_info[marital_status]', 'Marital Status', 'required|xss_clean');
+        $this->form_validation->set_rules('physical_address[state]', 'State', 'required|xss_clean');
 		$this->form_validation->set_rules('contact_info[dob]', 'Date of Birth', 'required|xss_clean');
 		$this->form_validation->set_rules('physical_address[paddress]', 'Physical Address', 'required|xss_clean');
 		$this->form_validation->set_rules('physical_address[city]', 'City', 'required|xss_clean');
