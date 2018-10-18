@@ -161,9 +161,6 @@ class Motorcycle_CI extends Welcome {
 
     public function benzProduct() {
 
-        // mail('palash@geeksperhour.com', 'session', print_r($_SESSION, true));
-        // mail('palash@geeksperhour.com', '_REQUEST', print_r($_REQUEST, true));
-
         if (array_key_exists("search_action", $_REQUEST) && $_REQUEST["search_action"] == "Clear") {
             $_REQUEST["search_keywords"] = "";
         }
