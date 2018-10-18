@@ -259,7 +259,7 @@
 									<option value="single" <?php echo $_POST['contact_info']['marital_status'] == 'single' ? 'selected' : '';?>>Single</option>
 									<option value="married" <?php echo $_POST['contact_info']['marital_status'] == 'married' ? 'selected' : '';?>>Married</option>
 								</select>
-							</td>
+							<?php if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW ): ?><span><b>*</b></span><?php endif; ?></td>
 						</tr>
 						<tr>
 							<td>
