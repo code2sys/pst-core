@@ -32,9 +32,6 @@
 			</div>
 			<?php endif; ?>
 			<!-- END SUCCESS -->
-<?php if (defined('ENABLE_TRAFFICLOGPRO') && ENABLE_TRAFFICLOGPRO): ?>
-
-<?php endif; ?>
 
   	<!-- Finance FORM-->
 			<div class="name_box_full" style="background:rgba(153, 153, 153, 0.28);padding: 30px;">
