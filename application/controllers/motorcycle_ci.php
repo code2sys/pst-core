@@ -160,7 +160,9 @@ class Motorcycle_CI extends Welcome {
 
 
     public function benzProduct() {
-        die('dsfs');
+
+        print_r($_REQUEST);die;
+
         if (array_key_exists("search_action", $_REQUEST) && $_REQUEST["search_action"] == "Clear") {
             $_REQUEST["search_keywords"] = "";
         }
