@@ -121,7 +121,12 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('condition', 'Condition', 'required|xss_clean');
 		$this->form_validation->set_rules('down_payment', 'Down Payment', 'required|xss_clean');
 		$this->form_validation->set_rules('contact_info[rphone]', 'Residence Phone', 'required|xss_clean');
+
+        if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW){
+
 		$this->form_validation->set_rules('contact_info[marital_status]', 'Marital Status', 'required|xss_clean');
+
+        }
         $this->form_validation->set_rules('physical_address[state]', 'State', 'required|xss_clean');
 		$this->form_validation->set_rules('contact_info[dob]', 'Date of Birth', 'required|xss_clean');
 		$this->form_validation->set_rules('physical_address[paddress]', 'Physical Address', 'required|xss_clean');
@@ -231,13 +236,16 @@ class Pages extends Master_Controller {
         $this->form_validation->set_rules('reference[city1]', 'Reference City (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[state1]', 'Reference State (At least three reference is required; more are preferred.)', 'required|xss_clean');
 
-        if (defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW){
+        if ((defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW) || (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW)){
 
         $this->form_validation->set_rules('reference[name2]', 'Reference Name (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[phone2]', 'Reference Phone (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[city2]', 'Reference City (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[state2]', 'Reference State (At least three reference is required; more are preferred.)', 'required|xss_clean');
 
+        }
+        
+        if (defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW){
         $this->form_validation->set_rules('reference[name3]', 'Reference Name (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[phone3]', 'Reference Phone (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[city3]', 'Reference City (At least three reference is required; more are preferred.)', 'required|xss_clean');
