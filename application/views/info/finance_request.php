@@ -1022,6 +1022,8 @@
 							</td>
 						</tr>
 
+						<?php if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW ): ?>
+
 						<tr>
 							<td>
 								<label for="name" >Nearest relative not living with you<br/>Name</label>
@@ -1066,12 +1068,6 @@
 								<input name="employer_info[relationship]" placeholder="" value="<?php echo $_POST['relative_relationship']['relative_relationship'];?>" /><span><b>*</b></span>
 							</td>
 						</tr>
-
-						<!-- <tr>Nearest relative not living with you</tr> -->
-
-
-
-						<?php if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW ): ?>
 
 						<tr>
 							<td>
