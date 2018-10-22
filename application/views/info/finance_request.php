@@ -494,6 +494,30 @@
 							</td>
 						</tr>
 
+						<?php if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW ): ?>
+
+						<tr>
+							<td>
+								<label for="previousFullAdd" >If less than two years, previous full address</label>
+							</td>
+							<td>
+								<input name="physical_address[pre_full_add]" placeholder="" value="<?php echo $_POST['physical_address']['pre_full_add'];?>" />
+								
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<label for="timeAtPreviousAdd" >Time at previous address</label>
+							</td>
+							<td>
+								<input name="physical_address[time_at_pre_add]" placeholder="" value="<?php echo $_POST['physical_address']['time_at_pre_add'];?>" />
+								
+							</td>
+						</tr>
+
+						<?php endif;?>
+
 
 
 						<tr class="joint-row">
