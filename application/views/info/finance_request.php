@@ -1070,7 +1070,9 @@
 								<label for="state" >State</label>
 							</td>
 							<td>
-								<input name="employer_info[relative_state]" placeholder="" value="<?php echo $_POST['employer_info']['relative_state'];?>" /><span><b>*</b></span>
+
+								<?php echo form_dropdown('employer_info[relative_state]', $states, $_POST['employer_info']['relative_state'], 'id="billing_state"'); ?>
+								<span><b>*</b></span>
 							</td>
 						</tr>
 
