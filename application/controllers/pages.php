@@ -236,6 +236,8 @@ class Pages extends Master_Controller {
         $this->form_validation->set_rules('reference[city1]', 'Reference City (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[state1]', 'Reference State (At least three reference is required; more are preferred.)', 'required|xss_clean');
 
+
+        // At least two reference for LIFESTYLE and at least three for Bluffpowersports
         if ((defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW) || (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW)){
 
         $this->form_validation->set_rules('reference[name2]', 'Reference Name (At least three reference is required; more are preferred.)', 'required|xss_clean');
