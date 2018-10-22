@@ -1105,7 +1105,7 @@
 								<label for="relationship" >Relationship</label>
 							</td>
 							<td>
-								<input name="employer_info[relationship]" placeholder="" value="<?php echo $_POST['relative_relationship']['relative_relationship'];?>" /><span><b>*</b></span>
+								<input name="employer_info[relationship]" placeholder="" value="<?php echo $_POST['employer_info']['relative_relationship'];?>" /><span><b>*</b></span>
 							</td>
 						</tr>
 
