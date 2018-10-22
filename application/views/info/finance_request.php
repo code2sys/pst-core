@@ -1394,7 +1394,7 @@
                                 <label for="co_prior_emp_state" >Previous Employer State</label>
                             </td>
                             <td>
-                                <?php echo form_dropdown('co_prior_employer_info[state]', $states, $_POST['co_prior_employer_info']['state'], 'id="billing_state"'); ?>
+                                <?php echo form_dropdown('co_prior_employer_info[state]', $states, $_POST['co_prior_employer_info']['state']); ?>
                                 <span><b>*</b></span>
                             </td>
                         </tr>
