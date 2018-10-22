@@ -64,11 +64,11 @@ if (isset($bannerImages) && count($bannerImages) > 0) {
         "bannerImages" => $bannerImages
     ), true));
 }
-if (isset($featured) && is_array($featured) && count($featured) > 0) {
-    mustache_tmpl_set($master_v_front_template, "motorcycles_widget", $CI->load->view("master/widgets/motorcycles", array(
-        "featured" => $featured
-    ), true));
-}
+// JLB: This used to rely on $featured...seems like it was bad to require having at least one featured bike to get the navigation.
+mustache_tmpl_set($master_v_front_template, "motorcycles_widget", $CI->load->view("master/widgets/motorcycles", array(
+    "featured" => (isset($featured) && is_array($featured) && count($featured) > 0) ? $featured : array()
+), true));
+
 if (isset($topVideo) && is_array($topVideo) && count($topVideo) > 0) {
     mustache_tmpl_set($master_v_front_template, "top_video_widget", $CI->load->view("master/widgets/homepage_top_videos", array(
         "topVideo" => $topVideo
