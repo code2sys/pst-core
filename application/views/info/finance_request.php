@@ -306,6 +306,19 @@
 							</td>
 						</tr>
 
+						<tr>
+							<td>
+								<label for="usCitizen" >US Citizen</label>
+							</td>
+							<td>
+								<select name="contact_info[us_citizen]">
+									<option value="">Please Select</option>
+									<option value="yes" <?php echo $_POST['contact_info']['us_citizen'] == 'yes'?'selected':'';?>>Yes</option>
+									<option value="no" <?php echo $_POST['contact_info']['us_citizen']=='no'?'selected':'';?>>No</option>
+								</select>
+							</td>
+						</tr>
+
 
 
 						<tr class="joint-row">
