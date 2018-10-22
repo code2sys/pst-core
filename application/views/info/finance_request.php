@@ -1025,16 +1025,16 @@
 						<tr>Nearest relative not living with you</tr>
 
 						<tr>
-							<td><label for="name1" >Name</label></td>
-							<td style="width:25%"><input style="width:60%" name="employer_info[name1]" placeholder="" value="<?php echo $_POST['employer_info']['name1'];?>" /><span><b>*</b></span></td>
-							<td><label for="phone1" >Phone</label></td>
-							<td style="width:25%"><input style="width:60%" name="employer_info[phone1]" placeholder="" value="<?php echo $_POST['employer_info']['phone1'];?>" /><span><b>*</b></span></td>
-							<td><label for="city1" >City</label></td>
-							<td style="width:25%"><input style="width:60%" name="employer_info[city1]" placeholder="" value="<?php echo $_POST['employer_info']['city1'];?>" /><span><b>*</b></span></td>
-							<td><label for="state1" >State</label></td>
-							<td style="width:25%"><input style="width:60%" name="employer_info[state1]" placeholder="" value="<?php echo $_POST['employer_info']['state1'];?>" /><span><b>*</b></span></td>
-							<td><label for="city1" >Relationship</label></td>
-							<td style="width:25%"><input style="width:60%" name="employer_info[city1]" placeholder="" value="<?php echo $_POST['employer_info']['city1'];?>" /><span><b>*</b></span></td>
+							<td><label for="name" >Name</label></td>
+							<td style="width:25%"><input style="width:60%" name="employer_info[name]" placeholder="" value="<?php echo $_POST['employer_info']['name'];?>" /><span><b>*</b></span></td>
+							<td><label for="phone" >Phone</label></td>
+							<td style="width:25%"><input style="width:60%" name="employer_info[phone]" placeholder="" value="<?php echo $_POST['employer_info']['phone'];?>" /><span><b>*</b></span></td>
+							<td><label for="city" >City</label></td>
+							<td style="width:25%"><input style="width:60%" name="employer_info[city]" placeholder="" value="<?php echo $_POST['employer_info']['city'];?>" /><span><b>*</b></span></td>
+							<td><label for="state" >State</label></td>
+							<td style="width:25%"><input style="width:60%" name="employer_info[state]" placeholder="" value="<?php echo $_POST['employer_info']['state'];?>" /><span><b>*</b></span></td>
+							<td><label for="relationship" >Relationship</label></td>
+							<td style="width:25%"><input style="width:60%" name="employer_info[city]" placeholder="" value="<?php echo $_POST['employer_info']['city'];?>" /><span><b>*</b></span></td>
 						</tr>
 
 						<?php if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW ): ?>
