@@ -1024,7 +1024,7 @@
 
 						<!-- <tr>Nearest relative not living with you</tr> -->
 
-						<tr>
+						<!-- <tr>
 							<td><label for="name" >Name</label></td>
 							<td style="width:25%"><input style="width:60%" name="employer_info[name]" placeholder="" value="<?php echo $_POST['employer_info']['name'];?>" /><span><b>*</b></span></td>
 							<td><label for="phone" >Phone</label></td>
@@ -1035,7 +1035,7 @@
 							<td style="width:25%"><input style="width:60%" name="employer_info[state]" placeholder="" value="<?php echo $_POST['employer_info']['state'];?>" /><span><b>*</b></span></td>
 							<td><label for="relationship" >Relationship</label></td>
 							<td style="width:25%"><input style="width:60%" name="employer_info[city]" placeholder="" value="<?php echo $_POST['employer_info']['city'];?>" /><span><b>*</b></span></td>
-						</tr>
+						</tr> -->
 
 						<?php if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW ): ?>
 
