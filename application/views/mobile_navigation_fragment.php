@@ -43,6 +43,7 @@ if (count($extra_navigation) > 0 || defined('MOTORCYCLE_SERVICE_LINK_URL')) {
     );
 }
 
+mustache_tmpl_set($mobile_navigation_fragment_template, "extra_navigation", $extra_navigation);
 
 
 $mobile_navigation_fragment_template = mustache_tmpl_open("mobile_navigation_fragment.html");
