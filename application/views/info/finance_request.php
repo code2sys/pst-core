@@ -1022,7 +1022,7 @@
 							</td>
 						</tr>
 
-						<tr>Nearest relative not living with you</tr>
+						<!-- <tr>Nearest relative not living with you</tr> -->
 
 						<tr>
 							<td><label for="name" >Name</label></td>
