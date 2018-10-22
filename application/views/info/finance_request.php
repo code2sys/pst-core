@@ -316,6 +316,7 @@
 									<option value="yes" <?php echo $_POST['contact_info']['us_citizen'] == 'yes'?'selected':'';?>>Yes</option>
 									<option value="no" <?php echo $_POST['contact_info']['us_citizen']=='no'?'selected':'';?>>No</option>
 								</select>
+								<?php if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW ): ?><span><b>*</b></span><?php endif; ?></td>
 							</td>
 						</tr>
 

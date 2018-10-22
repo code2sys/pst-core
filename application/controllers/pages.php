@@ -124,7 +124,8 @@ class Pages extends Master_Controller {
 
         if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW){
 
-		$this->form_validation->set_rules('contact_info[marital_status]', 'Marital Status', 'required|xss_clean');
+        $this->form_validation->set_rules('contact_info[marital_status]', 'Marital Status', 'required|xss_clean');
+		$this->form_validation->set_rules('contact_info[us_citizen]', 'US Citizen', 'required|xss_clean');
 
         }
         $this->form_validation->set_rules('physical_address[state]', 'State', 'required|xss_clean');
