@@ -238,20 +238,26 @@ class Pages extends Master_Controller {
 
 
         // At least two reference for LIFESTYLE and at least three for Bluffpowersports
-        if ((defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW) || (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW)){
+        if (defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW ){
 
         $this->form_validation->set_rules('reference[name2]', 'Reference Name (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[phone2]', 'Reference Phone (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[city2]', 'Reference City (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[state2]', 'Reference State (At least three reference is required; more are preferred.)', 'required|xss_clean');
 
-        }
-        
-        if (defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW){
         $this->form_validation->set_rules('reference[name3]', 'Reference Name (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[phone3]', 'Reference Phone (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[city3]', 'Reference City (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[state3]', 'Reference State (At least three reference is required; more are preferred.)', 'required|xss_clean');
+
+        }
+        
+        if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW){
+            
+        $this->form_validation->set_rules('reference[name2]', 'Reference Name (At least three reference is required; more are preferred.)', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[phone2]', 'Reference Phone (At least three reference is required; more are preferred.)', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[city2]', 'Reference City (At least three reference is required; more are preferred.)', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[state2]', 'Reference State (At least three reference is required; more are preferred.)', 'required|xss_clean');
         }
 
         // They must specify a bank...
