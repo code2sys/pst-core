@@ -1027,7 +1027,7 @@
 								<label for="name" >Nearest relative not living with you<br/>Name</label>
 							</td>
 							<td>
-								<input name="employer_info[name]" placeholder="" value="<?php echo $_POST['employer_info']['name'];?>" /><span><b>*</b></span>
+								<input name="employer_info[relative_name]" placeholder="" value="<?php echo $_POST['employer_info']['relative_name'];?>" /><span><b>*</b></span>
 							</td>
 						</tr>
 
@@ -1036,7 +1036,7 @@
 								<label for="phone" >Phone</label>
 							</td>
 							<td>
-								<input name="employer_info[phone]" placeholder="" value="<?php echo $_POST['employer_info']['phone'];?>" /><span><b>*</b></span>
+								<input name="employer_info[relative_phone]" placeholder="" value="<?php echo $_POST['employer_info']['relative_phone'];?>" /><span><b>*</b></span>
 							</td>
 						</tr>
 
@@ -1045,7 +1045,7 @@
 								<label for="city" >City</label>
 							</td>
 							<td>
-								<input name="employer_info[city]" placeholder="" value="<?php echo $_POST['employer_info']['city'];?>" /><span><b>*</b></span>
+								<input name="employer_info[relative_city]" placeholder="" value="<?php echo $_POST['employer_info']['relative_city'];?>" /><span><b>*</b></span>
 							</td>
 						</tr>
 
@@ -1054,7 +1054,7 @@
 								<label for="state" >State</label>
 							</td>
 							<td>
-								<input name="employer_info[state]" placeholder="" value="<?php echo $_POST['employer_info']['state'];?>" /><span><b>*</b></span>
+								<input name="employer_info[relative_state]" placeholder="" value="<?php echo $_POST['employer_info']['relative_state'];?>" /><span><b>*</b></span>
 							</td>
 						</tr>
 
@@ -1063,7 +1063,7 @@
 								<label for="relationship" >Relationship</label>
 							</td>
 							<td>
-								<input name="employer_info[relationship]" placeholder="" value="<?php echo $_POST['employer_info']['relationship'];?>" /><span><b>*</b></span>
+								<input name="employer_info[relationship]" placeholder="" value="<?php echo $_POST['relative_relationship']['relative_relationship'];?>" /><span><b>*</b></span>
 							</td>
 						</tr>
 
