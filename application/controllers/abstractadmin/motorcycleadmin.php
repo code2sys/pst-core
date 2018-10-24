@@ -298,7 +298,7 @@ abstract class Motorcycleadmin extends Firstadmin
                             }
                         } else if ($k == "vehicle_type") {
                             if ($this->_checkTypeChange($motorcycle, $post['vehicle_type'])) {
-                                $post['customer_set_type'] = 1;
+                                $post['customer_set_vehicle_type'] = 1;
                             }
 
                         } else {
@@ -1113,7 +1113,7 @@ abstract class Motorcycleadmin extends Firstadmin
                 }
             } else if ($_REQUEST["name"] == "vehicle_type") {
                 if ($this->_checkTypeChange($motorcycle, $_REQUEST["value"])) {
-                    $motorcycle->set("customer_set_type", 1);
+                    $motorcycle->set("customer_set_vehicle_type", 1);
                 }
             }
 

@@ -26,6 +26,10 @@ if (defined("MOTORCYCLE_SHOP_NEW") && MOTORCYCLE_SHOP_NEW && (!defined("MOTORCYC
 mustache_tmpl_set($template, "MOTORCYCLE_SHOP_DISABLE", defined("MOTORCYCLE_SHOP_DISABLE") && MOTORCYCLE_SHOP_DISABLE);
 mustache_tmpl_set($template, "MOTORCYCLE_SHOP_DISABLE", defined("MOTORCYCLE_SHOP_DISABLE") && MOTORCYCLE_SHOP_DISABLE);
 
+// JLB 10-22-18
+// If we have this link several spots, and you ever wanted to change it, we should factor it out and just have a default
+mustache_tmpl_set($template, "MOTORCYCLE_SERVICE_LINK_URL", defined('MOTORCYCLE_SERVICE_LINK_URL') ? MOTORCYCLE_SERVICE_LINK_URL : "/pages/index/servicerequest");
+
 if (count($featured) > 0) {
     mustache_tmpl_set($template, "ShowFeaturedModels", true);
 

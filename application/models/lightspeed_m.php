@@ -476,6 +476,9 @@ class Lightspeed_M extends Master_M {
                             if ($k == "category") {
                                 $comp_val = $PSTAPI->motorcyclecategory()->get($comp_val);
                                 $comp_val = is_null($comp_val) ? "" : $comp_val->get("name");
+                            } else if ($k == "vehicle_type") {
+                                $comp_val = $PSTAPI->motorcycletype()->get($comp_val);
+                                $comp_val = is_null($comp_val) ? "" : $comp_val->get("name");
                             }
 
                             if ($motorcycle_array[$k] == $comp_val && $k != "destination_charge") {
