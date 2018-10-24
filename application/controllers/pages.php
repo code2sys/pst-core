@@ -124,7 +124,8 @@ class Pages extends Master_Controller {
 
         if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW){
 
-		$this->form_validation->set_rules('contact_info[marital_status]', 'Marital Status', 'required|xss_clean');
+        $this->form_validation->set_rules('contact_info[marital_status]', 'Marital Status', 'required|xss_clean');
+		$this->form_validation->set_rules('contact_info[us_citizen]', 'US Citizen', 'required|xss_clean');
 
         }
         $this->form_validation->set_rules('physical_address[state]', 'State', 'required|xss_clean');
@@ -152,7 +153,17 @@ class Pages extends Master_Controller {
 		$this->form_validation->set_rules('employer_info[emp_phone]', 'Employer Phone', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[salary]', 'Salary(Annually Gross)', 'required|xss_clean');
 		$this->form_validation->set_rules('employer_info[month]', 'Time at Employer(Month)', 'required|xss_clean');
-		$this->form_validation->set_rules('employer_info[year]', 'Time at Employer(Year)', 'required|xss_clean');
+        $this->form_validation->set_rules('employer_info[year]', 'Time at Employer(Year)', 'required|xss_clean');
+
+        if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW){
+
+        $this->form_validation->set_rules('employer_info[relative_name]', 'Relative Name', 'required|xss_clean');
+        $this->form_validation->set_rules('employer_info[relative_phone]', 'Relative Phone', 'required|xss_clean');
+        $this->form_validation->set_rules('employer_info[relative_city]', 'Relative City', 'required|xss_clean');
+        $this->form_validation->set_rules('employer_info[relative_state]', 'Relative State', 'required|xss_clean');
+		$this->form_validation->set_rules('employer_info[relative_relationship]', 'Relationship with relative ', 'required|xss_clean');
+
+        }
 
 		// If they've been there for less than 2 years, it's required
         if (intVal($_REQUEST['housing_info']['years']) < 2) {
@@ -236,20 +247,28 @@ class Pages extends Master_Controller {
         $this->form_validation->set_rules('reference[city1]', 'Reference City (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[state1]', 'Reference State (At least three reference is required; more are preferred.)', 'required|xss_clean');
 
-        if ((defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW) || (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW)){
+
+        // At least two reference for LIFESTYLE and at least three for Bluffpowersports
+        if (defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW ){
 
         $this->form_validation->set_rules('reference[name2]', 'Reference Name (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[phone2]', 'Reference Phone (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[city2]', 'Reference City (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[state2]', 'Reference State (At least three reference is required; more are preferred.)', 'required|xss_clean');
 
-        }
-        
-        if (defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW){
         $this->form_validation->set_rules('reference[name3]', 'Reference Name (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[phone3]', 'Reference Phone (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[city3]', 'Reference City (At least three reference is required; more are preferred.)', 'required|xss_clean');
         $this->form_validation->set_rules('reference[state3]', 'Reference State (At least three reference is required; more are preferred.)', 'required|xss_clean');
+
+        }
+        
+        if (defined('LIFESTYLESHONDA_VIEW') && LIFESTYLESHONDA_VIEW){
+
+        $this->form_validation->set_rules('reference[name2]', 'Reference Name (At least three reference is required; more are preferred.)', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[phone2]', 'Reference Phone (At least three reference is required; more are preferred.)', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[city2]', 'Reference City (At least three reference is required; more are preferred.)', 'required|xss_clean');
+        $this->form_validation->set_rules('reference[state2]', 'Reference State (At least three reference is required; more are preferred.)', 'required|xss_clean');
         }
 
         // They must specify a bank...
