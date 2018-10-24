@@ -179,7 +179,7 @@ class CRS_M extends Master_M
         // refresh it...
         $CI->CRSCron_M->refreshCRSData($motorcycle_id);
 
-        if ($motorcycle->get("customer_set_type") == 0) {
+        if ($motorcycle->get("customer_set_vehicle_type") == 0) {
             // Now, we attempt to fix the machine type...
             $corrected_category = $this->_getMachineTypeMotoType($vin_match["machine_type"], $vin_match["offroad"]);
             if ($corrected_category > 0) {
