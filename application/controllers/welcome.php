@@ -1085,6 +1085,7 @@ class Welcome extends Master_Controller {
     }
 
     public function productEnquiry() {
+
         $result = array(
             "success" => false,
             "error_message" => "Unknown error."
@@ -1101,9 +1102,19 @@ class Welcome extends Master_Controller {
             } else {
 
                 $this->load->model('motorcycle_m');
-
+                $this->load->model('trafficlogpro_m');
 
                 $this->motorcycle_m->saveEnquiry($post);
+                
+               
+                //Traffic log pro API
+
+                if ( (array_key_exists("make", $post) || array_key_exists("product_id", $post)) && (defined('ENABLE_TRAFFICLOGPRO') && ENABLE_TRAFFICLOGPRO) ){
+
+                    $apiDetails = $this->trafficlogpro_m->insertInquiryData($post);
+                                           
+                }
+
 
                 $toEmail = $this->motorcycle_m->getSalesEmail();
                 $message = "";
