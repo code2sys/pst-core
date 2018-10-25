@@ -16,13 +16,17 @@ if (!defined('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS')) {
 
 $SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
 
+echo "<pre>";
+print_r($title);
+echo "</pre>";exit;
+
 	?>
 <head>
     <?php echo jget_store_block("top_header"); ?>
 	<?php if (isset($title)): ?>
     <title><?php echo $title; ?></title>
 	<?php endif; ?>
-	
+
     <?php
     $CI =& get_instance();
     echo $CI->load->view("master/top_header", array(

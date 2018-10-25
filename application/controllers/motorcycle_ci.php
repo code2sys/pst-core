@@ -246,9 +246,6 @@ class Motorcycle_CI extends Welcome {
         $this->_mainData["filter"] = $filter;
         $this->_mainData["title"] = "Robert Test Page";
 
-        echo "<pre>";
-        print_r($this->_mainData);
-        echo "</pre>";
         $this->renderMasterPage('benz_views/header.php', 'benz_views/product.php', $this->_mainData);
         // $this->load->view('benz_views/header.php');
         // $this->load->view('benz_views/product.php');
