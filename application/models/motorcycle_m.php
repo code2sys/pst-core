@@ -54,7 +54,11 @@ class Motorcycle_M extends Master_M {
             } else{
                 $filter['condition'] = '2';
             }
-        } else if(array_key_exists('vehicles', $data_source)) {
+        } else {
+            $filter["condition"] = 1;
+        }
+
+        if(array_key_exists('vehicles', $data_source)) {
             $vehicles = $this->getMotorcycleVehicle();
             $vhcls = $this->processReturnValue($data_source['vehicles']);     
             print_r($vehicles);exit;
@@ -63,10 +67,8 @@ class Motorcycle_M extends Master_M {
                     $filter_vehicles[] = $vehicle['id'];
                 }
             }
-        } else {
-            $filter["condition"] = 1;
         }
-
+        
         $filter['brands'] = $this->processReturnValue($data_source['brands']);
         $filter['years'] = $this->processReturnValue($data_source['years']);
         $filter['categories'] = $this->processReturnValue($data_source['categories']);
