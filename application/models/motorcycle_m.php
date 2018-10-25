@@ -89,28 +89,27 @@ class Motorcycle_M extends Master_M {
                 $filter['condition'] = 'Pre-Owned';
             }
         }
-        echo "<pre>";
-        print_r($_GET);exit;
+        
         if (array_key_exists('brands', $_GET)) {
-            $brands = $this->processReturnValue($data_source['brands']);
+            $brands = $this->processReturnValue($_GET['brands']);
             foreach( $brands as $brand ) {
                 $page_title .= $brand;
             }
         }
         if (array_key_exists('years', $_GET)) {
-            $years = $this->processReturnValue($data_source['years']);
+            $years = $this->processReturnValue($_GET['years']);
             foreach( $years as $year ) {
                 $page_title .= $year;
             }
         }
         if (array_key_exists('vehicles', $_GET)) {
-            $vehicles = $this->processReturnValue($data_source['vehicles']);
+            $vehicles = $this->processReturnValue($_GET['vehicles']);
             foreach( $vehicles as $vehicle ) {
                 $page_title .= $vehicle;
             }
         }
         if (array_key_exists('vehicles', $_GET)) {
-            $vehicles = $this->processReturnValue($data_source['vehicles']);
+            $vehicles = $this->processReturnValue($_GET['vehicles']);
             foreach( $vehicles as $vehicle ) {
                 $page_title .= $vehicle;
             }
