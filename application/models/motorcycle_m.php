@@ -89,6 +89,8 @@ class Motorcycle_M extends Master_M {
                 $filter['condition'] = 'Pre-Owned';
             }
         }
+        echo "<pre>";
+        print_r($_GET);exit;
         if (array_key_exists('brands', $_GET)) {
             $brands = $this->processReturnValue($data_source['brands']);
             foreach( $brands as $brand ) {
