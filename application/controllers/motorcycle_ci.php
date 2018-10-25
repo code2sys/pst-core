@@ -62,7 +62,7 @@ class Motorcycle_CI extends Welcome {
             $featured = 0;
         }
         $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = $featured;
-        header("Location: /Motorcycle_List" . $this->preSwitch($pre));
+        header("Location: /Major_Unit_List" . $this->preSwitch($pre));
     }
 
     protected function preSwitch($pre) {
@@ -83,7 +83,7 @@ class Motorcycle_CI extends Welcome {
             $sort_number = 0;
         }
         $_SESSION["bikeControlSort"] = $sort_number;
-        header("Location: /Motorcycle_List" . $this->preSwitch($pre));
+        header("Location: /Major_Unit_List" . $this->preSwitch($pre));
 
     }
 
@@ -92,16 +92,16 @@ class Motorcycle_CI extends Welcome {
             $show_number = ITEMS_ON_PAGE;
         }
         $_SESSION["bikeControlShow"] = $show_number;
-        header("Location: /Motorcycle_List" . $this->preSwitch($pre));
+        header("Location: /Major_Unit_List" . $this->preSwitch($pre));
     }
 
     /*
-     * This is the main Motorcycle_List page.
+     * This is the main Major_Unit_List page.
      */
     public function featuredNewProducts() {
         $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
-        $_REQUEST["fltr"] = "new";
-        $_GET["fltr"] = "new";
+        $_REQUEST["fltr"] = "New_Inventory";
+        $_GET["fltr"] = "New_Inventory";
         $this->benzProduct();
     }
 
@@ -200,8 +200,8 @@ class Motorcycle_CI extends Welcome {
         // I think this is a problem with a default.
         if (!array_key_exists("fltr", $_REQUEST) && !array_key_exists("fltr", $_GET)) {
             if (!defined("MOTORCYCLE_SHOP_NEW") || MOTORCYCLE_SHOP_NEW) {
-                $_REQUEST["fltr"] = "new";
-                $_GET["fltr"] = "new";
+                $_REQUEST["fltr"] = "New_Inventory";
+                $_GET["fltr"] = "New_Inventory";
             } else {
                 $_GET["fltr"] = "pre-owned";
             }
@@ -271,7 +271,7 @@ class Motorcycle_CI extends Welcome {
         // echo $id.'<br>';
         // echo $title;exit;
         if ($id == null) {
-            redirect('Motorcycle_List?fltr=new');
+            redirect('Major_Unit_List?fltr=New_Inventory');
         }
 
         // $this->load->view('benz_views/header.php');

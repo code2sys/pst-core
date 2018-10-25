@@ -15,7 +15,7 @@ if (MOTORCYCLE_SHOP_NEW) {
         if (array_key_exists("condition", $filter) && $filter["condition"] == 2) {
             $_GET["fltr"] = "special";
         } else if (array_key_exists("condition", $filter) && $filter["condition"] == 1) {
-            $_GET["fltr"] = "new";
+            $_GET["fltr"] = "New_Inventory";
         } else {
             $_GET["fltr"] = "pre-owned";
         }

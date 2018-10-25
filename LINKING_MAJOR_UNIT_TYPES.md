@@ -35,7 +35,7 @@ MariaDB [ss_v1]> select * from motorcycle_type;
 The numbers are pretty stable. The trick to the URL is that the filter relies on the session, so you have to reset it manually with a query string parameter:
 
 <pre>
-/Motorcycle_List?fltr=new&vehicles=1&filterChange=1&search_keywords=
+/Major_Unit_List?fltr=New_Inventory&vehicles=1&filterChange=1&search_keywords=
 </pre>
 
 Would get you new ATVs, and it would reset any other filters.

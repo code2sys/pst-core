@@ -38,7 +38,7 @@ class Motorcycle_M extends Master_M {
             // JLB 2018-09-13 - There's now SPECIAL
             if ($data_source["fltr"] == "special") {
                 $filter["featured"] = 1;
-            } else if ($data_source['fltr'] == 'new'){
+            } else if ($data_source['fltr'] == 'New_Inventory'){
                 $filter['condition'] = '1';
             } else{
                 $filter['condition'] = '2';

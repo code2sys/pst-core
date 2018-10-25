@@ -309,14 +309,14 @@ echo $CI->load->view("benz_views/real_footer", array(
 		var url = "<?php
             if (array_key_exists("major_units_featured_only", $_SESSION) && $_SESSION["major_units_featured_only"] > 0) {
                 if (array_key_exists('fltr', $_GET) && $_GET['fltr'] == "pre-owned") {
-                    echo site_url('Motorcycle_List/featured_preowned');
+                    echo site_url('Major_Unit_List/featured_preowned');
                 } else if (array_key_exists('fltr', $_GET) && $_GET['fltr'] == "special") {
-                    echo site_url('Motorcycle_List/featured_special');
+                    echo site_url('Major_Unit_List/featured_special');
                 } else {
-                    echo site_url('Motorcycle_List/featured');
+                    echo site_url('Major_Unit_List/featured');
                 }
             } else {
-                echo site_url('Motorcycle_List');
+                echo site_url('Major_Unit_List');
             }
             ?>?"+url1;
 		window.location.href = url;
