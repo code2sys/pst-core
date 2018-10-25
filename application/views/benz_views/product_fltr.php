@@ -52,7 +52,7 @@ foreach ($vehicles as $vehicle) {
     mustache_tmpl_iterate($template, "vehicles");
     mustache_tmpl_set($template, "vehicles", array(
         "vehicle_id" => $vehicle['id'],
-        "vehicle_name" => $vehicle['name'],
+        "vehicle_name" => $vehicle['name'], 
         "checked" => $vhcls[$key] == $vehicle['id']
     ));
 }
