@@ -3,22 +3,18 @@
 <?php
 	$new_assets_url = jsite_url(  "/qatesting/benz_assets/" );
 	$media_url = jsite_url("/media/");
-$CI =& get_instance();
-$CI->load->model("admin_m");
-$store_name = $CI->admin_m->getAdminShippingProfile();
-$google_conversion_id = $store_name['google_conversion_id'];
-$partsfinder_link = $store_name["partsfinder_link"];
-$number_across = trim($partsfinder_link) == "" ? "six" : "seven";
+	$CI =& get_instance();
+	$CI->load->model("admin_m");
+	$store_name = $CI->admin_m->getAdminShippingProfile();
+	$google_conversion_id = $store_name['google_conversion_id'];
+	$partsfinder_link = $store_name["partsfinder_link"];
+	$number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 
-if (!defined('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS')) {
-    define('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS', true);
-}
+	if (!defined('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS')) {
+		define('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS', true);
+	}
 
-$SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
-
-echo "<pre>";
-print_r($title);
-echo "</pre>";exit;
+	$SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
 
 	?>
 <head>
