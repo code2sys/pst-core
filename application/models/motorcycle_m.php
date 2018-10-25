@@ -60,15 +60,15 @@ class Motorcycle_M extends Master_M {
 
         if(array_key_exists('vehicles', $data_source)) {
             $vehicles = $this->getMotorcycleVehicle();
-            $vhcls = $this->processReturnValue($data_source['vehicles']);     
-            print_r($vehicles);exit;
+            $vhcls = $this->processReturnValue($data_source['vehicles']);
+            
             foreach ($vehicles as $vehicle) {
                 if(in_array($vehicle['name'], $vhcls)) {
                     $filter_vehicles[] = $vehicle['id'];
                 }
             }
         }
-        
+
         $filter['brands'] = $this->processReturnValue($data_source['brands']);
         $filter['years'] = $this->processReturnValue($data_source['years']);
         $filter['categories'] = $this->processReturnValue($data_source['categories']);
