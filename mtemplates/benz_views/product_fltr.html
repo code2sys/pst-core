@@ -48,8 +48,8 @@
             <p class="parg-txt">Vehicle</p>
             {{#vehicles}}
             <div class="checkbox checkbox-primary sdCheckbox">
-                <input id="vehicle{{vehicle_id}}" class="styled" name="vehicles[]" value="{{vehicle_id}}" type="checkbox" {{#checked}}checked{{/checked}}>
-                <label for="vehicle{{vehicle_id}}">{{{vehicle_name}}}</label>
+                <input id="vehicle{{vehicle_name}}" class="styled" name="vehicles[]" value="{{vehicle_name}}" type="checkbox" {{#checked}}checked{{/checked}}>
+                <label for="vehicle{{vehicle_name}}">{{{vehicle_name}}}</label>
             </div>
             {{/vehicles}}
         </div>

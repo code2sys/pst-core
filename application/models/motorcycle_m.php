@@ -87,7 +87,7 @@ class Motorcycle_M extends Master_M {
             $this->db->where_in('motorcycle.category', $filter['categories']);
         }
         if (!$skip_vehicles && @$filter['vehicles']) {
-            $this->db->where_in('motorcycle.vehicle_type', $filter['vehicles']);
+            $this->db->where_in('motorcycle.vehicle_name', $filter['vehicles']);
         }
 
         if (!$skip_vehicles && @$filter['status']) {
