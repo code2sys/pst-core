@@ -48,12 +48,12 @@ $vhcls = explode('$', $_GET['vehicles']);
 $vhcls = array_filter($vhcls);
 
 foreach ($vehicles as $vehicle) {
-    $key = array_search($vehicle['id'], $vhcls);
+    $key = array_search($vehicle['name'], $vhcls);
     mustache_tmpl_iterate($template, "vehicles");
     mustache_tmpl_set($template, "vehicles", array(
         "vehicle_id" => $vehicle['id'],
         "vehicle_name" => $vehicle['name'],
-        "checked" => $vhcls[$key] == $vehicle['id']
+        "checked" => $vhcls[$key] == $vehicle['name']
     ));
 }
 
