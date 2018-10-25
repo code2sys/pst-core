@@ -245,7 +245,7 @@ class Motorcycle_CI extends Welcome {
         $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
         $this->_mainData["filter"] = $filter;
 
-        $this->setMasterPageVars('title', "Robert Test Page");
+        $this->setMasterPageVars('title', $this->motorcycle_m->getPageTitle());
         $this->renderMasterPage('benz_views/header.php', 'benz_views/product.php', $this->_mainData);
         // $this->load->view('benz_views/header.php');
         // $this->load->view('benz_views/product.php');

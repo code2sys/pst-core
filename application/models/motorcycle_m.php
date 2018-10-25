@@ -83,12 +83,38 @@ class Motorcycle_M extends Master_M {
         if (array_key_exists('fltr', $_GET)) {
             if ($_GET["fltr"] == "New_Inventory") {
                 $page_title = "New";
-            } else if ($_GET["fltr"] == 'New_Inventory'){
-                $filter['condition'] = '1';
+            } else if ($_GET["fltr"] == 'special'){
+                $page_title = "Featured";
             } else{
-                $filter['condition'] = '2';
+                $filter['condition'] = 'Pre-Owned';
             }
         }
+        if (array_key_exists('brands', $_GET)) {
+            $brands = $this->processReturnValue($data_source['brands']);
+            foreach( $brands as $brand ) {
+                $page_title .= $brand;
+            }
+        }
+        if (array_key_exists('years', $_GET)) {
+            $years = $this->processReturnValue($data_source['years']);
+            foreach( $years as $year ) {
+                $page_title .= $year;
+            }
+        }
+        if (array_key_exists('vehicles', $_GET)) {
+            $vehicles = $this->processReturnValue($data_source['vehicles']);
+            foreach( $vehicles as $vehicle ) {
+                $page_title .= $vehicle;
+            }
+        }
+        if (array_key_exists('vehicles', $_GET)) {
+            $vehicles = $this->processReturnValue($data_source['vehicles']);
+            foreach( $vehicles as $vehicle ) {
+                $page_title .= $vehicle;
+            }
+        }
+
+        return $page_title;
     }
 
     protected function buildWhere($filter, $skip_year = false, $skip_vehicles = false, $skip_categories = false) {
