@@ -1229,7 +1229,7 @@ class Welcome extends Master_Controller {
 //            // This knowledge should be centralized...
 //            redirect(base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']));
 //        } else {
-//            redirect(base_url("Motorcycle_List?fltr=new"));
+//            redirect(base_url("Major_Unit_List?fltr=New_Inventory"));
 //        }
     }
 

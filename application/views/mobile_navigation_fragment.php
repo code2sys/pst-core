@@ -22,7 +22,7 @@ $extra_navigation = array();
 // You have to explicitly turn NEW ON.
 if (defined("MOTORCYCLE_SHOP_NEW") && MOTORCYCLE_SHOP_NEW) {
     $extra_navigation[] = array(
-        "url" => "/Motorcycle_List?fltr=new&search_keywords=",
+        "url" => "/Major_Unit_List?fltr=New_Inventory&search_keywords=",
         "mobile_label" => "New Units"
     );
 }
@@ -30,7 +30,7 @@ if (defined("MOTORCYCLE_SHOP_NEW") && MOTORCYCLE_SHOP_NEW) {
 // This was how it was done in motorcycles.php. You have to explicitly turn used OFF.
 if (!defined("MOTORCYCLE_SHOP_USED") || MOTORCYCLE_SHOP_USED) {
     $extra_navigation[] = array(
-        "url" => "/Motorcycle_List?fltr=new&search_keywords=",
+        "url" => "/Major_Unit_List?fltr=New_Inventory&search_keywords=",
         "mobile_label" => "Pre-Owned Units"
     );
 }

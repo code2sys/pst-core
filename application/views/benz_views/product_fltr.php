@@ -12,7 +12,7 @@ $template = mustache_tmpl_open("benz_views/product_fltr.html");
 
 mustache_tmpl_set($template, "MOTORCYCLE_SHOP_NEW", MOTORCYCLE_SHOP_NEW);
 mustache_tmpl_set($template, "fltr_special_active", $_GET['fltr'] == 'special' );
-mustache_tmpl_set($template, "fltr_new_active", $_GET['fltr'] == 'new' );
+mustache_tmpl_set($template, "fltr_new_active", $_GET['fltr'] == 'New_Inventory' );
 mustache_tmpl_set($template, "fltr_preowned_active", $_GET['fltr'] == 'pre-owned' );
 mustache_tmpl_set($template, "major_units_featured_only", array_key_exists("major_units_featured_only", $_SESSION) && $_SESSION["major_units_featured_only"] > 0);
 

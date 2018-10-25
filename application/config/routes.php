@@ -41,10 +41,10 @@
 $route['default_controller'] = "welcome";
 $route['404_override'] = 'my404';
 $route['Motorcycle_Gear_Brands'] = 'shopping/brands';
-$route['Motorcycle_List'] = 'motorcycle_ci/benzProduct';
-$route['Motorcycle_List/featured'] = 'motorcycle_ci/featuredNewProducts';
-$route['Motorcycle_List/featured_special'] = 'motorcycle_ci/featuredSpecialProducts';
-$route['Motorcycle_List/featured_preowned'] = 'motorcycle_ci/featuredUsedProducts';
+$route['Major_Unit_List'] = 'motorcycle_ci/benzProduct';
+$route['Major_Unit_List/featured'] = 'motorcycle_ci/featuredNewProducts';
+$route['Major_Unit_List/featured_special'] = 'motorcycle_ci/featuredSpecialProducts';
+$route['Major_Unit_List/featured_preowned'] = 'motorcycle_ci/featuredUsedProducts';
 $route['Motorcycle_Sort/([0-9]+)/([0-9]+)'] = 'motorcycle_ci/benzProductSort/$1/$2';
 $route['Motorcycle_Featured/([0-9]+)/([0-9]+)'] = 'motorcycle_ci/benzProductFeatured/$1/$2';
 $route['Motorcycle_Show/([0-9]+)/([0-9]+)'] = 'motorcycle_ci/benzProductShow/$1/$2';
