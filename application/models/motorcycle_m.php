@@ -60,7 +60,7 @@ class Motorcycle_M extends Master_M {
 
             foreach ($vehicles as $vehicle) {
                 if(in_array($vehicle['name'], $vhcls)) {
-                    $filter_vehicles[] = $vehicle['id']
+                    $filter_vehicles[] = $vehicle['id'];
                 }
             }
         } else {
