@@ -77,6 +77,20 @@ class Motorcycle_M extends Master_M {
         return $filter;
     }
 
+    public function getPageTitle() {
+        $page_title = "New";
+
+        if (array_key_exists('fltr', $_GET)) {
+            if ($_GET["fltr"] == "New_Inventory") {
+                $page_title = "New";
+            } else if ($_GET["fltr"] == 'New_Inventory'){
+                $filter['condition'] = '1';
+            } else{
+                $filter['condition'] = '2';
+            }
+        }
+    }
+
     protected function buildWhere($filter, $skip_year = false, $skip_vehicles = false, $skip_categories = false) {
         $where = array();
         if( !empty($filter['condition']) ) {
