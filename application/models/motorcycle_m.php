@@ -32,7 +32,9 @@ class Motorcycle_M extends Master_M {
         /*
          * I reject the idea that vault is the default as a general principle. This seems like a horrible choice for the vault, since it is
          * supposed to be SPECIAL. JLB 06-04-17
-         */
+         */        
+        $filter_vehicles = array();
+
         if (array_key_exists('fltr', $data_source)) {
             //$filter['condition'] = $_GET['fltr'] == 'current' ? '1' : '2';
             // JLB 2018-09-13 - There's now SPECIAL
@@ -52,6 +54,15 @@ class Motorcycle_M extends Master_M {
             } else{
                 $filter['condition'] = '2';
             }
+        } else if(array_key_exists('vehicles', $data_source)) {
+            $vehicles = $this->getMotorcycleVehicle();
+            $vhcls = $this->processReturnValue($data_source['vehicles']);     
+
+            foreach ($vehicles as $vehicle) {
+                if(in_array($vehicle['name'], $vhcls)) {
+                    $filter_vehicles[] = $vehicle['id']
+                }
+            }
         } else {
             $filter["condition"] = 1;
         }
@@ -59,7 +70,7 @@ class Motorcycle_M extends Master_M {
         $filter['brands'] = $this->processReturnValue($data_source['brands']);
         $filter['years'] = $this->processReturnValue($data_source['years']);
         $filter['categories'] = $this->processReturnValue($data_source['categories']);
-        $filter['vehicles'] = $this->processReturnValue($data_source['vehicles']);
+        $filter['vehicles'] = $filter_vehicles;
 
         return $filter;
     }
@@ -87,7 +98,7 @@ class Motorcycle_M extends Master_M {
             $this->db->where_in('motorcycle.category', $filter['categories']);
         }
         if (!$skip_vehicles && @$filter['vehicles']) {
-            $this->db->where_in('motorcycle.vehicle_name', $filter['vehicles']);
+            $this->db->where_in('motorcycle.vehicle_type', $filter['vehicles']);
         }
 
         if (!$skip_vehicles && @$filter['status']) {
