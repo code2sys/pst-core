@@ -25,9 +25,9 @@ if (@$motorcycles) {
                     <div class="mid-r-logo">
                             <!--<img src="<?php echo $new_assets_url; ?>images/imgpsh_fullsize (6).png" width="152px;"/>-->
                     </div>
-                    <div class="mid-r-img-veh">
+                    <!-- <div class="mid-r-img-veh">
                         <img src="<?php echo $motorcycle_image; ?>" width="px;"/>
-                    </div>
+                    </div> -->
                 </div>
             </a>
             <div class="mid-r-text">
