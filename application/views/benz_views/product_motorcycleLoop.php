@@ -10,9 +10,6 @@ $CI =& get_instance();
 $CI->load->helper("mustache_helper");
 $template = mustache_tmpl_open("benz_views/product_motorcycleLoop.html");
 
-echo "<pre>";
-print_r($motorcycles);exit;
-
 foreach ($motorcycles as $motorcycle) {
 
     // What is the default...
