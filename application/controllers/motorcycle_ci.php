@@ -279,9 +279,9 @@ class Motorcycle_CI extends Welcome {
             $id = $this->motorcycle_m->getMotorcycleIdByTitle($title1);
         }
 
-        // echo urldecode($title);
-        // echo $id.'<br>';
-        // echo $title;exit;
+        echo $stock_code;
+        echo $id.'<br>';
+        echo $title;exit;
         if ($id == null) {
             redirect('Major_Unit_List?fltr=New_Inventory');
         }
