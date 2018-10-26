@@ -209,6 +209,7 @@ class Motorcycle_CI extends Welcome {
 
 
         $this->load->model('pages_m');
+        $this->load->model('admin_m');
         $this->load->model('motorcycle_m');
 
         if (!array_key_exists("filterChange", $_REQUEST) && array_key_exists("motorcycle_filter", $_SESSION) && is_array($_SESSION["motorcycle_filter"]) && (!array_key_exists("fltr", $_REQUEST) || (array_key_exists("motorcycle_fltr", $_SESSION) && $_SESSION["motorcycle_fltr"] == $_REQUEST["fltr"]))) {
@@ -244,6 +245,10 @@ class Motorcycle_CI extends Welcome {
         $recently = $_SESSION['recentlyMotorcycle'];
         $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
         $this->_mainData["filter"] = $filter;
+
+        $store_name = $this->admin_m->getAdminShippingProfile();
+        echo "<pre>";
+        print_r($store_name);
 
         $this->setMasterPageVars('title', $this->motorcycle_m->getPageTitle());
         $this->renderMasterPage('benz_views/header.php', 'benz_views/product.php', $this->_mainData);
