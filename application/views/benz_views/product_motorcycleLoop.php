@@ -32,10 +32,10 @@ foreach ($motorcycles as $motorcycle) {
         define('GET_FINANCING_WORDING', 'GET FINANCING');
     }
     mustache_tmpl_set($motorcycle_action_buttons, "get_financing_wording", GET_FINANCING_WORDING);
-    mustache_tmpl_set($motorcycle_action_buttons, "view_url", base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']));
+    mustache_tmpl_set($motorcycle_action_buttons, "view_url", base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . $motorcycle['sku']));
 
     mustache_tmpl_set($template, "motorcycles", array(
-        "url" => base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']),
+        "url" => base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title']  . $motorcycle['sku']),
         "motorcycle_type" => $motorcycle["type"],
         "motorcycle_url_title" => $motorcycle["url_title"],
         "motorcycle_sku" => $motorcycle["sku"],
