@@ -88,16 +88,19 @@ class Motorcycle_M extends Master_M {
         return $filter;
     }
 
-    public function getPageTitle() {
+    public function getPageInfos() {
         $page_title = "New";
-
+        $page_meta = "we offer a wide variety of ";
         if (array_key_exists('fltr', $_GET)) {
             if ($_GET["fltr"] == "New_Inventory") {
                 $page_title = "New";
+                $page_meta .= "New";
             } else if ($_GET["fltr"] == 'special'){
                 $page_title = "Featured";
+                $page_meta .= "Featured";
             } else{
                 $filter['condition'] = 'Pre-Owned';
+                $page_meta .= "Pre-Owned";
             }
         }
 
@@ -105,19 +108,25 @@ class Motorcycle_M extends Master_M {
             $brands = $this->processReturnValue($_GET['brands']);
             foreach( $brands as $brand ) {
                 $page_title .= " ".$brand;
+                $page_meta .= " ".$brand;
             }
+            $page_meta .= "(Brands)";
         }
         if (array_key_exists('years', $_GET)) {
             $years = $this->processReturnValue($_GET['years']);
             foreach( $years as $year ) {
                 $page_title .= " ".$year;
+                $page_meta .= " ".$year;
             }
+            $page_meta .= "(Years)";
         }
         if (array_key_exists('vehicles', $_GET)) {
             $vehicles = $this->processReturnValue($_GET['vehicles']);
             foreach( $vehicles as $vehicle ) {
                 $page_title .= " ".$vehicle;
+                $page_meta .= " ".$vehicle;
             }
+            $page_meta .= "(Vehicle).";
         }
         if (array_key_exists('categories', $_GET)) {
             $categories = $this->processReturnValue($_GET['categories']);
@@ -125,8 +134,12 @@ class Motorcycle_M extends Master_M {
                 $page_title .= " ".$category;
             }
         }
+        $page_meta .= "Come visit our dealer ship to see all we have to offer for (Keywords) entered on the home page.";
 
-        return $page_title;
+        return array(
+            'page_title' =>$page_title,
+            'page_meta' =>$page_meta,
+        );
     }
 
     protected function buildWhere($filter, $skip_year = false, $skip_vehicles = false, $skip_categories = false) {
