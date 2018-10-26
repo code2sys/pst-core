@@ -21,11 +21,11 @@ mustache_tmpl_set($template, "major_unit_search_keywords", htmlentities(array_ke
 $ctgrs = explode('$', $_GET['categories']);
 $ctgrs = array_filter($ctgrs);
 foreach ($categories as $category) {
-    $key = array_search($category['id'], $ctgrs);
+    $key = array_search($category['name'], $ctgrs);
     mustache_tmpl_iterate($template, "categories");
     mustache_tmpl_set($template, "categories", array(
         "category_id" => $category['id'],
-        "checked" => $ctgrs[$key] == $category['id'],
+        "checked" => $ctgrs[$key] == $category['name'],
         "category_name" => $category['name']
     ));
 }
