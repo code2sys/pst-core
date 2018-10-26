@@ -60,8 +60,8 @@
 
             {{#categories}}
             <div class="checkbox checkbox-primary sdCheckbox">
-                <input id="category{{category_id}}" class="styled" name="category[]" value="{{category_id}}" type="checkbox" {{#checked}}checked{{/checked}}>
-                <label for="category{{category_id}}">{{{category_name}}}</label>
+                <input id="category{{category_name}}" class="styled" name="category[]" value="{{category_name}}" type="checkbox" {{#checked}}checked{{/checked}}>
+                <label for="category{{category_name}}">{{{category_name}}}</label>
             </div>
             {{/categories}}
         </div>

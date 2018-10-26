@@ -68,10 +68,21 @@ class Motorcycle_M extends Master_M {
                 }
             }
         }
+        $filter_categories = array();
+        if(array_key_exists('categories', $data_source)) {
+            $categories = $this->getMotorcycleCategory();
+            $catgrs = $this->processReturnValue($data_source['categories']);
+
+            foreach ($categories as $category) {
+                if(in_array($category['name'], $catgrs)) {
+                    $filter_categories[] = $category['id'];
+                }
+            }
+        }
 
         $filter['brands'] = $this->processReturnValue($data_source['brands']);
         $filter['years'] = $this->processReturnValue($data_source['years']);
-        $filter['categories'] = $this->processReturnValue($data_source['categories']);
+        $filter['categories'] = $filter_categories;
         $filter['vehicles'] = $filter_vehicles;
 
         return $filter;
@@ -106,6 +117,12 @@ class Motorcycle_M extends Master_M {
             $vehicles = $this->processReturnValue($_GET['vehicles']);
             foreach( $vehicles as $vehicle ) {
                 $page_title .= " ".$vehicle;
+            }
+        }
+        if (array_key_exists('categories', $_GET)) {
+            $categories = $this->processReturnValue($_GET['categories']);
+            foreach( $categories as $category ) {
+                $page_title .= " ".$category;
             }
         }
 
