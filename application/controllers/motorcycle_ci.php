@@ -247,10 +247,10 @@ class Motorcycle_CI extends Welcome {
         $this->_mainData["filter"] = $filter;
 
         $store_name = $this->admin_m->getAdminShippingProfile();
-        echo "<pre>";
-        print_r($store_name);
+        $title = $this->motorcycle_m->getPageTitle();
+        $title .= " ".$store_name['company']." ".$store_name['city']." ".$store_name['state'];
 
-        $this->setMasterPageVars('title', $this->motorcycle_m->getPageTitle());
+        $this->setMasterPageVars('title', $title);
         $this->renderMasterPage('benz_views/header.php', 'benz_views/product.php', $this->_mainData);
         // $this->load->view('benz_views/header.php');
         // $this->load->view('benz_views/product.php');
