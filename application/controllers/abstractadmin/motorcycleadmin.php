@@ -54,7 +54,8 @@ abstract class Motorcycleadmin extends Firstadmin
             "dealer_track_default_category" => "",
             "dealer_track_default_vehicle_type" => "",
             "dealer_track_delete_if_not_in_upload" => 1,
-            "dealer_track_active_immediately" => 0
+            "dealer_track_active_immediately" => 0,
+            "dealer_track_default_cycletrader" => 1
         );
     }
 
