@@ -52,6 +52,13 @@ $success = $CI->session->flashdata("success");
                                 <label><input type="radio" name="dealer_track_active_immediately" value="1" <?php if ($dealer_track_active_immediately > 0): ?>checked="checked"<?php endif; ?> /> Active</label>
                             </td>
                         </tr>
+                        <tr>
+                            <td width="30%"><b>Initial Cycle Trader Setting for Newly Imported Units:</b></td>
+                            <td>
+                                <label><input type="radio" name="dealer_track_default_cycletrader" value="0" <?php if ($dealer_track_default_cycletrader == 0): ?>checked="checked"<?php endif; ?> /> No, Exclude New Units from Cycle Trader By Default</label>
+                                <label><input type="radio" name="dealer_track_default_cycletrader" value="1" <?php if ($dealer_track_default_cycletrader > 0): ?>checked="checked"<?php endif; ?> /> Yes, Include New Units in Cycle Trader By Default</label>
+                            </td>
+                        </tr>
 
                         <tr>
                             <td width="30%"><b>Delete If Not In Feed File:</b><br/>If a file is received, should it be treated as a complete export of Dealer Track major unit inventory, or as an incremental update?</td>
