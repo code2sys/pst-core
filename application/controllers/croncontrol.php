@@ -2,6 +2,11 @@
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
 
+    public function encryptWord($word) {
+        $this->load->library("encrypt");
+        print $this->encrypt->encode($word);
+    }
+
     // JLB 09-18-18
     public function fixOrders() {
         $query = $this->db->query("select `order`.id, `order_product`.part_id from `order` join order_product on `order`.id = order_product.order_id join order_transaction on `order`.id = order_transaction.order_id where order_product.product_sku = '';");
