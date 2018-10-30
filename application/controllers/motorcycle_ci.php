@@ -217,7 +217,7 @@ class Motorcycle_CI extends Welcome {
         } else {
             $filter = $this->motorcycle_m->assembleFilterFromRequest();
             
-            $_SESSION["motorcycle_filter"] = $filter;
+            // $_SESSION["motorcycle_filter"] = $filter;
             $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
 
         }
