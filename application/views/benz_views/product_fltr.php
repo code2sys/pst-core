@@ -119,11 +119,11 @@ foreach ($brands as $k => $brand) {
     $key = array_search($brand['make'], $brnds);
 
     $filteredUrl = '&brands=';    
+    $paramBrands = '';
     if ($brnds[$key] == $brand['make']) {
         $tempBrnds = $brnds;
         unset($tempBrnds[$key]);
-
-        $paramBrands = '';
+        
         if (count($tempBrnds) > 0) {
             foreach( $tempBrnds as $temp ) {
                 $filteredUrl .= $temp.'$';
@@ -158,11 +158,12 @@ $vhcls = array_filter($vhcls);
 foreach ($vehicles as $vehicle) {
     $key = array_search($vehicle['name'], $vhcls);
 
-    $filteredUrl = '&vehicles=';    
+    $filteredUrl = '&vehicles=';  
+    $paramVehicles = '';  
     if ($vhcls[$key] == $vehicle['name']) {
         $tempVhcls = $vhcls;
         unset($tempVhcls[$key]);
-
+        
         if (count($tempVhcls) > 0) {
             foreach( $tempVhcls as $temp ) {
                 $filteredUrl .= $temp.'$';
