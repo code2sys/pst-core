@@ -57,8 +57,7 @@ if (array_key_exists("categories", $_REQUEST) && array_key_exists("categories", 
 if (array_key_exists("brands", $_REQUEST) && array_key_exists("brands", $_GET)) {
     $brandsUrl = '&'.$indexedParams['brands'];
     $tmps = explode('=', $indexedParams['brands']);
-    // unset($tmps[0]);
-    // $tmps = explode('$', $tmps);
+    $tmps = explode('$', $tmps[1]);
 
     print_r($tmps);
     foreach( $tmps as $tmp ) {
