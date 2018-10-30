@@ -109,7 +109,7 @@ foreach ($categories as $category) {
     mustache_tmpl_iterate($template, "categories");
     mustache_tmpl_set($template, "categories", array(
         "category_id" => $category['id'],
-        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : $paramBrands.$paramVehicles.'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $filteredUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
+        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : str_replace(" ", "-", $paramBrands).str_replace(" ", "-", $paramVehicles).'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $filteredUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
         "checked" => $ctgrs[$key] == $category['name'],
         "category_name" => $category['name']
     ));
@@ -151,7 +151,7 @@ foreach ($brands as $k => $brand) {
     mustache_tmpl_set($template, "brands", array(
         "brand_make" => $brand['make'],
         "k" => $k,
-        "filter_link" => $actualUrl . '/'. $paramUrl . (($filteredBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : $filteredBrands.$paramVehicles.'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $filteredUrl . $categoriesUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
+        "filter_link" => $actualUrl . '/'. $paramUrl . (($filteredBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : str_replace(" ", "-", $filteredBrands).str_replace(" ", "-", $paramVehicles).'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $filteredUrl . $categoriesUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
         "checked" => $brnds[$key] == $brand['make']
     ));
 }
@@ -177,6 +177,7 @@ foreach ($vehicles as $vehicle) {
             $filteredUrl = substr($filteredUrl, 0, -1);
         } else {
             $filteredUrl = '';
+            $filteredVehicles = '';
         }
     } else {        
         if ( $vehiclesUrl != '' ) {
@@ -191,7 +192,7 @@ foreach ($vehicles as $vehicle) {
     mustache_tmpl_set($template, "vehicles", array(
         "vehicle_id" => $vehicle['id'],
         "vehicle_name" => $vehicle['name'],
-        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $filteredVehicles == '') ? "_Powersports_Units_".$forSaleLink : $paramBrands.$filteredVehicles.'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $categoriesUrl . $yearsUrl . $filteredUrl . '&filterChange=1',
+        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $filteredVehicles == '') ? "_Powersports_Units_".$forSaleLink : str_replace(" ", "-", $paramBrands).str_replace(" ", "-", $filteredVehicles).'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $categoriesUrl . $yearsUrl . $filteredUrl . '&filterChange=1',
         "checked" => $vhcls[$key] == $vehicle['name']
     ));
 }
@@ -227,7 +228,7 @@ foreach ($years as $k => $year) {
     mustache_tmpl_set($template, "years", array(
         "k" => $k,
         "year" => $year['year'],
-        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : $paramBrands.$paramVehicles.'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $categoriesUrl . $filteredUrl . $vehiclesUrl . '&filterChange=1',
+        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : str_replace(" ", "-", $paramBrands).str_replace(" ", "-", $paramVehicles).'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $categoriesUrl . $filteredUrl . $vehiclesUrl . '&filterChange=1',
         "checked" => $yr[$key] == $year['year']
     ));
 }
