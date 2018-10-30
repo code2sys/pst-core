@@ -251,6 +251,7 @@ class Motorcycle_CI extends Welcome {
         $page_info = $this->motorcycle_m->getPageInfos();
 
         $title = $page_info['page_title']." For Sale ".$store_name['company']." ".$store_name['city']." ".$store_name['state'];
+        $this->_mainData['forSaleLink'] = 'For_Sale_'.$store_name['city'].'_'.$store_name['state'];
 
         $this->setMasterPageVars('title', $title);
 
