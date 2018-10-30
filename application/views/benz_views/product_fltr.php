@@ -20,8 +20,13 @@ mustache_tmpl_set($template, "major_unit_search_keywords", htmlentities(array_ke
 
 $currentURL     = current_url();
 $queryString    = $_SERVER['QUERY_STRING'];
-$params         = explode('$', $queryString);
+$params         = explode('&', $queryString);
 $params         = array_filter($params);
+
+foreach ($params as $param) {
+    $arr = explode('=', $param);
+    $params[$arr[0]] = $param;
+}
 
 $fullURL = $currentURL . '?' . $params; 
 
