@@ -310,6 +310,13 @@ class Motorcycle_CI extends Welcome {
             $this->setMasterPageVars('metatag', $metaTag);
         }
 
+        $this->load->library('user_agent');
+        $this->_mainData['referUrl'] = base_url('Major_Unit_List');
+        if ($this->agent->is_referral())
+        {
+            $this->_mainData['referUrl'] = $this->agent->referrer();
+        }
+
         // echo "<pre>";
         // print_r($this->_mainData);exit;
         // echo "</pre>";
