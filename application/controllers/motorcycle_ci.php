@@ -217,7 +217,7 @@ class Motorcycle_CI extends Welcome {
         } else {
             $filter = $this->motorcycle_m->assembleFilterFromRequest();
             
-            $_SESSION["motorcycle_filter"] = $filter;
+            // $_SESSION["motorcycle_filter"] = $filter;
             $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
 
         }
@@ -237,7 +237,8 @@ class Motorcycle_CI extends Welcome {
         if (!array_key_exists("major_units_featured_only", $_SESSION)) {
             $_SESSION["major_units_featured_only"] = 0;
         }
-
+echo "<pre>";
+print_r($filter);
         $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], 0, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
 
         $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
@@ -250,10 +251,10 @@ class Motorcycle_CI extends Welcome {
         $store_name = $this->admin_m->getAdminShippingProfile();
         $page_info = $this->motorcycle_m->getPageInfos();
 
-        $title = (($page_info['page_title'] == "New" || $page_info['page_title'] == "Pre-Owned") ? $page_info['page_title']." Powersports Units" : $page_info['page_title']) ." For Sale ".$store_name['company']." ".$store_name['city']." ".$store_name['state'];
+        $title = $page_info['page_title']." For Sale ".$store_name['company']." ".$store_name['city']." ".$store_name['state'];
         $this->_mainData['forSaleLink'] = 'For_Sale_'.$store_name['city'].'_'.$store_name['state'];
 
-        $this->_mainData['pageRec'] = $this->pages_m->getPageRec(0);
+        $this->_mainData['pageRec'] = $this->pages_m->getPageRec(1);
 
         $this->setMasterPageVars('title', $title);
 
