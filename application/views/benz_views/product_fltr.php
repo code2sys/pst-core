@@ -59,18 +59,17 @@ if (array_key_exists("brands", $_REQUEST) && array_key_exists("brands", $_GET)) 
     $tmps = explode('=', $indexedParams['brands']);
     $tmps = explode('$', $tmps[1]);
 
-    print_r($tmps);
     foreach( $tmps as $tmp ) {
         $paramBrands .= "_".str_replace(" ", "-", $tmp);
     }
 }
-echo "=======";
-print_r($paramBrands); exit;
+
 if (array_key_exists("vehicles", $_REQUEST) && array_key_exists("vehicles", $_GET)) {
     $vehiclesUrl = '&'.$indexedParams['vehicles'];
 
-    $tmps = explode('$', $indexedParams['vehicles']);
-    $tmps = array_filter($tmp);
+    $tmps = explode('=', $indexedParams['vehicles']);
+    $tmps = explode('$', $tmps[1]);
+
     foreach( $tmps as $tmp ) {
         $paramVehicles .= "_".str_replace(" ", "-", $tmp);
     }
