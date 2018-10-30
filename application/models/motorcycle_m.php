@@ -48,7 +48,7 @@ class Motorcycle_M extends Master_M {
             //$filter['condition'] = $_GET['fltr'] == 'current' ? '1' : '2';
             if ($data_source["condition"] == "special") {
                 $filter["featured"] = 1;
-            } else if ($data_source['condition'] == 'new'){
+            } else if ($data_source['condition'] == 'New_Inventory'){
                 $filter['condition'] = '1';
             } else{
                 $filter['condition'] = '2';
@@ -132,7 +132,7 @@ class Motorcycle_M extends Master_M {
                 $page_title .= " ".$category;
             }
         }
-        $page_meta .= "Come visit our dealer ship to see all we have to offer.";
+        $page_meta .= " Come visit our dealer ship to see all we have to offer.";
 
         return array(
             'page_title' =>$page_title,

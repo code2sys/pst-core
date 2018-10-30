@@ -250,13 +250,11 @@ class Motorcycle_CI extends Welcome {
         $store_name = $this->admin_m->getAdminShippingProfile();
         $page_info = $this->motorcycle_m->getPageInfos();
 
-        $title = $page_info['page_title']." ".$store_name['company']." ".$store_name['city']." ".$store_name['state'];
+        $title = $page_info['page_title']." For Sale ".$store_name['company']." ".$store_name['city']." ".$store_name['state'];
 
         $this->setMasterPageVars('title', $title);
 
-        $metaTag = '<meta name="description" content="At ' . $store_name['company'] . ' in '. $store_name['city'] .' and '. $store_name['state'] .' '. $page_info['page_meta'] .'"/>';
         $this->_mainData['meta_description'] = "At " . $store_name['company'] . " in ". $store_name['city'] ." and ". $store_name['state'] ." ". $page_info['page_meta'];
-        // $this->setMasterPageVars('metatag', $metaTag);
 
         $this->renderMasterPage('benz_views/header.php', 'benz_views/product.php', $this->_mainData);
         // $this->load->view('benz_views/header.php');
