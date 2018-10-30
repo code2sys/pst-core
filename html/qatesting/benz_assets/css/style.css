@@ -881,6 +881,10 @@ h3.head-tx {
     color: #999;
     display: flex;
     align-items: center;
+    text-decoration: none;
+}
+.filter-inner .filter-item:hover {
+    color: #0e66d7;
 }
 .filter-inner .filter-item b {
     display: flex;
@@ -890,8 +894,13 @@ h3.head-tx {
     border: 1px solid #999;
     border-radius: 50%;
 }
+.filter-inner .filter-item.checked {
+    color: #0e66d7;
+}
 .filter-inner .filter-item.checked b {
-    background-color: #999;
+    background-color: #0e66d7;
+    border-color: #0e66d7;
+
 }
 .sdCheckbox {
     padding: 6px 10px !important;
