@@ -18,6 +18,28 @@ mustache_tmpl_set($template, "major_units_featured_only", array_key_exists("majo
 
 mustache_tmpl_set($template, "major_unit_search_keywords", htmlentities(array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : ""));
 
+$currentURL     = current_url();
+$queryString    = $_SERVER['QUERY_STRING'];
+$params         = explode('$', $queryString);
+$params         = array_filter($params);
+
+$fullURL = $currentURL . '?' . $params; 
+
+echo "<pre>";
+print_r($params);exit;
+$fltrUrl = '';
+$brandsUrl = '';
+$yearsUrl = '';
+$vehiclesUrl = '';
+$categoriesUrl = '';
+foreach ($params as $param) {
+    if (!array_key_exists("fltr", $_REQUEST) && !array_key_exists("fltr", $_GET)) {
+        $fltrUrl = 'fltr=New_Inventory';
+    } else {
+        $fltrUrl = 'fltr=New_Inventory';
+    }
+}
+
 $ctgrs = explode('$', $_GET['categories']);
 $ctgrs = array_filter($ctgrs);
 foreach ($categories as $category) {
@@ -29,17 +51,6 @@ foreach ($categories as $category) {
         "category_name" => $category['name']
     ));
 }
-
-
-$currentURL = current_url(); 
-
-$params   = $_SERVER['QUERY_STRING'];
-
-$fullURL = $currentURL . '?' . $params; 
-
-echo "<pre>";
-print_r($params);exit;
-
 
 $brnds = explode('$', $_GET['brands']);
 $brnds = array_filter($brnds);
