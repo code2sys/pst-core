@@ -269,10 +269,6 @@ class Motorcycle_CI extends Welcome {
         $this->load->model('pages_m');
         $this->load->model('motorcycle_m');
 
-        echo $stock_code;exit;
-        echo $id.'<br>';
-        echo $title;exit;
-
         // JLB 08-23-17
         // This used to just use the title. Let's try the stock code first.
         $id = $this->motorcycle_m->getMotorcycleIdBySKU($stock_code);
