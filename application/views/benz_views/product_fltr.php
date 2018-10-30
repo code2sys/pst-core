@@ -30,6 +30,9 @@ foreach ($categories as $category) {
     ));
 }
 
+echo "<pre>";
+print_r($this->uri->segment_array());exit;
+
 $brnds = explode('$', $_GET['brands']);
 $brnds = array_filter($brnds);
 
