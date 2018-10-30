@@ -99,7 +99,7 @@ class Motorcycle_M extends Master_M {
                 $page_title = "Featured";
                 $page_meta .= "Featured";
             } else{
-                $filter['condition'] = 'Pre-Owned';
+                $page_title = 'Pre-Owned';
                 $page_meta .= "Pre-Owned";
             }
         }
