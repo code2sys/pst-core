@@ -13,7 +13,8 @@
 	if (!defined('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS')) {
 		define('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS', true);
 	}
-
+echo "<pre>";
+print_r($pageRec);exit;
 	$SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
 
 	?>
