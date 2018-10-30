@@ -29,10 +29,6 @@ foreach ($params as $param) {
     $indexedParams[$exp[0]] = $param;
 }
 
-// $fullURL = $currentURL . '?' . $params; 
-
-// echo "<pre>";
-// print_r($params);exit;
 $fltrUrl = '';
 $brandsUrl = '';
 $yearsUrl = '';
@@ -62,10 +58,33 @@ $ctgrs = explode('$', $_GET['categories']);
 $ctgrs = array_filter($ctgrs);
 foreach ($categories as $category) {
     $key = array_search($category['name'], $ctgrs);
+
+    $filteredUrl = '&categories=';
+    
+    if ($ctgrs[$key] == $category['name']) {
+        $tempCtgrs = $ctgrs;
+        unset($tempCtgrs[$key]);
+
+        if (count($tempCtgrs) > 0) {
+            foreach( $tempCtgrs as $temp ) {
+                $filteredUrl .= $temp.'$';
+            }
+            $filteredUrl = substr($filteredUrl, 0, -1);
+        } else {
+            $filteredUrl = '';
+        }
+    } else {
+        if ( $categoriesUrl != '' ) {
+            $filteredUrl = $categoriesUrl.'$'.$category['name'];
+        } else {
+            $filteredUrl = '&categories='.$category['name'];
+        }
+    }
+    
     mustache_tmpl_iterate($template, "categories");
     mustache_tmpl_set($template, "categories", array(
         "category_id" => $category['id'],
-        "filter_link" => $currentURL . '?' . $fltrUrl . $brandsUrl . ($categoriesUrl != '' ? $categoriesUrl.'$'.$category['name'] : '&'.$category['name']) . $yearsUrl . $vehiclesUrl . $indexedParams['filterChange'],
+        "filter_link" => $currentURL . $fltrUrl . $brandsUrl . $filteredUrl . $yearsUrl . $vehiclesUrl . $indexedParams['filterChange'],
         "checked" => $ctgrs[$key] == $category['name'],
         "category_name" => $category['name']
     ));
@@ -76,11 +95,33 @@ $brnds = array_filter($brnds);
 
 foreach ($brands as $k => $brand) {
     $key = array_search($brand['make'], $brnds);
+
+    $filteredUrl = '&brands=';    
+    if ($brnds[$key] == $brand['make']) {
+        $tempBrnds = $brnds;
+        unset($tempBrnds[$key]);
+
+        if (count($tempBrnds) > 0) {
+            foreach( $tempBrnds as $temp ) {
+                $filteredUrl .= $temp.'$';
+            }
+            $filteredUrl = substr($filteredUrl, 0, -1);
+        } else {
+            $filteredUrl = '';
+        }
+    } else {
+        if ( $brandsUrl != '' ) {
+            $filteredUrl = $brandsUrl.'$'.$brand['make'];
+        } else {
+            $filteredUrl = '&brands='.$brand['make'];
+        }
+    }
+
     mustache_tmpl_iterate($template, "brands");
     mustache_tmpl_set($template, "brands", array(
         "brand_make" => $brand['make'],
         "k" => $k,
-        "filter_link" => $currentURL . '?' . $fltrUrl . ($brandsUrl != '' ? $brandsUrl.'$'.$brand['make'] : '&'.$brand['make']) . $categoriesUrl . $yearsUrl . $vehiclesUrl . $indexedParams['filterChange'],
+        "filter_link" => $currentURL . $fltrUrl . $filteredUrl . $categoriesUrl . $yearsUrl . $vehiclesUrl . $indexedParams['filterChange'],
         "checked" => $brnds[$key] == $brand['make']
     ));
 }
@@ -91,11 +132,32 @@ $vhcls = array_filter($vhcls);
 
 foreach ($vehicles as $vehicle) {
     $key = array_search($vehicle['name'], $vhcls);
+
+    $filteredUrl = '&vehicles=';    
+    if ($vhcls[$key] == $vehicle['name']) {
+        $tempVhcls = $vhcls;
+        unset($tempVhcls[$key]);
+
+        if (count($tempVhcls) > 0) {
+            foreach( $tempVhcls as $temp ) {
+                $filteredUrl .= $temp.'$';
+            }
+            $filteredUrl = substr($filteredUrl, 0, -1);
+        } else {
+            $filteredUrl = '';
+        }
+    } else {
+        if ( $vehiclesUrl != '' ) {
+            $filteredUrl = $vehiclesUrl.'$'.$vehicle['name'];
+        } else {
+            $filteredUrl = '&vehicles='.$vehicle['name'];
+        }
+    }
     mustache_tmpl_iterate($template, "vehicles");
     mustache_tmpl_set($template, "vehicles", array(
         "vehicle_id" => $vehicle['id'],
         "vehicle_name" => $vehicle['name'],
-        "filter_link" => $currentURL . '?' . $fltrUrl . $brandsUrl . $categoriesUrl . $yearsUrl . ($vehiclesUrl != '' ? $vehiclesUrl.'$'.$vehicle['name'] : '&'.$vehicle['name']) . $indexedParams['filterChange'],
+        "filter_link" => $currentURL . $fltrUrl . $brandsUrl . $categoriesUrl . $yearsUrl . $filteredUrl . $indexedParams['filterChange'],
         "checked" => $vhcls[$key] == $vehicle['name']
     ));
 }
@@ -105,11 +167,33 @@ $yr = array_filter($yr);
 
 foreach ($years as $k => $year) {
     $key = array_search($year['year'], $yr);
+
+    $filteredUrl = '&years=';    
+    if ($yr[$key] == $year['year']) {
+        $tempYr = $yr;
+        unset($tempYr[$key]);
+        
+        if (count($tempYr) > 0) {
+            foreach( $tempYr as $temp ) {
+                $filteredUrl .= $temp.'$';
+            }
+            $filteredUrl = substr($filteredUrl, 0, -1);
+        } else {
+            $filteredUrl = '';
+        }
+    } else {
+        if ( $yearsUrl != '' ) {
+            $filteredUrl = $yearsUrl.'$'.$year['year'];
+        } else {
+            $filteredUrl = '&years='.$year['year'];
+        }
+    }
+
     mustache_tmpl_iterate($template, "years");
     mustache_tmpl_set($template, "years", array(
         "k" => $k,
         "year" => $year['year'],
-        "filter_link" => $currentURL . '?' . $fltrUrl . $brandsUrl . $categoriesUrl . ($yearsUrl != '' ? $yearsUrl.'$'.$year['year'] : '&'.$year['year']) . $vehiclesUrl . $indexedParams['filterChange'],
+        "filter_link" => $currentURL . $fltrUrl . $brandsUrl . $categoriesUrl . $filteredUrl . $vehiclesUrl . $indexedParams['filterChange'],
         "checked" => $yr[$key] == $year['year']
     ));
 }
