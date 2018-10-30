@@ -212,11 +212,11 @@ class Motorcycle_CI extends Welcome {
         $this->load->model('admin_m');
         $this->load->model('motorcycle_m');
 
-        if (array_key_exists("motorcycle_filter", $_SESSION) && is_array($_SESSION["motorcycle_filter"]) && (!array_key_exists("fltr", $_REQUEST) || (array_key_exists("motorcycle_fltr", $_SESSION) && $_SESSION["motorcycle_fltr"] == $_REQUEST["fltr"]))) {
+        if (!array_key_exists("filterChange", $_REQUEST) && array_key_exists("motorcycle_filter", $_SESSION) && is_array($_SESSION["motorcycle_filter"]) && (!array_key_exists("fltr", $_REQUEST) || (array_key_exists("motorcycle_fltr", $_SESSION) && $_SESSION["motorcycle_fltr"] == $_REQUEST["fltr"]))) {
             $filter = $_SESSION["motorcycle_filter"];
         } else {
             $filter = $this->motorcycle_m->assembleFilterFromRequest();
-
+            
             $_SESSION["motorcycle_filter"] = $filter;
             $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
 
