@@ -30,8 +30,16 @@ foreach ($categories as $category) {
     ));
 }
 
+
+$currentURL = current_url(); 
+
+$params   = $_SERVER['QUERY_STRING'];
+
+$fullURL = $currentURL . '?' . $params; 
+
 echo "<pre>";
-print_r($this->uri->segment_array());exit;
+print_r($params);exit;
+
 
 $brnds = explode('$', $_GET['brands']);
 $brnds = array_filter($brnds);
