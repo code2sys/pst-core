@@ -29,7 +29,7 @@
             {{#brands}}
             <div class="checkbox checkbox-primary sdCheckbox brandfltr">
                 <!-- <input id="brand{{k}}" class="styled" name="brand[]" value="{{brand_make}}" type="checkbox" {{#checked}}checked{{/checked}}> -->
-                <a href="{{filter_link}}">{{brand_make}}</a>
+                <a href="{{filter_link}}" class="filter-item {{#checked}}checked{{/checked}}"><b>&nbsp;</b>{{brand_make}}</a>
                 <!-- <label for="brand{{k}}">{{brand_make}}</label> -->
             </div>
             {{/brands}}
@@ -41,7 +41,7 @@
             <div class="checkbox checkbox-primary sdCheckbox">
                 <!-- <input id="year{{k}}" class="styled" name="year[]" value="{{{year}}}" type="checkbox" {{#checked}}checked{{/checked}} >
                 <label for="year{{k}}">{{{year}}}</label> -->
-                <a href="{{filter_link}}">{{year}}</a>
+                <a href="{{filter_link}}" class="filter-item {{#checked}}checked{{/checked}}"><b>&nbsp;</b>{{year}}</a>
             </div>
             {{/years}}
         </div>
@@ -52,7 +52,7 @@
             <div class="checkbox checkbox-primary sdCheckbox">
                 <!-- <input id="vehicle{{vehicle_name}}" class="styled" name="vehicles[]" value="{{vehicle_name}}" type="checkbox" {{#checked}}checked{{/checked}}>
                 <label for="vehicle{{vehicle_name}}">{{{vehicle_name}}}</label> -->
-                <a href="{{filter_link}}">{{vehicle_name}}</a>
+                <a href="{{filter_link}}" class="filter-item {{#checked}}checked{{/checked}}"><b>&nbsp;</b>{{vehicle_name}}</a>
             </div>
             {{/vehicles}}
         </div>
@@ -65,7 +65,7 @@
             <div class="checkbox checkbox-primary sdCheckbox">
                 <!-- <input id="category{{category_name}}" class="styled" name="category[]" value="{{category_name}}" type="checkbox" {{#checked}}checked{{/checked}}>
                 <label for="category{{category_name}}">{{{category_name}}}</label> -->
-                <a href="{{filter_link}}">{{category_name}}</a>
+                <a href="{{filter_link}}" class="filter-item {{#checked}}checked{{/checked}}"><b>&nbsp;</b>{{category_name}}</a>
             </div>
             {{/categories}}
         </div>
