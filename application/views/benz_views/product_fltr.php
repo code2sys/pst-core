@@ -19,7 +19,7 @@ mustache_tmpl_set($template, "major_units_featured_only", array_key_exists("majo
 mustache_tmpl_set($template, "major_unit_search_keywords", htmlentities(array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : ""));
 mustache_tmpl_set($template, 'for_sale_link', $forSaleLink);
 
-$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
 echo $actual_link;exit;
 $currentURL     = current_url();
 $queryString    = $_SERVER['QUERY_STRING'];
