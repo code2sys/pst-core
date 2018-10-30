@@ -60,7 +60,7 @@ if (array_key_exists("brands", $_REQUEST) && array_key_exists("brands", $_GET)) 
     $tmps = explode('$', $tmps[1]);
 
     foreach( $tmps as $tmp ) {
-        $paramBrands .= "_".str_replace(" ", "-", $tmp);
+        $paramBrands .= "_".str_replace(array('%20', ' '), array('-', '-'), $tmp);
     }
 }
 
@@ -71,7 +71,7 @@ if (array_key_exists("vehicles", $_REQUEST) && array_key_exists("vehicles", $_GE
     $tmps = explode('$', $tmps[1]);
 
     foreach( $tmps as $tmp ) {
-        $paramVehicles .= "_".str_replace(" ", "-", $tmp);
+        $paramVehicles .= "_".str_replace(array('%20', ' '), array('-', '-'), $tmp);
     }
 }
 if (array_key_exists("years", $_REQUEST) && array_key_exists("years", $_GET)) {
