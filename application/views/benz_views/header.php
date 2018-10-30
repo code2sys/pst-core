@@ -13,8 +13,7 @@
 	if (!defined('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS')) {
 		define('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS', true);
 	}
-echo "<pre>";
-print_r($pageRec);exit;
+	
 	$SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
 
 	?>
@@ -29,7 +28,7 @@ print_r($pageRec);exit;
     echo $CI->load->view("master/top_header", array(
         "store_name" => $store_name,
         "meta_description" => $meta_description,
-        "meta_keywords" => $meta_keywords
+        "meta_keywords" => $pageRec['keywords'],
     ));
 
     ?>
