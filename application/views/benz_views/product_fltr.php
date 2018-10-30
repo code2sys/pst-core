@@ -140,7 +140,7 @@ foreach ($brands as $k => $brand) {
             $filteredBrands = $paramBrands.'_'.str_replace(" ", "-", $brand['make']);
         } else {
             $filteredUrl = '&brands='.$brand['make'];
-            $filteredBrands = str_replace(" ", "-", $brand['make']);
+            $filteredBrands = '_'.str_replace(" ", "-", $brand['make']);
         }
     }
 
@@ -181,7 +181,7 @@ foreach ($vehicles as $vehicle) {
             $filteredVehicles = $paramVehicles.'_'.str_replace(" ", "-", $vehicle['name']);
         } else {
             $filteredUrl = '&vehicles='.$vehicle['name'];
-            $filteredVehicles = str_replace(" ", "-", $vehicle['name']);
+            $filteredVehicles = '_'.str_replace(" ", "-", $vehicle['name']);
         }
     }
     mustache_tmpl_iterate($template, "vehicles");
