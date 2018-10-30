@@ -119,7 +119,7 @@ foreach ($brands as $k => $brand) {
     $key = array_search($brand['make'], $brnds);
 
     $filteredUrl = '&brands=';    
-    $paramBrands = '';
+    $filteredBrands = '';
     if ($brnds[$key] == $brand['make']) {
         $tempBrnds = $brnds;
         unset($tempBrnds[$key]);
@@ -127,18 +127,20 @@ foreach ($brands as $k => $brand) {
         if (count($tempBrnds) > 0) {
             foreach( $tempBrnds as $temp ) {
                 $filteredUrl .= $temp.'$';
-                $paramBrands .= "_".str_replace(" ", "-", $temp);
+                $filteredBrands .= "_".str_replace(" ", "-", $temp);
             }
             $filteredUrl = substr($filteredUrl, 0, -1);
         } else {
             $filteredUrl = '';
+            $filteredBrands = '';
         }
     } else {
-        $paramBrands .= '_'.str_replace(" ", "-",$brand['make']);
         if ( $brandsUrl != '' ) {
             $filteredUrl = $brandsUrl.'$'.$brand['make'];
+            $filteredBrands = $paramBrands.'_'.str_replace(" ", "-", $brand['make']);
         } else {
             $filteredUrl = '&brands='.$brand['make'];
+            $filteredBrands = str_replace(" ", "-", $brand['make']);
         }
     }
 
@@ -146,7 +148,7 @@ foreach ($brands as $k => $brand) {
     mustache_tmpl_set($template, "brands", array(
         "brand_make" => $brand['make'],
         "k" => $k,
-        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : $paramBrands.$paramVehicles.'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $filteredUrl . $categoriesUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
+        "filter_link" => $actualUrl . '/'. $paramUrl . (($filteredBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : $filteredBrands.$paramVehicles.'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $filteredUrl . $categoriesUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
         "checked" => $brnds[$key] == $brand['make']
     ));
 }
@@ -159,7 +161,7 @@ foreach ($vehicles as $vehicle) {
     $key = array_search($vehicle['name'], $vhcls);
 
     $filteredUrl = '&vehicles=';  
-    $paramVehicles = '';  
+    $filteredVehicles = '';  
     if ($vhcls[$key] == $vehicle['name']) {
         $tempVhcls = $vhcls;
         unset($tempVhcls[$key]);
@@ -167,25 +169,26 @@ foreach ($vehicles as $vehicle) {
         if (count($tempVhcls) > 0) {
             foreach( $tempVhcls as $temp ) {
                 $filteredUrl .= $temp.'$';
-                $paramVehicles .= "_".str_replace(" ", "-", $temp);
+                $filteredVehicles .= "_".str_replace(" ", "-", $temp);
             }
             $filteredUrl = substr($filteredUrl, 0, -1);
         } else {
             $filteredUrl = '';
         }
-    } else {
-        $paramVehicles .= '_'.str_replace(" ", "-",$vehicle['name']);
+    } else {        
         if ( $vehiclesUrl != '' ) {
             $filteredUrl = $vehiclesUrl.'$'.$vehicle['name'];
+            $filteredVehicles = $paramVehicles.'_'.str_replace(" ", "-", $vehicle['name']);
         } else {
             $filteredUrl = '&vehicles='.$vehicle['name'];
+            $filteredVehicles = str_replace(" ", "-", $vehicle['name']);
         }
     }
     mustache_tmpl_iterate($template, "vehicles");
     mustache_tmpl_set($template, "vehicles", array(
         "vehicle_id" => $vehicle['id'],
         "vehicle_name" => $vehicle['name'],
-        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : $paramBrands.$paramVehicles.'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $categoriesUrl . $yearsUrl . $filteredUrl . '&filterChange=1',
+        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $filteredVehicles == '') ? "_Powersports_Units_".$forSaleLink : $paramBrands.$filteredVehicles.'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $categoriesUrl . $yearsUrl . $filteredUrl . '&filterChange=1',
         "checked" => $vhcls[$key] == $vehicle['name']
     ));
 }
