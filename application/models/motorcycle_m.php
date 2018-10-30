@@ -132,7 +132,7 @@ class Motorcycle_M extends Master_M {
                 $page_title .= " ".$category;
             }
         }
-        $page_meta .= "Come visit our dealer ship to see all we have to offer for (Keywords) entered on the home page.";
+        $page_meta .= "Come visit our dealer ship to see all we have to offer.";
 
         return array(
             'page_title' =>$page_title,
