@@ -44,7 +44,11 @@ if (!array_key_exists("fltr", $_REQUEST) && !array_key_exists("fltr", $_GET)) {
     $paramUrl = 'New';
     $fltrUrl = '?fltr=New_Inventory';
 } else {
-    $paramUrl = 'Pre-Owned';
+    if($_REQUEST['fltr'] == 'New_Inventory') {
+        $paramUrl = 'New';
+    } else {
+        $paramUrl = 'Pre-Owned';
+    }
     $fltrUrl = '?'.$indexedParams['fltr'];
 }
 if (array_key_exists("categories", $_REQUEST) && array_key_exists("categories", $_GET)) {
