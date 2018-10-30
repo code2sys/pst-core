@@ -239,6 +239,7 @@ class Motorcycle_CI extends Welcome {
         }
 echo "<pre>";
 print_r($filter);
+echo "</pre>";
         $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], 0, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
 
         $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
