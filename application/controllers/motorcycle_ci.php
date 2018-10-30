@@ -253,11 +253,11 @@ class Motorcycle_CI extends Welcome {
         $title = $page_info['page_title']." For Sale ".$store_name['company']." ".$store_name['city']." ".$store_name['state'];
         $this->_mainData['forSaleLink'] = 'For_Sale_'.$store_name['city'].'_'.$store_name['state'];
 
-        $this->_mainData['pageRec'] = $this->pages_m->getPageRec($this->_pageId);
+        $this->_mainData['pageRec'] = $this->pages_m->getPageRec(1);
 
         $this->setMasterPageVars('title', $title);
 
-        $this->_mainData['meta_description'] = "At " . $store_name['company'] . " in ". $store_name['city'] ." and ". $store_name['state'] ." ". $page_info['page_meta'];
+        $this->_mainData['meta_description'] = "At " . $store_name['company'] . " in ". $store_name['city'] ." ". $store_name['state'] ." ". $page_info['page_meta'];
 
         $this->renderMasterPage('benz_views/header.php', 'benz_views/product.php', $this->_mainData);
         // $this->load->view('benz_views/header.php');
