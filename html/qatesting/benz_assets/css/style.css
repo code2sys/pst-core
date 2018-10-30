@@ -886,6 +886,9 @@ h3.head-tx {
 .filter-inner .filter-item:hover {
     color: #0e66d7;
 }
+.filter-inner .filter-item:hover b {
+    border-color: #0e66d7;
+}
 .filter-inner .filter-item b {
     display: flex;
     width: 20px;
