@@ -1,11 +1,16 @@
 <?php
 
 // fix the image URLs.
+$CI =& get_instance();
+$CI->load->model("admin_m");
+$store_name = $CI->admin_m->getAdminShippingProfile();
 
 if (!isset($motorcycle_template)) {
     $motorcycle_template = "master/widgets/motorcycles.html";
 }
 $template = mustache_tmpl_open($motorcycle_template);
+
+mustache_tmpl_set($template, 'for_sale_link', 'For_Sale_'.$store_name['city'].'_'.$store_name['state']);
 
 mustache_tmpl_set($template, "DISABLE_FRONT_MOTORCYCLE_NAV", defined("DISABLE_FRONT_MOTORCYCLE_NAV") && DISABLE_FRONT_MOTORCYCLE_NAV);
 mustache_tmpl_set($template, "MOTORCYCLE_SHOP_DISABLE", defined("MOTORCYCLE_SHOP_DISABLE") && MOTORCYCLE_SHOP_DISABLE);
