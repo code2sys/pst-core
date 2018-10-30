@@ -879,10 +879,11 @@ h3.head-tx {
 }
 .filter-inner .filter-item {
     color: #999;
+    display: flex;
+    align-items: center;
 }
 .filter-inner .filter-item b {
     display: flex;
-    flex-direction: row;
     width: 20px;
     height: 20px;
     margin-right: 10px;
