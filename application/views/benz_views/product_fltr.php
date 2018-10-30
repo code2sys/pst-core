@@ -84,7 +84,7 @@ foreach ($categories as $category) {
     mustache_tmpl_iterate($template, "categories");
     mustache_tmpl_set($template, "categories", array(
         "category_id" => $category['id'],
-        "filter_link" => $currentURL . $fltrUrl . $brandsUrl . $filteredUrl . $yearsUrl . $vehiclesUrl,
+        "filter_link" => $currentURL . $fltrUrl . $brandsUrl . $filteredUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
         "checked" => $ctgrs[$key] == $category['name'],
         "category_name" => $category['name']
     ));
@@ -121,7 +121,7 @@ foreach ($brands as $k => $brand) {
     mustache_tmpl_set($template, "brands", array(
         "brand_make" => $brand['make'],
         "k" => $k,
-        "filter_link" => $currentURL . $fltrUrl . $filteredUrl . $categoriesUrl . $yearsUrl . $vehiclesUrl,
+        "filter_link" => $currentURL . $fltrUrl . $filteredUrl . $categoriesUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
         "checked" => $brnds[$key] == $brand['make']
     ));
 }
@@ -157,7 +157,7 @@ foreach ($vehicles as $vehicle) {
     mustache_tmpl_set($template, "vehicles", array(
         "vehicle_id" => $vehicle['id'],
         "vehicle_name" => $vehicle['name'],
-        "filter_link" => $currentURL . $fltrUrl . $brandsUrl . $categoriesUrl . $yearsUrl . $filteredUrl,
+        "filter_link" => $currentURL . $fltrUrl . $brandsUrl . $categoriesUrl . $yearsUrl . $filteredUrl . '&filterChange=1',
         "checked" => $vhcls[$key] == $vehicle['name']
     ));
 }
@@ -193,7 +193,7 @@ foreach ($years as $k => $year) {
     mustache_tmpl_set($template, "years", array(
         "k" => $k,
         "year" => $year['year'],
-        "filter_link" => $currentURL . $fltrUrl . $brandsUrl . $categoriesUrl . $filteredUrl . $vehiclesUrl,
+        "filter_link" => $currentURL . $fltrUrl . $brandsUrl . $categoriesUrl . $filteredUrl . $vehiclesUrl . '&filterChange=1',
         "checked" => $yr[$key] == $year['year']
     ));
 }
