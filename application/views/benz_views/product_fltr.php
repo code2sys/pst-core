@@ -17,6 +17,7 @@ mustache_tmpl_set($template, "fltr_preowned_active", $_GET['fltr'] == 'pre-owned
 mustache_tmpl_set($template, "major_units_featured_only", array_key_exists("major_units_featured_only", $_SESSION) && $_SESSION["major_units_featured_only"] > 0);
 
 mustache_tmpl_set($template, "major_unit_search_keywords", htmlentities(array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : ""));
+mustache_tmpl_set($template, 'for_sale_link', $forSaleLink);
 
 $currentURL     = current_url();
 $queryString    = $_SERVER['QUERY_STRING'];
