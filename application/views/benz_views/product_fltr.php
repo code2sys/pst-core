@@ -19,8 +19,7 @@ mustache_tmpl_set($template, "major_units_featured_only", array_key_exists("majo
 mustache_tmpl_set($template, "major_unit_search_keywords", htmlentities(array_key_exists("major_unit_search_keywords", $_SESSION) ? $_SESSION["major_unit_search_keywords"] : ""));
 mustache_tmpl_set($template, 'for_sale_link', $forSaleLink);
 
-$actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
-echo $actual_link;exit;
+$actualUrl      = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
 $currentURL     = current_url();
 $queryString    = $_SERVER['QUERY_STRING'];
 $params         = explode('&', $queryString);
@@ -32,6 +31,9 @@ foreach ($params as $param) {
     $indexedParams[$exp[0]] = $param;
 }
 
+$paramUrl = '';
+$paramBrands = '';
+$paramVehicles = '';
 $fltrUrl = '';
 $brandsUrl = '';
 $yearsUrl = '';
@@ -39,8 +41,10 @@ $vehiclesUrl = '';
 $categoriesUrl = '';
 
 if (!array_key_exists("fltr", $_REQUEST) && !array_key_exists("fltr", $_GET)) {
+    $paramUrl = 'New';
     $fltrUrl = '?fltr=New_Inventory';
 } else {
+    $paramUrl = 'Pre-Owned';
     $fltrUrl = '?'.$indexedParams['fltr'];
 }
 if (array_key_exists("categories", $_REQUEST) && array_key_exists("categories", $_GET)) {
@@ -48,9 +52,20 @@ if (array_key_exists("categories", $_REQUEST) && array_key_exists("categories", 
 }
 if (array_key_exists("brands", $_REQUEST) && array_key_exists("brands", $_GET)) {
     $brandsUrl = '&'.$indexedParams['brands'];
+    $tmps = explode('$', $indexedParams['brands']);
+    $tmps = array_filter($tmp);
+    foreach( $tmps as $tmp ) {
+        $paramBrands .= "_".str_replace(" ", "-", $tmp);
+    }
 }
 if (array_key_exists("vehicles", $_REQUEST) && array_key_exists("vehicles", $_GET)) {
     $vehiclesUrl = '&'.$indexedParams['vehicles'];
+
+    $tmps = explode('$', $indexedParams['vehicles']);
+    $tmps = array_filter($tmp);
+    foreach( $tmps as $tmp ) {
+        $paramVehicles .= "_".str_replace(" ", "-", $tmp);
+    }
 }
 if (array_key_exists("years", $_REQUEST) && array_key_exists("years", $_GET)) {
     $yearsUrl = '&'.$indexedParams['years'];
@@ -87,7 +102,7 @@ foreach ($categories as $category) {
     mustache_tmpl_iterate($template, "categories");
     mustache_tmpl_set($template, "categories", array(
         "category_id" => $category['id'],
-        "filter_link" => $currentURL . $fltrUrl . $brandsUrl . $filteredUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
+        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : $paramBrands.$paramVehicles.'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $filteredUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
         "checked" => $ctgrs[$key] == $category['name'],
         "category_name" => $category['name']
     ));
@@ -104,15 +119,18 @@ foreach ($brands as $k => $brand) {
         $tempBrnds = $brnds;
         unset($tempBrnds[$key]);
 
+        $paramBrands = '';
         if (count($tempBrnds) > 0) {
             foreach( $tempBrnds as $temp ) {
                 $filteredUrl .= $temp.'$';
+                $paramBrands .= "_".str_replace(" ", "-", $temp);
             }
             $filteredUrl = substr($filteredUrl, 0, -1);
         } else {
             $filteredUrl = '';
         }
     } else {
+        $paramBrands .= '_'.str_replace(" ", "-",$brand['make']);
         if ( $brandsUrl != '' ) {
             $filteredUrl = $brandsUrl.'$'.$brand['make'];
         } else {
@@ -124,7 +142,7 @@ foreach ($brands as $k => $brand) {
     mustache_tmpl_set($template, "brands", array(
         "brand_make" => $brand['make'],
         "k" => $k,
-        "filter_link" => $currentURL . $fltrUrl . $filteredUrl . $categoriesUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
+        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : $paramBrands.$paramVehicles.'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $filteredUrl . $categoriesUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
         "checked" => $brnds[$key] == $brand['make']
     ));
 }
@@ -144,12 +162,14 @@ foreach ($vehicles as $vehicle) {
         if (count($tempVhcls) > 0) {
             foreach( $tempVhcls as $temp ) {
                 $filteredUrl .= $temp.'$';
+                $paramVehicles .= "_".str_replace(" ", "-", $temp);
             }
             $filteredUrl = substr($filteredUrl, 0, -1);
         } else {
             $filteredUrl = '';
         }
     } else {
+        $paramVehicles .= '_'.str_replace(" ", "-",$vehicle['name']);
         if ( $vehiclesUrl != '' ) {
             $filteredUrl = $vehiclesUrl.'$'.$vehicle['name'];
         } else {
@@ -160,7 +180,7 @@ foreach ($vehicles as $vehicle) {
     mustache_tmpl_set($template, "vehicles", array(
         "vehicle_id" => $vehicle['id'],
         "vehicle_name" => $vehicle['name'],
-        "filter_link" => $currentURL . $fltrUrl . $brandsUrl . $categoriesUrl . $yearsUrl . $filteredUrl . '&filterChange=1',
+        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : $paramBrands.$paramVehicles.'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $categoriesUrl . $yearsUrl . $filteredUrl . '&filterChange=1',
         "checked" => $vhcls[$key] == $vehicle['name']
     ));
 }
@@ -196,7 +216,7 @@ foreach ($years as $k => $year) {
     mustache_tmpl_set($template, "years", array(
         "k" => $k,
         "year" => $year['year'],
-        "filter_link" => $currentURL . $fltrUrl . $brandsUrl . $categoriesUrl . $filteredUrl . $vehiclesUrl . '&filterChange=1',
+        "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : $paramBrands.$paramVehicles.'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $categoriesUrl . $filteredUrl . $vehiclesUrl . '&filterChange=1',
         "checked" => $yr[$key] == $year['year']
     ));
 }
