@@ -339,6 +339,9 @@ class Motorcycle_CI extends Welcome {
         }
 
         $this->load->model('motorcycle_m');
+        echo "<pre>";
+        echo $this->input->post("page");
+        echo "</pre>";
         $curPage = intVal($this->input->post("page") ? $this->input->post("page") : 0);
         $offset = ($curPage * $_SESSION["bikeControlShow"]);
 
