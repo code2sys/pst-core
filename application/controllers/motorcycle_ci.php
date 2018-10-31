@@ -237,12 +237,14 @@ class Motorcycle_CI extends Welcome {
         if (!array_key_exists("major_units_featured_only", $_SESSION)) {
             $_SESSION["major_units_featured_only"] = 0;
         }
-echo "<pre>";
-print_r($filter);
-echo "</pre>";
+
         $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], 0, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
 
         $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
+        echo "<pre>";
+        print_r($total);
+        echo "</pre>";
+
         $this->_mainData['pages'] = ceil($total / $_SESSION["bikeControlShow"]);
         $this->_mainData['fpages'] = $this->pages_m->getPages(1, 'footer');
         $recently = $_SESSION['recentlyMotorcycle'];
