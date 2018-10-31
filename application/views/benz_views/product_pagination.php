@@ -9,7 +9,9 @@
 $CI =& get_instance();
 $CI->load->helper("mustache_helper");
 $template = mustache_tmpl_open("benz_views/product_pagination.html");
-
+echo "<pre>";
+echo $pages."###".$cpage;
+echo "</pre>";
 mustache_tmpl_set($template, "pages", $pages);
 mustache_tmpl_set($template, "page", $cpage);
 mustache_tmpl_set($template, "MorePagesThan1", $pages > 1);
