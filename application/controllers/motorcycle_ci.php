@@ -241,9 +241,6 @@ class Motorcycle_CI extends Welcome {
         $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], 0, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
 
         $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
-        echo "<pre>";
-        print_r($total);
-        echo "</pre>";
 
         $this->_mainData['pages'] = ceil($total / $_SESSION["bikeControlShow"]);
         $this->_mainData['fpages'] = $this->pages_m->getPages(1, 'footer');
@@ -346,7 +343,7 @@ class Motorcycle_CI extends Welcome {
 
         $filter = $this->motorcycle_m->assembleFilterFromRequest();
 echo "<pre>";
-print_r($_GET);
+print_r($_REQUEST);
         unset($filter['page']);
         // JLB 06-04-17
         // Why was there a separate one for getFilterMotorcycles?? As far as I can tell, it was to separate off the limit vs. offset.
