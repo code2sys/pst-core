@@ -139,6 +139,13 @@ class Motorcycle_M extends Master_M {
             'page_meta' =>$page_meta,
         );
     }
+    public function generateUnitUrlfromFilter( $fltr, $filter ) {
+        $this->load->model('admin_m');
+        $store_name = $this->admin_m->getAdminShippingProfile();
+
+        $unitUrl = "New_For_Sale";
+        return $unitUrl.'_'.$store_name['city'].'_'.$store_name['state'];
+    }
 
     protected function buildWhere($filter, $skip_year = false, $skip_vehicles = false, $skip_categories = false) {
         $where = array();

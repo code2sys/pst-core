@@ -83,9 +83,13 @@ class Motorcycle_CI extends Welcome {
             $sort_number = 0;
         }
         $_SESSION["bikeControlSort"] = $sort_number;
+
+        $this->load->model('motorcycle_m');
+
+        $unitUrl = $this->motorcycle_m->generateUnitUrlfromFilter($_SESSION["motorcycle_fltr"], $_SESSION["motorcycle_filter"]);
         
         echo "<pre>";
-        echo $_SESSION["motorcycle_fltr"];
+        echo $unitUrl;
         print_r($_SESSION["motorcycle_filter"]); exit;
         header("Location: /For_Sale/Major_Unit_List" . $this->preSwitch($pre));
 
