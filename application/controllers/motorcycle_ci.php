@@ -83,6 +83,8 @@ class Motorcycle_CI extends Welcome {
             $sort_number = 0;
         }
         $_SESSION["bikeControlSort"] = $sort_number;
+        $currentURL     = current_url();
+        echo $currentURL;exit;
         header("Location: /For_Sale/Major_Unit_List" . $this->preSwitch($pre));
 
     }
