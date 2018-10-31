@@ -1,8 +1,8 @@
 <div class="mypagination">
-    <?php $page = 1; ?>
+    <?php $page = $_SESSION["motoCurPage"]+1; ?>
     <div class="mypagination">
         <ul>
-            <!-- <li class="active pgn"><a href="javascript:void(0);" data-page-number="1">1</a></li> -->
+            <li class="active pgn"><a href="javascript:void(0);" data-page-number="1">1</a></li>
 
             {{#MoreThan1}}
                 <li class="pgn"><a href="javascript:void(0);" data-page-number="2">2</a></li>
