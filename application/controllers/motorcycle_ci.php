@@ -215,11 +215,12 @@ class Motorcycle_CI extends Welcome {
 
         
         $filter = $this->motorcycle_m->assembleFilterFromRequest();
-        $filterDiff = array_diff($filter, $_SESSION["motorcycle_filter"]);
-        echo "<pre>";
-        var_dump($filter === $_SESSION["motorcycle_filter"]);
-        echo "</pre>";
-        if ((array_key_exists("filterChange", $_REQUEST) && count($filterDiff) > 0) || !array_key_exists("motoCurPage", $_SESSION)) {
+        $filterDiff = true;
+        if (array_key_exists("motorcycle_filter", $_SESSION)) {
+            $filterDiff = $filter !== $_SESSION["motorcycle_filter"];
+        }
+
+        if ((array_key_exists("filterChange", $_REQUEST) && !$filterDiff) || !array_key_exists("motoCurPage", $_SESSION)) {
             $_SESSION["motoCurPage"] = 0;
         }
 
