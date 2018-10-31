@@ -85,7 +85,7 @@ class Motorcycle_CI extends Welcome {
         $_SESSION["bikeControlSort"] = $sort_number;
         
         echo "<pre>";
-        print_r($_REQUEST); exit;
+        print_r($_SESSION["motorcycle_filter"]); exit;
         header("Location: /For_Sale/Major_Unit_List" . $this->preSwitch($pre));
 
     }
