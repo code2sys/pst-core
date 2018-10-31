@@ -36,6 +36,11 @@ class Motorcycle_CI extends Welcome {
             header("Location: /");
             exit();
         }
+
+        $this->output->set_header('Last-Modified:'.gmdate('D, d M Y H:i:s').'GMT');
+        $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate');
+        $this->output->set_header('Cache-Control: post-check=0, pre-check=0',false);
+        $this->output->set_header('Pragma: no-cache');
     }
 
     /*
@@ -92,7 +97,7 @@ class Motorcycle_CI extends Welcome {
             $show_number = ITEMS_ON_PAGE;
         }
         $_SESSION["bikeControlShow"] = $show_number;
-        header("Location: " . $_SESSION["motorcycle_current_url"]);
+        header("Location: " . $_SESSION["motorcycle_current_url"] ."&filterChange=1");
     }
 
     /*
@@ -216,7 +221,7 @@ class Motorcycle_CI extends Welcome {
         $filter = $this->motorcycle_m->assembleFilterFromRequest();            
         $_SESSION["motorcycle_filter"] = $filter;
         $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
-        $_SESSION["motorcycle_current_url"] = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $_SESSION["motorcycle_current_url"] = str_replace('&filterChange=1', '', (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
         
         if ($squash_filter) {
             $filter = array();
