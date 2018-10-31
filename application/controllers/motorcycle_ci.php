@@ -93,6 +93,7 @@ class Motorcycle_CI extends Welcome {
             $show_number = ITEMS_ON_PAGE;
         }
         $_SESSION["bikeControlShow"] = $show_number;
+        $_SESSION["motoCurPage"] = 0;
         header("Location: " . $_SESSION["motorcycle_current_url"] ."&filterChange=1");
     }
 
@@ -218,10 +219,6 @@ class Motorcycle_CI extends Welcome {
         if (array_key_exists("motorcycle_filter", $_SESSION)) {
             $filterDiff = $filter === $_SESSION["motorcycle_filter"];
         }
-
-        echo "<pre>";
-        var_dump($filterDiff);
-        echo "</pre>";
 
         if ((array_key_exists("filterChange", $_REQUEST) && !$filterDiff) || !array_key_exists("motoCurPage", $_SESSION)) {
             $_SESSION["motoCurPage"] = 0;
