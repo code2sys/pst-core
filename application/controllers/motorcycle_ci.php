@@ -217,7 +217,7 @@ class Motorcycle_CI extends Welcome {
         } else {
             $filter = $this->motorcycle_m->assembleFilterFromRequest();
             
-            // $_SESSION["motorcycle_filter"] = $filter;
+            $_SESSION["motorcycle_filter"] = $filter;
             $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
 
         }
@@ -343,7 +343,7 @@ class Motorcycle_CI extends Welcome {
 
         $filter = $this->motorcycle_m->assembleFilterFromRequest();
 echo "<pre>";
-print_r($_REQUEST);
+print_r($_SESSION["motorcycle_filter"]);
         unset($filter['page']);
         // JLB 06-04-17
         // Why was there a separate one for getFilterMotorcycles?? As far as I can tell, it was to separate off the limit vs. offset.
