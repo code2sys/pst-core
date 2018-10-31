@@ -83,7 +83,7 @@ class Motorcycle_CI extends Welcome {
             $sort_number = 0;
         }
         $_SESSION["bikeControlSort"] = $sort_number;
-        header("Location: /Motorcycle_Sort" . $this->preSwitch($pre));
+        // header("Location: /Motorcycle_Sort" . $this->preSwitch($pre));
 
     }
 
