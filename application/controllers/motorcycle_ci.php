@@ -84,9 +84,9 @@ class Motorcycle_CI extends Welcome {
         }
         $_SESSION["bikeControlSort"] = $sort_number;
         
-        $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        header("Location: " . $actual_link."?".$_SERVER['QUERY_STRING']);
-        // header("Location: /For_Sale/Major_Unit_List" . $this->preSwitch($pre));
+        echo "<pre>";
+        print_r($_REQUEST); exit;
+        header("Location: /For_Sale/Major_Unit_List" . $this->preSwitch($pre));
 
     }
 
