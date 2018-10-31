@@ -212,15 +212,21 @@ class Motorcycle_CI extends Welcome {
         $this->load->model('admin_m');
         $this->load->model('motorcycle_m');
 
-        // if (!array_key_exists("filterChange", $_REQUEST) && array_key_exists("motorcycle_filter", $_SESSION) && is_array($_SESSION["motorcycle_filter"]) && (!array_key_exists("fltr", $_REQUEST) || (array_key_exists("motorcycle_fltr", $_SESSION) && $_SESSION["motorcycle_fltr"] == $_REQUEST["fltr"]))) {
-        //     $filter = $_SESSION["motorcycle_filter"];
-        // } else {
-        $filter = $this->motorcycle_m->assembleFilterFromRequest();
-        
-        $_SESSION["motorcycle_filter"] = $filter;
-        $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
+        if (!array_key_exists("filterChange", $_REQUEST) && array_key_exists("motorcycle_filter", $_SESSION) && is_array($_SESSION["motorcycle_filter"]) && (!array_key_exists("fltr", $_REQUEST) || (array_key_exists("motorcycle_fltr", $_SESSION) && $_SESSION["motorcycle_fltr"] == $_REQUEST["fltr"]))) {
+            $filter = $_SESSION["motorcycle_filter"];
 
-        $_SESSION["motorcycle_current_url"] = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            if(!array_key_exists("motoCurPage", $_SESSION)) {
+                $_SESSION["motoCurPage"] = 0;
+            }
+        } else {
+            $filter = $this->motorcycle_m->assembleFilterFromRequest();
+            
+            $_SESSION["motorcycle_filter"] = $filter;
+            $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
+            $_SESSION["motoCurPage"] = 0;
+        }
+
+        $_SESSION["motorcycle_current_url"] = str_replace('&filterChange=1', '', (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
         
         if ($squash_filter) {
             $filter = array();
@@ -238,9 +244,6 @@ class Motorcycle_CI extends Welcome {
             $_SESSION["major_units_featured_only"] = 0;
         }
 
-        if(!array_key_exists("motoCurPage", $_SESSION)) {
-            $_SESSION["motoCurPage"] = 0;
-        }
         $offset = ($_SESSION["motoCurPage"] * $_SESSION["bikeControlShow"]);
 
         $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], $offset, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
@@ -322,7 +325,7 @@ class Motorcycle_CI extends Welcome {
         $this->_mainData['referUrl'] = base_url('Major_Unit_List');
         if ($this->agent->is_referral())
         {
-            $this->_mainData['referUrl'] = $this->agent->referrer();
+            $this->_mainData['referUrl'] = str_replace('&filterChange=1', '', $this->agent->referrer());
         }
 
         // echo "<pre>";
