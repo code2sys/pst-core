@@ -238,7 +238,12 @@ class Motorcycle_CI extends Welcome {
             $_SESSION["major_units_featured_only"] = 0;
         }
 
-        $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], 0, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
+        if(!array_key_exists("motoCurPage", $_SESSION)) {
+            $_SESSION["motoCurPage"] = 0;
+        }
+        $offset = ($_SESSION["motoCurPage"] * $_SESSION["bikeControlShow"]);
+
+        $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], $offset, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
 
         $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
 
@@ -343,7 +348,8 @@ class Motorcycle_CI extends Welcome {
         echo "</pre>";
         $curPage = intVal($this->input->post("page") ? $this->input->post("page") : 0);
         $offset = ($curPage * $_SESSION["bikeControlShow"]);
-
+        
+        $_SESSION["motoCurPage"] = $curPage;
         $filter = $_SESSION["motorcycle_filter"];
         
         unset($filter['page']);
