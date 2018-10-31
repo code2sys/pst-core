@@ -245,7 +245,7 @@ class Motorcycle_CI extends Welcome {
         $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
 
         $this->_mainData['pages'] = ceil($total / $_SESSION["bikeControlShow"]);
-        $this->_mainData['cpage'] = $_SESSION["motoCurPage"];
+        $this->_mainData['cpage'] = $_SESSION["motoCurPage"]+1;
         $this->_mainData['fpages'] = $this->pages_m->getPages(1, 'footer');
         $recently = $_SESSION['recentlyMotorcycle'];
         $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
