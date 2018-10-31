@@ -83,7 +83,7 @@ class Motorcycle_CI extends Welcome {
             $sort_number = 0;
         }
         $_SESSION["bikeControlSort"] = $sort_number;
-        header("Location: /Motorcycle_Sort" . $this->preSwitch($pre));
+        header("Location: /For_Sale/Major_Unit_List" . $this->preSwitch($pre));
 
     }
 
@@ -92,7 +92,7 @@ class Motorcycle_CI extends Welcome {
             $show_number = ITEMS_ON_PAGE;
         }
         $_SESSION["bikeControlShow"] = $show_number;
-        header("Location: /Motorcycle_Show" . $this->preSwitch($pre));
+        header("Location: /For_Sale/Major_Unit_List" . $this->preSwitch($pre));
     }
 
     /*
