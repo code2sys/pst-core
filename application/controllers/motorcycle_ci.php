@@ -344,7 +344,7 @@ class Motorcycle_CI extends Welcome {
         $curPage = intVal($this->input->post("page") ? $this->input->post("page") : 0);
         $offset = ($curPage * $_SESSION["bikeControlShow"]);
 
-        $filter = $this->motorcycle_m->assembleFilterFromRequest(true);
+        $filter = $this->motorcycle_m->assembleFilterFromRequest();
 echo "<pre>";
 print_r($filter);exit;
         unset($filter['page']);
