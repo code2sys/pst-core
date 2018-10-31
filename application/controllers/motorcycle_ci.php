@@ -83,9 +83,6 @@ class Motorcycle_CI extends Welcome {
             $sort_number = 0;
         }
         $_SESSION["bikeControlSort"] = $sort_number;
-        echo "<pre>";
-        echo  $_SESSION["motorcycle_current_url"];
-        echo "</pre>";exit;
         header("Location: " . $_SESSION["motorcycle_current_url"]);
 
     }
