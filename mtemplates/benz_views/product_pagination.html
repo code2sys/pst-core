@@ -17,44 +17,43 @@
                 <li class=" pgn"><a href="javascript:void(0);" data-page-number="2">Next →</a></li>
 
             {{/MoreThan1}} -->
-            <?php if ($pages > 1): ?>
-                <?php if ($page > 1): ?>
-                    <li class=" pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page - 1; ?>">← Previous</a></li>
+            {{#MorePagesThan1}}
+                {{#MorePageThan1}}
+                    <li class=" pgn"><a href="javascript:void(0);" data-page-number="{{page-1}}">← Previous</a></li>
 
-                    <?php if ($page > 2): ?>
+                    {{#MorePageThan2}}
 
-                        <?php if ($page > 3): ?>
+                        {{#MorePageThan3}}
                             <li class="pager_spacer"><span>&hellip;</span></li>
-                        <?php endif; ?>
+                        {{/MorePageThan3}}
 
-                        <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page - 2; ?>"><?php echo $page - 2; ?></a></li>
+                        <li class="pgn"><a href="javascript:void(0);" data-page-number="{{page-2}}">{{page-2}}</a></li>
 
-                    <?php endif; ?>
+                    {{/MorePageThan2}}
 
-                    <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page - 1; ?>"><?php echo $page - 1; ?></a></li>
-                <?php endif; ?>
+                    <li class="pgn"><a href="javascript:void(0);" data-page-number="{{page-1}}">{{page-1}}</a></li>
+                {{/MorePageThan1}}
 
-                <li class="active pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page; ?>"><?php echo $page; ?></a></li>
+                <li class="active pgn"><a href="javascript:void(0);" data-page-number="{{page}}">{{page}}</a></li>
 
 
-                <?php if ($page < $pages): ?>
-                    <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 1; ?>"><?php echo $page + 1; ?></a></li>
+                {{#MorePagesThanPage}}
+                    <li class="pgn"><a href="javascript:void(0);" data-page-number="{{page+1}}">{{page+1}}</a></li>
 
-                    <?php if ($page < $pages - 1): ?>
-                        <li class="pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 2; ?>"><?php echo $page + 2; ?></a></li>
+                    {{#MorePagesThanPage1}}
+                        <li class="pgn"><a href="javascript:void(0);" data-page-number="{{page+2}}">{{page+2}}</a></li>
 
-                        <?php if ($page < $pages - 2): ?>
+                        {{#MorePagesThanPage2}}
                             <li class="pager_spacer"><span>&hellip;</span></li>
-                        <?php endif; ?>
+                        {{/MorePagesThanPage2}}
 
 
-                    <?php endif; ?>
+                    {{/MorePagesThanPage1}}
 
-                    <li class=" pgn"><a href="javascript:void(0);" data-page-number="<?php echo $page + 1; ?>">Next →</a></li>
-                <?php endif; ?>
+                    <li class=" pgn"><a href="javascript:void(0);" data-page-number="{{page+1}}">Next →</a></li>
+                {{/MorePagesThanPage}}
 
-
-            <?php endif; ?>
+            {{/MorePagesThan1}}
         </ul>
     </div>
 </div>
