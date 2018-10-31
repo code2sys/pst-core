@@ -7,7 +7,8 @@ $new_assets_url1 = jsite_url( "/qatesting/benz_assets/");
 			<div class="one-fifth">
 				<h3 class="aut-title">About<span><?php echo $store_name['company'];?></span></h3>
 				<ul class="clear">
-					<li><a href="<?php echo site_url('pages/index/aboutus');?>">About Us</a></li>
+                    <li><a href="<?php echo site_url('pages/index/aboutus');?>">About Us</a></li>
+                    <li><a href="<?php echo site_url('pages/index/aboutus');?>">Site Map</a></li>
 				</ul>				
 			</div>
 			<?php
