@@ -216,7 +216,7 @@ class Motorcycle_CI extends Welcome {
         $filter = $this->motorcycle_m->assembleFilterFromRequest();            
         $_SESSION["motorcycle_filter"] = $filter;
         $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
-        $_SESSION["motorcycle_current_url"] = str_replace('&filterChange=1', '', (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+        $_SESSION["motorcycle_current_url"] = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         
         if ($squash_filter) {
             $filter = array();
@@ -234,11 +234,7 @@ class Motorcycle_CI extends Welcome {
             $_SESSION["major_units_featured_only"] = 0;
         }
 
-        if (!array_key_exists("filterChange", $_REQUEST)) {
-            if(!array_key_exists("motoCurPage", $_SESSION)) {
-                $_SESSION["motoCurPage"] = 0;
-            }
-        } else {            
+        if (array_key_exists("filterChange", $_REQUEST) || !array_key_exists("motoCurPage", $_SESSION)) {
             $_SESSION["motoCurPage"] = 0;
         }
 
@@ -249,6 +245,7 @@ class Motorcycle_CI extends Welcome {
         $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
 
         $this->_mainData['pages'] = ceil($total / $_SESSION["bikeControlShow"]);
+        $this->_mainData['cpage'] = $_SESSION["motoCurPage"];
         $this->_mainData['fpages'] = $this->pages_m->getPages(1, 'footer');
         $recently = $_SESSION['recentlyMotorcycle'];
         $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
@@ -349,9 +346,6 @@ class Motorcycle_CI extends Welcome {
         }
         $curPage = intVal($this->input->post("page") != null ? $this->input->post("page") : $_SESSION["motoCurPage"]);
 
-        echo "<pre>";
-        echo $curPage;
-        echo "</pre>";
         $offset = ($curPage * $_SESSION["bikeControlShow"]);
         
         $_SESSION["motoCurPage"] = $curPage;
