@@ -346,7 +346,7 @@ class Motorcycle_CI extends Welcome {
         }
         $curPage = intVal($this->input->post("page") != null ? $this->input->post("page") : $_SESSION["motoCurPage"]);
 
-        header("Location: " . $_SESSION["motorcycle_current_url"]. "&page=".$curPage); exit;
+        redirect($_SESSION["motorcycle_current_url"]. "&page=".$curPage);
 
         // $offset = ($curPage * $_SESSION["bikeControlShow"]);
         
