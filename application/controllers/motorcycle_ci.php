@@ -37,10 +37,6 @@ class Motorcycle_CI extends Welcome {
             exit();
         }
 
-        $this->output->set_header('Last-Modified:'.gmdate('D, d M Y H:i:s').'GMT');
-        $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate');
-        $this->output->set_header('Cache-Control: post-check=0, pre-check=0',false);
-        $this->output->set_header('Pragma: no-cache');
     }
 
     /*
@@ -218,7 +214,12 @@ class Motorcycle_CI extends Welcome {
         $this->load->model('motorcycle_m');
 
         
-        $filter = $this->motorcycle_m->assembleFilterFromRequest();            
+        $filter = $this->motorcycle_m->assembleFilterFromRequest();
+        $filterDiff = array_diff($filter, $_SESSION["motorcycle_filter"]);
+        if ((array_key_exists("filterChange", $_REQUEST) && count($filterDiff) > 0) || !array_key_exists("motoCurPage", $_SESSION)) {
+            $_SESSION["motoCurPage"] = 0;
+        }
+
         $_SESSION["motorcycle_filter"] = $filter;
         $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
         $_SESSION["motorcycle_current_url"] = str_replace('&filterChange=1', '', (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
@@ -228,7 +229,6 @@ class Motorcycle_CI extends Welcome {
             $_SESSION["motorcycle_filter"] = array();
         }
 
-
         $filter["status"] = 1;
         $this->_mainData['vehicles'] = $this->motorcycle_m->getMotorcycleVehicle($filter, $_SESSION["major_units_featured_only"]);
         $this->_mainData['brands'] = $this->motorcycle_m->getMotorcycleMake($filter, $_SESSION["major_units_featured_only"]);
@@ -237,10 +237,6 @@ class Motorcycle_CI extends Welcome {
 
         if (!array_key_exists("major_units_featured_only", $_SESSION)) {
             $_SESSION["major_units_featured_only"] = 0;
-        }
-
-        if (array_key_exists("filterChange", $_REQUEST) || !array_key_exists("motoCurPage", $_SESSION)) {
-            $_SESSION["motoCurPage"] = 0;
         }
 
         $offset = ($_SESSION["motoCurPage"] * $_SESSION["bikeControlShow"]);
