@@ -346,25 +346,23 @@ class Motorcycle_CI extends Welcome {
         }
         $curPage = intVal($this->input->post("page") != null ? $this->input->post("page") : $_SESSION["motoCurPage"]);
 
-        redirect($_SESSION["motorcycle_current_url"]. "&page=".$curPage);
-
-        // $offset = ($curPage * $_SESSION["bikeControlShow"]);
+        $offset = ($curPage * $_SESSION["bikeControlShow"]);
         
-        // $_SESSION["motoCurPage"] = $curPage;
-        // $filter = $_SESSION["motorcycle_filter"];
+        $_SESSION["motoCurPage"] = $curPage;
+        $filter = $_SESSION["motorcycle_filter"];
         
-        // unset($filter['page']);
-        // // JLB 06-04-17
-        // // Why was there a separate one for getFilterMotorcycles?? As far as I can tell, it was to separate off the limit vs. offset.
-        // $motorcycles['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], $offset, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
+        unset($filter['page']);
+        // JLB 06-04-17
+        // Why was there a separate one for getFilterMotorcycles?? As far as I can tell, it was to separate off the limit vs. offset.
+        $motorcycles['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], $offset, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
 
 
-        // $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
-        // $motorcycles['pages'] = ceil($total / $_SESSION["bikeControlShow"]);
-        // $motorcycles['page'] = $curPage + 1;
+        $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
+        $motorcycles['pages'] = ceil($total / $_SESSION["bikeControlShow"]);
+        $motorcycles['page'] = $curPage + 1;
 
-        // $filteredProducts = $this->load->view('benz_views/filter-product.php', $motorcycles, true);
-        // echo $filteredProducts;
+        $filteredProducts = $this->load->view('benz_views/filter-product.php', $motorcycles, true);
+        echo $filteredProducts;
     }
 
 
