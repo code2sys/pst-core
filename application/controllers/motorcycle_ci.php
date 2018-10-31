@@ -345,7 +345,8 @@ class Motorcycle_CI extends Welcome {
         $offset = ($curPage * $_SESSION["bikeControlShow"]);
 
         $filter = $this->motorcycle_m->assembleFilterFromRequest(true);
-
+echo "<pre>";
+print_r($filter);exit;
         unset($filter['page']);
         // JLB 06-04-17
         // Why was there a separate one for getFilterMotorcycles?? As far as I can tell, it was to separate off the limit vs. offset.
