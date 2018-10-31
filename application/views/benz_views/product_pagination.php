@@ -19,7 +19,9 @@ mustache_tmpl_set($template, "MorePageThan3", $cpage > 3);
 mustache_tmpl_set($template, "MorePagesThanPage", $cpage < $pages);
 mustache_tmpl_set($template, "MorePagesThanPage1", ($page < $pages - 1));
 mustache_tmpl_set($template, "MorePagesThanPage2", ($page < $pages - 2));
-mustache_tmpl_set($template, "MoreThan2", $pages > 2);
-mustache_tmpl_set($template, "MoreThan3", $pages > 3);
+mustache_tmpl_set($template, "minpage1", $cpage-1);
+mustache_tmpl_set($template, "minpage2", $cpage-2);
+mustache_tmpl_set($template, "plupage1", $cpage+1);
+mustache_tmpl_set($template, "plupage2", $cpage+2);
 
 print mustache_tmpl_parse($template);

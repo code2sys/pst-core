@@ -19,7 +19,7 @@
             {{/MoreThan1}} -->
             {{#MorePagesThan1}}
                 {{#MorePageThan1}}
-                    <li class=" pgn"><a href="javascript:void(0);" data-page-number="{{page-1}}">← Previous</a></li>
+                    <li class=" pgn"><a href="javascript:void(0);" data-page-number="{{minpage1}}">← Previous</a></li>
 
                     {{#MorePageThan2}}
 
@@ -27,21 +27,21 @@
                             <li class="pager_spacer"><span>&hellip;</span></li>
                         {{/MorePageThan3}}
 
-                        <li class="pgn"><a href="javascript:void(0);" data-page-number="{{page-2}}">{{page-2}}</a></li>
+                        <li class="pgn"><a href="javascript:void(0);" data-page-number="{{minpage2}}">{{minpage2}}</a></li>
 
                     {{/MorePageThan2}}
 
-                    <li class="pgn"><a href="javascript:void(0);" data-page-number="{{page-1}}">{{page-1}}</a></li>
+                    <li class="pgn"><a href="javascript:void(0);" data-page-number="{{minpage1}}">{{minpage1}}</a></li>
                 {{/MorePageThan1}}
 
                 <li class="active pgn"><a href="javascript:void(0);" data-page-number="{{page}}">{{page}}</a></li>
 
 
                 {{#MorePagesThanPage}}
-                    <li class="pgn"><a href="javascript:void(0);" data-page-number="{{page+1}}">{{page+1}}</a></li>
+                    <li class="pgn"><a href="javascript:void(0);" data-page-number="{{plupage1}}">{{plupage1}}</a></li>
 
                     {{#MorePagesThanPage1}}
-                        <li class="pgn"><a href="javascript:void(0);" data-page-number="{{page+2}}">{{page+2}}</a></li>
+                        <li class="pgn"><a href="javascript:void(0);" data-page-number="{{plupage2}}">{{plupage2}}</a></li>
 
                         {{#MorePagesThanPage2}}
                             <li class="pager_spacer"><span>&hellip;</span></li>
@@ -50,7 +50,7 @@
 
                     {{/MorePagesThanPage1}}
 
-                    <li class=" pgn"><a href="javascript:void(0);" data-page-number="{{page+1}}">Next →</a></li>
+                    <li class=" pgn"><a href="javascript:void(0);" data-page-number="{{plupage1}}">Next →</a></li>
                 {{/MorePagesThanPage}}
 
             {{/MorePagesThan1}}
