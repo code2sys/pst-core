@@ -216,6 +216,9 @@ class Motorcycle_CI extends Welcome {
         
         $filter = $this->motorcycle_m->assembleFilterFromRequest();
         $filterDiff = array_diff($filter, $_SESSION["motorcycle_filter"]);
+        echo "<pre>";
+        print_r($filterDiff);
+        echo "</pre>";
         if ((array_key_exists("filterChange", $_REQUEST) && count($filterDiff) > 0) || !array_key_exists("motoCurPage", $_SESSION)) {
             $_SESSION["motoCurPage"] = 0;
         }
