@@ -222,7 +222,7 @@ class Motorcycle_CI extends Welcome {
         $_SESSION["motorcycle_filter"] = $filter;
         $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
 
-        $_SESSION["motorcycle_current_url"] = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]?$_SERVER[QUERY_STRING]";
+        $_SESSION["motorcycle_current_url"] = "$_SERVER[REQUEST_URI]?$_SERVER[QUERY_STRING]";
         
         if ($squash_filter) {
             $filter = array();
