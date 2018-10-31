@@ -344,9 +344,9 @@ class Motorcycle_CI extends Welcome {
         $curPage = intVal($this->input->post("page") ? $this->input->post("page") : 0);
         $offset = ($curPage * $_SESSION["bikeControlShow"]);
 
-        $filter = $this->motorcycle_m->assembleFilterFromRequest(true);
+        $filter = $this->motorcycle_m->assembleFilterFromRequest();
 echo "<pre>";
-print_r($curPage);
+print_r($_GET);
         unset($filter['page']);
         // JLB 06-04-17
         // Why was there a separate one for getFilterMotorcycles?? As far as I can tell, it was to separate off the limit vs. offset.
