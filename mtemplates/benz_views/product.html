@@ -1,11 +1,11 @@
 <script type="application/javascript">
-    $(document).on("change", "select[name='bikeControlShow']", function(e) {
-        window.location.href = "/Motorcycle_Show/" + $("select[name='bikeControlShow']").val() + "/" + {{preowned_new_flag}};
-    });
+    // $(document).on("change", "select[name='bikeControlShow']", function(e) {
+    //     window.location.href = "/Motorcycle_Show/" + $("select[name='bikeControlShow']").val() + "/" + {{preowned_new_flag}};
+    // });
 
-    $(document).on("change", "select[name='bikeControlSort']", function(e) {
-        window.location.href = "/Motorcycle_Sort/" + $("select[name='bikeControlSort']").val() + "/" + {{preowned_new_flag}};
-    });
+    // $(document).on("change", "select[name='bikeControlSort']", function(e) {
+    //     window.location.href = "/Motorcycle_Sort/" + $("select[name='bikeControlSort']").val() + "/" + {{preowned_new_flag}};
+    // });
 
     $(document).on("change", "input[name='major_units_featured_only']", function() {
         if ($("input[name='major_units_featured_only']:checked").length > 0) {
