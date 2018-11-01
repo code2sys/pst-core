@@ -49,7 +49,7 @@ mustache_tmpl_set($template, "selector3_js", $CI->load->view("master/widgets/sel
 
 mustache_tmpl_set($template, "top_parent", $top_parent);
 
-mustache_tmpl_set($template, "ENABLE_INVENTORY_SITEMAP", ENABLE_INVENTORY_SITEMAP);
+mustache_tmpl_set($template, "ENABLE_INVENTORY_SITEMAP", defined("ENABLE_INVENTORY_SITEMAP") && ENABLE_INVENTORY_SITEMAP);
 
 // this is the only thing different from footer_v.php as far as I can tell.
 mustache_tmpl_set($template, "s_assets", $s_assets);
