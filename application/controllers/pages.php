@@ -386,7 +386,23 @@ class Pages extends Master_Controller {
 				$this->_mainData['widgetBlock'] .= $this->loadGoogleMaps();
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/contact_v', $this->_mainData, TRUE);
 				// $this->_mainData['widgetBlock'] .= $block;
-	  		}
+              }
+              
+            if($pageTag == 'sitemap')
+            {
+                $this->processContactForm();
+                // $block = $this->_mainData['widgetBlock'];
+                $this->load->helper('easy_captcha_helper');
+
+                // JLB 01-11-18
+                // If there are really store hours, we have to show them....
+                $CI =& get_instance();
+                $CI->load->model("admin_m");
+                $store_name = $CI->admin_m->getAdminShippingProfile();
+
+
+                $this->_mainData['widgetBlock'] .= $this->load->view('info/sitemap_v', $this->_mainData, TRUE);
+            }
 			
 			if($pageTag == 'servicerequest')
 	  		{
