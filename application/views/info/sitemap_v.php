@@ -13,10 +13,6 @@ $CI =& get_instance();
 $CI->load->helper("mustache_helper");
 $template = mustache_tmpl_open("info/site_map.html");
 
-echo "<pre>";
-print_r($motorcycles[0]);
-echo "</pre>";
-
 foreach ($motorcycles as $motorcycle) {
 
     // What is the default...
