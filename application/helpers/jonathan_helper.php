@@ -385,3 +385,17 @@ function normalize_incoming_make($make) {
 
     return $make;
 }
+
+// Rob - to check it has unit or not
+function isMajorUnitShop() {
+    $isMajorUnitShop = false;
+    if ( 
+            (defined('MOTORCYCLE_SHOP_NEW') && MOTORCYCLE_SHOP_NEW)
+        ||  (defined('MOTORCYCLE_SHOP_USED') && MOTORCYCLE_SHOP_USED) 
+        ||  (!defined('MOTORCYCLE_SHOP_DISABLE') || !MOTORCYCLE_SHOP_DISABLE) 
+    ) {
+        $isMajorUnitShop = true;
+    }
+
+    return $isMajorUnitShop;
+}
