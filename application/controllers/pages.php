@@ -394,6 +394,8 @@ class Pages extends Master_Controller {
                 $CI->load->model("admin_m");
                 $CI->load->model("motorcycle_m");
 
+                $this->_mainData['pageRec'] = $this->pages_m->getPageRec(1);
+
                 $store_name = $CI->admin_m->getAdminShippingProfile();
                 $this->_mainData['storeInfo'] = $store_name;
 
