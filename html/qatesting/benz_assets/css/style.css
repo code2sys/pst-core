@@ -2419,19 +2419,15 @@ p.creditCar_b.loct a i{
 }
 
 /* site map */
-.site-map h1 {
-    font-family: Oswald, Roboto;
-    font-weight: 500;
-    color: red;
-}
-/* .site-map .row {
-    margin-left: 0;
-    margin-right: 0;
-} */
-.site-map .unit a.Detail {
+.site-map {
+    font-family: 'Oswald', 'Roboto Condensed', Helvetica, Arial, sans-serif;
     color: #f11406;
+}
+.site-map h1 {
+    font-weight: 500;
+}
+.site-map .unit a.Detail {
     text-decoration: none;
-    display: block;
 }
 .site-map .unit a.Detail:hover {
     color: #880a02;
@@ -2440,7 +2436,6 @@ p.creditCar_b.loct a i{
     position: relative;
     padding-top: 75%;
 }
-
 .site-map .unit .image-container .image-container-image {
     position: absolute;
     top: 0;
