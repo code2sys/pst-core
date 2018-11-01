@@ -394,8 +394,8 @@ class Pages extends Master_Controller {
                 $CI->load->model("admin_m");
                 $store_name = $CI->admin_m->getAdminShippingProfile();
 
-
-                $this->_mainData['storeInfo'] = $this->load->view('info/sitemap_v', $this->_mainData, TRUE);
+                $this->_mainData['storeInfo'] = $store_name;
+                $this->_mainData['widgetBlock'] .= $this->load->view('info/sitemap_v', $this->_mainData, TRUE);
             }
 			
 			if($pageTag == 'servicerequest')
