@@ -4,7 +4,7 @@
 	echo "</pre>";
 ?>
 <div class="site-map">
-	<h1>Site Map</h1>
+	<h1>Inventory Map</h1>
 
 	<div class="container">
 		<div class="row">

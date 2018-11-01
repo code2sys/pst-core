@@ -2419,6 +2419,11 @@ p.creditCar_b.loct a i{
 }
 
 /* site map */
+.site-map h1 {
+    font-family: Oswald, Roboto;
+    font-weight: 500;
+    color: red;
+}
 .site-map .row {
     margin-left: 0;
     margin-right: 0;
