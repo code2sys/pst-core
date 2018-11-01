@@ -1,24 +1,21 @@
-<?php
-	echo "<pre>";
-	print_r($motorcycles[0]);
-	echo "</pre>";
-?>
-<div class="site-map">
-	<h1>Inventory Map</h1>
 
-	<div class="container">
-		<div class="row">
-			<div class="col-12 col-sm-6 col-md-3" style="min-height: 100px; border: 1px solid red;">1</div>
-			<div class="col-12 col-sm-6 col-md-3" style="min-height: 100px; border: 1px solid red;">2</div>
-			<div class="col-12 col-sm-6 col-md-3" style="min-height: 100px; border: 1px solid red;">3</div>
-			<div class="col-12 col-sm-6 col-md-3" style="min-height: 100px; border: 1px solid red;">4</div>
-			<div class="col-12 col-sm-6 col-md-3" style="min-height: 100px; border: 1px solid red;">5</div>
-			<div class="col-12 col-sm-6 col-md-3" style="min-height: 100px; border: 1px solid red;">6</div>
-			<div class="col-12 col-sm-6 col-md-3" style="min-height: 100px; border: 1px solid red;">7</div>
-			<div class="col-12 col-sm-6 col-md-3" style="min-height: 100px; border: 1px solid red;">8</div>
-			<div class="col-12 col-sm-6 col-md-3" style="min-height: 100px; border: 1px solid red;">9</div>
-			<div class="col-12 col-sm-6 col-md-3" style="min-height: 100px; border: 1px solid red;">10</div>
-			<div class="col-12 col-sm-6 col-md-3" style="min-height: 100px; border: 1px solid red;">11</div>
-		</div>
-	</div>
-</div>			
+<?php
+/**
+ * Created by VS Code.
+ * User: Robert
+ * Date: 10/31/18
+ * Time: 20:00 PM
+ */
+
+
+$CI =& get_instance();
+$CI->load->helper("mustache_helper");
+$template = mustache_tmpl_open("info/site_map.html");
+
+echo "<pre>";
+print_r($motorcycles[0]);
+echo "</pre>";
+
+mustache_tmpl_set($template, "motorcycles", $motorcycles);
+
+print mustache_tmpl_parse($template);
