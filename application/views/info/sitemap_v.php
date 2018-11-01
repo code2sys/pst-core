@@ -1,6 +1,6 @@
 <?php
 	echo "<pre>";
-	print_r($widgetBlock);
+	print_r($storeInfo);
 	echo "</pre>";
 ?>
 <div class="site-map">
