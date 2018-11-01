@@ -404,9 +404,9 @@ class Pages extends Master_Controller {
                 $this->_mainData['motorcycles'] = $CI->motorcycle_m->getMotorcycles($filter, 0, 0);
                 $this->_mainData['title'] = "Inventory Site Map | ".$store_name['company']. " | ".$store_name['city']." ".$store_name['state'];
 
-                if( defined('ENABLE_INVENTORY_SITEMAP') && ENABLE_INVENTORY_SITEMAP ) {
+                // if( defined('ENABLE_INVENTORY_SITEMAP') && ENABLE_INVENTORY_SITEMAP ) {
                     $this->_mainData['widgetBlock'] .= $this->load->view('info/sitemap_v', $this->_mainData, TRUE);
-                }
+                // }
             }
 			
 			if($pageTag == 'servicerequest')
