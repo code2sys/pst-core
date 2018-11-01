@@ -2421,16 +2421,16 @@ p.creditCar_b.loct a i{
 /* site map */
 .site-map {
     font-family: 'Oswald', 'Roboto Condensed', Helvetica, Arial, sans-serif;
-    color: #f11406;
 }
 .site-map h1 {
+    color: #f11406;
     font-weight: 500;
 }
 .site-map .unit a.Detail {
     text-decoration: none;
 }
 .site-map .unit a.Detail:hover {
-    color: #880a02;
+    color: #041a40;
 }
 .site-map .unit .image-container {
     position: relative;
