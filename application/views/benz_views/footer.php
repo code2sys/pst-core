@@ -70,6 +70,9 @@ mustache_tmpl_set($template, "ride_selection_js",  $CI->load->view("widgets/ride
 ), true));
 mustache_tmpl_set($template, "showvideo_function", $CI->load->view("showvideo_function", array(), false));
 
+
+mustache_tmpl_set($template, "ENABLE_INVENTORY_SITEMAP", ENABLE_INVENTORY_SITEMAP);
+
 /*
  * Comment preserved from the "ownCarousel" in the template:
  *             // JLB 01-31-18

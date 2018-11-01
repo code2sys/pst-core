@@ -394,21 +394,19 @@ class Pages extends Master_Controller {
                 $CI->load->model("admin_m");
                 $CI->load->model("motorcycle_m");
 
-                $this->_mainData['pageRec'] = $this->pages_m->getPageRec(1);
+                $this->_mainData['pageRec'] = $this->pages_m->getPageRec(0);
 
                 $store_name = $CI->admin_m->getAdminShippingProfile();
                 $this->_mainData['storeInfo'] = $store_name;
-echo "<pre>";
-print_r($store_name);
-echo "######";
-print_r($this->_mainData['pageRec']);
-echo "</pre>";
+
                 $filter = array();
                 $filter["status"] = 1;                
                 $this->_mainData['motorcycles'] = $CI->motorcycle_m->getMotorcycles($filter, 0, 0);
-                $this->_mainData['title'] = "Inventory Site Map";
+                $this->_mainData['title'] = "Inventory Site Map | ".$store_name['company']. " | ".$store_name['city']." ".$store_name['state'];
 
-                $this->_mainData['widgetBlock'] .= $this->load->view('info/sitemap_v', $this->_mainData, TRUE);
+                if( defined('ENABLE_INVENTORY_SITEMAP') && ENABLE_INVENTORY_SITEMAP ) {
+                    $this->_mainData['widgetBlock'] .= $this->load->view('info/sitemap_v', $this->_mainData, TRUE);
+                }
             }
 			
 			if($pageTag == 'servicerequest')

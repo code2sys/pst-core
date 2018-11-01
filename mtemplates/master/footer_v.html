@@ -13,7 +13,9 @@
             <h3 class="aut-title">About <span>{{store_name}}</span></h3>
             <ul class="clear">
                 <li><a href="/pages/index/aboutus">About Us</a></li>
+                {{#ENABLE_INVENTORY_SITEMAP}}
                 <li><a href="/pages/index/sitemap">Site Map</a></li>
+                {{/ENABLE_INVENTORY_SITEMAP}}
             </ul>
         </div>
         {{{pages_rendered}}}
