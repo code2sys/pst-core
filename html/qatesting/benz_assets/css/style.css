@@ -2454,4 +2454,5 @@ p.creditCar_b.loct a i{
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    text-align: center;
 }
