@@ -7,6 +7,7 @@
 
 $CI =& get_instance();
 $CI->load->helper("mustache_helper");
+$CI->load->helper("jonathan");
 $template = mustache_tmpl_open("benz_views/footer.html");
 
 mustache_tmpl_set($template, "new_assets_url", jsite_url("/qatesting/benz_assets/"));
@@ -69,6 +70,9 @@ mustache_tmpl_set($template, "ride_selection_js",  $CI->load->view("widgets/ride
 
 ), true));
 mustache_tmpl_set($template, "showvideo_function", $CI->load->view("showvideo_function", array(), false));
+
+
+mustache_tmpl_set($template, "IS_INVENTORY_SITEMAP", isMajorUnitShop());
 
 /*
  * Comment preserved from the "ownCarousel" in the template:
