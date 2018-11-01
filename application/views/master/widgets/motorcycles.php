@@ -10,7 +10,8 @@ if (!isset($motorcycle_template)) {
 }
 $template = mustache_tmpl_open($motorcycle_template);
 
-mustache_tmpl_set($template, 'for_sale_link', 'Powersports_Units_For_Sale_'.$store_name['city'].'_'.$store_name['state']);
+mustache_tmpl_set($template, 'city', $store_name['city']);
+mustache_tmpl_set($template, 'state', $store_name['state']);
 
 mustache_tmpl_set($template, "DISABLE_FRONT_MOTORCYCLE_NAV", defined("DISABLE_FRONT_MOTORCYCLE_NAV") && DISABLE_FRONT_MOTORCYCLE_NAV);
 mustache_tmpl_set($template, "MOTORCYCLE_SHOP_DISABLE", defined("MOTORCYCLE_SHOP_DISABLE") && MOTORCYCLE_SHOP_DISABLE);
