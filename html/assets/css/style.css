@@ -2749,3 +2749,43 @@ Added for the gallery
 	width: 100%;
 	transition: transform 0.6s;
 }
+
+/* site map */
+.site-map h1 {
+    font-family: Oswald, Roboto;
+    font-weight: 500;
+    color: red;
+}
+/* .site-map .row {
+    margin-left: 0;
+    margin-right: 0;
+} */
+.site-map .unit a.Detail {
+    color: #f11406;
+    text-decoration: none;
+    display: block;
+}
+.site-map .unit .image-container {
+    position: relative;
+    padding-top: 75%;
+}
+
+.site-map .unit .image-container .image-container-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-origin: content-box;
+    background-size: contain;
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+.site-map .unit .title {
+    height: 2.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
