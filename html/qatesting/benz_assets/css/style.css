@@ -2433,6 +2433,9 @@ p.creditCar_b.loct a i{
     text-decoration: none;
     display: block;
 }
+.site-map .unit a.Detail:hover {
+    color: #880a02;
+}
 .site-map .unit .image-container {
     position: relative;
     padding-top: 75%;
@@ -2448,7 +2451,7 @@ p.creditCar_b.loct a i{
     height: 100%;
     background-origin: content-box;
     background-size: contain;
-    background-position: center top;
+    background-position: center center;
     background-repeat: no-repeat;
 }
 .site-map .unit .title {
