@@ -398,10 +398,15 @@ class Pages extends Master_Controller {
 
                 $store_name = $CI->admin_m->getAdminShippingProfile();
                 $this->_mainData['storeInfo'] = $store_name;
-
+echo "<pre>";
+print_r($store_name);
+echo "######";
+print_r($this->_mainData['pageRec']);
+echo "</pre>";
                 $filter = array();
                 $filter["status"] = 1;                
                 $this->_mainData['motorcycles'] = $CI->motorcycle_m->getMotorcycles($filter, 0, 0);
+                $this->_mainData['title'] = "Inventory Site Map";
 
                 $this->_mainData['widgetBlock'] .= $this->load->view('info/sitemap_v', $this->_mainData, TRUE);
             }
