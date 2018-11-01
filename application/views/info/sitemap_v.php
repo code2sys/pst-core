@@ -1,6 +1,6 @@
 <?php
 	echo "<pre>";
-	print_r($storeInfo);
+	print_r($motorcycles[0]);
 	echo "</pre>";
 ?>
 <div class="site-map">

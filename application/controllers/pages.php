@@ -392,9 +392,15 @@ class Pages extends Master_Controller {
             {
                 $CI =& get_instance();
                 $CI->load->model("admin_m");
-                $store_name = $CI->admin_m->getAdminShippingProfile();
+                $CI->load->model("motorcycle_m");
 
+                $store_name = $CI->admin_m->getAdminShippingProfile();
                 $this->_mainData['storeInfo'] = $store_name;
+
+                $filter = array();
+                $filter["status"] = 1;                
+                $this->_mainData['motorcycles'] = $CI->motorcycle_m->getMotorcycles($filter, 0, 0);
+
                 $this->_mainData['widgetBlock'] .= $this->load->view('info/sitemap_v', $this->_mainData, TRUE);
             }
 			
