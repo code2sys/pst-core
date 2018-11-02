@@ -177,6 +177,7 @@ class CRS_M extends Master_M
 
 
         // refresh it...
+        $CI->load->model("CRSCron_M");
         $CI->CRSCron_M->refreshCRSData($motorcycle_id);
 
         if ($motorcycle->get("customer_set_vehicle_type") == 0) {
