@@ -404,6 +404,11 @@ class Pages extends Master_Controller {
                 $this->_mainData['motorcycles'] = $CI->motorcycle_m->getMotorcycles($filter, 0, 0);
                 $title = "Inventory Site Map | ".$store_name['company']. " | ".$store_name['city']." ".$store_name['state'];
                 $this->setMasterPageVars('title', $title);
+
+                echo "<pre>";
+                print_r($this->_mainData['pageRec']);
+                echo "</pre>";
+                
                 $this->setMasterPageVars('descr', $this->_mainData['pageRec']['descr']);
                 $this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
 
