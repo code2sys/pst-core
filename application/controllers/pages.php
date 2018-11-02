@@ -405,6 +405,11 @@ class Pages extends Master_Controller {
                 $title = "Inventory Site Map | ".$store_name['company']. " | ".$store_name['city']." ".$store_name['state'];
                 $this->setMasterPageVars('title', $title);
 
+                echo "<pre>";
+                print_r($this->_mainData['pageRec']);
+                echo "</pre>";
+                
+
                 $this->load->helper("jonathan");
                 if(isMajorUnitShop()) {
                     $this->_mainData['widgetBlock'] .= $this->load->view('info/sitemap_v', $this->_mainData, TRUE);
