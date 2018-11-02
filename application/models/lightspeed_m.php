@@ -596,6 +596,10 @@ class Lightspeed_M extends Master_M {
                         $motorcycle->set("description", $crs_trim["description"] );
                         $motorcycle->save();
                         $denormalize = true;
+                    } else {
+                        if ($crs_trim["description"] == "") {
+                            print "No description found " . $motorcycle->get("crs_trim_id") . "\n";
+                        }
                     }
 
                     if ($denormalize) {
