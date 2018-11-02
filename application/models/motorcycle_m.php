@@ -423,6 +423,7 @@ class Motorcycle_M extends Master_M {
         }
         $this->db->select('year');
         $this->db->group_by('year');
+        $this->db->order_by('year', 'DESC');
         $record = $this->selectRecords('motorcycle', $where);
         return $record;
     }
