@@ -10,11 +10,6 @@ if (isset($title) && $title != "") {
     $page_title = $pageRec["title"];
 }
 
-echo "<pre>";
-echo $descr."###";
-print_r($pageRec);
-echo "</pre>";
-
 $meta_description = "";
 if (isset($descr) && $descr != "") {
     $meta_description = $descr;
