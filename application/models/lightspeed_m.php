@@ -592,15 +592,10 @@ class Lightspeed_M extends Master_M {
                     }
 
                     // should we attempt to set the description?
-                    if ($crs_trim["description"] != "" && $motorcycle->get("customer_set_description") == 0 && $motorcycle->get("lightspeed_set_description") == 0) {
-                        $motorcycle->set("description", $crs_trim["description"] );
+                    if ($crs_trim[0]["description"] != "" && $motorcycle->get("customer_set_description") == 0 && $motorcycle->get("lightspeed_set_description") == 0) {
+                        $motorcycle->set("description", $crs_trim[0]["description"] );
                         $motorcycle->save();
                         $denormalize = true;
-                    } else {
-                        if ($crs_trim["description"] == "") {
-                            print_r($crs_trim);
-                            print "No description found " . $motorcycle->get("crs_trim_id") . "\n";
-                        }
                     }
 
                     if ($denormalize) {
