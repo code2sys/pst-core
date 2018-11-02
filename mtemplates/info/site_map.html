@@ -1,0 +1,22 @@
+<div class="site-map">
+    <h1>Inventory Site Map</h1>
+
+    <div class="container">
+        <div class="row">
+            {{#motorcycles}}
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="unit">
+                        <a class="Detail" title="{{motorcycle_title}}" href="{{url}}">
+                            <div class="image-container">
+                                <div class="image-container-image" style="background-image:url('{{motorcycle_image}}');"></div>
+                            </div>
+                            <div class="title">{{motorcycle_title}}</div>
+                        </a>
+                    </div>
+                </div>
+            {{/motorcycles}}
+        </div>
+    </div>
+</div>			
+
+

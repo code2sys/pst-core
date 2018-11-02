@@ -386,7 +386,30 @@ class Pages extends Master_Controller {
 				$this->_mainData['widgetBlock'] .= $this->loadGoogleMaps();
 				$this->_mainData['widgetBlock'] .= $this->load->view('info/contact_v', $this->_mainData, TRUE);
 				// $this->_mainData['widgetBlock'] .= $block;
-	  		}
+              }
+              
+            if($pageTag == 'sitemap')
+            {
+                $CI =& get_instance();
+                $CI->load->model("admin_m");
+                $CI->load->model("motorcycle_m");
+
+                $this->_mainData['pageRec'] = $this->pages_m->getPageRec(0);
+
+                $store_name = $CI->admin_m->getAdminShippingProfile();
+                $this->_mainData['storeInfo'] = $store_name;
+
+                $filter = array();
+                $filter["status"] = 1;                
+                $this->_mainData['motorcycles'] = $CI->motorcycle_m->getMotorcycles($filter, 0, 0);
+                $title = "Inventory Site Map | ".$store_name['company']. " | ".$store_name['city']." ".$store_name['state'];
+                $this->setMasterPageVars('title', $title);
+
+                $this->load->helper("jonathan");
+                if(isMajorUnitShop()) {
+                    $this->_mainData['widgetBlock'] .= $this->load->view('info/sitemap_v', $this->_mainData, TRUE);
+                }
+            }
 			
 			if($pageTag == 'servicerequest')
 	  		{
