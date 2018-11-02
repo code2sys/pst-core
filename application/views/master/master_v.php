@@ -11,6 +11,7 @@ if (isset($title) && $title != "") {
 }
 
 echo "<pre>";
+echo $descr."###";
 print_r($pageRec);
 echo "</pre>";
 
