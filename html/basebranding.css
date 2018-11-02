@@ -44,3 +44,8 @@
 .major_unit_searchbox {
     width: 95% !important;
 }
+
+.description_from_crs {
+    font-size: 120%;
+    line-height: 200%;
+}
