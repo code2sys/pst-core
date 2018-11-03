@@ -49,6 +49,12 @@ $route['Motorcycle_Sort/([0-9]+)/([0-9]+)'] = 'motorcycle_ci/benzProductSort/$1/
 $route['Motorcycle_Featured/([0-9]+)/([0-9]+)'] = 'motorcycle_ci/benzProductFeatured/$1/$2';
 $route['Motorcycle_Show/([0-9]+)/([0-9]+)'] = 'motorcycle_ci/benzProductShow/$1/$2';
 $route['motorcycle/([a-zA-z0-9_-]+)'] = 'motorcycle_ci/benzDetails/$1/$2';
+
+$route['Motorcycle_List'] = 'motorcycle_ci/benzProduct';
+$route['Motorcycle_List/featured'] = 'motorcycle_ci/featuredNewProducts';
+$route['Motorcycle_List/featured_special'] = 'motorcycle_ci/featuredSpecialProducts';
+$route['Motorcycle_List/featured_preowned'] = 'motorcycle_ci/featuredUsedProducts';
+
 $route['streetbikeparts'] = 'streetbikeparts/index';
 $route['dirtbikeparts'] = 'dirtbikeparts/index';
 $route['vtwin'] = 'vtwin/index';

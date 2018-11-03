@@ -207,6 +207,11 @@ class Motorcycle_CI extends Welcome {
             } else {
                 $_GET["fltr"] = "pre-owned";
             }
+        } else {
+            if ($_REQUEST["fltr"] == "new" ) {
+                $_REQUEST["fltr"] = "New_Inventory";
+                $_GET["fltr"] = "New_Inventory";
+            }
         }
 
 
