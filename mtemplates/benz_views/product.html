@@ -10,13 +10,13 @@
     $(document).on("change", "input[name='major_units_featured_only']", function() {
         if ($("input[name='major_units_featured_only']:checked").length > 0) {
             {{#fltr_preowned}}
-            window.location.href = "/Motorcycle_List/featured_preowned";
+            window.location.href = "/Major_Unit_List/featured_preowned";
             {{/fltr_preowned}}
             {{#fltr_new}}
-            window.location.href = "/Motorcycle_List/featured";
+            window.location.href = "/Major_Unit_List/featured";
             {{/fltr_new}}
             {{#fltr_special}}
-            window.location.href = "/Motorcycle_List/featured_special";
+            window.location.href = "/Major_Unit_List/featured_special";
             {{/fltr_special}}
         } else {
             window.location.href = "/Motorcycle_Featured/0/" + {{preowned_new_flag}};
