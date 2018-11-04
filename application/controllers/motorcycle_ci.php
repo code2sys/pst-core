@@ -36,6 +36,7 @@ class Motorcycle_CI extends Welcome {
             header("Location: /");
             exit();
         }
+
     }
 
     /*
@@ -62,7 +63,7 @@ class Motorcycle_CI extends Welcome {
             $featured = 0;
         }
         $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = $featured;
-        header("Location: /Motorcycle_List" . $this->preSwitch($pre));
+        header("Location: /Major_Unit_List" . $this->preSwitch($pre));
     }
 
     protected function preSwitch($pre) {
@@ -83,7 +84,7 @@ class Motorcycle_CI extends Welcome {
             $sort_number = 0;
         }
         $_SESSION["bikeControlSort"] = $sort_number;
-        header("Location: /Motorcycle_List" . $this->preSwitch($pre));
+        header("Location: " . $_SESSION["motorcycle_current_url"]);
 
     }
 
@@ -92,16 +93,17 @@ class Motorcycle_CI extends Welcome {
             $show_number = ITEMS_ON_PAGE;
         }
         $_SESSION["bikeControlShow"] = $show_number;
-        header("Location: /Motorcycle_List" . $this->preSwitch($pre));
+        $_SESSION["motoCurPage"] = 0;
+        header("Location: " . $_SESSION["motorcycle_current_url"] ."&filterChange=1");
     }
 
     /*
-     * This is the main Motorcycle_List page.
+     * This is the main Major_Unit_List page.
      */
     public function featuredNewProducts() {
         $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
-        $_REQUEST["fltr"] = "new";
-        $_GET["fltr"] = "new";
+        $_REQUEST["fltr"] = "New_Inventory";
+        $_GET["fltr"] = "New_Inventory";
         $this->benzProduct();
     }
 
@@ -158,6 +160,117 @@ class Motorcycle_CI extends Welcome {
         print json_encode($result);
     }
 
+    public function featuredNewProductsChangeUrl() {
+        $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
+        $_REQUEST["fltr"] = "New_Inventory";
+        $_GET["fltr"] = "New_Inventory";
+        $this->benzChangeUrl('new');
+    }
+
+    public function featuredSpecialProductsChangeUrl() {
+        $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
+        $_REQUEST["fltr"] = "special";
+        $_GET["fltr"] = "special";
+        $this->benzChangeUrl('special');
+    }
+
+    public function featuredUsedProductsChangeUrl() {
+        $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
+        $_REQUEST["fltr"] = "pre-owned";
+        $_GET["fltr"] = "pre-owned";
+        $this->benzChangeUrl('pre-owned');
+    }
+
+    public function benzChangeUrl( $type ='new' ) {
+        $this->load->model('admin_m');
+        $this->load->model('motorcycle_m');
+        $this->load->helper('url');
+
+        $store_name = $this->admin_m->getAdminShippingProfile();
+        $categories = $this->motorcycle_m->getMotorcycleCategory();
+        $vehicles = $this->motorcycle_m->getMotorcycleVehicle();
+
+        $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
+        if ( $type == 'new' ) {
+            $actual_link .= "/New";
+        } else {
+            $actual_link .= "/Pre-Owned";
+        }
+        $preUrlString = "_Powersports_Units";
+        $preBrandFltr = "";
+        $preCategoryFltr = "";
+        $preVehicleFltr = "";
+        if (array_key_exists("brands", $_REQUEST) || array_key_exists("vehicles", $_REQUEST)) {
+            $preUrlString = "";
+        }
+        if (array_key_exists("brands", $_REQUEST)){
+            $brands = $this->motorcycle_m->processReturnValue($_REQUEST['brands']);
+            $preBrandFltr = "&brands=";
+
+            foreach ($brands as $brand) {
+                $preUrlString .= "_".url_title($brand);
+                $preBrandFltr .= url_title($brand)."$";
+            }
+
+            $preBrandFltr = substr($preBrandFltr, 0, -1);
+        }
+        if (array_key_exists("vehicles", $_REQUEST)){
+            $requestVehicles = $this->motorcycle_m->processReturnValue($_REQUEST['vehicles']);
+            $preVehicleFltr = "&vehicles=";
+
+            foreach ($vehicles as $vehicle) {
+                if(in_array($vehicle['name'], $requestVehicles) || in_array($vehicle['id'], $requestVehicles)) {
+                    $preUrlString .= "_".url_title($vehicle['name']);
+                    $preVehicleFltr .= url_title($vehicle['name'])."$";
+                }
+            }
+
+            $preVehicleFltr = substr($preVehicleFltr, 0, -1);
+        }
+        if (array_key_exists("categories", $_REQUEST)){
+            $requestCategories = $this->motorcycle_m->processReturnValue($_REQUEST['categories']);
+            $preCategoryFltr = "&categories=";
+
+            foreach ($categories as $category) {
+                if(in_array($category['name'], $requestCategories) || in_array($category['id'], $requestCategories)) {
+                    $preCategoryFltr .= url_title($category['name'])."$";
+                }
+            }
+            $preCategoryFltr = substr($preCategoryFltr, 0, -1);
+        }
+        $actual_link .= $preUrlString;
+        $actual_link .= "_For_Sale";
+        $actual_link .= "_".url_title($store_name['city']);
+        $actual_link .= "_".url_title($store_name['state']);
+        $actual_link .= "/Major_Unit_List?fltr=";
+        if ( $type == 'new' ) {
+            $actual_link .= "New_Inventory";
+        } else if( $type == 'pre-owned' ) {
+            $actual_link .= "pre-owned";
+        } else {
+            $actual_link .= "special";
+        }
+        $actual_link .= $preBrandFltr . $preCategoryFltr;
+
+        if (array_key_exists("years", $_REQUEST)){
+            $actual_link .= "&years=".$_REQUEST['years'];
+        }
+
+        $actual_link .= $preVehicleFltr;
+
+        if (array_key_exists("search_keywords", $_REQUEST)) {
+            $actual_link .= "&search_keywords=".$_REQUEST["search_keywords"];
+        }
+
+        if (array_key_exists("featured_only", $_REQUEST)) {
+            $actual_link .= "&featured_only=".$_REQUEST["featured_only"];
+        }
+
+        $actual_link .= "&filterChange=1";
+
+        header("Location: " . $actual_link);
+    }
+
 
     public function benzProduct() {
 
@@ -200,31 +313,41 @@ class Motorcycle_CI extends Welcome {
         // I think this is a problem with a default.
         if (!array_key_exists("fltr", $_REQUEST) && !array_key_exists("fltr", $_GET)) {
             if (!defined("MOTORCYCLE_SHOP_NEW") || MOTORCYCLE_SHOP_NEW) {
-                $_REQUEST["fltr"] = "new";
-                $_GET["fltr"] = "new";
+                $_REQUEST["fltr"] = "New_Inventory";
+                $_GET["fltr"] = "New_Inventory";
             } else {
                 $_GET["fltr"] = "pre-owned";
+            }
+        } else {
+            if ($_REQUEST["fltr"] == "new" ) {
+                $_REQUEST["fltr"] = "New_Inventory";
+                $_GET["fltr"] = "New_Inventory";
             }
         }
 
 
         $this->load->model('pages_m');
+        $this->load->model('admin_m');
         $this->load->model('motorcycle_m');
 
-        if (!array_key_exists("filterChange", $_REQUEST) && array_key_exists("motorcycle_filter", $_SESSION) && is_array($_SESSION["motorcycle_filter"]) && (!array_key_exists("fltr", $_REQUEST) || (array_key_exists("motorcycle_fltr", $_SESSION) && $_SESSION["motorcycle_fltr"] == $_REQUEST["fltr"]))) {
-            $filter = $_SESSION["motorcycle_filter"];
-        } else {
-            $filter = $this->motorcycle_m->assembleFilterFromRequest();
-            $_SESSION["motorcycle_filter"] = $filter;
-            $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
-
+        $filter = $this->motorcycle_m->assembleFilterFromRequest();
+        $filterDiff = true;
+        if (array_key_exists("motorcycle_filter", $_SESSION)) {
+            $filterDiff = $filter === $_SESSION["motorcycle_filter"];
         }
 
+        if ((array_key_exists("filterChange", $_REQUEST) && !$filterDiff) || !array_key_exists("motoCurPage", $_SESSION)) {
+            $_SESSION["motoCurPage"] = 0;
+        }
+
+        $_SESSION["motorcycle_filter"] = $filter;
+        $_SESSION["motorcycle_fltr"] = $_REQUEST["fltr"];
+        $_SESSION["motorcycle_current_url"] = str_replace('&filterChange=1', '', (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+        
         if ($squash_filter) {
             $filter = array();
             $_SESSION["motorcycle_filter"] = array();
         }
-
 
         $filter["status"] = 1;
         $this->_mainData['vehicles'] = $this->motorcycle_m->getMotorcycleVehicle($filter, $_SESSION["major_units_featured_only"]);
@@ -236,14 +359,31 @@ class Motorcycle_CI extends Welcome {
             $_SESSION["major_units_featured_only"] = 0;
         }
 
-        $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], 0, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
+        $offset = ($_SESSION["motoCurPage"] * $_SESSION["bikeControlShow"]);
+
+        $this->_mainData['motorcycles'] = $this->motorcycle_m->getMotorcycles($filter, $_SESSION["bikeControlShow"], $offset, $_SESSION["bikeControlSort"], $_SESSION["major_units_featured_only"]);
 
         $total = $this->motorcycle_m->getTotal($filter, $_SESSION["major_units_featured_only"]);
+
         $this->_mainData['pages'] = ceil($total / $_SESSION["bikeControlShow"]);
+        $this->_mainData['cpage'] = $_SESSION["motoCurPage"]+1;
         $this->_mainData['fpages'] = $this->pages_m->getPages(1, 'footer');
         $recently = $_SESSION['recentlyMotorcycle'];
         $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
         $this->_mainData["filter"] = $filter;
+
+        $store_name = $this->admin_m->getAdminShippingProfile();
+        $page_info = $this->motorcycle_m->getPageInfos();
+
+        $title = $page_info['page_title']." For Sale ".$store_name['company']." ".$store_name['city']." ".$store_name['state'];
+        $this->_mainData['forSaleLink'] = 'For_Sale_'.$store_name['city'].'_'.$store_name['state'];
+
+        $this->_mainData['pageRec'] = $this->pages_m->getPageRec(1);
+
+        $this->setMasterPageVars('title', $title);
+
+        $this->_mainData['meta_description'] = "At " . $store_name['company'] . " in ". $store_name['city'] ." ". $store_name['state'] ." ". $page_info['page_meta'];
+
         $this->renderMasterPage('benz_views/header.php', 'benz_views/product.php', $this->_mainData);
         // $this->load->view('benz_views/header.php');
         // $this->load->view('benz_views/product.php');
@@ -267,11 +407,8 @@ class Motorcycle_CI extends Welcome {
             $id = $this->motorcycle_m->getMotorcycleIdByTitle($title1);
         }
 
-        // echo urldecode($title);
-        // echo $id.'<br>';
-        // echo $title;exit;
         if ($id == null) {
-            redirect('Motorcycle_List?fltr=new');
+            redirect('Major_Unit_List?fltr=New_Inventory');
         }
 
         // $this->load->view('benz_views/header.php');
@@ -284,6 +421,7 @@ class Motorcycle_CI extends Welcome {
         $this->_mainData['recentlyMotorcycle'] = $this->motorcycle_m->getReccentlyMotorcycles($recently);
 
         $this->_mainData['motorcycle'] = $this->motorcycle_m->getMotorcycle($id);
+
         $this->setMasterPageVars('title', @$this->_mainData['motorcycle']['title']);
         if (array_key_exists("recentlyMotorcycle", $_SESSION)) {
             $_SESSION["recentlyMotorcycle"] = array_values($_SESSION["recentlyMotorcycle"]);            
@@ -297,6 +435,13 @@ class Motorcycle_CI extends Welcome {
             //$metaTag = '<meta property="og:image" content="'.$this->_mainData['motorcycle']['images'][0]['image_name'].'"/>';
             $metaTag = '<meta property="og:image" content="' . ($this->_mainData['motorcycle']['images'][0]["external"] > 0 ? $this->_mainData['motorcycle']['images'][0]["image_name"] : (jsite_url('/media/') . $this->_mainData['motorcycle']['images'][0]['image_name'])) . '"/>';
             $this->setMasterPageVars('metatag', $metaTag);
+        }
+
+        $this->load->library('user_agent');
+        $this->_mainData['referUrl'] = base_url('Major_Unit_List');
+        if ($this->agent->is_referral())
+        {
+            $this->_mainData['referUrl'] = str_replace('&filterChange=1', '', $this->agent->referrer());
         }
 
         // echo "<pre>";
@@ -317,11 +462,16 @@ class Motorcycle_CI extends Welcome {
         }
 
         $this->load->model('motorcycle_m');
-        $curPage = intVal($this->input->post("page") ? $this->input->post("page") : 0);
+        if(!array_key_exists("motoCurPage", $_SESSION)) {
+            $_SESSION["motoCurPage"] = 0;
+        }
+        $curPage = intVal($this->input->post("page") != null ? $this->input->post("page") : $_SESSION["motoCurPage"]);
+
         $offset = ($curPage * $_SESSION["bikeControlShow"]);
-
-        $filter = $this->motorcycle_m->assembleFilterFromRequest(true);
-
+        
+        $_SESSION["motoCurPage"] = $curPage;
+        $filter = $_SESSION["motorcycle_filter"];
+        
         unset($filter['page']);
         // JLB 06-04-17
         // Why was there a separate one for getFilterMotorcycles?? As far as I can tell, it was to separate off the limit vs. offset.

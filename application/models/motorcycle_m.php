@@ -32,13 +32,14 @@ class Motorcycle_M extends Master_M {
         /*
          * I reject the idea that vault is the default as a general principle. This seems like a horrible choice for the vault, since it is
          * supposed to be SPECIAL. JLB 06-04-17
-         */
+         */        
+        
         if (array_key_exists('fltr', $data_source)) {
             //$filter['condition'] = $_GET['fltr'] == 'current' ? '1' : '2';
             // JLB 2018-09-13 - There's now SPECIAL
             if ($data_source["fltr"] == "special") {
                 $filter["featured"] = 1;
-            } else if ($data_source['fltr'] == 'new'){
+            } else if ($data_source['fltr'] == 'New_Inventory'){
                 $filter['condition'] = '1';
             } else{
                 $filter['condition'] = '2';
@@ -47,7 +48,7 @@ class Motorcycle_M extends Master_M {
             //$filter['condition'] = $_GET['fltr'] == 'current' ? '1' : '2';
             if ($data_source["condition"] == "special") {
                 $filter["featured"] = 1;
-            } else if ($data_source['condition'] == 'new'){
+            } else if ($data_source['condition'] == 'New_Inventory'){
                 $filter['condition'] = '1';
             } else{
                 $filter['condition'] = '2';
@@ -55,15 +56,90 @@ class Motorcycle_M extends Master_M {
         } else {
             $filter["condition"] = 1;
         }
+        
+        $filter_vehicles = array();
+        if(array_key_exists('vehicles', $data_source)) {
+            $vehicles = $this->getMotorcycleVehicle();
+            $vhcls = $this->processReturnValue($data_source['vehicles']);
+
+            foreach ($vehicles as $vehicle) {
+                if(in_array($vehicle['name'], $vhcls) || in_array($vehicle['id'], $vhcls)) {
+                    $filter_vehicles[] = $vehicle['id'];
+                }
+            }
+        }
+        $filter_categories = array();
+        if(array_key_exists('categories', $data_source)) {
+            $categories = $this->getMotorcycleCategory();
+            $catgrs = $this->processReturnValue($data_source['categories']);
+
+            foreach ($categories as $category) {
+                if(in_array($category['name'], $catgrs) || in_array($category['id'], $catgrs)) {
+                    $filter_categories[] = $category['id'];
+                }
+            }
+        }
 
         $filter['brands'] = $this->processReturnValue($data_source['brands']);
         $filter['years'] = $this->processReturnValue($data_source['years']);
-        $filter['categories'] = $this->processReturnValue($data_source['categories']);
-        $filter['vehicles'] = $this->processReturnValue($data_source['vehicles']);
+        $filter['categories'] = $filter_categories;
+        $filter['vehicles'] = $filter_vehicles;
 
         return $filter;
     }
 
+    public function getPageInfos() {
+        $page_title = "New";
+        $page_meta = "we offer a wide variety of ";
+        if (array_key_exists('fltr', $_GET)) {
+            if ($_GET["fltr"] == "New_Inventory") {
+                $page_title = "New";
+                $page_meta .= "New";
+            } else if ($_GET["fltr"] == 'special'){
+                $page_title = "Featured";
+                $page_meta .= "Featured";
+            } else{
+                $page_title = 'Pre-Owned';
+                $page_meta .= "Pre-Owned";
+            }
+        }
+
+        if (array_key_exists('brands', $_GET)) {
+            $brands = $this->processReturnValue($_GET['brands']);
+            foreach( $brands as $brand ) {
+                $page_title .= " ".$brand;
+                $page_meta .= " ".$brand;
+            }
+        }
+        if (array_key_exists('years', $_GET)) {
+            $years = $this->processReturnValue($_GET['years']);
+            foreach( $years as $year ) {
+                $page_title .= " ".$year;
+                $page_meta .= " ".$year;
+            }
+        }
+        if (array_key_exists('vehicles', $_GET)) {
+            $vehicles = $this->processReturnValue($_GET['vehicles']);
+            foreach( $vehicles as $vehicle ) {
+                $page_title .= " ".$vehicle;
+                $page_meta .= " ".$vehicle;
+            }
+            $page_meta .= ".";
+        }
+        if (array_key_exists('categories', $_GET)) {
+            $categories = $this->processReturnValue($_GET['categories']);
+            foreach( $categories as $category ) {
+                $page_title .= " ".$category;
+            }
+        }
+        $page_meta .= " Come visit our dealer ship to see all we have to offer.";
+
+        return array(
+            'page_title' =>$page_title,
+            'page_meta' =>$page_meta,
+        );
+    }
+ 
     protected function buildWhere($filter, $skip_year = false, $skip_vehicles = false, $skip_categories = false) {
         $where = array();
         if( !empty($filter['condition']) ) {
@@ -347,6 +423,7 @@ class Motorcycle_M extends Master_M {
         }
         $this->db->select('year');
         $this->db->group_by('year');
+        $this->db->order_by('year', 'DESC');
         $record = $this->selectRecords('motorcycle', $where);
         return $record;
     }

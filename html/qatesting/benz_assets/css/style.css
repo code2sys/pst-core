@@ -877,6 +877,34 @@ h3.head-tx {
     border-top: 1px solid #cbcccc;
     padding: 15px 0;
 }
+.filter-inner .filter-item {
+    color: #999;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+.filter-inner .filter-item:hover {
+    color: #0e66d7;
+}
+.filter-inner .filter-item:hover b {
+    border-color: #0e66d7;
+}
+.filter-inner .filter-item b {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #999;
+    border-radius: 50%;
+}
+.filter-inner .filter-item.checked {
+    color: #0e66d7;
+}
+.filter-inner .filter-item.checked b {
+    background-color: #0e66d7;
+    border-color: #0e66d7;
+
+}
 .sdCheckbox {
     padding: 6px 10px !important;
     margin: 0 !important;

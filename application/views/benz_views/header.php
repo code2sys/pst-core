@@ -3,31 +3,32 @@
 <?php
 	$new_assets_url = jsite_url(  "/qatesting/benz_assets/" );
 	$media_url = jsite_url("/media/");
-$CI =& get_instance();
-$CI->load->model("admin_m");
-$store_name = $CI->admin_m->getAdminShippingProfile();
-$google_conversion_id = $store_name['google_conversion_id'];
-$partsfinder_link = $store_name["partsfinder_link"];
-$number_across = trim($partsfinder_link) == "" ? "six" : "seven";
+	$CI =& get_instance();
+	$CI->load->model("admin_m");
+	$store_name = $CI->admin_m->getAdminShippingProfile();
+	$google_conversion_id = $store_name['google_conversion_id'];
+	$partsfinder_link = $store_name["partsfinder_link"];
+	$number_across = trim($partsfinder_link) == "" ? "six" : "seven";
 
-if (!defined('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS')) {
-    define('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS', true);
-}
-
-$SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
+	if (!defined('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS')) {
+		define('SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS', true);
+	}
+	
+	$SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS = SIMPLIFIED_NAV_WITHIN_MAJOR_UNITS;
 
 	?>
 <head>
     <?php echo jget_store_block("top_header"); ?>
 	<?php if (isset($title)): ?>
     <title><?php echo $title; ?></title>
-    <?php endif; ?>
+	<?php endif; ?>
+
     <?php
     $CI =& get_instance();
     echo $CI->load->view("master/top_header", array(
         "store_name" => $store_name,
         "meta_description" => $meta_description,
-        "meta_keywords" => $meta_keywords
+        "meta_keywords" => $pageRec['keywords'],
     ));
 
     ?>
@@ -309,14 +310,14 @@ echo $CI->load->view("benz_views/real_footer", array(
 		var url = "<?php
             if (array_key_exists("major_units_featured_only", $_SESSION) && $_SESSION["major_units_featured_only"] > 0) {
                 if (array_key_exists('fltr', $_GET) && $_GET['fltr'] == "pre-owned") {
-                    echo site_url('Motorcycle_List/featured_preowned');
+                    echo site_url('Major_Unit_List/featured_preowned');
                 } else if (array_key_exists('fltr', $_GET) && $_GET['fltr'] == "special") {
-                    echo site_url('Motorcycle_List/featured_special');
+                    echo site_url('Major_Unit_List/featured_special');
                 } else {
-                    echo site_url('Motorcycle_List/featured');
+                    echo site_url('Major_Unit_List/featured');
                 }
             } else {
-                echo site_url('Motorcycle_List');
+                echo site_url('Major_Unit_List');
             }
             ?>?"+url1;
 		window.location.href = url;
