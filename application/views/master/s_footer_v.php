@@ -1,6 +1,7 @@
 <?php
 $CI =& get_instance();
 $CI->load->helper("mustache_helper");
+$CI->load->helper("jonathan");
 $template = mustache_tmpl_open("master/s_footer_v.html");
 
 $new_assets_url = jsite_url("/qatesting/newassets/");
@@ -48,6 +49,8 @@ mustache_tmpl_set($template, "selector2_js", $CI->load->view("master/widgets/sel
 mustache_tmpl_set($template, "selector3_js", $CI->load->view("master/widgets/selector3_js", array(), true));
 
 mustache_tmpl_set($template, "top_parent", $top_parent);
+
+mustache_tmpl_set($template, "IS_INVENTORY_SITEMAP", isMajorUnitShop());
 
 // this is the only thing different from footer_v.php as far as I can tell.
 mustache_tmpl_set($template, "s_assets", $s_assets);

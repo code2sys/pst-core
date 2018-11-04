@@ -362,6 +362,7 @@ class Lightspeed_M extends Master_M {
             'sale_price' => $bike->WebPrice,
             'retail_price' => $bike->MSRP,
             'description' => $bike->WebDescription,
+            'lightspeed_set_description' => trim($bike->WebDescription) != '',
             'call_on_price' => $bike->WebPriceHidden,
             "destination_charge" => ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
             "lightspeed" => 1,
@@ -481,12 +482,20 @@ class Lightspeed_M extends Master_M {
                                 $comp_val = is_null($comp_val) ? "" : $comp_val->get("name");
                             }
 
-                            if ($motorcycle_array[$k] == $comp_val && $k != "destination_charge") {
+                            // JLB 11-02-18
+                            // You can't get the description back because, what if they want it clear, and then CRS charges in?
+                            if ($motorcycle_array[$k] == $comp_val && $k != "destination_charge" && $k != "description") {
                                 $update_array[$set_k] = 0; // if it matches, well, we should clear this flag, since they have gotten around to matching it in Lightspeed.
                             }
                         } else  {
                             $update_array[$k] = $motorcycle_array[$k];
                         }
+                    }
+
+                    // JLB 11-02-18
+                    // As part of adding in the description from lightspeed, we have to mark it.
+                    if (array_key_exists("description", $update_array)) {
+                        $update_array["lightspeed_set_description"] = trim($update_array["description"]) != "" ? 1 : 0; // we have to clear it out if it is zeroed.
                     }
 
                     // JLB 04-24-18
@@ -571,15 +580,31 @@ class Lightspeed_M extends Master_M {
                 // JLB 10-05-18
                 // Brandt no longer wants model on the name.
                 $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
-                if ($motorcycle->get("crs_trim_id") > 0 && $motorcycle->get("customer_set_title") == 0) {
-                    // OK, go get that trim display name...
+                if ($motorcycle->get("crs_trim_id") > 0) {
                     $crs_trim = $CI->CRS_m->getTrim($motorcycle->get("crs_trim_id"));
-                    $motorcycle->set("title", $motorcycle->get("year") . " " . $motorcycle->get("make") . " " . convert_to_normal_text($crs_trim[0]["display_name"]));
-                    $motorcycle->save();
-                    global $PSTAPI;
-                    initializePSTAPI();
-                    $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle_id);
+                    $denormalize = false;
+
+                    if ($motorcycle->get("customer_set_title") == 0) {
+                        // OK, go get that trim display name...
+                        $motorcycle->set("title", $motorcycle->get("year") . " " . $motorcycle->get("make") . " " . convert_to_normal_text($crs_trim[0]["display_name"]));
+                        $motorcycle->save();
+                        $denormalize = true;
+                    }
+
+                    // should we attempt to set the description?
+                    if ($crs_trim[0]["description"] != "" && $motorcycle->get("customer_set_description") == 0 && $motorcycle->get("lightspeed_set_description") == 0) {
+                        $motorcycle->set("description", "<div class='description_from_crs'>" . $motorcycle->get("title") . "<br/><br/>" . $crs_trim[0]["description"] . "</div>");
+                        $motorcycle->save();
+                        $denormalize = true;
+                    }
+
+                    if ($denormalize) {
+                        global $PSTAPI;
+                        initializePSTAPI();
+                        $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle_id);
+                    }
                 }
+
 
 
                 // Todo...

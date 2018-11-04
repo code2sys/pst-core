@@ -192,7 +192,9 @@ class Motorcycle_M extends Master_M {
         }
         $this->db->group_by('motorcycle.id');
         $this->db->select("motorcycle.*,motorcycleimage.image_name, motorcycle_type.name  as type, motorcycleimage.external $relevance_search_extra ", FALSE);
-        $this->db->limit($limit, $offset);
+        if($limit > 0) {
+            $this->db->limit($limit, $offset);
+        }
 
         switch($sort_order) {
             case 1:
