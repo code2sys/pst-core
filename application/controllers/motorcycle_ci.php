@@ -160,6 +160,117 @@ class Motorcycle_CI extends Welcome {
         print json_encode($result);
     }
 
+    public function featuredNewProductsChangeUrl() {
+        $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
+        $_REQUEST["fltr"] = "New_Inventory";
+        $_GET["fltr"] = "New_Inventory";
+        $this->benzChangeUrl('new');
+    }
+
+    public function featuredSpecialProductsChangeUrl() {
+        $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
+        $_REQUEST["fltr"] = "special";
+        $_GET["fltr"] = "special";
+        $this->benzChangeUrl('special');
+    }
+
+    public function featuredUsedProductsChangeUrl() {
+        $_SESSION["major_units_featured_only"] = $_SESSION["bikeControlFeatured"] = 1;
+        $_REQUEST["fltr"] = "pre-owned";
+        $_GET["fltr"] = "pre-owned";
+        $this->benzChangeUrl('pre-owned');
+    }
+
+    public function benzChangeUrl( $type ='new' ) {
+        $this->load->model('admin_m');
+        $this->load->model('motorcycle_m');
+        $this->load->helper('url');
+
+        $store_name = $this->admin_m->getAdminShippingProfile();
+        $categories = $this->motorcycle_m->getMotorcycleCategory();
+        $vehicles = $this->motorcycle_m->getMotorcycleVehicle();
+
+        $actual_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
+        if ( $type == 'new' ) {
+            $actual_link .= "/New";
+        } else {
+            $actual_link .= "/Pre-Owned";
+        }
+        $preUrlString = "_Powersports_Units";
+        $preBrandFltr = "";
+        $preCategoryFltr = "";
+        $preVehicleFltr = "";
+        if (array_key_exists("brands", $_REQUEST) || array_key_exists("vehicles", $_REQUEST)) {
+            $preUrlString = "";
+        }
+        if (array_key_exists("brands", $_REQUEST)){
+            $brands = $this->motorcycle_m->processReturnValue($_REQUEST['brands']);
+            $preBrandFltr = "&brands=";
+
+            foreach ($brands as $brand) {
+                $preUrlString .= "_".url_title($brand);
+                $preBrandFltr .= url_title($brand)."$";
+            }
+
+            $preBrandFltr = substr($preBrandFltr, 0, -1);
+        }
+        if (array_key_exists("vehicles", $_REQUEST)){
+            $requestVehicles = $this->motorcycle_m->processReturnValue($_REQUEST['vehicles']);
+            $preVehicleFltr = "&vehicles=";
+
+            foreach ($vehicles as $vehicle) {
+                if(in_array($vehicle['name'], $requestVehicles) || in_array($vehicle['id'], $requestVehicles)) {
+                    $preUrlString .= "_".url_title($vehicle['name']);
+                    $preVehicleFltr .= url_title($vehicle['name'])."$";
+                }
+            }
+
+            $preVehicleFltr = substr($preVehicleFltr, 0, -1);
+        }
+        if (array_key_exists("categories", $_REQUEST)){
+            $requestCategories = $this->motorcycle_m->processReturnValue($_REQUEST['categories']);
+            $preCategoryFltr = "&categories=";
+
+            foreach ($categories as $category) {
+                if(in_array($category['name'], $requestCategories) || in_array($category['id'], $requestCategories)) {
+                    $preCategoryFltr .= url_title($category['name'])."$";
+                }
+            }
+            $preCategoryFltr = substr($preCategoryFltr, 0, -1);
+        }
+        $actual_link .= $preUrlString;
+        $actual_link .= "_For_Sale";
+        $actual_link .= "_".url_title($store_name['city']);
+        $actual_link .= "_".url_title($store_name['state']);
+        $actual_link .= "/Major_Unit_list?fltr=";
+        if ( $type == 'new' ) {
+            $actual_link .= "New_Inventory";
+        } else if( $type == 'pre-owned' ) {
+            $actual_link .= "pre-owned";
+        } else {
+            $actual_link .= "special";
+        }
+        $actual_link .= $preBrandFltr . $preCategoryFltr;
+
+        if (array_key_exists("years", $_REQUEST)){
+            $actual_link .= "&years=".$_REQUEST['years'];
+        }
+
+        $actual_link .= $preVehicleFltr;
+
+        if (array_key_exists("search_keywords", $_REQUEST)) {
+            $actual_link .= "&search_keywords=".$_REQUEST["search_keywords"];
+        }
+
+        if (array_key_exists("featured_only", $_REQUEST)) {
+            $actual_link .= "&featured_only=".$_REQUEST["featured_only"];
+        }
+
+        $actual_link .= "&filterChange=1";
+
+        header("Location: " . $actual_link);
+    }
+
 
     public function benzProduct() {
 
