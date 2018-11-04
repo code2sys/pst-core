@@ -51,10 +51,10 @@ $route['Motorcycle_Featured/([0-9]+)/([0-9]+)'] = 'motorcycle_ci/benzProductFeat
 $route['Motorcycle_Show/([0-9]+)/([0-9]+)'] = 'motorcycle_ci/benzProductShow/$1/$2';
 $route['motorcycle/([a-zA-z0-9_-]+)'] = 'motorcycle_ci/benzDetails/$1/$2';
 
-$route['Motorcycle_List'] = 'motorcycle_ci/benzProduct';
-$route['Motorcycle_List/featured'] = 'motorcycle_ci/featuredNewProducts';
-$route['Motorcycle_List/featured_special'] = 'motorcycle_ci/featuredSpecialProducts';
-$route['Motorcycle_List/featured_preowned'] = 'motorcycle_ci/featuredUsedProducts';
+$route['Motorcycle_List'] = 'motorcycle_ci/benzChangeUrl';
+$route['Motorcycle_List/featured'] = 'motorcycle_ci/featuredNewProductsChangeUrl';
+$route['Motorcycle_List/featured_special'] = 'motorcycle_ci/featuredSpecialProductsChangeUrl';
+$route['Motorcycle_List/featured_preowned'] = 'motorcycle_ci/featuredUsedProductsChangeUrl';
 
 $route['streetbikeparts'] = 'streetbikeparts/index';
 $route['dirtbikeparts'] = 'dirtbikeparts/index';
