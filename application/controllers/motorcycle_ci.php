@@ -242,7 +242,7 @@ class Motorcycle_CI extends Welcome {
         $actual_link .= "_For_Sale";
         $actual_link .= "_".url_title($store_name['city']);
         $actual_link .= "_".url_title($store_name['state']);
-        $actual_link .= "/Major_Unit_list?fltr=";
+        $actual_link .= "/Major_Unit_List?fltr=";
         if ( $type == 'new' ) {
             $actual_link .= "New_Inventory";
         } else if( $type == 'pre-owned' ) {
