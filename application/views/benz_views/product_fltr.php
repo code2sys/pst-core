@@ -60,7 +60,7 @@ if (array_key_exists("brands", $_REQUEST) && array_key_exists("brands", $_GET)) 
     $tmps = explode('$', $tmps[1]);
 
     foreach( $tmps as $tmp ) {
-        $paramBrands .= "_".str_replace(array('%20', ' '), array('-', '-'), $tmp);
+        $paramBrands .= "_".str_replace(" ", "-", urldecode($tmp));
     }
 }
 
@@ -69,9 +69,10 @@ if (array_key_exists("vehicles", $_REQUEST) && array_key_exists("vehicles", $_GE
 
     $tmps = explode('=', $indexedParams['vehicles']);
     $tmps = explode('$', $tmps[1]);
+    $tmps = array_filter($tmps);
 
     foreach( $tmps as $tmp ) {
-        $paramVehicles .= "_".str_replace(array('%20', ' '), array('-', '-'), $tmp);
+        $paramVehicles .= "_".str_replace(" ", "-", urldecode($tmp));
     }
 }
 if (array_key_exists("years", $_REQUEST) && array_key_exists("years", $_GET)) {
@@ -81,6 +82,7 @@ if (array_key_exists("years", $_REQUEST) && array_key_exists("years", $_GET)) {
 
 $ctgrs = explode('$', $_GET['categories']);
 $ctgrs = array_filter($ctgrs);
+
 foreach ($categories as $category) {
     $key = array_search($category['name'], $ctgrs);
 
@@ -92,7 +94,7 @@ foreach ($categories as $category) {
 
         if (count($tempCtgrs) > 0) {
             foreach( $tempCtgrs as $temp ) {
-                $filteredUrl .= $temp.'$';
+                $filteredUrl .= urlencode($temp).'$';
             }
             $filteredUrl = substr($filteredUrl, 0, -1);
         } else {
@@ -100,9 +102,9 @@ foreach ($categories as $category) {
         }
     } else {
         if ( $categoriesUrl != '' ) {
-            $filteredUrl = $categoriesUrl.'$'.$category['name'];
+            $filteredUrl = $categoriesUrl.'$'.urlencode($category['name']);
         } else {
-            $filteredUrl = '&categories='.$category['name'];
+            $filteredUrl = '&categories='.urlencode($category['name']);
         }
     }
     
@@ -129,7 +131,7 @@ foreach ($brands as $k => $brand) {
         
         if (count($tempBrnds) > 0) {
             foreach( $tempBrnds as $temp ) {
-                $filteredUrl .= $temp.'$';
+                $filteredUrl .= urlencode($temp).'$';
                 $filteredBrands .= "_".str_replace(" ", "-", $temp);
             }
             $filteredUrl = substr($filteredUrl, 0, -1);
@@ -139,10 +141,10 @@ foreach ($brands as $k => $brand) {
         }
     } else {
         if ( $brandsUrl != '' ) {
-            $filteredUrl = $brandsUrl.'$'.$brand['make'];
+            $filteredUrl = $brandsUrl.'$'.urlencode($brand['make']);
             $filteredBrands = $paramBrands.'_'.str_replace(" ", "-", $brand['make']);
         } else {
-            $filteredUrl = '&brands='.$brand['make'];
+            $filteredUrl = '&brands='.urlencode($brand['make']);
             $filteredBrands = '_'.str_replace(" ", "-", $brand['make']);
         }
     }
@@ -171,7 +173,7 @@ foreach ($vehicles as $vehicle) {
         
         if (count($tempVhcls) > 0) {
             foreach( $tempVhcls as $temp ) {
-                $filteredUrl .= $temp.'$';
+                $filteredUrl .= urlencode($temp).'$';
                 $filteredVehicles .= "_".str_replace(" ", "-", $temp);
             }
             $filteredUrl = substr($filteredUrl, 0, -1);
@@ -181,10 +183,10 @@ foreach ($vehicles as $vehicle) {
         }
     } else {        
         if ( $vehiclesUrl != '' ) {
-            $filteredUrl = $vehiclesUrl.'$'.$vehicle['name'];
+            $filteredUrl = $vehiclesUrl.'$'.urlencode($vehicle['name']);
             $filteredVehicles = $paramVehicles.'_'.str_replace(" ", "-", $vehicle['name']);
         } else {
-            $filteredUrl = '&vehicles='.$vehicle['name'];
+            $filteredUrl = '&vehicles='.urlencode($vehicle['name']);
             $filteredVehicles = '_'.str_replace(" ", "-", $vehicle['name']);
         }
     }

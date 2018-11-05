@@ -209,7 +209,7 @@ class Motorcycle_CI extends Welcome {
 
             foreach ($brands as $brand) {
                 $preUrlString .= "_".url_title($brand);
-                $preBrandFltr .= url_title($brand)."$";
+                $preBrandFltr .= urlencode($brand)."$";
             }
 
             $preBrandFltr = substr($preBrandFltr, 0, -1);
@@ -221,7 +221,7 @@ class Motorcycle_CI extends Welcome {
             foreach ($vehicles as $vehicle) {
                 if(in_array($vehicle['name'], $requestVehicles) || in_array($vehicle['id'], $requestVehicles)) {
                     $preUrlString .= "_".url_title($vehicle['name']);
-                    $preVehicleFltr .= url_title($vehicle['name'])."$";
+                    $preVehicleFltr .= urlencode($vehicle['name'])."$";
                 }
             }
 
@@ -233,7 +233,7 @@ class Motorcycle_CI extends Welcome {
 
             foreach ($categories as $category) {
                 if(in_array($category['name'], $requestCategories) || in_array($category['id'], $requestCategories)) {
-                    $preCategoryFltr .= url_title($category['name'])."$";
+                    $preCategoryFltr .= urlencode($category['name'])."$";
                 }
             }
             $preCategoryFltr = substr($preCategoryFltr, 0, -1);
@@ -244,7 +244,13 @@ class Motorcycle_CI extends Welcome {
         $actual_link .= "_".url_title($store_name['state']);
         $actual_link .= "/Major_Unit_List?fltr=";
         if ( $type == 'new' ) {
-            $actual_link .= "New_Inventory";
+            if( array_key_exists("fltr", $_REQUEST) && $_REQUEST['fltr'] == 'special' ) {
+                $actual_link .= "special";
+            } else if ( array_key_exists("fltr", $_REQUEST) && $_REQUEST['fltr'] == 'pre-owned' ) {
+                $actual_link .= "pre-owned";
+            } else {
+                $actual_link .= "New_Inventory";
+            }
         } else if( $type == 'pre-owned' ) {
             $actual_link .= "pre-owned";
         } else {
@@ -260,6 +266,9 @@ class Motorcycle_CI extends Welcome {
 
         if (array_key_exists("search_keywords", $_REQUEST)) {
             $actual_link .= "&search_keywords=".$_REQUEST["search_keywords"];
+            $_SESSION["major_unit_search_keywords"] = $_REQUEST["search_keywords"];
+        } else {
+            $_SESSION["major_unit_search_keywords"] = '';
         }
 
         if (array_key_exists("featured_only", $_REQUEST)) {
@@ -378,7 +387,7 @@ class Motorcycle_CI extends Welcome {
         $title = $page_info['page_title']." For Sale ".$store_name['company']." ".$store_name['city']." ".$store_name['state'];
         $this->_mainData['forSaleLink'] = 'For_Sale_'.$store_name['city'].'_'.$store_name['state'];
 
-        $this->_mainData['pageRec'] = $this->pages_m->getPageRec(1);
+        $this->_mainData['pageRec'] = $this->pages_m->getPageRec(0);
 
         $this->setMasterPageVars('title', $title);
 
