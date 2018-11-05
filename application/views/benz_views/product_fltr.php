@@ -81,6 +81,9 @@ if (array_key_exists("years", $_REQUEST) && array_key_exists("years", $_GET)) {
 
 $ctgrs = explode('$', $_GET['categories']);
 $ctgrs = array_filter($ctgrs);
+echo "<pre>";
+print_r($ctgrs);
+echo "</pre>";
 foreach ($categories as $category) {
     $key = array_search(urlencode($category['name']), $ctgrs);
 
