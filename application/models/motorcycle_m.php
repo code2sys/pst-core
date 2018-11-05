@@ -63,7 +63,7 @@ class Motorcycle_M extends Master_M {
             $vhcls = $this->processReturnValue($data_source['vehicles']);
 
             foreach ($vehicles as $vehicle) {
-                if(in_array($vehicle['name'], $vhcls) || in_array($vehicle['id'], $vhcls)) {
+                if(in_array(urlencode($vehicle['name']), $vhcls) || in_array($vehicle['id'], $vhcls)) {
                     $filter_vehicles[] = $vehicle['id'];
                 }
             }
@@ -74,7 +74,7 @@ class Motorcycle_M extends Master_M {
             $catgrs = $this->processReturnValue($data_source['categories']);
 
             foreach ($categories as $category) {
-                if(in_array($category['name'], $catgrs) || in_array($category['id'], $catgrs)) {
+                if(in_array(urlencode($category['name']), $catgrs) || in_array($category['id'], $catgrs)) {
                     $filter_categories[] = $category['id'];
                 }
             }

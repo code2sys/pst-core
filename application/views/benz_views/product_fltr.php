@@ -60,7 +60,7 @@ if (array_key_exists("brands", $_REQUEST) && array_key_exists("brands", $_GET)) 
     $tmps = explode('$', $tmps[1]);
 
     foreach( $tmps as $tmp ) {
-        $paramBrands .= "_".str_replace(array('%20', ' '), array('-', '-'), $tmp);
+        $paramBrands .= "_".urlencode($tmp);
     }
 }
 
@@ -71,7 +71,7 @@ if (array_key_exists("vehicles", $_REQUEST) && array_key_exists("vehicles", $_GE
     $tmps = explode('$', $tmps[1]);
 
     foreach( $tmps as $tmp ) {
-        $paramVehicles .= "_".str_replace(array('%20', ' '), array('-', '-'), $tmp);
+        $paramVehicles .= "_".urlencode($tmp);
     }
 }
 if (array_key_exists("years", $_REQUEST) && array_key_exists("years", $_GET)) {
@@ -82,11 +82,11 @@ if (array_key_exists("years", $_REQUEST) && array_key_exists("years", $_GET)) {
 $ctgrs = explode('$', $_GET['categories']);
 $ctgrs = array_filter($ctgrs);
 foreach ($categories as $category) {
-    $key = array_search($category['name'], $ctgrs);
+    $key = array_search(urlencode($category['name']), $ctgrs);
 
     $filteredUrl = '&categories=';
     
-    if ($ctgrs[$key] == $category['name']) {
+    if ($ctgrs[$key] == urlencode($category['name'])) {
         $tempCtgrs = $ctgrs;
         unset($tempCtgrs[$key]);
 
@@ -100,9 +100,9 @@ foreach ($categories as $category) {
         }
     } else {
         if ( $categoriesUrl != '' ) {
-            $filteredUrl = $categoriesUrl.'$'.$category['name'];
+            $filteredUrl = $categoriesUrl.'$'.urlencode($category['name']);
         } else {
-            $filteredUrl = '&categories='.$category['name'];
+            $filteredUrl = '&categories='.urlencode($category['name']);
         }
     }
     
@@ -110,7 +110,7 @@ foreach ($categories as $category) {
     mustache_tmpl_set($template, "categories", array(
         "category_id" => $category['id'],
         "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : str_replace(" ", "-", $paramBrands).str_replace(" ", "-", $paramVehicles).'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $filteredUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
-        "checked" => $ctgrs[$key] == $category['name'],
+        "checked" => $ctgrs[$key] == urlencode($category['name']),
         "category_name" => $category['name']
     ));
 }
@@ -119,11 +119,11 @@ $brnds = explode('$', $_GET['brands']);
 $brnds = array_filter($brnds);
 
 foreach ($brands as $k => $brand) {
-    $key = array_search($brand['make'], $brnds);
+    $key = array_search(urlencode($brand['make']), $brnds);
 
     $filteredUrl = '&brands=';    
     $filteredBrands = '';
-    if ($brnds[$key] == $brand['make']) {
+    if ($brnds[$key] == urlencode($brand['make'])) {
         $tempBrnds = $brnds;
         unset($tempBrnds[$key]);
         
@@ -139,10 +139,10 @@ foreach ($brands as $k => $brand) {
         }
     } else {
         if ( $brandsUrl != '' ) {
-            $filteredUrl = $brandsUrl.'$'.$brand['make'];
+            $filteredUrl = $brandsUrl.'$'.urlencode($brand['make']);
             $filteredBrands = $paramBrands.'_'.str_replace(" ", "-", $brand['make']);
         } else {
-            $filteredUrl = '&brands='.$brand['make'];
+            $filteredUrl = '&brands='.urlencode($brand['make']);
             $filteredBrands = '_'.str_replace(" ", "-", $brand['make']);
         }
     }
@@ -152,7 +152,7 @@ foreach ($brands as $k => $brand) {
         "brand_make" => $brand['make'],
         "k" => $k,
         "filter_link" => $actualUrl . '/'. $paramUrl . (($filteredBrands == '' && $paramVehicles == '') ? "_Powersports_Units_".$forSaleLink : str_replace(" ", "-", $filteredBrands).str_replace(" ", "-", $paramVehicles).'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $filteredUrl . $categoriesUrl . $yearsUrl . $vehiclesUrl . '&filterChange=1',
-        "checked" => $brnds[$key] == $brand['make']
+        "checked" => $brnds[$key] == urlencode($brand['make'])
     ));
 }
 
@@ -161,11 +161,11 @@ $vhcls = explode('$', $_GET['vehicles']);
 $vhcls = array_filter($vhcls);
 
 foreach ($vehicles as $vehicle) {
-    $key = array_search($vehicle['name'], $vhcls);
+    $key = array_search(urlencode($vehicle['name']), $vhcls);
 
     $filteredUrl = '&vehicles=';  
     $filteredVehicles = '';  
-    if ($vhcls[$key] == $vehicle['name']) {
+    if ($vhcls[$key] == urlencode($vehicle['name'])) {
         $tempVhcls = $vhcls;
         unset($tempVhcls[$key]);
         
@@ -181,10 +181,10 @@ foreach ($vehicles as $vehicle) {
         }
     } else {        
         if ( $vehiclesUrl != '' ) {
-            $filteredUrl = $vehiclesUrl.'$'.$vehicle['name'];
+            $filteredUrl = $vehiclesUrl.'$'.urlencode($vehicle['name']);
             $filteredVehicles = $paramVehicles.'_'.str_replace(" ", "-", $vehicle['name']);
         } else {
-            $filteredUrl = '&vehicles='.$vehicle['name'];
+            $filteredUrl = '&vehicles='.urlencode($vehicle['name']);
             $filteredVehicles = '_'.str_replace(" ", "-", $vehicle['name']);
         }
     }
@@ -193,7 +193,7 @@ foreach ($vehicles as $vehicle) {
         "vehicle_id" => $vehicle['id'],
         "vehicle_name" => $vehicle['name'],
         "filter_link" => $actualUrl . '/'. $paramUrl . (($paramBrands == '' && $filteredVehicles == '') ? "_Powersports_Units_".$forSaleLink : str_replace(" ", "-", $paramBrands).str_replace(" ", "-", $filteredVehicles).'_'.$forSaleLink) . '/Major_Unit_List' . $fltrUrl . $brandsUrl . $categoriesUrl . $yearsUrl . $filteredUrl . '&filterChange=1',
-        "checked" => $vhcls[$key] == $vehicle['name']
+        "checked" => $vhcls[$key] == urlencode($vehicle['name'])
     ));
 }
 
