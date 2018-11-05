@@ -84,7 +84,9 @@ class Motorcycle_M extends Master_M {
         $filter['years'] = $this->processReturnValue($data_source['years']);
         $filter['categories'] = $filter_categories;
         $filter['vehicles'] = $filter_vehicles;
-
+echo "<pre>";
+print_r($filter);
+echo "</pre>";
         return $filter;
     }
 
