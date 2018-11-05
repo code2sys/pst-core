@@ -266,6 +266,9 @@ class Motorcycle_CI extends Welcome {
 
         if (array_key_exists("search_keywords", $_REQUEST)) {
             $actual_link .= "&search_keywords=".$_REQUEST["search_keywords"];
+            $_SESSION["major_unit_search_keywords"] = $_REQUEST["search_keywords"];
+        } else {
+            $_SESSION["major_unit_search_keywords"] = '';
         }
 
         if (array_key_exists("featured_only", $_REQUEST)) {
