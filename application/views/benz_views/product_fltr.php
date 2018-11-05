@@ -93,7 +93,7 @@ foreach ($categories as $category) {
 
         if (count($tempCtgrs) > 0) {
             foreach( $tempCtgrs as $temp ) {
-                $filteredUrl .= $temp.'$';
+                $filteredUrl .= urlencode($temp).'$';
             }
             $filteredUrl = substr($filteredUrl, 0, -1);
         } else {
@@ -130,7 +130,7 @@ foreach ($brands as $k => $brand) {
         
         if (count($tempBrnds) > 0) {
             foreach( $tempBrnds as $temp ) {
-                $filteredUrl .= $temp.'$';
+                $filteredUrl .= urlencode($temp).'$';
                 $filteredBrands .= "_".str_replace(" ", "-", $temp);
             }
             $filteredUrl = substr($filteredUrl, 0, -1);
@@ -172,7 +172,7 @@ foreach ($vehicles as $vehicle) {
         
         if (count($tempVhcls) > 0) {
             foreach( $tempVhcls as $temp ) {
-                $filteredUrl .= $temp.'$';
+                $filteredUrl .= urlencode($temp).'$';
                 $filteredVehicles .= "_".str_replace(" ", "-", $temp);
             }
             $filteredUrl = substr($filteredUrl, 0, -1);
