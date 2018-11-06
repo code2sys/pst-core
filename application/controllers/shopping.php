@@ -649,7 +649,11 @@ class Shopping extends Master_Controller {
         $_SESSION['url'] = '';
         $metaTag = '';
         $record = $this->parts_m->getBrandBySlug($brand);
-        if ( empty( $record ) ) {
+        if (is_null($brand)) {
+            // Just go on home.
+            header("Location: " . site_url(""));
+            exit();
+        } else if ( empty( $record ) ) {
             $this->size_chart( $brand );
         } else {
 			unset($_SESSION['search']);
