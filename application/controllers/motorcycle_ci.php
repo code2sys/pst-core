@@ -143,7 +143,7 @@ class Motorcycle_CI extends Welcome {
         $filter_data = array();
         $this->motorcycle_m->sub_assembleFilterInput($filter_data, $_REQUEST);
         $filter = $this->motorcycle_m->sub_assembleFilterFromRequest($filter_data);
-
+        $filter["status"] = 1;
         // we need to assemble our own filter...
 
         $result = array(
