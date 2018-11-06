@@ -649,8 +649,16 @@ class Shopping extends Master_Controller {
         $_SESSION['url'] = '';
         $metaTag = '';
         $record = $this->parts_m->getBrandBySlug($brand);
-        if ( empty( $record ) ) {
-            $this->size_chart( $brand );
+        if (is_null($brand) || empty($record)) {
+            // I suppose this could be a sizing chart because this is STUPID.
+            $brand_sizing_chart = $this->parts_m->getBrandBySizeChart( $brand);
+            if (!is_null($brand_sizing_chart) && !empty($brand_sizing_chart) && FALSE != $brand_sizing_chart) {
+                $this->size_chart($brand);
+            } else {
+                // Just go on home.
+                header("Location: " . site_url(""));
+                exit();
+            }
         } else {
 			unset($_SESSION['search']);
 			$_SESSION['search']['brand'] = array('id' => $record['brand_id'], 'name' => $record['name']);
