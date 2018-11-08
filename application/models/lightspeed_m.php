@@ -441,7 +441,8 @@ class Lightspeed_M extends Master_M {
                     'retail_price' => $motorcycle_array["retail_price"],
                     "lightspeed" => 1,
                     "lightspeed_flag" => 1,
-                    "source" => "Lightspeed"
+                    "source" => "Lightspeed",
+                    'call_on_price' => $motorcycle_array['call_on_price']
                 );
 
                 if ($motorcycle_array["location_description"] != "") {

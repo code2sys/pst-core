@@ -9,7 +9,7 @@ There was a task for the SS website to migrate service pages from Demo. Here's h
 <pre>
 for id in 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 
 do 
-php html/index.php cron/migratePage/ss_v1/vp_v1/$id
+php html/index.php cron/migratePage/ss_v1/muller_v1/$id
 done
 </pre>
 
