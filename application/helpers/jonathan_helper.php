@@ -399,3 +399,8 @@ function isMajorUnitShop() {
 
     return $isMajorUnitShop;
 }
+
+// This is used to generate the description uniformly from CRS wherever it might come in.
+function generateCRSDescription($title, $description) {
+    return "<div class='description_from_crs'>" . $title . "<br/><br/>" . $description . "</div>";
+}
