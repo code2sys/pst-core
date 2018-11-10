@@ -5,7 +5,7 @@ class CronControl extends Master_Controller {
     // JLB 11-09-18
     // Fix the description from CRS...
     public function fixCRSDescriptions() {
-        
+
     }
 
 
@@ -264,9 +264,9 @@ class CronControl extends Master_Controller {
 
 	public function weekly()
 	{
+        $this->checkForCRSMigration(1);
+        $this->refreshCRSData();
 		$this->_runJob('weekly');
-		$this->checkForCRSMigration(1);
-		$this->refreshCRSData();
 	}
 
 	public function monthly()
