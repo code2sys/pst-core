@@ -5,7 +5,19 @@ class CronControl extends Master_Controller {
     // JLB 11-09-18
     // Fix the description from CRS...
     public function fixCRSDescriptions() {
+        global $PSTAPI;
+        initializePSTAPI();
 
+        // get the matching bikes...
+        $bikes = $PSTAPI->motorcycle()->fetch(array(
+            "source" => "PST",
+            "customer_set_description" => 0,
+            "lightspeed_set_description" => 0
+        ));
+
+        foreach ($bikes as $bike) {
+            fixCRSBike($bike);
+        }
     }
 
 
