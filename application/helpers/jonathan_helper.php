@@ -409,6 +409,7 @@ function generateCRSDescription($title, $description) {
 function fixCRSBike(&$motorcycle) {
     $motorcycle_id = $motorcycle->id();
     $CI =& get_instance();
+    $CI->load->model("CRS_m");
     $crs_trim = $CI->CRS_m->getTrim($motorcycle->get("crs_trim_id"));
     $denormalize = false;
 
