@@ -16,6 +16,7 @@ class CronControl extends Master_Controller {
         ));
 
         foreach ($bikes as $bike) {
+            print "Considering bike " . $bike->id() . "\n";
             fixCRSBike($bike);
         }
     }
