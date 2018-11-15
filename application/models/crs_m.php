@@ -275,7 +275,7 @@ class CRS_M extends Master_M
         $clean_records = $records;
 
         foreach ($records as $rec) {
-            if ($rec["text_value"] != "Not Available") {
+            if (strtolower(trim($rec["text_value"])) != "not available") {
                 $clean_records[] = $rec;
             }
         }
