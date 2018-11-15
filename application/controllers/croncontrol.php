@@ -657,9 +657,9 @@ class CronControl extends Master_Controller {
 	    $this->lightspeed_m->preserveMajorUnitsChangedField($field);
     }
 
-	public function refreshCRSData() {
+	public function refreshCRSData($motorcycle_id = 0, $deep_clean = 0) {
 	    $this->load->model("CRSCron_m");
-	    $this->CRSCron_m->refreshCRSData();
+	    $this->CRSCron_m->refreshCRSData($motorcycle_id, $deep_clean > 0);
 	    $this->cleanUpCRS();
     }
 
