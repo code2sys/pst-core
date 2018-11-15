@@ -68,6 +68,7 @@ class CRSCron_M extends Master_M
 
             // get the attributes...
             $attributes = $CI->CRS_m->getTrimAttributes($trim_id, $version_number);
+            print "Found " . count($attributes) . " attributes\n";
 
             // Now, you have to update them all...
             foreach ($attributes as $a) {

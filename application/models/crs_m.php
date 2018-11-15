@@ -278,6 +278,8 @@ class CRS_M extends Master_M
             if (strtolower(trim($rec["text_value"])) != "not available") {
                 $clean_records[] = $rec;
                 print("Trim $trim_id Text Value " . $rec["text_value"] . "\n");
+            } else {
+                print("Skipping for trim $trim_id Text Value " . $rec["text_value"] . "\n");
             }
         }
 
