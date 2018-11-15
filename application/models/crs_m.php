@@ -241,12 +241,29 @@ class CRS_M extends Master_M
         return $this->getTrims($args);
     }
 
+    protected function _applyMutationToRecords($records) {
+        if (function_exists("CRSMutateFunction")) {
+            // There is a mutator, hence, you must mutate.
+            for ($i = 0; $i < count($records); $i++) {
+                $m = $records[$i];
+                $crs_make = $m["make"];
+                $crs_display_name = $m["display_name"];
+
+                $rec = CRSMutateFunction($crs_make, $crs_display_name);
+                $m["make"] = $rec["make"];
+                $m["display_name"] = $rec["display_name"];
+                $records[$i] = $m;
+            }
+        }
+        return $records;
+    }
+
     public function getTrims($args = array()) {
-        return $this->postRequest("getTrims", $args, "records");
+        return $this->_applyMutationToRecords($this->postRequest("getTrims", $args, "records"));
     }
 
     public function getTrim($trim_id) {
-        return $this->postRequest("getTrim", array("trim_id" => $trim_id), "trims");
+        return $this->_applyMutationToRecords($this->postRequest("getTrim", array("trim_id" => $trim_id), "trims"));
     }
 
     // get the extra details...
