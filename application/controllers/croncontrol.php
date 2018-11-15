@@ -512,14 +512,20 @@ class CronControl extends Master_Controller {
 
         // Now, we have to enter them...
         foreach ($matching_motorcycles as $m) {
+
+            // JLB 11-15-18 - I added a more complicated approval function. This may be redundant.
+            $crs_make = $m["make"];
+            $crs_display_name = $m["display_name"];
+            if (function_exists("CRSApproveFunction") && !CRSApproveFunction($crs_make, $crs_display_name)) {
+                continue; // skip it; we are not doing this bike.
+            }
+
             // Is there one of these?
             $crs_model = $m["model"];
             $crs_model_id = $m["model_id"];
-            $crs_make = $m["make"];
             $crs_make_id = $m["make_id"];
             $crs_machinetype = $m["machine_type"];
             $crs_trim = $m["trim"];
-            $crs_display_name = $m["display_name"];
             $crs_trim_id = $m["trim_id"];
 
             if ($debug > 0) {
