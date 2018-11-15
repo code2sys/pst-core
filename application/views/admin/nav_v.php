@@ -71,6 +71,13 @@ if (!is_null($pageIndex) && $pageIndex < 9)
 						<li><a href="<?php echo base_url('/admin/mInventory'); ?>" ><i class="fa fa-motorcycle"></i>&nbsp;Unit Inventory</a></li>
 					<?php } ?>
                     <?php endif; ?>
+
+                    <?php if(in_array('mInventory', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
+                    <?php if (FALSE !== getCRSStructure()): ?>
+                        <li><a href="<?php echo base_url('/admin/showcase_settings'); ?>" ><i class="fa fa-motorcycle"></i>&nbsp;Unit Showcase</a></li>
+                    <?php endif; ?>
+                    <?php } ?>
+
                     <?php
                     if (defined('ENABLE_VAULT') && ENABLE_VAULT):
                     ?>
@@ -87,7 +94,7 @@ if (!is_null($pageIndex) && $pageIndex < 9)
                         <?php } ?>
                     <?php endif; ?>
                     <?php if (defined('ENABLE_DEALER_TRACK') && ENABLE_DEALER_TRACK): ?>
-                        <?php if(in_array('products', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
+                        <?php if(in_array('mInventory', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
                             <li><a href="<?php echo base_url('/admin/dealer_track_controls'); ?>"><i class="fa fa-motorcycle"></i>&nbsp;Dealer Track Controls</a></li>
                         <?php } ?>
                     <?php endif; ?>

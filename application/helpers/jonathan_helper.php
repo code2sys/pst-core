@@ -399,3 +399,17 @@ function isMajorUnitShop() {
 
     return $isMajorUnitShop;
 }
+
+// There is a global structure with CRS that, if present, means they also get the showcase.
+function getCRSStructure() {
+    // is there a CRS configuration file?
+    $filename = "/var/www/crs_configs/" . STORE_NAME;
+
+    if (file_exists($filename)) {
+        $crs_struct = json_decode(file_get_contents($filename), true);
+        return $crs_struct;
+
+    } else {
+        return FALSE;
+    }
+}

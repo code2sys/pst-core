@@ -402,10 +402,9 @@ class CronControl extends Master_Controller {
         }
 
         // is there a CRS configuration file?
-        $filename = "/var/www/crs_configs/" . STORE_NAME;
+        $crs_struct = getCRSStructure();
 
-        if (file_exists($filename)) {
-            $crs_struct = json_decode(file_get_contents($filename), true);
+        if (FALSE !== $crs_struct) {
 
             $uniqid = uniqid("delete_crs");
             $this->db->query("Update motorcycle set uniqid = ? where source = 'PST' and crs_trim_id > 0", array($uniqid));
@@ -425,7 +424,7 @@ class CronControl extends Master_Controller {
             $this->db->query("Update crspull_feed_log set status = 2, processing_end = now() where status = 1");
 
         } else {
-            print "Not found: $filename \n";
+            print "No CRS structure found. \n";
         }
 
         $this->cleanUpCRS();

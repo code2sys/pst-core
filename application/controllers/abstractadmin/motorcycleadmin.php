@@ -28,7 +28,7 @@ abstract class Motorcycleadmin extends Firstadmin
      *
      */
     public function dealer_track_controls() {
-        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+        if(!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
 
@@ -60,7 +60,7 @@ abstract class Motorcycleadmin extends Firstadmin
     }
 
     public function save_dealer_track_controls() {
-        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+        if(!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
 
