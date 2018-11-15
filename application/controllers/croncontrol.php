@@ -659,7 +659,7 @@ class CronControl extends Master_Controller {
 
 	public function refreshCRSData($motorcycle_id = 0, $deep_clean = 0) {
 	    $this->load->model("CRSCron_m");
-	    $this->CRSCron_m->refreshCRSData($motorcycle_id, $deep_clean > 0);
+	    $this->CRSCron_m->refreshCRSData($motorcycle_id, intVal($deep_clean) > 0);
 	    $this->cleanUpCRS();
     }
 
