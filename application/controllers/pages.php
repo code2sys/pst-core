@@ -821,6 +821,40 @@ class Pages extends Master_Controller {
 	 	redirect('admin_content/pages');
   	}
   	
+  	public function make_inactive($pageId = NULL)
+  	{
+        $this->enforceAdmin("pages");
+
+        if(is_numeric($pageId))
+	 	{
+            global $PSTAPI;
+            initializePSTAPI();
+            $page = $PSTAPI->pages()->get($pageId);
+            if (!is_null($page)) {
+                $page->set("active", 0);
+                $page->save();
+            }
+	 	}
+	 	redirect('admin_content/pages');
+  	}
+
+  	public function make_active($pageId = NULL)
+  	{
+        $this->enforceAdmin("pages");
+
+        if(is_numeric($pageId))
+	 	{
+	 	    global $PSTAPI;
+	 	    initializePSTAPI();
+	 	    $page = $PSTAPI->pages()->get($pageId);
+	 	    if (!is_null($page)) {
+	 	        $page->set("active", 1);
+	 	        $page->save();
+            }
+	 	}
+	 	redirect('admin_content/pages');
+  	}
+
   	public function addTextBox()
   	{
         $this->enforceAdmin("pages");

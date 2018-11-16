@@ -94,7 +94,7 @@
 
                         ?>
 						<tr>
-							<td>Page Type</td><td>
+							<td>Page Format</td><td>
                                 <label><input type="radio" name="type" value="Managed Page" <?php if ($type_value == "Managed Page"): ?>checked="checked" <?php endif; ?> /><strong>Managed Page:</strong> Use content-management tools to manage text, video, and slider content.</label><br/>
                                 <label><input type="radio" name="type" value="External Link" <?php if ($type_value == "External Link"): ?>checked="checked" <?php endif; ?> /><strong>External Link:</strong> Page links to an external URL that opens in a new window.</label><br/>
                                 <label><input type="radio" name="type" value="File Attachment" <?php if ($type_value == "File Attachment"): ?>checked="checked" <?php endif; ?> /><strong>File Attachment:</strong> Upload a file that is downloaded by the website visitor when they click the link.</label><br/>

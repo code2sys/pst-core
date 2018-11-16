@@ -10,6 +10,8 @@ class Pages_M extends Master_M
 	
 	public function getPages($active = 0, $location = NULL)
 	{
+	    $where = array();
+
 		if($active)
 			$where = array('active' => 1);
 		if($location)
@@ -20,7 +22,7 @@ class Pages_M extends Master_M
 		}
 		$this->db->order_by("delete", "asc"); 
 		
-		$records = $this->selectRecords('pages', @$where);
+		$records = $this->selectRecords('pages', $where);
 		return $records;
 	}
 	
