@@ -79,7 +79,6 @@
                 $(window).load(function() {
                     $("#page_index_list").dataTable({
                         "processing" : true,
-                        "data" : [],
                         "paging" : true,
                         "info" : true,
                         "stateSave" : true,
