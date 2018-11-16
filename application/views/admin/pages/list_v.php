@@ -35,16 +35,15 @@
             <!-- We have to make the checkboxes for filtering -->
             <?php if (isset($pages) && is_array($pages) && count($pages) > 0): ?>
 
-            <div>
+            <div style="margin-bottom: 1em;">
+                <strong>Filter by Type:</strong>
             <?php
             $seen_types = array();
             foreach ($pages as $page) {
                 if (!in_array($page["page_class"], $seen_types)) {
                     $seen_types[] = $page["page_class"];
                     ?>
-                    <div style="display: inline-block; width: 33%">
                         <label><input type="checkbox" name="pageclass" value="<?php echo $page["page_class"]; ?>" checked="true" class="filter_checkbox"><?php echo $page["page_class"]; ?></label>
-                    </div>
                 <?php
                 }
             } ?>
