@@ -241,17 +241,49 @@ class CRS_M extends Master_M
         return $this->getTrims($args);
     }
 
+    protected function _applyMutationToRecords($records) {
+        if (function_exists("CRSMutateFunction")) {
+            // There is a mutator, hence, you must mutate.
+            for ($i = 0; $i < count($records); $i++) {
+                $m = $records[$i];
+                $crs_make = $m["make"];
+                $crs_display_name = $m["display_name"];
+
+                $rec = CRSMutateFunction($crs_make, $crs_display_name);
+                $m["make"] = $rec["make"];
+                $m["display_name"] = $rec["display_name"];
+                $records[$i] = $m;
+            }
+        }
+        return $records;
+    }
+
     public function getTrims($args = array()) {
-        return $this->postRequest("getTrims", $args, "records");
+        return $this->_applyMutationToRecords($this->postRequest("getTrims", $args, "records"));
     }
 
     public function getTrim($trim_id) {
-        return $this->postRequest("getTrim", array("trim_id" => $trim_id), "trims");
+        return $this->_applyMutationToRecords($this->postRequest("getTrim", array("trim_id" => $trim_id), "trims"));
     }
 
     // get the extra details...
     public function getTrimAttributes($trim_id, $version_number = 0) {
-        return $this->postRequest("getTrimAttributes", array("trim_id" => $trim_id, "version_number" => $version_number), "specifications");
+        $records = $this->postRequest("getTrimAttributes", array("trim_id" => $trim_id, "version_number" => $version_number), "specifications");
+
+        // JLB 11-15-18
+        // There is no need to push down all these "NOT AVAILABLE"
+        $clean_records = $records;
+
+        foreach ($records as $rec) {
+            if (strtolower(trim($rec["text_value"])) != "not available") {
+                $clean_records[] = $rec;
+                print("Trim $trim_id Text Value " . $rec["text_value"] . "\n");
+            } else {
+                print("Skipping for trim $trim_id Text Value " . $rec["text_value"] . "\n");
+            }
+        }
+
+        return $clean_records;
     }
 
     public function getTrimPhotos($trim_id, $version_number = 0) {

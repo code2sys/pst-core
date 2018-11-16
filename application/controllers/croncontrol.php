@@ -2,6 +2,26 @@
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
 
+    // JLB 11-09-18
+    // Fix the description from CRS...
+    public function fixCRSDescriptions() {
+        global $PSTAPI;
+        initializePSTAPI();
+
+        // get the matching bikes...
+        $bikes = $PSTAPI->motorcycle()->fetch(array(
+            "source" => "PST",
+            "customer_set_description" => 0,
+            "lightspeed_set_description" => 0
+        ));
+
+        foreach ($bikes as $bike) {
+            fixCRSBike($bike);
+        }
+    }
+
+
+
     public function encryptWord($word) {
         $this->load->library("encrypt");
         print $this->encrypt->encode($word);
@@ -256,9 +276,9 @@ class CronControl extends Master_Controller {
 
 	public function weekly()
 	{
+        $this->checkForCRSMigration(1);
+        $this->refreshCRSData();
 		$this->_runJob('weekly');
-		$this->checkForCRSMigration(1);
-		$this->refreshCRSData();
 	}
 
 	public function monthly()
@@ -397,6 +417,9 @@ class CronControl extends Master_Controller {
         $results = $query->result_array();
         if (count($results) == 0 && $force == 0) {
             return;
+        } else if (count($results) == 0) {
+            // Record something.
+            $this->db->query("insert into crspull_feed_log (run_at, run_by, status, processing_start) values (now(), 'cron', 1, now())");
         } else {
             $this->db->query("update crspull_feed_log set status = 1, processing_start = now() where status = 0");
         }
@@ -511,14 +534,20 @@ class CronControl extends Master_Controller {
 
         // Now, we have to enter them...
         foreach ($matching_motorcycles as $m) {
+
+            // JLB 11-15-18 - I added a more complicated approval function. This may be redundant.
+            $crs_make = $m["make"];
+            $crs_display_name = $m["display_name"];
+            if (function_exists("CRSApproveFunction") && !CRSApproveFunction($crs_make, $crs_display_name)) {
+                continue; // skip it; we are not doing this bike.
+            }
+
             // Is there one of these?
             $crs_model = $m["model"];
             $crs_model_id = $m["model_id"];
-            $crs_make = $m["make"];
             $crs_make_id = $m["make_id"];
             $crs_machinetype = $m["machine_type"];
             $crs_trim = $m["trim"];
-            $crs_display_name = $m["display_name"];
             $crs_trim_id = $m["trim_id"];
 
             if ($debug > 0) {
@@ -567,7 +596,7 @@ class CronControl extends Master_Controller {
                     // JLB 11-27-17: We just set the destination charge = 1.
                     $this->db->query("Insert into motorcycle (title, description, status, `condition`, sku, engine_type, transmission, retail_price, sale_price, data, margin, profit, category, vehicle_type, year, make, model, color, craigslist_feed_status, cycletrader_feed_status, crs_trim_id, crs_machinetype, crs_model_id, crs_make_id, crs_year, uniqid, source, crs_version_number, destination_charge, stock_status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'Out Of Stock')", array(
                         preg_replace("/[^" . $this->config->item("permitted_uri_chars") . "]/i", "", ($title = $trim["year"]. " " . $trim["make"] . " " . $trim["display_name"])),
-                        $title,
+                        generateCRSDescription($title, $trim["description"]),
                         $stock_status,
                         1,
                         $this->getNextCRSSKU(),
@@ -627,9 +656,9 @@ class CronControl extends Master_Controller {
 	    $this->lightspeed_m->preserveMajorUnitsChangedField($field);
     }
 
-	public function refreshCRSData() {
+	public function refreshCRSData($motorcycle_id = 0, $deep_clean = 0) {
 	    $this->load->model("CRSCron_m");
-	    $this->CRSCron_m->refreshCRSData();
+	    $this->CRSCron_m->refreshCRSData($motorcycle_id, intVal($deep_clean) > 0);
 	    $this->cleanUpCRS();
     }
 

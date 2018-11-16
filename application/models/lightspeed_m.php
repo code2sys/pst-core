@@ -441,7 +441,8 @@ class Lightspeed_M extends Master_M {
                     'retail_price' => $motorcycle_array["retail_price"],
                     "lightspeed" => 1,
                     "lightspeed_flag" => 1,
-                    "source" => "Lightspeed"
+                    "source" => "Lightspeed",
+                    'call_on_price' => $motorcycle_array['call_on_price']
                 );
 
                 if ($motorcycle_array["location_description"] != "") {
@@ -581,30 +582,8 @@ class Lightspeed_M extends Master_M {
                 // Brandt no longer wants model on the name.
                 $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
                 if ($motorcycle->get("crs_trim_id") > 0) {
-                    $crs_trim = $CI->CRS_m->getTrim($motorcycle->get("crs_trim_id"));
-                    $denormalize = false;
-
-                    if ($motorcycle->get("customer_set_title") == 0) {
-                        // OK, go get that trim display name...
-                        $motorcycle->set("title", $motorcycle->get("year") . " " . $motorcycle->get("make") . " " . convert_to_normal_text($crs_trim[0]["display_name"]));
-                        $motorcycle->save();
-                        $denormalize = true;
-                    }
-
-                    // should we attempt to set the description?
-                    if ($crs_trim[0]["description"] != "" && $motorcycle->get("customer_set_description") == 0 && $motorcycle->get("lightspeed_set_description") == 0) {
-                        $motorcycle->set("description", "<div class='description_from_crs'>" . $motorcycle->get("title") . "<br/><br/>" . $crs_trim[0]["description"] . "</div>");
-                        $motorcycle->save();
-                        $denormalize = true;
-                    }
-
-                    if ($denormalize) {
-                        global $PSTAPI;
-                        initializePSTAPI();
-                        $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle_id);
-                    }
+                    fixCRSBike($motorcycle);
                 }
-
 
 
                 // Todo...

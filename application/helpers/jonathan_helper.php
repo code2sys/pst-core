@@ -413,3 +413,38 @@ function getCRSStructure() {
         return FALSE;
     }
 }
+
+// This is used to generate the description uniformly from CRS wherever it might come in.
+function generateCRSDescription($title, $description) {
+    return "<div class='description_from_crs'>" . $title . "<br/><br/>" . $description . "</div>";
+}
+
+// Fix the CRS bike
+function fixCRSBike(&$motorcycle) {
+    $motorcycle_id = $motorcycle->id();
+    $CI =& get_instance();
+    $CI->load->model("CRS_m");
+    $crs_trim = $CI->CRS_m->getTrim($motorcycle->get("crs_trim_id"));
+    $denormalize = false;
+
+    if ($motorcycle->get("customer_set_title") == 0) {
+        // OK, go get that trim display name...
+        $motorcycle->set("title", $motorcycle->get("year") . " " . $motorcycle->get("make") . " " . convert_to_normal_text($crs_trim[0]["display_name"]));
+        $motorcycle->save();
+        $denormalize = true;
+    }
+
+    // should we attempt to set the description?
+    if ($crs_trim[0]["description"] != "" && $motorcycle->get("customer_set_description") == 0 && $motorcycle->get("lightspeed_set_description") == 0) {
+        $motorcycle->set("description", generateCRSDescription( $motorcycle->get("title"), $crs_trim[0]["description"] ));
+        $motorcycle->save();
+        $denormalize = true;
+    }
+
+    if ($denormalize) {
+        global $PSTAPI;
+        initializePSTAPI();
+        $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle_id);
+    }
+}
+
