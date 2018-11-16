@@ -35,6 +35,21 @@
             <!-- We have to make the checkboxes for filtering -->
             <?php if (isset($pages) && is_array($pages) && count($pages) > 0): ?>
 
+            <div>
+            <?php
+            $seen_types = array();
+            foreach ($pages as $page) {
+                if (!in_array($page["page_class"], $seen_types)) {
+                    $seen_types[] = $page["page_class"];
+                    ?>
+                    <div style="display: inline-block; width: 33%">
+                        <label><input type="checkbox" name="pageclass" value="<?php echo $page["page_class"]; ?>" checked="true" class="filter_checkbox"><?php echo $page["page_class"]; ?></label>
+                    </div>
+                <?php
+                }
+            } ?>
+            </div>
+
 
             <div class="tabular_data">
                 <table width="100%" cellpadding="10" id="page_index_list">
@@ -77,7 +92,12 @@
 
             <script type="application/javascript">
                 $(window).load(function() {
-                    $("#page_index_list").dataTable({
+                    $.fn.dataTableExt.afnFiltering.push(function(oSettings, aData, iDataIndex) {
+                        var val = aData[2];
+                        return $("input[name='pageclass'][value='" + val + "']:checked").length > 0;
+                    });
+
+                    var oTable = $("#page_index_list").dataTable({
                         "processing" : true,
                         "paging" : true,
                         "info" : true,
@@ -90,6 +110,15 @@
                             null
                         ]
                     });
+
+                    $('input.filter_checkbox').on("click", function(e) {
+                        oTable.fnDraw();
+                        // you need to save the settings...
+                    });
+
+                    // we have to add a listener on those checkboxes..
+
+                    // we have to load any existing settings for the filter..
 
                 });
             </script>
