@@ -90,6 +90,10 @@
         padding-left: 6px;
         padding-right: 6px;
     }
+
+    .showroom-grid-widget .showroom-tile {
+        padding-bottom: 32px;
+    }
 }
 
 .showroom-grid-widget .showroom-tile-image {
