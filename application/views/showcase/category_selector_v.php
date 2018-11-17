@@ -267,7 +267,7 @@
 </div>
 
 <script type="application/javascript">
-    $(document).on("load", function() {
+    $(window).on("load", function() {
         $(".showroom-tile-image").css("height", Math.floor(0.5 * $(".showroom-tile-image").width()) + "px");
     })
 </script>
