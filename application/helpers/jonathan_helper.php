@@ -177,6 +177,9 @@ function jprint_interactive_footer($pages = null, $output = true) {
         // Well, if there is nothing here, then let's go get the real deal.
         $CI->load->model('pages_m');
         $pages = $CI->pages_m->getPages(1, 'footer');
+
+        // filter out the page types...
+
     }
     $CI->load->helper("mustache_helper");
     $template = mustache_tmpl_open("jprint_interactive_footer.html");
@@ -184,6 +187,10 @@ function jprint_interactive_footer($pages = null, $output = true) {
     if (is_array($pages) && count($pages) > 0) {
         mustache_tmpl_set($template, "pages", 1);
         foreach ($pages as $p) {
+            if (in_array($p["page_class"], array("Showroom Model", "Showroom Trim ", "Showroom Make", "Showroom Machine Type"))) {
+                continue; // we don't put those down there...
+            }
+
             mustache_tmpl_iterate($template, "each_page");
             mustache_tmpl_set($template, "each_page", array(
                 "label" => $p['label'],
