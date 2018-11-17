@@ -63,7 +63,7 @@
 
                 case "Showroom Machine Type":
                     // OK, we have a MAKE in hand.
-                    $showcasemachinetypes = $PSTAPI->showcasemachinetypes()->fetch(array(
+                    $showcasemachinetypes = $PSTAPI->showcasemachinetype()->fetch(array(
                         "page_id" => $pageRec["id"],
                         "deleted" => 0
                     ));
