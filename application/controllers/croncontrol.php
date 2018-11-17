@@ -749,6 +749,12 @@ class CronControl extends Master_Controller {
         }
     }
 
+    // JLB 11-16-18
+    public function loadFactoryShowroom() {
+        $this->load->model("Showcasemodel");
+        $this->Showcasemodel->loadShowcase();
+    }
+
 }
 
 /* End of file croncontrol.php */
