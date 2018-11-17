@@ -185,16 +185,15 @@ function jprint_interactive_footer($pages = null, $output = true) {
         mustache_tmpl_set($template, "pages", 1);
         foreach ($pages as $p) {
             print "<!-- Page Class: " . $p["page_class"] . " --> \n";
-            if (in_array($p["page_class"], array("Showroom Model", "Showroom Trim ", "Showroom Make", "Showroom Machine Type"))) {
-                continue; // we don't put those down there...
+            if (!in_array($p["page_class"], array("Showroom Model", "Showroom Trim ", "Showroom Make", "Showroom Machine Type"))) {
+                mustache_tmpl_iterate($template, "each_page");
+                mustache_tmpl_set($template, "each_page", array(
+                    "label" => $p['label'],
+                    "target" => ($p['type'] == 'External Link') ? 'target="_blank"' : '',
+                    "link" => ($p['type'] == 'External Link') ? $p['external_url'] : site_url('pages/index/' . $p['tag'])
+                ));
             }
 
-            mustache_tmpl_iterate($template, "each_page");
-            mustache_tmpl_set($template, "each_page", array(
-                "label" => $p['label'],
-                "target" => ($p['type'] == 'External Link') ? 'target="_blank"' : '',
-                "link" => ($p['type'] == 'External Link') ? $p['external_url'] : site_url('pages/index/' . $p['tag'])
-            ));
         }
     }
 
