@@ -120,48 +120,34 @@ switch ($pageRec["page_class"]) {
             <?php
 
             $grid_widgets = array();
+            $prepare_widget_group = function($title, $source_array) use ($grid_widgets) {
+                usort($source_array, function($a, $b) {
+                    $a_title = $a->get("short_title");
+                    $b_title = $b->get("short_title");
+                    return strnatcasecmp($a_title, $b_title);
+                });
+
+                if (count($source_array) > 0) {
+                    $grid_widgets[] = array(
+                        "title" => $title,
+                        "tiles" => array_map(function ($x) {
+                            return array(
+                                "title" => $x->get("short_title"),
+                                "url_fragment" => $x->get("full_url"),
+                                "thumbnail" => $x->get("thumbnail_photo")
+                            );
+                        }, $source_array)
+                    );
+                }
+
+            };
+
 
             if ($display_makes) {
-                // single grid, of the makes...
-                usort($showcasemakes, function($a, $b) {
-                    $a_title = $a->get("title");
-                    $b_title = $b->get("title");
-                    return strnatcasecmp($a_title, $b_title);
-                });
-
-                if (count($showcasemakes) > 0) {
-                    $grid_widgets[] = array(
-                        "title" => "",
-                        "tiles" => array_map(function ($x) {
-                            return array(
-                                "title" => $x->get("title"),
-                                "url_fragment" => $x->get("full_url"),
-                                "thumbnail" => $x->get("thumbnail_photo")
-                            );
-                        }, $showcasemakes)
-                    );
-                }
-
+                $prepare_widget_group("", $showcasemakes);
             } else if ($display_machine_types) {
-                usort($showcasemachinetypes, function($a, $b) {
-                    $a_title = $a->get("title");
-                    $b_title = $b->get("title");
-                    return strnatcasecmp($a_title, $b_title);
-                });
-
-                if (count($showcasemachinetypes) > 0) {
-                    $grid_widgets[] = array(
-                        "title" => "",
-                        "tiles" => array_map(function ($x) {
-                            return array(
-                                "title" => $x->get("title"),
-                                "url_fragment" => $x->get("full_url"),
-                                "thumbnail" => $x->get("thumbnail_photo")
-                            );
-                        }, $showcasemachinetypes)
-                    );
-                }
-            } else if ($display_models) {
+                $prepare_widget_group("", $showcasemachinetypes);
+             } else if ($display_models) {
 
                 // sort them by year...
                 $year_buckets = array();
@@ -180,45 +166,12 @@ switch ($pageRec["page_class"]) {
 
                 foreach ($year_bucket_keys as $year) {
                     $buckets = $year_buckets[$year];
-                    usort($buckets, function($a, $b) {
-                        $a_title = $a->get("title");
-                        $b_title = $b->get("title");
-                        return strnatcasecmp($a_title, $b_title);
-                    });
 
-                    if (count($buckets) > 0) {
-                        $grid_widgets[] = array(
-                            "title" => $year . " Models",
-                            "tiles" => array_map(function ($x) {
-                                return array(
-                                    "title" => $x->get("title"),
-                                    "url_fragment" => $x->get("full_url"),
-                                    "thumbnail" => $x->get("thumbnail_photo")
-                                );
-                            }, $buckets)
-                        );
-                    }
+                    $prepare_widget_group($year. " Models", $buckets);
                 }
 
             } else if ($display_trims) {
-                usort($showcasetrims, function($a, $b) {
-                    $a_title = $a->get("title");
-                    $b_title = $b->get("title");
-                    return strnatcasecmp($a_title, $b_title);
-                });
-
-                if (count($showcasetrims) > 0) {
-                    $grid_widgets[] = array(
-                        "title" => "Trims",
-                        "tiles" => array_map(function ($x) {
-                            return array(
-                                "title" => $x->get("title"),
-                                "url_fragment" => $x->get("full_url"),
-                                "thumbnail" => $x->get("thumbnail_photo")
-                            );
-                        }, $showcasetrims)
-                    );
-                }
+                $prepare_widget_group("Trims", $showcasetrims);
             }
 
 
