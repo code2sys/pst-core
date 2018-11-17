@@ -144,9 +144,9 @@ switch ($pageRec["page_class"]) {
 
 
             if ($display_makes) {
-                call_user_function($prepare_widget_group,"", $showcasemakes);
+                call_user_func($prepare_widget_group,"", $showcasemakes);
             } else if ($display_machine_types) {
-                call_user_function($prepare_widget_group,"", $showcasemachinetypes);
+                call_user_func($prepare_widget_group,"", $showcasemachinetypes);
              } else if ($display_models) {
 
                 // sort them by year...
@@ -167,11 +167,11 @@ switch ($pageRec["page_class"]) {
                 foreach ($year_bucket_keys as $year) {
                     $buckets = $year_buckets[$year];
 
-                    call_user_function($prepare_widget_group,$year. " Models", $buckets);
+                    call_user_func($prepare_widget_group,$year. " Models", $buckets);
                 }
 
             } else if ($display_trims) {
-                call_user_function($prepare_widget_group,"Trims", $showcasetrims);
+                call_user_func($prepare_widget_group,"Trims", $showcasetrims);
             }
 
 
