@@ -554,6 +554,12 @@ class Showcasemodel extends CI_Model {
                 foreach ($unupdated as $u) {
                     $u->disable();
                 }
+
+                // fix the URLs
+                $matches = $PSTAPI->$f()->fetch();
+                foreach ($matches as $m) {
+                    $m->fixURLTitle();
+                }
             }
 
             // ensure that there is a landing page...

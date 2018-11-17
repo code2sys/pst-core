@@ -446,10 +446,29 @@ class Pages extends Master_Controller {
 				$this->_mainData['ssl'] = true;
 				// $this->_mainData['widgetBlock'] .= $block;
 	  		}
+
+	  		$master_view = "master/master_v";
+			$page_view = "info/ride_home_v";
+
+	  		switch($this->_mainData['pageRec']["page_class"]) {
+                case "Showroom Landing Page":
+                case "Showroom Machine Type":
+                case "Showroom Make":
+                case "Showroom Model":
+
+                    break;
+
+
+                case "Showroom Trim":
+
+                    break;
+
+            }
+
 	  		
 	  		$this->setNav('master/navigation_v', 0);
 			$this->_mainData["full_info_content"] = 1;
-	  		$this->renderMasterPage('master/master_v', 'info/ride_home_v', $this->_mainData);
+	  		$this->renderMasterPage($master_view, $page_view, $this->_mainData);
 	  		
 	  	}
 	  	else
