@@ -206,7 +206,7 @@ class Showcasemodel extends CI_Model {
             foreach ($paged_factories as $f) {
                 $PSTAPI->$f()->updateWhere(array(
                     "updated" => 0
-                ));
+                ), array());
             }
 
             // OK now, this should represent a series of product lines to add...which is likely to create
