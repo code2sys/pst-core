@@ -338,11 +338,12 @@ class Showcasemodel extends CI_Model {
         ));
 
         if (count($machinetypes) == 0) {
+            $showcasemake = $PSTAPI->showcasemake()->get($showcasemake_id);
             // you have to make one.
             return $PSTAPI->showcasemachinetype()->add(array(
                 "showcasemake_id" => $showcasemake_id,
                 "crs_machinetype" => $crs_machinetype,
-                "title" => $map[$crs_machinetype]
+                "title" => $showcasemake->get("title") . " " . $map[$crs_machinetype]
             ));
         } else {
             $machinetypes[0]->set("updated", 1);
@@ -380,13 +381,16 @@ class Showcasemodel extends CI_Model {
                 throw new \Exception("Model could not be found: $crs_model_id");
             }
 
+            $showcasemachinetype = $PSTAPI->showcasemachinetype()->get($showcasemachinetype_id);
+            $showcasemake = $PSTAPI->showcasemake()->get($showcasemachinetype->get("showcasemake_id"));
+
             // we have to add a model
             $model = $PSTAPI->showcasemodel()->add(array(
                 "showcasemake_id" =>$showcasemake_id,
                 "year" => $candidate["year"],
                 "crs_model_id" => $crs_model_id,
                 "showcasemachinetype_id" => $showcasemachinetype_id,
-                "title" => $candidate["model"],
+                "title" => $candidate["year"] . " " . $showcasemake->get("title") . " " . $candidate["model"],
                 "updated" => 1
             ));
         } else {
@@ -429,10 +433,14 @@ class Showcasemodel extends CI_Model {
         ));
 
         if (count($trims) == 0) {
+            $showcasemodel = $PSTAPI->showcasemodel()->get($showcasemodel_id);
+            $showcasemachinetype = $PSTAPI->showcasemachinetype()->get($showcasemodel->get("showcasemachinetype_id"));
+            $showcasemake = $PSTAPI->showcasemake()->get($showcasemachinetype->get("showcasemake_id"));
+
             // OK, we have to add it...
             $trim = $PSTAPI->showcasetrim()->add(array(
-                "title" => $trim_structure["display_name"],
-                "description" => generateCRSDescription($trim_structure["display_name"], $trim_structure["description"]),
+                "title" => ($t = $showcasemodel->get("year") . " " . $showcasemake->get("title") . " " . $trim_structure["display_name"]),
+                "description" => generateCRSDescription($t, $trim_structure["description"]),
                 "crs_trim_id" => $trim_structure["trim_id"],
                 "updated" => 1
             ));
