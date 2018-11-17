@@ -49,3 +49,51 @@
     font-size: 120%;
     line-height: 200%;
 }
+
+.showroom-grid-widget {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid gray;
+    background-color: #eeeeee;
+    padding: 32px;
+}
+
+.showroom-grid-widget .row {
+    width: 100%;
+}
+
+.showroom-grid-widget .row .span3 {
+    width: 24%;
+    padding-bottom: 6px;
+    padding-left: 6px;
+    padding-right: 6px;
+    display: inline-block;
+}
+
+@media (max-width: 768px) {
+    .showroom-grid-widget .row .span3 {
+        width: 48%;
+        padding-bottom: 6px;
+        padding-left: 6px;
+        padding-right: 6px;
+        display: inline-block;
+    }
+}
+
+.showroom-grid-widget .showroom-tile-image {
+    border: 1px solid black;
+    background-size: cover;
+    showroom-tile-image: width: 100%;
+    position: relative;
+}
+
+.showroom-grid-widget .showroom-tile-title {
+    position: absolute;
+    bottom: 100%;
+    right: 100%;
+    text-align: right;
+}
+
+
+

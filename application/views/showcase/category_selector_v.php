@@ -8,7 +8,7 @@
 
         <?php echo @$widgetBlock; ?>
 
-        <div class="inventory-selector-block">
+        <div class="inventory-selector-block content_section">
             <?php
 
             $display_makes = false;
@@ -265,3 +265,9 @@
     <div class="clear"></div>
 
 </div>
+
+<script type="application/javascript">
+    $(document).on("load", function() {
+        $(".showroom-tile-image").css("height", Math.floor(0.8 * $(".showroom-tile-image").width()) + "px");
+    })
+</script>
