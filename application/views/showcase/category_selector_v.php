@@ -111,24 +111,127 @@
                     return strnatcasecmp($a_title, $b_title);
                 });
 
-                $grid_widgets[] = array(
-                    "title" => "",
-                    "tiles" => array_map(function($x) {
-                        "title" => $x->get("title"),
-                        "url_fragment" => ""
-                    }, $showcasemakes)
-                );
+                if (count($showcasemakes) > 0) {
+                    $grid_widgets[] = array(
+                        "title" => "",
+                        "tiles" => array_map(function ($x) {
+                            return array(
+                                "title" => $x->get("title"),
+                                "url_fragment" => $x->get("full_url"),
+                                "thumbnail" => $x->get("thumbnail_photo")
+                            );
+                        }, $showcasemakes)
+                    );
+                }
 
             } else if ($display_machine_types) {
+                usort($showcasemachinetypes, function($a, $b) {
+                    $a_title = $a->get("title");
+                    $b_title = $b->get("title");
+                    return strnatcasecmp($a_title, $b_title);
+                });
 
+                if (count($showcasemachinetypes) > 0) {
+                    $grid_widgets[] = array(
+                        "title" => "",
+                        "tiles" => array_map(function ($x) {
+                            return array(
+                                "title" => $x->get("title"),
+                                "url_fragment" => $x->get("full_url"),
+                                "thumbnail" => $x->get("thumbnail_photo")
+                            );
+                        }, $showcasemachinetypes)
+                    );
+                }
             } else if ($display_models) {
 
-            } else if ($display_trims) {
+                // sort them by year...
+                $year_buckets = array();
 
+                foreach ($showcasemodels as $m) {
+                    $year = intVal($m->get("year"));
+                    if (!array_key_exists($year, $year_buckets)) {
+                        $year_buckets[$year] = array();
+                    }
+                    $year_buckets[$year][] = $m;
+                }
+
+                sort($year_buckets);
+
+                foreach ($year_buckets as $year) {
+                    $buckets = $year_buckets[$year];
+                    usort($buckets, function($a, $b) {
+                        $a_title = $a->get("title");
+                        $b_title = $b->get("title");
+                        return strnatcasecmp($a_title, $b_title);
+                    });
+
+                    if (count($buckets) > 0) {
+                        $grid_widgets[] = array(
+                            "title" => "",
+                            "tiles" => array_map(function ($x) {
+                                return array(
+                                    "title" => $x->get("title"),
+                                    "url_fragment" => $x->get("full_url"),
+                                    "thumbnail" => $x->get("thumbnail_photo")
+                                );
+                            }, $buckets)
+                        );
+                    }
+                }
+
+            } else if ($display_trims) {
+                usort($showcasetrims, function($a, $b) {
+                    $a_title = $a->get("title");
+                    $b_title = $b->get("title");
+                    return strnatcasecmp($a_title, $b_title);
+                });
+
+                if (count($showcasetrims) > 0) {
+                    $grid_widgets[] = array(
+                        "title" => "",
+                        "tiles" => array_map(function ($x) {
+                            return array(
+                                "title" => $x->get("title"),
+                                "url_fragment" => $x->get("full_url"),
+                                "thumbnail" => $x->get("thumbnail_photo")
+                            );
+                        }, $showcasetrims)
+                    );
+                }
             }
 
 
             ?>
+
+            <?php foreach ($grid_widgets as $grid_widget): ?>
+            <div class="showroom-grid-widget">
+                <?php if ($grid_widget["title"] != ""): ?>
+                <div class="showroom-grid-widget-title"><?php echo $grid_widget["title"]; ?></div>
+                <?php endif; ?>
+
+                <div class="showroom-grid-widget-rows">
+                    <div class="row">
+                    <?php for ($i = 0; $i < count($grid_widget["tiles"]); $i++) {
+                        $tile = $grid_widget["tiles"][$i];
+                        if ($i > 0 && $i % 4 == 0) {
+                            ?></div><div class="row"><?php
+                        }
+                        ?>
+                        <div class="span3 showroom-tile">
+                            <a href="<?php echo site_url('Factory_Showroom/' . $tile["url_fragment"]); ?>" class="showroom-tile-link"><div class="showroom-tile-image" style="background-image: url('<?php echo $tile['thumbnail']; ?>'); "><span class="showroom-tile-title"><?php echo $tile["title"]; ?></span></div></a>
+                        </div>
+                        <?php
+                    } ?>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <?php endforeach; ?>
+
         </div>
 
 
