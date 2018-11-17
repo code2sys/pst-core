@@ -94,4 +94,9 @@
 }
 
 
-
+.showroom-grid-widget-title {
+    font-size: 125%;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 3px;
+}
