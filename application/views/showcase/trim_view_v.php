@@ -11,7 +11,7 @@ $showcasetrims = $PSTAPI->showcasetrim()->fetch(array(
 ));
 
 if (count($showcasetrims) > 0) {
-    $showcasetrim = $showcasetrim[0];
+    $showcasetrim = $showcasetrims[0];
     $description = $showcasetrim->get("description");
     $show_info = trim(strip_tags($description)) != "";
     $title = $showcasetrim->get("title");
@@ -96,7 +96,7 @@ if (count($showcasetrims) > 0) {
                         <?php if ($show_spec): ?>
                             <div class="info" id="product-details-spec-body">
 
-                                
+
                             </div>
                         <?php endif; ?>
 
