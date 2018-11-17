@@ -442,7 +442,8 @@ class Showcasemodel extends CI_Model {
                 "title" => ($t = $showcasemodel->get("year") . " " . $showcasemake->get("title") . " " . $trim_structure["display_name"]),
                 "description" => generateCRSDescription($t, $trim_structure["description"]),
                 "crs_trim_id" => $trim_structure["trim_id"],
-                "updated" => 1
+                "updated" => 1,
+                "showcasemodel_id" => $showcasemodel_id
             ));
         } else {
             $trim = $trims[0];
