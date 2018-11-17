@@ -455,12 +455,14 @@ class Pages extends Master_Controller {
                 case "Showroom Machine Type":
                 case "Showroom Make":
                 case "Showroom Model":
-
+                    $master_view = "benz_views/header";
+                    $page_view = "showcase/category_selector_v";
                     break;
 
 
                 case "Showroom Trim":
-
+                    $master_view = "benz_views/header";
+                    $page_view = "showcase/trim_view_v";
                     break;
 
             }
