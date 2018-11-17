@@ -169,7 +169,7 @@
 
                     if (count($buckets) > 0) {
                         $grid_widgets[] = array(
-                            "title" => "",
+                            "title" => $year . " Models",
                             "tiles" => array_map(function ($x) {
                                 return array(
                                     "title" => $x->get("title"),
@@ -190,7 +190,7 @@
 
                 if (count($showcasetrims) > 0) {
                     $grid_widgets[] = array(
-                        "title" => "",
+                        "title" => "Trims",
                         "tiles" => array_map(function ($x) {
                             return array(
                                 "title" => $x->get("title"),
