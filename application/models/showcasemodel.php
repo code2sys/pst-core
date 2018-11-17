@@ -288,17 +288,15 @@ class Showcasemodel extends CI_Model {
             if (!isset($this->_makeMap)) {
                 $this->_makeMap = array();
                 $makes = $this->CRS_m->getMakes();
-                print_r($makes);
                 foreach ($makes as $m) {
                     $make_id = intVal($m["make_id"]);
-                    $makes[$make_id] = $m;
+                    $this->_makeMap[$make_id] = $m;
                 }
             }
 
             $crs_make_id = intVal($crs_make_id);
 
             if (!array_key_exists($crs_make_id, $this->_makeMap)) {
-                print_r($this->_makeMap);
                 throw new \Exception("Could not find make in make map: " . $crs_make_id);
             }
 
