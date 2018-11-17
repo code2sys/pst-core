@@ -10,6 +10,10 @@ $showcasetrims = $PSTAPI->showcasetrim()->fetch(array(
     "deleted" => 0
 ));
 
+
+$show_spec = false;
+$show_info = false;
+
 if (count($showcasetrims) > 0) {
     $showcasetrim = $showcasetrims[0];
     $description = $showcasetrim->get("description");
@@ -20,20 +24,8 @@ if (count($showcasetrims) > 0) {
         "deleted" => 0
     ), true);
 
-    usort($images, function($a, $b) {
-        $a_o = intVal($a["ordinal"]);
-        $b_o = intVal($b["ordinal"]);
-        if ($a_o < $b_o) {
-            return -1;
-        } else if ($a_o > $b_o) {
-            return 1;
-        }
-        return 0;
-    });
-
-
     // get the spec in there.
-    $show_spec = false;
+
 
 }
 
