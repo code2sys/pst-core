@@ -104,8 +104,11 @@
 }
 
 .showroom-grid-widget .showroom-tile-title {
-    float: right;
     text-align: right;
+    display: block;
+    height: 32px;
+    text-overflow: ellipsis;
+    overflow-y: hidden;
 }
 
 
