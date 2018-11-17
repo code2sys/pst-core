@@ -9,7 +9,7 @@
 
 require_once(__DIR__ . "/orderadmin.php");
 
-abstract class Employeeadmin extends Lightspeedconsole {
+abstract class Employeeadmin extends Orderadmin {
 
 
     protected function validateEditUser() {
