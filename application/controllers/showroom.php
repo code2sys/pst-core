@@ -28,13 +28,9 @@ class Showroom extends Pages {
     public function index() {
         global $PSTAPI;
         $pages = $PSTAPI->pages()->fetch(array(
-            "page_class" => $this->Showcasemodel->_default_main_title(),
+            "page_class" => $this->Showcasemodel->_pageType_main(),
             "active" => 1
         ));
-
-        print "Hi";
-        print "Pages: " . count($pages) . "\n";
-        exit();
 
         $this->_sub_sub_findPage($pages, "");
     }
