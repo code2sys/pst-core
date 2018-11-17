@@ -82,6 +82,16 @@
     }
 }
 
+@media (max-width: 460px) {
+    .showroom-grid-widget .row .span3 {
+        width: 100%;
+        display: block;
+        padding-bottom: 6px;
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+}
+
 .showroom-grid-widget .showroom-tile-image {
     border: 1px solid black;
     background-size: cover;
