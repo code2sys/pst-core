@@ -184,8 +184,7 @@ function jprint_interactive_footer($pages = null, $output = true) {
     if (is_array($pages) && count($pages) > 0) {
         mustache_tmpl_set($template, "pages", 1);
         foreach ($pages as $p) {
-            print "<!-- Page Class: " . $p["page_class"] . " --> \n";
-            if (!in_array($p["page_class"], array("Showroom Model", "Showroom Trim ", "Showroom Make", "Showroom Machine Type"))) {
+            if (!in_array($p["page_class"], array("Showroom Model", "Showroom Trim", "Showroom Make", "Showroom Machine Type"))) {
                 mustache_tmpl_iterate($template, "each_page");
                 mustache_tmpl_set($template, "each_page", array(
                     "label" => $p['label'],
