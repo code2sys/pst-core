@@ -268,6 +268,6 @@
 
 <script type="application/javascript">
     $(document).on("load", function() {
-        $(".showroom-tile-image").css("height", Math.floor(0.8 * $(".showroom-tile-image").width()) + "px");
+        $(".showroom-tile-image").css("height", Math.floor(0.5 * $(".showroom-tile-image").width()) + "px");
     })
 </script>
