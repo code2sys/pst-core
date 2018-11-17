@@ -16,8 +16,7 @@ class Internalapi extends CI_Controller {
         global $Permitted_InternalAPI_IPs;
         if (!isset($Permitted_InternalAPI_IPs)) {
             $Permitted_InternalAPI_IPs = array(
-                "159.203.108.87",
-                "23.27.206.84"
+                "10.132.45.182"
             );
         }
         if (!in_array($_SERVER["REMOTE_ADDR"], $Permitted_InternalAPI_IPs)) {
