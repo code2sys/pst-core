@@ -120,7 +120,7 @@ switch ($pageRec["page_class"]) {
             <?php
 
             $grid_widgets = array();
-            $prepare_widget_group = function($title, $source_array) use ($grid_widgets) {
+            function prepare_widget_group($title, $source_array, &$grid_widgets) {
                 usort($source_array, function($a, $b) {
                     $a_title = $a->get("short_title");
                     $b_title = $b->get("short_title");
@@ -144,9 +144,9 @@ switch ($pageRec["page_class"]) {
 
 
             if ($display_makes) {
-                call_user_func($prepare_widget_group,"", $showcasemakes);
+                prepare_widget_group("", $showcasemakes, $grid_widgets);
             } else if ($display_machine_types) {
-                call_user_func($prepare_widget_group,"", $showcasemachinetypes);
+                prepare_widget_group("", $showcasemachinetypes, $grid_widgets);
              } else if ($display_models) {
 
                 // sort them by year...
@@ -167,11 +167,11 @@ switch ($pageRec["page_class"]) {
                 foreach ($year_bucket_keys as $year) {
                     $buckets = $year_buckets[$year];
 
-                    call_user_func($prepare_widget_group,$year. " Models", $buckets);
+                    prepare_widget_group($year. " Models", $buckets, $grid_widgets);
                 }
 
             } else if ($display_trims) {
-                call_user_func($prepare_widget_group,"Trims", $showcasetrims);
+                prepare_widget_group("Trims", $showcasetrims, $grid_widgets);
             }
 
 
