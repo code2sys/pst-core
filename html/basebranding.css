@@ -84,7 +84,7 @@
 .showroom-grid-widget .showroom-tile-image {
     border: 1px solid black;
     background-size: cover;
-    showroom-tile-image: width: 100%;
+    width: 100%;
     position: relative;
 }
 
