@@ -72,12 +72,6 @@ if (!is_null($pageIndex) && $pageIndex < 9)
 					<?php } ?>
                     <?php endif; ?>
 
-                    <?php if(in_array('mInventory', $_SESSION['userRecord']['permissions']) || @$_SESSION['userRecord']['admin']) { ?>
-                    <?php if (FALSE !== getCRSStructure()): ?>
-                        <li><a href="<?php echo base_url('/admin/showcase_settings'); ?>" ><i class="fa fa-motorcycle"></i>&nbsp;Unit Showcase</a></li>
-                    <?php endif; ?>
-                    <?php } ?>
-
                     <?php
                     if (defined('ENABLE_VAULT') && ENABLE_VAULT):
                     ?>

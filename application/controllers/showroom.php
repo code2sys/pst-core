@@ -78,6 +78,8 @@ class Showroom extends Pages {
     }
 
     protected function _sub_RedirectIfOneChild($factory, $url_title, $id_column, $child_factory, $prefix_segment = "") {
+        return; // JLB: skip this for now.
+
         global $PSTAPI;
         $match = $this->_sub_FetchByURLTitle($factory, $url_title);
         if (FALSE !== $match) {
