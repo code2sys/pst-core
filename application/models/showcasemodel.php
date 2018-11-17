@@ -375,6 +375,7 @@ class Showcasemodel extends CI_Model {
             }
 
             if (!$found_candidate) {
+                print_r($candidate_crs);
                 throw new \Exception("Model could not be found: $crs_model_id");
             }
 
