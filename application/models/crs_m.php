@@ -223,7 +223,7 @@ class CRS_M extends Master_M
     }
 
     public function getModels($args = array()) {
-        return $this->postRequest("getMake", $args, "records");
+        return $this->postRequest("getModels", $args, "records");
     }
 
     public function getMakesByMachineType($machine_type) {
