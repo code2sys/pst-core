@@ -279,9 +279,6 @@ class Showcasemodel extends CI_Model {
     protected $_makeMap;
     protected function _assertMake($crs_make_id) {
         global $PSTAPI;
-        $makes = $PSTAPI->showcasemake()->fetch(array(
-            "crs_make_id" => $crs_make_id
-        ));
 
         // OK, we have to make one, which means, we have to get the information about it.
         if (!isset($this->_makeMap)) {
@@ -292,6 +289,11 @@ class Showcasemodel extends CI_Model {
                 $this->_makeMap[$make_id] = $m;
             }
         }
+
+        $makes = $PSTAPI->showcasemake()->fetch(array(
+            "crs_make_id" => $crs_make_id
+        ));
+
 
         $crs_make_id = intVal($crs_make_id);
 
