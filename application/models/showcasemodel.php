@@ -283,33 +283,38 @@ class Showcasemodel extends CI_Model {
             "crs_make_id" => $crs_make_id
         ));
 
+        // OK, we have to make one, which means, we have to get the information about it.
+        if (!isset($this->_makeMap)) {
+            $this->_makeMap = array();
+            $makes = $this->CRS_m->getMakes();
+            foreach ($makes as $m) {
+                $make_id = intVal($m["make_id"]);
+                $this->_makeMap[$make_id] = $m;
+            }
+        }
+
+        $crs_make_id = intVal($crs_make_id);
+
+        if (!array_key_exists($crs_make_id, $this->_makeMap)) {
+            throw new \Exception("Could not find make in make map: " . $crs_make_id);
+        }
+
+        // OK, now, it's in there, so we should be able to make this thing.
+        $crs_data = $this->_makeMap[$crs_make_id];
+
         if (count($makes) == 0) {
-            // OK, we have to make one, which means, we have to get the information about it.
-            if (!isset($this->_makeMap)) {
-                $this->_makeMap = array();
-                $makes = $this->CRS_m->getMakes();
-                foreach ($makes as $m) {
-                    $make_id = intVal($m["make_id"]);
-                    $this->_makeMap[$make_id] = $m;
-                }
-            }
 
-            $crs_make_id = intVal($crs_make_id);
-
-            if (!array_key_exists($crs_make_id, $this->_makeMap)) {
-                throw new \Exception("Could not find make in make map: " . $crs_make_id);
-            }
-
-            // OK, now, it's in there, so we should be able to make this thing.
-            $crs_data = $this->_makeMap[$crs_make_id];
             return $PSTAPI->showcasemake()->add(array(
                 "make" => $crs_data["make"],
                 "crs_make_id" => $crs_make_id,
                 "description" => "",
                 "updated" => 1,
-                "title" => $crs_data["make"]
+                "title" => $crs_data["make"],
+                "short_title" => $crs_data["make"]
             ));
         } else {
+            $makes[0]->set("title", $crs_data["make"]);
+            $makes[0]->set("short_title", $crs_data["make"]);
             $makes[0]->set("updated", 1);
             $makes[0]->save();
             return $makes[0]; // that's the one!
@@ -337,15 +342,19 @@ class Showcasemodel extends CI_Model {
             "crs_machinetype" => $crs_machinetype
         ));
 
+        $showcasemake = $PSTAPI->showcasemake()->get($showcasemake_id);
+
         if (count($machinetypes) == 0) {
-            $showcasemake = $PSTAPI->showcasemake()->get($showcasemake_id);
             // you have to make one.
             return $PSTAPI->showcasemachinetype()->add(array(
                 "showcasemake_id" => $showcasemake_id,
                 "crs_machinetype" => $crs_machinetype,
-                "title" => $showcasemake->get("title") . " " . $map[$crs_machinetype]
+                "title" => $showcasemake->get("title") . " " . $map[$crs_machinetype],
+                "short_title" => $map[$crs_machinetype]
             ));
         } else {
+            $machinetypes[0]->set("title", $showcasemake->get("title") . " " . $map[$crs_machinetype]);
+            $machinetypes[0]->set("short_title", $map[$crs_machinetype]);
             $machinetypes[0]->set("updated", 1);
             $machinetypes[0]->save();
             return $machinetypes[0];
@@ -360,29 +369,30 @@ class Showcasemodel extends CI_Model {
             "showcasemachinetype_id" => $showcasemachinetype_id
         ));
 
+        $candidate_crs = $this->CRS_m->getModels(array(
+            "make_id" => $trim_structure["make_id"],
+            "machine_type" => $trim_structure["machine_type"]
+        ));
+
+
+        $candidate = array();
+        $found_candidate = false;
+        foreach ($candidate_crs as $c) {
+            if ($c["model_id"] == $crs_model_id) {
+                $candidate = $c;
+                $found_candidate = true;
+            }
+        }
+
+        if (!$found_candidate) {
+            print_r($candidate_crs);
+            throw new \Exception("Model could not be found: $crs_model_id");
+        }
+
+        $showcasemachinetype = $PSTAPI->showcasemachinetype()->get($showcasemachinetype_id);
+        $showcasemake = $PSTAPI->showcasemake()->get($showcasemachinetype->get("showcasemake_id"));
+
         if (count($models) == 0) {
-            $candidate_crs = $this->CRS_m->getModels(array(
-                "make_id" => $trim_structure["make_id"],
-                "machine_type" => $trim_structure["machine_type"]
-            ));
-
-
-            $candidate = array();
-            $found_candidate = false;
-            foreach ($candidate_crs as $c) {
-                if ($c["model_id"] == $crs_model_id) {
-                    $candidate = $c;
-                    $found_candidate = true;
-                }
-            }
-
-            if (!$found_candidate) {
-                print_r($candidate_crs);
-                throw new \Exception("Model could not be found: $crs_model_id");
-            }
-
-            $showcasemachinetype = $PSTAPI->showcasemachinetype()->get($showcasemachinetype_id);
-            $showcasemake = $PSTAPI->showcasemake()->get($showcasemachinetype->get("showcasemake_id"));
 
             // we have to add a model
             $model = $PSTAPI->showcasemodel()->add(array(
@@ -391,10 +401,13 @@ class Showcasemodel extends CI_Model {
                 "crs_model_id" => $crs_model_id,
                 "showcasemachinetype_id" => $showcasemachinetype_id,
                 "title" => $candidate["year"] . " " . $showcasemake->get("title") . " " . $candidate["model"],
+                "short_title" => $candidate["year"] . " " . $candidate["model"],
                 "updated" => 1
             ));
         } else {
             $model = $models[0];
+            $model->set("title", $candidate["year"] . " " . $showcasemake->get("title") . " " . $candidate["model"]);
+            $model->set("short_title", $candidate["year"] . " " . $candidate["model"]);
         }
 
         $model->set("updated", 1);
@@ -431,15 +444,16 @@ class Showcasemodel extends CI_Model {
         $trims = $PSTAPI->showcasetrim()->fetch(array(
             "crs_trim_id" => $trim_structure["trim_id"]
         ));
+        $showcasemodel = $PSTAPI->showcasemodel()->get($showcasemodel_id);
+        $showcasemachinetype = $PSTAPI->showcasemachinetype()->get($showcasemodel->get("showcasemachinetype_id"));
+        $showcasemake = $PSTAPI->showcasemake()->get($showcasemachinetype->get("showcasemake_id"));
 
         if (count($trims) == 0) {
-            $showcasemodel = $PSTAPI->showcasemodel()->get($showcasemodel_id);
-            $showcasemachinetype = $PSTAPI->showcasemachinetype()->get($showcasemodel->get("showcasemachinetype_id"));
-            $showcasemake = $PSTAPI->showcasemake()->get($showcasemachinetype->get("showcasemake_id"));
 
             // OK, we have to add it...
             $trim = $PSTAPI->showcasetrim()->add(array(
                 "title" => ($t = $showcasemodel->get("year") . " " . $showcasemake->get("title") . " " . $trim_structure["display_name"]),
+                "short_title" => $trim_structure["display_name"],
                 "description" => generateCRSDescription($t, $trim_structure["description"]),
                 "crs_trim_id" => $trim_structure["trim_id"],
                 "updated" => 1,
@@ -447,6 +461,8 @@ class Showcasemodel extends CI_Model {
             ));
         } else {
             $trim = $trims[0];
+            $trim->set("title", $showcasemodel->get("year") . " " . $showcasemake->get("title") . " " . $trim_structure["display_name"]);
+            $trim->set("short_title", $trim_structure["display_name"]);
         }
 
         // We should make this a page!
