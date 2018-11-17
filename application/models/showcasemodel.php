@@ -288,6 +288,7 @@ class Showcasemodel extends CI_Model {
             if (!isset($this->_makeMap)) {
                 $this->_makeMap = array();
                 $makes = $this->CRS_m->getMakes();
+                print_r($makes);
                 foreach ($makes as $m) {
                     $make_id = intVal($m["make_id"]);
                     $makes[$make_id] = $m;
