@@ -9,8 +9,8 @@
  *
  */
 
-require_once(__DIR__ . "/showcaseadmin.php");
+require_once(__DIR__ . "/lightspeedconsole.php");
 
-abstract class Finaladmin extends Showcaseadmin {
+abstract class Finaladmin extends Lightspeedconsole {
 
 }

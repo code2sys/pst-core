@@ -365,7 +365,6 @@ class Showcasemodel extends CI_Model {
                 "machine_type" => $trim_structure["machine_type"]
             ));
 
-            print_r($candidate_crs);
 
             $candidate = array();
             $found_candidate = false;
