@@ -98,14 +98,14 @@ class Showroom extends Pages {
     public function machinetype($make_name, $machine_type_name) {
         // Check for children, and intercept if required...
         $base_url = "Factory_Showroom/$make_name";
-        $this->_sub_RedirectIfOneChild("showcasemachinetype", $machine_type_name, "showcasemachinetype_id", "showcasemachinetype", $base_url);
+        $this->_sub_RedirectIfOneChild("showcasemachinetype", $machine_type_name, "showcasemachinetype_id", "showcasemachinetype", $base_url . "/" . $machine_type_name);
         $this->_subFindPage("showcasemachinetype", $machine_type_name, $base_url);
     }
 
     public function model($make_name, $machine_type_name, $model_name) {
         // Check for children, and intercept if required
         $base_url = "Factory_Showroom/$make_name/$machine_type_name";
-        $this->_sub_RedirectIfOneChild("showcasemodel", $machine_type_name, "showcasemodel_id", "showcasetrim", $base_url);
+        $this->_sub_RedirectIfOneChild("showcasemodel", $machine_type_name, "showcasemodel_id", "showcasetrim", $base_url . "/" . $model_name);
         $this->_subFindPage("showcasemodel", $model_name, $base_url);
     }
 
