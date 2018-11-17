@@ -172,7 +172,7 @@ echo $CI->load->view("benz_views/real_footer", array(
 			var vehicles = $("input[name='vehicles[]']:checkbox:checked").map(function(){
 				return $(this).val();
 			}).get();
-			var condition = "<?php echo $_GET['fltr'];?>";
+			var condition = "<?php echo array_key_exists('fltr', $_GET) ? $_GET['fltr'] : "";?>";
 			pg = parseInt(pg)-1;
 
 			var ajax_url = "<?php echo site_url('motorcycle_ci/filterMotorcycle');?>";
