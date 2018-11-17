@@ -31,6 +31,10 @@ class Showroom extends Pages {
             "page_class" => $this->Showcasemodel->_default_main_title(),
             "active" => 1
         ));
+
+        print "Hi";
+        exit();
+
         $this->_sub_sub_findPage($pages, "");
     }
 
