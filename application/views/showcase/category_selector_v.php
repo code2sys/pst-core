@@ -220,7 +220,7 @@
                         }
                         ?>
                         <div class="span3 showroom-tile">
-                            <a href="<?php echo site_url('Factory_Showroom/' . $tile["url_fragment"]); ?>" class="showroom-tile-link"><div class="showroom-tile-image" style="background-image: url('<?php echo $tile['thumbnail']; ?>'); "><span class="showroom-tile-title"><?php echo $tile["title"]; ?></span></div></a>
+                            <a href="<?php echo site_url('Factory_Showroom/' . $tile["url_fragment"]); ?>" class="showroom-tile-link"><div class="showroom-tile-image" style="background-image: url('<?php echo $tile['thumbnail']; ?>'); "></div><span class="showroom-tile-title"><?php echo $tile["title"]; ?></span></a>
                         </div>
                         <?php
                     } ?>
