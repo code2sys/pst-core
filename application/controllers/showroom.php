@@ -33,6 +33,7 @@ class Showroom extends Pages {
         ));
 
         print "Hi";
+        print "Pages: " . count($pages) . "\n";
         exit();
 
         $this->_sub_sub_findPage($pages, "");
