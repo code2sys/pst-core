@@ -10,12 +10,16 @@ $showcasetrims = $PSTAPI->showcasetrim()->fetch(array(
     "deleted" => 0
 ));
 
+$title = $pageRec["title"];
+$full_url = "";
 
 $show_spec = false;
 $show_info = false;
 
 if (count($showcasetrims) > 0) {
     $showcasetrim = $showcasetrims[0];
+    $title = $showcasetrim->get("title");
+    $full_url = $showcasetrim->get("full_url");
     $description = $showcasetrim->get("description");
     $show_info = trim(strip_tags($description)) != "";
     $title = $showcasetrim->get("title");
@@ -36,6 +40,15 @@ if (count($showcasetrims) > 0) {
 
     <!-- MAIN CONTENT -->
     <div class="main_content fl-wdh full_info_content" style="float: none !important; width: 100% !important;">
+
+        <?php
+        $CI =& get_instance();
+        echo $CI->load->view("showcase/breadcrumbs", array(
+            "title" => $title,
+            "full_url" => $full_url
+        ), true);
+
+        ?>
 
         <?php echo @$widgetBlock; ?>
 
