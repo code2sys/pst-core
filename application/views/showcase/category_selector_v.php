@@ -158,7 +158,7 @@
 
                 $year_bucket_keys = array_keys($year_buckets);
                 sort($year_bucket_keys);
-                $year_bucket_keys = array_reverse($year_buckets);
+                $year_bucket_keys = array_reverse($year_bucket_keys);
 
                 foreach ($year_bucket_keys as $year) {
                     $buckets = $year_buckets[$year];
