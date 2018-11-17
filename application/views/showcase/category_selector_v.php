@@ -156,9 +156,10 @@
                     $year_buckets[$year][] = $m;
                 }
 
-                sort($year_buckets);
+                $year_bucket_keys = array_keys($year_buckets);
+                sort($year_bucket_keys);
 
-                foreach ($year_buckets as $year) {
+                foreach ($year_bucket_keys as $year) {
                     $buckets = $year_buckets[$year];
                     usort($buckets, function($a, $b) {
                         $a_title = $a->get("title");
