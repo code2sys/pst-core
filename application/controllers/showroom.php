@@ -15,7 +15,7 @@ class Showroom extends Pages {
         parent::__construct();
 
         // check that the showroom really works...if there is no showroom, bounce them out.
-        if (FALSE === getCRSStructure) {
+        if (FALSE === getCRSStructure()) {
             header("Location: " . base_url(""));
             exit();
         }
@@ -25,7 +25,7 @@ class Showroom extends Pages {
     }
 
     // show the Showroom Landing Page
-    public function index() {
+    public function index($pageTag = NULL) {
         global $PSTAPI;
         $pages = $PSTAPI->pages()->fetch(array(
             "page_class" => $this->Showcasemodel->_pageType_main(),
@@ -82,7 +82,7 @@ class Showroom extends Pages {
         $match = $this->_sub_FetchByURLTitle($factory, $url_title);
         if (FALSE !== $match) {
             // OK, so what do we have?
-            $child_matches = $PSTAPI->$child_factory->fetch(array(
+            $child_matches = $PSTAPI->$child_factory()->fetch(array(
                 $id_column => $match->id(),
                 "deleted" => 0
             ));
