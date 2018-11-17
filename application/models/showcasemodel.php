@@ -55,7 +55,8 @@ class Showcasemodel extends CI_Model {
                 "title" => $this->_default_main_title(),
                 "active" => 1,
                 "delete" => 0,
-                "page_class" => $this->_pageType_main()
+                "page_class" => $this->_pageType_main(),
+                "tag" => "factoryshowroom"
             ));
         } else {
             // we just have to make sure it's active.
@@ -73,9 +74,18 @@ class Showcasemodel extends CI_Model {
 
     protected function _subSimpleEnsurePage($factory, $key_field, $value, $type) {
         global $PSTAPI;
-        $make = $PSTAPI->$factory()->fetch(array(
-            $key_field => $value
-        ));
+
+        $query_data = array();
+
+        if (is_array($key_field)) {
+            for ($i = 0; $i < count($key_field); $i++) {
+                $query_data[$key_field[$i]] = $value[$i];
+            }
+        } else {
+            $query_data[$key_field] = $value;
+        }
+
+        $make = $PSTAPI->$factory()->fetch($query_data);
 
         if (count($make) == 0) {
             return;
@@ -94,13 +104,16 @@ class Showcasemodel extends CI_Model {
                     $page->save();
                 }
             } else {
+                $tag = preg_replace("/[^a-z0-9\-\_]+/", "_", strtolower($type . " " . $make->get("title")));
+
                 // make the page...
                 $page = $PSTAPI->pages()->add(array(
                     "label" => $make->get("title"),
                     "title" => $make->get("title"),
                     "active" => 1,
                     "delete" => 0,
-                    "page_class" => $type
+                    "page_class" => $type,
+                    "tag" => $tag
                 ));
                 $make->set("page_id", $page->id());
                 $make->save();
@@ -109,8 +122,8 @@ class Showcasemodel extends CI_Model {
     }
 
     // this should also mark it as updated IF it is not deleted.
-    protected function _ensureMachineTypePage($crs_machinetype) {
-        $this->_subSimpleEnsurePage("showcasemachinetype", "crs_machinetype", $crs_machinetype, $this->_pageType_machinetype());
+    protected function _ensureMachineTypePage($crs_machinetype, $showcasemake_id) {
+        $this->_subSimpleEnsurePage("showcasemachinetype", array("crs_machinetype", "showcasemake_id"), array($crs_machinetype, $showcasemake_id), $this->_pageType_machinetype());
     }
 
     // this should also mark it as updated IF it is not deleted
@@ -124,11 +137,314 @@ class Showcasemodel extends CI_Model {
     }
 
     // Return true if this is added at the end of it..
-    protected function _addUpdateTrim($crs_machinetype, $crs_make_id, $year, $trim_structure) {
+    protected function _addUpdateTrim($trim_structure) {
         // You have to make sure there's an entry for the make, and an entry for the make, machine type, and model as well...
-        print_r($trim_structure);
+        $showcasemake = $this->_assertMake($trim_structure["make_id"]);
+
+        if ($showcasemake->get("deleted") > 0) {
+            return false; // the make has been deleted!
+        }
+
+        // You have to make sure there's a machine type ID
+        $showcasemachinetype = $this->_assertMachineType($trim_structure["machine_type"], $showcasemake->id());
+
+        if ($showcasemachinetype->get("deleted") > 0) {
+            return false;
+        }
+
+        // You have to then ensure there is a model
+        $showcasemodel = $this->_assertModel($trim_structure["model_id"], $showcasemachinetype->id(), $showcasemake->id(), $trim_structure);
+
+        if ($showcasemodel->get("deleted") > 0) {
+            return false;
+        }
+
+        // You have to then make the trim...
+        $showcasetrim = $this->_assertTrim($trim_structure, $showcasemodel->id());
+
+        if ($showcasetrim->get("deleted") > 0) {
+            return false;
+        }
+
+        // If you are still here, then you need to make sure your trim and model have page.s..
+        $this->_ensureModelPage($trim_structure["model_id"]);
+        $this->_ensureTrimPage($trim_structure["trim_id"]);
+
+        // OK, now, so long as we are still rolling, you have to:
+        // fill the specs
+        // fill the photos
+        // then, you'll have to tack back for thumbnails if they do not exist...
+        $this->_fetchTrimPhotos($showcasetrim, $trim_structure);
+        $photo = $this->_fetchTrimPhotos($showcasetrim, $trim_structure);
+
+        if ($photo !== FALSE) {
+
+            // consider setting these..
+            if (is_null($showcasetrim->get("thumbnail_photo")) || $showcasetrim->get("thumbnail_photo") == "") {
+                // OK, we have to set it.
+                $showcasetrim->set("thumbnail_photo", $photo);
+                $showcasetrim->save();
+            }           
+            // consider setting these..
+            if (is_null($showcasemodel->get("thumbnail_photo")) || $showcasemodel->get("thumbnail_photo") == "") {
+                // OK, we have to set it.
+                $showcasemodel->set("thumbnail_photo", $photo);
+                $showcasemodel->save();
+            }
+            if (is_null($showcasemachinetype->get("thumbnail_photo")) || $showcasemachinetype->get("thumbnail_photo") == "") {
+                // OK, we have to set it.
+                $showcasemachinetype->set("thumbnail_photo", $photo);
+                $showcasemachinetype->save();
+            }           
+            if (is_null($showcasemake->get("thumbnail_photo")) || $showcasemake->get("thumbnail_photo") == "") {
+                // OK, we have to set it.
+                $showcasemake->set("thumbnail_photo", $photo);
+                $showcasemake->save();
+            }
+        }
+
+
+        // Make sure there is a page - we'll handle the machine type and make higher up.
+        $this->_ensureModelPage($trim_structure["model_id"]);
+        $this->_ensureTrimPage($trim_structure["trim_id"]);
+
+        return true;
+    }
+
+    protected function _fetchTrimSpecs($showcasetrim, $trim_structure) {
+
+
 
     }
+
+    // return a photo URL, or false if there isn't one. We'll use it to backfill the thumbnail photo.
+    protected function _fetchTrimPhotos($showcasetrim, $trim_structure) {
+        $one_good_photo_url = FALSE;
+
+        global $PSTAPI;
+
+        // get the current photos...
+        $photos = $PSTAPI->showcasephoto()->fetch(array(
+            "showcasetrim_id" => $showcasetrim->id()
+        ));
+
+        // make an LUT by URL
+        $url_lut = array();
+        foreach ($photos as $p) {
+            $url_lut[$p->get("url")] = $p;
+        }
+
+        $seen_urls = array();
+
+        // get the candidate photos
+        $candidate_photos = $this->CRS_m->getTrimPhotos($showcasetrim->get("crs_trim_id"), 0);
+
+        // load them
+        foreach ($candidate_photos as $p) {
+            $seen_urls[] = $p["photo_url"];
+            if (!array_key_exists($p["photo_url"], $url_lut)) {
+                // you have to add it..
+                $PSTAPI->showcasephoto()->add(array(
+                    "crs_photomap_id" => $p["photo_id"],
+                    "showcasetrim_id" => $showcasetrim->id(),
+                    "url" => $p["photo_url"]
+                ));
+            }
+        }
+
+        // Remove the junked ones...
+        foreach ($photos as $p) {
+            if (!in_array($p->get("url"), $seen_urls)) {
+                $p->remove();
+            }
+        }
+
+        // check them...
+        $photos = $PSTAPI->showcasephoto()->fetch(array(
+            "showcasetrim_id" => $showcasetrim->id(),
+            "deleted" => 0
+        ));
+
+        if (count($photos) > 0) {
+            $one_good_photo_url = $photos[0]->get("url");
+        }
+
+        // return one good photo URL...
+        return $one_good_photo_url;
+    }
+
+    /*
+     * The following make sure that these exist. Don't worry, you're going to ensure there's a page if you get this far.
+     */
+    protected $_makeMap;
+    protected function _assertMake($crs_make_id) {
+        global $PSTAPI;
+        $makes = $PSTAPI->showcasemake()->fetch(array(
+            "crs_make_id" => $crs_make_id
+        ));
+
+        if (count($makes) == 0) {
+            // OK, we have to make one, which means, we have to get the information about it.
+            if (!isset($this->_makeMap)) {
+                $this->_makeMap = array();
+                $makes = $this->CRS_m->getMakes();
+                foreach ($makes as $m) {
+                    $make_id = intVal($m["make_id"]);
+                    $makes[$make_id] = $m;
+                }
+            }
+
+            $crs_make_id = intVal($crs_make_id);
+
+            if (!array_key_exists($crs_make_id, $this->_makeMap)) {
+                throw new \Exception("Could not find make in make map: " . $crs_make_id);
+            }
+
+            // OK, now, it's in there, so we should be able to make this thing.
+            $crs_data = $this->_makeMap[$crs_make_id];
+            return $PSTAPI->showcasemake()->add(array(
+                "make" => $crs_data["make"],
+                "crs_make_id" => $crs_make_id,
+                "description" => "",
+                "updated" => 1,
+                "title" => $crs_data["make"]
+            ));
+        } else {
+            $makes[0]->set("updated", 1);
+            $makes[0]->save();
+            return $makes[0]; // that's the one!
+        }
+    }
+
+    // The difference here: The machine types, although independent in CRS, are downstream from Make in the showroom.
+    //
+    protected function _assertMachineType($crs_machinetype, $showcasemake_id) {
+        $map = array(
+            "MOT" => "Motorcycles",
+            "ATV" => "ATV",
+            "UTV" => "UTV",
+            "WAT" => "Watercraft",
+            "SNO" => "Snowmobiles"
+        );
+
+        if (!array_key_exists($crs_machinetype, $map)) {
+            throw new \Exception("Unrecognized machine type: $crs_machinetype");
+        }
+
+        global $PSTAPI;
+        $machinetypes = $PSTAPI->showcasemachinetype()->fetch(array(
+            "showcasemake_id" => $showcasemake_id,
+            "crs_machinetype" => $crs_machinetype
+        ));
+
+        if (count($machinetypes) == 0) {
+            // you have to make one.
+            return $PSTAPI->showcasemachinetype()->add(array(
+                "showcasemake_id" => $showcasemake_id,
+                "crs_machinetype" => $crs_machinetype,
+                "title" => $map[$crs_machinetype]
+            ));
+        } else {
+            $machinetypes[0]->set("updated", 1);
+            $machinetypes[0]->save();
+            return $machinetypes[0];
+        }
+
+    }
+
+    protected function _assertModel($crs_model_id, $showcasemachinetype_id, $showcasemake_id, $trim_structure) {
+        global $PSTAPI;
+        $models = $PSTAPI->showcasemodel()->fetch(array(
+            "crs_model_id" => $crs_model_id,
+            "showcasemachinetype_id" => $showcasemachinetype_id
+        ));
+
+        if (count($models) == 0) {
+            $candidate_crs = $this->CRS_m->getModels(array(
+                "make_id" => $trim_structure["make_id"],
+                "machine_type" => $trim_structure["machine_type"]
+            ));
+
+            $candidate = array();
+            $found_candidate = false;
+            foreach ($candidate_crs as $c) {
+                if ($c["model_id"] == $crs_model_id) {
+                    $candidate = $c;
+                    $found_candidate = true;
+                }
+            }
+
+            if (!$found_candidate) {
+                throw new \Exception("Model could not be found: $crs_model_id");
+            }
+
+            // we have to add a model
+            $model = $PSTAPI->showcasemodel()->add(array(
+                "showcasemake_id" =>$showcasemake_id,
+                "year" => $candidate["year"],
+                "crs_model_id" => $crs_model_id,
+                "showcasemachinetype_id" => $showcasemachinetype_id,
+                "title" => $candidate["model"],
+                "updated" => 1
+            ));
+        } else {
+            $model = $models[0];
+        }
+
+        $model->set("updated", 1);
+        $model->save();
+        $this->_ensureModelPage($crs_model_id);
+        return $model;
+    }
+
+    /*
+     * Array
+(
+    [year] => 2019
+    [version_number] => 201801003
+    [model] => RZR XP® 4 Turbo S
+    [model_id] => 86107
+    [make] => Polaris
+    [make_id] => 23
+    [machine_type] => UTV
+    [trim] => Base
+    [display_name] => RZR XP® 4 Turbo S
+    [description] => The Polaris RZR XP 4 Turbo S Base is a sport utility style utility vehicle with an MSRP of $30,499 and is new for 2019. Power is provided by a 4-Stroke, 925cc, Liquid cooled, DOHC, Parallel Twin engine with Electric starter. The engine is paired with transmission and total fuel capacity is 9.5 gallons. The RZR XP 4 Turbo S Base rides on Aluminum wheels with ITP Coyote 32 x 10-15 (8-Ply Rated) front tires and a ITP Coyote 32 x 10-15 (8-Ply Rated) rear tires. The front suspension is an Independent Double A-Arm while the rear suspension is an Independent. Front Hydraulic Disc brakes and rear Hydraulic Disc brakes provide stopping power. The RZR XP 4 Turbo S Base comes standard with a Bucket, 4-passenger seat.
+    [trim_id] => 245980
+    [msrp] => 30499.00
+    [engine_type] => Parallel Twin
+    [transmission] => Continuously Variable (CVT)
+    [default_category] => Sport Utility
+    [offroad] => 0
+)
+     */
+    protected function _assertTrim($trim_structure, $showcasemodel_id) {
+        global $PSTAPI;
+
+        // OK, well, is there one for this trim?
+        $trims = $PSTAPI->showcasetrim()->fetch(array(
+            "crs_trim_id" => $trim_structure["trim_id"]
+        ));
+
+        if (count($trims) == 0) {
+            // OK, we have to add it...
+            $trim = $PSTAPI->showcasetrim()->add(array(
+                "title" => $trim_structure["display_name"],
+                "description" => generateCRSDescription($trim_structure["display_name"], $trim_structure["description"]),
+                "crs_trim_id" => $trim_structure["trim_id"],
+                "updated" => 1
+            ));
+        } else {
+            $trim = $trims[0];
+        }
+
+        // We should make this a page!
+        $trim->set("updated", 1);
+        $trim->save();
+        $this->_ensureTrimPage($trim_structure["trim_id"]);
+        return $trim;
+    }
+
 
     protected function _addProductLine($crs_machinetype, $crs_make_id, $year) {
         $CI =& get_instance();
@@ -155,13 +471,16 @@ class Showcasemodel extends CI_Model {
             }
 
             // OK, that should handle updating this record.
-            $contains_one_valid_bike = $this->_addUpdateTrim($crs_machinetype, $crs_make_id, $year, $m) || $contains_one_valid_bike;
+            $contains_one_valid_bike = $this->_addUpdateTrim($m) || $contains_one_valid_bike;
         }
 
         if ($contains_one_valid_bike) {
             // Then, we have to ensure there is a MAKE page and a MODEL page.
             $this->_ensureMakePage($crs_make_id);
-            $this->_ensureMachineTypePage($crs_machinetype);
+            global $PSTAPI;
+            $make = $PSTAPI->showcasemake()->fetch(array("crs_make_id" => $crs_make_id));
+            $showcasemake_id = $make[0]->id();
+            $this->_ensureMachineTypePage($crs_machinetype, $showcasemake_id);
         }
 
         return $contains_one_valid_bike;
