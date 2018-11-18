@@ -82,7 +82,7 @@ class Internalapi extends CI_Controller {
                 $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
                 if ($motorcycle->get("crs_trim_id") > 0 && trim($motorcycle->get("description")) == "" && $motorcycle->get("customer_set_description") == 0) {
                     // then we need to do as we did for Lightspeed.
-                    fixCRSBike($motorcycle, true); // Don't change the title.
+                    fixCRSBike($motorcycle); // Don't change the title.
                 }
 
                 // denormalize that sucker.
