@@ -406,7 +406,7 @@ function generateCRSDescription($title, $description) {
 }
 
 // Fix the CRS bike
-function fixCRSBike(&$motorcycle, $exclude_title = false) {
+function fixCRSBike(&$motorcycle, $exclude_title = false, $exclude_description = false) {
     $motorcycle_id = $motorcycle->id();
     $CI =& get_instance();
     $CI->load->model("CRS_m");
@@ -421,7 +421,7 @@ function fixCRSBike(&$motorcycle, $exclude_title = false) {
     }
 
     // should we attempt to set the description?
-    if ($crs_trim[0]["description"] != "" && $motorcycle->get("customer_set_description") == 0 && $motorcycle->get("lightspeed_set_description") == 0) {
+    if ($crs_trim[0]["description"] != "" && $motorcycle->get("customer_set_description") == 0 && $motorcycle->get("lightspeed_set_description") == 0 && !$exclude_description) {
         $motorcycle->set("description", generateCRSDescription( $motorcycle->get("title"), $crs_trim[0]["description"] ));
         $motorcycle->save();
         $denormalize = true;
