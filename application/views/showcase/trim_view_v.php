@@ -65,7 +65,7 @@ if (count($showcasetrims) > 0) {
         }
     }));
 
-    $spec_groups =  $PSTAPI->showcasespecgroup()->fetch(array("deleted" => 0, "showcasetrim_id" => $showcasetrim-id()));
+    $spec_groups =  $PSTAPI->showcasespecgroup()->fetch(array("deleted" => 0, "showcasetrim_id" => $showcasetrim->id()));
     // LUT
     $specgroup_LUT = array();
     foreach ($spec_groups as $sg) {
