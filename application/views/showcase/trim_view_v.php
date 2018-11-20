@@ -50,7 +50,7 @@ if (count($showcasetrims) > 0) {
             ), true);
 
             ?>
-            <div class="col-md-8 col-xs-12 col-sm-7 pdig sect-sid">
+            <div class="col-md-12 col-xs-12 col-sm-12 pdig sect-sid">
                 <div class="clearfix" style="width:100%;">
                     <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
                         <?php foreach( $images as $image ) {
@@ -66,11 +66,11 @@ if (count($showcasetrims) > 0) {
                     </ul>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-5 pull-right bx-rit pdig sect-wdt">
-                <h3><?php $title;?></h3>
-
-
-            </div>
+<!--            <div class="col-md-4 col-sm-5 pull-right bx-rit pdig sect-wdt">-->
+<!--                <h3>--><?php //$title;?><!--</h3>-->
+<!---->
+<!---->
+<!--            </div>-->
         </div>
         <div class="col-md-12 col-xs-12 pdig padg-one" style="padding-top:50px;">
 
