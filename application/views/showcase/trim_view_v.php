@@ -88,7 +88,7 @@ if (count($showcasetrims) > 0) {
                 <hr class="hr-lne">
                 <?php if ($show_info): ?>
                     <div class="info" id="product-details-info-body">
-                        <?php echo $motorcycle['description'];?>
+                        <?php echo $description;?>
                     </div>
                 <?php endif; ?>
                 <?php if ($show_spec): ?>
