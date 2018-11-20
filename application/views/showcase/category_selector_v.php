@@ -120,7 +120,7 @@ switch ($pageRec["page_class"]) {
             <?php
 
             $grid_widgets = array();
-            function prepare_widget_group($title, $source_array, &$grid_widgets) {
+            function prepare_widget_group($title, $source_array, &$grid_widgets, $use_display_title = false) {
                 usort($source_array, function($a, $b) {
                     $a_title = $a->get("short_title");
                     $b_title = $b->get("short_title");
@@ -132,7 +132,7 @@ switch ($pageRec["page_class"]) {
                         "title" => $title,
                         "tiles" => array_map(function ($x) {
                             return array(
-                                "title" => $x->get("short_title"),
+                                "title" => $use_display_title ? $x->get("display_title") : $x->get("short_title"),
                                 "url_fragment" => $x->get("full_url"),
                                 "thumbnail" => $x->get("thumbnail_photo")
                             );
@@ -144,7 +144,7 @@ switch ($pageRec["page_class"]) {
 
 
             if ($display_makes) {
-                prepare_widget_group("", $showcasemakes, $grid_widgets);
+                prepare_widget_group("", $showcasemakes, $grid_widgets, true);
             } else if ($display_machine_types) {
                 prepare_widget_group("", $showcasemachinetypes, $grid_widgets);
              } else if ($display_models) {
