@@ -826,11 +826,67 @@ class Pages extends Master_Controller {
   		$js = '<script type="text/javascript" src="' . $this->_mainData['assets'] . '/ckeditor4/ckeditor.js"></script>';
   		$this->loadJS($js);
   		$this->_mainData['edit_config'] = $this->_mainData['assets'] . '/js/htmleditor.js';
-  		
+
+  		// We have to compute the flags based on the page information
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $page = $PSTAPI->pages()->get($pageId);
+
+        $this->_mainData["hidden_managed_page"] = false;
+        $this->_mainData["upload_thumbnail"] = false;
+        $this->_mainData["custom_link"] = false;
+        $this->_mainData["current_thumbnail"] = false;
+
+        if (!is_null($page)) {
+            // First, what page types do not permit being files or downloads?
+            $this->_mainData["hidden_managed_page"] = in_array($page->get("page_class"), array("System Page", "Part Section", "Showroom Model", "Showroom Trim", "Showroom Make", "Showroom Machine Type", "Showroom Landing Page"));
+            $this->_mainData["upload_thumbnail"] = in_array($page->get("page_class"), array("Showroom Model", "Showroom Trim", "Showroom Make", "Showroom Machine Type", "Showroom Landing Page"));
+
+            switch ($page->get("page_class")) {
+                case "Showroom Model":
+                    $this->_doPageFlagsShowroom("showcasemodel", $pageId);
+                    break;
+
+                case "Showroom Trim":
+                    $this->_doPageFlagsShowroom("showcasetrim", $pageId);
+                    break;
+
+                case "Showroom Make":
+                    $this->_doPageFlagsShowroom("showcasemake", $pageId);
+                    break;
+
+                case "Showroom Machine Type":
+                    $this->_doPageFlagsShowroom("showcasemachinetype", $pageId);
+                    break;
+
+                case "Showroom Landing Page":
+                    $this->_mainData["custom_link"] = "Factory_Showroom";
+                    break;
+            }
+        }
+
+
   		$this->setNav('admin/nav_v', 1);
 	  	$this->renderMasterPage('admin/master_v', 'admin/pages/edit_v', $this->_mainData);
   	}
-  	
+
+  	protected function _doPageFlagsShowroom($factory, $pageId) {
+	    global $PSTAPI;
+	    initializePSTAPI();
+
+        $models = $PSTAPI->$factory()->fetch(array(
+            "page_id" => $pageId
+        ));
+
+        if (count($models) > 0) {
+            $model = $models[0];
+            $this->_mainData["custom_link"] = "Factory_Showroom/" . $model->get("full_url");
+            $this->_mainData["current_thumbnail"] = $model->get("thumbnail_photo");
+
+        }
+    }
+
   	public function delete($pageId = NULL)
   	{
         $this->enforceAdmin("pages");
