@@ -130,7 +130,7 @@ switch ($pageRec["page_class"]) {
                 if (count($source_array) > 0) {
                     $grid_widgets[] = array(
                         "title" => $title,
-                        "tiles" => array_map(function ($x) {
+                        "tiles" => array_map(function ($x) use ($use_display_title) {
                             return array(
                                 "title" => $use_display_title ? $x->get("display_title") : $x->get("short_title"),
                                 "url_fragment" => $x->get("full_url"),
