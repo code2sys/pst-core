@@ -96,6 +96,10 @@
     }
 }
 
+.showroom-grid-widget .showroom-tile {
+    position: relative;
+}
+
 .showroom-grid-widget .showroom-tile-image {
     border: 1px solid black;
     background-size: contain;
