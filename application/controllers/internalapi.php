@@ -27,11 +27,10 @@ class Internalapi extends CI_Controller {
 
     public function dealertrack() {
 
-
         $file = $_FILES["upload"];
 
         if ($file["size"] > 0) {
-            ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+            ini_set('max_execution_time', 600); //300 seconds = 5 minutes
 
             global $PSTAPI;
             initializePSTAPI();
@@ -78,6 +77,13 @@ class Internalapi extends CI_Controller {
                     $this->CRS_m->fixCatsByTrim($motorcycle_id);
                 }
 
+                // JLB 11-17-18
+                // Set the description, if we can.
+                $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
+                if ($motorcycle->get("crs_trim_id") > 0) {
+                    // then we need to do as we did for Lightspeed.
+                    fixCRSBike($motorcycle, $motorcycle->get("customer_set_title") > 0, trim($motorcycle->get("description")) == "" && $motorcycle->get("customer_set_description") > 0); // Don't change the title.
+                }
 
                 // denormalize that sucker.
                 $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle_id);
@@ -87,6 +93,42 @@ class Internalapi extends CI_Controller {
             $PSTAPI->dealerTrackFeedLog()->end($log_id);
             $this->load->model("CRSCron_M");
             $this->CRSCron_M->removeExtraCRSBikes();
+
+        } else {
+            print "No file received.\n";
+        }
+    }
+
+    public function dealermade() {
+        $file = $_FILES["upload"];
+
+        if ($file["size"] > 0) {
+            ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+
+            global $PSTAPI;
+            initializePSTAPI();
+            
+            $image_count = 0;
+
+            // Start importing images
+            $contents = file_get_contents($file["tmp_name"]);
+            $log_id = $PSTAPI->externalMajorUnitImage()->begin($contents);
+
+            // Get the header
+            $handle = fopen($file["tmp_name"], "r");
+            $header = fgetcsv($handle);
+
+            while (FALSE !== ($row = fgetcsv($handle))) {
+                $data = array();
+                for ($i = 0; $i < count($header); $i++) {
+                    $data[strtolower(str_replace(' ', '_', trim($header[$i])))] = $row[$i];
+                }
+
+                $image_count += $PSTAPI->externalMajorUnitImage()->processRow($data);
+            }
+
+            // end importing images
+            $PSTAPI->externalMajorUnitImage()->end($log_id, $image_count);
 
         } else {
             print "No file received.\n";
