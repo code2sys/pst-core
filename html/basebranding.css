@@ -108,11 +108,17 @@
 }
 
 .showroom-grid-widget .showroom-tile-title {
+    position: absolute;
+    right: 0;
+    bottom: 0;
     text-align: right;
-    display: block;
     height: 32px;
     text-overflow: ellipsis;
     overflow-y: hidden;
+    font-size: 125%;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
 }
 
 
