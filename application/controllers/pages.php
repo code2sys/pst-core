@@ -763,6 +763,49 @@ class Pages extends Master_Controller {
 			// update page section ordinals
             $this->pages_m->updatePageSectionOrdinals($newId > 1 ? $newId : $pageId, $page_section_ids);
 
+            // JLB 11-20-18:
+            global $PSTAPI;
+            initializePSTAPI();
+
+            $page = $PSTAPI->pages()->get($pageId);
+
+            if (!is_null($page)) {
+                // We have to do some cleanup for the showroom.
+                if ($page->hasShowcaseObject()) {
+                    $object = $page->getShowcaseObject();
+
+                    if (!is_null($object)) {
+                        if ($page->hasThumbnail()) {
+                            $thumbnail = $_FILES["thumbnail"];
+
+                            if ($thumbnail["size"] > 0) {
+                                // let's just assume it's an image for now.
+
+                                $image_directory = STORE_DIRECTORY . "/html/media/pagethumbnails";
+
+                                if (!file_exists($image_directory)) {
+                                    mkdir($image_directory);
+                                }
+
+                                // move the image..
+                                $image_filename = $image_directory . "/" . time() . "_" . preg_replace("/[^0-9a-z\.\-\_]+/i", "_", $thumbnail["name"]);
+
+                                move_uploaded_file($thumbnail["tmp_name"], $image_filename);
+                                $object->set("thumbnail_photo",  "/media/pagethumbnails/" . basename($image_filename));
+                                $object->save();
+                            }
+                        }
+
+                        // If the title changed, you must change with it.
+                        if ($object->get("display_title") != $_REQUEST["label"]) {
+                            $object->set("display_title", $_REQUEST["label"]);
+                            $object->set("customer_set_title", 1);
+                            $object->save();
+                        }
+                    }
+                }
+            }
+
   			if(is_numeric($pageId) && ($newId > 1))
   				$pageId = $newId;
   			elseif($newId > 1)
@@ -841,23 +884,20 @@ class Pages extends Master_Controller {
         if (!is_null($page)) {
             // First, what page types do not permit being files or downloads?
             $this->_mainData["hidden_managed_page"] = in_array($page->get("page_class"), array("System Page", "Part Section", "Showroom Model", "Showroom Trim", "Showroom Make", "Showroom Machine Type", "Showroom Landing Page"));
-            $this->_mainData["upload_thumbnail"] = in_array($page->get("page_class"), array("Showroom Model", "Showroom Trim", "Showroom Make", "Showroom Machine Type", "Showroom Landing Page"));
+            $this->_mainData["upload_thumbnail"] = $page->hasThumbnail();
 
             switch ($page->get("page_class")) {
                 case "Showroom Model":
-                    $this->_doPageFlagsShowroom("showcasemodel", $pageId);
-                    break;
-
                 case "Showroom Trim":
-                    $this->_doPageFlagsShowroom("showcasetrim", $pageId);
-                    break;
-
                 case "Showroom Make":
-                    $this->_doPageFlagsShowroom("showcasemake", $pageId);
-                    break;
-
                 case "Showroom Machine Type":
-                    $this->_doPageFlagsShowroom("showcasemachinetype", $pageId);
+                    $model = $page->getShowcaseObject();
+                    if ($model) {
+                        $this->_mainData["custom_link"] = "Factory_Showroom/" . $model->get("full_url");
+                        $this->_mainData["current_thumbnail"] = $model->get("thumbnail_photo");
+
+                    }
+                    $this->_doPageFlagsShowroom("showcasemodel", $pageId);
                     break;
 
                 case "Showroom Landing Page":
@@ -881,8 +921,6 @@ class Pages extends Master_Controller {
 
         if (count($models) > 0) {
             $model = $models[0];
-            $this->_mainData["custom_link"] = "Factory_Showroom/" . $model->get("full_url");
-            $this->_mainData["current_thumbnail"] = $model->get("thumbnail_photo");
 
         }
     }

@@ -151,7 +151,7 @@
                         <?php if ($upload_thumbnail): ?>
                         <tr>
                             <td>Thumbnail</td>
-                            <td><?php if ($current_thumbnail && $current_thumbnail != ""): ?><strong>Current:</strong> <a href="<?php echo $current_thumbnail; ?>" download="download"><i class="fa fa-download">&nbsp;</i></a><br/><img src="<?php echo $current_thumbnail; ?>" width="300" height="150" /><br/><br/><?php endif; ?><strong>New Image:</strong><br/><input type="file" accept=".gif,.jpg,.png,image/gif,image/jpeg,image/png" /><br/><em>Please provide a GIF, JPG, or PNG image, under 2MB in size, that is twice as wide as it is tall. 800x400 pixels recommended.</em> </td>
+                            <td><?php if ($current_thumbnail && $current_thumbnail != ""): ?><strong>Current:</strong> <a href="<?php echo $current_thumbnail; ?>" download="download"><i class="fa fa-download">&nbsp;</i></a><br/><img src="<?php echo $current_thumbnail; ?>" width="300" height="150" /><br/><br/><?php endif; ?><strong>New Image:</strong><br/><input type="file" name="thumbnail" accept=".gif,.jpg,.png,image/gif,image/jpeg,image/png" /><br/><em>Please provide a GIF, JPG, or PNG image, under 2MB in size, that is twice as wide as it is tall. 800x400 pixels recommended.</em> </td>
                         </tr>
                         <?php endif; ?>
 

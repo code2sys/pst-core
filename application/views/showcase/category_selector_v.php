@@ -192,7 +192,7 @@ switch ($pageRec["page_class"]) {
                         }
                         ?>
                         <div class="span3 showroom-tile">
-                            <a href="<?php echo site_url('Factory_Showroom/' . $tile["url_fragment"]); ?>" class="showroom-tile-link"><div class="showroom-tile-image" style="background-image: url('<?php echo (is_null($tile['thumbnail']) || $tile['thumbnail'] == '') ? site_url('/assets/showcase_no_picture_available.png') : $tile['thumbnail']; ?>'); "></div><span class="showroom-tile-title"><?php echo $tile["title"]; ?></span><div class="clear: both"></div></a>
+                            <a href="<?php echo site_url('Factory_Showroom/' . $tile["url_fragment"]); ?>" class="showroom-tile-link"><div class="showroom-tile-image" style="background-image: url('<?php echo (is_null($tile['thumbnail']) || $tile['thumbnail'] == '') ? site_url('/assets/showcase_no_picture_available.png') : $tile['thumbnail']; ?>'); "></div><span class="showroom-tile-title"><?php echo $tile["display_title"]; ?></span><div class="clear: both"></div></a>
                         </div>
                         <?php
                     } ?>
