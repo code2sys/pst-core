@@ -211,10 +211,121 @@ class Showcasemodel extends CI_Model {
         return true;
     }
 
+    /*
+     * What does this need to do?
+     * We have to replicate the specs as they would appear on a motorcycle.
+     *
+     */
     protected function _fetchTrimSpecs($showcasetrim, $trim_structure) {
+        global $PSTAPI;
+        initializePSTAPI();
+
+        // Get the trim, specifically, which will include the specs..
+        $this->load->model("CRS_m");
+
+        // Then, iterate over specs, get the engine_type, transmission, retail_price, and category attributes. Category is just a string. At the same time, I believe we can run the code in parallel as it is on CRSCron_m to insert into spec group and the spec itself. We assume always a deep clean for PST-sourced ones?
+
+        $attributes = $this->CRS_m->getTrimAttributes($trim_structure["trim_id"], 0);
+
+        $existing_attributes = $PSTAPI->showcasespec()->fetch(array(
+            "showcasetrim_id" => $showcasetrim->id()
+        ));
+
+        // might as well make a LUT for this as well.
+        $existing_LUT = array();
+        foreach ($existing_attributes as $ea) {
+            $existing_LUT[$ea->get("crs_attribute_id")] = $ea;
+        }
+        $seen = array();
+
+        foreach ($attributes as $a) {
+            // You have to get the attribute group for it...
+            $showcasespecgroup_id = $this->_getAttributeGroup($showcasetrim->id(), $a["attributegroup_name"], $a["attributegroup_number"]);
+
+            $seen[$a["attribute_id"]] = true;
+            $attribute_id = $a["attribute_id"];
 
 
+            foreach (array(30003 => "engine_type", 40002 => "transmission", 20002 => "retail_price", 10011 => "category") as $id => $label) {
+                if ($attribute_id == $id) {
+                    if ($showcasetrim->get("customer_set_" . $label) == 0) {
+                        if ($showcasetrim->get($label) != $a["text_value"]) {
+                            $showcasetrim->set($label, $a["text_value"]);
+                            $showcasetrim->save();
+                        }
+                    }
+                }
+            }
 
+            if (array_key_exists($a["attribute_id"], $existing_LUT)) {
+                // we have to consider if an update is appropriate
+                $m = $existing_LUT[$a["attribute_id"]];
+                if ($m->get("override") == 0) {
+                    if ($m->get("value") != $a["text_value"] || $m->get("final_value") != $a["text_value"] || $m->geT("showcasespecgroup_id") != $showcasespecgroup_id) {
+                        $m->set("value", $a["text_value"]);
+                        $m->set("final_value", $a["text_value"]);
+                        $m->set("showcasespecgroup_id", $showcasespecgroup_id);
+                        $m->save();
+                    }
+                }
+            } else {
+                // you can just add it...
+                $PSTAPI->showcasespec()->add(array(
+                    "version_number" => $a["version_number"],
+                    "value" => $a["text_value"],
+                    "feature_name" => $a["feature_name"],
+                    "attribute_name" => $a["label"],
+                    "type" => $a["type"],
+                    "external_package_id" => $a["package_id"],
+                    "showcasetrim_id" => $showcasetrim->id(),
+                    "final_value" => $a["text_value"],
+                    "crs_attribute_id" => $a["attribute_id"],
+                    "showcasespecgroup_id" => $showcasespecgroup_id,
+                    "ordinal" => $a["attribute_id"] % 10000
+                ));
+            }
+
+        }
+
+        // now, you have to deep clean it.
+        foreach ($existing_attributes as $ea) {
+            if (!array_key_exists($ea->get("crs_attribute_id"), $seen)) {
+                $ea->remove();
+            }
+        }
+    }
+
+    protected $motorcycle_attributegroups;
+    protected function _getAttributeGroup($showcasetrim_id, $attributegroup_name, $attributegroup_number) {
+        if (!isset($this->motorcycle_attributegroups)) {
+            $this->motorcycle_attributegroups = array();
+        }
+
+        $key = $showcasetrim_id . "-" . $attributegroup_number;
+        if (array_key_exists($key, $this->motorcycle_attributegroups)) {
+            return $this->motorcycle_attributegroups[$key];
+        }
+
+        global $PSTAPI;
+        initializePSTAPI();
+        $matches = $PSTAPI->showcasespecgroup()->fetch(array(
+            "showcasetrim_id" => $showcasetrim_id,
+            "crs_attributegroup_number" => $attributegroup_number
+        ));
+
+        if (count($matches) == 0) {
+            // you have to add one.
+            $id = $PSTAPI->showcasespecgroup()->add(array(
+                "showcasetrim_id" => $showcasetrim_id,
+                "name" => $attributegroup_name,
+                "ordinal" => $attributegroup_number,
+                "crs_attributegroup_number" => $attributegroup_number
+            ))->id();
+        } else {
+            $id = $matches[0]->id();
+        }
+        $this->motorcycle_attributegroups[$key] = $id;
+        return $id;
     }
 
     // return a photo URL, or false if there isn't one. We'll use it to backfill the thumbnail photo.
