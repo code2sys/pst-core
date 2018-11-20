@@ -242,11 +242,16 @@ class Showcasemodel extends CI_Model {
         $seen = array();
 
         foreach ($attributes as $a) {
+            if (strtolower(trim($a["text_value"])) == "not available") {
+                continue;
+            }
+
             // You have to get the attribute group for it...
             $showcasespecgroup_id = $this->_getAttributeGroup($showcasetrim->id(), $a["attributegroup_name"], $a["attributegroup_number"]);
 
             $seen[$a["attribute_id"]] = true;
             $attribute_id = $a["attribute_id"];
+
 
 
             foreach (array(30003 => "engine_type", 40002 => "transmission", 20002 => "retail_price", 10011 => "category") as $id => $label) {
@@ -264,7 +269,7 @@ class Showcasemodel extends CI_Model {
                 // we have to consider if an update is appropriate
                 $m = $existing_LUT[$a["attribute_id"]];
                 if ($m->get("override") == 0) {
-                    if ($m->get("value") != $a["text_value"] || $m->get("final_value") != $a["text_value"] || $m->geT("showcasespecgroup_id") != $showcasespecgroup_id) {
+                    if ($m->get("value") != $a["text_value"] || $m->get("final_value") != $a["text_value"] || $m->get("showcasespecgroup_id") != $showcasespecgroup_id) {
                         $m->set("value", $a["text_value"]);
                         $m->set("final_value", $a["text_value"]);
                         $m->set("showcasespecgroup_id", $showcasespecgroup_id);
@@ -293,7 +298,8 @@ class Showcasemodel extends CI_Model {
         // now, you have to deep clean it.
         foreach ($existing_attributes as $ea) {
             if (!array_key_exists($ea->get("crs_attribute_id"), $seen)) {
-                $ea->remove();
+                $ea->set("deleted", 1);
+                $ea->save();
             }
         }
     }
