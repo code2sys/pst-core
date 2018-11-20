@@ -36,7 +36,9 @@ class Showroom extends Pages {
     }
 
     protected function _sub_sub_findPage($pages, $redirect_url) {
+        error_log("_sub_sub_findPage calling");
         if (count($pages) > 0) {
+            error_log("_sub_sub_findPage: Found tag: " . $pages[0]->get("tag"));
             parent::index($pages[0]->get("tag"));
         } else {
             header("Location: " . base_url($redirect_url));
