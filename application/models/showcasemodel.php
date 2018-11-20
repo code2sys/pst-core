@@ -209,7 +209,7 @@ class Showcasemodel extends CI_Model {
         $this->_ensureTrimPage($trim_structure["trim_id"]);
 
         // get its specs
-        $this->_fetchTrimStrimpecs($showcasetrim, $trim_structure);
+        $this->_fetchTrimSpecs($showcasetrim, $trim_structure);
 
         return true;
     }
