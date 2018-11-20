@@ -174,7 +174,7 @@ class Showcasemodel extends CI_Model {
         // fill the specs
         // fill the photos
         // then, you'll have to tack back for thumbnails if they do not exist...
-        $this->_fetchTrimPhotos($showcasetrim, $trim_structure);
+
         $photo = $this->_fetchTrimPhotos($showcasetrim, $trim_structure);
 
         if ($photo !== FALSE) {
@@ -207,6 +207,9 @@ class Showcasemodel extends CI_Model {
         // Make sure there is a page - we'll handle the machine type and make higher up.
         $this->_ensureModelPage($trim_structure["model_id"]);
         $this->_ensureTrimPage($trim_structure["trim_id"]);
+
+        // get its specs
+        $this->_fetchTrimSpecs($showcasetrim, $trim_structure);
 
         return true;
     }
