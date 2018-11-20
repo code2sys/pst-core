@@ -74,6 +74,7 @@ if (count($showcasetrims) > 0) {
 
 
     for ($i = 0; $i < count($specs); $i++) {
+        $show_spec = true;
         $specs[$i]["spec_group"] = $specgroup_LUT[ $specs[$i]["showcasespecgroup_id"]];
     }
 
