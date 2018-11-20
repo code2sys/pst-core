@@ -28,7 +28,53 @@ if (count($showcasetrims) > 0) {
         "deleted" => 0
     ), true);
 
-    // get the spec in there.
+
+    global $PSTAPI;
+    initializePSTAPI();
+    $specs = $PSTAPI->showcasespec()->fetch(array(
+        "showcasetrim_id" => $showcasetrim->id(),
+        "deleted" => 0
+    ), true);
+
+    // sort it..
+    usort($specs, function($a, $b) {
+        $a_o = intVal($a["ordinal"]);
+        $b_o = intVal($b["ordinal"]);
+
+        if ($a_o < $b_o) {
+            return -1;
+        } else if ($a_o > $b_o) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+
+    // you have to filter..
+    $hidden_groups = array_map(function($x) { return $x->id(); }, $PSTAPI->showcasespecgroup()->fetch(array("deleted" => 1, "showcasetrim_id" => $showcasetrim->id() )));
+
+    $specs = array_values(array_filter($specs, function($x) use ($hidden_groups) {
+        if ($x["crs_attribute_id"] >= 230000) {
+            return false;
+        } else if ($x["crs_attribute_id"] < 20000) {
+            return false;
+        } else if (in_array($x["showcasespecgroup_id"], $hidden_groups)) {
+            return false;
+        } else {
+            return true;
+        }
+    }));
+
+    $spec_groups =  $PSTAPI->showcasespecgroup()->fetch(array("deleted" => 0, "showcasetrim_id" => $showcasetrim-id()));
+    // LUT
+    $specgroup_LUT = array();
+    foreach ($spec_groups as $sg) {
+        $specgroup_LUT[$sg->id()] = $sg->get("name");
+    }
+
+    for ($i = 0; $i < count($specs); $i++) {
+        $specs[$i]["spec_group"] = $specgroup_LUT[ $specs[$i]["showcasespecgroup_id"]];
+    }
 
 
 }
@@ -80,7 +126,7 @@ if (count($showcasetrims) > 0) {
 					info
 				</span>
                 <?php endif; ?>
-                <?php if ($show_spec): ?>
+                <?php if (count($specs) > 0): ?>
                     <span href="#" class="btn info-btn" id="product-details-spec">
 					specifications
 				</span>
@@ -91,10 +137,69 @@ if (count($showcasetrims) > 0) {
                         <?php echo $description;?>
                     </div>
                 <?php endif; ?>
-                <?php if ($show_spec): ?>
+                <?php if (count($specs) > 0): ?>
                     <div class="info" id="product-details-spec-body">
 
+                        <div>
+                            <style scoped>
 
+                                .row1 {
+                                    background-color: white;
+                                }
+
+                                td {
+                                    padding: 3px;
+                                    width: 50%;
+                                }
+
+                                td.key {
+                                    font-weight: bold;
+                                }
+
+                                td.value {
+                                    text-align: right;
+                                }
+
+
+                            </style>
+                            <h3>Specifications</h3>
+
+                            <?php
+                            $feature_name = "";
+                            foreach ($specs as $s) {
+                            if ($feature_name != $s["spec_group"]) {
+                            if ($feature_name != ""):
+                                ?>
+                                </table>
+                            <?php
+                            endif;
+                            $feature_name = $s["spec_group"];
+                            ?>
+                            <p><strong><?php echo $feature_name; ?></strong></p>
+                            <table border="0" width="100%" class="stripedtable">
+                                <?php
+                                $k = 0;
+
+
+                                }
+                                ?>
+                                <tr class="row<?php echo $k; ?>">
+                                    <td class="key" valign="top"><?php echo $s["feature_name"] . ($s["attribute_name"] != "" ? " - " . $s["attribute_name"] : ""); ?></td>
+                                    <td class="value" valign="top"><?php echo $s["final_value"]; ?></td>
+                                </tr>
+                                <?php
+                                $k = 1 - $k;
+
+                                }
+
+                                ?>
+
+
+                                <?php if ($feature_name != ""): ?></table><?php endif; ?>
+
+
+                            <p><em>Certain features may require an additional add-on package that may not be included in the retail or sale price. Please contact the dealership for full details.</em></p>
+                        </div>
 
                     </div>
                 <?php endif; ?>
