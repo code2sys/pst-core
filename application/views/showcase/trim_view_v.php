@@ -72,12 +72,14 @@ if (count($showcasetrims) > 0) {
         $specgroup_LUT[$sg->id()] = $sg->get("name");
     }
 
-    print_r($specgroup_LUT); exit();
 
     for ($i = 0; $i < count($specs); $i++) {
+        print "Found: ";
+        print $specs[$i]["showcasespecgroup_id"] . "<br/>\n";
         $specs[$i]["spec_group"] = $specgroup_LUT[ $specs[$i]["showcasespecgroup_id"]];
     }
 
+    exit();
 
 }
 
