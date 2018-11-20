@@ -297,7 +297,7 @@ class Pages extends Master_Controller {
   	{
 		if(!empty($text))
 		{
-			if (preg_match('/^[\w]+$/', $text) == 1) {
+			if (preg_match('/^[\w_-]+$/', $text) == 1) {
 			    return TRUE;
 			}
 			else 
