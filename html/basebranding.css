@@ -102,6 +102,7 @@
     background-position-x: center;
     background-position-y: center;
     background-color: white;
+    background-repeat: no-repeat;
     width: 100%;
     position: relative;
 }
