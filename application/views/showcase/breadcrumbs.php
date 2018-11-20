@@ -11,7 +11,7 @@ if ($title != "") {
 if ($full_url != "") {
     // we have to generate the parts.
     ?>
-    <nav class="breadcrumb">
+    <nav class="breadcrumb showcasebreadcrumb">
 				<a href="<?php echo site_url(""); ?>">Home</a>
 				<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
 				<a href="<?php echo site_url("Factory_Showroom"); ?>">Factory Showroom</a>

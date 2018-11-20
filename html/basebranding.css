@@ -122,3 +122,7 @@
     display: block;
     margin-bottom: 3px;
 }
+
+.showcasebreadcrumb {
+    background-color: transparent;
+}
