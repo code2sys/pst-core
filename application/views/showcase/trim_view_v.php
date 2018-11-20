@@ -75,6 +75,7 @@ if (count($showcasetrims) > 0) {
 
     for ($i = 0; $i < count($specs); $i++) {
         print "Found: ";
+        print_r($specs[$i]);
         print $specs[$i]["showcasespecgroup_id"] . "<br/>\n";
         $specs[$i]["spec_group"] = $specgroup_LUT[ $specs[$i]["showcasespecgroup_id"]];
     }
