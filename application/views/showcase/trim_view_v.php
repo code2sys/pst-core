@@ -119,9 +119,9 @@ if (count($showcasetrims) > 0) {
 <!---->
 <!--            </div>-->
         </div>
-        <div class="col-md-12 col-xs-12 pdig padg-one" style="padding-top:50px;">
+        <div class="col-md-12 col-xs-12 " style="padding-top:50px;">
 
-            <div class="col-md-12 col-xs-12 col-sm-12 pdig vide-wdt">
+            <div class="col-md-12 col-xs-12 col-sm-12 ">
                 <?php if ($show_info): ?>
                     <span href="#" class="btn info-btn" id="product-details-info">
 					info
