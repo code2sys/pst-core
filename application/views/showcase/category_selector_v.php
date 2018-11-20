@@ -240,6 +240,6 @@ switch ($pageRec["page_class"]) {
 
 <script type="application/javascript">
     $(window).on("load", function() {
-        $(".showroom-tile-image").css("height", Math.floor(0.5 * $(".showroom-tile-image").width()) + "px");
+        $(".showroom-tile-image").css("height", Math.floor($(".showroom-tile-image").width()) + "px");
     })
 </script>
