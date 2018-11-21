@@ -158,14 +158,14 @@ class Pages_M extends Master_M
 		if(is_numeric($post['id']))
 		{
 			$where = array('id' => $post['id']);
-			return $PSTAPI->pages()->update($post['id'], $post)->to_array();
+			return $PSTAPI->pages()->update($post['id'], $post)->id();
 //			$success = $this->updateRecord('pages', $post, $where, FALSE);
 		}
 		else
 		{	
 			$data['delete'] = 1;
 			$data['active'] = 0;
-            return $PSTAPI->pages()->add($post)->to_array();
+            return $PSTAPI->pages()->add($post)->id();
 			//$success = $this->createRecord('pages', $post, FALSE);
 		}
 	}
