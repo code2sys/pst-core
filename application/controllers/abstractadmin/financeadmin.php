@@ -147,6 +147,7 @@ abstract class Financeadmin extends Motorcycleadmin {
             $data['first_name'] = $post['fname'];
             $data['last_name'] = $post['lname'];
             $data['driver_licence'] = $post['dl'];
+            $data['driver_licence_state'] = $post['driver_licence_state'];
             $data['driver_licence_expiration'] = $post['driver_licence_expiration'];
             $data['email'] = $post['email'];
             $data['co_first_name'] = $post['co_fname'];
@@ -178,7 +179,11 @@ abstract class Financeadmin extends Motorcycleadmin {
         $this->_mainData['application'] = $this->admin_m->getCreditApplication($id);
         $this->_mainData['id'] = $id;
         $this->setNav('admin/nav_v', 5);
-        $this->renderMasterPage('admin/master_v', 'admin/finance/edit_v', $this->_mainData);
+        if (defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW) {
+            $this->renderMasterPage('admin/master_v', 'admin/finance/edit_v_bluff', $this->_mainData);
+        } else {
+            $this->renderMasterPage('admin/master_v', 'admin/finance/edit_v', $this->_mainData);
+        }
     }
 
     public function finance_delete($id = null) {
@@ -197,6 +202,10 @@ abstract class Financeadmin extends Motorcycleadmin {
         }
         $this->_mainData['application'] = $this->admin_m->getCreditApplication($id);
         $this->setNav('admin/nav_v', 5);
-        $this->renderMasterPage('admin/master_v_blank', 'admin/finance/print_v', $this->_mainData);
+        if (defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW) {
+            $this->renderMasterPage('admin/master_v_blank', 'admin/finance/print_v_bluff', $this->_mainData);
+        } else {
+            $this->renderMasterPage('admin/master_v_blank', 'admin/finance/print_v', $this->_mainData);
+        }
     }
 }
