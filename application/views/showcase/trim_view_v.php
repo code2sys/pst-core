@@ -127,7 +127,7 @@ if (count($showcasetrims) > 0) {
                 <h3><?php $title;?></h3>
 
                 <?php if (floatVal($showcasetrim->get("retail_price")) > 0): ?>
-                <p>Starting at $<?php echo number_format(floatVal($showcasetrim->get("retail_price"), 2)); ?></p>
+                <p>Starting at $<?php echo number_format(floatVal($showcasetrim->get("retail_price")), 2); ?></p>
                 <?php endif; ?>
 
                 <h4>Highlights</h4>
