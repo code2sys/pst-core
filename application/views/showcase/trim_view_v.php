@@ -78,6 +78,16 @@ if (count($showcasetrims) > 0) {
         $specs[$i]["spec_group"] = $specgroup_LUT[ $specs[$i]["showcasespecgroup_id"]];
     }
 
+    // "year", "make", "model", "vehicle_type",
+    $showcasemodel = $PSTAPI->showcasemodel()->get($showcasetrim->get("showcasemodel_id"));
+    $showcasemachinetype = $PSTAPI->showcasemachinetype()->get($showcasemodel->get("showcasemachinetype_id"));
+    $showcasemake = $PSTAPI->showcasemake()->get($showcasemachinetype->get("showcasemake_id"));
+
+    $showcasetrim->set("year", $showcasemodel->get("year"));
+    $showcasetrim->set("model", $showcasemodel->get("short_title"));
+    $showcasetrim->set("make", $showcasemake->get("display_title"));
+    $showcasetrim->set("vehicle_type", $showcasemachinetype->get("short_title"));
+
 }
 
 ?>
@@ -97,7 +107,7 @@ if (count($showcasetrims) > 0) {
             ), true);
 
             ?>
-            <div class="col-md-12 col-xs-12 col-sm-12 pdig sect-sid">
+            <div class="col-md-8 col-xs-12 col-sm-7 pdig sect-sid">
                 <div class="clearfix" style="width:100%;">
                     <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
                         <?php foreach( $images as $image ) {
@@ -113,11 +123,26 @@ if (count($showcasetrims) > 0) {
                     </ul>
                 </div>
             </div>
-<!--            <div class="col-md-4 col-sm-5 pull-right bx-rit pdig sect-wdt">-->
-<!--                <h3>--><?php //$title;?><!--</h3>-->
-<!---->
-<!---->
-<!--            </div>-->
+            <div class="col-md-4 col-sm-5 pull-right bx-rit pdig sect-wdt">
+                <h3><?php $title;?></h3>
+
+                <?php if (floatVal($showcasetrim->get("msrp")) > 0): ?>
+                <p>Starting at $<?php echo number_format(floatVal($showcasetrim->get("msrp"), 2)); ?></p>
+                <?php endif; ?>
+
+                <h4>Highlights</h4>
+                <hr>
+
+                <?php foreach (array("year", "make", "model", "vehicle_type", "category", "engine_type", "transmission") as $k):
+                    if ($showcasetrim->get($k) != ""): ?>
+                    <div class="dtal-txt">
+                        <label><?php echo ucwords(str_replace("_", " ", $k)); ?>:</label>
+                        <span><?php echo $showcasetrim->get($k); ?></span>
+                    </div>
+                <?php endif; endforeach; ?>
+
+
+            </div>
         </div>
         <div class="col-md-12 col-xs-12 " style="padding-top:50px;">
 
