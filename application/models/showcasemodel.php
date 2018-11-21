@@ -278,7 +278,7 @@ class Showcasemodel extends CI_Model {
                 }
             } else {
                 // you can just add it...
-                $existing_LUT[$a["attribute_id"] = $PSTAPI->showcasespec()->add(array(
+                $existing_LUT[$a["attribute_id"]] = $PSTAPI->showcasespec()->add(array(
                     "version_number" => $a["version_number"],
                     "value" => $a["text_value"],
                     "feature_name" => $a["feature_name"],
