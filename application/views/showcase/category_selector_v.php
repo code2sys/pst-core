@@ -95,6 +95,21 @@ switch ($pageRec["page_class"]) {
         break;
 }
 
+if ($display_models) {
+    // we have to convert these to trims...
+    $showcasetrims = array();
+
+    foreach ($showcasemodels as $scm) {
+        $showcasetrims = array_merge($showcasetrims, $PSTAPI->showcasetrim()->fetch(array(
+            "showcasemodel_id" => $scm->get("showcasemodel_id"),
+            "deleted" => 0
+        )));
+    }
+
+    $display_models = false;
+    $display_trims = true;
+}
+
 ?>
 
 <!-- CONTENT WRAP =========================================================================-->
@@ -142,12 +157,7 @@ switch ($pageRec["page_class"]) {
 
             };
 
-
-            if ($display_makes) {
-                prepare_widget_group("", $showcasemakes, $grid_widgets, true);
-            } else if ($display_machine_types) {
-                prepare_widget_group("", $showcasemachinetypes, $grid_widgets);
-            } else if ($display_models) {
+            function sortByCategoryOrYear($showcasemodels, $grid_widgets) {
 
                 // First, you have to figure out if they have categories...
 
@@ -211,10 +221,17 @@ switch ($pageRec["page_class"]) {
                         prepare_widget_group($year. " Models", $buckets, $grid_widgets);
                     }
                 }
+            }
 
 
+            if ($display_makes) {
+                prepare_widget_group("", $showcasemakes, $grid_widgets, true);
+            } else if ($display_machine_types) {
+                prepare_widget_group("", $showcasemachinetypes, $grid_widgets);
+            } else if ($display_models) {
+                sortByCategoryOrYear($showcasemodels, $grid_widgets);
             } else if ($display_trims) {
-                prepare_widget_group("Trims", $showcasetrims, $grid_widgets);
+                sortByCategoryOrYear($showcasetrims, $grid_widgets);
             }
 
 
