@@ -123,6 +123,8 @@ class Showcasemodel extends CI_Model {
                     "tag" => $tag
                 ));
                 print "F\n";
+                print_r($page_to_array());
+                print "Page ID: " . $page->id() . "\n";
                 $make->set("page_id", $page->id());
                 $make->save();
             }
