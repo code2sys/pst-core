@@ -90,22 +90,27 @@ class Showcasemodel extends CI_Model {
         $make = $PSTAPI->$factory()->fetch($query_data);
 
         if (count($make) == 0) {
+            print "A\n";
             return;
         }
         $make = $make[0];
 
         if ($make->get("deleted") == 0) {
+            print "B\n";
             $make->set("updated", 1);
             $make->save();
 
             // Now, find a page...
             if ($make->get("page_id") > 0) {
+                print "C\n";
                 $page = $PSTAPI->pages()->get($make->get("page_id"));
                 if ($page->get("active") == 0) {
                     $page->set("active", 1);
                     $page->save();
+                    print "D\n";
                 }
             } else {
+                print "E\n";
                 $tag = preg_replace("/[^a-z0-9\-\_]+/", "_", strtolower($type . " " . $make->get("title")));
 
                 // make the page...
@@ -117,9 +122,11 @@ class Showcasemodel extends CI_Model {
                     "page_class" => $type,
                     "tag" => $tag
                 ));
+                print "F\n";
                 $make->set("page_id", $page->id());
                 $make->save();
             }
+            print "G\n";
         }
     }
 
