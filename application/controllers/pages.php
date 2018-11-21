@@ -813,8 +813,10 @@ class Pages extends Master_Controller {
   		}
   		if(is_numeric($pageId))
   		{
+  		    global $PSTAPI;
+  		    initializePSTAPI();
                         $this->_mainData['bannerlibrary'] = 'bannerlibrary';
-	  		$this->_mainData['pageRec'] = $this->pages_m->getPageRec($pageId);
+	  		$this->_mainData['pageRec'] = $PSTAPI->pages()->get($pageId)->to_array(); // $this->pages_m->getPageRec($pageId);
 	  		$this->setMasterPageVars('descr', $this->_mainData['pageRec']['metatags']);
 	  		$this->setMasterPageVars('title', $this->_mainData['pageRec']['title']);
 	  		$this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
