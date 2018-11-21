@@ -463,6 +463,7 @@ class Showcasemodel extends CI_Model {
                 "short_title" => $make_name
             ));
         } else {
+            $this->_makeMap[$make_name] = $PSTAPI->showcasemake()->get($this->_makeMap[$make_name]->id());
             $this->_makeMap[$make_name]->set("title", $make_name);
             $this->_makeMap[$make_name]->set("short_title", $make_name);
             $this->_makeMap[$make_name]->set("updated", 1);
