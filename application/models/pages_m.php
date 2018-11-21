@@ -40,9 +40,10 @@ class Pages_M extends Master_M
 	
 	public function getPageRec($pageId)
 	{
-		$where = array('id' => $pageId);
-		$record = $this->selectRecord('pages', $where);
-		return $record;
+	    global $PSTAPI;
+	    initializePSTAPI();
+	    $obj = $PSTAPI->pages()->get($pageId);
+	    return is_null($obj) ? false : $obj->to_array();
 	}
 	
 	public function getPageRecByTag($tag)
