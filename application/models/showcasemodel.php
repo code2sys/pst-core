@@ -69,8 +69,8 @@ class Showcasemodel extends CI_Model {
     }
 
     // this should also mark it as updated IF it is not deleted.
-    protected function _ensureMakePage($crs_make_id) {
-        $this->_subSimpleEnsurePage("showcasemake", "crs_make_id", $crs_make_id, $this->_pageType_make());
+    protected function _ensureMakePage($make) {
+        $this->_subSimpleEnsurePage("showcasemake", "title", $make, $this->_pageType_make());
     }
 
     protected function _subSimpleEnsurePage($factory, $key_field, $value, $type) {
@@ -123,7 +123,14 @@ class Showcasemodel extends CI_Model {
     }
 
     // this should also mark it as updated IF it is not deleted.
-    protected function _ensureMachineTypePage($crs_machinetype, $showcasemake_id) {
+    protected function _ensureMachineTypePage($crs_machinetype, $make_name) {
+        global $PSTAPI;
+        initializePSTAPI();
+        $makes = $PSTAPI->showcasemake()->fetch(array(
+            "title" => $make_name
+        ));
+        $showcasemake_id = count($makes) > 0 ? $makes[0]->id() : null;
+
         $this->_subSimpleEnsurePage("showcasemachinetype", array("crs_machinetype", "showcasemake_id"), array($crs_machinetype, $showcasemake_id), $this->_pageType_machinetype());
     }
 
@@ -140,7 +147,7 @@ class Showcasemodel extends CI_Model {
     // Return true if this is added at the end of it..
     protected function _addUpdateTrim($trim_structure) {
         // You have to make sure there's an entry for the make, and an entry for the make, machine type, and model as well...
-        $showcasemake = $this->_assertMake($trim_structure["make_id"]);
+        $showcasemake = $this->_assertMake($trim_structure["make"]);
 
         if ($showcasemake->get("deleted") > 0) {
             return false; // the make has been deleted!
@@ -398,50 +405,52 @@ class Showcasemodel extends CI_Model {
      * The following make sure that these exist. Don't worry, you're going to ensure there's a page if you get this far.
      */
     protected $_makeMap;
-    protected function _assertMake($crs_make_id) {
+    protected function _assertMake($make_name) {
         global $PSTAPI;
 
-        // OK, we have to make one, which means, we have to get the information about it.
         if (!isset($this->_makeMap)) {
             $this->_makeMap = array();
-            $makes = $this->CRS_m->getMakes();
-            foreach ($makes as $m) {
-                $make_id = intVal($m["make_id"]);
-                $this->_makeMap[$make_id] = $m;
-            }
         }
 
-        $makes = $PSTAPI->showcasemake()->fetch(array(
-            "crs_make_id" => $crs_make_id
-        ));
-
-
-        $crs_make_id = intVal($crs_make_id);
-
-        if (!array_key_exists($crs_make_id, $this->_makeMap)) {
-            throw new \Exception("Could not find make in make map: " . $crs_make_id);
-        }
+//        // OK, we have to make one, which means, we have to get the information about it.
+//        if (!isset($this->_makeMap)) {
+//            $this->_makeMap = array();
+//            $makes = $this->CRS_m->getMakes();
+//            foreach ($makes as $m) {
+//                $make_id = intVal($m["make_id"]);
+//                $this->_makeMap[$m["title"]] = $m;
+//            }
+//        }
+//
+//        $makes = $PSTAPI->showcasemake()->fetch(array(
+//            "crs_make_id" => $crs_make_id
+//        ));
+//
+//
+//        $crs_make_id = intVal($crs_make_id);
+//
+//        if (!array_key_exists($crs_make_id, $this->_makeMap)) {
+//            throw new \Exception("Could not find make in make map: " . $crs_make_id);
+//        }
 
         // OK, now, it's in there, so we should be able to make this thing.
-        $crs_data = $this->_makeMap[$crs_make_id];
+        if (array_key_exists($make_name, $this->_makeMap)) {
 
-        if (count($makes) == 0) {
-
-            return $PSTAPI->showcasemake()->add(array(
-                "make" => $crs_data["make"],
-                "crs_make_id" => $crs_make_id,
+            $this->_makeMap[$make_name] = $PSTAPI->showcasemake()->add(array(
+                "make" => $make_name,
                 "description" => "",
                 "updated" => 1,
-                "title" => $crs_data["make"],
-                "short_title" => $crs_data["make"]
+                "title" => $make_name,
+                "short_title" => $make_name
             ));
         } else {
-            $makes[0]->set("title", $crs_data["make"]);
-            $makes[0]->set("short_title", $crs_data["make"]);
-            $makes[0]->set("updated", 1);
-            $makes[0]->save();
-            return $makes[0]; // that's the one!
+            $this->_makeMap[$make_name]->set("title", $make_name);
+            $this->_makeMap[$make_name]->set("short_title", $make_name);
+            $this->_makeMap[$make_name]->set("updated", 1);
+            $this->_makeMap[$make_name]->save();
         }
+
+        return $this->_makeMap[$make_name];
     }
 
     // The difference here: The machine types, although independent in CRS, are downstream from Make in the showroom.
@@ -611,6 +620,10 @@ class Showcasemodel extends CI_Model {
 
         $contains_one_valid_bike = false;
 
+        $ensured_make = array();
+        $ensured_machine_types = array();
+
+
         foreach ($matching_motorcycles as $m) {
 
             // JLB 11-15-18 - I added a more complicated approval function. This may be redundant.
@@ -621,16 +634,18 @@ class Showcasemodel extends CI_Model {
             }
 
             // OK, that should handle updating this record.
-            $contains_one_valid_bike = $this->_addUpdateTrim($m) || $contains_one_valid_bike;
-        }
-
-        if ($contains_one_valid_bike) {
-            // Then, we have to ensure there is a MAKE page and a MODEL page.
-            $this->_ensureMakePage($crs_make_id);
-            global $PSTAPI;
-            $make = $PSTAPI->showcasemake()->fetch(array("crs_make_id" => $crs_make_id));
-            $showcasemake_id = $make[0]->id();
-            $this->_ensureMachineTypePage($crs_machinetype, $showcasemake_id);
+            if ($this->_addUpdateTrim($m)) {
+                $contains_one_valid_bike = true;
+                $key = $crs_machinetype . "-" .  $crs_make;
+                if (!array_key_exists($key, $ensured_machine_types)) {
+                    $this->_ensureMachineTypePage($crs_machinetype, $crs_make);
+                    $ensured_machine_types[$key] = true;
+                }
+                if (!array_key_exists($crs_make, $ensured_make)) {
+                    $ensured_make[$crs_make] = true;
+                    $this->_ensureMakePage($crs_make);
+                }
+            }
         }
 
         return $contains_one_valid_bike;
