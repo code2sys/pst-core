@@ -211,6 +211,11 @@ if ($display_models) {
                             $clean_bucket[] = $cb;
                         }
 
+                        print "<!--  Clean bucket: ";
+                        print_r($clean_bucket);
+                        print "-->";
+                        
+
                         prepare_widget_group($c, $clean_bucket, $grid_widgets);
                     }
 
