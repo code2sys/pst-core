@@ -126,8 +126,8 @@ if (count($showcasetrims) > 0) {
             <div class="col-md-4 col-sm-5 pull-right bx-rit pdig sect-wdt">
                 <h3><?php $title;?></h3>
 
-                <?php if (floatVal($showcasetrim->get("msrp")) > 0): ?>
-                <p>Starting at $<?php echo number_format(floatVal($showcasetrim->get("msrp"), 2)); ?></p>
+                <?php if (floatVal($showcasetrim->get("retail_price")) > 0): ?>
+                <p>Starting at $<?php echo number_format(floatVal($showcasetrim->get("retail_price"), 2)); ?></p>
                 <?php endif; ?>
 
                 <h4>Highlights</h4>
