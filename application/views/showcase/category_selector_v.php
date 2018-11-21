@@ -199,7 +199,7 @@ if ($display_models) {
                         $cat_bucket = $category_buckets[$c];
 
                         usort($cat_bucket, function($a, $b) {
-                            if ($a->get("year") != $b->get("year")) {
+                            if (intVal($a->get("year")) != intVal($b->get("year"))) {
                                 // newer first...
                                 return (intVal($a->get("year")) > intVal($b->get("year"))) ? -1 : 1;
                             } else {
