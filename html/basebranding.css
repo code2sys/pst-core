@@ -116,7 +116,7 @@
     right: 5%;
     bottom: 0;
     text-align: right;
-    height: 32px;
+    margin-bottom: 18px;
     text-overflow: ellipsis;
     overflow-y: hidden;
     font-size: 125%;
