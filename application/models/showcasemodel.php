@@ -70,6 +70,7 @@ class Showcasemodel extends CI_Model {
 
     // this should also mark it as updated IF it is not deleted.
     protected function _ensureMakePage($make) {
+        print "Call to _ensureMakePAge $make \n";
         $this->_subSimpleEnsurePage("showcasemake", "title", $make, $this->_pageType_make());
     }
 
