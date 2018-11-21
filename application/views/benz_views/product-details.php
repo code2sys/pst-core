@@ -383,6 +383,11 @@ echo $CI->load->view("showvideo_function", array(), false);
     #image-gallery li {
         background-color: white;
     }
+    #image-gallery li.clone img{
+        object-fit: cover !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
 
 </style>
 

@@ -25,6 +25,10 @@
     -webkit-transition-property: -webkit-transform,height;
     -moz-transition-property: -moz-transform,height;
     transition-property: transform,height;
+    -webkit-transition-duration: inherit !important;
+    transition-duration: inherit !important;
+    -webkit-transition-timing-function: inherit !important;
+    transition-timing-function: inherit !important;
 }
 .lSSlideWrapper .lSFade {
     position: relative;
