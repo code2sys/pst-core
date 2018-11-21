@@ -565,9 +565,9 @@ class Pages extends Master_Controller {
 					redirect($this->_mainData['s_baseURL'] . 'pages/index/financerequest');
                 }
                 if (defined('BLUFFPOWERSPORTS_VIEW') && BLUFFPOWERSPORTS_VIEW) {
-                    $this->processCreditForm();    
-                } else {
                     $this->processCreditFormBLUFF();
+                } else {                    
+                    $this->processCreditForm();    
                 }
 		  		// $block = $this->_mainData['widgetBlock'];
 				//$this->load->helper('easy_captcha_helper');
