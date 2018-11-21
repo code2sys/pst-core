@@ -75,6 +75,8 @@ class Showcasemodel extends CI_Model {
     }
 
     protected function _subSimpleEnsurePage($factory, $key_field, $value, $type) {
+        print"Call to  _subSimpleEnsurePage($factory, $key_field, $value, $type) \n";
+
         global $PSTAPI;
 
         $query_data = array();
@@ -102,7 +104,7 @@ class Showcasemodel extends CI_Model {
 
             // Now, find a page...
             if ($make->get("page_id") > 0) {
-                print "C\n";
+                print "C Page " . $make->get("page_id") . " ID " . $make->id() . "\n";
                 $page = $PSTAPI->pages()->get($make->get("page_id"));
                 if ($page->get("active") == 0) {
                     $page->set("active", 1);
