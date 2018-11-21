@@ -127,6 +127,8 @@ class Showcasemodel extends CI_Model {
                 print "Page ID: " . $page->id() . "\n";
                 $make->set("page_id", $page->id());
                 $make->save();
+                print "Updated page for make " . $make->id() . " \n";
+                sleep(15);
             }
             print "G\n";
         }
