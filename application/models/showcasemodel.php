@@ -56,7 +56,8 @@ class Showcasemodel extends CI_Model {
                 "active" => 1,
                 "delete" => 0,
                 "page_class" => $this->_pageType_main(),
-                "tag" => "factoryshowroom"
+                "tag" => "factoryshowroom",
+                "location" => "footer,comp_info"
             ));
         } else {
             // we just have to make sure it's active.

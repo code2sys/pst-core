@@ -136,9 +136,10 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 
 <?php
 $CI =& get_instance();
+$CI->load->model("pages_m");
 echo $CI->load->view("benz_views/real_footer", array(
     "store_name" => $store_name,
-    "pages" => $pages,
+    "pages" => $CI->pages_m->getPages(1, 'footer'),
     "SMSettings" => $SMSettings
 ), true);
 
