@@ -75,6 +75,7 @@ class Showcasemodel extends CI_Model {
 
     protected function _subSimpleEnsurePage($factory, $key_field, $value, $type) {
         global $PSTAPI;
+        initializePSTAPI();
 
         $query_data = array();
 
