@@ -94,8 +94,8 @@ class Showcasemodel extends CI_Model {
         $make = $make[0];
 
         if ($make->get("deleted") == 0) {
+            $PSTAPI->$factory()->update($make->id(), array("updated" => 1));
             $make->set("updated", 1);
-            $make->save();
 
             // Now, find a page...
             if ($make->get("page_id") > 0) {
@@ -116,8 +116,7 @@ class Showcasemodel extends CI_Model {
                     "page_class" => $type,
                     "tag" => $tag
                 ));
-                $make->set("page_id", $page->id());
-                $make->save();
+                $PSTAPI->$factory()->update($make->id(), array("page_id" => $page->id()));
             }
         }
     }
@@ -146,6 +145,9 @@ class Showcasemodel extends CI_Model {
 
     // Return true if this is added at the end of it..
     protected function _addUpdateTrim($trim_structure) {
+        global $PSTAPI;
+        initializePSTAPI();
+
         // You have to make sure there's an entry for the make, and an entry for the make, machine type, and model as well...
         $showcasemake = $this->_assertMake($trim_structure["make"]);
 
@@ -191,23 +193,23 @@ class Showcasemodel extends CI_Model {
             if (is_null($showcasetrim->get("thumbnail_photo")) || $showcasetrim->get("thumbnail_photo") == "") {
                 // OK, we have to set it.
                 $showcasetrim->set("thumbnail_photo", $photo);
-                $showcasetrim->save();
-            }           
+                $PSTAPI->showcasetrim()->update($showcasetrim->id(), array("thumbnail_photo" => $photo));
+            }
             // consider setting these..
             if (is_null($showcasemodel->get("thumbnail_photo")) || $showcasemodel->get("thumbnail_photo") == "") {
                 // OK, we have to set it.
                 $showcasemodel->set("thumbnail_photo", $photo);
-                $showcasemodel->save();
+                $PSTAPI->showcasemodel()->update($showcasemodel->id(), array("thumbnail_photo" => $photo));
             }
             if (is_null($showcasemachinetype->get("thumbnail_photo")) || $showcasemachinetype->get("thumbnail_photo") == "") {
                 // OK, we have to set it.
                 $showcasemachinetype->set("thumbnail_photo", $photo);
-                $showcasemachinetype->save();
+                $PSTAPI->showcasemachinetype()->update($showcasemachinetype->id(), array("thumbnail_photo" => $photo));
             }           
             if (is_null($showcasemake->get("thumbnail_photo")) || $showcasemake->get("thumbnail_photo") == "") {
                 // OK, we have to set it.
                 $showcasemake->set("thumbnail_photo", $photo);
-                $showcasemake->save();
+                $PSTAPI->showcasemake()->update($showcasemake->id(), array("thumbnail_photo" => $photo));
             }
         }
 
@@ -267,7 +269,9 @@ class Showcasemodel extends CI_Model {
                     if ($showcasetrim->get("customer_set_" . $label) == 0) {
                         if ($showcasetrim->get($label) != $a["text_value"]) {
                             $showcasetrim->set($label, $a["text_value"]);
-                            $showcasetrim->save();
+                            $PSTAPI->showcasetrim()->update($showcasetrim->id(), array(
+                                $label => $a["text_value"]
+                            ));
                         }
                     }
                 }
@@ -530,6 +534,7 @@ class Showcasemodel extends CI_Model {
         $showcasemachinetype = $PSTAPI->showcasemachinetype()->get($showcasemachinetype_id);
         $showcasemake = $PSTAPI->showcasemake()->get($showcasemachinetype->get("showcasemake_id"));
 
+        $update_array = array();
         if (count($models) == 0) {
 
             // we have to add a model
@@ -546,10 +551,15 @@ class Showcasemodel extends CI_Model {
             $model = $models[0];
             $model->set("title", $candidate["year"] . " " . $showcasemake->get("title") . " " . $candidate["model"]);
             $model->set("short_title", $candidate["year"] . " " . $candidate["model"]);
+            $update_array = array(
+                "short_title" => $candidate["year"] . " " . $candidate["model"],
+                "title" => $candidate["year"] . " " . $showcasemake->get("title") . " " . $candidate["model"]
+            );
         }
 
+        $update_array["updated"] = 1;
         $model->set("updated", 1);
-        $model->save();
+        $PSTAPI->showcasemodel()->update($model->id(), $update_array);
         $this->_ensureModelPage($crs_model_id);
         return $model;
     }
@@ -586,6 +596,7 @@ class Showcasemodel extends CI_Model {
         $showcasemachinetype = $PSTAPI->showcasemachinetype()->get($showcasemodel->get("showcasemachinetype_id"));
         $showcasemake = $PSTAPI->showcasemake()->get($showcasemachinetype->get("showcasemake_id"));
 
+        $update_array = array();
         if (count($trims) == 0) {
 
             // OK, we have to add it...
@@ -601,11 +612,16 @@ class Showcasemodel extends CI_Model {
             $trim = $trims[0];
             $trim->set("title", $showcasemodel->get("year") . " " . $showcasemake->get("title") . " " . $trim_structure["display_name"]);
             $trim->set("short_title", $trim_structure["display_name"]);
+            $update_array = array(
+                "title" => $trim->get("title"),
+                "short_title" => $trim->get("short_title")
+            );
         }
 
         // We should make this a page!
         $trim->set("updated", 1);
-        $trim->save();
+        $update_array["updated"] = 1;
+        $PSTAPI->showcasetrim()->update($trim->id(), $update_array);
         $this->_ensureTrimPage($trim_structure["trim_id"]);
         return $trim;
     }
