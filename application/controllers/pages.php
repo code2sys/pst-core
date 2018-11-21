@@ -1026,6 +1026,13 @@ class Pages extends Master_Controller {
                             $object->set("customer_set_title", 1);
                             $object->save();
                         }
+
+                        // If the caption changed, you must change with it.
+                        if (array_key_exists("short_title", $_REQUEST) && $object->get("short_title") != $_REQUEST["short_title"]) {
+                            $object->set("short_title", $_REQUEST["short_title"]);
+                            $object->set("customer_set_short_title", 1);
+                            $object->save();
+                        }
                     }
                 }
             }
@@ -1121,6 +1128,7 @@ class Pages extends Master_Controller {
                     if ($model) {
                         $this->_mainData["custom_link"] = "Factory_Showroom/" . $model->get("full_url");
                         $this->_mainData["current_thumbnail"] = $model->get("thumbnail_photo");
+                        $this->_mainData["short_title"] = $model->get("short_title");
 
                     }
                     $this->_doPageFlagsShowroom("showcasemodel", $pageId);

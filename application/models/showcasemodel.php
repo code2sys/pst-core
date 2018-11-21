@@ -456,7 +456,9 @@ class Showcasemodel extends CI_Model {
         } else {
             $this->_makeMap[$make_name] = $PSTAPI->showcasemake()->get($this->_makeMap[$make_name]->id());
             $this->_makeMap[$make_name]->set("title", $make_name);
-            $this->_makeMap[$make_name]->set("short_title", $make_name);
+            if ($this->_makeMap[$make_name]->get("customer_set_short_title") == 0) {
+                $this->_makeMap[$make_name]->set("short_title", $make_name);
+            }
             $this->_makeMap[$make_name]->set("updated", 1);
             $this->_makeMap[$make_name]->save();
         }
@@ -497,7 +499,9 @@ class Showcasemodel extends CI_Model {
             ));
         } else {
             $machinetypes[0]->set("title", $showcasemake->get("title") . " " . $map[$crs_machinetype]);
-            $machinetypes[0]->set("short_title", $map[$crs_machinetype]);
+            if ($machinetypes[0]->get("customer_set_short_title") == 0) {
+                $machinetypes[0]->set("short_title", $map[$crs_machinetype]);
+            }
             $machinetypes[0]->set("updated", 1);
             $machinetypes[0]->save();
             return $machinetypes[0];
@@ -551,11 +555,15 @@ class Showcasemodel extends CI_Model {
         } else {
             $model = $models[0];
             $model->set("title", $candidate["year"] . " " . $showcasemake->get("title") . " " . $candidate["model"]);
-            $model->set("short_title", $candidate["year"] . " " . $candidate["model"]);
             $update_array = array(
-                "short_title" => $candidate["year"] . " " . $candidate["model"],
                 "title" => $candidate["year"] . " " . $showcasemake->get("title") . " " . $candidate["model"]
             );
+
+            if ($model->get("customer_set_short_title") == 0) {
+                $model->set("short_title", $candidate["year"] . " " . $candidate["model"]);
+                $update_array["short_title"] = $model->get("short_title");
+            }
+
         }
 
         $update_array["updated"] = 1;
@@ -612,11 +620,15 @@ class Showcasemodel extends CI_Model {
         } else {
             $trim = $trims[0];
             $trim->set("title", $showcasemodel->get("year") . " " . $showcasemake->get("title") . " " . $trim_structure["display_name"]);
-            $trim->set("short_title", $trim_structure["display_name"]);
             $update_array = array(
-                "title" => $trim->get("title"),
-                "short_title" => $trim->get("short_title")
+                "title" => $trim->get("title")
             );
+
+            if ($trim->get("customer_set_short_title") == 0) {
+                $trim->set("short_title", $trim_structure["display_name"]);
+                $update_array["short_title"] = $trim->get("short_title");
+            }
+
         }
 
         // We should make this a page!
