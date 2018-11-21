@@ -179,6 +179,10 @@ if ($display_models) {
                     $category_buckets[$category][] = $m;
                 }
 
+                print "<!-- ";
+                print_r($category_buckets);
+                print "-->";
+
 
                 if (count(array_keys($category_buckets)) > 1) {
                     // display it by the category...
