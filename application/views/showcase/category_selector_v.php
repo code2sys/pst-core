@@ -198,6 +198,10 @@ if ($display_models) {
                     foreach ($category_keys as $c) {
                         $cat_bucket = $category_buckets[$c];
 
+                        print "<!-- ";
+                        print_r($cat_bucket);
+                        print "--> \n";
+
                         usort($cat_bucket, function($a, $b) {
                             if (intVal($a->get("year")) != intVal($b->get("year"))) {
                                 // newer first...
@@ -206,6 +210,12 @@ if ($display_models) {
                                 return strnatcasecmp($a->get("title"), $b->get("title"));
                             }
                         });
+
+                        print "<!-- Sorted bucket: ";
+                        print_r($cat_bucket);
+                        print "--> \n";
+
+
 
                         // we have to put the year on the short list, too.
                         $clean_bucket = array();
