@@ -407,9 +407,14 @@ class Showcasemodel extends CI_Model {
     protected $_makeMap;
     protected function _assertMake($make_name) {
         global $PSTAPI;
+        initializePSTAPI();
 
         if (!isset($this->_makeMap)) {
+            $makes = $PSTAPI->showcasemake()->fetch();
             $this->_makeMap = array();
+            foreach ($makes as $m) {
+                $this->_makeMap[$m->get("title")] = $m;
+            }
         }
 
 //        // OK, we have to make one, which means, we have to get the information about it.
@@ -434,7 +439,7 @@ class Showcasemodel extends CI_Model {
 //        }
 
         // OK, now, it's in there, so we should be able to make this thing.
-        if (array_key_exists($make_name, $this->_makeMap)) {
+        if (!array_key_exists($make_name, $this->_makeMap)) {
 
             $this->_makeMap[$make_name] = $PSTAPI->showcasemake()->add(array(
                 "make" => $make_name,
