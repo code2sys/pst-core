@@ -268,7 +268,22 @@ class CRS_M extends Master_M
 
     // get the extra details...
     public function getTrimAttributes($trim_id, $version_number = 0) {
-        return $this->postRequest("getTrimAttributes", array("trim_id" => $trim_id, "version_number" => $version_number), "specifications");
+        $records = $this->postRequest("getTrimAttributes", array("trim_id" => $trim_id, "version_number" => $version_number), "specifications");
+
+        // JLB 11-15-18
+        // There is no need to push down all these "NOT AVAILABLE"
+        $clean_records = $records;
+
+        foreach ($records as $rec) {
+            if (strtolower(trim($rec["text_value"])) != "not available") {
+                $clean_records[] = $rec;
+                print("Trim $trim_id Text Value " . $rec["text_value"] . "\n");
+            } else {
+                print("Skipping for trim $trim_id Text Value " . $rec["text_value"] . "\n");
+            }
+        }
+
+        return $clean_records;
     }
 
     public function getTrimPhotos($trim_id, $version_number = 0) {

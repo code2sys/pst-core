@@ -31,47 +31,68 @@
 			<a href="<?php echo base_url('pages/edit'); ?>" class="button">Create New</a>
 			<div class="clear"></div>
 			<div class="divider"></div>
-			<form action="<?php echo base_url('admin_content/pages'); ?>" method="post" id="form_example" class="form_standard">
-			<button type="submit" id="button"><i class="fa fa-upload"></i>&nbsp;Submit</button>
-			<div class="clear"></div>
-				<div class="hidden_table">	
-					<table width="100%" cellpadding="6" style="border-collapse: collapse">
-                        <thead>
-                            <tr style="border-bottom: 1px solid black; ">
-                                <td style="border-bottom: 1px solid black; "><strong>Active</strong></td>
-                                <td style="border-bottom: 1px solid black; "><strong>Page Name</strong></td>
-                                <td style="border-bottom: 1px solid black; "><strong>Page Type</strong></td>
-                                <td style="border-bottom: 1px solid black; "><strong>Actions</strong></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-						<?php if($pages): foreach($pages as $page): ?>
-							<tr>
-								<td>
-								<?php if($page['delete']): ?>
-									<?php echo form_checkbox('active[]', $page['id'], $page['active']); ?>
-								<?php else: ?>
-									Active
-								<?php endif; ?>
-								</td>
-								<td>
-									<?php echo $page['label']; ?>
-								</td>
-                                <td>
-									<?php echo $page['type']; ?>
-								</td>
-								<td>
-									<a href="<?php echo base_url('pages/edit/'.$page['id']); ?>">Edit</a>
-									<?php if($page['delete']): ?> | 
-										<a href="<?php echo base_url('pages/delete/'.$page['id']); ?>">Delete</a>
-									<?php endif; ?>
-								</td>
-							</tr>
-						<?php endforeach; endif; ?>
-                        </tbody>
-					</table>
-				</div>
-			</form>
+
+            <!-- We have to make the checkboxes for filtering -->
+            <?php if (isset($pages) && is_array($pages) && count($pages) > 0): ?>
+
+
+            <div class="tabular_data">
+                <table width="100%" cellpadding="10" id="page_index_list">
+                    <thead>
+                    <tr>
+                        <th><b>Active</b></th>
+                        <th><b>Name</b></th>
+                        <th><b>Type</b></th>
+                        <th><b>Format</b></th>
+                        <th><b>Actions</b></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($pages as $page): ?>
+                    <tr>
+                        <td><?php if (!$page['delete'] || $page['active']): ?>Yes<?php else: ?>No<?php endif; ?></td>
+                        <td><?php echo $page["label"]; ?></td>
+                        <td><?php echo $page["page_class"]; ?></td>
+                        <td><?php echo $page["type"]; ?></td>
+                        <td>
+                            <a href="<?php echo base_url('pages/edit/'.$page['id']); ?>"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+                            <?php if ($page['delete']): ?>
+                                <?php if ($page['active']): ?>
+                                    | <a href="<?php echo base_url('pages/make_inactive/'.$page['id']); ?>" ><i class="fa fa-pause"></i>&nbsp;Make Inactive</a>
+                                <?php else: ?>
+                                    | <a href="<?php echo base_url('pages/make_active/'.$page['id']); ?>" "><i class="fa fa-play"></i>&nbsp;Make Active</a>
+                                <?php endif; ?>
+                                | <a href="<?php echo base_url('pages/delete/'.$page['id']); ?>" onClick="return confirm('Are you sure? This cannot be undone.'); "><i class="fa fa-times"></i>&nbsp;Delete</a>
+                            <?php endif; ?>
+
+                        </td>
+
+                    </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <?php endif; ?>
+
+            <script type="application/javascript">
+                $(window).load(function() {
+                    $("#page_index_list").dataTable({
+                        "processing" : true,
+                        "paging" : true,
+                        "info" : true,
+                        "stateSave" : true,
+                        "columns" : [
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                        ]
+                    });
+
+                });
+            </script>
 			
 		</div>
 	</div>
