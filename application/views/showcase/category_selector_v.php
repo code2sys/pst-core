@@ -188,7 +188,7 @@ if ($display_models) {
 
                     // now, display them...
                     foreach ($category_keys as $c) {
-                        $cat_bucket = $category_keys[$c];
+                        $cat_bucket = $category_buckets[$c];
 
                         usort($cat_bucket, function($a, $b) {
                             if ($a->get("year") != $b->get("year")) {
