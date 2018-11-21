@@ -143,12 +143,14 @@ if ($display_models) {
             <?php
 
             $grid_widgets = array();
-            function prepare_widget_group($title, $source_array, &$grid_widgets, $use_display_title = false) {
-                usort($source_array, function($a, $b) {
-                    $a_title = $a->get("short_title");
-                    $b_title = $b->get("short_title");
-                    return strnatcasecmp($a_title, $b_title);
-                });
+            function prepare_widget_group($title, $source_array, &$grid_widgets, $use_display_title = false, $sorted_already = false) {
+                if (!$sorted_already) {
+                    usort($source_array, function ($a, $b) {
+                        $a_title = $a->get("short_title");
+                        $b_title = $b->get("short_title");
+                        return strnatcasecmp($a_title, $b_title);
+                    });
+                }
 
                 if (count($source_array) > 0) {
                     $grid_widgets[] = array(
@@ -198,10 +200,6 @@ if ($display_models) {
                     foreach ($category_keys as $c) {
                         $cat_bucket = $category_buckets[$c];
 
-                        print "<!-- ";
-                        print_r($cat_bucket);
-                        print "--> \n";
-
                         usort($cat_bucket, function($a, $b) {
                             if (intVal($a->get("year")) != intVal($b->get("year"))) {
                                 // newer first...
@@ -211,12 +209,6 @@ if ($display_models) {
                             }
                         });
 
-                        print "<!-- Sorted bucket: ";
-                        print_r($cat_bucket);
-                        print "--> \n";
-
-
-
                         // we have to put the year on the short list, too.
                         $clean_bucket = array();
 
@@ -225,7 +217,7 @@ if ($display_models) {
                             $clean_bucket[] = $cb;
                         }
 
-                        prepare_widget_group($c, $clean_bucket, $grid_widgets);
+                        prepare_widget_group($c, $clean_bucket, $grid_widgets, false, true);
                     }
 
                 } else {
