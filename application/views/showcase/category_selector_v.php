@@ -157,7 +157,7 @@ if ($display_models) {
 
             };
 
-            function sortByCategoryOrYear($showcasemodels, $grid_widgets) {
+            function sortByCategoryOrYear($showcasemodels, &$grid_widgets) {
 
                 // First, you have to figure out if they have categories...
 
@@ -178,10 +178,6 @@ if ($display_models) {
                     }
                     $category_buckets[$category][] = $m;
                 }
-
-                print "<!-- ";
-                print_r($category_buckets);
-                print "-->";
 
 
                 if (count(array_keys($category_buckets)) > 1) {
@@ -210,11 +206,6 @@ if ($display_models) {
                             $cb->set("short_title", $cb->get("year") . " " . $cb->get("short_title"));
                             $clean_bucket[] = $cb;
                         }
-
-                        print "<!--  Clean bucket: ";
-                        print_r($clean_bucket);
-                        print "-->";
-                        
 
                         prepare_widget_group($c, $clean_bucket, $grid_widgets);
                     }
