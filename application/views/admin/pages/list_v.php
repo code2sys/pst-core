@@ -65,7 +65,7 @@
                     <?php foreach ($pages as $page): ?>
                     <tr>
                         <td><?php if (!$page['delete'] || $page['active']): ?>Yes<?php else: ?>No<?php endif; ?></td>
-                        <td><?php echo htmlspecialchars($page["label"]); ?></td>
+                        <td><?php echo htmlentities($page["label"], ENT_COMPAT | ENT_IGNORE); ?></td>
                         <td><?php echo $page["page_class"]; ?></td>
                         <td><?php echo $page["type"]; ?></td>
                         <td>
