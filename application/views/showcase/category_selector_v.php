@@ -147,10 +147,13 @@ switch ($pageRec["page_class"]) {
                 prepare_widget_group("", $showcasemakes, $grid_widgets, true);
             } else if ($display_machine_types) {
                 prepare_widget_group("", $showcasemachinetypes, $grid_widgets);
-             } else if ($display_models) {
+            } else if ($display_models) {
+
+                // First, you have to figure out if they have categories...
 
                 // sort them by year...
                 $year_buckets = array();
+                $category_buckets = array();
 
                 foreach ($showcasemodels as $m) {
                     $year = intVal($m->get("year"));
@@ -158,17 +161,57 @@ switch ($pageRec["page_class"]) {
                         $year_buckets[$year] = array();
                     }
                     $year_buckets[$year][] = $m;
+
+                    $category = $m->get("category");
+                    if (!array_key_exists($category, $category_buckets)) {
+                        $category_buckets[$category] = array();
+                    }
+                    $category_buckets[$category][] = $m;
                 }
 
-                $year_bucket_keys = array_keys($year_buckets);
-                sort($year_bucket_keys);
-                $year_bucket_keys = array_reverse($year_bucket_keys);
 
-                foreach ($year_bucket_keys as $year) {
-                    $buckets = $year_buckets[$year];
+                if (count(array_keys($category_buckets)) > 1) {
+                    // display it by the category...
+                    /// sort them...
+                    $category_keys = array_keys($category_buckets);
+                    sort($category_keys);
 
-                    prepare_widget_group($year. " Models", $buckets, $grid_widgets);
+                    // now, display them...
+                    foreach ($category_keys as $c) {
+                        $cat_bucket = $category_keys[$c];
+
+                        usort($cat_bucket, function($a, $b) {
+                            if ($a->get("year") != $b->get("year")) {
+                                // newer first...
+                                return (intVal($a->get("year")) > intVal($b->get("year"))) ? -1 : 1;
+                            } else {
+                                return strnatcasecmp($a->get("title"), $b->get("title"));
+                            }
+                        });
+
+                        // we have to put the year on the short list, too.
+                        $clean_bucket = array();
+
+                        foreach ($cat_bucket as $cb) {
+                            $cb->set("short_title", $cb->get("year") . " " . $cb->get("short_title"));
+                            $clean_bucket[] = $cb;
+                        }
+
+                        prepare_widget_group($c, $clean_bucket, $grid_widgets);
+                    }
+
+                } else {
+                    $year_bucket_keys = array_keys($year_buckets);
+                    sort($year_bucket_keys);
+                    $year_bucket_keys = array_reverse($year_bucket_keys);
+
+                    foreach ($year_bucket_keys as $year) {
+                        $buckets = $year_buckets[$year];
+
+                        prepare_widget_group($year. " Models", $buckets, $grid_widgets);
+                    }
                 }
+
 
             } else if ($display_trims) {
                 prepare_widget_group("Trims", $showcasetrims, $grid_widgets);
