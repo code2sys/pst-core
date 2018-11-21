@@ -136,6 +136,9 @@ class Pages_M extends Master_M
 
 	public function editPage($post)
 	{
+	    global $PSTAPI;
+	    initializePSTAPI();
+
 		if($post['id'] == 12) {
             $post['tag'] = 'Motorcycle_Gear_Brands';
         } else if (array_key_exists("tag", $post) && $post["tag"] != "") {
@@ -155,15 +158,16 @@ class Pages_M extends Master_M
 		if(is_numeric($post['id']))
 		{
 			$where = array('id' => $post['id']);
-			$success = $this->updateRecord('pages', $post, $where, FALSE);
+			return $PSTAPI->pages()->update($post['id'], $post)->to_array();
+//			$success = $this->updateRecord('pages', $post, $where, FALSE);
 		}
 		else
 		{	
 			$data['delete'] = 1;
-			$data['active'] = 0;		
-			$success = $this->createRecord('pages', $post, FALSE);
+			$data['active'] = 0;
+            return $PSTAPI->pages()->add($post)->to_array();
+			//$success = $this->createRecord('pages', $post, FALSE);
 		}
-		return $success;
 	}
 	
 	public function getTextBoxes($pageId, $page_section_id = 0)
