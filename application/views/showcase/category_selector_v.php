@@ -99,11 +99,19 @@ if ($display_models) {
     // we have to convert these to trims...
     $showcasetrims = array();
 
+
+
     foreach ($showcasemodels as $scm) {
-        $showcasetrims = array_merge($showcasetrims, $PSTAPI->showcasetrim()->fetch(array(
+        $new_trims = $PSTAPI->showcasetrim()->fetch(array(
             "showcasemodel_id" => $scm->get("showcasemodel_id"),
             "deleted" => 0
-        )));
+        ));
+
+        foreach ($new_trims as &$nt) {
+            $nt->set("year", $scm->get("year"));
+        }
+
+        $showcasetrims = array_merge($showcasetrims, $new_trims);
     }
 
     $display_models = false;
