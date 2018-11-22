@@ -53,10 +53,11 @@
             loop: true,
             items: 1,
             autoplaySpeed : {{HOME_SCREEN_SLIDER_SPEED}},
-            dotsSpeed : {{HOME_SCREEN_PAGINATION_SPEED}},
+            smartSpeed : {{HOME_SCREEN_PAGINATION_SPEED}},
             singleItem:true,
             autoplay: {{HOME_SCREEN_AUTO_PLAY_TIMEOUT}},
             autoplayTimeout:{{HOME_SCREEN_AUTO_PLAY_TIMEOUT2}}
+            autoplayHoverPause:true
         });
 
 
@@ -64,8 +65,9 @@
             items : 4,
             lazyLoad : true,
             nav : true,
-            autoPlay: true,
-            autoPlayTimeout:3000
+            dots: false,
+            autoplay: true,
+            autoplayTimeout:3000
         });
 
         $("#homes-for-rent").owlCarousel({
