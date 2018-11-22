@@ -49,8 +49,9 @@
     $(document).ready(function() {
 
         $("#owl-demo").owlCarousel({
-            navigation : true,
+            nav : true,
             loop: true,
+            item: 1,
             slideSpeed : {{HOME_SCREEN_SLIDER_SPEED}},
             paginationSpeed : {{HOME_SCREEN_PAGINATION_SPEED}},
             singleItem:true,
@@ -63,7 +64,7 @@
             items : 4,
             loop: true,
             lazyLoad : true,
-            navigation : true,
+            nav : true,
             autoPlay: true,
             autoPlayTimeout:3000
         });
@@ -72,19 +73,19 @@
             loop: true,
             items : 4,
             lazyLoad : true,
-            navigation : true
+            nav : true
         });
         $("#homes-for-rent-1").owlCarousel({
             loop: true,
             items : 3,
             lazyLoad : true,
-            navigation : true
+            nav : true
         });
         $("#hotels-flats-1").owlCarousel({
             loop: true,
             items : 3,
             lazyLoad : true,
-            navigation : true
+            nav : true
         });
 
 

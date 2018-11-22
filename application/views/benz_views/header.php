@@ -191,8 +191,9 @@ echo $CI->load->view("benz_views/real_footer", array(
 		$(document).ready(function() {
 
 			$("#owl-demo").owlCarousel({
-				navigation : true,
+				nav : true,
 				loop: true,
+				item: 1,
 				slideSpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 300; ?>,
 				paginationSpeed : <?php echo defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_PAGINATION_SPEED : 400; ?>,
 				singleItem:true,
