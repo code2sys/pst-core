@@ -63,7 +63,7 @@ echo $CI->load->view("braintree", array(
             $("#owl-demo").owlCarousel({
                 nav : true,
                 loop: true,
-                item: 1,
+                items: 1,
                 slideSpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 500; ?>,
                 paginationSpeed : <?php echo defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_PAGINATION_SPEED : 500; ?>,
                 singleItem:true,
