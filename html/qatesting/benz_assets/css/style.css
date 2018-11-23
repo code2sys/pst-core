@@ -293,6 +293,9 @@ a.ftrimg1 {
     bottom: 25px;
     width: 100%;
 }
+.slider .owl-theme .owl-dots .owl-dot {
+    outline: none;
+}
 .slider .owl-theme .owl-dots .owl-dot span {
     width: 13px;
     height: 13px;
