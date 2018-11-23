@@ -143,7 +143,7 @@ if ($display_models) {
             <?php
 
             $grid_widgets = array();
-            function prepare_widget_group($title, $source_array, &$grid_widgets, $use_display_title = false, $sorted_already = false) {
+            function prepare_widget_group($title, $source_array, &$grid_widgets, $use_display_title = false, $sorted_already = false, $subtitle = "") {
                 if (!$sorted_already) {
                     usort($source_array, function ($a, $b) {
                         $a_title = $a->get("short_title");
@@ -155,6 +155,7 @@ if ($display_models) {
                 if (count($source_array) > 0) {
                     $grid_widgets[] = array(
                         "title" => $title,
+                        "subtitle" => $subtitle,
                         "tiles" => array_map(function ($x) use ($use_display_title) {
                             return array(
                                 "title" => $use_display_title ? $x->get("display_title") : $x->get("short_title"),
@@ -212,12 +213,25 @@ if ($display_models) {
                         // we have to put the year on the short list, too.
                         $clean_bucket = array();
 
+                        $current_year = 0;
+
+                        $title = $c;
                         foreach ($cat_bucket as $cb) {
+                            if ($current_year != $cb->get("year")) {
+                                if ($current_year > 0 && count($clean_bucket) > 0) {
+                                    prepare_widget_group($title, $clean_bucket, $grid_widgets, false, true, $current_year);
+                                    $title = "";
+                                }
+                                $clean_bucket = array();
+                                $current_year = $cb->get("year");
+                            }
                             $cb->set("short_title", $cb->get("year") . " " . $cb->get("short_title"));
                             $clean_bucket[] = $cb;
                         }
 
-                        prepare_widget_group($c, $clean_bucket, $grid_widgets, false, true);
+                        if (count($clean_bucket) > 0) {
+                            prepare_widget_group($title, $clean_bucket, $grid_widgets, false, true, $current_year);
+                        }
                     }
 
                 } else {
@@ -248,9 +262,12 @@ if ($display_models) {
             ?>
 
             <?php foreach ($grid_widgets as $grid_widget): ?>
-            <div class="showroom-grid-widget">
+            <div class="showroom-grid-widget <?php if ($grid_widget["title"] == "" && $grid_widget["subtitle"] != ""): ?>subtitleonly<?php endif; ?>">
                 <?php if ($grid_widget["title"] != ""): ?>
                 <div class="showroom-grid-widget-title"><?php echo $grid_widget["title"]; ?></div>
+                <?php endif; ?>
+                <?php if ($grid_widget["subtitle"] != ""): ?>
+                <div class="showroom-grid-widget-subtitle"><?php echo $grid_widget["subtitle"]; ?></div>
                 <?php endif; ?>
 
                 <div class="showroom-grid-widget-rows">

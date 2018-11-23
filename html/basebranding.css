@@ -118,6 +118,13 @@
     margin-bottom: 3px;
 }
 
+
+.showroom-grid-widget-subtitle {
+    font-size: 110%;
+    display: block;
+    margin-bottom: 3px;
+}
+
 .showcasebreadcrumb {
     background-color: transparent;
 }
