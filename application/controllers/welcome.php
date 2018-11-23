@@ -1109,7 +1109,7 @@ class Welcome extends Master_Controller {
                
                 //Traffic log pro API
 
-                if ( (array_key_exists("make", $post) || array_key_exists("product_id", $post)) && (defined('ENABLE_TRAFFICLOGPRO') && ENABLE_TRAFFICLOGPRO) ){
+                if (true ||  (array_key_exists("make", $post) || array_key_exists("product_id", $post)) && (defined('ENABLE_TRAFFICLOGPRO') && ENABLE_TRAFFICLOGPRO) ){
 
                     $apiDetails = $this->trafficlogpro_m->insertInquiryData($post);
                                            

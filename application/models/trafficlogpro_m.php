@@ -24,12 +24,15 @@ class Trafficlogpro_M extends Master_M {
         $apiDetails = $this->admin_m->getAdminShippingProfile();
 
         $payload = $this->getXml($post, $apiDetails);
+        return;
+
                     $trafficLogProRes = $this->sendAsPost(
                     'http://api.trafficlogpro.com/xml/',
                     array('data' => $payload)
                     );
 
                     error_log($payload);
+
 
         // convert the XML result into array
         $array_data = json_decode(json_encode(simplexml_load_string($trafficLogProRes)), true);
