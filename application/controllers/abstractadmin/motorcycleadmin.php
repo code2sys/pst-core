@@ -1028,8 +1028,6 @@ abstract class Motorcycleadmin extends Firstadmin
 
         $rows = $PSTAPI->motorcycleenquiry()->simpleQuery(array(), true, "$where $order_string limit $length offset $start ");
 
-        $rows = $query->result_array();
-
         $output_rows = array();
         foreach ($rows as $row) {
             $clean_row = array(
