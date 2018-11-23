@@ -17,34 +17,34 @@
             {{#grid_widgets}}
             <?php foreach ($grid_widgets as $grid_widget): ?>
             <div class="showroom-grid-widget {{#subtitleonly}}subtitleonly{{/subtitleonly}}">
-            {{#widget_title}}
-            <div class="showroom-grid-widget-title">{{{widget_title}}}</div>
-            {{/widget_title}}
-            {{#widget_subtitle}}
-            <div class="showroom-grid-widget-subtitle">{{{widget_subtitle}}}</div>
-            {{/widget_subtitle}}
+                {{#widget_title}}
+                <div class="showroom-grid-widget-title">{{{widget_title}}}</div>
+                {{/widget_title}}
+                {{#widget_subtitle}}
+                <div class="showroom-grid-widget-subtitle">{{{widget_subtitle}}}</div>
+                {{/widget_subtitle}}
 
-            <div class="showroom-grid-widget-rows">
-                <div class="row">
-                    {{#widget_tiles}}
-                    {{#next_row}}
-                </div><div class="row">
-                    {{/next_row}}
+                <div class="showroom-grid-widget-rows">
+                    <div class="row">
+                        {{#widget_tiles}}
+                        {{#next_row}}
+                    </div><div class="row">
+                        {{/next_row}}
 
-                <div class="span2 col-md-2 col-sm-4 col-xs-12 showroom-tile-holder" >
-                    <div class=" showroom-tile">
-                        <a href="{{tile_url}}" class="showroom-tile-link"><div class="showroom-tile-image" style="background-image: -webkit-linear-gradient(rgba(255,255,255,0.2) 0%,rgba(0,0,0,0.2) 100%), url('{{thumbnail_url}}'); "></div><span class="showroom-tile-title">{{{tile_title}}}</span><div class="clear: both"></div></a>
+                    <div class="span2 col-md-2 col-sm-4 col-xs-12 showroom-tile-holder" >
+                        <div class=" showroom-tile">
+                            <a href="{{tile_url}}" class="showroom-tile-link"><div class="showroom-tile-image" style="background-image: -webkit-linear-gradient(rgba(255,255,255,0.2) 0%,rgba(0,0,0,0.2) 100%), url('{{thumbnail_url}}'); "></div><span class="showroom-tile-title">{{{tile_title}}}</span><div class="clear: both"></div></a>
+                        </div>
                     </div>
-                </div>
-                {{/widget_tiles}}
+                    {{/widget_tiles}}
+
+                    </div>
 
                 </div>
 
-                </div>
-
-        {{/grid_widgets}}
+            </div>
+            {{/grid_widgets}}
         </div>
-
     <!-- END MAIN CONTENT -->
 
     <div class="clear"></div>
