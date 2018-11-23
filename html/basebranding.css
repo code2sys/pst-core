@@ -132,3 +132,18 @@
 .showroom-grid-widget.subtitleonly {
     margin-top: -56px; /* This is a 12 px margin + 12 px margin + 32 px padding */
 }
+
+
+.category_selector_v.widgetBlock {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1024px;
+}
+
+@media (max-width: 1024px) {
+    .category_selector_v.widgetBlock {
+        max-width: 100%;
+    }
+}
+
+
