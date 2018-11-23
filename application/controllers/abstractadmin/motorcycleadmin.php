@@ -951,20 +951,16 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->setNav('admin/nav_v', 5);
 
         // getthe quote
-        $match = false;
-        $the_row = array();
-        $query = $this->db->query("Select * from motorcycle_enquiry where id = ?", array($id));
-        foreach ($query->result_array() as $row) {
-            $match = true;
-            $the_row = $row;
-        }
+        global $PSTAPI;
+        initializePSTAPI();
+        $the_row = $PSTAPI->motorcycleenquiry()->get($id);
 
-        if (!$match) {
+        if (is_null($the_row)) {
             // redirect it...
             header("Location: /admin/motorcycle_quotes");
         } else {
             // OK, we have to cram it down...
-            $this->_mainData["quote"] = $the_row;
+            $this->_mainData["quote"] = $the_row->to_array();
             $this->renderMasterPage('admin/master_v', 'admin/motorcycle/quotes_view', $this->_mainData);
         }
     }
