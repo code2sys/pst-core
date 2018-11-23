@@ -257,11 +257,11 @@ if ($display_models) {
                     <div class="row">
                     <?php for ($i = 0; $i < count($grid_widget["tiles"]); $i++) {
                         $tile = $grid_widget["tiles"][$i];
-                        if ($i > 0 && $i % 4 == 0) {
+                        if ($i > 0 && $i % 6 == 0) {
                             ?></div><div class="row"><?php
                         }
                         ?>
-                        <div class="span3 showroom-tile">
+                        <div class="span2 col-md-2 col-sm-4 col-xs-1 showroom-tile">
                             <a href="<?php echo site_url('Factory_Showroom/' . $tile["url_fragment"]); ?>" class="showroom-tile-link"><div class="showroom-tile-image" style="background-image: -webkit-linear-gradient(rgba(255,255,255,0.2) 0%,rgba(0,0,0,0.2) 100%), url('<?php echo (is_null($tile['thumbnail']) || $tile['thumbnail'] == '') ? site_url('/assets/showcase_no_picture_available.png') : $tile['thumbnail']; ?>'); "></div><span class="showroom-tile-title"><?php echo $tile["title"]; ?></span><div class="clear: both"></div></a>
                         </div>
                         <?php
