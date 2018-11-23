@@ -293,13 +293,20 @@ a.ftrimg1 {
 }
 .owl-carousel .owl-nav .owl-prev {
     position: absolute;
-    left: -30px;
+    left: -35px;
+    color: white;
+    background: #1757b1;
+    width: 33px;
+    height: 33px;
+    font-weight: 600;
+    opacity: inherit;
+    font-size: 17px;
+    border-radius: 50%;
+    outline: none;
 }
 .owl-carousel .owl-nav .owl-next {
     position: absolute;
-    right: -30px;
-}
-.owl-carousel .owl-nav [class*='owl-'] {
+    right: -35px;
     color: white;
     background: #1757b1;
     width: 33px;
@@ -346,7 +353,7 @@ a.ftrimg1 {
     justify-content: space-between;
     padding: 0 100px;
 }
-.slider .owl-nav .owl-prev, .owl-next {
+.slider .owl-nav .owl-prev, .slider .owl-nav .owl-next {
     position: relative !important;
 }
 .slider .owl-theme .owl-nav [class*='owl-'] {
