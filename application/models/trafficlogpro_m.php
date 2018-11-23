@@ -24,13 +24,12 @@ class Trafficlogpro_M extends Master_M {
         $apiDetails = $this->admin_m->getAdminShippingProfile();
 
         $payload = $this->getXml($post, $apiDetails);
-        error_log($payload);
-        return;
 
-                    $trafficLogProRes = $this->sendAsPost(
-                    'http://api.trafficlogpro.com/xml/',
-                    array('data' => $payload)
-                    );
+
+        $trafficLogProRes = $this->sendAsPost(
+        'http://api.trafficlogpro.com/xml/',
+        array('data' => $payload)
+        );
 
 
 
@@ -159,9 +158,6 @@ class Trafficlogpro_M extends Master_M {
                 global $PSTAPI;
                 initializePSTAPI();
                 $showcasetrim = $PSTAPI->showcasetrim()->get($product_id);
-
-                error_log("Lookup of trim $product_id ...");
-
 
                 if (!is_null($showcasetrim) && $showcasetrim->get("title") == $post["motorcycle"]) {
                     $showcasetrim->addDecorations();
