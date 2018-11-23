@@ -128,3 +128,7 @@
 .showcasebreadcrumb {
     background-color: transparent;
 }
+
+.showroom-grid-widget.subtitleonly {
+    margin-top: -56px; /* This is a 12 px margin + 12 px margin + 32 px padding */
+}
