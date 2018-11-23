@@ -293,13 +293,13 @@ a.ftrimg1 {
 }
 .owl-carousel .owl-nav .owl-prev {
     position: absolute;
-    left: -25px;
+    left: -30px;
 }
 .owl-carousel .owl-nav .owl-next {
     position: absolute;
-    right: -25px;
+    right: -30px;
 }
-.owl-theme .owl-nav [class*='owl-'] {
+.owl-carousel .owl-nav [class*='owl-'] {
     color: white;
     background: #1757b1;
     width: 33px;
@@ -345,6 +345,9 @@ a.ftrimg1 {
     display: flex;
     justify-content: space-between;
     padding: 0 100px;
+}
+.slider .owl-nav .owl-prev, .owl-next {
+    position: relative !important;
 }
 .slider .owl-theme .owl-nav [class*='owl-'] {
     color: #000;
