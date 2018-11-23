@@ -1168,7 +1168,7 @@ class Welcome extends Master_Controller {
                     global $PSTAPI;
                     initializePSTAPI();
 
-                    if (true || $PSTAPI->config()->getKeyValue("forward_leads_to_cdk") == "Yes") {
+                    if ($PSTAPI->config()->getKeyValue("forward_leads_to_cdk") == "Yes") {
                         $vehicle_type = $vehicle_make = $vehicle_model = $vehicle_year = "";
                         // We should be getting this motorcycle by title?
                         $motorcycle = $PSTAPI->motorcycle()->fetch(array("title" => $post['motorcycle']), true);
@@ -1218,7 +1218,7 @@ class Welcome extends Master_Controller {
                             "VehicleYear" => $vehicle_year
                         ));
 
-                        // $inquiry->pushToVSept();
+                        $inquiry->pushToVSept();
                     }
                 }
 

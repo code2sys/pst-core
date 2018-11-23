@@ -29,6 +29,8 @@ class Trafficlogpro_M extends Master_M {
                     array('data' => $payload)
                     );
 
+                    error_log($payload);
+
         // convert the XML result into array
         $array_data = json_decode(json_encode(simplexml_load_string($trafficLogProRes)), true);
         //if error code is 1 that's means something went wrong.
@@ -143,47 +145,58 @@ class Trafficlogpro_M extends Master_M {
 
         if (array_key_exists("product_id", $post)) {
 
-        $product_id = $post["product_id"];
-        $this->load->model('motorcycle_m');
-        
-        $product_detail = $this->motorcycle_m->getMotorcycle($product_id);
-        
-        //product details
-            
-        $prodcuct_year = $product_detail['year'];
-        $prodcuct_make = $product_detail['make'];
-        $prodcuct_vin_number = $product_detail['vin_number'];
-        $prodcuct_mileage = $product_detail['mileage'];
-        $prodcuct_color = $product_detail['color'];
-        $prodcuct_condition = $product_detail['condition'];
-        $prodcuct_model = $product_detail['model'];
-        $prodcuct_sale_price = $product_detail['sale_price'];
-        $prodcuct_category = $product_detail['category'];
+            $product_id = $post["product_id"];
+            $this->load->model('motorcycle_m');
 
-         // traffic log pro API details
+            $product_detail = $this->motorcycle_m->getMotorcycle($product_id);
 
-        $trafficLogProDealerCode = $apiDetails['trafficLogProDealerCode'];
-        $trafficLogProApiKey = $apiDetails['trafficLogProApiKey'];
+            // JLB: If this doesn't exist, or if the title doesn't match, should we consider checking the
+            if (empty($product_detail) || is_null($product_detail) || $product_detail["title"] != $post["motorcycle"]) {
+                global $PSTAPI;
+                initializePSTAPI();
+                $showcasetrim = $PSTAPI->showcasetrim()->get($product_id);
+
+                if (!is_null($showcasetrim) && $showcasetrim->get("title") == $post["motorcycle"]) {
+                    $product_detail = $showcasetrim->to_array();
+                }
+            }
+
+            //product details
+
+            $product_year = $product_detail['year'];
+            $product_make = $product_detail['make'];
+            $product_vin_number = $product_detail['vin_number'];
+            $product_mileage = $product_detail['mileage'];
+            $product_color = $product_detail['color'];
+            $product_condition = $product_detail['condition'];
+            $product_model = $product_detail['model'];
+            $product_sale_price = $product_detail['sale_price'];
+            $product_category = $product_detail['category'];
+
+             // traffic log pro API details
+
+            $trafficLogProDealerCode = $apiDetails['trafficLogProDealerCode'];
+            $trafficLogProApiKey = $apiDetails['trafficLogProApiKey'];
 
 
 
         }else{
 
-            $prodcuct_year = '';
-            $prodcuct_make = '';
-            $prodcuct_vin_number = '';
-            $prodcuct_mileage = '';
-            $prodcuct_color = '';
-            $prodcuct_condition = '';
-            $prodcuct_model = '';
-            $prodcuct_sale_price = '';
-            $prodcuct_category = '';
+            $product_year = '';
+            $product_make = '';
+            $product_vin_number = '';
+            $product_mileage = '';
+            $product_color = '';
+            $product_condition = '';
+            $product_model = '';
+            $product_sale_price = '';
+            $product_category = '';
         }
         
-        if ($prodcuct_condition == 1){
-            $prodcuct_condition = "New";
+        if ($product_condition == 1){
+            $product_condition = "New";
         }else{
-            $prodcuct_condition = "Pre-Owned";
+            $product_condition = "Pre-Owned";
         }
 
         // SELECT * FROM sudesh_v1.motorcycle WHERE id=862;
@@ -201,7 +214,7 @@ class Trafficlogpro_M extends Master_M {
                 "<contact>" .
                     "<firstname>".$firstname."</firstname>" .
                     "<middlename></middlename>" .
-                    "<lastname>".$lastname."</lastname>" .
+                    "<lastname>".$lastName."</lastname>" .
                     "<address1>".$address."</address1>" .
                     "<address2></address2>" .
                     "<city>".$city."</city>" .
@@ -216,16 +229,16 @@ class Trafficlogpro_M extends Master_M {
                     "<dob></dob>" .
                 "</contact>" .
                 "<product>" .
-                    "<year>".$prodcuct_year."</year>" .
-                    "<make>".$prodcuct_make."</make>" .
-                    "<model>".$prodcuct_model."</model>" .
-                    "<color>".$prodcuct_color."</color>" .
-                    "<condition>".$prodcuct_condition."</condition>" .
-                    "<mileage>".$prodcuct_mileage."</mileage>" .
-                    "<category>".$prodcuct_category."</category>" .
+                    "<year>".$product_year."</year>" .
+                    "<make>".$product_make."</make>" .
+                    "<model>".$product_model."</model>" .
+                    "<color>".$product_color."</color>" .
+                    "<condition>".$product_condition."</condition>" .
+                    "<mileage>".$product_mileage."</mileage>" .
+                    "<category>".$product_category."</category>" .
                     "<class></class>" .
-                    "<vin>".$prodcuct_vin_number."</vin>" .
-                    "<price>".$prodcuct_sale_price."</price>" .
+                    "<vin>".$product_vin_number."</vin>" .
+                    "<price>".$product_sale_price."</price>" .
                 "</product>" .
                 "<tradein>" .
                     "<year>".$vehicle_year_tradein."</year>" .
