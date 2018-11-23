@@ -120,7 +120,8 @@ echo $CI->load->view("benz_views/sub_product-details", array(
         "category" => $showcasetrim->get("category"),
         "engine_type" => $showcasetrim->get("engine_type"),
         "transmission" => $showcasetrim->get("transmission"),
-        "specs" => $specs
+        "specs" => $specs,
+        "description" => $description
     ),
     "override_pricing_widget" => true,
     "pricing_widget" => $CI->load->view("showcase/showcase_pricing_widget", array(

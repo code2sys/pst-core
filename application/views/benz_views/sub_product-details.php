@@ -134,6 +134,7 @@ $CI =& get_instance();
         <div class="col-md-12 col-xs-12 pdig padg-one" style="padding-top:50px;">
             <?php
             if (!isset($hide_recently_viewed) || !$hide_recently_viewed) {
+                $specwidth = "col-md-9 col-sm-8 col-xs-12";
 
                 echo $CI->load->view("benz_views/recently_viewed", array(
                     "master_class" => "col-md-3 col-xs-12 fltrbar pull-right pdig oder col-sm-4",
@@ -142,13 +143,15 @@ $CI =& get_instance();
                     "recentlyMotorcycle" => $recentlyMotorcycle,
                     "no_fify" => true
                 ), true);
+            } else {
+                $specwidth = "col-md-12 col-sm-12 col-xs-12";
             }
 
             $show_info = !empty($mainVideo) || (trim($motorcycle['description']) != "");
             $show_spec = (count($motorcycle['specs']) > 0);
             ?>
 
-            <div class="col-md-9 col-xs-12 col-sm-8 pdig vide-wdt">
+            <div class="<?php echo $specwidth; ?> pdig vide-wdt">
                 <?php if ($show_info): ?>
                     <span href="#" class="btn info-btn" id="product-details-info">
 					info
