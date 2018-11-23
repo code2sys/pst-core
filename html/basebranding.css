@@ -140,14 +140,16 @@
     max-width: 1024px;
 }
 
+.category_selector_v.widgetBlock .page_header .bxslider img {
+    max-width: 95%;
+}
+
 @media (max-width: 1024px) {
     .category_selector_v.widgetBlock {
         max-width: 100%;
     }
 
-    .category_selector_v.widgetBlock .page_header .bxslider img {
-        max-width: 95%;
-    }
+
 }
 
 
