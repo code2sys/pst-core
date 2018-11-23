@@ -22,5 +22,5 @@ echo $CI->load->view("benz_views/sub_product-details", array(
     "override_pricing_widget" => false,
     "hide_stock_information" => false,
     "hide_recently_viewed" => false,
-    "image_url" => count($motorcycle["images"]) > 0 ? $motorcycle["images"][0] : ""
+    "image_url" => count($motorcycle["images"]) > 0 ? $motorcycle["images"][0]["image_name"] : ""
 ), true);
