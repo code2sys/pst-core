@@ -287,13 +287,38 @@ a.ftrimg1 {
     width: 1349px ;
     margin: 0;
 }
-.slider .owl-theme .owl-controls .owl-page.active span {
-    background: #fff;
-}
-.slider .owl-pagination {
+
+.slider .owl-dots {
     position: absolute;
     bottom: 25px;
     width: 100%;
+}
+.slider .owl-dots .owl-dot span {
+    background: none;
+    border: 1px solid white;
+}
+.slider .owl-dots .owl-dot.active span {
+    background: #fff;
+}
+
+.slider .owl-nav {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 100px;
+}
+.slider .owl-nav .button {
+    color: #000;
+    background: #fff;
+    width: 33px;
+    height: 33px;
+    line-height: 27px;
+    font-weight: 600;
+    opacity: inherit;
+    font-size: 22px;
+    border-radius: 50%;
 }
 .slider .owl-buttons {
     position: inherit;
