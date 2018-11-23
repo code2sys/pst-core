@@ -269,7 +269,7 @@ foreach ($grid_widgets as $grid_widget) {
         $transformed_tiles[] = $new_tile;
     }
 
-    mustache_tmpl_iterate($category_selector_v, "grid_widgets", array(
+    mustache_tmpl_set($category_selector_v, "grid_widgets", array(
         "subtitleonly" => $grid_widget["title"] == "" && $grid_widget["subtitle"] != "",
         "widget_title" => $grid_widget["title"],
         "widget_subtitle" => $grid_widget["subtitle"],
