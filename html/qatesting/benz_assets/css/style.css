@@ -291,7 +291,7 @@ a.ftrimg1 {
     width: 100%;
     top: 25%;
 }
-.owl-carousel .owl-nav .owl-prev {
+.owl-carousel .owl-nav button.owl-prev {
     position: absolute;
     left: -35px;
     color: white;
@@ -304,7 +304,7 @@ a.ftrimg1 {
     border-radius: 50%;
     outline: none;
 }
-.owl-carousel .owl-nav .owl-next {
+.owl-carousel .owl-nav button.owl-next {
     position: absolute;
     right: -35px;
     color: white;
