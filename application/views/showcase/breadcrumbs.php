@@ -2,58 +2,61 @@
 global $PSTAPI;
 initializePSTAPI();
 
+$CI =& get_instance();
+$CI->load->helper("mustache_helper");
+$breadcrumbs_menu = mustache_tmpl_open("showcase/breadcrumbs.html");
+
+
 if ($title != "") {
-    ?>
-    <h1><?php echo $title; ?></h1>
-    <?php
+    mustache_tmpl_set($breadcrumbs_menu, "title", $title);
 }
+
 
 if ($full_url != "") {
-    // we have to generate the parts.
-    ?>
-    <nav class="breadcrumb showcasebreadcrumb">
-				<a href="<?php echo site_url(""); ?>">Home</a>
-				<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
-				<a href="<?php echo site_url("Factory_Showroom"); ?>">Factory Showroom</a>
-        <?php
-        $pieces = explode("/", $full_url);
+    mustache_tmpl_set($breadcrumbs_menu, "show_nav", true);
+    mustache_tmpl_set($breadcrumbs_menu, "home_nav", site_url(""));
+    mustache_tmpl_set($breadcrumbs_menu, "showroom_nav", site_url("Factory_Showroom"));
 
-        for ($i = 0; $i < count($pieces); $i++) {
-            $piece = $pieces[$i];
+    $pieces = explode("/", $full_url);
 
-            $factory = "showcase";
-            switch ($i) {
-                case 0:
-                    $factory .= "make";
-                    break;
+    for ($i = 0; $i < count($pieces); $i++) {
+        $piece = $pieces[$i];
 
-                case 1:
-                    $factory .= "machinetype";
-                    break;
+        $factory = "showcase";
+        switch ($i) {
+            case 0:
+                $factory .= "make";
+                break;
 
-                case 2:
-                    $factory .= "model";
-                    break;
+            case 1:
+                $factory .= "machinetype";
+                break;
 
-                case 3:
-                    $factory .= "trim";
-                    break;
-            }
+            case 2:
+                $factory .= "model";
+                break;
 
-            $object = $PSTAPI->$factory()->fetch(array(
-                "url_title" => $piece
-            ));
-
-            if (count($object) > 0) {
-                $object = $object[0];
-                ?>
-        <span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
-                <a href="<?php echo site_url("Factory_Showroom/" . $object->get("full_url")); ?>"><?php echo $object->get("title"); ?></a>
-            <?php
-            }
+            case 3:
+                $factory .= "trim";
+                break;
         }
 
-        ?>
-			</nav>
-    <?php
+        $object = $PSTAPI->$factory()->fetch(array(
+            "url_title" => $piece
+        ));
+
+        if (count($object) > 0) {
+            $object = $object[0];
+            mustache_tmpl_iterate($breadcrumbs_menu, "nav_loop");
+            mustache_tmpl_set($breadcrumbs_menu, "nav_loop", array(
+                "full_url" => site_url("Factory_Showroom/" . $object->get("full_url")),
+                "link_title" => $object->get("title")
+            ));
+        }
+    }
+
 }
+
+print mustache_tmpl_parse($breadcrumbs_menu);
+
+

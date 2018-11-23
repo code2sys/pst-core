@@ -1,0 +1,15 @@
+{{#title}}
+<h1>{{{title}}}</h1>
+{{/title}}
+{{#show_nav}}
+<nav class="breadcrumb showcasebreadcrumb">
+    <a href="{{home_nav}}">Home</a>
+    <span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+    <a href="showroom_nav">Factory Showroom</a>
+
+    {{#nav_loop}}
+    <span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+    <a href="{{full_url}}">{{link_title}}</a>
+    {{/nav_loop}}
+</nav>
+{{/show_nav}}
