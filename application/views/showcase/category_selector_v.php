@@ -133,8 +133,6 @@ if (isset($widgetBlock) && $widgetBlock != "") {
     mustache_tmpl_set($category_selector_v, "widgetBlock", $widgetBlock);
 }
 
-echo mustache_tmpl_parse($category_selector_v);
-
 
 $grid_widgets = array();
 function prepare_widget_group($title, $source_array, &$grid_widgets, $use_display_title = false, $sorted_already = false, $subtitle = "") {
