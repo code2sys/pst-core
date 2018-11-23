@@ -152,12 +152,16 @@ class Trafficlogpro_M extends Master_M {
             $this->load->model('motorcycle_m');
 
             $product_detail = $this->motorcycle_m->getMotorcycle($product_id);
+            error_log(print_r($product_detail, true));
 
             // JLB: If this doesn't exist, or if the title doesn't match, should we consider checking the
             if (empty($product_detail) || is_null($product_detail) || $product_detail["title"] != $post["motorcycle"]) {
                 global $PSTAPI;
                 initializePSTAPI();
                 $showcasetrim = $PSTAPI->showcasetrim()->get($product_id);
+
+                error_log("Lookup of trim $product_id ...");
+
 
                 if (!is_null($showcasetrim) && $showcasetrim->get("title") == $post["motorcycle"]) {
                     $showcasetrim->addDecorations();
