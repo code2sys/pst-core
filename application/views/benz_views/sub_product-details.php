@@ -151,7 +151,7 @@ $CI =& get_instance();
             $show_spec = (count($motorcycle['specs']) > 0);
             ?>
 
-            <div class="<?php echo $specwidth; ?> pdig vide-wdt">
+            <div class="<?php echo $specwidth; ?> major-unit-tabbed-region pdig vide-wdt">
                 <?php if ($show_info): ?>
                     <span href="#" class="btn info-btn" id="product-details-info">
 					info

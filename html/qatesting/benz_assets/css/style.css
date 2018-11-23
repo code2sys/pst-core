@@ -1276,6 +1276,7 @@ img.powerlogo-a {
     list-style: url(../images/dot.png);
 }
 
+.major-unit-tabbed-region .info-btn,
 .col-md-9 .info-btn {
 	background: #494949;
     border-radius: 4px 4px 0 0;
