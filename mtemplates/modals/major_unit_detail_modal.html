@@ -23,8 +23,8 @@
                     <div class="col-sm-{{#motorcycle_image}}8{{/motorcycle_image}}{{^motorcycle_image}}12{{/motorcycle_image}}">
                         <ul>
                             <li><strong>{{motorcycle_title}}</strong></li>
-                            <li>Color: {{motorcycle_color}}</li>
-                            <li>Stock #: {{motorcycle_display_sku}}</li>
+                            {{#motorcycle_color}}<li>Color: {{motorcycle_color}}</li>{{/motorcycle_color}}
+                            {{#motorcycle_display_sku}}<li>Stock #: {{motorcycle_display_sku}}</li>{{/motorcycle_display_sku}}
                             {{#motorcycle_vin_number}}<li>VIN: {{motorcycle_vin_number}}</li>{{/motorcycle_vin_number}}
                         </ul>
                     </div>
