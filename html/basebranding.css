@@ -141,7 +141,7 @@
 }
 
 .category_selector_v.widgetBlock .page_header .bxslider img {
-    max-width: 95%;
+    max-width: 100%;
 }
 
 @media (max-width: 1024px) {
