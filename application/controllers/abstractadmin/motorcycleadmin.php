@@ -1019,20 +1019,15 @@ abstract class Motorcycleadmin extends Firstadmin
 
         $where = jonathan_generate_likes(array("status", "firstName", "lastName", "email", "phone", "motorcycle"), $s = (array_key_exists("search", $_REQUEST) && array_key_exists("value", $_REQUEST["search"]) ? $_REQUEST["search"]["value"] : ""), "WHERE");
 
+        global $PSTAPI;
+        initializePSTAPI();
+
         // get total count
-        $query = $this->db->query("Select count(*) as cnt from motorcycle_enquiry");
-        $total_count = 0;
-        foreach ($query->result_array() as $row) {
-            $total_count = $row['cnt'];
-        }
+        $total_count = $PSTAPI->motorcycleenquiry()->simpleCount();
+        $filtered_count = $PSTAPI->motorcycleenquiry()->simpleCount(array(), $where);
 
-        $query = $this->db->query("Select count(*) as cnt from motorcycle_enquiry $where");
-        $filtered_count = 0;
-        foreach ($query->result_array() as $row) {
-            $filtered_count = $row['cnt'];
-        }
+        $rows = $PSTAPI->motorcycleenquiry()->simpleQuery(array(), true, "$where $order_string limit $length offset $start ");
 
-        $query = $this->db->query("Select motorcycle_enquiry.*, concat(firstName, ' ', lastName) as name from motorcycle_enquiry $where $order_string limit $length offset $start  ");
         $rows = $query->result_array();
 
         $output_rows = array();
@@ -1040,7 +1035,7 @@ abstract class Motorcycleadmin extends Firstadmin
             $clean_row = array(
                 date("m/d/Y g:i a T", strtotime($row['created'])),
                 $row['status'],
-                $row['name'],
+                $row['firstName'] . " " . $row['lastName'],
                 $row['email'],
                 $row['phone'],
                 $row['motorcycle']
