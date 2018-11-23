@@ -929,8 +929,9 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->setNav('admin/nav_v', 5);
 
         // Let's get those quotes, all of them...
-        $query = $this->db->query("Select * from motorcycle_enquiry");
-        $this->_mainData["inquiries"] = $query->result_array();
+        global $PSTAPI;
+        initializePSTAPI();
+        $this->_mainData["inquiries"] = $PSTAPI->motorcycleenquiry()->fetch(array(), true);
 
         $this->renderMasterPage('admin/master_v', 'admin/motorcycle/quotes_index', $this->_mainData);
     }
