@@ -297,11 +297,11 @@ a.ftrimg1 {
 }
 .owl-carousel .owl-nav .owl-next {
     position: absolute;
-    right: 25px;
+    right: -25px;
 }
-.owl-carousel .owl-theme .owl-nav [class*='owl-'] {
+.owl-theme .owl-nav [class*='owl-'] {
     color: white;
-    background: ##1757b1;
+    background: #1757b1;
     width: 33px;
     height: 33px;
     font-weight: 600;
