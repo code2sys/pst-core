@@ -130,5 +130,6 @@ echo $CI->load->view("benz_views/sub_product-details", array(
     ), true),
     "hide_stock_information" => true,
     "hide_recently_viewed" => true,
-    "description" => $description
+    "description" => $description,
+    "image_url" => $showcasetrim->get("thumbnail_photo")
 ), true);
