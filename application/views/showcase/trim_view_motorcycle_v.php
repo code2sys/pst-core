@@ -100,6 +100,7 @@ if (count($showcasetrims) > 0) {
 }
 
 echo $CI->load->view("benz_views/sub_product-details", array(
+    "in_showroom" => true,
     "override_breadcrumbs" => true,
     "breadcrumbs" => $CI->load->view("showcase/breadcrumbs", array(
         "title" => $title,
