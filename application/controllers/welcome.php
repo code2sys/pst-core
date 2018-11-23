@@ -1175,18 +1175,13 @@ class Welcome extends Master_Controller {
 
                         if (count($motorcycle) == 0) {
                             // We potentially have a trim...
-                            $showcasetrim = $PSTAPI->showcasetrim()->fetch(array("title" => $post["motorcycle"]), true);
+                            $showcasetrim = $PSTAPI->showcasetrim()->fetch(array("title" => $post["motorcycle"]));
 
 
                             if (count($showcasetrim) > 0) {
                                 $motorcycle = $showcasetrim[0];
-
-                                $showcasemodel = $PSTAPI->showcasemodel()->get($motorcycle["showcasemodel_id"]);
-                                $motorcycle["model"] = $showcasemodel->get("title");
-                                $showcasemachinetype = $PSTAPI->showcasemachinetype()->get($showcasemodel->get("showcasemachinetype_id"));
-                                $motorcycle["type"] = $showcasemachinetype->get("title");
-                                $showcasemake = $PSTAPI->showcasemake()->get($showcasemachinetype->get("showcasemake_id"));
-                                $motorcycle["make"] = $showcasemake->get("title");
+                                $motorcycle->addDecorations();
+                                $motorcycle = $motorcycle->to_array();
                             }
 
                         } else {
