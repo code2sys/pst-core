@@ -291,11 +291,11 @@ a.ftrimg1 {
     width: 100%;
     top: 25%;
 }
-.owl-carousel .owl-nav button.owl-prev {
+#hotels-flats .owl-nav button.owl-prev {
     position: absolute;
     left: -35px;
-    color: white;
-    background: #1757b1;
+    color: white !important;
+    background: #1757b1 !important;
     width: 33px;
     height: 33px;
     font-weight: 600;
@@ -304,11 +304,11 @@ a.ftrimg1 {
     border-radius: 50%;
     outline: none;
 }
-.owl-carousel .owl-nav button.owl-next {
+#hotels-flats .owl-nav button.owl-next {
     position: absolute;
     right: -35px;
-    color: white;
-    background: #1757b1;
+    color: white !important;
+    background: #1757b1 !important;
     width: 33px;
     height: 33px;
     font-weight: 600;
