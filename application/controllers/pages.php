@@ -600,7 +600,7 @@ class Pages extends Master_Controller {
 
                 case "Showroom Trim":
                     $master_view = "benz_views/header";
-                    $page_view = "showcase/trim_view_v";
+                    $page_view = "showcase/trim_view_motorcycle_v";
                     break;
 
             }
