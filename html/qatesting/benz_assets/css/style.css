@@ -293,11 +293,11 @@ a.ftrimg1 {
     bottom: 25px;
     width: 100%;
 }
-.slider .owl-dots .owl-dot span {
+.slider .owl-theme .owl-dots .owl-dot span {
     background: none;
     border: 1px solid white;
 }
-.slider .owl-dots .owl-dot.active span {
+.slider .owl-theme .owl-dots .owl-dot.active span {
     background: #fff;
 }
 
@@ -309,7 +309,7 @@ a.ftrimg1 {
     justify-content: space-between;
     padding: 0 100px;
 }
-.slider .owl-nav .button {
+.slider .owl-nav button {
     color: #000;
     background: #fff;
     width: 33px;
