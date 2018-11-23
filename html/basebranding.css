@@ -72,30 +72,6 @@
     display: inline-block;
 }
 
-@media (max-width: 768px) {
-    .showroom-grid-widget .row .span3 {
-        width: 48%;
-        padding-bottom: 6px;
-        padding-left: 6px;
-        padding-right: 6px;
-        display: inline-block;
-    }
-}
-
-@media (max-width: 460px) {
-    .showroom-grid-widget .row .span3 {
-        width: 100%;
-        display: block;
-        padding-bottom: 6px;
-        padding-left: 6px;
-        padding-right: 6px;
-    }
-
-    .showroom-grid-widget .showroom-tile {
-        padding-bottom: 32px;
-    }
-}
-
 .showroom-grid-widget .showroom-tile {
     position: relative;
     padding-left: 0px;
