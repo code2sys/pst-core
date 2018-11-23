@@ -294,6 +294,8 @@ a.ftrimg1 {
     width: 100%;
 }
 .slider .owl-theme .owl-dots .owl-dot span {
+    width: 13px;
+    height: 13px;
     background: none;
     border: 1px solid white;
 }
@@ -309,7 +311,7 @@ a.ftrimg1 {
     justify-content: space-between;
     padding: 0 100px;
 }
-.slider .owl-nav button {
+.slider .owl-theme .owl-nav [class*='owl-'] {
     color: #000;
     background: #fff;
     width: 33px;
