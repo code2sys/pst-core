@@ -45,19 +45,20 @@ $CI =& get_instance();
 
                                 foreach ($motorcycle['images'] as $img) {
                                     if (!($img['crs_thumbnail'] > 0)) {
-                                        $img["url"] = $image["image_name"];
-                                        if ($img["external"] == 0) {
-                                            $img["url"] = $media_url. $img["url"];
-                                        }
-
                                         $clean_images[] = $img;
                                     }
-
-
                                 }
-
                                 $motorcycle['images'] = $clean_images;
                             }
+
+                            // You have to fix them...
+                            foreach ($motorcycle["images"] as &$img) {
+                                $img["url"] = $img["image_name"];
+                                if ($img["external"] == 0) {
+                                    $img["url"] = $media_url. $img["url"];
+                                }
+                            }
+
                         }
 
 
