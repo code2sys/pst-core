@@ -1168,11 +1168,30 @@ class Welcome extends Master_Controller {
                     global $PSTAPI;
                     initializePSTAPI();
 
-                    if ($PSTAPI->config()->getKeyValue("forward_leads_to_cdk") == "Yes") {
+                    if (true || $PSTAPI->config()->getKeyValue("forward_leads_to_cdk") == "Yes") {
                         $vehicle_type = $vehicle_make = $vehicle_model = $vehicle_year = "";
                         // We should be getting this motorcycle by title?
                         $motorcycle = $PSTAPI->motorcycle()->fetch(array("title" => $post['motorcycle']), true);
-                        $motorcycle = count($motorcycle) > 0 ? $motorcycle[0] : array();
+
+                        if (count($motorcycle) == 0) {
+                            // We potentially have a trim...
+                            $showcasetrim = $PSTAPI->showcasetrim()->fetch(array("title" => $post["motorcycle"]), true);
+
+
+                            if (count($showcasetrim) > 0) {
+                                $motorcycle = $showcasetrim[0];
+
+                                $showcasemodel = $PSTAPI->showcasemodel()->get($motorcycle["showcasemodel_id"]);
+                                $motorcycle["model"] = $showcasemodel->get("title");
+                                $showcasemachinetype = $PSTAPI->showcasemachinetype()->get($showcasemodel->get("showcasemachinetype_id"));
+                                $motorcycle["type"] = $showcasemachinetype->get("title");
+                                $showcasemake = $PSTAPI->showcasemake()->get($showcasemachinetype->get("showcasemake_id"));
+                                $motorcycle["make"] = $showcasemake->get("title");
+                            }
+
+                        } else {
+                            $motorcycle = $motorcycle[0];
+                        }
 
                         if (array_key_exists("make", $motorcycle)) {
                             $vehicle_make = $motorcycle["make"];
@@ -1204,7 +1223,7 @@ class Welcome extends Master_Controller {
                             "VehicleYear" => $vehicle_year
                         ));
 
-                        $inquiry->pushToVSept();
+                        // $inquiry->pushToVSept();
                     }
                 }
 
