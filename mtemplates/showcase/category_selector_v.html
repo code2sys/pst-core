@@ -1,0 +1,57 @@
+
+<!-- CONTENT WRAP =========================================================================-->
+<div class="content_wrap inventory-content-wrap">
+
+
+
+    <!-- MAIN CONTENT -->
+    <div class="main_content fl-wdh full_info_content" style="float: none !important; width: 100% !important;">
+
+        {{{breadcrumbs}}}
+
+
+        {{{widgetBlock}}}
+
+
+        <div class="inventory-selector-block content_section">
+            {{#grid_widgets}}
+            <?php foreach ($grid_widgets as $grid_widget): ?>
+            <div class="showroom-grid-widget {{#subtitleonly}}subtitleonly{{/subtitleonly}}">
+            {{#widget_title}}
+            <div class="showroom-grid-widget-title">{{{widget_title}}}</div>
+            {{/widget_title}}
+            {{#widget_subtitle}}
+            <div class="showroom-grid-widget-subtitle">{{{widget_subtitle}}}</div>
+            {{/widget_subtitle}}
+
+            <div class="showroom-grid-widget-rows">
+                <div class="row">
+                    {{#widget_tiles}}
+                    {{#next_row}}
+                </div><div class="row">
+                    {{/next_row}}
+
+                <div class="span2 col-md-2 col-sm-4 col-xs-12 showroom-tile-holder" >
+                    <div class=" showroom-tile">
+                        <a href="{{tile_url}}" class="showroom-tile-link"><div class="showroom-tile-image" style="background-image: -webkit-linear-gradient(rgba(255,255,255,0.2) 0%,rgba(0,0,0,0.2) 100%), url('{{thumbnail_url}}'); "></div><span class="showroom-tile-title">{{{tile_title}}}</span><div class="clear: both"></div></a>
+                    </div>
+                </div>
+                {{/widget_tiles}}
+
+                </div>
+
+                </div>
+
+        {{/grid_widgets}}
+        </div>
+
+    <!-- END MAIN CONTENT -->
+
+    <div class="clear"></div>
+</div>
+
+<script type="application/javascript">
+    $(window).on("load", function() {
+        $(".showroom-tile-image").css("height", Math.floor($(".showroom-tile-image").width()) + "px");
+    })
+</script>
