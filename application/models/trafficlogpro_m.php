@@ -160,6 +160,7 @@ class Trafficlogpro_M extends Master_M {
                 $showcasetrim = $PSTAPI->showcasetrim()->get($product_id);
 
                 if (!is_null($showcasetrim) && $showcasetrim->get("title") == $post["motorcycle"]) {
+                    $showcasetrim->addDecorations();
                     $product_detail = $showcasetrim->to_array();
                 }
             }
