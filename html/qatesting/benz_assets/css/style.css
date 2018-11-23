@@ -299,6 +299,10 @@ a.ftrimg1 {
     background: none;
     border: 1px solid white;
 }
+.slider .owl-theme .owl-dots .owl-dot:hover span {
+    background: none;
+    border: 2px solid white;
+}
 .slider .owl-theme .owl-dots .owl-dot.active span {
     background: #fff;
 }
@@ -316,11 +320,11 @@ a.ftrimg1 {
     background: #fff;
     width: 33px;
     height: 33px;
-    line-height: 27px;
     font-weight: 600;
     opacity: inherit;
-    font-size: 22px;
+    font-size: 17px;
     border-radius: 50%;
+    outline: none;
 }
 .slider .owl-buttons {
     position: inherit;
