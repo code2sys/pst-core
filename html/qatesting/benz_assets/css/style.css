@@ -292,21 +292,13 @@ a.ftrimg1 {
     top: 25%;
 }
 #hotels-flats .owl-nav button.owl-prev {
-    position: absolute;
-    left: -35px;
-    color: white !important;
-    background: #1757b1 !important;
-    width: 33px;
-    height: 33px;
-    font-weight: 600;
-    opacity: inherit;
-    font-size: 17px;
-    border-radius: 50%;
-    outline: none;
+    left: -45px;
 }
 #hotels-flats .owl-nav button.owl-next {
+    right: -45px;
+}
+#hotels-flats .owl-nav [class*='owl-'] {
     position: absolute;
-    right: -35px;
     color: white !important;
     background: #1757b1 !important;
     width: 33px;
