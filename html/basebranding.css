@@ -98,6 +98,8 @@
 
 .showroom-grid-widget .showroom-tile {
     position: relative;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .showroom-grid-widget .showroom-tile-image {
