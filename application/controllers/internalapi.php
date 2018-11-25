@@ -30,7 +30,7 @@ class Internalapi extends CI_Controller {
         $file = $_FILES["upload"];
 
         if ($file["size"] > 0) {
-            ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+            ini_set('max_execution_time', 600); //300 seconds = 5 minutes
 
             global $PSTAPI;
             initializePSTAPI();
@@ -77,6 +77,13 @@ class Internalapi extends CI_Controller {
                     $this->CRS_m->fixCatsByTrim($motorcycle_id);
                 }
 
+                // JLB 11-17-18
+                // Set the description, if we can.
+                $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
+                if ($motorcycle->get("crs_trim_id") > 0) {
+                    // then we need to do as we did for Lightspeed.
+                    fixCRSBike($motorcycle, $motorcycle->get("customer_set_title") > 0, trim($motorcycle->get("description")) == "" && $motorcycle->get("customer_set_description") > 0); // Don't change the title.
+                }
 
                 // denormalize that sucker.
                 $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle_id);
