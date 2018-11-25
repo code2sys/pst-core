@@ -43,14 +43,24 @@ class Pages_M extends Master_M
 	    global $PSTAPI;
 	    initializePSTAPI();
 	    $obj = $PSTAPI->pages()->get($pageId);
+	    $obj->inheritHomeMeta();
 	    return is_null($obj) ? false : $obj->to_array();
 	}
 	
 	public function getPageRecByTag($tag)
 	{
-		$where = array('tag' => $tag);
-		$record = $this->selectRecord('pages', $where);
-		return $record;
+        global $PSTAPI;
+        initializePSTAPI();
+        $obj = $PSTAPI->pages()->fetch(array(
+            "tag" => $tag
+        ));
+        if (count($obj) > 0) {
+            $obj = $obj[0];
+            $obj->inheritHomeMeta();
+            return $obj->to_array();
+        } else {
+            return false;
+        }
 	}
 	
 	public function getWidgets()
