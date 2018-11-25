@@ -29,7 +29,7 @@
     $CI =& get_instance();
     echo $CI->load->view("master/top_header", array(
         "store_name" => $store_name,
-        "meta_description" => $meta_description,
+        "meta_description" => isset($meta_description) && $meta_description != "" ? $meta_description : $pageRec["metatags"],
         "meta_keywords" => $pageRec['keywords'],
     ));
 
