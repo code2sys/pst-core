@@ -451,3 +451,115 @@ function fixCRSBike(&$motorcycle, $exclude_title = false, $exclude_description =
     }
 }
 
+function figureShowcaseFlags($pageRec, &$display_makes, &$display_machine_types, &$display_models, &$display_trims, &$showcasemake_id, &$showcasemodel_id, &$showcasemachinetype_id, &$full_url, &$showcasemakes, &$showcasemodels, &$showcasetrims) {
+
+
+    global $PSTAPI;
+    initializePSTAPI();
+
+    $title = $pageRec["title"];
+
+    switch ($pageRec["page_class"]) {
+        case "Showroom Landing Page":
+            $display_makes = true;
+            $showcasemakes = $PSTAPI->showcasemake()->fetch(array(
+                "deleted" => 0
+            ));
+            break;
+
+        case "Showroom Make":
+            // are the machine types?
+            $showcasemakes = $PSTAPI->showcasemake()->fetch(array(
+                "page_id" => $pageRec["id"],
+                "deleted" => 0
+            ));
+
+            if (count($showcasemakes) > 0) {
+                $showcasemake = $showcasemakes[0];
+                $full_url = $showcasemake->get("full_url");
+                $showcasemake_id = $showcasemake->id();
+
+                // machinetypes;
+                $showcasemachinetypes = $PSTAPI->showcasemachinetype()->fetch(array(
+                    "showcasemake_id" => $showcasemake->id(),
+                    "deleted" => 0
+                ));
+
+                if (count($showcasemachinetypes) == 1) {
+                    $showcasemodels = $PSTAPI->showcasemodel()->fetch(array(
+                        "showcasemachinetype_id" => $showcasemachinetypes[0]->id(),
+                        "deleted" => 0
+                    ));
+                    $display_models = true;
+                } else {
+                    // display it.
+                    $display_machine_types = true;
+                }
+            }
+
+            break;
+
+        case "Showroom Machine Type":
+            // OK, we have a MAKE in hand.
+            $showcasemachinetypes = $PSTAPI->showcasemachinetype()->fetch(array(
+                "page_id" => $pageRec["id"],
+                "deleted" => 0
+            ));
+
+            if (count($showcasemachinetypes) > 0) {
+                $showcasemachinetype = $showcasemachinetypes[0];
+                $full_url = $showcasemachinetype->get("full_url");
+                $showcasemachinetype_id = $showcasemachinetype->id();
+
+                $showcasemodels = $PSTAPI->showcasemodel()->fetch(array(
+                    "showcasemachinetype_id" => $showcasemachinetype_id,
+                    "deleted" => 0
+                ));
+                $display_models = true;
+            }
+
+            break;
+
+        case "Showroom Model":
+            $showcasemodels = $PSTAPI->showcasemodel()->fetch(array(
+                "page_id" => $pageRec["id"],
+                "deleted" => 0
+            ));
+
+            if (count($showcasemodels) > 0) {
+                $showcasemodel = $showcasemodels[0];
+                $showcasemodel_id = $showcasemodel->id();
+                $full_url = $showcasemodel->get("full_url");
+
+                $showcasetrims = $PSTAPI->showcasetrim()->fetch(array(
+                    "showcasemodel_id" => $showcasemodel_id,
+                    "deleted" => 0
+                ));
+                $display_trims = true;
+            }
+            break;
+    }
+
+    if ($display_models) {
+        // we have to convert these to trims...
+        $showcasetrims = array();
+
+
+
+        foreach ($showcasemodels as $scm) {
+            $new_trims = $PSTAPI->showcasetrim()->fetch(array(
+                "showcasemodel_id" => $scm->get("showcasemodel_id"),
+                "deleted" => 0
+            ));
+
+            foreach ($new_trims as &$nt) {
+                $nt->set("year", $scm->get("year"));
+            }
+
+            $showcasetrims = array_merge($showcasetrims, $new_trims);
+        }
+
+        $display_models = false;
+        $display_trims = true;
+    }
+}
