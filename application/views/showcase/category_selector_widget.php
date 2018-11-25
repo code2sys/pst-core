@@ -102,7 +102,7 @@ function sortByCategoryOrYear($showcasemodels, &$grid_widgets) {
             foreach ($cat_bucket as $cb) {
                 if ($current_year != $cb->get("year")) {
                     if ($current_year > 0 && count($clean_bucket) > 0) {
-                        prepare_widget_group($title, $clean_bucket, $grid_widgets, false, true, $current_year);
+                        prepare_widget_group($title, $clean_bucket, $grid_widgets, false, true, $current_year > 0 ? $current_year : "");
                         $title = "";
                     }
                     $clean_bucket = array();

@@ -34,7 +34,7 @@
     ));
 
     ?>
-    
+
     <?php
     if (isset($extra_meta_tags)) {
         echo $extra_meta_tags;
