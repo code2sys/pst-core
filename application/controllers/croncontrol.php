@@ -276,7 +276,9 @@ class CronControl extends Master_Controller {
 
 	public function weekly()
 	{
-        $this->checkForCRSMigration(1);
+	    if (false !== getCRSStructure()) {
+            $this->checkForCRSMigration(1);
+        }
         $this->refreshCRSData();
 		$this->_runJob('weekly');
 	}
