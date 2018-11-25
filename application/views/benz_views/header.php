@@ -34,11 +34,7 @@
     ?>
 
 	<?php echo @$metatag; ?>
-    <?php
-    if (isset($extra_meta_tags)) {
-        echo $extra_meta_tags; 
-    }
-    ?>
+
 
 	<!--Motercycle Content Start-->
 	<!--Motercycle Content End-->
