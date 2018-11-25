@@ -159,6 +159,16 @@ class Pages_M extends Master_M
 		if(is_numeric($post['id']))
 		{
 			$where = array('id' => $post['id']);
+			$page = $PSTAPI->pages()->get($post['id']);
+			$page->inheritHomeMeta();
+
+			if ($page->get("keywords") != $post["keywords"]) {
+			    $post["customer_set_keywords"] = 1;
+            }
+			if ($page->get("metatags") != $post["metatags"]) {
+			    $post["customer_set_metatags"] = 1;
+            }
+
 			return $PSTAPI->pages()->update($post['id'], $post)->id();
 //			$success = $this->updateRecord('pages', $post, $where, FALSE);
 		}
