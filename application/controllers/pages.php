@@ -612,10 +612,10 @@ class Pages extends Master_Controller {
                 // get the store location...
                 $this->load->model("admin_m");
                 $store_name = $this->admin_m->getAdminShippingProfile();
-                if (!array_key_exists("metatag", $this->_mainData)) {
-                    $this->_mainData["metatag"] = "";
+                if (!array_key_exists("extra_meta_tags", $this->_mainData)) {
+                    $this->_mainData["extra_meta_tags"] = "";
                 }
-                $this->_mainData["metatag"] .= $this->load->view("showcase/location_metatags", $store_name, true);
+                $this->_mainData["extra_meta_tags"] .= $this->load->view("showcase/location_metatags", $store_name, true);
             }
 
 	  		
