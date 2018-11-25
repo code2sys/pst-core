@@ -587,6 +587,7 @@ class Pages extends Master_Controller {
 
 	  		$master_view = "master/master_v";
 			$page_view = "info/ride_home_v";
+			$embed_location_meta = false;
 
 	  		switch($this->_mainData['pageRec']["page_class"]) {
                 case "Showroom Landing Page":
@@ -595,14 +596,26 @@ class Pages extends Master_Controller {
                 case "Showroom Model":
                     $master_view = "benz_views/header";
                     $page_view = "showcase/category_selector_v";
+                    $embed_location_meta = true;
                     break;
 
 
                 case "Showroom Trim":
                     $master_view = "benz_views/header";
                     $page_view = "showcase/trim_view_motorcycle_v";
+                    $embed_location_meta = true;
                     break;
 
+            }
+
+            if ($embed_location_meta) {
+                // get the store location...
+                $this->load->model("admin_m");
+                $store_name = $this->admin_m->getAdminShippingProfile();
+                if (!array_key_exists("metatag", $this->_mainData)) {
+                    $this->_mainData["metatag"] = "";
+                }
+                $this->_mainData["metatag"] .= $this->load->view("showcase/location_metatags", $store_name, true);
             }
 
 	  		
