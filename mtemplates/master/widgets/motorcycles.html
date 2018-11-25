@@ -26,19 +26,19 @@
         <div class="col-md-{{moto_width}} wrap-col">
             <a href="{{MOTORCYCLE_SERVICE_LINK_URL}}"><h2>schedule service</h2></a>
         </div>
-    </div>
+    </div>  
 </div>
 
 {{#ShowFeaturedModels}}
 <div class="sw filterBar" id="featuredMotorcycleModelSlider">
     <div class="container_b">
         <h1 class="head-txt"> featured models: <span> <a href="/Major_Unit_List?fltr=special&search_keywords=">shop more</a> </span></h1>
-        <div id="hotels-flats" class="owl-carousel">
+        <div id="hotels-flats" class="owl-carousel owl-theme">
             {{#FeaturedModels}}
             <div class="item">
                 <div class="item-box">
                     <a href="{{link}}">
-                        <img class="lazyOwl" data-src="{{image_name}}" alt="Motorcycle Image">
+                        <img class="owl-lazy" data-src="{{image_name}}" alt="Motorcycle Image">
                         <p>{{original_title}}</p>
                        {{{price}}}
                     </a>
