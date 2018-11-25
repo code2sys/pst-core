@@ -1,6 +1,5 @@
 <?php
 
-
 $CI =& get_instance();
 $CI->load->helper("mustache_helper");
 $category_selector_v = mustache_tmpl_open("showcase/category_selector_v.html");
@@ -9,6 +8,8 @@ mustache_tmpl_set($category_selector_v, "breadcrumbs", $CI->load->view("showcase
     "title" => $title,
     "full_url" => $full_url
 ), true));
+
+print "WHERE MY BREADCRUMBS???\n";
 
 
 if (isset($widgetBlock) && $widgetBlock != "") {

@@ -766,6 +766,7 @@ class CronControl extends Master_Controller {
     public function loadFactoryShowroom() {
         $this->load->model("Showcasemodel");
         $this->Showcasemodel->loadShowcase();
+        $this->fixShowcasePages();
     }
 
 }
