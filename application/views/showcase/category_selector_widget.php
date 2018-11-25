@@ -10,6 +10,7 @@ $showcasemachinetype_id = null;
 $showcasemakes = null;
 $showcasemodels = null;
 $showcasetrims = null;
+$showcasemachinetypes = null;
 
 global $PSTAPI;
 initializePSTAPI();
@@ -17,7 +18,7 @@ initializePSTAPI();
 $title = $pageRec["title"];
 $full_url = "";
 
-figureShowcaseFlags($pageRec, $display_makes, $display_machine_types, $display_models, $display_trims, $showcasemake_id, $showcasemodel_id, $showcasemachinetype_id, $full_url, $showcasemakes, $showcasemodels, $showcasetrims);
+figureShowcaseFlags($pageRec, $display_makes, $display_machine_types, $display_models, $display_trims, $showcasemake_id, $showcasemodel_id, $showcasemachinetype_id, $full_url, $showcasemakes, $showcasemodels, $showcasetrims, $showcasemachinetypes);
 
 $CI =& get_instance();
 $CI->load->helper("mustache_helper");
