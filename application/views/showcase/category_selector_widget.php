@@ -125,7 +125,7 @@ function sortByCategoryOrYear($showcasemodels, &$grid_widgets) {
         foreach ($year_bucket_keys as $year) {
             $buckets = $year_buckets[$year];
 
-            prepare_widget_group($year. " Models", $buckets, $grid_widgets);
+            prepare_widget_group($year > 0 ? $year. " Models" : "", $buckets, $grid_widgets);
         }
     }
 }
