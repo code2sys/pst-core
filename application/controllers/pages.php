@@ -1118,6 +1118,7 @@ class Pages extends Master_Controller {
             // First, what page types do not permit being files or downloads?
             $this->_mainData["hidden_managed_page"] = in_array($page->get("page_class"), array("System Page", "Part Section", "Showroom Model", "Showroom Trim", "Showroom Make", "Showroom Machine Type", "Showroom Landing Page"));
             $this->_mainData["upload_thumbnail"] = $page->hasThumbnail();
+            $this->_mainData["has_showcase_segment"] = $page->hasShowcaseSegment();
 
             switch ($page->get("page_class")) {
                 case "Showroom Model":

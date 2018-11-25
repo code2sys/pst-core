@@ -308,6 +308,28 @@ class Pages_M extends Master_M
                     }
 
                     break;
+
+
+                case "Factory Showroom":
+                    // This is for the inventory showcase.
+                    global $PSTAPI;
+                    initializePSTAPI();
+
+                    $page = $PSTAPI->pages()->get($pageId);
+
+                    if (!is_null($page) && $page->hasShowcaseSegment()) {
+                        if ($page->get("page_class") == "Showroom Trim") {
+                            /*
+                             * I don't think this happens; I'm going to prevent it. The page is so similar to motorcycles, why is it treated like a page?
+                             */
+                        } else {
+                            $widgetBlock .= $this->load->view("showcase/category_selector_widget", array(
+                                "pageRec" => $page->to_array()
+                            ), true);
+                        }
+                    }
+                    break;
+
             }
 
 

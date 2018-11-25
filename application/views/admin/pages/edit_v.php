@@ -175,8 +175,10 @@
 															  </td>
 						</tr>
 						<?php endif; ?>
+
+                        <?php if ($pageRec["page_class"] != "Showroom Trim"): ?>
 						<tr class="typeSpecific showManagedPage">
-							<td>TextBox Widget</td><td></td>
+                            <td><strong>Page Widgets</strong></td><td></td>
 						</tr>
 						<tr class="typeSpecific showManagedPage">
 							<td colspan="2">
@@ -196,6 +198,10 @@
                                         <li ><strong>Calendar of Events</strong> <a href="javascript:void(0);" onclick="addWidget('Events');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Large image slider with 1024x400px images.</p>
 
 
+                                        <?php if ($has_showcase_segment): ?>
+                                            <li ><strong>Factory Showroom</strong> <a href="javascript:void(0);" onclick="addWidget('Factory Showroom');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Factory showroom segment.</p>
+                                        <?php endif; ?>
+
 
 									</ul>
 									<ul id="sortable">
@@ -206,6 +212,7 @@
                                             $textedit = 0;
                                             $gallery = 0;
                                             $events = 0;
+                                            $showrooms = 0;
                                             foreach ($page_sections as $section) {
                                                 switch ($section["type"]) {
                                                     case "Textbox":
@@ -233,6 +240,11 @@
                                                         $events++;
                                                         $label = $section["type"] . " " . $events;
                                                         break;
+                                                        
+                                                    case 'Factory Showroom':
+                                                        $showrooms++;
+                                                        $label = $section["type"] . " " . $showrooms;
+                                                        break;
                                                 }
 
                                                 ?>
@@ -256,6 +268,7 @@
 								<?php foreach($pageRec['widgets'] as $wid): ?>
 										<input type="hidden" value="<?php echo $wid; ?>" name="widgets[]">
 							<?php endforeach; endif; ?>
+						<?php endif; ?>
 						<?php endif; ?>
 					</table>
 				</div>

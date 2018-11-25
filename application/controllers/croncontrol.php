@@ -2,6 +2,17 @@
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
 
+    // JLB 11-25-18
+    // Fix all those showcase pages that already exist...
+    public function fixShowcasePages() {
+        global $PSTAPI;
+        initializePSTAPI();
+        $pages = $PSTAPI->pages()->fetch();
+        foreach ($pages as $p) {
+            $p->fixShowcaseSegment();
+        }
+    }
+
     // JLB 11-09-18
     // Fix the description from CRS...
     public function fixCRSDescriptions() {

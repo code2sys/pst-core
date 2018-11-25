@@ -50,7 +50,7 @@ class Showcasemodel extends CI_Model {
 
         if (count($pages) == 0) {
             // we have to add the page...
-            $PSTAPI->pages()->add(array(
+            $p = $PSTAPI->pages()->add(array(
                 "label" => $this->_default_main_title(),
                 "title" => $this->_default_main_title(),
                 "active" => 1,
@@ -59,6 +59,7 @@ class Showcasemodel extends CI_Model {
                 "tag" => "factoryshowroom",
                 "location" => "footer,comp_info"
             ));
+            $p->fixShowcaseSegment();
         } else {
             // we just have to make sure it's active.
             if ($pages[0]->get("active") == 0) {
@@ -117,6 +118,7 @@ class Showcasemodel extends CI_Model {
                     "page_class" => $type,
                     "tag" => $tag
                 ));
+                $page->fixShowcaseSegment();
                 $PSTAPI->$factory()->update($make->id(), array("page_id" => $page->id()));
             }
         }
