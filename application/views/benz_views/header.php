@@ -19,7 +19,9 @@
 	?>
 <head>
     <?php echo jget_store_block("top_header"); ?>
-	<?php if (isset($title)): ?>
+    <?php if (isset($fancy_title) && $fancy_title != ""): ?>
+    <title><?php echo $fancy_title; ?></title>
+	<?php elseif (isset($title)): ?>
     <title><?php echo $title; ?></title>
 	<?php endif; ?>
 
@@ -36,7 +38,7 @@
 	<?php echo @$metatag; ?>
     <?php
     if (isset($extra_meta_tags)) {
-        echo $extra_meta_tags; 
+        echo $extra_meta_tags;
     }
     ?>
 
