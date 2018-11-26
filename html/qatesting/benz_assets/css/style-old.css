@@ -276,17 +276,81 @@ a.ftrimg1 {
     width: 100%;
     height: 480px;
 }
+.owl-carousel .owl-stage-outer {
+    width: 100%;
+}
+.owl-carousel .owl-nav {
+    position: absolute;
+    width: 100%;
+    top: 25%;
+}
+#hotels-flats .owl-nav button.owl-prev {
+    left: -45px;
+}
+#hotels-flats .owl-nav button.owl-next {
+    right: -45px;
+}
+#hotels-flats .owl-nav [class*='owl-'] {
+    position: absolute;
+    color: white !important;
+    background: #1757b1 !important;
+    width: 33px;
+    height: 33px;
+    font-weight: 600;
+    opacity: inherit;
+    font-size: 17px;
+    border-radius: 50%;
+    outline: none;
+}
+
 .slider .owl-carousel .owl-item {
     width: 1349px ;
     margin: 0;
 }
-.slider .owl-theme .owl-controls .owl-page.active span {
-    background: #fff;
-}
-.slider .owl-pagination {
+
+.slider .owl-dots {
     position: absolute;
     bottom: 25px;
     width: 100%;
+}
+.slider .owl-theme .owl-dots .owl-dot {
+    outline: none;
+}
+.slider .owl-theme .owl-dots .owl-dot span {
+    width: 13px;
+    height: 13px;
+    background: none;
+    border: 1px solid white;
+}
+.slider .owl-theme .owl-dots .owl-dot:hover span {
+    background: none;
+    border: 2px solid white;
+}
+.slider .owl-theme .owl-dots .owl-dot.active span {
+    background: #fff;
+}
+
+.slider .owl-nav {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 100px;
+}
+.slider .owl-nav .owl-prev, .slider .owl-nav .owl-next {
+    position: relative !important;
+}
+.slider .owl-theme .owl-nav [class*='owl-'] {
+    color: #000;
+    background: #fff;
+    width: 33px;
+    height: 33px;
+    font-weight: 600;
+    opacity: inherit;
+    font-size: 17px;
+    border-radius: 50%;
+    outline: none;
 }
 .slider .owl-buttons {
     position: inherit;
