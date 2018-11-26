@@ -194,11 +194,11 @@ echo $CI->load->view("benz_views/real_footer", array(
 				nav : true,
 				loop: true,
 				items: 1,
-				autoplaySpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 300; ?>,
-				dotsSpeed : <?php echo defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_PAGINATION_SPEED : 400; ?>,
 				singleItem:true,
-				autoplay: <?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000; ?>,
-				autoplayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 1000; ?>
+				navText: ["<",">"],
+				autoplay: true,
+				autoplayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000; ?>,
+				autoplayHoverPause:true
 		   });
             <?php
             // JLB 01-31-18
@@ -207,26 +207,29 @@ echo $CI->load->view("benz_views/real_footer", array(
             ?>
             $("#hotels-flats").owlCarousel({
                 items : 4,
-                lazyLoad : true,
-                navigation : true,
-                autoPlay: true,
-                autoPlayTimeout:3000
+				loop: true,
+				lazyLoad : true,
+				nav : true,
+				dots: false,
+				navText: ["<",">"],
+				autoplay: true,
+				autoplayTimeout:3000
             });
 
             $("#homes-for-rent").owlCarousel({
                 items : 4,
                 lazyLoad : true,
-                navigation : true
+                nav : true
             });
             $("#homes-for-rent-1").owlCarousel({
                 items : 3,
                 lazyLoad : true,
-                navigation : true
+                nav : true
             });
             $("#hotels-flats-1").owlCarousel({
                 items : 3,
                 lazyLoad : true,
-                navigation : true
+                nav : true
             });
 
 
