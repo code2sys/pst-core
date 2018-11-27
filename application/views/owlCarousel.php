@@ -1,5 +1,6 @@
 <?php
 
+$CI =& get_instance();
 $CI->load->helper("mustache_helper");
 
 $template = mustache_tmpl_open("owlCarousel.html");
