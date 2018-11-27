@@ -187,55 +187,12 @@ echo $CI->load->view("benz_views/real_footer", array(
 			});
 		}
 	});
+	</script>
 
-		$(document).ready(function() {
-
-			$("#owl-demo").owlCarousel({
-				nav : true,
-				loop: true,
-				items: 1,
-				singleItem:true,
-				navText: ["<",">"],
-				autoplay: true,
-				autoplayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000; ?>,
-				autoplayHoverPause:true
-		   });
-            <?php
-            // JLB 01-31-18
-            // The BENZ guys just cannot make good names. I don't know which ones of these are live, but they all appear to exist somewhere.
-            // Really, a clusterfuck of bad design on this page...and it's duplicated in header.php and in a few other spots.
-            ?>
-            $("#hotels-flats").owlCarousel({
-                items : 4,
-				loop: true,
-				lazyLoad : true,
-				nav : true,
-				dots: false,
-				navText: ["<",">"],
-				autoplay: true,
-				autoplayTimeout:3000
-            });
-
-            $("#homes-for-rent").owlCarousel({
-                items : 4,
-                lazyLoad : true,
-                nav : true
-            });
-            $("#homes-for-rent-1").owlCarousel({
-                items : 3,
-                lazyLoad : true,
-                nav : true
-            });
-            $("#hotels-flats-1").owlCarousel({
-                items : 3,
-                lazyLoad : true,
-                nav : true
-            });
-
-
-        });
-
-    </script>
+<?php
+$CI =& get_instance();
+echo $CI->load->view("owlCarousel", array(), true);
+?>
 
 	<script type="text/javascript">
   /* Submit on Enter */
