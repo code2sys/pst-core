@@ -61,14 +61,12 @@ echo $CI->load->view("braintree", array(
 		$(document).ready(function() {
             // This is the main slider
             $("#owl-demo").owlCarousel({
-                nav : true,
-                loop: true,
-                items: 1,
-                singleItem:true,
-                navText: ["<",">"],
-                autoplay: true,
-                autoplayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000; ?>,
-                autoplayHoverPause:true
+                  navigation : true,
+                   slideSpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 500; ?>,
+                   paginationSpeed : <?php echo defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_PAGINATION_SPEED : 500; ?>,
+                   singleItem:true,
+                   autoPlay: <?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000; ?>,
+                   autoPlayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 1000; ?>
               });
 
 
@@ -79,37 +77,34 @@ echo $CI->load->view("braintree", array(
             ?>
             $("#hotels-flats").owlCarousel({
                 items : 4,
-                loop: true,
                 lazyLoad : true,
-                nav : true,
-                dots: false,
-                navText: ["<",">"],
-                autoplay: true,
-                autoplayTimeout:3000
+                navigation : true,
+                autoPlay: true,
+                autoPlayTimeout:3000
             });
 
             $("#homes-for-rent").owlCarousel({
                 items : 4,
                 lazyLoad : true,
-                nav : true
+                navigation : true
             });
             $("#homes-for-rent-1").owlCarousel({
                 items : 3,
                 lazyLoad : true,
-                nav : true
+                navigation : true
             });
             $("#hotels-flats-1").owlCarousel({
                 items : 3,
                 lazyLoad : true,
-                nav : true
+                navigation : true
             });
 
             $("#hotels-flats-2").owlCarousel({
                 items : 3,
                 lazyLoad : true,
-                nav : true,
-                autoplay: true,
-                autoplayTimeout:3000
+                navigation : true,
+                autoPlay: true,
+                autoPlayTimeout:3000
             });
 
         });
