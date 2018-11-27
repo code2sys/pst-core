@@ -44,50 +44,8 @@
 </div>
 
 {{{braintree}}}
+{{{owlCarousel}}}
 
-<script type="application/javascript">
-    $(document).ready(function() {
-
-        $("#owl-demo").owlCarousel({
-            navigation : true,
-            slideSpeed : {{HOME_SCREEN_SLIDER_SPEED}},
-            paginationSpeed : {{HOME_SCREEN_PAGINATION_SPEED}},
-            singleItem:true,
-            autoPlay: {{HOME_SCREEN_AUTO_PLAY_TIMEOUT}},
-            autoPlayTimeout:{{HOME_SCREEN_AUTO_PLAY_TIMEOUT2}}
-        });
-
-
-        $("#hotels-flats").owlCarousel({
-            items : 4,
-            lazyLoad : true,
-            navigation : true,
-            autoPlay: true,
-            autoPlayTimeout:3000
-        });
-
-        $("#homes-for-rent").owlCarousel({
-            items : 4,
-            lazyLoad : true,
-            navigation : true
-        });
-        $("#homes-for-rent-1").owlCarousel({
-            items : 3,
-            lazyLoad : true,
-            navigation : true
-        });
-        $("#hotels-flats-1").owlCarousel({
-            items : 3,
-            lazyLoad : true,
-            navigation : true
-        });
-
-
-    });
-
-
-
-</script>
 
 <script type="text/javascript">
     /* Submit on Enter */

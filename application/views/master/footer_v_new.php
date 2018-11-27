@@ -55,62 +55,11 @@ $CI =& get_instance();
 echo $CI->load->view("braintree", array(
 	"store_name" => $store_name
 ), true);
+
+echo $CI->load->view("owlCarousel", array(), true);
 ?>
-		
-	<script type="application/javascript">
-		$(document).ready(function() {
-            // This is the main slider
-            $("#owl-demo").owlCarousel({
-                  navigation : true,
-                   slideSpeed : <?php echo defined("HOME_SCREEN_SLIDER_SPEED") ? HOME_SCREEN_SLIDER_SPEED : 500; ?>,
-                   paginationSpeed : <?php echo defined("HOME_SCREEN_PAGINATION_SPEED") ? HOME_SCREEN_PAGINATION_SPEED : 500; ?>,
-                   singleItem:true,
-                   autoPlay: <?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 5000; ?>,
-                   autoPlayTimeout:<?php echo defined("HOME_SCREEN_AUTO_PLAY_TIMEOUT") ? HOME_SCREEN_AUTO_PLAY_TIMEOUT : 1000; ?>
-              });
 
 
-            <?php
-            // JLB 01-31-18
-            // The BENZ guys just cannot make good names. I don't know which ones of these are live, but they all appear to exist somewhere.
-            // Really, a clusterfuck of bad design on this page...and it's duplicated in header.php and in a few other spots.
-            ?>
-            $("#hotels-flats").owlCarousel({
-                items : 4,
-                lazyLoad : true,
-                navigation : true,
-                autoPlay: true,
-                autoPlayTimeout:3000
-            });
-
-            $("#homes-for-rent").owlCarousel({
-                items : 4,
-                lazyLoad : true,
-                navigation : true
-            });
-            $("#homes-for-rent-1").owlCarousel({
-                items : 3,
-                lazyLoad : true,
-                navigation : true
-            });
-            $("#hotels-flats-1").owlCarousel({
-                items : 3,
-                lazyLoad : true,
-                navigation : true
-            });
-
-            $("#hotels-flats-2").owlCarousel({
-                items : 3,
-                lazyLoad : true,
-                navigation : true,
-                autoPlay: true,
-                autoPlayTimeout:3000
-            });
-
-        });
-
-	</script>
-	
 	<script type="text/javascript">
   /* Submit on Enter */
   $(document).ready(function(){
