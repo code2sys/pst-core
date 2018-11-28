@@ -1131,6 +1131,10 @@ class Account_M extends Master_M
 		// echo "<pre>";
 		// print_r($data);
 		// echo "</pre>";exit;
+        if (!array_key_exists("ip_address", $data)) {
+            $data["ip_address"] = returnClientIP();
+        }
+
 	   $this->db->insert('finance_applications', $data );
 	}
         
