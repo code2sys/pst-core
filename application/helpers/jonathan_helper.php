@@ -434,3 +434,7 @@ function fixCRSBike(&$motorcycle, $exclude_title = false, $exclude_description =
     }
 }
 
+// JLB: I put this here as I expect we'll be putting in an LB in the future...which will require looking at headers differently.
+function returnClientIP() {
+    return $_SERVER["REMOTE_ADDR"];
+}
