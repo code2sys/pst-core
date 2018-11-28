@@ -484,6 +484,9 @@ class Motorcycle_M extends Master_M {
     public function saveEnquiry( $data ) {
         global $PSTAPI;
         initializePSTAPI();
+        if (!array_key_exists("ip_address", $data)) {
+            $data["ip_address"] = returnClientIP();
+        }
         $PSTAPI->motorcycleenquiry()->add($data);
     }
 

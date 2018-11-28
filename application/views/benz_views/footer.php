@@ -20,6 +20,9 @@ mustache_tmpl_set($template, "pages", $pages);
 // we also will make that into its own rendered version
 mustache_tmpl_set($template, "pages_rendered", jprint_interactive_footer($pages, false));
 
+// JLB: I moved this out because it was dumb to keep replicating it.
+mustache_tmpl_set($template, "owlCarousel", $CI->load->view("owlCarousel", array(), true));
+
 
 // the following builds up the address
 mustache_tmpl_set($template, "street_address", $store_name['street_address']);

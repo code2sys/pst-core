@@ -563,3 +563,8 @@ function figureShowcaseFlags($pageRec, &$display_makes, &$display_machine_types,
         $display_trims = true;
     }
 }
+
+// JLB: I put this here as I expect we'll be putting in an LB in the future...which will require looking at headers differently.
+function returnClientIP() {
+    return $_SERVER["REMOTE_ADDR"];
+}
