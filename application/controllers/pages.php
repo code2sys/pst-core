@@ -463,7 +463,6 @@ class Pages extends Master_Controller {
 	  		$this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
 	  		$this->setMasterPageVars('metatags', $this->_mainData['pageRec']['metatags']);
 	  		$this->setMasterPageVars('descr', $this->_mainData['pageRec']['metatags']);
-	  		error_log("Setting metatags to " . $this->_mainData["pageRec"]["metatags"]);
 	  		$this->setMasterPageVars('metatag', html_entity_decode($this->_mainData['pageRec']['metatags']));
 	  		$this->setMasterPageVars('css', html_entity_decode($this->_mainData['pageRec']['css']));
 	  		$this->setMasterPageVars('script', html_entity_decode($this->_mainData['pageRec']['javascript']));
@@ -1521,8 +1520,6 @@ class Pages extends Master_Controller {
             "page_section_id" => $page_section_id
         ));
 
-        error_log(print_r($_REQUEST, true));
-
 
         header("Location: /pages/edit/${page_id}");
 
@@ -1588,8 +1585,6 @@ class Pages extends Master_Controller {
             "zip" => array_key_exists("zip", $_REQUEST) ? $_REQUEST["zip"] : "",
             "city" => array_key_exists("city", $_REQUEST) ? $_REQUEST["city"] : ""
         ));
-
-        error_log(print_r($_REQUEST, true));
 
         header("Location: /pages/edit/${pageId}");
     }

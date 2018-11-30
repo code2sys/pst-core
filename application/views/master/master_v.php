@@ -12,17 +12,12 @@ if (isset($title) && $title != "") {
 
 $meta_description = "";
 if (isset($descr) && $descr != "") {
-    error_log("Description 1: $descr");
     $meta_description = $descr;
 } else if (isset($pageRec) && is_array($pageRec) && array_key_exists("descr", $pageRec) && $pageRec["descr"] != "") {
-    error_log("Description 2");
     $meta_description = $pageRec["descr"];
 } else if (isset($pageRec) && is_array($pageRec) && array_key_exists("metatags", $pageRec) && $pageRec["metatags"] != "") {
-    error_log("Description 3");
     $meta_description = $pageRec["metatags"];
 }
-
-error_log("Meta description: $meta_description");
 
 $meta_keywords = "";
 if (isset($keywords) && $keywords != "") {
@@ -48,7 +43,6 @@ if (isset($keywords) && $keywords != "") {
         ?>
 
         <?php
-        error_log("Calling top_header with $meta_description");
         $CI =& get_instance();
         echo $CI->load->view("master/top_header", array(
             "store_name" => $store_name,
