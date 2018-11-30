@@ -1,5 +1,6 @@
 <h4>Highlights</h4>
 <hr>
+{{^hide_stock_information}}
 <div class="dtal-txt">
     <label>location :</label>
     <span>{{location_description}}</span>
@@ -14,6 +15,7 @@
     <label>Condition :</label>
     <span>{{#condition1}}New{{/condition1}}{{^condition1}}Pre-Owned{{/condition1}}</span>
 </div>
+{{/hide_stock_information}}
 {{#year}}
 <div class="dtal-txt">
     <label>year :</label>
@@ -82,10 +84,12 @@
     <span>{{vin_number}}</span>
 </div>
 {{/vin_number}}
+{{#clean_complex_SKU}}
 <div class="dtal-txt">
     <label>Stock Code :</label>
     <span>{{clean_complex_SKU}}</span>
 </div>
+{{/clean_complex_SKU}}
 <div class="social-button">
     <p class="scia-share">Share</p>
     <a href="javascript:fbshareCurrentPage()" target="_blank" alt="Share on Facebook" class="face">

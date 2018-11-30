@@ -49,3 +49,107 @@
     font-size: 120%;
     line-height: 200%;
 }
+
+.showroom-grid-widget {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    /*border: 1px solid gray;*/
+    /*background-color: #eeeeee;*/
+    padding: 32px;
+    margin-bottom: 12px;
+}
+
+.showroom-grid-widget .row {
+    width: 100%;
+}
+
+.showroom-grid-widget .row .span3 {
+    width: 24%;
+    padding-bottom: 6px;
+    padding-left: 6px;
+    padding-right: 6px;
+    display: inline-block;
+}
+
+.showroom-grid-widget .showroom-tile {
+    position: relative;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-right: 6px;
+    margin-left: 6px;
+    margin-bottom: 6px;
+}
+
+.showroom-grid-widget .showroom-tile-holder {
+    padding: 6px;
+}
+
+.showroom-grid-widget .showroom-tile-image {
+    border: 1px solid black;
+    background-size: contain;
+    background-position-x: center;
+    background-position-y: center;
+    background-color: white;
+    background-repeat: no-repeat;
+    width: 100%;
+    position: relative;
+}
+
+.showroom-grid-widget .showroom-tile-title {
+    position: absolute;
+    right: 6px;
+    bottom: 0;
+    text-align: right;
+    margin-bottom: 6px;
+    text-overflow: ellipsis;
+    overflow-y: hidden;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+}
+
+
+.showroom-grid-widget-title {
+    font-size: 125%;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 3px;
+}
+
+
+.showroom-grid-widget-subtitle {
+    font-size: 110%;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.showcasebreadcrumb {
+    background-color: transparent;
+}
+
+.showroom-grid-widget.subtitleonly {
+    margin-top: -56px; /* This is a 12 px margin + 12 px margin + 32 px padding */
+}
+
+
+.category_selector_v.widgetBlock {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1024px;
+}
+
+.category_selector_v.widgetBlock .page_header .bxslider img {
+    max-width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .category_selector_v.widgetBlock {
+        max-width: 100%;
+    }
+
+
+}
+
+

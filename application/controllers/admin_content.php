@@ -162,7 +162,9 @@ class Admin_Content extends Master_Controller {
             $this->_mainData['success'] = 'Your changes have been made.';
         }
 
-        $this->_mainData['pages'] = $this->pages_m->getPages();
+        global $PSTAPI;
+        initializePSTAPI();
+        $this->_mainData['pages'] = $PSTAPI->pages()->fetch(array(), true); // $this->pages_m->getPages();
         $this->renderMasterPage('admin/master_v', 'admin/pages/list_v', $this->_mainData);
     }
 

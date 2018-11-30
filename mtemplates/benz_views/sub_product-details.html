@@ -1,0 +1,259 @@
+<style>
+    ul.lSPager.lSGallery {
+        right: 0px;
+    }
+</style>
+<div class="sw prod-ls">
+    <div class="container_b">
+        <div class="col-md-12 col-xs-12 pdig">
+            {{#override_breadcrumbs}}
+            {{{breadcrumbs}}}
+            {{/override_breadcrumbs}}
+            {{^override_breadcrumbs}}
+            <nav class="breadcrumb">
+                <a href="{{base_url}}">Home</a>
+                <span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+                <a href="{{referUrl}}">Motorcycle List</a>
+                <span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+                <a href="breadcrumb_url">{{{breadcrumb_title}}}</a>
+            </nav>
+            {{/override_breadcrumbs}}
+
+            {{{menu_section_template}}}
+
+            <div class="col-md-8 col-xs-12 col-sm-7 pdig sect-sid">
+                <div class="clearfix" style="width:100%;">
+                    <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
+                        {{#image_loop}}
+                        <li data-thumb="{{url}}">
+                            <a class="fancybox" href="{{url}}" data-fancybox-group="gallery">
+                                <img src="{{url}}" />
+                            </a>
+                        </li>
+                        {{/image_loop}}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-5 pull-right bx-rit pdig sect-wdt">
+                <h3>{{{motorcycle_title}}}</h3>
+                {{{pricing_widget}}}
+                {{{info_block_template}}}
+            </div>
+        </div>
+        <div class="col-md-12 col-xs-12 pdig padg-one" style="padding-top:50px;">
+            {{{recently_viewed}}}
+
+            <div class="{{specwidth}} major-unit-tabbed-region pdig vide-wdt">
+                {{#show_info}}
+                <span href="#" class="btn info-btn" id="product-details-info">
+					info
+				</span>
+                {{/show_info}}
+                {{#show_spec}}
+                <span href="#" class="btn info-btn" id="product-details-spec">
+					specifications
+				</span>
+                {{/show_spec}}
+                <hr class="hr-lne">
+                {{#show_info}}
+                <div class="info" id="product-details-info-body">
+                    {{#embedded_videos}}
+                    <div class="vds rmv">
+                        {{{embedded_videos}}}
+                    </div>
+                    <div class="clear mn-hght"></div>
+                    {{/embedded_videos}}
+                    {{{description}}}
+                </div>
+                {{/show_info}}
+                {{#show_spec}}
+                <div class="info" id="product-details-spec-body">
+
+                    <div>
+                        <style scoped>
+
+                            .row1 {
+                                background-color: white;
+                            }
+
+                            td {
+                                padding: 3px;
+                                width: 50%;
+                            }
+
+                            td.key {
+                                font-weight: bold;
+                            }
+
+                            td.value {
+                                text-align: right;
+                            }
+
+
+                        </style>
+                        <h3>Specifications</h3>
+
+                        {{#specs_loop}}
+                        <p><strong>{{{feature_name}}}</strong></p>
+                        <table border="0" width="100%" class="stripedtable">
+                            {{#attributes}}
+                            <tr class="row{{k}}">
+                                <td class="key" valign="top">{{{feature_name}}}{{#attribute_name}} - {{{attribute_name}}}{{/attribute_name}}</td>
+                                <td class="value" valign="top">{{{final_value}}}</td>
+                            </tr>
+                            {{/attributes}}
+                        </table>
+                        {{/specs_loop}}
+
+                        <p><em>Certain features may require an additional add-on package that may not be included in the retail or sale price. Please contact the dealership for full details.</em></p>
+                    </div>
+
+
+                </div>
+                {{/show_spec}}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#tab_switcher}}
+<script type="application/javascript">
+    $(document).ready(function() {
+        // Hide the spec stuff
+        $("#product-details-spec").css("opacity", 0.5);
+        $("#product-details-spec-body").hide();
+
+        $("#product-details-spec").on("click", function(e) {
+            $("#product-details-spec").css("opacity", 1.0);
+            $("#product-details-info").css("opacity", 0.5);
+            e.stopPropagation();
+            e.preventDefault();
+            $("#product-details-info-body").hide();
+            $("#product-details-spec-body").show();
+        });
+
+        $("#product-details-info").on("click", function(e) {
+            $("#product-details-info").css("opacity", 1.0);
+            $("#product-details-spec").css("opacity", 0.5);
+            e.stopPropagation();
+            e.preventDefault();
+            $("#product-details-spec-body").hide();
+            $("#product-details-info-body").show();
+        });
+
+    });
+</script>
+{{/tab_switcher}}
+
+
+<script language="javascript">
+    function fbshareCurrentPage()
+    {window.open("http://www.facebook.com/share.php?u="+escape(window.location.href)+"&picture="+"{{url_image_url}}", '',
+        'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+        return false; }
+</script>
+<script>
+    $(document).ready(function() {
+
+        var thumbItem = 9;
+        var screen_width = $(document).width();
+
+        if (screen_width < 480) {
+            // mobile screen
+            thumbItem = 4;
+        } else if (screen_width < 640) {
+            // phablet
+            thumbItem = 5;
+        } else if (screen_width < 768) {
+            // tablet
+            thumbItem = 6;
+        } else if (screen_width < 1024) {
+            // I don't know why
+            thumbItem = 8;
+        }
+
+        $('#image-gallery').lightSlider({
+            gallery:true,
+            item:1,
+            galleryMargin: 10,
+            thumbItem:thumbItem,
+            slideMargin: 0,
+            speed:500,
+            auto:true,
+            loop:true,
+            onSliderLoad: function() {
+                $('#image-gallery').removeClass('cS-hidden');
+            },
+            pause:{{MAJOR_UNIT_PAUSE_TIME}}
+        });
+    });
+
+</script>
+
+{{{showvideo_function}}}
+
+<script>
+    $(document).ready(function() {
+        $(".fancybox").fancybox({
+            prevEffect	: 'none',
+            nextEffect	: 'none',
+            helpers	: {
+                title	: {
+                    type: 'outside'
+                },
+                thumbs	: {
+                    width	: 50,
+                    height	: 50
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    .lSSlideOuter .lSPager.lSGallery img {
+        display: block;
+        height: auto;
+        width: 100%;
+        max-height: 60px;
+    }
+
+    .lSSlideOuter .lSPager.lSGallery a {
+        display: block;
+        height: 60px;
+    }
+    #image-gallery li {
+        background-color: white;
+    }
+    #image-gallery li.clone img{
+        object-fit: cover !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+</style>
+
+{{{major_unit_detail_modal}}}
+{{{trade_in_value_modal}}}
+{{{customer_exit_modal}}}
+
+
+<script type="application/javascript">
+    $(document).ready(function () {
+        // Show Major Unit Detail modal
+        setTimeout(function () {
+            var siteModalsState = JSON.parse(localStorage.getItem('siteModalsState')) || {};
+
+            // If user has already made a form submission on another modal, don't show this modal
+            if (siteModalsState['hasContactedSales']) return;
+
+            $('.modal').modal('hide');
+
+            // Fixes Bootstrap bug
+            setTimeout(function () {
+                $('#major-unit-detail-modal_{{motorcycle_id}}').modal('show');
+            }, 500);
+        }, 5000);
+    });
+</script>

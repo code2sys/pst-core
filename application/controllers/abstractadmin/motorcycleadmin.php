@@ -28,7 +28,7 @@ abstract class Motorcycleadmin extends Firstadmin
      *
      */
     public function dealer_track_controls() {
-        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+        if(!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
 
@@ -60,7 +60,7 @@ abstract class Motorcycleadmin extends Firstadmin
     }
 
     public function save_dealer_track_controls() {
-        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+        if(!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
 
@@ -929,8 +929,9 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->setNav('admin/nav_v', 5);
 
         // Let's get those quotes, all of them...
-        $query = $this->db->query("Select * from motorcycle_enquiry");
-        $this->_mainData["inquiries"] = $query->result_array();
+        global $PSTAPI;
+        initializePSTAPI();
+        $this->_mainData["inquiries"] = $PSTAPI->motorcycleenquiry()->fetch(array(), true);
 
         $this->renderMasterPage('admin/master_v', 'admin/motorcycle/quotes_index', $this->_mainData);
     }
@@ -950,20 +951,16 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->setNav('admin/nav_v', 5);
 
         // getthe quote
-        $match = false;
-        $the_row = array();
-        $query = $this->db->query("Select * from motorcycle_enquiry where id = ?", array($id));
-        foreach ($query->result_array() as $row) {
-            $match = true;
-            $the_row = $row;
-        }
+        global $PSTAPI;
+        initializePSTAPI();
+        $the_row = $PSTAPI->motorcycleenquiry()->get($id);
 
-        if (!$match) {
+        if (is_null($the_row)) {
             // redirect it...
             header("Location: /admin/motorcycle_quotes");
         } else {
             // OK, we have to cram it down...
-            $this->_mainData["quote"] = $the_row;
+            $this->_mainData["quote"] = $the_row->to_array();
             $this->renderMasterPage('admin/master_v', 'admin/motorcycle/quotes_view', $this->_mainData);
         }
     }
@@ -1022,28 +1019,21 @@ abstract class Motorcycleadmin extends Firstadmin
 
         $where = jonathan_generate_likes(array("status", "firstName", "lastName", "email", "phone", "motorcycle"), $s = (array_key_exists("search", $_REQUEST) && array_key_exists("value", $_REQUEST["search"]) ? $_REQUEST["search"]["value"] : ""), "WHERE");
 
+        global $PSTAPI;
+        initializePSTAPI();
+
         // get total count
-        $query = $this->db->query("Select count(*) as cnt from motorcycle_enquiry");
-        $total_count = 0;
-        foreach ($query->result_array() as $row) {
-            $total_count = $row['cnt'];
-        }
+        $total_count = $PSTAPI->motorcycleenquiry()->simpleCount();
+        $filtered_count = $PSTAPI->motorcycleenquiry()->simpleCount(array(), $where);
 
-        $query = $this->db->query("Select count(*) as cnt from motorcycle_enquiry $where");
-        $filtered_count = 0;
-        foreach ($query->result_array() as $row) {
-            $filtered_count = $row['cnt'];
-        }
-
-        $query = $this->db->query("Select motorcycle_enquiry.*, concat(firstName, ' ', lastName) as name from motorcycle_enquiry $where $order_string limit $length offset $start  ");
-        $rows = $query->result_array();
+        $rows = $PSTAPI->motorcycleenquiry()->simpleQuery(array(), true, "$where $order_string limit $length offset $start ");
 
         $output_rows = array();
         foreach ($rows as $row) {
             $clean_row = array(
                 date("m/d/Y g:i a T", strtotime($row['created'])),
                 $row['status'],
-                $row['name'],
+                $row['firstName'] . " " . $row['lastName'],
                 $row['email'],
                 $row['phone'],
                 $row['motorcycle']

@@ -51,6 +51,10 @@
             <script type="application/javascript">
                 $(document).on("ready", function() {
                     var checkTypes = function() {
+                        <?php if ($hidden_managed_page): ?>
+                        $(".typeSpecific").hide();
+                        $(".typeSpecific.showManagedPage").show();
+                        <?php else: ?>
                         var value = $("input[name='type']:checked").val();
 
                         $(".typeSpecific").hide();
@@ -67,6 +71,7 @@
                                 $(".typeSpecific.showFileAttachment").show();
                                 break;
                         }
+                        <?php endif; ?>
 
                     };
 
@@ -82,7 +87,13 @@
 					<table width="100%" cellpadding="6">
 						<?php if (@$pageRec['tag']): ?>
 						<tr <?php if (array_key_exists("admin_pages_tag_error", $_SESSION) && $_SESSION["admin_pages_tag_error"]): ?>class="error"<?php endif; ?>>
+                            <?php if ($custom_link && $custom_link != ""): ?>
+                                <td>Page URL</td>
+                                <td><a href="<?php echo base_url($custom_link); ?>" target="_blank"><?php echo base_url($custom_link); ?></a></td>
+                                <input type="hidden" name="tag" value="<?php echo $pageRec['tag']; ?>" />
+                            <?php else: ?>
 							<td>Page URL</td><td><?php echo base_url("pages/index"); ?>/<input type="text" name="tag" value="<?php echo $pageRec['tag']; ?>" /> <a href="<?php echo base_url("pages/index/" . $pageRec['tag']); ?>" target="_blank" style="font-size: 85%">[ View ]</a> <?php if (array_key_exists("admin_pages_tag_error", $_SESSION) && $_SESSION["admin_pages_tag_error"]): ?><em>Sorry, &quot;<?php echo $_SESSION["admin_pages_tag_requested"]; ?>&quot; is already in use.</em><?php endif; ?></td>
+                            <?php endif; ?>
 						</tr>
                             <?php $_SESSION["admin_pages_tag_error"] = false; ?>
 						<?php endif; ?>
@@ -92,6 +103,11 @@
                         <?php
                         $type_value = array_key_exists("type", $pageRec) ? $pageRec["type"] : "Managed Page";
 
+                        if ($hidden_managed_page) {
+                        ?>
+                            <input type="hidden" name="type" value="Managed Page" />
+                            <?php
+                        } else {
                         ?>
 						<tr>
 							<td>Page Format</td><td>
@@ -99,6 +115,7 @@
                                 <label><input type="radio" name="type" value="External Link" <?php if ($type_value == "External Link"): ?>checked="checked" <?php endif; ?> /><strong>External Link:</strong> Page links to an external URL that opens in a new window.</label><br/>
                                 <label><input type="radio" name="type" value="File Attachment" <?php if ($type_value == "File Attachment"): ?>checked="checked" <?php endif; ?> /><strong>File Attachment:</strong> Upload a file that is downloaded by the website visitor when they click the link.</label><br/>
 						</tr>
+                        <?php } ?>
 
                         <tr class="typeSpecific showExternalLink">
                             <td>External Link</td><td><input id="external_url" type="text" name="external_url" value="<?php echo @$pageRec['external_url']; ?>" class="text large" /></td>
@@ -130,6 +147,19 @@
 						<tr class="typeSpecific showManagedPage">
 							<td>Meta Description</td><td><input id="metatags" name="metatags" value="<?php echo @$pageRec['metatags']; ?>" class="text large" /></td>
 						</tr>
+
+                        <?php if ($upload_thumbnail): ?>
+                        <tr>
+                            <td>Thumbnail</td>
+                            <td><?php if ($current_thumbnail && $current_thumbnail != ""): ?><strong>Current:</strong> <a href="<?php echo $current_thumbnail; ?>" download="download"><i class="fa fa-download">&nbsp;</i></a><br/><div style="width: 200px; height: 200px; border: 1px solid black; background-image:  -webkit-linear-gradient(rgba(255,255,255,0.2) 0%,rgba(0,0,0,0.2) 100%), url('<?php echo $current_thumbnail; ?>'); background-size: contain; background-color: #ffffff; background-position-x: center; background-position-y: center; background-repeat: no-repeat  " >&nbsp;</div><br/><br/><?php endif; ?><strong>New Image:</strong><br/><input type="file" name="thumbnail" accept=".gif,.jpg,.png,image/gif,image/jpeg,image/png" /><br/><em>Please provide a GIF, JPG, or PNG image, under 2MB in size, that is square. 400x400 pixels recommended.</em> </td>
+                        </tr>
+
+                        <tr>
+                            <td>Thumbnail Caption</td><td><input id="short_title" name="short_title" value="<?php echo $short_title; ?>" class="text large" /></td>
+                        </tr>
+
+                        <?php endif; ?>
+
 						<?php if(@$pageRec['id'] != 12): ?>
 						<?php if(@$pageRec['delete']): ?>
 						<tr class="">
@@ -145,8 +175,10 @@
 															  </td>
 						</tr>
 						<?php endif; ?>
+
+                        <?php if ($pageRec["page_class"] != "Showroom Trim"): ?>
 						<tr class="typeSpecific showManagedPage">
-							<td>TextBox Widget</td><td></td>
+                            <td><strong>Page Widgets</strong></td><td></td>
 						</tr>
 						<tr class="typeSpecific showManagedPage">
 							<td colspan="2">
@@ -166,6 +198,10 @@
                                         <li ><strong>Calendar of Events</strong> <a href="javascript:void(0);" onclick="addWidget('Events');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Large image slider with 1024x400px images.</p>
 
 
+                                        <?php if ($has_showcase_segment): ?>
+                                            <li ><strong>Factory Showroom</strong> <a href="javascript:void(0);" onclick="addWidget('Factory Showroom');" class=""><i class='fa fa-plus'></i>&nbsp;Add</a></li><p>Factory showroom segment.</p>
+                                        <?php endif; ?>
+
 
 									</ul>
 									<ul id="sortable">
@@ -176,6 +212,7 @@
                                             $textedit = 0;
                                             $gallery = 0;
                                             $events = 0;
+                                            $showrooms = 0;
                                             foreach ($page_sections as $section) {
                                                 switch ($section["type"]) {
                                                     case "Textbox":
@@ -203,6 +240,11 @@
                                                         $events++;
                                                         $label = $section["type"] . " " . $events;
                                                         break;
+                                                        
+                                                    case 'Factory Showroom':
+                                                        $showrooms++;
+                                                        $label = $section["type"] . " " . $showrooms;
+                                                        break;
                                                 }
 
                                                 ?>
@@ -226,6 +268,7 @@
 								<?php foreach($pageRec['widgets'] as $wid): ?>
 										<input type="hidden" value="<?php echo $wid; ?>" name="widgets[]">
 							<?php endforeach; endif; ?>
+						<?php endif; ?>
 						<?php endif; ?>
 					</table>
 				</div>

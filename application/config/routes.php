@@ -38,6 +38,15 @@
 |
 */
 
+// JLB 2018-11-17: New Showroom Routing
+
+$route['Factory_Showroom'] = 'showroom/index';
+$route['Factory_Showroom/([a-zA-z0-9_-]+)'] = 'showroom/make/$1';
+$route['Factory_Showroom/([a-zA-z0-9_-]+)/([a-zA-z0-9_-]+)'] = 'showroom/machinetype/$1/$2';
+$route['Factory_Showroom/([a-zA-z0-9_-]+)/([a-zA-z0-9_-]+)/([a-zA-z0-9_-]+)'] = 'showroom/model/$1/$2/$3';
+$route['Factory_Showroom/([a-zA-z0-9_-]+)/([a-zA-z0-9_-]+)/([a-zA-z0-9_-]+)/([a-zA-z0-9_-]+)'] = 'showroom/trim/$1/$2/$3/$4';
+
+
 $route['default_controller'] = "welcome";
 $route['404_override'] = 'my404';
 $route['Motorcycle_Gear_Brands'] = 'shopping/brands';

@@ -427,7 +427,7 @@ class Pages extends Master_Controller {
   	{
 		if(!empty($text))
 		{
-			if (preg_match('/^[\w]+$/', $text) == 1) {
+			if (preg_match('/^[\w_-]+$/', $text) == 1) {
 			    return TRUE;
 			}
 			else 
@@ -584,10 +584,50 @@ class Pages extends Master_Controller {
 				$this->_mainData['ssl'] = true;
 				// $this->_mainData['widgetBlock'] .= $block;
 	  		}
-	  		
+
+	  		$master_view = "master/master_v";
+			$page_view = "info/ride_home_v";
+			$embed_location_meta = false;
+            $this->load->model("admin_m");
+            $store_name = $this->admin_m->getAdminShippingProfile();
+            $store_trailer = " | " . $store_name["company"] . " " . $store_name["city"] . " " . $store_name["state"];
+
+	  		switch($this->_mainData['pageRec']["page_class"]) {
+                case "Showroom Landing Page":
+                    $master_view = "benz_views/header";
+                    $page_view = "showcase/category_selector_v";
+                    $embed_location_meta = true;
+                    $this->_mainData["fancy_title"] = "Factory Showroom $store_trailer ";
+                    break;
+
+                case "Showroom Model":
+                case "Showroom Make":
+                case "Showroom Machine Type":
+                    $master_view = "benz_views/header";
+                    $page_view = "showcase/category_selector_v";
+                    $embed_location_meta = true;
+                    $this->_mainData["fancy_title"] = "Factory Showroom " . $this->_mainData["pageRec"]["title"] . " $store_trailer ";
+                    break;
+
+                case "Showroom Trim":
+                    $master_view = "benz_views/header";
+                    $page_view = "showcase/trim_view_motorcycle_v";
+                    $embed_location_meta = true;
+                    $this->_mainData["fancy_title"] = "Factory Showroom " . $this->_mainData["pageRec"]["title"] . " $store_trailer ";
+                    break;
+            }
+
+            if ($embed_location_meta) {
+                // get the store location...
+                if (!array_key_exists("extra_meta_tags", $this->_mainData)) {
+                    $this->_mainData["extra_meta_tags"] = "";
+                }
+                $this->_mainData["extra_meta_tags"] .= $this->load->view("showcase/location_metatags", $store_name, true);
+            }
+
 	  		$this->setNav('master/navigation_v', 0);
 			$this->_mainData["full_info_content"] = 1;
-	  		$this->renderMasterPage('master/master_v', 'info/ride_home_v', $this->_mainData);
+	  		$this->renderMasterPage($master_view, $page_view, $this->_mainData);
 	  		
 	  	}
 	  	else
@@ -966,6 +1006,56 @@ class Pages extends Master_Controller {
 			// update page section ordinals
             $this->pages_m->updatePageSectionOrdinals($newId > 1 ? $newId : $pageId, $page_section_ids);
 
+            // JLB 11-20-18:
+            global $PSTAPI;
+            initializePSTAPI();
+
+            $page = $PSTAPI->pages()->get($pageId);
+
+            if (!is_null($page)) {
+                // We have to do some cleanup for the showroom.
+                if ($page->hasShowcaseObject()) {
+                    $object = $page->getShowcaseObject();
+
+                    if (!is_null($object)) {
+                        if ($page->hasThumbnail()) {
+                            $thumbnail = $_FILES["thumbnail"];
+
+                            if ($thumbnail["size"] > 0) {
+                                // let's just assume it's an image for now.
+
+                                $image_directory = STORE_DIRECTORY . "/html/media/pagethumbnails";
+
+                                if (!file_exists($image_directory)) {
+                                    mkdir($image_directory);
+                                }
+
+                                // move the image..
+                                $image_filename = $image_directory . "/" . time() . "_" . preg_replace("/[^0-9a-z\.\-\_]+/i", "_", $thumbnail["name"]);
+
+                                move_uploaded_file($thumbnail["tmp_name"], $image_filename);
+                                $object->set("thumbnail_photo",  "/media/pagethumbnails/" . basename($image_filename));
+                                $object->save();
+                            }
+                        }
+
+                        // If the title changed, you must change with it.
+                        if ($object->get("display_title") != $_REQUEST["label"]) {
+                            $object->set("display_title", $_REQUEST["label"]);
+                            $object->set("customer_set_title", 1);
+                            $object->save();
+                        }
+
+                        // If the caption changed, you must change with it.
+                        if (array_key_exists("short_title", $_REQUEST) && $object->get("short_title") != $_REQUEST["short_title"]) {
+                            $object->set("short_title", $_REQUEST["short_title"]);
+                            $object->set("customer_set_short_title", 1);
+                            $object->save();
+                        }
+                    }
+                }
+            }
+
   			if(is_numeric($pageId) && ($newId > 1))
   				$pageId = $newId;
   			elseif($newId > 1)
@@ -973,8 +1063,12 @@ class Pages extends Master_Controller {
   		}
   		if(is_numeric($pageId))
   		{
-                        $this->_mainData['bannerlibrary'] = 'bannerlibrary';
-	  		$this->_mainData['pageRec'] = $this->pages_m->getPageRec($pageId);
+  		    global $PSTAPI;
+  		    initializePSTAPI();
+            $this->_mainData['bannerlibrary'] = 'bannerlibrary';
+            $page = $PSTAPI->pages()->get($pageId);
+            $page->inheritHomeMeta();
+	  		$this->_mainData['pageRec'] = $page->to_array(); // $this->pages_m->getPageRec($pageId);
 	  		$this->setMasterPageVars('descr', $this->_mainData['pageRec']['metatags']);
 	  		$this->setMasterPageVars('title', $this->_mainData['pageRec']['title']);
 	  		$this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
@@ -1029,11 +1123,64 @@ class Pages extends Master_Controller {
   		$js = '<script type="text/javascript" src="' . $this->_mainData['assets'] . '/ckeditor4/ckeditor.js"></script>';
   		$this->loadJS($js);
   		$this->_mainData['edit_config'] = $this->_mainData['assets'] . '/js/htmleditor.js';
-  		
+
+  		// We have to compute the flags based on the page information
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $page = $PSTAPI->pages()->get($pageId);
+
+        $this->_mainData["hidden_managed_page"] = false;
+        $this->_mainData["upload_thumbnail"] = false;
+        $this->_mainData["custom_link"] = false;
+        $this->_mainData["current_thumbnail"] = false;
+
+        if (!is_null($page)) {
+            // First, what page types do not permit being files or downloads?
+            $this->_mainData["hidden_managed_page"] = in_array($page->get("page_class"), array("System Page", "Part Section", "Showroom Model", "Showroom Trim", "Showroom Make", "Showroom Machine Type", "Showroom Landing Page"));
+            $this->_mainData["upload_thumbnail"] = $page->hasThumbnail();
+            $this->_mainData["has_showcase_segment"] = $page->hasShowcaseSegment();
+
+            switch ($page->get("page_class")) {
+                case "Showroom Model":
+                case "Showroom Trim":
+                case "Showroom Make":
+                case "Showroom Machine Type":
+                    $model = $page->getShowcaseObject();
+                    if ($model) {
+                        $this->_mainData["custom_link"] = "Factory_Showroom/" . $model->get("full_url");
+                        $this->_mainData["current_thumbnail"] = $model->get("thumbnail_photo");
+                        $this->_mainData["short_title"] = $model->get("short_title");
+
+                    }
+                    $this->_doPageFlagsShowroom("showcasemodel", $pageId);
+                    break;
+
+                case "Showroom Landing Page":
+                    $this->_mainData["custom_link"] = "Factory_Showroom";
+                    break;
+            }
+        }
+
+
   		$this->setNav('admin/nav_v', 1);
 	  	$this->renderMasterPage('admin/master_v', 'admin/pages/edit_v', $this->_mainData);
   	}
-  	
+
+  	protected function _doPageFlagsShowroom($factory, $pageId) {
+	    global $PSTAPI;
+	    initializePSTAPI();
+
+        $models = $PSTAPI->$factory()->fetch(array(
+            "page_id" => $pageId
+        ));
+
+        if (count($models) > 0) {
+            $model = $models[0];
+
+        }
+    }
+
   	public function delete($pageId = NULL)
   	{
         $this->enforceAdmin("pages");
