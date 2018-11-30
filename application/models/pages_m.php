@@ -44,6 +44,7 @@ class Pages_M extends Master_M
 	    initializePSTAPI();
 	    $obj = $PSTAPI->pages()->get($pageId);
 	    $obj->inheritHomeMeta();
+	    $obj->set("descr", $obj->get("metatags"));
 	    return is_null($obj) ? false : $obj->to_array();
 	}
 	
