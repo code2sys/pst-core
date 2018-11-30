@@ -22,6 +22,8 @@ if (isset($descr) && $descr != "") {
     $meta_description = $pageRec["metatags"];
 }
 
+error_log("Meta description: $meta_description");
+
 $meta_keywords = "";
 if (isset($keywords) && $keywords != "") {
     $meta_keywords = $keywords;
