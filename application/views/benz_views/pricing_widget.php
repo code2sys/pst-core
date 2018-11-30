@@ -28,7 +28,7 @@ if( $motorcycle['call_on_price'] == '1' ||  ($retail_price_zero && $sale_price_z
 
     // embed them.
     mustache_tmpl_set($pricing_widget_template, "retail_price", $motorcycle["retail_price"]);
-    mustache_tmpl_set($pricing_widget_template, "sale_price", $motorcycle["retail_price"]);
+    mustache_tmpl_set($pricing_widget_template, "sale_price", $motorcycle["sale_price"]);
 }
 
 
