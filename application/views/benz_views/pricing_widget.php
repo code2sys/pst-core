@@ -12,7 +12,6 @@ $pricing_widget_template = mustache_tmpl_open("benz_views/pricing_widget.html");
 if( $motorcycle['call_on_price'] == '1' ||  ($retail_price_zero && $sale_price_zero) ) {
     mustache_tmpl_set($pricing_widget_template, "CALL_FOR_PRICE", true);
 } else {
-    mustache_tmpl_set($pricing_widget_template, "CALL_FOR_PRICE", falses);
     if (!$sale_price_zero && $motorcycle["sale_price"] != $motorcycle["retail_price"]) {
         mustache_tmpl_set($pricing_widget_template, "SHOW_SALE_PRICE", true);
         if (!$retail_price_zero) {
