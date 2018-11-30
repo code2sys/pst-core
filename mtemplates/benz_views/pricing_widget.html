@@ -1,0 +1,14 @@
+{{#CALL_FOR_PRICE}}
+<p class="cfp">Call For Price</p>
+{{/CALL_FOR_PRICE}}
+{{^CALL_FOR_PRICE}}
+{{#SHOW_RETAIL_PRICE}}
+<p>Retail Price: &nbsp; <span class="strikethrough">${{retail_price}}</span></p>
+{{/SHOW_RETAIL_PRICE}}
+{{#SHOW_SALE_PRICE}}
+<p>Sale Price: &nbsp; &nbsp;<span class="redtext">${{sale_price}}</span></p>
+{{/SHOW_SALE_PRICE}}
+{{#SHOW_DEST_CHARGE}}
+<sub>* Plus Applicable destination charge</sub>
+{{/SHOW_DEST_CHARGE}}
+{{/CALL_FOR_PRICE}}
