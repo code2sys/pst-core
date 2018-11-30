@@ -46,6 +46,7 @@ if (isset($keywords) && $keywords != "") {
         ?>
 
         <?php
+        error_log("Calling top_header with $meta_description");
         $CI =& get_instance();
         echo $CI->load->view("master/top_header", array(
             "store_name" => $store_name,
