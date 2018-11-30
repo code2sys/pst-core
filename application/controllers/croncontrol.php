@@ -764,6 +764,10 @@ class CronControl extends Master_Controller {
 
     // JLB 11-16-18
     public function loadFactoryShowroom() {
+        // Temporarily prevent the loading of the showcase.
+        if (!defined('FACTORY_SHOWROOM') || !FACTORY_SHOWROOM) {
+            return;
+        }
         $this->load->model("Showcasemodel");
         $this->Showcasemodel->loadShowcase();
         $this->fixShowcasePages();

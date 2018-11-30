@@ -712,6 +712,12 @@ class Showcasemodel extends CI_Model {
     }
 
     public function loadShowcase() {
+        // Temporarily prevent the loading of the showcase.
+        if (!defined('FACTORY_SHOWROOM') || !FACTORY_SHOWROOM) {
+            return;
+        }
+
+
         global $PSTAPI;
 
 
