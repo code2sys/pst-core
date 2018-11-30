@@ -144,18 +144,21 @@ final class Mail_queue_m extends Master_M {
 	 */
 	public function getReadyEmails($orderBy=NULL, $limit=NULL, $offset=NULL)
 	{
-		$rowsArray = NULL;
-		$this->db->from('queued_email');
-		$this->db->where(array('readyForProcess' => TRUE));
-		if (!is_null($orderBy))
-			$this->db->order_by($orderBy);
-		if (!is_null($limit))
-			$this->db->limit($limit, $offset);
-		$query = $this->db->get();
-		if ($query->num_rows() > 0)
-			$rowsArray = $query->result_array();
-		$query->free_result();	
-		return $rowsArray;
+	    global $PSTAPI;
+	    initializePSTAPI();
+	    $trailer = "";
+        if (!is_null($orderBy)) {
+            $trailer = " ORDER BY $orderBy ";
+        }
+        if (!is_null($limit)) {
+            $trailer .= sprintf(" LIMIT %d ", $limit);
+
+            if (!is_null($offset)) {
+                $trailer .= intVal($offset);
+            }
+        }
+
+	    return $PSTAPI->queuedemail()->simpleQuery(array("readyForProcess" => 1), true, $trailer);
 	}
 
 	/**

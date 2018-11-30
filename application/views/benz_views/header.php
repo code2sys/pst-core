@@ -19,7 +19,9 @@
 	?>
 <head>
     <?php echo jget_store_block("top_header"); ?>
-	<?php if (isset($title)): ?>
+    <?php if (isset($fancy_title) && $fancy_title != ""): ?>
+    <title><?php echo $fancy_title; ?></title>
+	<?php elseif (isset($title)): ?>
     <title><?php echo $title; ?></title>
 	<?php endif; ?>
 
@@ -27,13 +29,17 @@
     $CI =& get_instance();
     echo $CI->load->view("master/top_header", array(
         "store_name" => $store_name,
-        "meta_description" => $meta_description,
+        "meta_description" => isset($meta_description) && $meta_description != "" ? $meta_description : $pageRec["metatags"],
         "meta_keywords" => $pageRec['keywords'],
     ));
 
     ?>
 
-	<?php echo @$metatag; ?>
+    <?php
+    if (isset($extra_meta_tags)) {
+        echo $extra_meta_tags;
+    }
+    ?>
 
 	<!--Motercycle Content Start-->
 	<!--Motercycle Content End-->
@@ -136,9 +142,10 @@ echo mustache_tmpl_parse($motorcycle_action_buttons);
 
 <?php
 $CI =& get_instance();
+$CI->load->model("pages_m");
 echo $CI->load->view("benz_views/real_footer", array(
     "store_name" => $store_name,
-    "pages" => $pages,
+    "pages" => $CI->pages_m->getPages(1, 'footer'),
     "SMSettings" => $SMSettings
 ), true);
 
@@ -172,7 +179,7 @@ echo $CI->load->view("benz_views/real_footer", array(
 			var vehicles = $("input[name='vehicles[]']:checkbox:checked").map(function(){
 				return $(this).val();
 			}).get();
-			var condition = "<?php echo $_GET['fltr'];?>";
+			var condition = "<?php echo array_key_exists('fltr', $_GET) ? $_GET['fltr'] : "";?>";
 			pg = parseInt(pg)-1;
 
 			var ajax_url = "<?php echo site_url('motorcycle_ci/filterMotorcycle');?>";

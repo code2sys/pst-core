@@ -72,7 +72,7 @@
 								</p>
 								<br/>
 								<p style="text-align: justify;">
-									Please initial below to indicate that you have recieved a copy of our <a href="<?php echo base_url().'pages/index/privacypolicy'?>">Privacy Notice</a> and agree to all of the above.
+									Please initial below to indicate that you have received a copy of our <a href="<?php echo base_url().'pages/index/privacypolicy'?>">Privacy Notice</a> and agree to all of the above.
 								</p>
 								<br/>
 								<p style="text-align: justify;">

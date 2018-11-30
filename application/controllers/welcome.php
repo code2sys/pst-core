@@ -1108,11 +1108,8 @@ class Welcome extends Master_Controller {
                 
                
                 //Traffic log pro API
-
-                if ( (array_key_exists("make", $post) || array_key_exists("product_id", $post)) && (defined('ENABLE_TRAFFICLOGPRO') && ENABLE_TRAFFICLOGPRO) ){
-
+                if ((array_key_exists("make", $post) || array_key_exists("product_id", $post)) && (defined('ENABLE_TRAFFICLOGPRO') && ENABLE_TRAFFICLOGPRO)) {
                     $apiDetails = $this->trafficlogpro_m->insertInquiryData($post);
-                                           
                 }
 
 
@@ -1163,12 +1160,6 @@ class Welcome extends Master_Controller {
                         "message" => $message
                     ));
 
-//        $header = "From: noreply@powersporttechnologies.com\r\n";
-//        $header.= "MIME-Version: 1.0\r\n";
-//        $header.= "Content-Type: text/html; charset=utf-8\r\n";
-//        $header.= "X-Priority: 1\r\n";
-//        mail($toEmail, "New Motorcycle Enquiry", $message, $header);
-
                     // JLB 04-19-18
                     // Is the configuration in there for echoing leads to CDK?
                     global $PSTAPI;
@@ -1178,7 +1169,21 @@ class Welcome extends Master_Controller {
                         $vehicle_type = $vehicle_make = $vehicle_model = $vehicle_year = "";
                         // We should be getting this motorcycle by title?
                         $motorcycle = $PSTAPI->motorcycle()->fetch(array("title" => $post['motorcycle']), true);
-                        $motorcycle = count($motorcycle) > 0 ? $motorcycle[0] : array();
+
+                        if (count($motorcycle) == 0) {
+                            // We potentially have a trim...
+                            $showcasetrim = $PSTAPI->showcasetrim()->fetch(array("title" => $post["motorcycle"]));
+
+
+                            if (count($showcasetrim) > 0) {
+                                $motorcycle = $showcasetrim[0];
+                                $motorcycle->addDecorations();
+                                $motorcycle = $motorcycle->to_array();
+                            }
+
+                        } else {
+                            $motorcycle = $motorcycle[0];
+                        }
 
                         if (array_key_exists("make", $motorcycle)) {
                             $vehicle_make = $motorcycle["make"];
@@ -1223,14 +1228,6 @@ class Welcome extends Master_Controller {
         // We let the JavaScript figure out what to do.
         print json_encode($result);
 
-//        if ($post['product_id'] > 0) {
-//            $motorcycle = $this->motorcycle_m->getMotorcycle($post['product_id']);
-//            // JLB 05-25-18
-//            // This knowledge should be centralized...
-//            redirect(base_url(strtolower($motorcycle['type']) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']));
-//        } else {
-//            redirect(base_url("Major_Unit_List?fltr=New_Inventory"));
-//        }
     }
 
     public function category() {

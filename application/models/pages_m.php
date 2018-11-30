@@ -40,16 +40,27 @@ class Pages_M extends Master_M
 	
 	public function getPageRec($pageId)
 	{
-		$where = array('id' => $pageId);
-		$record = $this->selectRecord('pages', $where);
-		return $record;
+	    global $PSTAPI;
+	    initializePSTAPI();
+	    $obj = $PSTAPI->pages()->get($pageId);
+	    $obj->inheritHomeMeta();
+	    return is_null($obj) ? false : $obj->to_array();
 	}
 	
 	public function getPageRecByTag($tag)
 	{
-		$where = array('tag' => $tag);
-		$record = $this->selectRecord('pages', $where);
-		return $record;
+        global $PSTAPI;
+        initializePSTAPI();
+        $obj = $PSTAPI->pages()->fetch(array(
+            "tag" => $tag
+        ));
+        if (count($obj) > 0) {
+            $obj = $obj[0];
+            $obj->inheritHomeMeta();
+            return $obj->to_array();
+        } else {
+            return false;
+        }
 	}
 	
 	public function getWidgets()
@@ -136,6 +147,9 @@ class Pages_M extends Master_M
 
 	public function editPage($post)
 	{
+	    global $PSTAPI;
+	    initializePSTAPI();
+
 		if($post['id'] == 12) {
             $post['tag'] = 'Motorcycle_Gear_Brands';
         } else if (array_key_exists("tag", $post) && $post["tag"] != "") {
@@ -155,15 +169,26 @@ class Pages_M extends Master_M
 		if(is_numeric($post['id']))
 		{
 			$where = array('id' => $post['id']);
-			$success = $this->updateRecord('pages', $post, $where, FALSE);
+			$page = $PSTAPI->pages()->get($post['id']);
+			$page->inheritHomeMeta();
+
+			if ($page->get("keywords") != $post["keywords"]) {
+			    $post["customer_set_keywords"] = 1;
+            }
+			if ($page->get("metatags") != $post["metatags"]) {
+			    $post["customer_set_metatags"] = 1;
+            }
+
+			return $PSTAPI->pages()->update($post['id'], $post)->id();
+//			$success = $this->updateRecord('pages', $post, $where, FALSE);
 		}
 		else
 		{	
 			$data['delete'] = 1;
-			$data['active'] = 0;		
-			$success = $this->createRecord('pages', $post, FALSE);
+			$data['active'] = 0;
+            return $PSTAPI->pages()->add($post)->id();
+			//$success = $this->createRecord('pages', $post, FALSE);
 		}
-		return $success;
 	}
 	
 	public function getTextBoxes($pageId, $page_section_id = 0)
@@ -303,6 +328,28 @@ class Pages_M extends Master_M
                     }
 
                     break;
+
+
+                case "Factory Showroom":
+                    // This is for the inventory showcase.
+                    global $PSTAPI;
+                    initializePSTAPI();
+
+                    $page = $PSTAPI->pages()->get($pageId);
+
+                    if (!is_null($page) && $page->hasShowcaseSegment()) {
+                        if ($page->get("page_class") == "Showroom Trim") {
+                            /*
+                             * I don't think this happens; I'm going to prevent it. The page is so similar to motorcycles, why is it treated like a page?
+                             */
+                        } else {
+                            $widgetBlock .= $this->load->view("showcase/category_selector_widget", array(
+                                "pageRec" => $page->to_array()
+                            ), true);
+                        }
+                    }
+                    break;
+
             }
 
 
