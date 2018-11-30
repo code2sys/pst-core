@@ -462,6 +462,7 @@ class Pages extends Master_Controller {
 			// echo "</pre>";
 	  		$this->setMasterPageVars('keywords', $this->_mainData['pageRec']['keywords']);
 	  		$this->setMasterPageVars('metatags', $this->_mainData['pageRec']['metatags']);
+	  		error_log("Setting metatags to " . $this->_mainData["pageRec"]["metatags"]);
 	  		$this->setMasterPageVars('metatag', html_entity_decode($this->_mainData['pageRec']['metatags']));
 	  		$this->setMasterPageVars('css', html_entity_decode($this->_mainData['pageRec']['css']));
 	  		$this->setMasterPageVars('script', html_entity_decode($this->_mainData['pageRec']['javascript']));

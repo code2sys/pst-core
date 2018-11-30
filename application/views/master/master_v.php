@@ -12,10 +12,13 @@ if (isset($title) && $title != "") {
 
 $meta_description = "";
 if (isset($descr) && $descr != "") {
+    error_log("Description 1");
     $meta_description = $descr;
 } else if (isset($pageRec) && is_array($pageRec) && array_key_exists("descr", $pageRec) && $pageRec["descr"] != "") {
+    error_log("Description 2");
     $meta_description = $pageRec["descr"];
 } else if (isset($pageRec) && is_array($pageRec) && array_key_exists("metatags", $pageRec) && $pageRec["metatags"] != "") {
+    error_log("Description 3");
     $meta_description = $pageRec["metatags"];
 }
 
