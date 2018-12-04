@@ -445,6 +445,7 @@ class Pages extends Master_Controller {
   		if($this->validateTag($pageTag))
   		{
 	  		$this->_mainData['pageRec'] = $this->pages_m->getPageRecByTag($pageTag);
+	  		$this->setMasterPageVars("title", $this->_mainData["pageRec"]["title"]);
 
 	  		// Handle links and file download...
             if ($this->_mainData['pageRec']['type'] == 'External Link') {
