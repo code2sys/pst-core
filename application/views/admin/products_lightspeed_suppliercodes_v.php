@@ -82,7 +82,22 @@ $success = $CI->session->flashdata("success");
             <div class="tab_content">
                 <div class="hidden_table">
                     <table width="100%" cellpadding="6">
-
+                        <?php
+                        global $PSTAPI;
+                        initializePSTAPI();
+                        ?>
+                        <tr >
+                            <td style="width:30%;"><b>New Unit Dealer IDs:</b><br/><em>By default, new units will be accepted from all dealer IDs in your Lightspeed feed. If you wish to restrict new unit inventory to specific dealerships, please enter the IDs here as a comma-separated list.</em></td>
+                            <td><?php echo form_input(array('name' => 'lightspeed_new_unit_dealership_list',
+                                    'value' => $PSTAPI->config()->getKeyValue('lightspeed_new_unit_dealership_list', ''),
+                                    'class' => 'text large')); ?></td>
+                        </tr>
+                        <tr >
+                            <td style="width:30%;"><b>Pre-Owned Unit Dealer IDs:</b><br/><em>By default, pre-owned units will be accepted from all dealer IDs in your Lightspeed feed. If you wish to restrict pre-owned unit inventory to specific dealerships, please enter the IDs here as a comma-separated list.</em></td>
+                            <td><?php echo form_input(array('name' => 'lightspeed_used_unit_dealership_list',
+                                    'value' => $PSTAPI->config()->getKeyValue('lightspeed_used_unit_dealership_list', ''),
+                                    'class' => 'text large')); ?></td>
+                        </tr>
                         <tr>
                             <td width="30%"><b>Initial Status for Imported Units:</b></td>
                             <td>
@@ -105,10 +120,7 @@ $success = $CI->session->flashdata("success");
                                 <label><input type="radio" name="lightSpeedPartPricingRule" value="1" <?php if ($c): ?>checked="checked"<?php endif; ?> /> Use LightSpeed Part Price</label>
                             </td>
                         </tr>
-                        <?php
-                        global $PSTAPI;
-                        initializePSTAPI();
-                        ?>
+
                         <tr>
                             <td colspan="2">
                                 <strong>CDK Lead Integration</strong><br/>
