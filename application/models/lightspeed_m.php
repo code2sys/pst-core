@@ -431,7 +431,11 @@ class Lightspeed_M extends Master_M {
                     if ($lightspeed_new_unit_dealership_list != "" && count($lightspeed_new_unit_dealership_filter) > 0) {
                         if (!in_array($dealer->Cmf, $lightspeed_new_unit_dealership_filter)) {
                             continue; // skip it.
+                        } else {
+                            print "Dealer CMF in new filter: " . $dealer->Cmf . "\n";
                         }
+                    } else {
+                        print "No new filter defined \n";
                     }
                 } else {
                     if ($lightspeed_used_unit_dealership_list != "" && count($lightspeed_used_unit_dealership_filter) > 0) {
