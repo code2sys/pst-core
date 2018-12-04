@@ -447,7 +447,7 @@ class Lightspeed_M extends Master_M {
                             print "FILTER Dealer CMF in used filter: " . $dealer->Cmf . "\n";
                         }
                     } else {
-                        print "FILTER No pre-owned filter defined \n":
+                        print "FILTER No pre-owned filter defined \n";
                     }
                 }
 
