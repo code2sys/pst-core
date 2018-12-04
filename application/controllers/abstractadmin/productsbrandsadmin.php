@@ -985,6 +985,12 @@ abstract class Productsbrandsadmin extends Customeradmin {
         $this->_mainData["success"] = $this->session->flashdata("success");
         $this->_mainData["error"] = $this->session->flashdata("error");
 
+        // JLB 12-04-18
+        // We have to add a dealership ID filter
+
+        $this->_mainData['lightspeed_new_unit_dealership_list'] = $PSTAPI->config()->getKeyValue('lightspeed_new_unit_dealership_list', '');
+        $this->_mainData['lightspeed_used_unit_dealership_list'] = $PSTAPI->config()->getKeyValue('lightspeed_used_unit_dealership_list', '');
+
         $this->setNav('admin/nav_v', 2);
         $this->renderMasterPage('admin/master_v', 'admin/products_lightspeed_suppliercodes_v', $this->_mainData);
     }
@@ -1006,7 +1012,9 @@ abstract class Productsbrandsadmin extends Customeradmin {
         // JLB 04-19-18
         // We have new settings for the lead generation transfer to CDK
         // Observe that we are transitioning styles in the code to the new object library...
-        $cdk_lead_transfer_keys = array("forward_leads_to_cdk", "vsept_dealership_id");
+        // JLB 12-04-18
+        // Adding in the lightspeed filters, too.
+        $cdk_lead_transfer_keys = array("forward_leads_to_cdk", "vsept_dealership_id", "lightspeed_new_unit_dealership_list", "lightspeed_used_unit_dealership_list");
         foreach ($cdk_lead_transfer_keys as $k)  {
             $$k = $val = $_REQUEST[$k];
             $PSTAPI->config()->setKeyValue($k, $val);
