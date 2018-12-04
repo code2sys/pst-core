@@ -430,18 +430,24 @@ class Lightspeed_M extends Master_M {
                 if ($motorcycle_array["condition"] == 1) {
                     if ($lightspeed_new_unit_dealership_list != "" && count($lightspeed_new_unit_dealership_filter) > 0) {
                         if (!in_array($dealer->Cmf, $lightspeed_new_unit_dealership_filter)) {
+                            print "FILTER skipping new " . $dealer->Cmf . "\n";
                             continue; // skip it.
                         } else {
-                            print "Dealer CMF in new filter: " . $dealer->Cmf . "\n";
+                            print "FILTER Dealer CMF in new filter: " . $dealer->Cmf . "\n";
                         }
                     } else {
-                        print "No new filter defined \n";
+                        print "FILTER No new filter defined \n";
                     }
                 } else {
                     if ($lightspeed_used_unit_dealership_list != "" && count($lightspeed_used_unit_dealership_filter) > 0) {
                         if (!in_array($dealer->Cmf, $lightspeed_used_unit_dealership_filter)) {
+                            print "FILTER skipping used " . $dealer->Cmf . "\n";
                             continue; // skip it.
+                        } else {
+                            print "FILTER Dealer CMF in used filter: " . $dealer->Cmf . "\n";
                         }
+                    } else {
+                        print "FILTER No pre-owned filter defined \n":
                     }
                 }
 
