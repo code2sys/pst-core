@@ -382,10 +382,18 @@ class Lightspeed_M extends Master_M {
         );
     }
 
-    public function get_major_units() {
+    public function get_major_units($debug = false) {
         $CI =& get_instance();
         $CI->load->model("CRS_m");
         $CI->load->model("CRSCron_M");
+
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $lightspeed_new_unit_dealership_list = trim($PSTAPI->config()->getKeyValue('lightspeed_new_unit_dealership_list', ''));
+        $lightspeed_new_unit_dealership_filter = preg_split("/\s*[,;]\s*/", $lightspeed_new_unit_dealership_list);
+        $lightspeed_used_unit_dealership_list = trim($PSTAPI->config()->getKeyValue('lightspeed_used_unit_dealership_list', ''));
+        $lightspeed_used_unit_dealership_filter = preg_split("/\s*[,;]\s*/", $lightspeed_used_unit_dealership_list);
 
         $string = "Dealer";
         $call = $this->call($string);
@@ -402,6 +410,7 @@ class Lightspeed_M extends Master_M {
 
         $ts = date("Y-m-d H:i:s");
         foreach($dealers as $dealer) {
+
             $string = "Unit/".$dealer->Cmf;
             $call = $this->call($string);
             $bikes = json_decode($call);
@@ -414,6 +423,34 @@ class Lightspeed_M extends Master_M {
                 $motorcycle_array = $this->_subUnpackMajorUnit($bike, $dealer->Cmf);
                 $motorcycle_array["lightspeed_timestamp"] = $ts;
 
+
+                // JLB 12-04-18
+                // Filter by the dealer ID, if there is one.
+                // I know this could be a little more compact, but I think it hurt readability.
+                if ($motorcycle_array["condition"] == 1) {
+                    if ($lightspeed_new_unit_dealership_list != "" && count($lightspeed_new_unit_dealership_filter) > 0) {
+                        if (!in_array($dealer->Cmf, $lightspeed_new_unit_dealership_filter)) {
+                            if ($debug) print "FILTER skipping new " . $dealer->Cmf . "\n";
+                            continue; // skip it.
+                        } else {
+                            if ($debug) print "FILTER Dealer CMF in new filter: " . $dealer->Cmf . "\n";
+                        }
+                    } else {
+                        if ($debug) print "FILTER No new filter defined \n";
+                    }
+                } else {
+                    if ($lightspeed_used_unit_dealership_list != "" && count($lightspeed_used_unit_dealership_filter) > 0) {
+                        if (!in_array($dealer->Cmf, $lightspeed_used_unit_dealership_filter)) {
+                            if ($debug) print "FILTER skipping used " . $dealer->Cmf . "\n";
+                            continue; // skip it.
+                        } else {
+                            if ($debug) print "FILTER Dealer CMF in used filter: " . $dealer->Cmf . "\n";
+                        }
+                    } else {
+                        if ($debug) print "FILTER No pre-owned filter defined \n";
+                    }
+                }
+
                 if (isset($bike->OnHold) && trim($bike->OnHold) != "") {
                     continue; // It's on hold for a deal. Not going to put that in tonight!
                 }
@@ -421,6 +458,9 @@ class Lightspeed_M extends Master_M {
                 if (isset($bike->UnitStatus) && trim($bike->UnitStatus) == "R") {
                     continue; // It has been removed.
                 }
+
+                // JLB 12-04-18
+                // We need to now apply the dealership ID once we know if this is a NEW or USED unit.
 
                 // JLB 09-17-18
                 // Added because of Al Lambs Dallas Honda
@@ -545,7 +585,7 @@ class Lightspeed_M extends Master_M {
                     if ($motorcycle === FALSE) {
                         print "Could not update: " . print_r($motorcycle_array, true) . "\n";
                     } else {
-                        print "Updated: " . $motorcycle_array["sku"] . "\n";
+                        if ($debug) print "Updated: " . $motorcycle_array["sku"] . "\n";
                         global $PSTAPI;
                         initializePSTAPI();
                         $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle["id"]);
