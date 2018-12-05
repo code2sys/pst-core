@@ -22,7 +22,7 @@ if (isset($motorcycles) && is_array($motorcycles) && count($motorcycles) > 0) {
     echo mustache_tmpl_parse($template);
 }
 
-$this->load->view("benz_views/product_pagination", array(
+echo $this->load->view("benz_views/product_pagination", array(
     "pages" => $pages,
     "cpage" => $page
 ), true);
