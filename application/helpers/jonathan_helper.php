@@ -568,3 +568,25 @@ function figureShowcaseFlags($pageRec, &$display_makes, &$display_machine_types,
 function returnClientIP() {
     return $_SERVER["REMOTE_ADDR"];
 }
+
+// JLB: We need to slip in the CDN URLs without breaking what is there...
+function updateAndGetPhotoURL($motorcycle_id, $crs_api_array)
+{
+    return updateAndGetTrimPhotoURL($motorcycle_id, $crs_api_array, "photo_url", "photo_cdn_url");
+}
+function updateAndGetTrimPhotoURL($motorcycle_id, $crs_api_array, $source_field = "trim_photo", $cdn_field = "trim_photo_cdn_url") {
+    if (!array_key_exists($source_field, $crs_api_array)) {
+        return "";
+    }
+
+    if (array_key_exists($cdn_field, $crs_api_array) && $crs_api_array[$cdn_field] != "") {
+        // we have to update it and slide it over...
+        $CI =& get_instance();
+        $CI->db->query("Update motorcycleimage set image_name = ? where image_name = ? and motorcycle_id = ?", array($crs_api_array[$cdn_field], $crs_api_array[$source_field], $motorcycle_id));
+
+        $crs_api_array[$source_field] = $crs_api_array[$cdn_field];
+    }
+
+
+    return $crs_api_array[$source_field];
+}

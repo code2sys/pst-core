@@ -334,6 +334,8 @@ abstract class Motorcycleadmin extends Firstadmin
                 if (count($trim) > 0) {
                     $trim = $trim[0];
                     if ($trim["trim_photo"] != "") {
+                        // JLB 12-06-18 I am not thrilled that this query basically shows up three places...
+                        $trim["trim_photo"] = updateAndGetTrimPhotoURL($id, $trim);
                         $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source) values (?, ?, now(), ?, 1, 1, ?, 'PST')", array($id, $trim["trim_photo"], 'Trim Photo: ' . $trim['display_name'], $trim["version_number"]));
                     }
 
