@@ -193,8 +193,6 @@ class Mdfeed_m extends Master_M {
 
                             // We insert the thumbnail, too?
                             if (array_key_exists("trim_photo", $vin_match) && $vin_match["trim_photo"] != "") {
-                                // JLB 12-06-18 I am not thrilled that this query basically shows up three places...
-                                $vin_match["trim_photo"] = updateAndGetTrimPhotoURL($motorcycle_id, $vin_match);
                                 $this->db->query("Insert into motorcycleimage (motorcycle_id, image_name, date_added, description, priority_number, external, version_number, source, crs_thumbnail) values (?, ?, now(), ?, 1, 1, ?, 'PST', 1) on duplicate key update source = 'PST'", array($motorcycle_id, $vin_match["trim_photo"], 'Trim Photo: ' . $vin_match['display_name'], $vin_match["version_number"]));
                             }
 

@@ -377,24 +377,6 @@ class Showcasemodel extends CI_Model {
         // load them
         foreach ($candidate_photos as $p) {
             $seen_urls[] = $p["photo_url"];
-
-            if (array_key_exists("photo_cdn_url", $p) && $p["photo_cdn_url"] != "") {
-                $matches = $PSTAPI->showcasephoto()->fetch(array(
-                    "url" => $p["photo_url"]
-                ));
-
-                // shove these over...
-                foreach ($matches as $m) {
-                    $m->set("url", $p["photo_cdn_url"]);
-                    $m->save();
-                }
-
-                // and push it over...
-                $p["photo_url"] = $p["photo_cdn_url"];
-                $seen_urls[] = $p["photo_url"];
-            }
-
-
             if (!array_key_exists($p["photo_url"], $url_lut)) {
                 // you have to add it..
                 $PSTAPI->showcasephoto()->add(array(

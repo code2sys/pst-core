@@ -131,7 +131,6 @@ class CRSCron_M extends Master_M
             $ordinal++;
 
             foreach ($photos as $p) {
-                $p["photo_url"] = updateAndGetPhotoURL($motorcycle_id, $p);
                 $ordinal++;
                 $seen_photos[] = $p["photo_url"];
                 // this needs to be inserted...
