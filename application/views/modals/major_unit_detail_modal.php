@@ -20,6 +20,9 @@ if (isset($motorcycle) && array_key_exists("id", $motorcycle) && $motorcycle["id
     mustache_tmpl_set($major_unit_detail_modal_template, "motorcycle_vin_number", $motorcycle["vin_number"]);
 
     if (isset($motorcycle_image) && $motorcycle_image != "") {
+        if (!preg_match("/^http/", $motorcycle_image)) {
+            $motorcycle_image = jsite_url("/media/" . $motorcycle_image);
+        }
         mustache_tmpl_set($major_unit_detail_modal_template, "motorcycle_image", $motorcycle_image);
     } else {
         mustache_tmpl_set($major_unit_detail_modal_template, "motorcycle_image", false);
