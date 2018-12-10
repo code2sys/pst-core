@@ -166,7 +166,7 @@ mustache_tmpl_set($sub_details_template, "tab_switcher", $show_info && $show_spe
 $image_url = ($image_url == "" || is_null($image_url) || $image_url == $media_url) ? "/assets/image_unavailable.png" : $image_url;
 
 if (!preg_match("/^http(s)?/", $image_url)) {
-    $image_url = base_url($image_url);
+    $image_url = base_url("/media/" . $image_url);
 }
 
 mustache_tmpl_set($sub_details_template, "image_url", $image_url);

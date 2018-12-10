@@ -208,7 +208,7 @@
 
                 // when...
                 $("#hover_box<?php echo $page_section_id;?> .start").html(calEvent.start.format("dddd, MMMM Do YYYY, h:mm a"));
-                if (calEvent.start != calEvent.end) {
+                if (calEvent.start != calEvent.end && calEvent.end) {
                     if (calEvent.start.format("MMMM Do YYYY") != calEvent.end.format("MMMM Do YYYY")) {
                         $("#hover_box<?php echo $page_section_id;?> .end").html(" to " + calEvent.end.format("MMMM Do YYYY, h:mm a"));
                     } else {
