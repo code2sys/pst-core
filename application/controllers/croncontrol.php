@@ -773,6 +773,16 @@ class CronControl extends Master_Controller {
         $this->fixShowcasePages();
     }
 
+    // JLB 12-14-18
+    // Gronifies disgronified image filenames.
+    public function gronifyImageNames() {
+        $query = $this->db->query(" select * from motorcycleimage where image_name  REGEXP '[^\-a-zA-Z0-9\_\.]' and source = 'Admin'");
+
+        foreach ($query->result_array() as $row) {
+            print "Motorcycle Image ID " . $row["id"] . " filename " . $row["image_name"] . "\n";
+        }
+    }
+
 }
 
 /* End of file croncontrol.php */
