@@ -782,6 +782,14 @@ class CronControl extends Master_Controller {
             print "Motorcycle Image ID " . $row["id"] . " filename " . $row["image_name"] . "\n";
             $gronified_filename = gronifyForFilename($row["image_name"]);
             print "Will be gronified to: " .$gronified_filename . "\n";
+            $full_filename = STORE_DIRECTORY . "/html/media/" . $row["image_name"];
+            $new_filename = STORE_DIRECTORY . "/html/media/" . $gronified_filename;
+
+            if (file_exists($full_filename)) {
+                print "Moving from $full_filename to $new_filename \n";
+                rename($full_filename, $new_filename);
+                $this->db->query("update motorcycleimage set image_name = ? where id = ? limit 1", array($gronified_filename, $row["id"]));
+            }
         }
     }
 
