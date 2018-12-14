@@ -455,7 +455,8 @@ abstract class Motorcycleadmin extends Firstadmin
                         $prt = $prt + 1;
                     }
                     $arr = array();
-                    $img = time() . '_' . str_replace(' ', '_', $val);
+                    // JLB 12-14-18: Let us get rid of funny characters.
+                    $img = time() . '_' . preg_replace("/[^a-z0-9\.\-]+/i", '_', $val);
                     $dir = STORE_DIRECTORY . '/html/media/' . $img;
                     move_uploaded_file($_FILES["file"]["tmp_name"][$key], $dir);
                     $arr['description'] = $_POST['description'];
