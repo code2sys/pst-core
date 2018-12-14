@@ -568,3 +568,8 @@ function figureShowcaseFlags($pageRec, &$display_makes, &$display_machine_types,
 function returnClientIP() {
     return $_SERVER["REMOTE_ADDR"];
 }
+
+// Sometimes, you just need to gronify a filename
+function gronifyForFilename($val) {
+    return preg_replace("/[^a-z0-9\.\-]+/i", '_', $val);
+}

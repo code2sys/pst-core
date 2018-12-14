@@ -780,6 +780,8 @@ class CronControl extends Master_Controller {
 
         foreach ($query->result_array() as $row) {
             print "Motorcycle Image ID " . $row["id"] . " filename " . $row["image_name"] . "\n";
+            $gronified_filename = gronifyForFilename($row["image_name"]);
+            print "Will be gronified to: " .$gronified_filename . "\n";
         }
     }
 
