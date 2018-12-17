@@ -523,8 +523,8 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 									<tr>
 										<td style="width:30%;"><b>Environment:</b></td>
 										<td>
-                                            <label><input type="radio" name="environment" value="production" <?php if (array_key_exists("environment", $address) && $address["environment"] == "product"):?>checked="checked"<?php endif; ?> /> Production</label>
-                                            <label><input type="radio" name="environment" value="sandbox" <?php if (!array_key_exists("environment", $address) || $address["environment"] != "product"):?>checked="checked"<?php endif; ?> /> Sandbox</label>
+                                            <label><input type="radio" name="environment" value="production" <?php if (array_key_exists("environment", $address) && $address["environment"] == "production"):?>checked="checked"<?php endif; ?> /> Production</label>
+                                            <label><input type="radio" name="environment" value="sandbox" <?php if (!array_key_exists("environment", $address) || $address["environment"] != "production"):?>checked="checked"<?php endif; ?> /> Sandbox</label>
                                     </tr>
 								</table>
 							</td>
