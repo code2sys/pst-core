@@ -31,9 +31,7 @@ $new_assets_url1 = jsite_url( "/qatesting/benz_assets/");
 				<h3>find us on</h3>
                 <?php
                 $CI =& get_instance();
-                echo $CI->load->view("social_link_buttons", array(
-                    "SMSettings" => $SMSettings
-                ), true);
+                echo getSocialLinkButtons();
                 ?>
 				<h3 class="nwsltr">newsletter</h3>
                 <form action="" class="form_standard" onSubmit="submitNewsletter();">

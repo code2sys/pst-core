@@ -69,7 +69,7 @@ if (!isset($SMSettings)) {
 }
 
 mustache_tmpl_set($template, "social_link_show_upper", array_key_exists("sm_show_upper_link", $SMSettings) && $SMSettings["sm_show_upper_link"] == 1);
-mustache_tmpl_set($template, "social_link_buttons", $CI->load->view("social_link_buttons", array("SMSettings" => $SMSettings), true));
+mustache_tmpl_set($template, "social_link_buttons", getSocialLinkButtons());
 
 jtemplate_add_store_hours($template, $store_name);
 echo mustache_tmpl_parse($template);
