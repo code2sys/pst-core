@@ -23,7 +23,7 @@ mustache_tmpl_set($search_placeholder_template, "SEARCH_PLACEHOLDER_WORDING", SE
 
 
 if (array_key_exists("sm_show_upper_link", $SMSettings) && $SMSettings["sm_show_upper_link"] == 1) {
-    mustache_tmpl_set($search_placeholder_template, "search_holder", $CI->load->view("social_link_buttons", array("SMSettings" => $SMSettings), true));
+    mustache_tmpl_set($search_placeholder_template, "search_holder", getSocialLinkButtons);
 } else {
     mustache_tmpl_set($search_placeholder_template, "search_holder", false);
 }

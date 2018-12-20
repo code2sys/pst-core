@@ -41,9 +41,7 @@ mustache_tmpl_set($template, "email", $store_name['email']);
 mustache_tmpl_set($template, "new_assets_url", $new_assets_url);
 
 // we now render the social
-mustache_tmpl_set($template, "social_link_buttons", $CI->load->view("social_link_buttons", array(
-    "SMSettings" => $SMSettings
-), true));
+mustache_tmpl_set($template, "social_link_buttons", getSocialLinkButtons());
 // and give it the raw, if desired
 mustache_tmpl_set($template, "social_settings_raw", $SMSettings);
 foreach ($SMSettings as $key => $val) {

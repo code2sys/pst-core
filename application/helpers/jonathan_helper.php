@@ -573,3 +573,22 @@ function returnClientIP() {
 function gronifyForFilename($val) {
     return preg_replace("/[^a-z0-9\.\-]+/i", '_', $val);
 }
+
+// I don't want to keep rendering this. I want to save it.
+global $social_link_buttons_rendered;
+function getSocialLinkButtons() {
+    global $social_link_buttons_rendered;
+
+    if (isset($social_link_buttons_rendered) && !is_null($social_link_buttons_rendered)) {
+        return $social_link_buttons_rendered;
+    }
+
+    $CI =& get_instance();
+    $CI->load->model("admin_m");
+    $SMSettings = $CI->admin_m->getSMSettings();
+    $social_link_buttons_rendered = $CI->load->view("social_link_buttons", array(
+        "SMSettings" => $SMSettings
+    ), true);
+
+    return $social_link_buttons_rendered;
+}
