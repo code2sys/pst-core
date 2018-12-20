@@ -2504,7 +2504,7 @@ class Admin_M extends Master_M {
 
 
             $getPriorityCategories = array();
-            $thePriorities = array(TOP_LEVEL_CAT_STREET_BIKES, TOP_LEVEL_CAT_DIRT_BIKES, TOP_LEVEL_CAT_ATV_PARTS, TOP_LEVEL_CAT_UTV_PARTS);
+            $thePriorities = array(TOP_LEVEL_CAT_STREET_BIKES, TOP_LEVEL_CAT_DIRT_BIKES, TOP_LEVEL_CAT_ATV_PARTS, TOP_LEVEL_CAT_UTV_PARTS, TOP_LEVEL_CAT_VTWIN_PARTS, TOP_LEVEL_CAT_MARINE, TOP_LEVEL_CAT_SNOW );
 
             for ($i = 0; $i <= 3; $i++) {
 
@@ -2548,6 +2548,15 @@ class Admin_M extends Master_M {
                     $returnURL .= $this->tag_creating($cat) . '_';
                 } else if ($key == TOP_LEVEL_CAT_UTV_PARTS) {
                     $breadCrumb[$counter]['link'] = "utvparts";
+                    $returnURL .= $this->tag_creating($cat) . '_';
+                } else if ($key == TOP_LEVEL_CAT_VTWIN_PARTS) {
+                    $breadCrumb[$counter]['link'] = "vtwin";
+                    $returnURL .= $this->tag_creating($cat) . '_';
+                } else if ($key == TOP_LEVEL_CAT_MARINE) {
+                    $breadCrumb[$counter]['link'] = "marine";
+                    $returnURL .= $this->tag_creating($cat) . '_';
+                } else if ($key == TOP_LEVEL_CAT_SNOW) {
+                    $breadCrumb[$counter]['link'] = "snowparts";
                     $returnURL .= $this->tag_creating($cat) . '_';
                 } else {
                     $breadCrumb[$counter]['link'] = "shopping/productlist/" . $returnURL . $this->tag_creating($cat) . '_';
