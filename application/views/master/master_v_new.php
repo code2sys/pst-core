@@ -488,7 +488,7 @@ $(document).ready(function() {
        // JLB 10-12-17
        // This is the stupidest thing in the world if it happens to the top-level categories...
        id = parseInt(id, 10);
-       if (id == <?php echo TOP_LEVEL_CAT_STREET_BIKES; ?> || id == <?php echo TOP_LEVEL_CAT_ATV_PARTS; ?> || id == <?php echo TOP_LEVEL_CAT_UTV_PARTS; ?> || id == <?php echo TOP_LEVEL_CAT_VTWIN_PARTS; ?> || id == <?php echo TOP_LEVEL_CAT_DIRT_BIKES; ?> || id == <?php echo TOP_LEVEL_CAT_MARINE; ?>) {
+       if (id == <?php echo TOP_LEVEL_CAT_STREET_BIKES; ?> || id == <?php echo TOP_LEVEL_CAT_ATV_PARTS; ?> || id == <?php echo TOP_LEVEL_CAT_UTV_PARTS; ?> || id == <?php echo TOP_LEVEL_CAT_VTWIN_PARTS; ?> || id == <?php echo TOP_LEVEL_CAT_DIRT_BIKES; ?> || id == <?php echo TOP_LEVEL_CAT_MARINE; ?> || id == <?php echo TOP_LEVEL_CAT_SNOW; ?>) {
            // sometimes, they just do these URLs wrong.
            switch(id) {
                case <?php echo TOP_LEVEL_CAT_STREET_BIKES; ?>:
@@ -508,6 +508,9 @@ $(document).ready(function() {
                    break;
                case <?php echo TOP_LEVEL_CAT_MARINE; ?>:
                    window.location.href = '/marine';
+                   break;
+               case <?php echo TOP_LEVEL_CAT_SNOW; ?>:
+                   window.location.href = '/snowparts';
                    break;
                default:
                    return true;

@@ -76,6 +76,7 @@ $route['hlsmfeed/receive'] = 'hlsmfeed/receive';
 
 $route['atvparts'] = 'atvparts/index';
 $route['utvparts'] = 'utvparts/index';
+$route['snowparts'] = 'snowparts/index';
 $route['admin'] = 'admin/index';
 
 $route["streetbikepart"] = "streetbikeparts/redirectToHome";

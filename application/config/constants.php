@@ -41,6 +41,13 @@ if (!defined('FOOTER_PAGE_LIMIT')) {
     define('FOOTER_PAGE_LIMIT', 8);
 }
 
+if (!defined('TOP_LEVEL_CAT_SNOW')) {
+    define('TOP_LEVEL_CAT_SNOW', -1);
+}
+if (!defined('TOP_LEVEL_PAGE_ID_SNOW')) {
+    define('TOP_LEVEL_PAGE_ID_SNOW', -1);
+}
+
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
