@@ -14,7 +14,9 @@ if( $motorcycle['call_on_price'] == '1' ||  ($retail_price_zero && $sale_price_z
 } else {
     if (!$sale_price_zero && $motorcycle["sale_price"] != $motorcycle["retail_price"]) {
         mustache_tmpl_set($pricing_widget_template, "SHOW_SALE_PRICE", true);
-        if (!$retail_price_zero) {
+        // JLB 12-24-18
+        // Only show the retail price AND the sale price if the sale price < retail_price
+        if (!$retail_price_zero && (floatVal($motorcycle["sale_price"]) < floatVal($motorcycle["retail_price"]))) {
             mustache_tmpl_set($pricing_widget_template, "SHOW_RETAIL_PRICE", true);
         }
     } else {
