@@ -127,7 +127,8 @@ class Mdfeed_m extends Master_M {
                             "mdfeed_flag" => 1,
                             "mdfeed_deleted" => 0,
                             "status" => $this->activeOnAdd() ? 1 : 0,
-                            "source" => "MD Feed"
+                            "source" => "MD Feed",
+                            "destination_charge" => $this->destinationOnAdd() ? 1 : 0
                         ));
 
                         $motorcycle_id = $motorcycle->id();

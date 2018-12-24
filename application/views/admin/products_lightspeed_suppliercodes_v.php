@@ -105,6 +105,13 @@ $success = $CI->session->flashdata("success");
                                 <label><input type="radio" name="lightspeed_active_load" value="1" <?php if ($c): ?>checked="checked"<?php endif; ?> /> Active</label>
                             </td>
                         </tr>
+                        <tr>
+                            <td width="30%"><b>Lightspeed Unit Destination Fee:</b></td>
+                            <td>
+                                <label><input type="radio" name="lightspeed_default_destination_charge" value="0" <?php if (!($c = $CI->Lightspeed_m->destinationOnAdd())): ?>checked="checked"<?php endif; ?> /> No, Do Not Include Destionation Charge By Default</label>
+                                <label><input type="radio" name="lightspeed_default_destination_charge" value="1" <?php if ($c): ?>checked="checked"<?php endif; ?> /> Yes, Include Destination Charge By Default</label>
+                            </td>
+                        </tr>
 
                         <tr>
                             <td width="30%"><b>Include Units in Cycle Trader Feed by Default:</b></td>
