@@ -1034,7 +1034,7 @@ class Lightspeed_M extends Master_M {
     }
 
     public function destinationOnAdd() {
-        return $this->_subContactFetch("lightspeed_default_destination_charge") > 0;
+        return $this->_subContactFetch("lightspeed_default_destination_charge");
     }
 
     public function setDestinationOnAdd($setting = 0) {
