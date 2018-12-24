@@ -490,7 +490,7 @@ class CronControl extends Master_Controller {
         $status = 0;
 
         foreach ($query->result_array() as $row) {
-            $status = $row["out_of_stock_active"];
+            $status = $row["crs_destination_charge"];
         }
 
         return $status;
