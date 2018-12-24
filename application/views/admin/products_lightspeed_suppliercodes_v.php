@@ -107,10 +107,11 @@ $success = $CI->session->flashdata("success");
                         </tr>
                         <tr>
                             <td width="30%"><b>Lightspeed Unit Destination Fee:</b></td>
+                            <!-- <?php echo ($c = intVal($CI->Lightspeed_m->destinationOnAdd())); ?> -->
                             <td>
-                                <label><input type="radio" name="lightspeed_default_destination_charge" value="0" <?php if (!($c = intVal($CI->Lightspeed_m->destinationOnAdd()))): ?>checked="checked"<?php endif; ?> /> No, Do Not Include Destionation Charge By Default</label>
-                                <label><input type="radio" name="lightspeed_default_destination_charge" value="1" <?php if ($c == 1): ?>checked="checked"<?php endif; ?> /> Yes, Include Destination Charge By Default</label>
-                                <label><input type="radio" name="lightspeed_default_destination_charge" value="2" <?php if ($c == 2): ?>checked="checked"<?php endif; ?> /> Enable if DSRP > MSRP or if freight cost is specified.</label>
+                                <label><input type="radio" name="lightspeed_default_destination_charge" value="0" <?php if ($c === 0): ?>checked="checked"<?php endif; ?> /> No, Do Not Include Destionation Charge By Default</label>
+                                <label><input type="radio" name="lightspeed_default_destination_charge" value="1" <?php if ($c === 1): ?>checked="checked"<?php endif; ?> /> Yes, Include Destination Charge By Default</label>
+                                <label><input type="radio" name="lightspeed_default_destination_charge" value="2" <?php if ($c === 2): ?>checked="checked"<?php endif; ?> /> Enable if DSRP > MSRP or if freight cost is specified.</label>
                             </td>
                         </tr>
 
