@@ -485,6 +485,16 @@ class CronControl extends Master_Controller {
 
         return $status;
     }
+    protected function _getCRSDestinationFee() {
+        $query = $this->db->query("Select crs_destination_charge from contact where id = 1");
+        $status = 0;
+
+        foreach ($query->result_array() as $row) {
+            $status = $row["crs_destination_charge"];
+        }
+
+        return $status;
+    }
 
 	/*
 	 * The point of this one is to be able to request some specific information and then to load them.
@@ -540,6 +550,7 @@ class CronControl extends Master_Controller {
         $this->db->query("Update motorcycle set uniqid = '' where crs_machinetype = ? and crs_make_id = ? and `condition` = 1 and source = 'PST'", array($machine_type, $make_id));
 
         $stock_status = $this->_getStockStatusCRS();
+        $crs_destination_fee = $this->_getCRSDestinationFee();
 
         // We sometimes need this in hand - the off-road type...
 
@@ -607,7 +618,7 @@ class CronControl extends Master_Controller {
                     }
 
                     // JLB 11-27-17: We just set the destination charge = 1.
-                    $this->db->query("Insert into motorcycle (title, description, status, `condition`, sku, engine_type, transmission, retail_price, sale_price, data, margin, profit, category, vehicle_type, year, make, model, color, craigslist_feed_status, cycletrader_feed_status, crs_trim_id, crs_machinetype, crs_model_id, crs_make_id, crs_year, uniqid, source, crs_version_number, destination_charge, stock_status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'Out Of Stock')", array(
+                    $this->db->query("Insert into motorcycle (title, description, status, `condition`, sku, engine_type, transmission, retail_price, sale_price, data, margin, profit, category, vehicle_type, year, make, model, color, craigslist_feed_status, cycletrader_feed_status, crs_trim_id, crs_machinetype, crs_model_id, crs_make_id, crs_year, uniqid, source, crs_version_number, destination_charge, stock_status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Out Of Stock')", array(
                         preg_replace("/[^" . $this->config->item("permitted_uri_chars") . "]/i", "", ($title = $trim["year"]. " " . $trim["make"] . " " . $trim["display_name"])),
                         generateCRSDescription($title, $trim["description"]),
                         $stock_status,
@@ -642,8 +653,8 @@ class CronControl extends Master_Controller {
                         $trim["year"],
                         $uniqid,
                         'PST',
-                        $trim["version_number"]
-
+                        $trim["version_number"],
+                        $crs_destination_fee
                     ));
 
                     $motorcycle_id = $this->db->insert_id();

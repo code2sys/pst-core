@@ -364,7 +364,8 @@ class Lightspeed_M extends Master_M {
             'description' => $bike->WebDescription,
             'lightspeed_set_description' => trim($bike->WebDescription) != '',
             'call_on_price' => $bike->WebPriceHidden,
-            "destination_charge" => $this->destinationOnAdd() ? 1 : 0 ,
+            // ($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0,
+            "destination_charge" => ($c = $this->destinationOnAdd()) == 2 ? (($bike->DSRP > $bike->MSRP || $bike->FreightCost > 0) ? 1 : 0) : ($c > 0 ? 1 : 0),
             "lightspeed" => 1,
             "lightspeed_flag" => 1,
             "source" => "Lightspeed",
@@ -1033,7 +1034,7 @@ class Lightspeed_M extends Master_M {
     }
 
     public function destinationOnAdd() {
-        return $this->_subContactFetch("lightspeed_default_destination_charge") > 0;
+        return $this->_subContactFetch("lightspeed_default_destination_charge");
     }
 
     public function setDestinationOnAdd($setting = 0) {

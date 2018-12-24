@@ -85,6 +85,16 @@
                 <label style="display: inline-block"><input type="radio" name="display_status_button" value="0" <?php if ($stock_status_mode == 0): ?>checked="checked"<?php endif; ?>> Do not show stock status</label>
             </form>
 
+            <?php if (FALSE !== getCRSStructure()): ?>
+            <h3>PST Unit Stock</h3>
+
+            <form>
+                <label style="display: inline-block"><input type="radio" name="crs_destination_charge" value="1" <?php if ($crs_destination_charge > 0): ?>checked="checked"<?php endif; ?>> Include Destination Fee by Default</label>
+                <label style="display: inline-block"><input type="radio" name="crs_destination_charge" value="0" <?php if ($crs_destination_charge == 0): ?>checked="checked"<?php endif; ?>> Do Not Include Destination Fee by Default</label>
+            </form>
+
+            <?php endif; ?>
+
         </div>
 
 
@@ -179,6 +189,15 @@
             "type" : "POST",
             "dataType": "json",
             "url" : "<?php echo site_url("admin/ajax_set_stock_status_mode"); ?>/" + $("input[name='display_status_button']:checked").val(),
+            "data" : {}
+        });
+    });
+
+    $("input[name='crs_destination_charge']").on("change", function(e) {
+        $.ajax({
+            "type" : "POST",
+            "dataType": "json",
+            "url" : "<?php echo site_url("admin/ajax_set_crs_destination_charge"); ?>/" + $("input[name='crs_destination_charge']:checked").val(),
             "data" : {}
         });
     });

@@ -699,6 +699,21 @@ abstract class Motorcycleadmin extends Firstadmin
         return $this->_stock_status_mode;
     }
 
+    protected $_crs_destination_charge;
+    protected function _getCRSDestinationCharge() {
+        if ($this->_crs_destination_charge === 0 || $this->crs_destination_charge === 1) {
+            return $this->_crs_destination_charge;
+        }
+
+        // need to get it..
+        $query = $this->db->query("Select crs_destination_charge from contact where id = 1");
+        foreach ($query->result_array() as $row) {
+            $this->_crs_destination_charge = intVal($row["crs_destination_charge"]);
+        }
+
+        return $this->_crs_destination_charge;
+    }
+
     protected $_out_of_stock_active;
     protected function _getOutOfStockActive() {
         if ($this->_out_of_stock_active === 0 || $this->_out_of_stock_active === 1) {
@@ -721,6 +736,7 @@ abstract class Motorcycleadmin extends Firstadmin
         }
         $this->setNav('admin/nav_v', 2);
         $this->_mainData["stock_status_mode"] = $this->_getStockStatusMode();
+        $this->_mainData["crs_destination_charge"] = $this->_getCRSDestinationCharge();
         $this->_mainData["out_of_stock_active"] = $this->_getOutOfStockActive();
         $this->renderMasterPage('admin/master_v', 'admin/motorcycle/list_v', $this->_mainData);
     }
@@ -730,6 +746,16 @@ abstract class Motorcycleadmin extends Firstadmin
             redirect('');
         }
         $this->db->query("Update contact set stock_status_mode = ? where id = 1 limit 1", array($stock_status_mode));
+    }
+
+    public function ajax_set_crs_destination_charge($stock_status_mode) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        $this->db->query("Update contact set crs_destination_charge = ? where id = 1 limit 1", array($stock_status_mode));
+
+        // Riiiipppllle in still waters.
+        $this->db->query("Update motorcycle set destination_charge = ? where source = 'PST' and customer_set_destination_charge = 0", array($stock_status_mode));
     }
 
     public function minventory_ajax() {
