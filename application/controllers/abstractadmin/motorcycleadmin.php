@@ -753,6 +753,9 @@ abstract class Motorcycleadmin extends Firstadmin
             redirect('');
         }
         $this->db->query("Update contact set crs_destination_charge = ? where id = 1 limit 1", array($stock_status_mode));
+
+        // Riiiipppllle in still waters.
+        $this->db->query("Update motorcycle set destination_charge = ? where source = 'PST' and customer_set_destination_charge = 0");
     }
 
     public function minventory_ajax() {
