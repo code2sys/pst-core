@@ -341,6 +341,11 @@ class Lightspeed_M extends Master_M {
         $data = array('total_cost' => $bike->totalCost, 'unit_cost' => $bike->totalCost, 'parts' => "", 'service' => "", 'auction_fee' => "", 'misc' => "");
         $bike->data = json_encode($data);
 
+        // JLB 12-31-18
+        if ($bike->DSRP > 0 && $bike->MSRP <= 0) {
+            $bike->MSRP = $bike->DSRP;
+        }
+
         $bike->WebPrice = ($bike->WebPrice <= 0) ? $bike->MSRP : $bike->WebPrice;
         $bike->Color = $this->cleanColors($bike->Color);
 
