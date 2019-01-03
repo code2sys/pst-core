@@ -76,7 +76,13 @@ if ($post_url == "") {
 if ($in_dir = opendir($incoming_directory)) {
     // We have to iterate over the entries to this and extract files.
     while (false !== ($entry = readdir($in_dir))) {
-        if ($entry != "." && $entry != "..") {
+        if ($entry != "." && $entry != ".." && "." != substr($entry, 0, 1)) {
+            // Give them 30 seconds to process this file.
+            if (filemtime($incoming_directory . "/" . $entry) > time() - 30) {
+                print "Skipping $entry; too new. \n";
+                continue;
+            }
+
             // attempt to process the file..
             // generate the error output
             $output_file = $outgoing_directory . "/" . time() . "_" . $entry . ".output.txt";
@@ -101,7 +107,10 @@ if ($in_dir = opendir($incoming_directory)) {
              * file name.
              */
             $file_name_with_full_path = realpath($target_file);
-            $post = array('upload'=>'@'.$file_name_with_full_path);
+            print "Uploading file: $file_name_with_full_path\n";
+
+            $post = array();
+            $post["upload"] = curl_file_create($file_name_with_full_path, "text/plain", $entry);
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL,$post_url);
@@ -122,6 +131,4 @@ if ($in_dir = opendir($incoming_directory)) {
     print "Could not open directory: $incoming_directory \n";
     exit(-2);
 }
-
-
 
