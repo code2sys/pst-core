@@ -583,7 +583,12 @@ echo $CI->load->view("master/widgets/flexiselect", array(), true);
     ?>
 
     <script type="application/javascript" src="<?php echo jsite_url('/custom.js'); ?>" ></script>
-
+<?php
+$CI =& get_instance();
+echo $CI->load->view("master/bottom_footer", array(
+    "store_name" => $store_name
+));
+?>
 <?php echo jget_store_block("bottom_body"); ?>
 </body>
 </html>
