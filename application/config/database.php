@@ -67,5 +67,23 @@ $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
 
+$db['vsftpd']['hostname'] = 'mysql:host=ftp.powersporttechnologies.com;dbname=vsftpd';
+$db['vsftpd']['username'] = "pstcore";
+$db['vsftpd']['password'] = "2354t980g3j0g58jg";
+$db['vsftpd']['database'] = "vsftpd";
+$db['vsftpd']['dbdriver'] = 'pdo';
+$db['vsftpd']['dbprefix'] = '';
+$db['vsftpd']['pconnect'] = TRUE;
+$db['vsftpd']['db_debug'] = TRUE;
+$db['vsftpd']['cache_on'] = FALSE;
+$db['vsftpd']['cachedir'] = '';
+$db['vsftpd']['char_set'] = 'utf8';
+$db['vsftpd']['dbcollat'] = 'utf8_general_ci';
+$db['vsftpd']['swap_pre'] = '';
+$db['vsftpd']['autoinit'] = TRUE;
+$db['vsftpd']['stricton'] = FALSE;
+
+
+
 /* End of file database.php */
 /* Location: ./application/config/database.php */
