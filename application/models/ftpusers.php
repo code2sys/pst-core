@@ -20,6 +20,16 @@ class Ftpusers extends CI_Model {
 
         $vsftp_database = $this->load->database("vsftpd", true);
 
+        // Step #1.5: Check that the username is not already in use by someone else!
+        $query = $vsftp_database->query("Select * from accounts where store != ? and tag = ? and username = ?", array($store, $tag, $username));
+        $matches = $query->result_array();
+
+        if (count($matches) > 0) {
+            error_log("Request for a username that already exists: $username for store $store tag $tag");
+            return false; // already in use.
+        }
+
+
         // Step #2: Check the datbase for this store. If it already exists, and if the username is the same, it's not a change. It may just be a password update.
         $query = $vsftp_database->query("Select * from accounts where store = ? and tag = ?", array($store, $tag));
         $existing_account = null;
