@@ -2,6 +2,17 @@
 require_once(APPPATH . 'controllers/Master_Controller.php');
 class CronControl extends Master_Controller {
 
+    // JLB 01-06-19
+    // This is here as an example
+    public function setUsernamePassword($username, $password) {
+        $this->load->model("Ftpusers");
+        if ($this->Ftpusers->setUsernamePassword($username, $password)) {
+            print "Success! Try it out.\n";
+        } else {
+            print "Failure!\n";
+        }
+    }
+
     // JLB 11-25-18
     // Fix all those showcase pages that already exist...
     public function fixShowcasePages() {
