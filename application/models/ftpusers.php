@@ -18,7 +18,7 @@ class Ftpusers extends CI_Model {
             return false; // bad username.
         }
 
-        $vsftp_database = $this->load->db("vsftpd");
+        $vsftp_database = $this->load->database("vsftpd", true);
 
         // Step #2: Check the datbase for this store. If it already exists, and if the username is the same, it's not a change. It may just be a password update.
         $query = $vsftp_database->query("Select * from accounts where store = ? and tag = ?", array($store, $tag));
