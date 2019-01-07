@@ -21,7 +21,8 @@ class Ftpusers extends CI_Model {
         $vsftp_database = $this->load->database("vsftpd", true);
 
         // Step #1.5: Check that the username is not already in use by someone else!
-        $query = $vsftp_database->query("Select * from accounts where store != ? and tag = ? and username = ?", array($store, $tag, $username));
+        // It can't be in use for any other store or tag for this store.
+        $query = $vsftp_database->query("Select * from accounts where (store != ? OR tag != ?) and username = ?", array($store, $tag, $username));
         $matches = $query->result_array();
 
         if (count($matches) > 0) {
