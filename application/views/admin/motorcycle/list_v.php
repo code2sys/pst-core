@@ -66,6 +66,7 @@
             <p><b>To add a new product click the button below.</b></p>
             <br>
             <a href="<?php echo base_url('admin/motorcycle_edit'); ?>" id="button"><i class="fa fa-plus"></i>&nbsp;Add a new Unit</a>
+            <a href="<?php echo base_url('admin/motorcycle_payment_option'); ?>" id="button"><i class="fa fa-plus"></i>&nbsp;Add Major Unit Payment Options</a>
         </div>
 
         <div class="admin_search_right">

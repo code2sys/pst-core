@@ -224,6 +224,23 @@ class Adminproduct extends Admin {
         redirect('adminproduct/product');
     }
 
+    public function product_json($part_id) {
+        if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
+            print json_encode(array('success'=>false, 'message' => 'unauthorized'));
+            return;
+        }
+
+        // OK, we need to go see if that part is, in fact, an MX part...
+        $this->load->model('parts_m');
+        $product = $this->parts_m->getProduct($part_id, NULL);
+
+        if (!is_null($product)) {
+            print json_encode(array('success'=>true, 'product' => $product));
+        } else {
+            print json_encode(array('success'=>false, 'message' => 'Not found'));
+        }
+    }
+
     public function product_hide($part_id) {
         if(!$this->checkValidAccess('products') && !@$_SESSION['userRecord']['admin']) {
             redirect('');

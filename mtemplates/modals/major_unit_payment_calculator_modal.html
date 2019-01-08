@@ -1,0 +1,290 @@
+<div class="modal fade pop" id="major-unit-payment-calculator-modal_{{motorcycle_id}}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body modal-body-dark">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <div class="modal-unit-details row">
+                    {{#motorcycle_image}}
+                    <div class="col-sm-4">
+                        <img class="img-responsive center-block" src="{{motorcycle_image}}"/>
+                    </div>
+                    {{/motorcycle_image}}
+
+                    <div class="col-sm-8">
+                        <div><h4><strong>{{motorcycle_title}}</strong></h4></div>
+                        <div style="display: flex;justify-content: space-between;flex-wrap: wrap; padding: 8px 0px;">
+                            {{#motorcycle_color}}<div>Color: {{motorcycle_color}}</div>{{/motorcycle_color}}
+                            {{#motorcycle_display_sku}}<div>Stock #: {{motorcycle_display_sku}}</div>{{/motorcycle_display_sku}}
+                            {{#motorcycle_vin_number}}<div>VIN: {{motorcycle_vin_number}}</div>{{/motorcycle_vin_number}}
+                        </div>
+                        <div style="display: flex;justify-content: space-between;flex-wrap: wrap; padding: 8px 0px;">
+                            {{#motorcycle_retail_price}}
+                            <div><b>Retail Price:</b>&nbsp;<span id="major-unit-payment-calculator-modal_retail-price-{{motorcycle_id}}" style="{{#motorcycle_saving_price}} text-decoration: line-through; {{/motorcycle_saving_price}}">${{motorcycle_retail_price}}</span></div>
+                            {{/motorcycle_retail_price}}
+                            {{#motorcycle_sale_price}}
+                            <div style="display: flex;flex-direction: column;text-align: right;{{#motorcycle_saving_price}}color:#f00;{{/motorcycle_saving_price}}">
+                                <div><b>Our Price:</b>&nbsp;<span id="major-unit-payment-calculator-modal_sale-price-{{motorcycle_id}}">${{motorcycle_sale_price}}</span></div>
+                                {{#motorcycle_saving_price}}
+                                <div id="saving-price-{{motorcycle_id}}" style="font-size: 10px;padding: 4px 0px;">Savings: ${{motorcycle_saving_price}}</div>
+                                {{/motorcycle_saving_price}}
+                            </div>
+                            {{/motorcycle_sale_price}}
+                        </div>
+                        {{#display_base_payment}}
+                        <div class="vehicle-monthly-payment">
+                            <h4>{{payment_text}}:&nbsp;$<span id="major-unit-payment-calculator-modal_{{motorcycle_id}}-monthly-payment-value">{{monthly_payment}}</span>/mo<sup>*</sup></h4>
+                        </div>
+                        {{/display_base_payment}}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="modal-form-container">
+                            {{{form_open_string}}}
+                            <div class="row" style="padding-top: 8px;padding-bottom:8px;">
+                                {{#has_down_payment_options}}
+                                <div class="col-xs-12 col-sm-4 col-sm-offset-1">
+                                    <div class="form-group" style="flex-direction: column">
+                                        <label for="major-unit-payment-calculator-modal_{{motorcycle_id}}_down-payment-select">DOWN PAYMENT:</label>
+                                        <select id="major-unit-payment-calculator-modal_{{motorcycle_id}}_down-payment-select" >
+                                            <option value="" disabled selected>Select Down Payment</option>
+                                            {{#down_payment_options}}
+                                                <option value="{{value}}">{{title}}</option>
+                                            {{/down_payment_options}}
+                                            <option value="-1">Custom Amount</option>
+                                        </select>
+                                        <div class="select-overlay" id="major-unit-payment-calculator-modal_{{motorcycle_id}}_down-payment-select-overlay">
+                                            <span style="padding:0px 8px">$</span>
+                                            <input type="number" id="major-unit-payment-calculator-modal_{{motorcycle_id}}_down-payment" name="down_payment" class="text" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/has_down_payment_options}}
+                                {{#has_terms}}
+                                <div class="col-xs-12 col-sm-4 col-sm-offset-2">
+                                    <div class="form-group" style="flex-direction: column">
+                                        <label for="major-unit-payment-calculator-modal_{{motorcycle_id}}_term">TERM:</label>
+                                        <select id="major-unit-payment-calculator-modal_{{motorcycle_id}}_term" required>
+                                            <option value="" disabled selected>Select Term</option>
+                                            {{#terms}}
+                                                <option value="{{index}}">{{term}} Months</option>
+                                            {{/terms}}
+                                        </select>
+                                    </div>
+                                </div>
+                                {{/has_terms}}
+                            </div>
+                            {{#has_warranty_options}}
+                            <div class="row" style="padding-top: 8px;padding-bottom:8px;">
+                                <div class="col-xs-12" style="padding-top: 4px;padding-bottom:4px;">
+                                    <label>WANT A WARRANTY?</label>
+                                </div>
+                                {{#warranty_options}}
+                                <div class="col-xs-12" style="padding-top: 4px;padding-bottom:4px;">
+                                    <div class="col-xs-1" style="display:flex;">
+                                        <input type="checkbox" class="{{motorcycle_id}}_warranty_option" data-value="{{index}}" style="margin:unset;">
+                                    </div>
+                                    <div class="col-xs-11">
+                                        <div class="col-xs-12 col-sm-3 col-md-2 text" style="text-transform:uppercase">
+                                            {{title}}
+                                        </div>
+                                        <div class="col-xs-12 col-sm-7 col-md-8 text" style="text-transform:initial">
+                                            {{{description}}}
+                                        </div>
+                                        <div class="col-xs-12 col-sm-2 col-md-2 text">
+                                            ${{price}}
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/warranty_options}}
+                            </div>
+                            {{/has_warranty_options}}
+    
+                            {{#has_accessory_options}}
+                            <div class="row" style="padding-top: 8px;padding-bottom:8px;">
+                                <div class="col-xs-12" style="padding-top: 4px;padding-bottom:4px;">
+                                    <label>TRICK OUT YOUR RIDE</label>
+                                </div>
+                                {{#accessory_options}}
+                                <div class="col-xs-12" style="padding-top: 4px;padding-bottom:4px;display:flex;align-items:center;">
+                                    <div class="col-xs-1" style="display:flex;">
+                                        <input type="checkbox" class="{{motorcycle_id}}_accessory_option" data-value="{{index}}" style="margin:unset;">
+                                    </div>
+                                    <div class="col-xs-11" style="display:flex;align-items:center;">
+                                        <div class="col-xs-4 col-sm-2">
+                                            {{#image}}
+                                            <img class="img-responsive center-block" src="{{image}}"/>
+                                            {{/image}}
+                                        </div>
+                                        <div class="col-xs-12 col-sm-8">
+                                            <div class="col-xs-12 text" style="text-transform:uppercase">
+                                                {{title}}
+                                            </div>
+                                            <div class="col-xs-12 text" style="text-transform:initial">
+                                                {{{description}}}
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-2 text">
+                                            ${{price}}
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/accessory_options}}
+                            </div>
+                            {{/has_accessory_options}}
+                            <div class="row" style="padding-top: 8px;padding-bottom:8px;">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="major-unit-payment-calculator-modal_{{motorcycle_id}}_firstName">First&nbsp;Name:</label>
+                                        <input id="major-unit-payment-calculator-modal_{{motorcycle_id}}_firstName" class="form-control" type="text" name="firstName" required>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="major-unit-payment-calculator-modal_{{motorcycle_id}}_lastName">Last&nbsp;Name:</label>
+                                        <input id="major-unit-payment-calculator-modal_{{motorcycle_id}}_lastName" class="form-control" type="text" name="lastName" required>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="major-unit-payment-calculator-modal_{{motorcycle_id}}_phone">Phone:</label>
+                                        <input id="major-unit-payment-calculator-modal_{{motorcycle_id}}_phone" class="form-control" type="text" name="phone">
+                                    </div>
+                                </div>
+        
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="major-unit-payment-calculator-modal_{{motorcycle_id}}_email">Email:</label>
+                                        <input id="major-unit-payment-calculator-modal_{{motorcycle_id}}_email" class="form-control" type="email" name="email" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="motorcycle" value="{{motorcycle_title}}">
+                            <input type="hidden" name="product_id" value="{{motorcycle_id}}">
+                            <input type="hidden" name="sku" value="{{motorcycle_sku}}">
+                            <input type="hidden" name="vin" value="{{motorcycle_vin_number}}">
+                            <input type="hidden" name="accessory_options" id="major-unit-payment-calculator-modal_{{motorcycle_id}}-accessory-options">
+                            <input type="hidden" name="warranty_options" id="major-unit-payment-calculator-modal_{{motorcycle_id}}-warranty-options">
+                            <input type="hidden" name="term" id="major-unit-payment-calculator-modal_{{motorcycle_id}}-term-term">
+                            <input type="hidden" name="interest_rate" id="major-unit-payment-calculator-modal_{{motorcycle_id}}-interest-rate">
+                            <input type="hidden" name="monthly_payment" id="major-unit-payment-calculator-modal_{{motorcycle_id}}-monthly-payment" value="{{monthly_payment}}">
+                            <input type="hidden" name="stock_number" value="{{motorcycle_display_sku}}">
+
+                            <div class="row text-center" style="display:flex;justify-content: center;">
+                                <div class="g-recaptcha" data-sitekey="{{RECAPTCHA_KEY}}"></div>
+                            </div>
+    
+                            <div class="row" style="padding-top:8px;padding-bottom:8px;">
+                                <div class="col-xs-6 col-sm-5 text-center">
+                                    <button class="btn submit" style="width: 90%;text-transform:initial" onclick="window.submitPaymentCalculatorForm('{{motorcycle_id}}', '{{form_action_url}}')">
+                                        Contact Me
+                                    </button>
+                                </div>
+                                <div class="col-xs-6 col-sm-5 col-sm-offset-2 text-center">
+                                    <button class="btn submit" style="width: 90%;text-transform:initial" onclick="window.submitPaymentCalculatorForm('{{motorcycle_id}}', '{{form_action_url}}', '/pages/index/financerequest')">
+                                        E-Z Financing
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row text-center text" style="font-size:12px;color:#AAA;">
+                                {{{fine_print}}}
+                            </div>
+                            {{{form_close_string}}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="application/javascript">
+    
+    if (!window.motorcycles) {
+        window.motorcycles = new Array();
+    }
+    window.motorcycles["{{motorcycle_id}}"] = {
+        'retail_price': "{{#motorcycle_retail_price}}{{motorcycle_retail_price}}{{/motorcycle_retail_price}}{{^motorcycle_retail_price}}0{{/motorcycle_retail_price}}",
+        'sale_price': "{{#motorcycle_sale_price}}{{motorcycle_sale_price}}{{/motorcycle_sale_price}}{{^motorcycle_sale_price}}0{{/motorcycle_sale_price}}",
+        'down_payment': "{{#down_payment}}{{down_payment}}{{/down_payment}}{{^down_payment}}0{{/down_payment}}",
+        'term': "{{#term}}{{term}}{{/term}}{{^term}}0{{/term}}",
+        'interest_rate': "{{#interest_rate}}{{interest_rate}}{{/interest_rate}}{{^interest_rate}}0{{/interest_rate}}",
+    };
+    
+    window.motorcycles["{{motorcycle_id}}"]["warranty_options"] = new Array();
+    {{#warranty_options}}
+    {
+        var title = `{{title}}`;
+        var description = `{{description}}`;
+        var price = `{{price}}`;
+        window.motorcycles["{{motorcycle_id}}"]["warranty_options"].push(
+            {
+                'title': title,
+                'description': description,
+                'price': price,
+            }
+        );
+    }
+    {{/warranty_options}}
+    window.motorcycles["{{motorcycle_id}}"]["accessory_options"] = new Array();
+    {{#accessory_options}}
+    {
+        var image = `{{image}}`;
+        var title = `{{title}}`;
+        var description = `{{description}}`;
+        var price = `{{price}}`;
+        window.motorcycles["{{motorcycle_id}}"]["accessory_options"].push(
+            {
+                'title': title,
+                'image': image,
+                'description': description,
+                'price': price,
+            }
+        );
+    }
+    {{/accessory_options}}
+    window.motorcycles["{{motorcycle_id}}"]["terms"] = new Array();
+    {{#terms}}
+    {
+        var interest_rate = "{{interest_rate}}";
+        var term = "{{term}}"
+        window.motorcycles["{{motorcycle_id}}"]["terms"].push(
+            {
+                'term': term,
+                'interest_rate': interest_rate
+            }
+        );
+    }
+    {{/terms}}
+    (function() {
+        $(".{{motorcycle_id}}_warranty_option").click(function(event) {
+            if (event.target.checked) {
+                $(".{{motorcycle_id}}_warranty_option").prop('checked', false);
+                $(event.target).prop('checked', true);
+            }
+            window.calculatePricesForPaymentCalculator("{{motorcycle_id}}");
+        });
+        $(".{{motorcycle_id}}_accessory_option").click(function(event) {
+            window.calculatePricesForPaymentCalculator("{{motorcycle_id}}");
+        });
+        $("#major-unit-payment-calculator-modal_{{motorcycle_id}}_down-payment-select").change(function(event) {
+            if (event.target.value == -1) {
+                $("#major-unit-payment-calculator-modal_{{motorcycle_id}}_down-payment-select-overlay").css('display', 'flex');
+            } else {
+                $("#major-unit-payment-calculator-modal_{{motorcycle_id}}_down-payment-select-overlay").css('display', 'none');
+                $("#major-unit-payment-calculator-modal_{{motorcycle_id}}_down-payment").val($(event.target).val());
+            }
+            window.calculatePricesForPaymentCalculator("{{motorcycle_id}}");
+        });
+        $("#major-unit-payment-calculator-modal_{{motorcycle_id}}_down-payment").change(function(event) {
+            window.calculatePricesForPaymentCalculator("{{motorcycle_id}}");
+        });
+        $("#major-unit-payment-calculator-modal_{{motorcycle_id}}_term").change(function(event) {
+            window.calculatePricesForPaymentCalculator("{{motorcycle_id}}");
+        });
+    })();
+</script>

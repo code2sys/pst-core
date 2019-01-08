@@ -1023,6 +1023,8 @@ h3.head-tx {
     width: 20%;
     float: left;
     padding: 0 13px;
+    display: flex;
+    flex-direction: column;
 }
 .mid .mid-r .mid-r-but a {
     text-decoration: none;
@@ -1038,23 +1040,13 @@ h3.head-tx {
     padding: 11px 15px;
     border-radius: 6px;
     transition: all 0.6s;
-}
-.mid .mid-r .mid-r-but a:hover {
-    box-shadow: 0 2px 5px black;
-}
-.mid .mid-r .mid-r-but a:nth-child(2) {
-    line-height: 1rem;
-    padding: 11px 15px 14px 15px;
-}
-.mid .mid-r .mid-r-but a:nth-child(2) img {
-    vertical-align: -webkit-baseline-middle;
-}
-.mid .mid-r .mid-r-but a:nth-child(2) span {
-    margin: 0 0 0 29px;
+    display: flex;
+    align-items: center;
 }
 .mid .mid-r .mid-r-but a img {
     margin: 0 8px 0 0;
     vertical-align: text-bottom;
+    float: left;
 }
 img.powerlogo-a {
     width: 121px !important;
@@ -1323,6 +1315,10 @@ img.powerlogo-a {
 	padding:15px 10px;
 	margin-right:10px;
 	border-radius:4px;
+}
+.prod-ls .nav>li>a.blue {
+    background-image:url('../images/backa.png');
+    background-size:cover;
 }
 .last {
 	margin:0 !important;
@@ -2484,4 +2480,161 @@ p.creditCar_b.loct a i{
     white-space: nowrap;
     text-overflow: ellipsis;
     text-align: center;
+}
+
+.vehicle-monthly-payment {
+    height: 40px;
+    align-items: center;
+    display: flex;
+    position: relative;
+    background-image: url(../images/price_background.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 0px 10px 0px 32px;
+    justify-content: center;
+    max-width: 360px;
+}
+a.vehicle-monthly-payment {
+    cursor: pointer;
+}
+a.vehicle-monthly-payment:hover {
+    filter: brightness(1.5);
+    text-decoration: none;
+    -webkit-transition : -webkit-filter 100ms linear;
+    -moz-transition: 1s -moz-filter linear;
+    -moz-transition: 1s filter linear;
+    -ms-transition: 1s -ms-filter linear;
+    -o-transition: 1s -o-filter linear;
+    transition: 1s filter linear, 1s -webkit-filter linear;
+}
+
+.vehicle-monthly-payment h4 {
+    font-weight: 700;
+    font-style: oblique;
+    color: white;
+    margin: unset;
+    box-shadow: unset;
+    line-height: unset;
+}
+
+
+.padg .vehicle-monthly-payment h4 {
+    font-size: 16px;
+}
+
+.vehicle-monthly-payment-desc {
+    font-style: oblique;
+    font-size: 10px;
+    color: black;
+    margin: 4px 0px 12px 0px;
+}
+.vehicle-monthly-payment-desc span{
+    font-style: oblique;
+    font-size: 10px;
+    color: black;
+}
+.modal .modal-form-container form.form_payment_calculator {
+    background: transparent;
+    color: white;
+    text-transform:initial;
+}
+
+.modal .modal-form-container form.form_payment_calculator p:first-of-type {
+    text-align: unset;
+    margin: unset;
+}
+
+.modal .modal-form-container form.form_payment_calculator select {
+    color: black;
+    font-weight: 300;
+}
+
+.modal .modal-form-container form.form_payment_calculator .text {
+    font-weight: 300;
+}
+.modal .modal-form-container form.form_payment_calculator .form-group label {
+    display: flex;
+    align-items: center;
+}
+
+.text.arial {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+form.form_payment_calculator .form-control {
+    background: transparent;
+    color: white;
+}
+
+.form_payment_calculator button.submit {
+    position: relative;
+    padding: 8px;
+    font-size: 1em;
+    color: #ffffff;
+    text-transform: uppercase;
+    background: #ff0000;
+    box-shadow:
+        inset 0 0 2px 0 rgba(255,255,255,.4),
+        inset 0 0 3px 0 rgba(0,0,0,.4),
+        inset 0 0 3px 5px rgba(0,0,0,.05),
+        2px 2px 4px 0 rgba(0,0,0,.25);
+}
+.form_payment_calculator button.submit:focus {
+    outline-color: transparent;
+}
+.form_payment_calculator button.submit:before, .form_payment_calculator button.submit:after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    height: 3px;
+}
+.form_payment_calculator button.submit:before {
+    top: 0;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    background: rgba(255,255,255,.6);
+    box-shadow: 0 -1px 2px 0 rgba(0,0,0,.15);
+}
+.form_payment_calculator button.submit:focus:before {
+    background: rgba(0,0,0,.15);
+}
+.form_payment_calculator button.submit:after {
+    bottom: 0;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background: rgba(0,0,0,.15);
+    box-shadow: 0 -1px 2px 0 rgba(0,0,0,.15);
+}
+.form_payment_calculator button.submit:focus:after {
+    background: rgba(255,255,255,.3);
+}
+
+.form_payment_calculator .select-overlay {
+    display:flex;
+    align-items:center;
+    position: absolute;
+    bottom: 1px;
+    left: 1;
+    margin: 0;
+    height: 28px;
+    border: unset;
+    width: calc(100% - 20px);
+    background: rgb(248, 248, 248);
+    color: black;
+    border-radius: 5px;
+    display:none;
+}
+.form_payment_calculator .select-overlay input {
+    width: unset;
+    max-width: 100%;
+    height: 100% !important;
+    flex: 1 1 auto;
+    background: rgb(248, 248, 248);
+    border: unset;
+    color: black;
+}
+.form_payment_calculator .select-overlay input:focus {
+    outline: unset;
 }

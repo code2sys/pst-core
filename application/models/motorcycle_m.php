@@ -227,6 +227,15 @@ class Motorcycle_M extends Master_M {
         }
 
         $records = $this->selectRecords('motorcycle', $where);
+
+        // Load major unit payment option
+        $this->load->model('motorcyclepaymentoption_m');
+        $global_payment_option = $this->motorcyclepaymentoption_m->getGlobalPaymentOption();
+        foreach($records as &$record) {
+            $record['payment_option'] = $this->motorcyclepaymentoption_m->getActivePaymentOption($record['id'], $global_payment_option, $record['condition']);
+        }
+        //
+
         $this->db->_protect_identifiers=true;
         return $records;
     }
@@ -286,6 +295,11 @@ class Motorcycle_M extends Master_M {
 
 
         $record["specs"] = $this->getMotorcycleSpecs($id, $record["retail_price"]);
+
+        // Load major unit payment option
+        $this->load->model('motorcyclepaymentoption_m');
+        $global_payment_option = $this->motorcyclepaymentoption_m->getGlobalPaymentOption();
+        $record['payment_option'] = $this->motorcyclepaymentoption_m->getActivePaymentOption($record['id'], $global_payment_option, $record['condition']);
 
         return $record;
     }
@@ -460,7 +474,18 @@ class Motorcycle_M extends Master_M {
         // Instead, it's ordered based on how new the bikes are....that makes no sense to me.
         // https://stackoverflow.com/questions/4979424/sql-order-by-sequence-of-in-values-in-query
         $query = $this->db->query("Select motorcycle.*, motorcycleimage.image_name, motorcycle_type.name as type, motorcycleimage.external from motorcycle left join motorcycle_type on motorcycle.vehicle_type = motorcycle_type.id left join (select min(priority_number) as priority_number, motorcycle_id, external from motorcycleimage where disable = 0 group by motorcycle_id) motorcycleimageA on motorcycleimageA.motorcycle_id = motorcycle.id left join motorcycleimage on motorcycleimage.motorcycle_id = motorcycle.id and motorcycleimage.priority_number = motorcycleimageA.priority_number where motorcycle.deleted = 0 and motorcycle.id in (" . ($imp = implode(",", $time_ordered)) . ") group by motorcycle.id order by FIELD(`motorcycle`.`id`, " . $imp . ") limit $display_limit" );
-        return $query->result_array();
+        $records = $query->result_array();
+
+        // Load major unit payment option
+        $this->load->model('motorcyclepaymentoption_m');
+        $global_payment_option = $this->motorcyclepaymentoption_m->getGlobalPaymentOption();
+        if (isset($records)) {
+            foreach($records as $record) {
+                $record['payment_option'] = $this->motorcyclepaymentoption_m->getActivePaymentOption($record['id'], $global_payment_option, $record['condition']);
+            }
+        }
+        
+        return $records;
 
         // $where = array();
         // $this->db->where_in('motorcycle.id',$ids);

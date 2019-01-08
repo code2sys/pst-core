@@ -1667,6 +1667,10 @@ class Admin_M extends Master_M {
         $this->db->insert('cycle_feed_log', $data);
     }
 
+    public function update_mu_ftp_feeds_log($data) {
+        $this->db->query('Insert into mu_ftp_feed_log (run_by, status) values (?, ?)', array($data['run_by'], $data['status']));
+    }
+
     public function update_craglist_feeds_log($data) {
 //        $this->db->insert('google_feed_log', $data);
     }
@@ -1687,6 +1691,13 @@ class Admin_M extends Master_M {
 
     public function get_cycletrader_feed_log() {
         $sql = "SELECT * FROM cycle_feed_log order by run_at desc limit 1";
+        $query = $this->db->query($sql);
+        $results = $query->result_array();
+        return $results[0];
+    }
+
+    public function get_mu_ftp_feed_log() {
+        $sql = "SELECT * FROM mu_ftp_feed_log order by run_at desc limit 1";
         $query = $this->db->query($sql);
         $results = $query->result_array();
         return $results[0];
