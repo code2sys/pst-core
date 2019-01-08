@@ -1104,6 +1104,15 @@ class Welcome extends Master_Controller {
                 $this->load->model('motorcycle_m');
                 $this->load->model('trafficlogpro_m');
 
+                // Accept post from major unit payment popup dialog
+                if (!empty($post['warranty_options'])) {
+                    $post['warranty_options'] = base64_decode($post['warranty_options']);
+                }
+                if (!empty($post['accessory_options'])) {
+                    $post['accessory_options'] = base64_decode($post['accessory_options']);
+                }
+                //
+
                 $this->motorcycle_m->saveEnquiry($post);
                 
                
@@ -1137,6 +1146,13 @@ class Welcome extends Master_Controller {
                              array("Miles", "miles"),
                              array("Accessories", "accessories"),
                              array("Comments", "questions"),
+                             array("Comments", "questions"),
+                             array("Monthly Payment", "monthly_payment"),
+                             array("Down Payment", "down_payment"),
+                             array("Interest Rate", "interest_rate"),
+                             array("Term", "rate"),
+                             array("Warranty Options", "warranty_options"),
+                             array("Accessory Options", "accessory_options")
 
                          ) as $rec) {
                     list ($label, $field) = $rec;

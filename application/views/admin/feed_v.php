@@ -33,6 +33,50 @@
                     </tr>
                 </table>
 
+                <table width="100%" cellpadding="6">
+                    <tr>
+                        <th colspan="4"><h2>Major Unit FTP Export:</h2></th>
+                    </tr>
+                    <tr>
+                        <td><button type="button" name="refresh_mu_ftp_feed" value="" onClick="window.location.href = '<?php echo base_url('admin_content/refresh_mu_ftp_feed/'); ?>'; return false;">Refresh Major Unit FTP Feed</button></td>
+                        <td>Status : <?php echo isset($mu_ftp_feeds['status']) && $mu_ftp_feeds['status'] == 1 ? 'Completed' : 'Processing'; ?></td>
+                        <td>Last Run : <?php echo isset($mu_ftp_feeds['run_at']) ? date('m/d/y H:i:s', strtotime($mu_ftp_feeds['run_at'])) : ''; ?></td>
+			<?php $mu_ftp_feed_file = STORE_DIRECTORY . "/Major_Unit_INV.csv" ?>
+			<?php if (file_exists($mu_ftp_feed_file) && is_file($mu_ftp_feed_file)): ?>
+                        <td>Filename : <a href="<?php echo jsite_url('/admin_content/download_muftpfeed/', true); ?>">Major_Unit_INV.csv</a></td>
+			<?php else: ?>
+			<td>Filename : Major_Unit_INV.csv</td>
+			<?php endif; ?>
+                    </tr>
+                </table>
+                <form action="<?php echo base_url('admin_content/mu_ftp_settings'); ?>" method="post" id="form_mu_ftp_settings" class="form_standard">
+                    <table width="100%" cellpadding="6">
+                        <tr>
+                            <td></td>
+                            <td colspan="3">
+                                FTP Address: <a href="https://ftp.powersporttechnologies.com">https://ftp.powersporttechnologies.com</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="3">
+                                FTP Username: <input  name="username" type="text" value="<?php echo $mu_ftp_settings['username']; ?>"></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="3">
+                                FTP Password: <input  name="password" type="password" value="<?php echo $mu_ftp_settings['password']; ?>"></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><button type="submit" >Set</button></td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </table>
+                </form>
+
             <?php if ($mdfeed_enabled): ?>
 
                 <table width="100%" cellpadding="6">

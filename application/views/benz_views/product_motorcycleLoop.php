@@ -28,6 +28,7 @@ foreach ($motorcycles as $motorcycle) {
     $motorcycle_action_buttons = mustache_tmpl_open("motorcycle_action_buttons.html");
     mustache_tmpl_set($motorcycle_action_buttons, "motorcycle_id", $motorcycle['id']);
     mustache_tmpl_set($motorcycle_action_buttons, "new_assets_url", $new_assets_url);
+    mustache_tmpl_set($motorcycle_action_buttons, "HAS_PAYMENT_CALCULATOR", $motorcycle["payment_option"]["active"] == 1 ? true : false);
     if (!defined('GET_FINANCING_WORDING')) {
         define('GET_FINANCING_WORDING', 'GET FINANCING');
     }
@@ -42,12 +43,18 @@ foreach ($motorcycles as $motorcycle) {
         "motorcycle_image" => $motorcycle_image,
         "motorcycle_title" => $motorcycle["title"],
         "pricing_widget" => $CI->load->view("benz_views/pricing_widget", array(
-            "motorcycle" => $motorcycle
+            "motorcycle" => $motorcycle,
+            "payment_option" => $motorcycle["payment_option"]
         ), true),
 
         "major_unit_detail_modal" => $CI->load->view('modals/major_unit_detail_modal.php', array(
             'motorcycle'       => $motorcycle,
             'motorcycle_image' => $motorcycle_image,
+        ), true),
+        "major_unit_payment_calculator_modal" => $CI->load->view('modals/major_unit_payment_calculator_modal.php', array(
+            'motorcycle'       => $motorcycle,
+            'motorcycle_image' => $motorcycle_image,
+            "payment_option" => $motorcycle["payment_option"]
         ), true),
         "trade_in_value_modal" => $CI->load->view('modals/trade_in_value_modal.php', array('motorcycle' => $motorcycle), true),
         "motorcycle_action_buttons" => mustache_tmpl_parse($motorcycle_action_buttons),

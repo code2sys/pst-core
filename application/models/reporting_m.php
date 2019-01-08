@@ -375,7 +375,7 @@ class Reporting_M extends Master_M {
         }
     }
 
-    public function get_motercycle_type_name($type_id) {
+    public function get_motorcycle_type_name($type_id) {
         $sql = "SELECT motorcycle_type.name  from motorcycle_type where motorcycle_type.id = '" . $type_id . "'";
         $query = $this->db->query($sql);
         $type = $query->result_array();
@@ -399,8 +399,8 @@ class Reporting_M extends Master_M {
         return $data[0];
     }
 
-    public function get_motercycle_image($moter_cycle_id) {
-        $sql = "SELECT motorcycleimage.image_name, motorcycleimage.external  from motorcycleimage WHERE motorcycleimage.motorcycle_id = '" . $moter_cycle_id . "' and disable = 0";
+    public function get_motorcycle_image($motor_cycle_id) {
+        $sql = "SELECT motorcycleimage.image_name, motorcycleimage.external  from motorcycleimage WHERE motorcycleimage.motorcycle_id = '" . $motor_cycle_id . "' and disable = 0";
         $query = $this->db->query($sql);
         $motorcycleimages = $query->result_array();
         if (!empty($motorcycleimages)) {
@@ -408,6 +408,119 @@ class Reporting_M extends Master_M {
         } else {
             return;
         }
+    }
+
+    public function get_motorcycle_video($motor_cycle_id) {
+        $sql = "SELECT motorcycle_video.video_url from motorcycle_video WHERE motorcycle_video.part_id = '" . $motor_cycle_id."'";
+        $query = $this->db->query($sql);
+        $motorcyclevideos = $query->result_array();
+        if (!empty($motorcyclevideos)) {
+            return $motorcyclevideos;
+        } else {
+            return;
+        }
+    }
+
+    /**
+     * Generate CSV for Major Unit FTP Feed and upload to the FTP server
+     */
+    public function putMajorUnitFTPFeed() {
+        $sql = "SELECT motorcycle.*  from motorcycle where deleted = 0";
+	$query = $this->db->query($sql);
+        $allmotorcycle = $query->result_array();
+        $dealer_info = $this->get_dealer_info();
+        $dealer_name = $dealer_info['company'];
+        $dealer_phone_no = preg_replace("/[^0-9]/", "", $dealer_info['phone']);
+
+        $dealer_location = $dealer_info['country'];
+        $dealer_city = $dealer_info['city'];
+        $dealer_state = $dealer_info['state'];
+        $dealer_post_code = $dealer_info['zip'];
+
+        $rows = array();
+
+        foreach ($allmotorcycle as $key => $motorcycle) {
+            $motorcycle_type = $this->get_motorcycle_type_name($motorcycle['vehicle_type']);
+            $motorcycle_images = $this->get_motorcycle_image($motorcycle['id']);
+            $motorcycle_videos = $this->get_motorcycle_video($motorcycle['id']);
+            $desc = strip_tags(preg_replace("/\r|\n/", "", $motorcycle['description']));
+            if ($motorcycle['condition'] == 1) {
+                $condition = 'New';
+            } elseif ($motorcycle['condition'] == 2) {
+                $condition = 'Used';
+            }
+            $data = array();
+            $data['sku'] = $motorcycle['sku'];
+            $data['vin_number'] = $motorcycle['vin_number'];
+            $data['manufacturer'] = $motorcycle['make'];
+            $prefix = $motorcycle['year'] . " " . $motorcycle['make'];
+            if ($motorcycle["lightspeed"] == 1 && (strtolower($prefix) == strtolower(substr($motorcycle['title'], 0, strlen($prefix))))) {
+                $data['model'] = substr($motorcycle['title'], strlen($prefix) + 1);
+            } else {
+                $data['model'] = $motorcycle['model'];
+            }
+            $data['year'] = $motorcycle['year'];
+            $data['tite'] = $motorcycle['title'];
+            $data['price'] = $motorcycle['sale_price'];
+            $data['newused'] = $condition;
+            $data['description'] = '"' . $desc . '"';
+            $data['transmission'] = $motorcycle['transmission'];
+            $data['vehicle_type'] = $motorcycle_type;
+            $data['category'] = $this->get_category_name($motorcycle['category']);
+            $data['itemurl'] = base_url(strtolower($motorcycle_type) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']);
+            $data['miles'] = $motorcycle['mileage'];
+            $data['engine_hours'] = $motorcycle['engine_hours'];
+            $data['engine'] = $motorcycle['engine_type'];
+            $data['weight'] = '';
+            $data['color'] = $motorcycle['color'];
+            $data['dealername'] = $dealer_name;
+            $data['dealerlocalphone'] = $dealer_phone_no;
+            $data['dealercity'] = $dealer_city;
+            $data['dealerstate'] = $dealer_state;
+            $data['dealerpostalcode'] = $dealer_post_code;
+            $data['dealerwebsiteurl'] = base_url();
+
+	    if (!empty($motorcycle_images)) {
+		$images = array();
+                foreach ($motorcycle_images as $image) {
+                    $images[] = $image['external'] > 0 ? $image['image_name'] : base_url('media' . '/' . $image['image_name']);
+                }
+		$data['imageurls'] = implode('|', $images);
+	    } else {
+		$data['imageurls'] = '';
+	    }
+	
+            if (!empty($motorcycle_videos)) {
+                $videos = array();
+                foreach($motorcycle_videos as $video) {
+                    $videos[] = 'https://www.youtube.com/watch?v='.$video['video_url'];
+                }
+                $data['videourls'] = implode('|', $videos);
+            } else {
+                $data['videourls'] = '';
+            }
+
+            $rows[] = $data;
+        }
+
+	// generate CSV file
+        $file_path = STORE_DIRECTORY . '/Major_Unit_INV.csv';
+        @unlink($file_path);
+        $handle = fopen($file_path, 'w');
+        $keys = array_keys(reset($rows));
+        fputcsv($handle, $keys);
+        foreach ($rows as $row) {
+            fputcsv($handle, $row);
+        }
+        fclose($handle);
+
+	// upload to the FTP server
+	initializePSTAPI();
+	global $PSTAPI;
+	$ftp_user = $PSTAPI->config()->getKeyValue('mu_ftp_username', '');
+        $ftp_password = $PSTAPI->config()->getKeyValue('mu_ftp_password', '');
+	$command = "echo \"put ".escapeshellarg($file_path)."\" | lftp ".$ftp_user.":".$ftp_password."@ftp.powersporttechnologies.com";
+	exec($command);
     }
 
     public function getProductForcycletrader() {
@@ -448,8 +561,8 @@ class Reporting_M extends Master_M {
                 $classid = 1049211046;
             }
 
-            $motercycle_type = $this->get_motercycle_type_name($motorcycle['vehicle_type']);
-            $motercycle_images = $this->get_motercycle_image($motorcycle['id']);
+            $motorcycle_type = $this->get_motorcycle_type_name($motorcycle['vehicle_type']);
+            $motorcycle_images = $this->get_motorcycle_image($motorcycle['id']);
             $desc = preg_replace("/\r|\n/", "", $motorcycle['description']);
 
             if ($motorcycle['condition'] == 1) {
@@ -474,7 +587,7 @@ class Reporting_M extends Master_M {
             $data['year'] = $motorcycle['year'];
             $data['price'] = $motorcycle['sale_price'];
             $data['newused'] = $condition;
-            $data['itemurl'] = base_url(strtolower($motercycle_type) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']);
+            $data['itemurl'] = base_url(strtolower($motorcycle_type) . '/' . $motorcycle['url_title'] . '/' . $motorcycle['sku']);
             $data['miles'] = $motorcycle['mileage'];
             $data['engine'] = $motorcycle['engine_type'];
             $data['weight'] = '';
@@ -491,8 +604,8 @@ class Reporting_M extends Master_M {
             $data['dealerareacode'] = $dealer_area_code;
             $data['dealerurl'] = base_url();
             for ($x = 1; $x <= 25; $x++) {
-                if (isset($motercycle_images[$x - 1]) && !empty($motercycle_images[$x - 1])) {
-                    $data['Photo_' . $x] = $motercycle_images[$x - 1]['external'] > 0 ? $motercycle_images[$x - 1]['image_name'] : base_url('media' . '/' . $motercycle_images[$x - 1]['image_name']);
+                if (isset($motorcycle_images[$x - 1]) && !empty($motorcycle_images[$x - 1])) {
+                    $data['Photo_' . $x] = $motorcycle_images[$x - 1]['external'] > 0 ? $motorcycle_images[$x - 1]['image_name'] : base_url('media' . '/' . $motorcycle_images[$x - 1]['image_name']);
                 } else {
                     $data['Photo_' . $x] = '';
                 }

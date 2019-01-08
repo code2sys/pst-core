@@ -290,6 +290,15 @@ class Admin_Content extends Master_Controller {
         header("Location: /admin_content/feeds");
     }
 
+    /**
+     * Scheudle a short job(minute) for generating Major UNIT FTP Feed
+     */
+    public function refresh_mu_ftp_feed() {
+        $data = array('run_by' => 'admin', 'status' => '0');
+        $this->admin_m->update_mu_ftp_feeds_log($data);
+        header("Location: /admin_content/feeds");
+    }
+
     public function ebay_feeds() {
 //        if (!$this->checkValidAccess('data_feeds') && !@$_SESSION['userRecord']['admin']) {
 //            redirect('');
@@ -356,10 +365,16 @@ class Admin_Content extends Master_Controller {
         $this->_mainData['paypalemail'] = $this->Ebaysetting->check_paypalemail();
         $this->_mainData['ebaymarkup'] = $this->Ebaysetting->check_markup();
         $this->_mainData['quantity'] = $this->Ebaysetting->check_quantity();
+	
+	$muftpsettings = array();
+	initializePSTAPI();
+	global $PSTAPI;
+	$muftpsettings['username'] = $PSTAPI->config()->getKeyValue('mu_ftp_username', '');
+	$muftpsettings['password'] = $PSTAPI->config()->getKeyValue('mu_ftp_password', '');
+	$this->_mainData['mu_ftp_settings'] = $muftpsettings;
+	$this->_mainData['mu_ftp_feeds'] = $this->admin_m->get_mu_ftp_feed_log();
 
         if (defined('ENABLE_MD_FEED') && ENABLE_MD_FEED) {
-            initializePSTAPI();
-            global $PSTAPI;
             $this->_mainData['mdfeed_enabled'] = true;
             $feeds = $PSTAPI->mdfeed()->fetch();
 
@@ -471,6 +486,20 @@ class Admin_Content extends Master_Controller {
                 $r["error"] > 0 ? $r["long_error_string"] : ""
             ));
         }
+    }
+
+    /**
+     * Update Major Unit Feed FTP credentials, we ust it to upload the feed file on the FTP server
+     */
+    public function mu_ftp_settings() {
+	$formData = $this->input->post();
+        if (!empty($formData)) {
+	    initializePSTAPI();
+	    global $PSTAPI;
+	    $PSTAPI->config()->setKeyValue('mu_ftp_username', isset($formData['username']) ? $formData['username'] : '');
+	    $PSTAPI->config()->setKeyValue('mu_ftp_password', isset($formData['password']) ? $formData['password'] : '');
+	}
+	header("Location: /admin_content/feeds");
     }
 
     public function ebay_settings() {
@@ -587,6 +616,23 @@ class Admin_Content extends Master_Controller {
         } else {
             print "Sorry, that file has disappeared.\n";
         }
+    }
+
+    public function download_muftpfeed() {
+	$file_path = STORE_DIRECTORY . '/Major_Unit_INV.csv';
+	if (file_exists($file_path) && is_file($file_path)) {
+	    header('Content-Type: application/octet-stream');
+            header("Content-Type: application/download");
+            header("Content-Description: File Transfer");
+            header('Content-Disposition: attachment; filename=Major_Unit_INV.csv');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($file_path));
+            readfile($file_path);
+	} else {
+	    print "Sorry, that file does not exist.\n";
+	}
     }
 	
 }

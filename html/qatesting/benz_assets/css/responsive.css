@@ -507,6 +507,8 @@ span.glyphicon-filter {
     }
     .mid .mid-r .mid-r-but {
         padding:0;
+        flex-direction: row;
+        flex-wrap: wrap;
     }
     .next .mid .mid-r .mid-r-text {
         border:none;
@@ -672,6 +674,12 @@ span.glyphicon-filter {
     }
     .content_section {
         margin-bottom:10px !important
+    }
+    .vehicle-monthly-payment {
+		padding-left:28px;
+    }
+    .vehicle-monthly-payment h4{
+		font-size: 15px;
     }
 }
 
@@ -1222,6 +1230,8 @@ span.glyphicon-filter {
     }
     .mid .mid-r .mid-r-but {
         padding:0;
+        flex-direction: row;
+        flex-wrap: wrap;
     }
     .next .mid .mid-r .mid-r-text {
         border:none;
@@ -1284,6 +1294,7 @@ span.glyphicon-filter {
         position: relative;		
         font-size: 12px;
         text-align:center;
+        justify-content: center;
     }	
 
     .pdig {
@@ -1379,6 +1390,9 @@ span.glyphicon-filter {
     }
     .sldr-section .owl-pagination {
         display:none !important;
+    }
+	.vehicle-monthly-payment {
+		padding-left:40px;
     }
 
 }
@@ -1936,6 +1950,8 @@ span.glyphicon-filter {
     }
     .mid .mid-r .mid-r-but {
         padding:0;
+        flex-direction: row;
+        justify-content: center;
     }
     .next .mid .mid-r .mid-r-text {
         border:none;
@@ -1945,10 +1961,6 @@ span.glyphicon-filter {
         margin:0px;;
     }	
 
-    .mid .mid-r .mid-r-but a:nth-child(2) span {
-        margin:0;		
-        text-align: center;
-    }
     .mid .mid-r .mid-r-but a img {
         vertical-align:middle !important;
         margin:0 5px;
@@ -1992,16 +2004,11 @@ span.glyphicon-filter {
     }
     .mid .mid-r .mid-r-but a {
         margin: 0 2.5px 4px;
-        padding: 10px 5px !important;
         float: left;
         position: relative;
         font-size: 12px;
-        width: 22.8%;
         height: 42px;
-        line-height: 24px;
-    }		
-    .mid .mid-r .mid-r-but a:nth-child(2) {
-        width:28%
+        justify-content: center;
     }
     .pdig {
         padding-left:0 !important;
@@ -2102,6 +2109,12 @@ span.glyphicon-filter {
     .sldr-section .owl-pagination {
         display:none !important;
     }
+    .vehicle-monthly-payment {
+        padding-left: 30px;
+    }
+	.vehicle-monthly-payment h4 {
+		font-size: 16px;
+	}
 }
 
 @media (min-width:768px) and (max-width:1023px){	
@@ -2744,14 +2757,15 @@ span.glyphicon-filter {
     .mid .mid-r .mid-r-but {
         padding:0;
         margin-top:20px;
+        flex-direction: row;
+        justify-content: center;
     }
     .mid .mid-r .mid-r-but a {		
         width: auto !important;
         float: left;
         padding: 10px 9.1px !important;
-        line-height: 19px !important;
         margin: 0 6px 10px 0;
-        font-size: 12px;
+        font-size: 11px;
     }
     .mid-r .mid-r-img .mid-r-img-veh img {
         padding:0 10px;
@@ -2763,21 +2777,8 @@ span.glyphicon-filter {
     .mid .mid-r .mid-r-but a img {
         margin:0 4px 0 0; 
         float: left;
-        display: table;
-        vertical-align: middle;
         width: 14px;    
         height:18px;
-    }
-    .mid .mid-r .mid-r-but a span{
-        display: table-cell;
-        vertical-align: middle;		
-    }
-    .mid .mid-r .mid-r-but a:nth-child(2) span {
-        float:right;
-        margin:0 0 0 3px
-    }
-    .mid .mid-r .mid-r-but a:last-child {
-        margin:0;
     }
     .mid-r-text .mid-text-right {
         padding:6px 0 ;
@@ -2809,9 +2810,15 @@ span.glyphicon-filter {
         padding-top:30px !important
     }
     .logo-tp_b {
-        margin:0 !important
+        margin:0 !important;
             margin-left: 36px !important;
     }
+    .vehicle-monthly-payment {
+		padding-left: 25px;
+	}
+	.vehicle-monthly-payment h4 {
+		font-size: 14.5px;
+	}
 }
 
 @media (min-width:1024px) and (max-width:1199px){	
@@ -3455,6 +3462,7 @@ span.glyphicon-filter {
     .mid .mid-r .mid-r-but {
         padding:0;
         margin-top:20px;
+        flex-direction: row;
     }
     .mid .mid-r .mid-r-but a {		
         width: 24% !important;
@@ -3463,14 +3471,11 @@ span.glyphicon-filter {
         margin: 0 9px 10px 0;
         font-size: 13px;
         height: 42px;
-        line-height: 25px !important;
+        justify-content: center;
     }
     .mid-r .mid-r-img .mid-r-img-veh img {
         padding:0 10px;
     }
-    .mid .mid-r .mid-r-but a:nth-child(2) span {
-        margin:0;
-    }	
     .mid .mid-r .mid-r-but a img {
         margin:0 4px 0 0; 
         float: left;
@@ -3480,10 +3485,6 @@ span.glyphicon-filter {
     .mid .mid-r .mid-r-but a span{
         display: table-cell;
         vertical-align: middle;		
-    }
-    .mid .mid-r .mid-r-but a:nth-child(2) span {
-        float:right;
-        margin:0 0 0 3px
     }
     .mid .mid-r .mid-r-but a:last-child {
         margin:0;
@@ -3532,6 +3533,16 @@ span.glyphicon-filter {
     }
     .search-bx {
         width: 311px !important;
+    }
+    .mid .mid-r.md-flex {
+        display: flex;
+        padding-bottom: 20px;
+    }
+    .mid .mid-r.md-flex .mid-r-but {
+        justify-content: space-between;
+    }
+    .mid .mid-r.md-flex .mid-r-but a {
+        margin: 5px 0px;
     }
 }
 

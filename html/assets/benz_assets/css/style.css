@@ -949,6 +949,8 @@ h3.head-tx {
     width: 20%;
     float: left;
     padding: 0 13px;
+    display: flex;
+    flex-direction: column;
 }
 .mid .mid-r .mid-r-but a {
     text-decoration: none;
@@ -964,23 +966,16 @@ h3.head-tx {
     padding: 11px 15px;
     border-radius: 6px;
     transition: all 0.6s;
+    display: flex;
+    align-items: center;
 }
 .mid .mid-r .mid-r-but a:hover {
     box-shadow: 0 2px 5px black;
 }
-.mid .mid-r .mid-r-but a:nth-child(2) {
-    line-height: 0;
-    padding: 11px 15px 14px 15px;
-}
-.mid .mid-r .mid-r-but a:nth-child(2) img {
-    vertical-align: -webkit-baseline-middle;
-}
-.mid .mid-r .mid-r-but a:nth-child(2) span {
-    margin: 0 0 0 29px;
-}
 .mid .mid-r .mid-r-but a img {
     margin: 0 8px 0 0;
     vertical-align: text-bottom;
+    float: left;
 }
 img.powerlogo-a {
     width: 121px !important;
@@ -1892,3 +1887,46 @@ p.creditCar_b.loct a i{
 	z-index:99999;
 }
 .footer .one-fifth.map a img{width:97%;}
+
+.vehicle-monthly-payment {
+    height: 40px;
+    align-items: center;
+    display: flex;
+    position: relative;
+    background-image: url(../images/price_background.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 0px 10px 0px 32px;
+    justify-content: center;
+    max-width: 360px;
+    text-decoration: none;
+}
+a.vehicle-monthly-payment {
+    cursor: pointer;
+}
+a.vehicle-monthly-payment:hover {
+    filter: brightness(1.5);
+    text-decoration: none;
+    -webkit-transition : -webkit-filter 100ms linear;
+    -moz-transition: 1s -moz-filter linear;
+    -moz-transition: 1s filter linear;
+    -ms-transition: 1s -ms-filter linear;
+    -o-transition: 1s -o-filter linear;
+    transition: 1s filter linear, 1s -webkit-filter linear;
+}
+
+.vehicle-monthly-payment h4 {
+    font-weight: 700;
+    font-style: oblique;
+    color: white;
+    margin: unset;
+    box-shadow: unset;
+    line-height: unset;
+}
+
+.vehicle-montly-payment-desc {
+    font-style: oblique;
+    font-size: 10px;
+    color: black;
+    margin: 4px 0px 12px 0px;
+}
