@@ -105,7 +105,7 @@
                                         </div>
                                         <div class="flex layout-row middle" style="padding:0px 8px;">
                                             <label>Term:</label>
-                                            <input type="number" class="text term"  name="data[terms][<?php echo $index?>][term]" value="<?php echo $term['term']?>">&nbsp;%
+                                            <input type="number" class="text term"  name="data[terms][<?php echo $index?>][term]" value="<?php echo $term['term']?>">
                                         </div>
                                     </div>
                                     <a onclick="deleteTerm(this.parentElement)">Delete</a>
@@ -198,7 +198,7 @@
                                         <input type="number" class="text price" name="data[accessory_options][<?php echo $index?>][price]" value="<?php echo $accessory_option["price"] ?>">
                                     </div>
                                     <div class="field flex layout-row middle">
-                                        <a onclick="deleteAccessoryOption(this.parentElement.parentElement)">Delete Option</a>
+                                        <a onclick="deleteAccessoryOption(this.parentElement.parentElement.parentElement)">Delete Option</a>
                                     </div>
                                 </div>
                             </div>
@@ -395,12 +395,12 @@ function importAccessoryProduct(e) {
     var url = $('input.accessory-product-url[data-id="' + idx + '"]').val();
     var parent = $(e).closest('.accessory-option');
     if (url) {
-        var regex = /shopping\/item\/(\d+)\/?.*/g;
+        var regex = /(.*)\/shopping\/item\/(\d+)\/?.*/g;
         var match = regex.exec(url);
         if (match) {
             console.log(match[1]);
             $.ajax({
-                url: '/adminproduct/product_json/' + match[1],
+                url: '/adminproduct/product_json/' + match[2],
                 method: "GET",
                 dataType: "json",
                 success: function(response) {
@@ -410,6 +410,11 @@ function importAccessoryProduct(e) {
                             var textId = $(parent).find('textarea.description').attr('id');
                             CKEDITOR.instances[textId].setData(response.product.description);
                             $(parent).find('input.price').val(response.product.price.sale_min ? response.product.price.sale_min : response.product.price.retail_min);
+                            if (response.product.images && response.product.images.length > 0 && response.product.images[0].path) {
+                                var image = match[1] + '/productimages/' + response.product.images[0].path;
+                                $(parent).find('img.accessory-thumbnail')[0].src = image;
+                                $(parent).find('input.accessory-thumbnail-url').val(image);
+                            }
                         }
                     }
                 },
@@ -459,7 +464,7 @@ function addAccessoryOption() {
                     <input type="number" class="text price" name="data[accessory_options][` + index + `][price]">
                 </div>
                 <div class="field flex layout-row middle">
-                    <a onclick="deleteAccessoryOption(this.parentElement.parentElement)">Delete Option</a>
+                    <a onclick="deleteAccessoryOption(this.parentElement.parentElement.parentElement)">Delete Option</a>
                 </div>
             </div>
         </div>`;
