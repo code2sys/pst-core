@@ -118,7 +118,7 @@ class Motorcyclepaymentoption_M extends Master_M {
     private function prefillAfterFetch($option) {
         if (!empty($option['data'])) { 
             $option['data'] = json_decode($option['data'], true); 
-            if (isset($option['data']['term']) && !isset($option['data']['terms'])) {
+            if (isset($option['data']['term']) && isset($option['data']['terms'])) {
                 $option['data']['selected_term'] = 0;
                 for ($i = 0; $i < count($option['data']['terms']); $i++) {
                     if ($option['data']['term'] == $option['data']['terms'][$i]['term']) {
