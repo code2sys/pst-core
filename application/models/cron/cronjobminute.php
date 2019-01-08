@@ -25,6 +25,19 @@ class CronJobMinute extends AbstractCronJob
         }
     }
 
+    public function fixPendingMajorUnitFTPFeed() {
+        $query = $this->db->query("select * from mu_ftp_feed_log where run_by = 'admin' and status = 0");
+        $results = $query->result_array();
+
+        if (count($results) > 0) {
+            $this->load->model("reporting_m");
+            $this->reporting_m->putMajorUnitFTPFeed();
+            foreach ($results as $row) {
+                $this->db->query("Update mu_ftp_feed_log set status = 1 where id = ?", $row["id"]);
+            }
+        }
+    }
+
     public function fixPendingGoogle() {
         $query = $this->db->query("select * from google_feed_log where run_by = 'admin' and status = 0");
         $results = $query->result_array();
@@ -45,6 +58,9 @@ class CronJobMinute extends AbstractCronJob
 	protected function feeds() {
         // Anything from cycle trader?
         $this->fixPendingCycleTrader();
+
+	// Anything from major unit ftp feed?
+	$this->fixPendingMajorUnitFTPFeed();
 
         // Anything from Google?
         $this->fixPendingGoogle();

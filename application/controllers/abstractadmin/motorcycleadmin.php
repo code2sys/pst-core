@@ -1140,4 +1140,40 @@ abstract class Motorcycleadmin extends Firstadmin
         }
         print json_encode(['status' => 'success', 'pk' => $_REQUEST["pk"], 'msg' => $_REQUEST["name"] ]);
     }
+
+    public function motorcycle_payment_option($id = NULL) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+
+        if (!is_null($id)) {
+            $this->_mainData['id'] = $id;
+            $this->_mainData['product'] = $this->admin_m->getAdminMotorcycle($id);
+        }
+        $this->load->model("motorcyclepaymentoption_m");
+
+        if ($this->input->post()) {
+            // print_r(json_encode($this->input->post()));
+            $this->motorcyclepaymentoption_m->savePaymentOption($this->input->post(), $id);
+            $this->_mainData['success'] = TRUE;
+        }
+
+        $this->_mainData['payment_option'] = $this->motorcyclepaymentoption_m->getPaymentOption($id);
+        if (!isset($this->_mainData['payment_option'])) {
+            $this->_mainData['payment_option'] = $this->motorcyclepaymentoption_m->getDefaultPaymentOption();
+        }
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/motorcycle/payment_option_v', $this->_mainData);
+    }
+
+    public function motorcyle_payment_images_upload() {
+        $images = array();
+        foreach ($_FILES['files']['name'] as $key => $val) {
+            $img = time() . '_' . gronifyForFilename($val);
+            $dir = STORE_DIRECTORY . '/html/media/' . $img;
+            move_uploaded_file($_FILES["files"]["tmp_name"][$key], $dir);
+            $images[] = '/media/'.$img;
+        }
+        print json_encode(array('success' => true, 'images' => $images));
+    }
 }

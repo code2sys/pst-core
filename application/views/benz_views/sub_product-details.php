@@ -22,6 +22,7 @@ mustache_tmpl_set($menu_section_template, "motorcycle_id", $motorcycle['id']);
 mustache_tmpl_set($menu_section_template, "base_url", jsite_url("/"));
 mustache_tmpl_set($menu_section_template, "WORDING_SCHEDULE_TEST_DRIVE", defined('WORDING_SCHEDULE_TEST_DRIVE') ? WORDING_SCHEDULE_TEST_DRIVE : "SCHEDULE TEST DRIVE");
 mustache_tmpl_set($menu_section_template, "GET_FINANCING_WORDING", defined('GET_FINANCING_WORDING') ? GET_FINANCING_WORDING : 'GET FINANCING');
+mustache_tmpl_set($menu_section_template, "HAS_PAYMENT_CALCULATOR", $motorcycle["payment_option"]["active"] == 1 ? true : false);
 mustache_tmpl_set($sub_details_template, "menu_section_template", mustache_tmpl_parse($menu_section_template));
 
 
@@ -91,7 +92,8 @@ if (isset($override_pricing_widget) && $override_pricing_widget) {
     mustache_tmpl_set($sub_details_template, "pricing_widget", $pricing_widget);
 } else {
     mustache_tmpl_set($sub_details_template, "pricing_widget", $CI->load->view("benz_views/pricing_widget", array(
-        "motorcycle" => $motorcycle
+        "motorcycle" => $motorcycle,
+        "payment_option" => $motorcycle["payment_option"]
     ), true));
 }
 
@@ -188,6 +190,13 @@ mustache_tmpl_set($sub_details_template, "major_unit_detail_modal", $this->view(
     'motorcycle_image' => $image_url,
 ), true));
 mustache_tmpl_set($sub_details_template, "trade_in_value_modal", $this->view('modals/trade_in_value_modal.php', array('in_showroom' => $in_showroom, 'motorcycle' => $motorcycle), true));
+if ($motorcycle["payment_option"]["active"] == 1) {
+    mustache_tmpl_set($sub_details_template, "major_unit_payment_calculator_modal", $this->view('modals/major_unit_payment_calculator_modal.php', array(
+        'in_showroom' => $in_showroom, 
+        'motorcycle' => $motorcycle,
+        "payment_option" => $motorcycle["payment_option"]
+    ), true));
+}
 mustache_tmpl_set($sub_details_template, "customer_exit_modal", $this->view('modals/customer_exit_modal.php', array('in_showroom' => $in_showroom), true));
 
 mustache_tmpl_set($sub_details_template, "motorcycle_id", $motorcycle["id"]);

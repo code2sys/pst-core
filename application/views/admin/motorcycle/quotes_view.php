@@ -65,6 +65,7 @@
                     array("key" => "state", "label" => "State"),
                     array("key" => "zipcode", "label" => "Zip"),
                     array("key" => "date_of_ride", "label" => defined('WORDING_PLACEHOLDER_DATE_OF_RIDE') ? WORDING_PLACEHOLDER_DATE_OF_RIDE : "Date of Test Ride"),
+                    array("key" => "sku", "label" => "Stock Number"),
                     array("key" => "motorcycle", "label" => "Major unit"),
                     array("key" => "make", "label" => "Make"),
                     array("key" => "model", "label" => "Model"),
@@ -73,7 +74,13 @@
                     array("key" => "accessories", "label" => "Accessories"),
                     array("key" => "questions", "label" => "Comments"),
                     array("key" => "created", "label" => "Request Date/Time"),
-                    array("key" => "status", "label" => "Status")
+                    array("key" => "status", "label" => "Status"),
+                    array("key" => "monthly_payment", "label" => "Monthly Payment"),
+                    array("key" => "down_payment", "label" => "Down Payment"),
+                    array("key" => "term", "label" => "Term"),
+                    array("key" => "interest_rate", "label" => "Interest Rate"),
+                    array("key" => "warranty_options", "label" => "Warranty Options"),
+                    array("key" => "accessory_options", "label" => "Accessory Options")
                 ) as $rec) {
                     $value = array_key_exists($rec["key"], $quote) ? $quote[ $rec["key"] ] : "";
 

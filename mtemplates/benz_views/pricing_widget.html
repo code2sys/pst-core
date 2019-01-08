@@ -3,6 +3,18 @@
 {{/CALL_FOR_PRICE}}
 {{^CALL_FOR_PRICE}}
 {{#SHOW_RETAIL_PRICE}}
+{{#MONTLY_PAYMENT}}
+<div style="display:inline-block">
+    <a href="#" data-toggle="modal" data-target="#major-unit-payment-calculator-modal_{{MOTORCYCLE_ID}}" class="vehicle-monthly-payment">
+        <h4>{{PAYMENT_TEXT}}:&nbsp;${{MONTLY_PAYMENT}}/mo<sup>*</sup></h4>
+    </a>
+    
+    <div class="vehicle-monthly-payment-desc">
+        <div>Plus Tax. {{MONTHS}} Months, {{INTEREST_RATE}}% APR. ${{DOWN_PAYMENT}} Down Payment.</div>
+        <a href="#" data-toggle="modal" data-target="#major-unit-payment-calculator-modal_{{MOTORCYCLE_ID}}">View Disclaimer</a>
+    </div>
+</div>
+{{/MONTLY_PAYMENT}}
 <p>Retail Price: &nbsp; {{#SHOW_SALE_PRICE}}<span class="strikethrough">{{/SHOW_SALE_PRICE}}${{retail_price}}{{#SHOW_SALE_PRICE}}</span>{{/SHOW_SALE_PRICE}}</p>
 {{/SHOW_RETAIL_PRICE}}
 {{#SHOW_SALE_PRICE}}

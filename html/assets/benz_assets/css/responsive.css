@@ -490,6 +490,8 @@ span.glyphicon-filter {
 	.next .mid .mid-r .mid-r-text,
 	.mid .mid-r .mid-r-but{
 		width:100%;
+		flex-direction: row;
+		flex-wrap: wrap;
 	}
 	.mid .mid-r .mid-r-but {
 		padding:0;
@@ -656,6 +658,13 @@ span.glyphicon-filter {
 	.content_section {
 		margin-bottom:10px !important
 	}
+	.vehicle-monthly-payment {
+		padding-left:28px;
+	}
+	.vehicle-monthly-payment h4{
+		font-size: 15px;
+	}
+
 }
 
 @media (min-width:480px) and (max-width:639px)
@@ -1189,6 +1198,8 @@ span.glyphicon-filter {
 	}
 	.mid .mid-r .mid-r-but {
 		padding:0;
+		flex-direction: row;
+		flex-wrap: wrap;
 	}
 	.next .mid .mid-r .mid-r-text {
 		border:none;
@@ -1251,6 +1262,7 @@ span.glyphicon-filter {
 		position: relative;		
 		font-size: 12px;
 		text-align:center;
+		justify-content: center;
 	}	
 	
 	.pdig {
@@ -1347,7 +1359,9 @@ span.glyphicon-filter {
 	.sldr-section .owl-pagination {
 		display:none !important;
 	}
-	
+	.vehicle-monthly-payment {
+		padding-left:40px;
+    }
 }
 
 @media (min-width:640px) and (max-width:767px){
@@ -1885,6 +1899,8 @@ span.glyphicon-filter {
 	}
 	.mid .mid-r .mid-r-but {
 		padding:0;
+		flex-direction: row;
+		justify-content: center;
 	}
 	.next .mid .mid-r .mid-r-text {
 		border:none;
@@ -1894,10 +1910,6 @@ span.glyphicon-filter {
 		margin:0px;;
 	}	
 	
-	.mid .mid-r .mid-r-but a:nth-child(2) span {
-		margin:0;		
-		text-align: center;
-	}
 	.mid .mid-r .mid-r-but a img {
 		vertical-align:middle !important;
 		margin:0 5px;
@@ -1941,16 +1953,10 @@ span.glyphicon-filter {
 	}
 	.mid .mid-r .mid-r-but a {
 		margin: 0 2.5px 4px;
-		padding: 10px 5px !important;
 		float: left;
 		position: relative;
 		font-size: 12px;
-		width: 22.8%;
 		height: 42px;
-		line-height: 24px;
-	}		
-	.mid .mid-r .mid-r-but a:nth-child(2) {
-		width:28%
 	}
 	.pdig {
 		padding-left:0 !important;
@@ -2050,6 +2056,12 @@ span.glyphicon-filter {
 	
 	.sldr-section .owl-pagination {
 		display:none !important;
+	}
+	.vehicle-monthly-payment {
+        padding-left: 30px;
+    }
+	.vehicle-monthly-payment h4 {
+		font-size: 16px;
 	}
 }
 
@@ -2674,14 +2686,15 @@ span.glyphicon-filter {
 	.mid .mid-r .mid-r-but {
 		padding:0;
 		margin-top:20px;
+		flex-direction: row;
+		justify-content: center;
 	}
 	.mid .mid-r .mid-r-but a {		
 		width: auto !important;
 		float: left;
 		padding: 10px 9.1px !important;
-		line-height: 19px !important;
 		margin: 0 6px 10px 0;
-		font-size: 12px;
+		font-size: 11px;
 	}
 	.mid-r .mid-r-img .mid-r-img-veh img {
 		padding:0 10px;
@@ -2693,21 +2706,12 @@ span.glyphicon-filter {
 	.mid .mid-r .mid-r-but a img {
 		margin:0 4px 0 0; 
 		float: left;
-		display: table;
-		vertical-align: middle;
 		width: 14px;    
 		height:18px;
 	}
 	.mid .mid-r .mid-r-but a span{
 		display: table-cell;
 		vertical-align: middle;		
-	}
-	.mid .mid-r .mid-r-but a:nth-child(2) span {
-		float:right;
-		margin:0 0 0 3px
-	}
-	.mid .mid-r .mid-r-but a:last-child {
-		margin:0;
 	}
 	.mid-r-text .mid-text-right {
 		padding:6px 0 ;
@@ -2740,6 +2744,12 @@ span.glyphicon-filter {
 	}
 	.logo-tp_b {
 		margin:0 !important
+	}
+	.vehicle-monthly-payment {
+		padding-left: 25px;
+	}
+	.vehicle-monthly-payment h4 {
+		font-size: 14.5px;
 	}
 }
 
@@ -3330,6 +3340,7 @@ span.glyphicon-filter {
 	.mid .mid-r .mid-r-but {
 		padding:0;
 		margin-top:20px;
+		flex-direction: row;
 	}
 	.mid .mid-r .mid-r-but a {		
 		width: 24% !important;
@@ -3338,7 +3349,7 @@ span.glyphicon-filter {
 		margin: 0 9px 10px 0;
 		font-size: 13px;
 		height: 42px;
-		line-height: 25px !important;
+		justify-content: center;
 	}
 	.mid-r .mid-r-img .mid-r-img-veh img {
 		padding:0 10px;
@@ -3394,5 +3405,11 @@ span.glyphicon-filter {
 		width: 66% !important;
 		margin: 0 0 15px !important;
 	}
-	
+}
+
+@media (min-width:1200px){
+    .mid .mid-r.md-flex {
+        display: flex;
+        margin-bottom: none;
+    }
 }

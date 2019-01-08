@@ -23,6 +23,24 @@ if( $motorcycle['call_on_price'] == '1' ||  ($retail_price_zero && $sale_price_z
         // just retail
         mustache_tmpl_set($pricing_widget_template, "SHOW_RETAIL_PRICE", true);
     }
+    
+    // display down payment
+    if ($payment_option["active"] == 1 && $payment_option["display_base_payment"] == 1)
+    {
+        $price = $sale_price_zero ? $motorcycle["retail_price"] : $motorcycle["sale_price"];
+        $moneydown = $payment_option["base_down_payment"];
+        $interest = $payment_option["data"]["interest_rate"];
+        $months = $payment_option["data"]["term"];
+        $principal = $price - $moneydown;
+        $month_interest = ($interest / (12 * 100));
+        $monthly_payment = $principal * ($month_interest / (1 - pow((1 + $month_interest), -$months) ));
+        mustache_tmpl_set($pricing_widget_template, "PAYMENT_TEXT", $payment_option["base_payment_text"]);
+        mustache_tmpl_set($pricing_widget_template, "MONTLY_PAYMENT", number_format($monthly_payment, 2));
+        mustache_tmpl_set($pricing_widget_template, "INTEREST_RATE", number_format($interest, 2));
+        mustache_tmpl_set($pricing_widget_template, "MONTHS", $months);
+        mustache_tmpl_set($pricing_widget_template, "DOWN_PAYMENT", $moneydown);
+        mustache_tmpl_set($pricing_widget_template, "MOTORCYCLE_ID", $motorcycle['id']);
+    }
 
     if ($motorcycle["destination_charge"]) {
         mustache_tmpl_set($pricing_widget_template, "SHOW_DEST_CHARGE", true);
