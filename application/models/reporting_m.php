@@ -427,9 +427,22 @@ class Reporting_M extends Master_M {
     public function putMajorUnitFTPFeed() {
         $ftp_user = $PSTAPI->config()->getKeyValue('mu_ftp_username', str_replace('_v1', '', STORE_NAME));
         $ftp_password = $PSTAPI->config()->getKeyValue('mu_ftp_password', '');
-        if (empty($ftp_user) || empty($ftp_password)) {
-            // if FTP username or password are not set, we cancel this operation
+
+        if (empty($ftp_user)) {
+            // If FTP username or password are not set, we cancel this operation
             return;
+        }
+
+        if (empty($ftp_password)) {
+            // Generate random password if not set
+            $ftp_password = random_string('alpha', 12);
+            $this->load->model('Ftpusers');
+
+            // Try to change the ftp credentials
+            if (!$this->Ftpusers->setUsernamePassword($ftp_user, $ftp_password)) { return; }
+
+            // IF successfully changed, we need to save the random password and procced. 
+            $PSTAPI->config()->setKeyValue('mu_ftp_password', $ftp_password);
         }
 
         $sql = "SELECT motorcycle.*  from motorcycle where deleted = 0";
