@@ -366,13 +366,17 @@ class Admin_Content extends Master_Controller {
         $this->_mainData['ebaymarkup'] = $this->Ebaysetting->check_markup();
         $this->_mainData['quantity'] = $this->Ebaysetting->check_quantity();
 	
-	$muftpsettings = array();
-	initializePSTAPI();
-	global $PSTAPI;
-	$muftpsettings['username'] = $PSTAPI->config()->getKeyValue('mu_ftp_username', '');
-	$muftpsettings['password'] = $PSTAPI->config()->getKeyValue('mu_ftp_password', '');
-	$this->_mainData['mu_ftp_settings'] = $muftpsettings;
-	$this->_mainData['mu_ftp_feeds'] = $this->admin_m->get_mu_ftp_feed_log();
+        $muftpsettings = array();
+        initializePSTAPI();
+        global $PSTAPI;
+        $muftpsettings['username'] = $PSTAPI->config()->getKeyValue('mu_ftp_username', str_replace('_v1', '', STORE_NAME));
+        $muftpsettings['password'] = $PSTAPI->config()->getKeyValue('mu_ftp_password', '');
+        $this->_mainData['mu_ftp_settings'] = $muftpsettings;
+        $this->_mainData['mu_ftp_feeds'] = $this->admin_m->get_mu_ftp_feed_log();
+        if (!empty($_SESSION["mu_ftp_settings_error"])) {
+            $this->_mainData['mu_ftp_settings_error'] = $_SESSION["mu_ftp_settings_error"];
+            $_SESSION["mu_ftp_settings_error"] = '';
+        }
 
         if (defined('ENABLE_MD_FEED') && ENABLE_MD_FEED) {
             $this->_mainData['mdfeed_enabled'] = true;
@@ -492,14 +496,22 @@ class Admin_Content extends Master_Controller {
      * Update Major Unit Feed FTP credentials, we ust it to upload the feed file on the FTP server
      */
     public function mu_ftp_settings() {
-	$formData = $this->input->post();
-        if (!empty($formData)) {
-	    initializePSTAPI();
-	    global $PSTAPI;
-	    $PSTAPI->config()->setKeyValue('mu_ftp_username', isset($formData['username']) ? $formData['username'] : '');
-	    $PSTAPI->config()->setKeyValue('mu_ftp_password', isset($formData['password']) ? $formData['password'] : '');
-	}
-	header("Location: /admin_content/feeds");
+        $formData = $this->input->post();
+        if (!empty($formData) && !empty($formData['username'])) {
+            $username = $formData['username'];
+            $password = isset($formData['password']) ? $formData['password'] : '';
+            $this->load->model('Ftpusers');
+            if ($this->Ftpusers->setUsernamePassword($username, $password)) {
+                initializePSTAPI();
+                global $PSTAPI;
+                $PSTAPI->config()->setKeyValue('mu_ftp_username', $username);
+                $PSTAPI->config()->setKeyValue('mu_ftp_password', $password);
+                $_SESSION["mu_ftp_settings_error"] = "";
+            } else {
+                $_SESSION["mu_ftp_settings_error"] = "Cannot to change the FTP credentials.";
+            }    
+        }
+        redirect("/admin_content/feeds");
     }
 
     public function ebay_settings() {

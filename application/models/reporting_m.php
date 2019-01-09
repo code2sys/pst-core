@@ -425,8 +425,15 @@ class Reporting_M extends Master_M {
      * Generate CSV for Major Unit FTP Feed and upload to the FTP server
      */
     public function putMajorUnitFTPFeed() {
+        $ftp_user = $PSTAPI->config()->getKeyValue('mu_ftp_username', str_replace('_v1', '', STORE_NAME));
+        $ftp_password = $PSTAPI->config()->getKeyValue('mu_ftp_password', '');
+        if (empty($ftp_user) || empty($ftp_password)) {
+            // if FTP username or password are not set, we cancel this operation
+            return;
+        }
+
         $sql = "SELECT motorcycle.*  from motorcycle where deleted = 0";
-	$query = $this->db->query($sql);
+	    $query = $this->db->query($sql);
         $allmotorcycle = $query->result_array();
         $dealer_info = $this->get_dealer_info();
         $dealer_name = $dealer_info['company'];
@@ -480,15 +487,15 @@ class Reporting_M extends Master_M {
             $data['dealerpostalcode'] = $dealer_post_code;
             $data['dealerwebsiteurl'] = base_url();
 
-	    if (!empty($motorcycle_images)) {
-		$images = array();
+            if (!empty($motorcycle_images)) {
+                $images = array();
                 foreach ($motorcycle_images as $image) {
                     $images[] = $image['external'] > 0 ? $image['image_name'] : base_url('media' . '/' . $image['image_name']);
                 }
-		$data['imageurls'] = implode('|', $images);
-	    } else {
-		$data['imageurls'] = '';
-	    }
+                $data['imageurls'] = implode('|', $images);
+            } else {
+                $data['imageurls'] = '';
+            }
 	
             if (!empty($motorcycle_videos)) {
                 $videos = array();
@@ -514,13 +521,11 @@ class Reporting_M extends Master_M {
         }
         fclose($handle);
 
-	// upload to the FTP server
-	initializePSTAPI();
-	global $PSTAPI;
-	$ftp_user = $PSTAPI->config()->getKeyValue('mu_ftp_username', '');
-        $ftp_password = $PSTAPI->config()->getKeyValue('mu_ftp_password', '');
-	$command = "echo \"put ".escapeshellarg($file_path)."\" | lftp ".$ftp_user.":".$ftp_password."@ftp.powersporttechnologies.com";
-	exec($command);
+        // upload to the FTP server
+        initializePSTAPI();
+        global $PSTAPI;
+        $command = "echo \"put ".escapeshellarg($file_path)."\" | lftp ".$ftp_user.":".$ftp_password."@ftp.powersporttechnologies.com";
+        exec($command);
     }
 
     public function getProductForcycletrader() {
