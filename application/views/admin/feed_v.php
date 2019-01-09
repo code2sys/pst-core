@@ -62,7 +62,7 @@
                         <tr>
                             <td></td>
                             <td colspan="3">
-                                FTP Address: <a href="ftp://ftp.powersporttechnologies.com">ftp://ftp.powersporttechnologies.com</a>
+                                FTP Address: <a href="ftp://ftp.powersporttechnologies.com" target="_blank">ftp://ftp.powersporttechnologies.com</a>
                             </td>
                         </tr>
                         <tr>
