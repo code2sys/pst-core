@@ -447,7 +447,7 @@ class Reporting_M extends Master_M {
             $PSTAPI->config()->setKeyValue('mu_ftp_password', $ftp_password);
         }
 
-        $sql = "SELECT motorcycle.*  from motorcycle where deleted = 0";
+        $sql = "SELECT motorcycle.*  from motorcycle where deleted = 0 and `status` = 1";
 	    $query = $this->db->query($sql);
         $allmotorcycle = $query->result_array();
         $dealer_info = $this->get_dealer_info();
