@@ -425,6 +425,8 @@ class Reporting_M extends Master_M {
      * Generate CSV for Major Unit FTP Feed and upload to the FTP server
      */
     public function putMajorUnitFTPFeed() {
+        initializePSTAPI();
+        global $PSTAPI;
         $ftp_user = $PSTAPI->config()->getKeyValue('mu_ftp_username', str_replace('_v1', '', STORE_NAME));
         $ftp_password = $PSTAPI->config()->getKeyValue('mu_ftp_password', '');
 
@@ -535,8 +537,6 @@ class Reporting_M extends Master_M {
         fclose($handle);
 
         // upload to the FTP server
-        initializePSTAPI();
-        global $PSTAPI;
         $command = "echo \"put ".escapeshellarg($file_path)."\" | lftp ".$ftp_user.":".$ftp_password."@ftp.powersporttechnologies.com";
         exec($command);
     }
