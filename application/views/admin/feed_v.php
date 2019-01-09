@@ -49,12 +49,20 @@
 			<?php endif; ?>
                     </tr>
                 </table>
+                <!-- FTP Form error message -->
+                <?php if (@$mu_ftp_settings_error): ?>
+                    <div class="error">
+                        <h1><span style="color:#C90;"><i class="fa fa-warning"></i></span>&nbsp;Error</h1>
+                        <p><?php echo $mu_ftp_settings_error; ?></p>
+                    </div>
+                <?php endif; ?>
+                <!-- / FTP Form error message -->
                 <form action="<?php echo base_url('admin_content/mu_ftp_settings'); ?>" method="post" id="form_mu_ftp_settings" class="form_standard">
                     <table width="100%" cellpadding="6">
                         <tr>
                             <td></td>
                             <td colspan="3">
-                                FTP Address: <a href="https://ftp.powersporttechnologies.com">https://ftp.powersporttechnologies.com</a>
+                                FTP Address: <a href="ftp://ftp.powersporttechnologies.com">ftp://ftp.powersporttechnologies.com</a>
                             </td>
                         </tr>
                         <tr>
@@ -66,7 +74,7 @@
                         <tr>
                             <td></td>
                             <td colspan="3">
-                                FTP Password: <input  name="password" type="password" value="<?php echo $mu_ftp_settings['password']; ?>"></td>
+                                FTP Password: <input  name="password" type="text" value="<?php echo $mu_ftp_settings['password']; ?>"></td>
                             </td>
                         </tr>
                         <tr>
