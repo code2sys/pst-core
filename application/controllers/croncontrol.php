@@ -287,13 +287,8 @@ class CronControl extends Master_Controller {
 	}
 
 	public function cleanUpCRS() {
-        global $CRS_CLEANUP_QUERIES;
-
-        if (isset($CRS_CLEANUP_QUERIES) && is_array($CRS_CLEANUP_QUERIES) && count($CRS_CLEANUP_QUERIES) > 0) {
-            foreach ($CRS_CLEANUP_QUERIES as $q) {
-                $this->db->query($q);
-            }
-        }
+        $this->load->model("CRSCron_m");
+        $this->CRSCron_m->cleanUpCRS();
     }
 
 	public function weekly()

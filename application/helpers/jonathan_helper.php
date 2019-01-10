@@ -449,6 +449,10 @@ function fixCRSBike(&$motorcycle, $exclude_title = false, $exclude_description =
         initializePSTAPI();
         $PSTAPI->denormalizedmotorcycle()->moveMotorcycle($motorcycle_id);
     }
+
+    // we should run the cleanup queries...
+    $CI->load->model("CRSCron_m");
+    $CI->CRSCron_m->cleanUpCRS();
 }
 
 function figureShowcaseFlags($pageRec, &$display_makes, &$display_machine_types, &$display_models, &$display_trims, &$showcasemake_id, &$showcasemodel_id, &$showcasemachinetype_id, &$full_url, &$showcasemakes, &$showcasemodels, &$showcasetrims, &$showcasemachinetypes) {
