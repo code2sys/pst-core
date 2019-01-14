@@ -291,6 +291,74 @@ class Lightspeed_M extends Master_M {
         return $results;
     }
 
+    public function updateLightspeedSettings($data) {
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $integration_type_new = $data['lightspeed_integration_type'];
+        $dealers_cmf_new = $data['lightspeed_dealers_cmf'];
+
+        $integration_type_old = $PSTAPI->config()->getKeyValue('lightspeed_integration_type', 'dealer_direct');
+        $dealers_cmf_old = $PSTAPI->config()->getKeyValue('lightspeed_dealers_cmf', '');
+
+        $PSTAPI->config()->setKeyValue('lightspeed_integration_type', $integration_type_new);
+        $PSTAPI->config()->setKeyValue('lightspeed_dealers_cmf', $dealers_cmf_new);
+
+        
+        $dealers_array = explode(",", $dealers_cmf_new);
+        $this->addCMFsToPST($dealers_array);
+    }
+
+    public function getLightspeedSettings() {
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $integration_type = $PSTAPI->config()->getKeyValue('lightspeed_integration_type', 'dealer_direct');
+        $dealers_cmf = $PSTAPI->config()->getKeyValue('lightspeed_dealers_cmf', '');
+
+        return array(
+            "lightspeed_integration_type" => $integration_type,
+            "lightspeed_dealers_cmf" => $dealers_cmf
+        );
+    }
+
+    protected function addCMFsToPST($dealer_cmfs) {
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $integration_type = $PSTAPI->config()->getKeyValue('lightspeed_integration_type', 'dealer_direct');
+        if ($integration_type != 'pst') {
+            throw new \Exception("Unexpected Lightspeed integration type : ". $integration_type);
+            return;
+        }
+
+        $cmfs_to_remove = array();
+        $cmfs_to_add = $dealer_cmfs;
+        $call = $this->call("Dealer");
+        $dealers = json_decode($call);
+        if(!empty($dealers)) {
+            foreach($dealers as $dealer) {
+                $found = array_search($dealer->Cmf, $cmfs_to_add);
+                if ($found !== FALSE) {
+                    array_splice($cmfs_to_add, $found, 1);
+                } else {
+                    $cmfs_to_remove[] = $dealer->Cmf;
+                }
+            }
+        }
+        
+
+        foreach($cmfs_to_add as $cmf) {
+            $endpoint = "License?LicenseKey=".LIGHTSPEED_PST_LICENSE_KEY."&Cmf=".$cmf;
+            $call = $this->call($endpoint, "POST");
+        }
+
+        foreach($cmfs_to_remove as $cmf) {
+            $endpoint = "License?LicenseKey=".LIGHTSPEED_PST_LICENSE_KEY."&Cmf=".$cmf;
+            $call = $this->call($endpoint, "DELETE");
+        }
+    }
+
     /*
     * return CMF #s according to Lightspeed Integration Type setting
     */
@@ -300,34 +368,19 @@ class Lightspeed_M extends Master_M {
         global $PSTAPI;
         initializePSTAPI();
 
-        $integration_type = $PSTAPI->config()->getKeyValue('lightspeed_integration_type', 'dealer_direct');
-        if ($integration_type == 'dealer_direct') {
-            /*
-            * Old way: user can set credentials under the Store Profile in admin panel
-            */
-            $string = "Dealer";
-            $call = $this->call($string);
-            $dealers = json_decode($call);
-    
-            if($dealers == NULL) {
-                throw new \Exception("An error occurred and no data was received from Lightspeed. Possible cause: incorrect Lightspeed username or password.");
-            }
+        $string = "Dealer";
+        $call = $this->call($string);
+        $dealers = json_decode($call);
 
-            $cmfs = array();
-            foreach($dealers as $dealer) {
-                $cmfs[] = $dealer->Cmf;
-            }
-            return $cmfs;
-        } else if ($integration_type == 'pst') {
-            /*
-            * New way: we use PST specific credentials, user need to specify CMF #s under the Store Profile in admin panel
-            */
-            $cmfs_string = $PSTAPI->config()->getKeyValue('lightspeed_dealers_cmf', '');
-            $cmfs = explode(',', $cmfs_string);
-            return $cmfs;
-        } else {
-            throw new \Exception("Unknown Lightspeed integration type : ".$integration_type);
+        if($dealers == NULL) {
+            throw new \Exception("An error occurred and no data was received from Lightspeed. Possible cause: incorrect Lightspeed username or password.");
         }
+
+        $cmfs = array();
+        foreach($dealers as $dealer) {
+            $cmfs[] = $dealer->Cmf;
+        }
+        return $cmfs;
     }
 
     public function preserveMajorUnitsChangedField($field) {
@@ -980,7 +1033,7 @@ class Lightspeed_M extends Master_M {
      * @access private
      * @author Manish
      */
-    protected function call($str) {
+    protected function call($str, $method = null) {
         $connection = curl_init();
         $this->credentials();
 //set the server we are using (could be Sandbox or Production server)
@@ -989,6 +1042,10 @@ class Lightspeed_M extends Master_M {
 //stop CURL from verifying the peer's certificate
         curl_setopt($connection, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($connection, CURLOPT_SSL_VERIFYHOST, 0);
+
+        if (!empty($method)) {
+            curl_setopt($connection, CURLOPT_CUSTOMREQUEST, $method);
+        }
 
         global $PSTAPI;
         initializePSTAPI();
@@ -1008,7 +1065,11 @@ class Lightspeed_M extends Master_M {
         }
 
 //set the headers using the array of headers
-        curl_setopt($connection, CURLOPT_HTTPHEADER, $this->headers);
+        if (!empty($method)) {
+            curl_setopt($connection, CURLOPT_HTTPHEADER, array('Content-Length: 0'));
+        } else {
+            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->headers);
+        }
 
 //set it to return the transfer as a string from curl_exec
         curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);

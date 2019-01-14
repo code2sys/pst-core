@@ -56,6 +56,10 @@ if (!defined('LIGHTSPEED_PST_PASSWORD')) {
     define('LIGHTSPEED_PST_PASSWORD', 'myoTm0s01AqlfnR');
 }
 
+if (!defined('LIGHTSPEED_PST_LICENSE_KEY')) {
+    define('LIGHTSPEED_PST_LICENSE_KEY', 'Unit');
+}
+
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

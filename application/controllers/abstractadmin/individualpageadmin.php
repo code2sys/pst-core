@@ -145,10 +145,7 @@ abstract class Individualpageadmin extends Employeeadmin
             "store_header_marquee_color" => "#ffffff",
         );
 
-        $lightspeed_settings = array(
-            "lightspeed_integration_type" => "dealer_direct",
-            "lightspeed_dealers_cmf" => ""
-        );
+        $this->load->model("lightspeed_m");
 
         if (!$this->checkValidAccess('profile') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
@@ -162,11 +159,7 @@ abstract class Individualpageadmin extends Employeeadmin
                 $this->db->query("insert into `config` (`key`, `value`) values (?, ?) on duplicate key update `value` = values(`value`)", array($key, $val));
             }
 
-            foreach (array_keys($lightspeed_settings) as $key) {
-                $$key = $val = $data[$key];
-                unset($data[$key]);
-                $this->db->query("insert into `config` (`key`, `value`) values (?, ?) on duplicate key update `value` = values(`value`)", array($key, $val));
-            }
+            $this->lightspeed_m->updateLightSpeedSettings($data);
 
 
             // update config;
@@ -227,14 +220,10 @@ abstract class Individualpageadmin extends Employeeadmin
             }
         }
 
+        $lightspeed_settings = $this->lightspeed_m->getLightspeedSettings();
+
         foreach (array_keys($lightspeed_settings) as $key) {
-            $query = $this->db->query("Select * from config where `key` = ?", array($key));
-            $record = $query->result_array();
-            if (count($record) > 0) {
-                $this->_mainData[$key] = $record[0]["value"];
-            } else {
-                $this->_mainData[$key] = $lightspeed_settings[$key];
-            }
+            $this->_mainData[$key] = $lightspeed_settings[$key];
         }
 
 
