@@ -767,24 +767,52 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
                         <strong><img src="/assets/ADP-Lightspeed-logo.jpg" alt="Lightspeed DMS Integration" /></strong>
                     </td>
                 </tr>
-                <tr>
+				<tr>
+					<td style="width:30%;"><b>Lightspeed Integration Type:</b></td>
+					<td><label><input type="radio" name='lightspeed_integration_type' value="dealer_direct" <?php if($lightspeed_integration_type=="dealer_direct") echo 'checked="checked"'; ?> />Dealer Credentials</label>
+						<label><input type="radio" name='lightspeed_integration_type' value="pst" <?php if($lightspeed_integration_type=="pst") echo 'checked="checked"'; ?> /> Lightspeed API Supplied Credentials</label>
+					</td>
+				</tr>
+                <tr class="lightspeed-settings lightspeed-settings-dealer_direct">
                     <td colspan="2"><em>Lightspeed DMS has an API for pulling major units (e.g., motorcycles). This requires a username and password to access.</em></td>
                 </tr>
-                <tr>
+                <tr class="lightspeed-settings lightspeed-settings-dealer_direct">
                     <td style="width:30%;"><b>Lightspeed Username:</b></td>
                     <td><?php echo form_input(array('name' => 'lightspeed_username',
                             'value' => array_key_exists("lightspeed_username", $address) ? $address["lightspeed_username"] : "",
                             'class' => 'text large')); ?></td>
                 </tr>
-                <tr>
+                <tr class="lightspeed-settings lightspeed-settings-dealer_direct">
                     <td style="width:30%;"><b>Lightspeed Password:</b></td>
                     <td><?php echo form_input(array('name' => 'lightspeed_password',
                             'value' => array_key_exists("lightspeed_password", $address) ? $address["lightspeed_password"] : "",
                             'class' => 'text large')); ?></td>
                 </tr>
+                <tr class="lightspeed-settings lightspeed-settings-pst">
+                    <td style="width:30%;"><b>CMF/s or Dealer Number/s:</b></td>
+                    <td><?php echo form_input(array('name' => 'lightspeed_dealers_cmf',
+                            'value' => $lightspeed_dealers_cmf,
+                            'class' => 'text large')); ?></td>
+                </tr>
+				<tr class="lightspeed-settings lightspeed-settings-pst">
+                    <td colspan="2"><em>*If multiple separate by commas and no spaces</em></td>
+                </tr>
             </table>
         </td>
     </tr>
+	<script type="application/javascript">
+		(function() {
+			var lightspeedIntegrationTypeFN = function() {
+				$(".lightspeed-settings").hide();
+				var val = $("input[name='lightspeed_integration_type']:checked").val();
+				if (val && val != "") {
+					$(".lightspeed-settings-" + val).show();
+				}
+			};
+			$("input[name='lightspeed_integration_type']").on("click", lightspeedIntegrationTypeFN);
+			lightspeedIntegrationTypeFN();
+		})();
+	</script>
 
 <?php endif; ?>
 
