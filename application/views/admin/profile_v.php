@@ -797,6 +797,15 @@ if (!defined("ENABLE_OEMPARTS_BUTTON")) {
 				<tr class="lightspeed-settings lightspeed-settings-pst">
                     <td colspan="2"><em>*If multiple separate by commas and no spaces</em></td>
                 </tr>
+				<tr class="lightspeed-settings lightspeed-settings-pst">
+                    <td colspan="4">Please read the below documents in order to sign up for Powersports Technologies program for Lightspeed NXT and Lightspeed EVO</td>
+                </tr>
+				<tr class="lightspeed-settings lightspeed-settings-pst">
+                    <td colspan="2"><a href="/assets/pdf/Powersports_Technologies_NXT_Sign_Up_Process.pdf" 
+					target="_blank">Powersports_Technologies_NXT_Sign_Up_Process.pdf</a><br><a href="/assets/pdf/Powersports_Technologies_EVO_Sign_Up_Process.pdf" 
+					target="_blank">Powersports_Technologies_EVO_Sign_Up_Process.pdf</a></td>
+					<td colspan="2"></td>
+                </tr>
             </table>
         </td>
     </tr>
