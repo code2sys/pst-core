@@ -291,10 +291,79 @@ class Lightspeed_M extends Master_M {
         return $results;
     }
 
-    public function preserveMajorUnitsChangedField($field) {
-        $CI =& get_instance();
-        $CI->load->model("CRS_m");
-        $CI->load->model("CRSCron_M");
+    public function updateLightspeedSettings($data) {
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $integration_type_new = $data['lightspeed_integration_type'];
+        $dealers_cmf_new = $data['lightspeed_dealers_cmf'];
+
+        $integration_type_old = $PSTAPI->config()->getKeyValue('lightspeed_integration_type', 'dealer_direct');
+        $dealers_cmf_old = $PSTAPI->config()->getKeyValue('lightspeed_dealers_cmf', '');
+
+        $PSTAPI->config()->setKeyValue('lightspeed_integration_type', $integration_type_new);
+        $PSTAPI->config()->setKeyValue('lightspeed_dealers_cmf', $dealers_cmf_new);
+
+        
+        $dealers_array = explode(",", $dealers_cmf_new);
+        $this->addCMFsToPST($dealers_array);
+    }
+
+    public function getLightspeedSettings() {
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $integration_type = $PSTAPI->config()->getKeyValue('lightspeed_integration_type', 'dealer_direct');
+        $dealers_cmf = $PSTAPI->config()->getKeyValue('lightspeed_dealers_cmf', '');
+
+        return array(
+            "lightspeed_integration_type" => $integration_type,
+            "lightspeed_dealers_cmf" => $dealers_cmf
+        );
+    }
+
+    protected function addCMFsToPST($dealer_cmfs) {
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $integration_type = $PSTAPI->config()->getKeyValue('lightspeed_integration_type', 'dealer_direct');
+        if ($integration_type != 'pst') {
+            throw new \Exception("Unexpected Lightspeed integration type : ". $integration_type);
+            return;
+        }
+
+        $cmfs_to_remove = array();
+        $cmfs_to_add = $dealer_cmfs;
+        $call = $this->call("Dealer");
+        $dealers = json_decode($call);
+        if(!empty($dealers)) {
+            foreach($dealers as $dealer) {
+                $found = array_search($dealer->Cmf, $cmfs_to_add);
+                if ($found !== FALSE) {
+                    array_splice($cmfs_to_add, $found, 1);
+                } else {
+                    $cmfs_to_remove[] = $dealer->Cmf;
+                }
+            }
+        }
+        
+
+        foreach($cmfs_to_add as $cmf) {
+            $endpoint = "License?LicenseKey=".LIGHTSPEED_PST_LICENSE_KEY."&Cmf=".$cmf;
+            $call = $this->call($endpoint, "POST");
+        }
+
+        foreach($cmfs_to_remove as $cmf) {
+            $endpoint = "License?LicenseKey=".LIGHTSPEED_PST_LICENSE_KEY."&Cmf=".$cmf;
+            $call = $this->call($endpoint, "DELETE");
+        }
+    }
+
+    /*
+    * return CMF #s according to Lightspeed Integration Type setting
+    */
+
+    protected function getDealerCMFs() {
 
         global $PSTAPI;
         initializePSTAPI();
@@ -307,16 +376,33 @@ class Lightspeed_M extends Master_M {
             throw new \Exception("An error occurred and no data was received from Lightspeed. Possible cause: incorrect Lightspeed username or password.");
         }
 
+        $cmfs = array();
         foreach($dealers as $dealer) {
-            $string = "Unit/" . $dealer->Cmf;
+            $cmfs[] = $dealer->Cmf;
+        }
+        return $cmfs;
+    }
+
+    public function preserveMajorUnitsChangedField($field) {
+        $CI =& get_instance();
+        $CI->load->model("CRS_m");
+        $CI->load->model("CRSCron_M");
+
+        global $PSTAPI;
+        initializePSTAPI();
+
+        $dealer_cmfs = $this->getDealerCMFs();
+
+        foreach($dealer_cmfs as $dealer_cmf) {
+            $string = "Unit/" . $dealer_cmf;
             $call = $this->call($string);
             $bikes = json_decode($call);
 
             foreach ($bikes as $bike) {
                 $sku = $bike->StockNumber;
-                $results = $this->_getMatchingBikes($bike->StockNumber, $dealer->Cmf, $sku);
+                $results = $this->_getMatchingBikes($bike->StockNumber, $dealer_cmf, $sku);
                 if (count($results) > 0) {
-                    $motorcycle_array = $this->_subUnpackMajorUnit($bike, $dealer->Cmf);
+                    $motorcycle_array = $this->_subUnpackMajorUnit($bike, $dealer_cmf);
                     // OK, we have to see if this field is the same or not...
                     if ($motorcycle_array[$field] != $results[0]->get($field)) {
                         $results[0]->set("customer_set_" . $field, 1);
@@ -401,23 +487,18 @@ class Lightspeed_M extends Master_M {
         $lightspeed_used_unit_dealership_list = trim($PSTAPI->config()->getKeyValue('lightspeed_used_unit_dealership_list', ''));
         $lightspeed_used_unit_dealership_filter = preg_split("/\s*[,;]\s*/", $lightspeed_used_unit_dealership_list);
 
-        $string = "Dealer";
-        $call = $this->call($string);
-        $dealers = json_decode($call);
-
-        if($dealers == NULL) {
-            throw new \Exception("An error occurred and no data was received from Lightspeed. Possible cause: incorrect Lightspeed username or password.");
-        }
-
+        
         $this->db->query("Update motorcycle set lightspeed_flag = 0");
 
         $valid_count = 0;
         $crs_trim_matches = 0;
 
         $ts = date("Y-m-d H:i:s");
-        foreach($dealers as $dealer) {
+        $dealer_cmfs = $this->getDealerCMFs();
 
-            $string = "Unit/".$dealer->Cmf;
+        foreach($dealer_cmfs as $dealer_cmf) {
+
+            $string = "Unit/".$dealer_cmf;
             $call = $this->call($string);
             $bikes = json_decode($call);
 
@@ -426,7 +507,7 @@ class Lightspeed_M extends Master_M {
 
                 $scrub_trim = false;
                 $last_known_trim = 0;
-                $motorcycle_array = $this->_subUnpackMajorUnit($bike, $dealer->Cmf);
+                $motorcycle_array = $this->_subUnpackMajorUnit($bike, $dealer_cmf);
                 $motorcycle_array["lightspeed_timestamp"] = $ts;
 
 
@@ -435,22 +516,22 @@ class Lightspeed_M extends Master_M {
                 // I know this could be a little more compact, but I think it hurt readability.
                 if ($motorcycle_array["condition"] == 1) {
                     if ($lightspeed_new_unit_dealership_list != "" && count($lightspeed_new_unit_dealership_filter) > 0) {
-                        if (!in_array($dealer->Cmf, $lightspeed_new_unit_dealership_filter)) {
-                            if ($debug) print "FILTER skipping new " . $dealer->Cmf . "\n";
+                        if (!in_array($dealer_cmf, $lightspeed_new_unit_dealership_filter)) {
+                            if ($debug) print "FILTER skipping new " . $dealer_cmf . "\n";
                             continue; // skip it.
                         } else {
-                            if ($debug) print "FILTER Dealer CMF in new filter: " . $dealer->Cmf . "\n";
+                            if ($debug) print "FILTER Dealer CMF in new filter: " . $dealer_cmf . "\n";
                         }
                     } else {
                         if ($debug) print "FILTER No new filter defined \n";
                     }
                 } else {
                     if ($lightspeed_used_unit_dealership_list != "" && count($lightspeed_used_unit_dealership_filter) > 0) {
-                        if (!in_array($dealer->Cmf, $lightspeed_used_unit_dealership_filter)) {
-                            if ($debug) print "FILTER skipping used " . $dealer->Cmf . "\n";
+                        if (!in_array($dealer_cmf, $lightspeed_used_unit_dealership_filter)) {
+                            if ($debug) print "FILTER skipping used " . $dealer_cmf . "\n";
                             continue; // skip it.
                         } else {
-                            if ($debug) print "FILTER Dealer CMF in used filter: " . $dealer->Cmf . "\n";
+                            if ($debug) print "FILTER Dealer CMF in used filter: " . $dealer_cmf . "\n";
                         }
                     } else {
                         if ($debug) print "FILTER No pre-owned filter defined \n";
@@ -477,7 +558,7 @@ class Lightspeed_M extends Master_M {
 
 
                 $update_array = array(
-                    'lightspeed_dealerID' => $dealer->Cmf,
+                    'lightspeed_dealerID' => $dealer_cmf,
                     'sku' => $motorcycle_array["sku"],
                     'real_sku' => $motorcycle_array["real_sku"],
                     'lightspeed_location' => $motorcycle_array["lightspeed_location"],
@@ -675,16 +756,12 @@ class Lightspeed_M extends Master_M {
 
     public function get_parts_xml() {
 
-        $string = "Dealer";
-        $call = $this->call($string);
-        $dealers = json_decode($call);
+        $dealer_cmfs = $this->getDealerCMFs();
 
+        foreach($dealer_cmfs as $dealer_cmf) {
 
-
-        foreach($dealers as $dealer) {
-
-            echo "<br>Dealer id: " . $dealer->Cmf;
-            $string = "Part/".$dealer->Cmf;
+            echo "<br>Dealer id: " . $dealer_cmf;
+            $string = "Part/".$dealer_cmf;
             $call = $this->call($string);
             $call = json_decode($call);
             echo "<pre>";
@@ -693,16 +770,12 @@ class Lightspeed_M extends Master_M {
     }
     public function get_units_xml() {
 
-        $string = "Dealer";
-        $call = $this->call($string);
-        $dealers = json_decode($call);
+        $dealer_cmfs = $this->getDealerCMFs();
 
+        foreach($dealer_cmfs as $dealer_cmf) {
 
-
-        foreach($dealers as $dealer) {
-
-            echo "<br>Dealer id: " . $dealer->Cmf;
-            $string = "Unit/".$dealer->Cmf;
+            echo "<br>Dealer id: " . $dealer_cmf;
+            $string = "Unit/".$dealer_cmf;
             $call = $this->call($string);
             $call = json_decode($call);
             echo "<pre>";
@@ -746,14 +819,12 @@ class Lightspeed_M extends Master_M {
 
     public function get_units_csv() {
 
-        $string = "Dealer";
-        $call = $this->call($string);
-        $dealers = json_decode($call);
+        $dealer_cmfs = $this->getDealerCMFs();
 
-        foreach($dealers as $dealer) {
+        foreach($dealer_cmfs as $dealer_cmf) {
 
-            echo "Dealer id: " . $dealer->Cmf . "\n";
-            $string = "Unit/".$dealer->Cmf;
+            echo "Dealer id: " . $dealer_cmf . "\n";
+            $string = "Unit/".$dealer_cmf;
             $call = $this->call($string);
             $call = json_decode($call, true);
             $this->extractStructureAsCSV($call);
@@ -767,16 +838,15 @@ class Lightspeed_M extends Master_M {
      * you then have to do the right thing with them.
      */
     public function get_parts() {
-        $string = "Dealer";
-        $call = $this->call($string);
-        $dealers = json_decode($call);
 
         // flag them all to clear them
         $uniqid = uniqid("get_parts_");
         $this->db->query("Update lightspeedpart set uniqid = ?, lightspeed_present_flag = 0", array($uniqid));
 
-        foreach($dealers as $dealer) {
-            $string = "Part/".$dealer->Cmf;
+        $dealer_cmfs = $this->getDealerCMFs();
+
+        foreach($dealer_cmfs as $dealer_cmf) {
+            $string = "Part/".$dealer_cmf;
             $call = $this->call($string);
             $parts = json_decode($call);
             foreach($parts as $part) {
@@ -963,7 +1033,7 @@ class Lightspeed_M extends Master_M {
      * @access private
      * @author Manish
      */
-    protected function call($str) {
+    protected function call($str, $method = null) {
         $connection = curl_init();
         $this->credentials();
 //set the server we are using (could be Sandbox or Production server)
@@ -973,10 +1043,33 @@ class Lightspeed_M extends Master_M {
         curl_setopt($connection, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($connection, CURLOPT_SSL_VERIFYHOST, 0);
 
-        curl_setopt($connection, CURLOPT_USERPWD, $this->cred['Setting']['user'].':'.$this->cred['Setting']['pass']);
+        if (!empty($method)) {
+            curl_setopt($connection, CURLOPT_CUSTOMREQUEST, $method);
+        }
+
+        global $PSTAPI;
+        initializePSTAPI();
+        $integration_type = $PSTAPI->config()->getKeyValue('lightspeed_integration_type', 'dealer_direct');
+        if ($integration_type == 'dealer_direct') {
+            /*
+            * Old way: user can set credentials under the Store Profile in admin panel
+            */
+            curl_setopt($connection, CURLOPT_USERPWD, $this->cred['Setting']['user'].':'.$this->cred['Setting']['pass']);
+        } else if ($integration_type == 'pst'){
+            /*
+            * New way: we use PST specific credentials, user need to specify CMF #s under the Store Profile in admin panel
+            */
+            curl_setopt($connection, CURLOPT_USERPWD, LIGHTSPEED_PST_USERNAME.':'.LIGHTSPEED_PST_PASSWORD);
+        } else {
+            throw new \Exception("Unknown Lightspeed integration type : ".$integration_type);
+        }
 
 //set the headers using the array of headers
-        curl_setopt($connection, CURLOPT_HTTPHEADER, $this->headers);
+        if (!empty($method)) {
+            curl_setopt($connection, CURLOPT_HTTPHEADER, array('Content-Length: 0'));
+        } else {
+            curl_setopt($connection, CURLOPT_HTTPHEADER, $this->headers);
+        }
 
 //set it to return the transfer as a string from curl_exec
         curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);

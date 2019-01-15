@@ -145,6 +145,8 @@ abstract class Individualpageadmin extends Employeeadmin
             "store_header_marquee_color" => "#ffffff",
         );
 
+        $this->load->model("lightspeed_m");
+
         if (!$this->checkValidAccess('profile') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
@@ -156,6 +158,8 @@ abstract class Individualpageadmin extends Employeeadmin
                 unset($data[$key]);
                 $this->db->query("insert into `config` (`key`, `value`) values (?, ?) on duplicate key update `value` = values(`value`)", array($key, $val));
             }
+
+            $this->lightspeed_m->updateLightSpeedSettings($data);
 
 
             // update config;
@@ -214,6 +218,12 @@ abstract class Individualpageadmin extends Employeeadmin
             } else {
                 $this->_mainData[$key] = $store_header_banner[$key];
             }
+        }
+
+        $lightspeed_settings = $this->lightspeed_m->getLightspeedSettings();
+
+        foreach (array_keys($lightspeed_settings) as $key) {
+            $this->_mainData[$key] = $lightspeed_settings[$key];
         }
 
 

@@ -48,6 +48,18 @@ if (!defined('TOP_LEVEL_PAGE_ID_SNOW')) {
     define('TOP_LEVEL_PAGE_ID_SNOW', -1);
 }
 
+if (!defined('LIGHTSPEED_PST_USERNAME')) {
+    define('LIGHTSPEED_PST_USERNAME', 'PowersportsTechnologies');
+}
+
+if (!defined('LIGHTSPEED_PST_PASSWORD')) {
+    define('LIGHTSPEED_PST_PASSWORD', 'myoTm0s01AqlfnR');
+}
+
+if (!defined('LIGHTSPEED_PST_LICENSE_KEY')) {
+    define('LIGHTSPEED_PST_LICENSE_KEY', 'Unit');
+}
+
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
