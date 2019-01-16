@@ -304,9 +304,11 @@ class Lightspeed_M extends Master_M {
         $PSTAPI->config()->setKeyValue('lightspeed_integration_type', $integration_type_new);
         $PSTAPI->config()->setKeyValue('lightspeed_dealers_cmf', $dealers_cmf_new);
 
-        
-        $dealers_array = explode(",", $dealers_cmf_new);
-        $this->addCMFsToPST($dealers_array);
+        if ($integration_type_new == 'pst' &&
+            ($integration_type_old != $integration_type_new || $dealers_cmf_old != $dealers_cmf_new)) {
+            $dealers_array = explode(",", $dealers_cmf_new);
+            $this->addCMFsToPST($dealers_array);
+        }
     }
 
     public function getLightspeedSettings() {
