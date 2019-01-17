@@ -73,6 +73,11 @@
 
         // Show Customer Exit modal
         $(document).mouseleave(function () {
+            // JLB 01-17-19 - Make this subordinate to others on the screen.
+            if ($(".modal.pop.in").length > 0) {
+                return;
+            }
+
             var siteModalsState = JSON.parse(localStorage.getItem('siteModalsState')) || {};
 
             // Keep track of how many times the cursor leaves the page
@@ -94,7 +99,10 @@
 
             // Fixes Bootstrap bug
             setTimeout(function () {
-                $('#customer-exit-modal').modal('show');
+                // JLB 01-17-19 - Make this subordinate to others on the screen.
+                if ($(".modal.pop.in").length == 0) {
+                    $('#customer-exit-modal').modal('show');
+                }
             }, 500);
         });
 
