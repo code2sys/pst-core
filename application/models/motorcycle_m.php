@@ -634,4 +634,121 @@ class Motorcycle_M extends Master_M {
 
         return array($rows, $total_count, $filtered_count);
     }
+
+    public function getMotorcycleImageColorCodes($id = 0, $include_deleted = false) {
+        $colors = array();
+        $pattern = "/_([a-zA-Z\-]+)\./";
+
+        $this->db->select('image_name');
+        $this->db->from('motorcycleimage');
+        if ( $id > 0 ) {
+            $this->db->where('motorcycle_id', $id);
+        }
+        if (!$include_deleted)
+            $this->db->where('disable', 0);
+        $this->db->where('description', 'Colorized Photo');
+        $query = $this->db->get();
+
+        $images = $query->result_array();
+
+        foreach ($images as $image) {
+            $matches = array();            
+            preg_match($pattern , $image['image_name'], $matches);
+
+            if (count($matches) > 1 && !in_array($matches[1], $colors)) {
+                $colors[] = $matches[1];
+            }
+        }
+
+        return $colors;
+    }
+
+    public function getCRSImageColorCodes($trim_id) {
+        $colors = array();
+        $pattern = "/_([a-zA-Z\-]+)\./";
+
+        $this->load->model("crs_m");
+        $images = $this->crs_m->getTrimPhotos($trim_id);
+
+        foreach ($images as $image) {
+            $matches = array();            
+            preg_match($pattern , $image['photo_url'], $matches);
+
+            if (count($matches) > 0 && $matches[1] != '' && !array_key_exists($matches[1], $colors)) {
+                $colors[] = $matches[1];
+            }
+        }
+
+        return $colors;
+    }
+
+    public function removeColorizedImage($id, $colors) {
+        // get image colors
+        $imageColors = $this->getMotorcycleImageColorCodes($id);
+
+
+        // remove itself
+        if (count($colors) > 0 ) {
+            $colors_to_remove = array_diff($imageColors, $colors);
+                
+            $this->load->model('admin_m');
+
+            if ( !empty($colors_to_remove) ) {  
+                
+                foreach ( $colors_to_remove as $ic ) {
+                    $this->db->select('id');
+                    $this->db->from('motorcycleimage');
+                    $this->db->where('motorcycle_id', $id);
+                    $this->db->where('description', 'Colorized Photo');
+                    $this->db->like('image_name', '_'.$ic.'.');
+                    $query = $this->db->get();
+
+                    $images = $query->result_array();
+
+                    foreach ($images as $image) {
+                        $this->admin_m->deleteMotorcycleImage($image['id'], $id);
+                    }
+                }
+            }
+
+            // remove thumbnail
+            $query = $this->db->query("Select id from motorcycleimage where motorcycle_id = ? and description like '%Trim Photo:%'", array($id));
+            foreach ($query->result_array() as $row) {
+                $this->admin_m->deleteMotorcycleImage($row['id'], $id);
+            }
+
+            if (!empty($colors)) {
+                foreach ( $colors as $ic ) {
+                    $this->db->query("Update motorcycleimage set disable = 0 where motorcycle_id = ? and description = 'Colorized Photo' and image_name like '%\_".$ic.".%'", array($id));
+                }
+            }
+
+            $this->reorderImages($id);
+        }
+    }
+
+    public function reorderImages($id) {
+        $query = $this->db->query("Select * from motorcycleimage where motorcycle_id = ? order by priority_number asc", array($id));
+        $colorized_photos = array();
+        $thumbnails = array();
+        $other_photos = array();
+        foreach($query->result_array() as $row) {
+            if ($row['description'] == 'Colorized Photo') {
+                $colorized_photos[] = $row;
+            } else if (strpos($row['description'], 'Trim Photo') !== false) {
+                $thumbnails[] = $row;
+            } else {
+                $other_photos[] = $row;
+            }
+        }
+
+        $photos = array_merge($thumbnails, $colorized_photos, $other_photos);
+        $order = 1;
+        foreach($photos as $photo) {
+            if ($photo['priority_number'] != $order)
+                $this->db->query("update motorcycleimage set priority_number = ? where id = ?", array($order, $photo['id']));
+            $order++;
+        }
+    }
+
 }

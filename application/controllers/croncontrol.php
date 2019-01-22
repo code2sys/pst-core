@@ -284,6 +284,9 @@ class CronControl extends Master_Controller {
 
 		// Then, do the lightspeed parts
         $this->dailyLightspeedParts();
+
+        // Then, migrate CRS color codes
+        $this->getCRSColorCodes();
 	}
 
 	public function cleanUpCRS() {
@@ -718,6 +721,10 @@ class CronControl extends Master_Controller {
     public function getMajorUnits() {
         $this->load->model("Lightspeed_m");
         $this->Lightspeed_m->get_major_units();
+    }
+    public function getCRSColorCodes() {
+        $this->load->model("color_m");
+        $this->color_m->getCRSColorCodes();
     }
 
     public function dailyLightspeedParts() {
