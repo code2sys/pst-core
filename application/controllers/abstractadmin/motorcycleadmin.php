@@ -217,15 +217,82 @@ abstract class Motorcycleadmin extends Firstadmin
 
     }
 
+    protected function getAvailableColors($motorcycle_id, $trim_id, $color_keyword) {
+        $this->load->model("color_m");
+        $this->load->model("motorcycle_m");
+        if(!empty($trim_id) && $motorcycle_id == 0) {
+            $motorcycle_colors_codes = $this->motorcycle_m->getCRSImageColorCodes($trim_id);
+        } else {
+            $motorcycle_colors_codes = $this->motorcycle_m->getMotorcycleImageColorCodes($motorcycle_id, true);
+        }
+
+        if (empty($motorcycle_colors_codes)) {
+            return array();
+        }
+
+        $colors_by_codes = $this->color_m->getColorsByCodes($motorcycle_colors_codes);
+        foreach ($motorcycle_colors_codes as $code) {
+            $found = false;
+            foreach ($colors_by_codes as $color) {
+                if ($color['code'] == $code) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $colors_by_codes[] = array('code' => $code, 'label' => '');
+            }
+        }
+        if (empty($color_keyword)) {
+            return $colors_by_codes;
+        }
+
+        $filtered_colors = array();
+        foreach($colors_by_codes as $color) {
+            if (stripos($color['code'], $color_keyword) !== false || stripos($color['label'], $color_keyword) !== false) {
+                $filtered_colors[] = $color;
+            }
+        }
+
+        return $filtered_colors;
+    }
+
+    public function get_color_autocomplete(){
+
+        $color = trim(array_key_exists("color", $_REQUEST) ? $_REQUEST["color"] : "");
+        $id = intval(trim(array_key_exists("id", $_REQUEST) ? $_REQUEST["id"] : 0));
+        $trim_id = trim(array_key_exists("trim_id", $_REQUEST) ? $_REQUEST["trim_id"] : "");
+
+        $colors = $this->getAvailableColors($id, $trim_id, $color);
+
+        $this->_printAjaxSuccess($colors);
+    }
+
     public function motorcycle_edit($id = NULL, $updated = null) {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
         }
+        $this->load->model("color_m");
+        $this->load->model("motorcycle_m");
         if (is_null($id)) {
             $this->_mainData['new'] = TRUE;
+            $this->_mainData['is_match_color'] = FALSE;
+            $colors = $this->getAvailableColors($id, NULL, NULL);
+            if (empty($colors)) {
+                $colors = $this->color_m->getAllColors();
+            }
+            $this->_mainData["colors"] = $colors;
         } else {
-            $this->_mainData['product'] = $this->admin_m->getAdminMotorcycle($id);
-            //$this->_mainData['categories'] = $this->admin_m->getMotorcycleCategory();
+            $product = $this->admin_m->getAdminMotorcycle($id);
+
+            $this->_mainData['product'] = $product;
+            $this->_mainData['is_match_color'] = ($product['source'] == "PST" || $product['source'] == "Admin") ? FALSE : TRUE;
+            $colors = $this->getAvailableColors($id, $product['crs_trim_id'], NULL);
+            if (empty($colors)) {
+                $colors = $this->color_m->getAllColors();
+            }
+            $this->_mainData["colors"] = $colors;
+            
         }
         if ($updated != null) {
             $this->_mainData['success'] = TRUE;
@@ -305,10 +372,10 @@ abstract class Motorcycleadmin extends Firstadmin
                         } else {
                             if ($motorcycle->get($k) != $val) {
                                 // OK, they change this value...
-                                $post["customer_set_" . $k] = 1; // We have to flag it...
-                                if (in_array($k, array("vin_number", "make", "model", "year"))) {
-                                    $scrub_trim = true;
-                                }
+                                // $post["customer_set_" . $k] = 1; // We have to flag it...
+                                // if (in_array($k, array("vin_number", "make", "model", "year"))) {
+                                //     $scrub_trim = true;
+                                // }
                             }
                         }
                     }
@@ -321,6 +388,22 @@ abstract class Motorcycleadmin extends Firstadmin
             } else {
                 if (array_key_exists("location_description", $post) && $post["location_description"] != "") {
                     $post["customer_set_location"] = 1;
+                }
+            }
+
+            // correct color field if it's from PST or Admin
+            if (!$post['is_match_color'] && !empty($post['color_code'])) {
+                $this->load->model("color_m");
+                $color = $this->color_m->getColorByCode($post["color_code"]);
+                if ($color !== FALSE) {
+                    $post["color"] = $color["label"];
+                    $post["color_code"] = $color["code"];
+                } else {
+                    // User manually entered the color.
+                    $post["color"] = $post["color_code"];
+
+                    // if it's not registered yet, we need to learn this
+                    $this->color_m->addColorMapping($post["color_code"], $post["color"]);
                 }
             }
 
@@ -346,6 +429,21 @@ abstract class Motorcycleadmin extends Firstadmin
                 // Well, if they just scrubbed the trim, we have to remove this...
                 $this->load->model("lightspeed_m");
                 $this->lightspeed_m->scrubTrim($id);
+            }
+
+            //
+            // remove colorized images
+            //
+            if (!empty($post["color_code"])) {
+                // remove colorized photos except for the selected color
+                $this->load->model("motorcycle_m");
+                $this->motorcycle_m->removeColorizedImage(intval($id), array($post["color_code"]));
+
+                // if it's from third party, learn this match
+                if ($post['is_match_color'] && !empty($post["color"])) {
+                    $this->load->model("color_m");
+                    $this->color_m->addColorMapping($post["color_code"], $post["color"]);
+                }
             }
 
             redirect('admin/motorcycle_edit/' . $id . '/updated');

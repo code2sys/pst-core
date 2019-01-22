@@ -30,6 +30,7 @@ $cstdata = (array) json_decode($product['data']);
         if ($id == 0): ?>
             <input type="hidden" name="crs_trim_id" value="<?php if (array_key_exists("crs_trim_id", $_REQUEST)) { echo htmlentities($_REQUEST["crs_trim_id"]); } ?>" />
         <?php endif; ?>
+        <input type="hidden" name="is_match_color" value="<?php echo $is_match_color?>">
         <!-- TAB CONTENT -->
         <div class="tab_content">
             <div class="hidden_table">
@@ -176,9 +177,32 @@ $cstdata = (array) json_decode($product['data']);
 						</td>
                     </tr>
                     <tr>
-                        <td style="width:50px;"><b>Color:</b></td>
-                        <td>
-                            <input type="text" name="color" value="<?php echo $product['color']==''?$_POST['color']:$product['color']; ?>" class="text small small-hndr">
+                        <td colspan="2">
+                            <table width="100%" class="inr">
+								<tr>
+                                <?php if ($is_match_color == false): ?>
+                                    <td class="min-wdh"><b>Color:</b></td>
+									<td class="inr-td scnd wdt">
+                                        <input type="text" id="unit_color" name="color_code" value="<?php echo empty($product['color_code']) ? $_POST['color_code']:$product['color_code']; ?>" class="text small small-hndr">
+                                        <span class="color_suggestion" style="display:none; font-style: italic">Please begin typing a color to see auto-complete suggestions.</span>
+                                    </td>
+                                <?php else: ?>
+                                    <td class="min-wdh"><b>Color:</b></td>
+									<td class="inr-td scnd wdt">
+                                        <input type="text" autocomplete="off" name="color" value="<?php echo empty($product['color']) ? $_POST['color']:$product['color']; ?>" class="text small small-hndr">
+                                    </td>
+                                    <td class="min-wdh"><b>Match Color:</b></td>
+                                    <td class="inr-td scnd">
+                                        <select id="color_code" name="color_code" class="small-hndr" style="border-radius:0;">
+                                            <option value="">Please Select Option</option>
+                                            <?php foreach( $colors as $color ) { ?>
+                                                <option value="<?php echo $color['code'];?>" <?php if($product['color_code'] == $color['code']) { echo "selected"; }else if($_POST['color_code']==$color['code']){echo "selected";} ?>><?php echo $color['code'];?>(<?php echo $color['label'];?>)</option>
+                                            <?php } ?>
+                                        </select>
+                                    </td>
+                                <?php endif ?>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                     <tr>
@@ -498,6 +522,56 @@ $cstdata = (array) json_decode($product['data']);
         $("input[name='category']").autocomplete("search", $("input[name='category']").val());
     });
 
+     $("#unit_color").on("focus", function(e) {
+        $("#unit_color").autocomplete("search", $("#unit_color").val());
+    });
+
+    // unit color autocomplete
+    $("#unit_color").autocomplete({
+        minLength: 0,
+        source: function(request, response) {
+            var data;
+            var unit_id = <?php if ($id) { echo $id; } else { echo "0"; } ?>;
+
+            data = {
+                id: unit_id,
+                color : $("#unit_color").val().trim(),
+                trim_id: $("input[name='crs_trim_id']").val()
+            };
+
+            if (data === false) {
+                response([]); // just bail out...
+            } else {
+
+                var suggestion_array = [];
+                $.ajax({
+                    "type" : "POST",
+                    "dataType" : "json",
+                    "url" : "<?php echo site_url("admin/get_color_autocomplete"); ?>",
+                    "data" : data,
+                    "success" : function(data) {
+                        if (data.success) {
+                            var returned_data = data.data;
+
+                            $.each(returned_data, function( index, value ) {
+                                suggestion_array.push({
+                                    label: value.code+"("+value.label+")",
+                                    value: value.code
+                                });
+                            });
+
+                            suggestion_array.sort();
+                        }
+                    },
+                    "complete" : function() {
+                        $(".color_suggestion").hide();
+                        response(suggestion_array);
+                    }
+                })
+            }
+
+        }
+    });
 
 
     $("input[name='make']").autocomplete({
