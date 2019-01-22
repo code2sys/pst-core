@@ -55,7 +55,7 @@ class CRS_M extends Master_M
 
 
     protected $_preserveMachineMotoType;
-    public function _getMachineTypeMotoType($machine_type, $offroad_flag, $insert_on_missing = false) {
+    public function _getMachineTypeMotoType($machine_type, $offroad_flag, $insert_on_missing = true) {
         if (is_null($offroad_flag)) {
             $offroad_flag = 0;
         }
