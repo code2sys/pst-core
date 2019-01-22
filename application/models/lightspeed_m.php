@@ -144,14 +144,24 @@ class Lightspeed_M extends Master_M {
         global $PSTAPI;
         initializePSTAPI();
 
-        $integration_type_new = $data['lightspeed_integration_type'];
-        $dealers_cmf_new = $data['lightspeed_dealers_cmf'];
+        // It is only going to be null or not present if it is not actually on the form. Otherwise, it will be "".
+        if (array_key_exists("lightspeed_integration_type", $data) && !is_null($data["lightspeed_integration_type"])) {
+            $integration_type_new = $data['lightspeed_integration_type'];
+            $integration_type_old = $PSTAPI->config()->getKeyValue('lightspeed_integration_type', 'dealer_direct');
+            $PSTAPI->config()->setKeyValue('lightspeed_integration_type', $integration_type_new);
+        } else {
+            $integration_type_new = $PSTAPI->config()->getKeyValue('lightspeed_integration_type', '');
+        }
 
-        $integration_type_old = $PSTAPI->config()->getKeyValue('lightspeed_integration_type', 'dealer_direct');
+        // It is only going to be null or not present if it is not actually on the form. Otherwise, it will be "".
         $dealers_cmf_old = $PSTAPI->config()->getKeyValue('lightspeed_dealers_cmf', '');
+        if (array_key_exists("lightspeed_dealers_cmf", $data) && !is_null($data["lightspeed_dealers_cmf"])) {
+            $dealers_cmf_new = $data['lightspeed_dealers_cmf'];
+            $PSTAPI->config()->setKeyValue('lightspeed_dealers_cmf', $dealers_cmf_new);
+        } else {
+            $dealers_cmf_new = $dealers_cmf_old;
+        }
 
-        $PSTAPI->config()->setKeyValue('lightspeed_integration_type', $integration_type_new);
-        $PSTAPI->config()->setKeyValue('lightspeed_dealers_cmf', $dealers_cmf_new);
 
         if ($integration_type_new == 'pst' &&
             ($integration_type_old != $integration_type_new || $dealers_cmf_old != $dealers_cmf_new)) {
