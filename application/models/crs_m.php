@@ -48,7 +48,8 @@ class CRS_M extends Master_M
 
     public function getMachineTypeMotoType($machine_type, $offroad_flag)
     {
-        return $this->_getMachineTypeMotoType($machine_type, $offroad_flag);
+        // JLB 1-22-19: Insert this thing.
+        return $this->_getMachineTypeMotoType($machine_type, $offroad_flag, true);
     }
 
 
