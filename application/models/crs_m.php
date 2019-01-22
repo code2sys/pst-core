@@ -54,8 +54,12 @@ class CRS_M extends Master_M
 
 
     protected $_preserveMachineMotoType;
-    protected function _getMachineTypeMotoType($machine_type, $offroad_flag) {
+    public function _getMachineTypeMotoType($machine_type, $offroad_flag, $insert_on_missing = false) {
         if (is_null($offroad_flag)) {
+            $offroad_flag = 0;
+        }
+
+        if ($offroad_flag !== 1) {
             $offroad_flag = 0;
         }
 
@@ -75,7 +79,34 @@ class CRS_M extends Master_M
         }
 
         if ($type_id == 0) {
-            throw new \Exception("Could not find a match for _getMachineTypeMotoType($machine_type, $offroad_flag)");
+            if ($insert_on_missing) {
+                // I guess we are inserting this thing!
+                global $PSTAPI;
+                initializePSTAPI();
+
+                $matches = $PSTAPI->motorcycletype()->fetch(array(
+                    "name" => $machine_type,
+                    "crs_type" => null
+                ));
+
+                if (count($matches) > 0) {
+                    // let's just take the first one, update it, and call it good!
+                    $match = $matches[0];
+                    $match->set("crs_type", $machine_type);
+                    $match->set("offroad", $offroad_flag);
+                    $match->save();
+                    $type_id = $match->id();
+                } else {
+                    $obj = $PSTAPI->motorcycletype()->add(array(
+                        "name" => $machine_type,
+                        "crs_type" => $machine_type,
+                        "offroad_flag" => $offroad_flag
+                    ));
+                    $type_id = $obj->id();
+                }
+            } else {
+                throw new \Exception("Could not find a match for _getMachineTypeMotoType($machine_type, $offroad_flag)");
+            }
         }
 
         $this->_preserveMachineMotoType[$key] = $type_id;

@@ -378,36 +378,9 @@ class CronControl extends Master_Controller {
 
 
     protected $_preserveMachineMotoType;
-    protected function _getMachineTypeMotoType($machine_type, $offroad_flag) {
-        if (is_null($offroad_flag)) {
-            $offroad_flag = 0;
-        }
-
-        if ($offroad_flag !== 1) {
-            $offroad_flag = 0;
-        }
-
-        if (!isset($this->_preserveMachineMotoType)) {
-            $this->_preserveMachineMotoType = array();
-        }
-
-        $key = sprintf("%s-%d", $machine_type, $offroad_flag);
-        if (array_key_exists($key, $this->_preserveMachineMotoType)) {
-            return $this->_preserveMachineMotoType[$key];
-        }
-
-        $type_id = 0;
-        $query = $this->db->query("Select id from motorcycle_type where crs_type = ? and offroad = ?", array($machine_type, $offroad_flag));
-        foreach ($query->result_array() as $row) {
-            $type_id = $row["id"];
-        }
-
-        if ($type_id == 0) {
-            throw new \Exception("Could not find a match for _getMachineTypeMotoType($machine_type, $offroad_flag)");
-        }
-
-        $this->_preserveMachineMotoType[$key] = $type_id;
-        return $type_id;
+    protected function _getMachineTypeMotoType($machine_type, $offroad_flag, $insert_on_missing = false) {
+        $this->load->model("CRS_m");
+        return $this->CRS_m->_getMachineTypeMotoType($machine_type, $offroad_flag, $insert_on_missing);
     }
 
     protected function SKUInUse($sku) {
