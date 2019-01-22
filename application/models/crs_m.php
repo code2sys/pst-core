@@ -316,6 +316,16 @@ class CRS_M extends Master_M
         }
     }
 
+    public function getColorCodes() {
+        try {
+            $result = $this->postRequest("colorcodes");
+            if (!empty($result["matches"])) return $result["matches"];
+            return array();
+        } catch (Exception $e) {
+            return array();
+        }
+    }
+
     protected function postRequest($function, $arguments = array(), $key = "")
     {
         //get the CRS webform data

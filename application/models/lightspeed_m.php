@@ -115,164 +115,13 @@ class Lightspeed_M extends Master_M {
     }
 
     public function cleanColors($color) {
-        global $recentlyNewColor;
-        if (!isset($recentlyNewColor)) {
-            $recentlyNewColor = array();
-        }
-
-        $lut = array(
-            // This came from Modesto
-            "BK" => "Black",
-            "GN" => "Green",
-            "RE" => "Red",
-            "WTE" => "White",
-            "OR" => "Orange",
-            "GY" => "Gray",
-            "LIM" => "Lime",
-            "BL" => "Blue",
-            "GRY" => "Gray",
-            "WH" => "White",
-            "YW" => "Yellow",
-            "SIL" => "Silver",
-            "WHT" => "White",
-            "BE" => "Beige",
-            "BLU" => "Blue",
-            "CM GY" => "Camo Gray",
-            "KRT" => "Kawasaki Racing Team",
-            "SL" => "Silver",
-            "BLK" => "Black",
-            "CAMO" => "Camo",
-            "GN CAMO" => "Green Camo",
-            "TIT" => "Titanium",
-            "GRN" => "Green",
-            "RED" => "Red",
-            "" => "N/A",
-            // This came from Holiday
-
-            'ACTIVE YELLOW' =>'Active Yellow',
-            'ATV RENEGADE XMR 1000 REFI R 1' =>'ATV RENEGADE XMR 1000 REFI R 1',
-            'AVALANCE GREY/LIME SQUEEZE' =>'Avalance Grey/Lime Squeeze',
-            'AVALANCGE GRAY/LIME SQUEEZE' =>'Avalancge Gray/Lime Squeeze',
-            'AVALANCHE GRAY/PINK POWER' =>'Avalanche Gray/Pink Power',
-            'BLACK' =>'Black',
-            'BLACK PEARL' =>'Black Pearl',
-            'BLACK RED WHITE' =>'Black Red White',
-            'BLACK/CANDY ORANGE' =>'Black/Candy Orange',
-            'BLACK/RED/WHITE' =>'Black/Red/White',
-            'BLACK&CAN-AM RED' =>'Black&Can-Am Red',
-            'BRIGHT YELLOW' =>'Bright Yellow',
-            'BRUHED ALUMINUM CAN-AM RED' =>'Bruhed Aluminum Can-Am Red',
-            'BRUSHED ALUMINUM & CAN-AM RED' =>'Brushed Aluminum & Can-Am Red',
-            'CAN-AM RED' =>'Can-Am Red',
-            'CAN-AM RED&BLACK' =>'Can-Am Red&Black',
-            'CANDY RED' =>'Candy Red',
-            'CARBON  BLACK&CAN-AM RED' =>'Carbon Black & Can-Am Red',
-            'CARBON BLACK & SUNBURST YELLOW' =>'Carbon Black & Sunburst Yellow',
-            'CRUISER BLACK' =>'Cruiser Black',
-            'CRUISER BLACK/LIME SQUEEZE' =>'Cruiser Black/Lime Squeeze',
-            'DIVER BLUE' =>'Diver Blue',
-            'GHOST GRAY' =>'Ghost Gray',
-            'GHOST GREY' =>'Ghost Gray',
-            'GRAY' =>'Gray',
-            'GRAY METALLIC' =>'Gray Metallic',
-            'GRAY WITH PINK' =>'Gray With Pink',
-            'GREEN' =>'Green',
-            'GREY/LIME SQUEEZE' =>'Grey/Lime Squeeze',
-            'HONDA PHANTOM CAMO' =>'Honda Phantom Camo',
-            'HYPER SILVER & YELLOW SUNBURST' =>'Hyper Silver & Yellow Sunburst',
-            'INDY RED' =>'Indy Red',
-            'INTENSE RED' =>'Intense Red',
-            'LIME SQUEEZE' =>'Lime Squeeze',
-            'MATTE GRAY METALLIC' =>'Matte Gray Metallic',
-            'MATTE PEARL WHITE' =>'Matte Pearl White',
-            'MATTE SILVER' =>'Matte Silver',
-            'MATTE SILVER METALLIC' =>'Matte Silver Metallic',
-            'METALLIC BLUE' =>'Metallic Blue',
-            'MIDNIGHT BLUE' =>'Midnight Blue',
-            'MOSSY -OAK BREAK-UP COUNTRY CAMO' =>'Mossy Oak Break-Up Country Camo',
-            'MOSSY OAK BREAK-UP COUNTRY CAMO' =>'Mossy Oak Break-Up Country Camo',
-            'MOSSY OAK CAMO' =>'Mossy Oak Camo',
-            'NARA BRONZE' =>'Nara Bronze',
-            'NAVY BLUE METALLIC' =>'Navy Blue Metallic',
-            'OLIVE' =>'Olive',
-            'ORANGE' =>'Orange',
-            'PEARL BLACK' =>'Pearl Black',
-            'PEARL ORANGE' =>'Pearl Orange',
-            'PEARL RED' =>'Pearl Red',
-            'PEARL WHITE' =>'Pearl White',
-            'PHANTON CAMO' =>'Phanton Camo',
-            'PLATINUM SATIN' =>'Platinum Satin',
-            'POLARIS PURSIT CAMO' =>'Polaris Pursit Camo',
-            'POLARIS PURSUIT CAMO' =>'Polaris Pursuit Camo',
-            'PPC' =>'Ppc',
-            'PURE MAGNESIUM METALLIC' =>'Pure Magnesium Metallic',
-            'PURSUIT CAMO' =>'Pursuit Camo',
-            'RADAR BLUE' =>'Radar Blue',
-            'RADAR BLUE METALLIC' =>'Radar Blue Metallic',
-            'RED/BLACK' =>'Red/Black',
-            'RED/BLACK/WHITE' =>'Red/Black/White',
-            'RED/WHITE/BLUE' =>'Red/White/Blue',
-            'RED&BLACK' =>'Red&Black',
-            'RIDE COMMAND EDITION' =>'Ride Command Edition',
-            'S. GREEN' =>'S. Green',
-            'SAGE GREEN' =>'Sage Green',
-            'SILVER PEARL' =>'Silver Pearl',
-            'SOLAR RED' =>'Solar Red',
-            'STEAL BLACK' =>'Steal Black',
-            'STEALTH BLACK' =>'Stealth Black',
-            'SUEDE METALLIC' =>'Suede Metallic',
-            'SUNBURST YELLOW' =>'Sunburst Yellow',
-            'SUNSET RED' =>'Sunset Red',
-            'SUNSET RED FOX EDITION' =>'Sunset Red Fox Edition',
-            'SUNSET RED METALLIC' =>'Sunset Red Metallic',
-            'SUNST RED METALLIC' =>'Sunst Red Metallic',
-            'TIMELESS BLACK' =>'Timeless Black',
-            'TITANIUM' =>'Titanium',
-            'TITANIUM MATTE METALLIC' =>'Titanium Matte Metallic',
-            'TRIPLE BLACK' =>'Triple Black',
-            'VAPOR WHITE' =>'Vapor White',
-            'VELOCITY BLUE' =>'Velocity Blue',
-            'VICTORY RED' =>'Victory Red',
-            'VODOO BLUE' =>'Vodoo Blue',
-            'WHITE' =>'White',
-            'WHITE LIGHTING' =>'White Lightning',
-            'WHITE LIGHTNING' =>'White Lightning',
-            'WHITE LIGHTNING W/ REFLEX BLUE' =>'White Lightning W/ Reflex Blue',
-            'WHITE, BLK, CAN AM RED' =>'White, Blk, Can Am Red',
-            'WHITE,BLACK&CAN-AM RED' =>'White,Black&Can-Am Red',
-            'WHITE/BLUE/RED' =>'White/Blue/Red',
-            'WHITE/RED' =>'White/Red',
-            'YELLOW' =>'Yellow',
-            "LM" => "Lime",
-"PURE MAGNESUIM METALLIC" => "PURE MAGNESUIM METALLIC",
-"WHITE&CAN-AM RED" => "WHITE&CAN-AM RED",
-"WHITE&BLACK& CAN-AM RED" => "WHITE&BLACK&CAN-AM RED",
-"CARBON  BLACK&CAN-AM RED" => "CARBON BLACK&CAN-AM RED",
-"CAN-AM RED & BLACK" => "CAN-AM RED&BLACK",
-"BLACK &CAN-AM RED" => "BLACK&CAN-AM RED",
-"BLUE" => "BLUE",
-"GRAY/PINK" => "GRAY/PINK",
-"BRIGHT WHITE/INDY RED" => "BRIGHT WHITE/INDY RED",
-            "BRN" => "Brown",
-            "MATTE RED" => "Matte Red",
-            "GRAY MATRIX CAMO" => "Gray Matrix Camo",
-            "SILVER" => "Silver",
-            "WHITE/BLACK" => "White/Black",
-            "BLUE/BLACK" => "Blue/Black",
-            "MATTE BLACK" => "Matte Black",
-            "BLUE/WHITE" => "Blue/White",
-            "ORANGE/BLACK" => "Orange/Black",
-            "Sunset Red" => "Sunset Red"
-        );
-
+        $this->load->model("color_m");
         $color = trim($color);
-        if (array_key_exists($color, $lut)) {
-            $color = $lut[$color];
-        } else if (!in_array($color, $recentlyNewColor)) {
-            $recentlyNewColor[] = $color;
-            print "UNRECOGNIZED COLOR: $color \n";
+        $color_found = $this->color_m->getColorByCode($color);
+        if ($color_found == FALSE) {
+            $color_found = $this->color_m->getColorByLabel($color, true);
         }
-        return $color;
+        return $color_found;
     }
 
     protected function _getMatchingBikes($stock_number, $dealer_cmf, &$final_sku) {
@@ -435,7 +284,7 @@ class Lightspeed_M extends Master_M {
         }
 
         $bike->WebPrice = ($bike->WebPrice <= 0) ? $bike->MSRP : $bike->WebPrice;
-        $bike->Color = $this->cleanColors($bike->Color);
+        
 
         // I expect these will be integers, numeric
         $location_description = (intVal($cmf) != 0 && array_key_exists(intVal($cmf), $lightspeedDealerMap)) ? $lightspeedDealerMap[intVal($cmf)] : "";
@@ -712,8 +561,11 @@ class Lightspeed_M extends Master_M {
                 $motorcycle = $PSTAPI->motorcycle()->get($motorcycle_id);
                 if ($motorcycle->get("crs_trim_id") > 0) {
                     fixCRSBike($motorcycle);
+                    // if has match color, we remove the colorized photos
+                    if (empty($motorcycle->get("color_code"))) {
+                        $this->fixColorCode($motorcycle_id, $motorcycle->get("color"));
+                    }
                 }
-
 
                 // Todo...
                 // Does this motorcycle have a zero group or a general group of settings? We need to be able to flag the settings group that comes from Lightspeed in some way...
@@ -731,6 +583,18 @@ class Lightspeed_M extends Master_M {
         // JLB 12-29-17
         // At the end of this, we will remove any CRS items that overlap bikes from Lightspeed
         $CI->CRSCron_M->removeExtraCRSBikes();
+    }
+
+    public function fixColorCode($motorcycle_id, $colorLabel) {
+        $CI =& get_instance();
+        $CI->load->model("motorcycle_m");
+        $CI->load->model("color_m");
+        $motorcycle_colors_codes = $CI->motorcycle_m->getMotorcycleImageColorCodes($motorcycle_id, true);
+        $color = $CI->color_m->getColorByLabel($colorLabel, true, $motorcycle_colors_codes);
+        if ($color !== FALSE) {
+            $this->db->query("Update motorcycle set color_code = ? where id = ?", array($color['code'], $motorcycle_id));
+            $CI->motorcycle_m->removeColorizedImage($motorcycle_id, array($color['code']));
+        }
     }
 
     public function scrubTrim($motorcycle_id) {
