@@ -2858,7 +2858,7 @@ class Admin_M extends Master_M {
         return $record;
     }
 
-    public function deleteMotorcycleImage($id, $motorcycle_id) {
+    public function deleteMotorcycleImage($id, $motorcycle_id, $customer_deleted = NULL) {
         // JLB 12-07-17
         // We have to see if this is an external or internal image... If it's an external image, we have to just mark it as disabled.
         // If it's an internal image, we also have to go remove the file. I can't believe they would never remove the files.
@@ -2869,7 +2869,11 @@ class Admin_M extends Master_M {
         }
 
         if ($image["external"] > 0) {
-            $this->db->query("Update motorcycleimage set disable = 1 where id = ? limit 1", array($id));
+            if (is_null($customer_deleted)) {
+                $this->db->query("Update motorcycleimage set disable = 1 where id = ? limit 1", array($id));
+            } else {
+                $this->db->query("Update motorcycleimage set disable = 1, customer_deleted = ? where id = ? limit 1", array($customer_deleted, $id));
+            }
         } else {
             $this->db->delete('motorcycleimage', array('id' => $id, 'motorcycle_id' => $motorcycle_id));
             // go purge the image...

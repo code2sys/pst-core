@@ -747,7 +747,7 @@ abstract class Motorcycleadmin extends Firstadmin
             redirect('');
         }
         if ($id != null && $motorcycle_id != null) {
-            $this->admin_m->deleteMotorcycleImage($id, $motorcycle_id);
+            $this->admin_m->deleteMotorcycleImage($id, $motorcycle_id, 1);
         }
         redirect('admin/motorcycle_images/' . $motorcycle_id);
     }
