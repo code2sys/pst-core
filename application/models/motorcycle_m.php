@@ -7,6 +7,7 @@ class Motorcycle_M extends Master_M {
 
     function __construct() {
         parent::__construct();
+        $this->_default_hang_tag_spec_labels = array('Length (in)','Seat Height (in)','Fuel Capacity (gal)','Wet Weight (lbs)','Engine Type','Displacement (ci)');
     }
 
     public function sub_assembleFilterInput(&$primary_source, &$secondary_source) {
@@ -250,7 +251,7 @@ class Motorcycle_M extends Master_M {
         return $query->result_array();
     }
 
-    public function getMotorcycleSpecs($id, $retail_price = false) {
+    public function getMotorcycleSpecs($id, $retail_price = false, $only_hang_tag = false) {
         $exclude_attributes = array(20005, 20008);
         if (FALSE !== $retail_price) {
             // OK, we need to do some excludes, e.g., MSRP
@@ -270,8 +271,11 @@ class Motorcycle_M extends Master_M {
             }
         }
 
+        if ($only_hang_tag)
+            $query = $this->db->query("Select motorcyclespec.*, motorcyclespecgroup.name as spec_group, motorcyclespecgroup.ordinal as group_ordinal from motorcyclespec join motorcyclespecgroup using (motorcyclespecgroup_id) where motorcyclespec.motorcycle_id = ? and motorcyclespecgroup.hidden = 0 and motorcyclespec.hidden = 0 and (crs_attribute_id is null OR ((crs_attribute_id < 230000) and (crs_attribute_id >= 20000) and crs_attribute_id not in (" . implode(",", $exclude_attributes) . "))) and motorcyclespec.hang_tag = 1 order by motorcyclespecgroup.ordinal, motorcyclespec.ordinal", array($id));
+        else
+            $query = $this->db->query("Select motorcyclespec.*, motorcyclespecgroup.name as spec_group, motorcyclespecgroup.ordinal as group_ordinal from motorcyclespec join motorcyclespecgroup using (motorcyclespecgroup_id) where motorcyclespec.motorcycle_id = ? and motorcyclespecgroup.hidden = 0 and motorcyclespec.hidden = 0 and (crs_attribute_id is null OR ((crs_attribute_id < 230000) and (crs_attribute_id >= 20000) and crs_attribute_id not in (" . implode(",", $exclude_attributes) . "))) order by motorcyclespecgroup.ordinal, motorcyclespec.ordinal", array($id));
 
-        $query = $this->db->query("Select motorcyclespec.*, motorcyclespecgroup.name as spec_group, motorcyclespecgroup.ordinal as group_ordinal from motorcyclespec join motorcyclespecgroup using (motorcyclespecgroup_id) where motorcyclespec.motorcycle_id = ? and motorcyclespecgroup.hidden = 0 and motorcyclespec.hidden = 0 and (crs_attribute_id is null OR ((crs_attribute_id < 230000) and (crs_attribute_id >= 20000) and crs_attribute_id not in (" . implode(",", $exclude_attributes) . "))) order by motorcyclespecgroup.ordinal, motorcyclespec.ordinal", array($id));
         return $query->result_array();
     }
 

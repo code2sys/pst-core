@@ -48,6 +48,8 @@ $cstdata = (array) json_decode($product['data']);
     <div style="float: right">
         <a href="#" class="edit-spec-button"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
         <a href="#" class="remove-spec-button"><i class="fa fa-trash-o"></i>&nbsp;Remove</a>
+        <span>&nbsp;&nbsp;Hang Tag:&nbsp;</span>
+        <input type="checkbox" class="hang_tag-checkbox" name="hang_tag" <% if (obj.hang_tag == 1) { %> checked <% } %>>
     </div>
     <div style="float: left; margin-right: 0.5em;">
         <a href="#" class="drag-drop-spec-button"><i class="fa fa-arrows-v"></i></a>
@@ -105,7 +107,8 @@ $cstdata = (array) json_decode($product['data']);
             "version_number" : "",
             "final_value" : "",
             "feature_name" : "",
-            "attribute_name" : ""
+            "attribute_name" : "",
+            "hang_tag": 0,
         }
     });
 
@@ -389,7 +392,8 @@ $cstdata = (array) json_decode($product['data']);
             "submit form" : "emptyAction",
             "click .edit-spec-button" : "showEditForm",
             "click .save-spec-button" : "saveButton",
-            "click .cancel-spec-button" : "cancelButton"
+            "click .cancel-spec-button" : "cancelButton",
+            "click .hang_tag-checkbox" : "toggleHangTagCheckbox"
         },
 
         "emptyAction" : function(e) {
@@ -479,6 +483,28 @@ $cstdata = (array) json_decode($product['data']);
                     }, this)
                 });
             }
+        },
+        "toggleHangTagCheckbox": function(e) {
+            var checked = $(e.target).is(":checked");
+            $.ajax({
+                "url" : "/admin/ajax_motorcycle_toggle_hangtag/<?php echo $id; ?>/" + this.model.get("motorcyclespec_id"),
+                "type" : "POST",
+                "dataType" : "json",
+                "data": {
+                    "enabled" : checked ? 1 : 0
+                },
+                "success" : _.bind(function(data) {
+                    if (data.success) {
+                        showGritter("Success", data.data.message);
+                        this.model.set("hang_tag", data.data.value);
+                        if (data.data.value == 1) {
+                            this.$("input[name=hang_tag]").attr("checked", "checked");
+                        } else {
+                            this.$("input[name=hang_tag]").removeAttr("checked");
+                        }
+                    }
+                }, this)
+            });
         },
         initialize: function(options) {
             this.options = options || {};

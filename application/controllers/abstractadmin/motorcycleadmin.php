@@ -579,6 +579,100 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->renderMasterPage('admin/master_v', 'admin/motorcycle/images_v', $this->_mainData);
     }
 
+    public function motorcycle_hang_tag($id = NULL) {
+        if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
+            redirect('');
+        }
+        if (is_null($id)) {
+            redirect('admin/motorcycle_edit');
+        }
+
+        $this->_mainData['id'] = $id;
+
+
+        $this->load->model("motorcycle_m");
+
+        $motorcycle = $this->motorcycle_m->getMotorcycle($id);
+
+        // calculate monthly payment
+        $payment_option = $motorcycle['payment_option'];
+        $retail_price_zero = $motorcycle["retail_price"] === "" || is_null($motorcycle["retail_price"]) || ($motorcycle["retail_price"] == "0.00") || ($motorcycle["retail_price"] == 0) || (floatVal($motorcycle["retail_price"]) < 0.01);
+        $sale_price_zero =$motorcycle["retail_price"] === "" || is_null($motorcycle["sale_price"]) || ($motorcycle["sale_price"] == "0.00") || ($motorcycle["sale_price"] == 0) || (floatVal($motorcycle["sale_price"]) < 0.01);
+        $price = $sale_price_zero ? ($retail_price_zero ? $motorcycle['retail_price'] : 0) : $motorcycle['sale_price'];
+        $moneydown = $payment_option["base_down_payment"];
+        $interest = $payment_option["data"]["interest_rate"];
+        $months = $payment_option["data"]["term"];
+        $principal = $price - $moneydown;
+        $month_interest = ($interest / (12 * 100));
+        $monthly_payment = $principal * ($month_interest / (1 - pow((1 + $month_interest), -$months) ));
+
+        $pricing_option = array(
+            "call_for_price" => $motorcycle["call_on_price"] == "1" ||  ($retail_price_zero && $sale_price_zero),
+            "show_monthly_payment" => $payment_option["active"] == 1 && $payment_option["display_base_payment"] == 1,
+            "payment_text" => $payment_option["base_payment_text"],
+            "monthly_payment" => number_format($monthly_payment, 2),
+            "interest_rate" => number_format($interest, 2),
+            "months" => $months,
+            "down_payment" => $moneydown,
+            "retail_price" => $motorcycle["retail_price"],
+            "show_sale_price" => false,
+            "show_retail_price" => false,
+            "discounted" => false,
+
+        );
+
+        if (!$sale_price_zero && $motorcycle["sale_price"] != $motorcycle["retail_price"]) {
+            $pricing_option["show_sale_price"] = true;
+            $pricing_option["sale_price"] = number_format($motorcycle["sale_price"], 2);
+            if (!$retail_price_zero && (floatVal($motorcycle["sale_price"]) < floatVal($motorcycle["retail_price"]))) {
+                $pricing_option["show_retail_price"] = true;
+                $pricing_option["retail_price"] = number_format($motorcycle["retail_price"], 2);
+                $pricing_option["discounted"] = true;
+                $pricing_option["discount"] = number_format(floatVal($motorcycle["retail_price"]) - floatVal($motorcycle["sale_price"]), 2);
+            }
+        } else {
+            $pricing_option["show_retail_price"] = true;
+            $pricing_option["retail_price"] = number_format($motorcycle["retail_price"], 2);
+        }
+
+        initializePSTAPI();
+        global $PSTAPI;
+
+        $this->_mainData['header_background_color'] = $PSTAPI->config()->getKeyValue('hang_tag_header_background_color', '#CCCCCC');
+        $this->_mainData['header_text_color'] = $PSTAPI->config()->getKeyValue('hang_tag_header_text_color', '#FFFFFF');
+        $this->_mainData['monthly_payment_color'] = $PSTAPI->config()->getKeyValue('hang_tag_monthly_payment_color', '#0000FF');
+        $this->_mainData['company_logo'] = $PSTAPI->config()->getKeyValue('hang_tag_company_logo', '/assets/images/admin_logo.png');
+
+        $this->_mainData['address'] = $this->admin_m->getAdminShippingProfile();
+        $this->_mainData['product'] = $motorcycle;
+        $this->_mainData['pricing_option'] = $pricing_option;
+        $this->_mainData['specs'] = $this->motorcycle_m->getMotorcycleSpecs($id, false, true);
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/motorcycle/hang_tag_v', $this->_mainData);
+    }
+
+    public function ajax_motorcycle_hang_tag_settings() {
+        initializePSTAPI();
+        global $PSTAPI;
+        if (isset($_FILES["logo"])) {
+            $logo_name = '/media/company_logo';
+            $file = STORE_DIRECTORY . '/html'.$logo_name;
+            @unlink($file);
+            move_uploaded_file($_FILES["logo"]["tmp_name"], $file);
+            $PSTAPI->config()->setKeyValue('hang_tag_company_logo', $logo_name);
+        }
+        if (array_key_exists("header_background_color", $_REQUEST)) {
+            $PSTAPI->config()->setKeyValue('hang_tag_header_background_color', $_REQUEST["header_background_color"]);
+        }
+        if (array_key_exists("header_text_color", $_REQUEST)) {
+            $PSTAPI->config()->setKeyValue('hang_tag_header_text_color', $_REQUEST["header_text_color"]);
+        }
+        if (array_key_exists("monthly_payment_color", $_REQUEST)) {
+            $PSTAPI->config()->setKeyValue('hang_tag_monthly_payment_color', $_REQUEST["monthly_payment_color"]);
+        }
+        print json_encode(array('success' => true));
+    }
+
     public function motorcycle_specs($id = NULL) {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {
             redirect('');
@@ -706,8 +800,34 @@ abstract class Motorcycleadmin extends Firstadmin
         $this->_printAjaxSuccess();
     }
 
-
-
+    // toggle hang tag for a spec
+    public function ajax_motorcycle_toggle_hangtag($motorcycle_id, $motorcyclespec_id) {
+        $enabled = array_key_exists("enabled", $_REQUEST) ? $_REQUEST["enabled"] : 0;
+        if ($enabled == 1) {
+            $query = $this->db->query("Select count(*) as count from motorcyclespec as spec join motorcyclespecgroup as grp using (motorcyclespecgroup_id) where spec.motorcycle_id = ? and grp.hidden = 0 and spec.hidden = 0 and (crs_attribute_id is null OR ((crs_attribute_id < 230000) and (crs_attribute_id >= 20000))) and spec.hang_tag = 1 and spec.motorcyclespec_id != ?", array($motorcycle_id, $motorcyclespec_id));
+            $results = $query->result_array();
+            if ($results[0]["count"] >= 14) {
+                $query = $this->db->query("select hang_tag from motorcyclespec where motorcyclespec_id = ?", array($motorcyclespec_id));
+                $results = $query->result_array();
+                $this->_printAjaxSuccess(array(
+                    'value' => count($results) > 0 ? $results[0]["hang_tag"] : 0,
+                    'message' => 'You can select up to 14 specifications.'
+                ));
+            } else {
+                $this->db->query("Update motorcyclespec set hang_tag = 1 where motorcyclespec_id = ?", array($motorcyclespec_id));
+                $this->_printAjaxSuccess(array(
+                    'value' => 1,
+                    'message' => 'Added to Hang Tag'
+                ));
+            }
+        } else {
+            $this->db->query("Update motorcyclespec set hang_tag = 0 where motorcyclespec_id = ?", array($motorcyclespec_id));
+            $this->_printAjaxSuccess(array(
+                'value' => 0,
+                'message' => 'Removed from Hang Tag'
+            ));
+        }
+    }
 
     public function motorcycle_video($id = NULL, $updated = null) {
         if (!$this->checkValidAccess('mInventory') && !@$_SESSION['userRecord']['admin']) {

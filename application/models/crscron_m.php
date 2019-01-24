@@ -51,6 +51,7 @@ class CRSCron_M extends Master_M
         $CI =& get_instance();
         $CI->load->model("CRS_m");
         $where = $motorcycle_id > 0 ? sprintf(" AND motorcycle.id = %d ", $motorcycle_id) : "";
+        $def_hang_tag_spec_labels = array('Length (in)','Seat Height (in)','Fuel Capacity (gal)','Wet Weight (lbs)','Engine Type','Displacement (ci)');
 
         // OK, this is straightforward, we have to get the motorcycles that have trim IDs, and we have to update the specifications...
         $query = $this->db->query("Select motorcycle.id as motorcycle_id, crs_trim_id, IfNull(max(motorcyclespec.version_number), 0) as version_number from motorcycle left join motorcyclespec on motorcycle.id = motorcyclespec.motorcycle_id where crs_trim_id > 0 $where group by motorcycle.id");
@@ -72,8 +73,8 @@ class CRSCron_M extends Master_M
             // Now, you have to update them all...
             foreach ($attributes as $a) {
                 $motorcyclespecgroup_id = $this->_getAttributeGroup($motorcycle_id, $a["attributegroup_name"], $a["attributegroup_number"]);
-
-                $this->db->query("Insert into motorcyclespec (version_number, value, feature_name, attribute_name, type, external_package_id, motorcycle_id, final_value, source, crs_attribute_id, motorcyclespecgroup_id, ordinal) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update value = If(source = 'PST', values(value), value), final_value = If(source = 'PST' AND override = 0, values(final_value), final_value), motorcyclespecgroup_id = values(motorcyclespecgroup_id), motorcyclespec_id = last_insert_id(motorcyclespec_id)", array(
+                $hang_tag = in_array($a['label'], $def_hang_tag_spec_labels) ? 1 : 0;
+                $this->db->query("Insert into motorcyclespec (version_number, value, feature_name, attribute_name, type, external_package_id, motorcycle_id, final_value, source, crs_attribute_id, motorcyclespecgroup_id, ordinal, hang_tag) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update value = If(source = 'PST', values(value), value), final_value = If(source = 'PST' AND override = 0, values(final_value), final_value), motorcyclespecgroup_id = values(motorcyclespecgroup_id), motorcyclespec_id = last_insert_id(motorcyclespec_id)", array(
                     $a["version_number"],
                     $a["text_value"],
                     $a["feature_name"],
@@ -85,7 +86,8 @@ class CRSCron_M extends Master_M
                     "PST",
                     $a["attribute_id"],
                     $motorcyclespecgroup_id,
-                    $a["attribute_id"] % 10000
+                    $a["attribute_id"] % 10000,
+                    $hang_tag
                 ));
 
                 $seen_attributes[] = $this->db->insert_id();
