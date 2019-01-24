@@ -719,7 +719,7 @@ class Motorcycle_M extends Master_M {
 
             if (!empty($colors)) {
                 foreach ( $colors as $ic ) {
-                    $this->db->query("Update motorcycleimage set disable = 0 where motorcycle_id = ? and description = 'Colorized Photo' and image_name like '%\_".$ic.".%'", array($id));
+                    $this->db->query("Update motorcycleimage set disable = 0 where customer_deleted = 0 and motorcycle_id = ? and description = 'Colorized Photo' and image_name like '%\_".$ic.".%'", array($id));
                 }
             }
 
