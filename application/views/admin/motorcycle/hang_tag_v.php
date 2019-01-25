@@ -26,7 +26,7 @@
             <div class="hidden_table" style="margin-bottom: 40px;">
                 <table width="100%" cellpadding="6">
                     <tr>
-                        <td><a href="#" onclick="window.print()">Print</a></td>
+                        <td><a href="/admin/ajax_motorcycle_hang_tag_print/<?php echo $id;?>" target="_blank">Print</a></td>
                     </tr>
                     <tr>
                         <td>

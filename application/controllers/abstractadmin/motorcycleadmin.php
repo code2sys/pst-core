@@ -594,6 +594,64 @@ abstract class Motorcycleadmin extends Firstadmin
 
         $motorcycle = $this->motorcycle_m->getMotorcycle($id);
 
+        initializePSTAPI();
+        global $PSTAPI;
+
+        $this->_mainData['header_background_color'] = $PSTAPI->config()->getKeyValue('hang_tag_header_background_color', '#CCCCCC');
+        $this->_mainData['header_text_color'] = $PSTAPI->config()->getKeyValue('hang_tag_header_text_color', '#FFFFFF');
+        $this->_mainData['monthly_payment_color'] = $PSTAPI->config()->getKeyValue('hang_tag_monthly_payment_color', '#0000FF');
+        $this->_mainData['company_logo'] = $PSTAPI->config()->getKeyValue('hang_tag_company_logo', '/assets/images/admin_logo.png');
+
+        $this->_mainData['address'] = $this->admin_m->getAdminShippingProfile();
+        $this->_mainData['product'] = $motorcycle;
+        $this->_mainData['pricing_option'] = $this->getPricingOptionForMotorcycle($motorcycle);
+        $this->_mainData['specs'] = $this->motorcycle_m->getMotorcycleSpecs($id, false, true);
+        $this->setNav('admin/nav_v', 2);
+        $this->renderMasterPage('admin/master_v', 'admin/motorcycle/hang_tag_v', $this->_mainData);
+    }
+
+    public function ajax_motorcycle_hang_tag_settings() {
+        initializePSTAPI();
+        global $PSTAPI;
+        if (isset($_FILES["logo"])) {
+            $old_logo = $PSTAPI->config()->getKeyValue('hang_tag_company_logo', NULL);
+            if (!empty($old_logo)) {
+                @unlink(STORE_DIRECTORY . '/html'.$old_logo);
+            }
+            $logo_name = '/media/'.time().'_'.gronifyForFilename($_FILES['logo']['name']);
+            $file = STORE_DIRECTORY . '/html'.$logo_name;
+            move_uploaded_file($_FILES["logo"]["tmp_name"], $file);
+            $PSTAPI->config()->setKeyValue('hang_tag_company_logo', $logo_name);
+        }
+        if (array_key_exists("header_background_color", $_REQUEST)) {
+            $PSTAPI->config()->setKeyValue('hang_tag_header_background_color', $_REQUEST["header_background_color"]);
+        }
+        if (array_key_exists("header_text_color", $_REQUEST)) {
+            $PSTAPI->config()->setKeyValue('hang_tag_header_text_color', $_REQUEST["header_text_color"]);
+        }
+        if (array_key_exists("monthly_payment_color", $_REQUEST)) {
+            $PSTAPI->config()->setKeyValue('hang_tag_monthly_payment_color', $_REQUEST["monthly_payment_color"]);
+        }
+        print json_encode(array('success' => true));
+    }
+
+    public function ajax_motorcycle_hang_tag_print($id) {
+        $this->load->model("motorcycle_m");
+        $motorcycle = $this->motorcycle_m->getMotorcycle($id);
+
+        $data = array(
+            'motorcycle' => $motorcycle,
+            'pricing_option' => $this->getPricingOptionForMotorcycle($motorcycle),
+            'address' => $this->admin_m->getAdminShippingProfile(),
+            'specs' => $this->motorcycle_m->getMotorcycleSpecs($id, false, true)
+        );
+
+        $this->load->library('MotorcycleHangTagPDF', $data); 
+        $this->motorcyclehangtagpdf->generate(true);
+        // print json_encode(array('success' => true));
+    }
+
+    public function getPricingOptionForMotorcycle($motorcycle) {
         // calculate monthly payment
         $payment_option = $motorcycle['payment_option'];
         $retail_price_zero = $motorcycle["retail_price"] === "" || is_null($motorcycle["retail_price"]) || ($motorcycle["retail_price"] == "0.00") || ($motorcycle["retail_price"] == 0) || (floatVal($motorcycle["retail_price"]) < 0.01);
@@ -635,45 +693,7 @@ abstract class Motorcycleadmin extends Firstadmin
             $pricing_option["retail_price"] = number_format($motorcycle["retail_price"], 2);
         }
 
-        initializePSTAPI();
-        global $PSTAPI;
-
-        $this->_mainData['header_background_color'] = $PSTAPI->config()->getKeyValue('hang_tag_header_background_color', '#CCCCCC');
-        $this->_mainData['header_text_color'] = $PSTAPI->config()->getKeyValue('hang_tag_header_text_color', '#FFFFFF');
-        $this->_mainData['monthly_payment_color'] = $PSTAPI->config()->getKeyValue('hang_tag_monthly_payment_color', '#0000FF');
-        $this->_mainData['company_logo'] = $PSTAPI->config()->getKeyValue('hang_tag_company_logo', '/assets/images/admin_logo.png');
-
-        $this->_mainData['address'] = $this->admin_m->getAdminShippingProfile();
-        $this->_mainData['product'] = $motorcycle;
-        $this->_mainData['pricing_option'] = $pricing_option;
-        $this->_mainData['specs'] = $this->motorcycle_m->getMotorcycleSpecs($id, false, true);
-        $this->setNav('admin/nav_v', 2);
-        $this->renderMasterPage('admin/master_v', 'admin/motorcycle/hang_tag_v', $this->_mainData);
-    }
-
-    public function ajax_motorcycle_hang_tag_settings() {
-        initializePSTAPI();
-        global $PSTAPI;
-        if (isset($_FILES["logo"])) {
-            $old_logo = $PSTAPI->config()->getKeyValue('hang_tag_company_logo', NULL);
-            if (!empty($old_logo)) {
-                @unlink(STORE_DIRECTORY . '/html'.$old_logo);
-            }
-            $logo_name = '/media/'.time().'_'.gronifyForFilename($_FILES['logo']['name']);
-            $file = STORE_DIRECTORY . '/html'.$logo_name;
-            move_uploaded_file($_FILES["logo"]["tmp_name"], $file);
-            $PSTAPI->config()->setKeyValue('hang_tag_company_logo', $logo_name);
-        }
-        if (array_key_exists("header_background_color", $_REQUEST)) {
-            $PSTAPI->config()->setKeyValue('hang_tag_header_background_color', $_REQUEST["header_background_color"]);
-        }
-        if (array_key_exists("header_text_color", $_REQUEST)) {
-            $PSTAPI->config()->setKeyValue('hang_tag_header_text_color', $_REQUEST["header_text_color"]);
-        }
-        if (array_key_exists("monthly_payment_color", $_REQUEST)) {
-            $PSTAPI->config()->setKeyValue('hang_tag_monthly_payment_color', $_REQUEST["monthly_payment_color"]);
-        }
-        print json_encode(array('success' => true));
+        return $pricing_option;
     }
 
     public function motorcycle_specs($id = NULL) {
