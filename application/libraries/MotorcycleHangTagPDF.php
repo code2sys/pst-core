@@ -26,11 +26,14 @@ class MotorcycleHangTagPDF extends TCPDF {
 	// Page footer
     public function Footer() {
         // Position at 15 mm from bottom
-        $this->SetY(-15);
+        $this->SetXY(5,-15);
         // Set font
         $this->SetFont('helvetica', 'I', 8);
-        // Page number
-        $this->Cell(0, 10, '*Price does not include Applicable Sales Tax, .U.V.C., Title, Registration or Dealer Documentation Fee.', 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		// Page number
+		
+		$disclaimer = '*Price does not include Applicable Sales Tax, .U.V.C., Title, Registration or Dealer Documentation Fee.';
+		$this->MultiCell($this->getPageWidth()/2 - 10, 10, $disclaimer, 0, 'L', false, 1);
+        // $this->MultiCell($this->getPageWidth()/2, 10, '*Price does not include Applicable Sales Tax, .U.V.C., Title, Registration or Dealer Documentation Fee.', 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
 
 	public function generate($download = false) {
@@ -109,8 +112,8 @@ class MotorcycleHangTagPDF extends TCPDF {
 		$header_height = 5 + $logo_height + $company_text_height + $phone_text_height + 3;
 
 		$pdf->Rect(0, 0, $page_width, $header_height, 'F', array(), $header_bg_color);
-		$pdf->Image($company_logo, $x_offset, 5, $logo_width, $logo_height, NULL, NULL, '', true, 150, '', false, false, 0, false, false, false);
-		$pdf->Image($company_logo, $area_width + $x_offset, 5, $logo_width, $logo_height, NULL, NULL, '', true, 150, '', false, false, 0, false, false, false);
+		$pdf->Image($company_logo, $x_offset, 5, $logo_width, $logo_height, '', '', '', true, 150, '', false);
+		$pdf->Image($company_logo, $area_width + $x_offset, 5, $logo_width, $logo_height, '', '', '', true, 150, '', false);
 
 		
 		$pdf->SetXY($x_offset, 5 + $logo_height, false);
@@ -177,10 +180,10 @@ class MotorcycleHangTagPDF extends TCPDF {
 
 		$text = $this->data['motorcycle']['title'];
 		$text_height = $pdf->GetStringHeight($area_width, $text);
-		$top = ($area_height - $height - $text_height) / 2;
+		$top = ($area_height - $height - $text_height) / 2 - 10;
 		$pdf->Ln($top);
 		$pdf->Image($company_logo, $page_width / 2 + ($page_width / 2 - $width) / 2, $pdf->GetY(), $width, $height, NULL, NULL, '', true, 150, '', false, false, 0, false, false, false);
-		$pdf->Ln($height);
+		$pdf->Ln($height + 10);
 		$pdf->SetX($page_width / 2 + 5);
 		$pdf->MultiCell($area_width, 0, $text, 0, 'C', false, 0);
 	}
