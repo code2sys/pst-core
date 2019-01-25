@@ -655,9 +655,12 @@ abstract class Motorcycleadmin extends Firstadmin
         initializePSTAPI();
         global $PSTAPI;
         if (isset($_FILES["logo"])) {
-            $logo_name = '/media/company_logo';
+            $old_logo = $PSTAPI->config()->getKeyValue('hang_tag_company_logo', NULL);
+            if (!empty($old_logo)) {
+                @unlink(STORE_DIRECTORY . '/html'.$old_logo);
+            }
+            $logo_name = '/media/'.time().'_'.gronifyForFilename($_FILES['logo']['name']);
             $file = STORE_DIRECTORY . '/html'.$logo_name;
-            @unlink($file);
             move_uploaded_file($_FILES["logo"]["tmp_name"], $file);
             $PSTAPI->config()->setKeyValue('hang_tag_company_logo', $logo_name);
         }

@@ -26,7 +26,7 @@
             <div class="hidden_table" style="margin-bottom: 40px;">
                 <table width="100%" cellpadding="6">
                     <tr>
-                        <td><a href="#" onclick="printPage()">Print</a></td>
+                        <td><a href="#" onclick="window.print()">Print</a></td>
                     </tr>
                     <tr>
                         <td>
@@ -38,13 +38,13 @@
                             <input type="color" name="header_text_color" value="<?php echo $header_text_color;?>">
                         </td>
                         <td>
-                            <label for="monthly_payment_color">Monthly Background Color:&nbsp;</label>
+                            <label for="monthly_payment_color">Monthly Payment Background and Price Color:&nbsp;</label>
                             <input type="color" name="monthly_payment_color" value="<?php echo $monthly_payment_color;?>">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <img class="company_logo_preview img-responsive center-block" style="max-width:300px" src="<?php echo $company_logo ?>"/>
+                            <img class="company_logo_preview img-responsive center-block" src="<?php echo $company_logo ?>"/>
                         </td>
                     </tr>
                     <tr>
@@ -57,10 +57,10 @@
                     <table class="printable-area" width="100%" cellpadding="6">
                         <tr>
                             <td>
-                                <table class="" width="100%" cellpadding="6">
+                                <table class="" width="90%" style="margin: auto;">
                                     <tr>
                                         <td>
-                                            <img class="company_logo_preview img-responsive center-block" style="max-width:300px" src="<?php echo $company_logo ?>"/>
+                                            <img class="company_logo_preview small img-responsive center-block" src="<?php echo $company_logo ?>"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -76,10 +76,10 @@
                                 </table>
                             </td>
                             <td>
-                                <table class="" width="100%" cellpadding="6">
+                                <table class="" width="90%" style="margin: auto;">
                                     <tr>
                                         <td>
-                                            <img class="company_logo_preview img-responsive center-block" style="max-width:300px" src="<?php echo $company_logo ?>"/>
+                                            <img class="company_logo_preview small img-responsive center-block" src="<?php echo $company_logo ?>"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -99,10 +99,10 @@
                 </div>
                 <div class="printable-area" style="display:flex;">
                     <div style="width: 50%;">
-                        <div class="hidden_table">
-                            <table width="100%" cellpadding="6">
+                        <div class="hidden_table" style="width:90%; margin:auto;">
+                            <table width="100%">
                                 <tr>
-                                    <td><div class="motor-name"><?php echo $product["title"];?></div></td>
+                                    <td style="padding-top:10px"><div class="motor-name"><?php echo $product["title"];?></div></td>
                                 </tr>
                                 <tr>
                                     <td><span class="sku">SKU: <?php echo $product['sku'];?></span></td>
@@ -114,11 +114,11 @@
                                         <?php else: ?>
                                             <div style="max-width: 320px;display: flex;justify-content: space-between;flex-wrap: wrap;font-size:15px;">
                                                 <?php if ($pricing_option['show_retail_price']) { ?>
-                                                <div><b>Retail Price:</b>&nbsp;<span style="<?php if ($pricing_option['show_sale_price']) {echo 'text-decoration: line-through;';} ?>"><?php echo $pricing_option['retail_price']?></span></div>
+                                                <div class="<?php if (!$pricing_option['show_sale_price']) {echo 'price-text';} ?>"><b>behind Retail Price:</b>&nbsp;<span style="<?php if ($pricing_option['show_sale_price']) {echo 'text-decoration: line-through;';} ?>"><?php echo $pricing_option['retail_price']?></span></div>
                                                 <?php } ?>
                                                 <?php if ($pricing_option['show_sale_price']) { ?>
-                                                <div style="display: flex;flex-direction: column;text-align: right;<?php if ($pricing_option['discounted']) { echo 'color:#f00;';} ?>">
-                                                    <div><b>Our Price:</b>&nbsp;<span><?php echo $pricing_option['sale_price']?></span></div>
+                                                <div class="price-text" style="display: flex;flex-direction: column;text-align: right;">
+                                                    <div><b>behind Our Price:</b>&nbsp;<span><?php echo $pricing_option['sale_price']?></span></div>
                                                     <?php if($pricing_option['discounted']) { ?>
                                                     <div style="font-size: 10px;padding: 4px 0px;">Savings: <?php echo $pricing_option['discount'];?></div>
                                                     <?php } ?>
@@ -126,7 +126,7 @@
                                                 <?php } ?>
                                             </div>
                                             <?php if ($pricing_option['show_monthly_payment']) {?>
-                                            <div style="display:inline-block">
+                                            <div style="display:inline-block;margin-top:20px;">
                                                 <div class="vehicle-monthly-payment">
                                                     <svg width="493px" height="52px" viewBox="0 0 493 52" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                         <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -134,7 +134,7 @@
                                                             <polygon id="shape2" fill="#D8D8D8" fill-rule="nonzero" points="0 9.23705556e-14 15 0 31 26 15 52 0 52 17 26"></polygon>
                                                         </g>
                                                     </svg>
-                                                    <div class="h4"><?php echo $pricing_option['payment_text'].':&nbsp;'.$pricing_option['monthly_payment'];?>/mo<sup>*</sup></div>
+                                                    <div class="h4" style="color:white"><?php echo $pricing_option['payment_text'].':&nbsp;'.$pricing_option['monthly_payment'];?>/mo<sup>*</sup></div>
                                                 </div>
                                                 <div class="vehicle-monthly-payment-desc">
                                                     <div><?php echo 'Plus Tax. '.$pricing_option['months'].' Months, '.$pricing_option['interest_rate'].'% APR. $'.$pricing_option['down_payment'].' Down Payment.';?></div>
@@ -192,11 +192,14 @@
                     </div>
                     <div style="width: 50%;display:flex;text-align:center;">
                         <div style="display:flex; margin:auto;flex-direction: column;">
-                            <img class="company_logo_preview img-responsive center-block" style="max-width:300px;margin:auto" src="<?php echo $company_logo ?>"/>
-                            <div class="motor-name"><?php echo $product["title"];?></div>
+                            <img class="company_logo_preview img-responsive center-block" style="margin:auto" src="<?php echo $company_logo ?>"/>
+                            <div class="motor-name" style="margin-top: 20px;"><?php echo $product["title"];?></div>
                         </div>
                         
                     </div>
+                </div>
+                <div class="printing-footer">
+                    <span>*Price does not include Applicable Sales Tax, .U.V.C., Title, Registration or Dealer Documentation Fee</span>
                 </div>
             </div>
             <div class="loading">
@@ -240,35 +243,53 @@
             
             // fill fr with image data    
             fr.readAsDataURL(e.target.files[0]);
+            if (e.target.files.length > 0) {
+                saveHangTagChanges('company_logo', {
+                    'logo': e.target.files[0]
+                });
+            }
         });
         $('input[name="header_background_color"]').change(function(e) {
             $('.printing-header').css('background', $(this).val());
+            saveHangTagChanges('header_background_color', {
+                'header_background_color': $(this).val()
+            });
         })
         $('input[name="header_text_color"]').change(function(e) {
             $('.header-text').css('color', $(this).val());
+            saveHangTagChanges('header_text_color', {
+                'header_text_color': $(this).val()
+            });
         })
         $('input[name="monthly_payment_color"]').change(function(e) {
             $('.vehicle-monthly-payment svg polygon').css('fill', $(this).val());
+            $('.price-text').css('color', $(this).val());
+            saveHangTagChanges('monthly_payment_color', {
+                'monthly_payment_color': $(this).val()
+            });
         })
-
 
         $('.printing-header').css('background', $('input[name="header_background_color"]').val());
         $('.header-text').css('color', $('input[name="header_text_color"]').val());
+        $('.price-text').css('color', $('input[name="monthly_payment_color"]').val());
         $('.vehicle-monthly-payment svg polygon').css('fill', $('input[name="monthly_payment_color"]').val());
         
     });
-    function printPage() {
+
+    function saveHangTagChanges(id, data) {
+        if (!window.hangTagCalls) {
+            window.hangTagCalls = {};
+        }
+
+        if (window.hangTagCalls[id]) {
+            window.hangTagCalls[id].abort();
+        }
 
         var formData = new FormData();
-        var fileInput = $('input[type="file"]')[0];
-        if (fileInput.files.length > 0) {
-            formData.append('logo', fileInput.files[0]);
-        }
-        formData.append('header_background_color', $('input[name="header_background_color"]').val());
-        formData.append('header_text_color', $('input[name="header_text_color"]').val());
-        formData.append('monthly_payment_color', $('input[name="monthly_payment_color"]').val());
-        $('.loading').show();
-        $.ajax({
+        $.each(data, function(k,v) {
+            formData.append(k, v);
+        });
+        window.hangTagCalls[id] = $.ajax({
             url: '/admin/ajax_motorcycle_hang_tag_settings',
             type: 'POST',
             processData: false,
@@ -276,17 +297,16 @@
             dataType: 'json',
             data: formData,
             success: function(response) {
-                $('.loading').hide();
-                window.print();
             },
             error: function(response) {
-                $('.loading').hide();
-                alert('Failed to save the settings');
             }
         });
     }
 </script>
 <style>
+.printing-footer {
+    display:none;
+}
 .loading {
     position: absolute;
     top: 0;
@@ -314,7 +334,6 @@
     align-items:center;
 }
 .printing .printable-area {
-    max-width: 800px;
     width: 100%;
     margin: auto;
 }
@@ -332,6 +351,12 @@
 }
 .sku {
     font-weight: bold;
+}
+.company_logo_preview {
+    max-width: 400px;
+}
+.company_logo_preview.small {
+    max-height: 150px;
 }
 .vehicle-monthly-payment {
     align-items: center;
@@ -384,6 +409,8 @@ table.motor-details tr:nth-child(odd) {background: #EEE}
 @media print { 
     body {
         -webkit-print-color-adjust:exact;
+        color-adjust:exact;
+        printer-colors: exact;
     }
     /* All your print styles go here */
     .head_wrap {
@@ -411,6 +438,14 @@ table.motor-details tr:nth-child(odd) {background: #EEE}
     }
     .footer_wrap {
         display:none;
+    }
+    .printable-area {
+        margin-bottom:50px;
+    }
+    .printing-footer {
+        display:block;
+        position:fixed;
+        bottom:0;
     }
 }
 </style>
