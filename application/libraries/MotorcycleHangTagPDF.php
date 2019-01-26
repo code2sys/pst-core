@@ -112,8 +112,8 @@ class MotorcycleHangTagPDF extends TCPDF {
 		$header_height = 5 + $logo_height + $company_text_height + $phone_text_height + 3;
 
 		$pdf->Rect(0, 0, $page_width, $header_height, 'F', array(), $header_bg_color);
-		$pdf->Image($company_logo, $x_offset, 5, $logo_width, $logo_height, '', '', '', true, 150, '', false);
-		$pdf->Image($company_logo, $area_width + $x_offset, 5, $logo_width, $logo_height, '', '', '', true, 150, '', false);
+		$pdf->Image($company_logo, $x_offset, 5, $logo_width, $logo_height, 'PNG', '', '', true, 300, '', false);
+		$pdf->Image($company_logo, $area_width + $x_offset, 5, $logo_width, $logo_height, '', '', '', true, 300, '', false);
 
 		
 		$pdf->SetXY($x_offset, 5 + $logo_height, false);
@@ -182,7 +182,7 @@ class MotorcycleHangTagPDF extends TCPDF {
 		$text_height = $pdf->GetStringHeight($area_width, $text);
 		$top = ($area_height - $height - $text_height) / 2 - 10;
 		$pdf->Ln($top);
-		$pdf->Image($company_logo, $page_width / 2 + ($page_width / 2 - $width) / 2, $pdf->GetY(), $width, $height, NULL, NULL, '', true, 150, '', false, false, 0, false, false, false);
+		$pdf->Image($company_logo, $page_width / 2 + ($page_width / 2 - $width) / 2, $pdf->GetY(), $width, $height, NULL, NULL, '', true, 300, '', false, false, 0, false, false, false);
 		$pdf->Ln($height + 10);
 		$pdf->SetX($page_width / 2 + 5);
 		$pdf->MultiCell($area_width, 0, $text, 0, 'C', false, 0);
