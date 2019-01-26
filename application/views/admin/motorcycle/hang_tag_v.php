@@ -114,11 +114,11 @@
                                         <?php else: ?>
                                             <div style="max-width: 320px;display: flex;justify-content: space-between;flex-wrap: wrap;font-size:15px;">
                                                 <?php if ($pricing_option['show_retail_price']) { ?>
-                                                <div class="<?php if (!$pricing_option['show_sale_price']) {echo 'price-text';} ?>"><b>behind Retail Price:</b>&nbsp;<span style="<?php if ($pricing_option['show_sale_price']) {echo 'text-decoration: line-through;';} ?>"><?php echo $pricing_option['retail_price']?></span></div>
+                                                <div class="<?php if (!$pricing_option['show_sale_price']) {echo 'price-text';} ?>"><b>Retail Price:</b>&nbsp;<span style="font-weight:bold;<?php if ($pricing_option['show_sale_price']) {echo 'text-decoration: line-through;';} ?>"><?php echo $pricing_option['retail_price']?></span></div>
                                                 <?php } ?>
                                                 <?php if ($pricing_option['show_sale_price']) { ?>
                                                 <div class="price-text" style="display: flex;flex-direction: column;text-align: right;">
-                                                    <div><b>behind Our Price:</b>&nbsp;<span><?php echo $pricing_option['sale_price']?></span></div>
+                                                    <div><b>Our Price:</b>&nbsp;<?php echo $pricing_option['sale_price']?></div>
                                                     <?php if($pricing_option['discounted']) { ?>
                                                     <div style="font-size: 10px;padding: 4px 0px;">Savings: <?php echo $pricing_option['discount'];?></div>
                                                     <?php } ?>

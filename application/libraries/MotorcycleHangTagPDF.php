@@ -15,8 +15,9 @@ class MotorcycleHangTagPDF extends TCPDF {
 			'font_sz_moto_name' => 20,
 			'font_sz_moto_sku' => 14,
 			'font_sz_moto_price' => 16,
+			'font_sz_monthly_desc' => 9,
 			'font_sz_discount' => 12,
-			'font_sz_details' => 12
+			'font_sz_details' => 12,
 		);
 		
 		initializePSTAPI();
@@ -26,7 +27,7 @@ class MotorcycleHangTagPDF extends TCPDF {
 	// Page footer
     public function Footer() {
         // Position at 15 mm from bottom
-        $this->SetXY(5,-15);
+        $this->SetY(-15);
         // Set font
         $this->SetFont('helvetica', 'I', 8);
 		// Page number
@@ -70,7 +71,7 @@ class MotorcycleHangTagPDF extends TCPDF {
 		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 		// set margins
-		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+		$pdf->SetMargins(5, PDF_MARGIN_TOP, 5);
 		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -90,7 +91,8 @@ class MotorcycleHangTagPDF extends TCPDF {
 		$pdf = $this;
 		global $PSTAPI;
 
-		$x_offset = 5;
+		$x_offset = $pdf->getMargins()['left'];
+		$y_offset = $x_offset;
 		$page_width = $pdf->getPageWidth();
 		$area_width = $page_width / 2;
 
@@ -109,18 +111,17 @@ class MotorcycleHangTagPDF extends TCPDF {
 
 		$company_text_height = $pdf->getStringHeight($area_width, $company);
 		$phone_text_height = $pdf->getStringHeight($area_width, $phone);
-		$header_height = 5 + $logo_height + $company_text_height + $phone_text_height + 3;
+		$header_height = $y_offset + $logo_height + $company_text_height + $phone_text_height + 3;
 
 		$pdf->Rect(0, 0, $page_width, $header_height, 'F', array(), $header_bg_color);
-		$pdf->Image($company_logo, $x_offset, 5, $logo_width, $logo_height, 'PNG', '', '', true, 300, '', false);
-		$pdf->Image($company_logo, $area_width + $x_offset, 5, $logo_width, $logo_height, '', '', '', true, 300, '', false);
+		$pdf->Image($company_logo, $x_offset, $y_offset, $logo_width, $logo_height, 'PNG', '', '', true, 300, '', false);
+		$pdf->Image($company_logo, $area_width + $x_offset, $y_offset, $logo_width, $logo_height, '', '', '', true, 300, '', false);
 
 		
-		$pdf->SetXY($x_offset, 5 + $logo_height, false);
+		$pdf->SetY($y_offset + $logo_height, false);
 
 		$pdf->MultiCell($area_width, 0, $company, 0, 'L', false, 0);
 		$pdf->MultiCell($area_width, 0, $company, 0, 'L', false, 1);
-		$pdf->SetX($x_offset, false);
 		$pdf->Cell($area_width, 0, $phone);
 		$pdf->Cell($area_width, 0, $phone);
 
@@ -184,7 +185,7 @@ class MotorcycleHangTagPDF extends TCPDF {
 		$pdf->Ln($top);
 		$pdf->Image($company_logo, $page_width / 2 + ($page_width / 2 - $width) / 2, $pdf->GetY(), $width, $height, NULL, NULL, '', true, 300, '', false, false, 0, false, false, false);
 		$pdf->Ln($height + 10);
-		$pdf->SetX($page_width / 2 + 5);
+		$pdf->SetX($page_width / 2 + $pdf->getMargins()['left']);
 		$pdf->MultiCell($area_width, 0, $text, 0, 'C', false, 0);
 	}
 
@@ -195,11 +196,9 @@ class MotorcycleHangTagPDF extends TCPDF {
 		$pdf->setTextColorArray(array(0,0,0));
 		$pdf->setFont('helvetica', 'B');
 		$pdf->setFontSize($this->options['font_sz_moto_name']);
-		$pdf->setX(5, false);
 		$pdf->MultiCell($area_width, 0, $this->data['motorcycle']['title'], 0, 'L', false, 1);
 
 		$pdf->setFontSize($this->options['font_sz_moto_sku']);
-		$pdf->setX(5, false);
 		$pdf->Cell($width, 0, 'SKU: '.$this->data['motorcycle']['sku'], 0, 1);
 		$pdf->setFont('helvetica', '');
 	}
@@ -215,7 +214,6 @@ class MotorcycleHangTagPDF extends TCPDF {
 		if ($pricing_option['call_for_price']) return;
 
 		$sale_price_align = 'R';
-		$pdf->setX(5, false);
 		$pdf->setFontSize($this->options['font_sz_moto_price']);
 		$pdf->setTextColorArray($pricing_option['show_sale_price'] ? $inactive_color : $active_color);
 		if ($pricing_option['show_retail_price']) {
@@ -225,7 +223,6 @@ class MotorcycleHangTagPDF extends TCPDF {
 
 			if ($pdf->getStringWidth('Retail Price: $'.$pricing_option['retail_price']) > $area_width / 2) {
 				$pdf->Ln();
-				$pdf->setX(5, false);
 				$sale_price_align = '';
 			}
 		}
@@ -237,7 +234,6 @@ class MotorcycleHangTagPDF extends TCPDF {
 
 			if ($pricing_option['discounted']) {
 				$pdf->Ln();
-				$pdf->setX(5, false);
 				$pdf->setFontSize($this->options['font_sz_discount']);
 				$pdf->Cell($area_width, 0, 'Savings: $'.$pricing_option['discount'], 0, 0, $sale_price_align);
 			}
@@ -263,7 +259,7 @@ class MotorcycleHangTagPDF extends TCPDF {
 		$text_width = $pdf->getStringWidth($text) + 4;
 		$text_height = $pdf->getStringHeight($area_width, $text);
 		$y = $pdf->GetY();
-		$x = 5;
+		$x = $pdf->getMargins()['left'];
 		$pdf->SetFillColorArray($bg_color);
 		$pdf->polygon(array(
 			$x, $y,
@@ -282,9 +278,13 @@ class MotorcycleHangTagPDF extends TCPDF {
 			$x + 4, $y + 12,
 			$x + 4 + 3, $y + 6
 		), 'F');
-		// $pdf->Cell($text_width, 0, $text, 0, 1, 'C');
-		$pdf->WriteHTMLCell($text_width, 15, $x + 4 + 3, $y + 2, $text);
-		// $pdf->Cell($text_width, 0, $text, 0, 1, 'C', false, '', 0, true, 'C', 'C');
+		$pdf->WriteHTMLCell($text_width, 12, $x + 4 + 3, $y + 2, $text, 0, 1);
+
+		$text = 'Plus Tax. '.$pricing_option['months'].' Months, '.$pricing_option['interest_rate'].'% APR. $'.$pricing_option['down_payment'].' Down Payment.';
+		$pdf->setTextColorArray(array(0,0,0));
+		$pdf->setFontSize($this->options['font_sz_monthly_desc']);
+		$pdf->MultiCell($area_width, 0, $text, 0, 'L', false, 0);
+		$pdf->Ln();
 	}
 
 	protected function _drawTable($title, $rows, $col_weights) {
@@ -295,7 +295,6 @@ class MotorcycleHangTagPDF extends TCPDF {
 		$pdf->setTextColorArray(array(0,0,0));
 		$pdf->SetFont('helvetica', 'B', $this->options['font_sz_details']);
 		$pdf->Ln();
-		$pdf->SetX(5, false);
 		$pdf->Cell($area_width, 0, $title, 0, 1);
 		$pdf->SetFont('helvetica', '');
 		
@@ -306,7 +305,6 @@ class MotorcycleHangTagPDF extends TCPDF {
 
 	protected function _drawTableRow($row, $col_weights, $row_width, $fill) {
 		$pdf = $this;
-		$pdf->SetX(5, false);
 		$row_height = $this->_getRowHeight($row, $col_weights, $row_width);
 		for ($i = 0; $i < count($col_weights); $i ++) {
 			$width = round($row_width * $col_weights[$i]);

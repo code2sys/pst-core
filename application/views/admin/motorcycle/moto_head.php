@@ -59,8 +59,8 @@
         <li><a href="<?php echo base_url('admin/motorcycle_specs/' . $id); ?>" <?php if ($active == "specs"): ?>class="active"<?php endif; ?>><i class="fa fa-check-square-o"></i>&nbsp;Specifications*</a></li>
         <li><a href="<?php echo base_url('admin/motorcycle_images/' . $id); ?>" <?php if ($active == "images"): ?>class="active"<?php endif; ?>><i class="fa fa-image"></i>&nbsp;Images*</a></li>
         <li><a href="<?php echo base_url('admin/motorcycle_video/' . $id); ?>" <?php if ($active == "video"): ?>class="active"<?php endif; ?>><i class="fa fa-image"></i>&nbsp;Videos</a></li>
-        <li><a href="<?php echo base_url('admin/motorcycle_payment_option/' . $id); ?>" <?php if ($active == "payment_option"): ?>class="active"<?php endif; ?>><i class="fa fa-image"></i>&nbsp;Payment Option</a></li>
-        <li><a href="<?php echo base_url('admin/motorcycle_hang_tag/' . $id); ?>" <?php if ($active == "hang_tag"): ?>class="active"<?php endif; ?>><i class="fa fa-image"></i>&nbsp;Hang Tag</a></li>
+        <li><a href="<?php echo base_url('admin/motorcycle_payment_option/' . $id); ?>" <?php if ($active == "payment_option"): ?>class="active"<?php endif; ?>><i class="fa fa-calculator"></i>&nbsp;Payment Option</a></li>
+        <li><a href="<?php echo base_url('admin/motorcycle_hang_tag/' . $id); ?>" <?php if ($active == "hang_tag"): ?>class="active"<?php endif; ?>><i class="fa fa-tag"></i>&nbsp;Hang Tag</a></li>
         <div class="clear"></div>
     </ul>
 </div>
