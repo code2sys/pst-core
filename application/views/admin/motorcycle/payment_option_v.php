@@ -14,7 +14,7 @@
                 "assets" => $assets,
                 "id" => @$id,
                 "active" => "payment_option",
-                "descriptor" => "Description",
+                "descriptor" => "Payment Option",
                 "source" => @$product["source"],
                 "stock_status" => @$product["stock_status"]
             ), true);

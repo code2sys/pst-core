@@ -20,7 +20,8 @@
         "dts/ebay-sdk-php": "@stable",
     	"pst/objectlib" : "dev-master",
         "google/recaptcha": "~1.1",
-        "stripe/stripe-php" : "~6.11"
+        "stripe/stripe-php" : "~6.11",
+        "tecnickcom/tcpdf": "^6.2"
     },
     "config" : {
         "secure-http" : false
