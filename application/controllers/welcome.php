@@ -1101,6 +1101,7 @@ class Welcome extends Master_Controller {
                 $result["error_message"] = "Please provide a valid email address so we can contact you.";
             } else {
 
+                $this->load->model("admin_m");
                 $this->load->model('motorcycle_m');
                 $this->load->model('trafficlogpro_m');
 
@@ -1162,6 +1163,34 @@ class Welcome extends Master_Controller {
                     }
                 }
 
+                // Create new customer and assign 'in round robin' employee to the customer
+                $customer = $this->admin_m->createCustomerIfNotExist(array(
+                    "email" => $post["email"],
+                    "first_name" => $post["firstName"],
+                    "last_name" => $post["lastName"],
+                    "phone" => $post["phone"],
+                ));
+                if ($customer !== FALSE) {
+                    // create 'New Lead' event for the customer
+                    $now = date('Y-m-d H:i:s');
+                    $notes = str_replace("<br/>","\n", $message);
+                    $reminder = array(
+                        'notes' => $notes,
+                        'subject' => 'New Lead',
+                        'user_id' => $customer['id'],
+                        'start_datetime' => date('Y-m-d H:i:s'),
+                        'end_datetime' => date('Y-m-d H:i:s'),
+                        'data' => json_encode(array(
+                            'recur' => false,
+                            'recur_per' => false,
+                            'recur_every' => ''
+                        )),
+                        'created_on' => $now,
+                        'id' => ''
+                    );
+                    $this->admin_m->saveCustomerReminder($reminder);
+                }
+
                 if ($actual_value) {
 
                     $this->load->model("mail_gen_m");
@@ -1175,6 +1204,27 @@ class Welcome extends Master_Controller {
                         "subject" => "New Unit Inquiry",
                         "message" => $message
                     ));
+
+                    // If there is an employee assigned to this customer,
+                    // we need to send same email to him
+                    if ($customer !== FALSE && !is_null($customer['created_by'])) {
+
+                        // Get the employee assigned to this customer
+                        $employee = $this->admin_m->getCustomerDetail($customer['created_by'], true);
+
+                        // Send the email to him
+                        if ($employee !== FALSE && !empty($employee['username'])) {
+                            $this->mail_gen_m->queueEmail(array(
+                                "toEmailAddress" => $employee['username'],
+                                "replyToEmailAddress" => $post['email'],
+                                "replyToName" => $post['firstName'] . " " . $post['lastName'],
+                                "fromEmailAddress" => "noreply@powersporttechnologies.com",
+                                "fromName" => "Major Unit Inquiry",
+                                "subject" => "New Unit Inquiry",
+                                "message" => $message
+                            ));
+                        }
+                    }
 
                     // JLB 04-19-18
                     // Is the configuration in there for echoing leads to CDK?

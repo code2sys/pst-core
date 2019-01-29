@@ -2243,7 +2243,8 @@ class Admin_M extends Master_M {
                 'contact.country AS country, ' .
                 'contact.email AS email, ' .
                 'contact.phone AS phone, ' .
-                'contact.company AS company, user.id, user.status, user.admin, user.cc_permission, user.username, user.notes, user.user_type'
+                'contact.company AS company, user.id, user.status, user.admin, user.cc_permission, user.username, user.notes, user.user_type, '.
+                'user.created_by, user.in_round_robin, user.ran_round_robin_at, user.sales_person'
         );
         //$where = array("user.first_name != ''" => null);
         $this->db->join('contact', 'contact.id = user.billing_id');
@@ -2345,6 +2346,9 @@ class Admin_M extends Master_M {
             'user_type' => 'employee',
             'cc_permission' => $data['cc_permission'] == 1 ? 1 : 0,
             'admin' => $data['admin'] == 1 ? 1 : 0,
+            'sales_person' => $data['sales_person'] == 1 ? 1 : 0,
+            'in_round_robin' => $data['in_round_robin'] == 1 ? 1 : 0,
+            'ran_round_robin_at' => isset($data['ran_round_robin_at']) ? $data['ran_round_robin_at'] : time(),
             'status' => $data['status'] == 1 ? 1 : 0,
         );
         $userId = $this->createRecord('user', $userData, FALSE);
@@ -2364,12 +2368,17 @@ class Admin_M extends Master_M {
     }
 
     public function updateEmployeeInfo($data) {
+        $where = array('id' => $data['id']);
+        $oldUserData = $this->selectRecord('user', $where);
+
         $userData = array();
         if (@$data['password']) {
             $this->load->library('encrypt');
             $userData['password'] = $this->encrypt->encode($data['password']);
         }
         $userData['cc_permission'] = $data['cc_permission'] == 1 ? 1 : 0;
+        $userData['sales_person'] = $data['sales_person'] == 1 ? 1 : 0;
+        $userData['in_round_robin'] = $data['in_round_robin'] == 1 ? 1 : 0;
         $userData['admin'] = $data['admin'] == 1 ? 1 : 0;
         $userData['status'] = $data['status'] == 1 ? 1 : 0;
         if (array_key_exists("username", $data)) {
@@ -2377,6 +2386,9 @@ class Admin_M extends Master_M {
         }
         if (array_key_exists("email", $data)) {
             $userData["lost_password_email"] = $data["email"];
+        }
+        if ($oldUserData['in_round_robin'] == 0 && $userData['in_round_robin'] == 1) {
+            $userData['ran_round_robin_at'] = time();
         }
         $where = array('id' => $data['id']);
         $this->updateRecord('user', $userData, $where, FALSE);
@@ -2396,6 +2408,34 @@ class Admin_M extends Master_M {
         unset($data['billing_id']);
         $return = $this->updateRecord('contact', $data, $where, FALSE);
         return $return;
+    }
+
+    public function createCustomerIfNotExist($data, $assign_round_robin = true) {
+        $existing_users = $this->selectRecords('user', array('username' => $data['email']));
+        if (empty($existing_users)) {
+            if ($assign_round_robin) {
+                $this->db->where('in_round_robin', 1);
+                $this->db->order_by('ran_round_robin_at', 'ASC');
+                $this->db->limit(1);
+                $employee = $this->selectRecord('user');
+                if ($employee !== FALSE) {
+                    $data['created_by'] = $employee['id'];
+
+                    // move the employee to the last of the round robin list
+                    $where = array('id' => $employee['id']);
+                    $employee_data = array('ran_round_robin_at', time());
+                    $this->updateRecord('user', $employee_data, $where, FALSE);
+                }
+            }
+            $this->createNewCustomer($data);
+        }
+
+        $existing_users = $this->selectRecords('user', array('username' => $data['email']));
+        if (empty($existing_users)) {
+            return FALSE;
+        }
+
+        return $this->getCustomerDetail($existing_users[0]['id']);
     }
 
     public function createNewCustomer($data) {

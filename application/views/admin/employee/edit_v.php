@@ -73,6 +73,21 @@ label{cursor:pointer;}
 							</td>
 						</tr>
 						<tr>
+							<td class="lft">Sales Person</td>
+							<td>
+								<input type="radio" name="sales_person" value="1" <?php echo $employee['sales_person'] == 1 ? 'checked' : '';?>>Yes
+								<input type="radio" name="sales_person" value="0" <?php echo $employee['sales_person'] == 0 ? 'checked' : '';?>>No
+							</td>
+						</tr>
+						<tr>
+							<td class="lft">Include in Round Robin</td>
+							<td>
+								<label class="checkbox">
+									<input type="checkbox" value="1" name="in_round_robin" <?php echo $employee['in_round_robin'] == 1 ? 'checked' : '';?>/>
+								</label>
+							</td>
+						</tr>
+						<tr>
 							<td class="lft">Active</td>
 							<td>
 								<input type="radio" name="status" value="1" <?php echo $employee['status'] == 1 ? 'checked' : '';?>>Yes
@@ -199,3 +214,18 @@ label{cursor:pointer;}
 		</div>
 	</div>
 </div>
+<script>
+jQuery(function() {
+	$('input[name="sales_person"]').change(function() {
+		if (this.value == '1') {
+			$('input[name="permission[customers]"]').attr('checked', 'checked');
+			$('input[name="permission[customers]"]').attr('disabled', true);
+			$('input[name="prmsion"]').attr('checked', true);
+			$('input[name="prmsion"]').attr('disabled', true);
+		} else {
+			$('input[name="permission[customers]"]').attr('disabled', false);
+			$('input[name="prmsion"]').attr('disabled', false);
+		}
+	});
+});
+</script>
