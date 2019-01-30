@@ -2353,6 +2353,11 @@ class Admin_M extends Master_M {
         );
         $userId = $this->createRecord('user', $userData, FALSE);
         $permissions = $this->db->query("delete from userpermissions where user_id = '" . $userId . "'");
+        
+        if ($data['sales_person'] == 1) {
+            $data['prmsion'] = 'user_specific_customers';
+            $data['permission']['customers'] = 'customers';
+        }
 
         if ($data['prmsion'] != '') {
             $data['permission'][$data['prmsion']] = $data['prmsion'];
@@ -2395,6 +2400,10 @@ class Admin_M extends Master_M {
 
         $permissions = $this->db->query("delete from userpermissions where user_id = '" . $data['id'] . "'");
 
+        if ($data['sales_person'] == 1) {
+            $data['prmsion'] = 'user_specific_customers';
+            $data['permission']['customers'] = 'customers';
+        }
         if ($data['prmsion'] != '') {
             $data['permission'][$data['prmsion']] = $data['prmsion'];
         }
@@ -2408,6 +2417,23 @@ class Admin_M extends Master_M {
         unset($data['billing_id']);
         $return = $this->updateRecord('contact', $data, $where, FALSE);
         return $return;
+    }
+
+    public function assignEmployeeToCustomer($employee_id, $customer_id) {
+        $employee = $this->selectRecord('user', array('id' => $employee_id));
+        if ($employee == FALSE) {
+            return FALSE;
+        }
+
+        $customer = $this->selectRecord('user', array('id' => $customer_id));
+        if ($customer == FALSE) {
+            return FALSE;
+        }
+
+        $data['created_by'] = $employee_id;
+        $where = array('id' => $customer_id);
+        $this->updateRecord('user', $data, $where, FALSE);
+        return true;
     }
 
     public function createCustomerIfNotExist($data, $assign_round_robin = true) {
@@ -2671,6 +2697,100 @@ class Admin_M extends Master_M {
         return $success;
     }
 
+    public function getOpenReminders($customer_id = NULL, $limit = 5, $offset = 0, $filter = array()) {
+        $result_array = array();
+        $count = 0;
+        if (is_null($customer_id)) {
+            $params = array();
+            $query_str = 'select reminder.*, '.
+                'owner.id as owner_id,'.
+                'owner.username as owner_username, '.
+                'contact.first_name as owner_first_name, '.
+                'contact.last_name as owner_last_name, '.
+                'customer.id as customer_id, '.
+                'customer_contact.first_name as customer_first_name, '.
+                'customer_contact.last_name as customer_last_name '.
+                'from user_reminder as reminder '.
+                'left join user as owner on reminder.created_by = owner.id '.
+                'left join contact as contact on contact.id = owner.billing_id ';
+
+            if ($filter['custom'] == 'own') {
+                $query_str = $query_str. ' join user as customer on reminder.user_id = customer.id and customer.created_by = ? ';
+                $params[] = $_SESSION['userRecord']['id'];
+            } else if ($filter['custom'] == 'web') {
+                $query_str = $query_str. ' left join user as customer on reminder.user_id = customer.id and customer.created_by is null ';
+            }
+            $query_str = $query_str.
+                'left join contact as customer_contact on customer_contact.id = customer.billing_id '.
+                'where reminder.is_completed = 0 ';
+            $query_str .= ' order by modified_on asc';
+            $query = $this->db->query($query_str, $params);
+            $count = $query->num_rows();
+            $query_str = $query_str.' limit '.$limit.' offset '.$offset;
+            $query = $this->db->query($query_str, $params);
+            $result_array = $query->result_array();
+        } else {
+            $query_str = 'select reminder.*, '.
+                'owner.id as owner_id,'.
+                'owner.username as owner_username, '.
+                'contact.first_name as owner_first_name, '.
+                'contact.last_name as owner_last_name '.
+                'from user_reminder as reminder '.
+                'left join user as owner on reminder.created_by = owner.id '.
+                'left join contact as contact on contact.id = owner.billing_id '.
+                'where reminder.user_id = ? and reminder.is_completed = 0 '.
+                'order by modified_on asc';
+
+            $query = $this->db->query($query_str, array($customer_id));
+            $count = $query->num_rows();
+            $query_str = $query_str.' limit '.$limit.' offset '.$offset;
+            $query = $this->db->query($query_str, array($customer_id));
+            $result_array = $query->result_array();
+        }
+        return array($result_array, $count, $count);
+    }
+
+    public function getClosedReminders($customer_id = NULL, $limit = 5, $offset = 0) {
+        $result_array = array();
+        $count = 0;
+        $pages = 0;
+        if (is_null($customer_id)) {
+            $query_str = 'select reminder.*, '.
+                'completed.id as completed_user_id, '.
+                'completed.username as completed_username, '.
+                'contact.first_name as completed_first_name, '.
+                'contact.last_name as completed_last_name '.
+                'from user_reminder as reminder '.
+                'left join user as completed on reminder.completed_by = completed.id '.
+                'left join contact as contact on contact.id = completed.billing_id '.
+                'where reminder.is_completed = 1 '.
+                'order by modified_on asc';
+            $query = $this->db->query($query_str);
+            $count = $query->num_rows();
+            $query_str = $query_str.' limit '.$limit.' offset '.$offset;
+            $query = $this->db->query($query_str);
+            $result_array = $query->result_array();
+        } else {
+            $query_str = 'select reminder.*, '.
+                'completed.id as completed_user_id, '.
+                'completed.username as completed_username, '.
+                'contact.first_name as completed_first_name, '.
+                'contact.last_name as completed_last_name '.
+                'from user_reminder as reminder '.
+                'left join user as completed on reminder.user_id = completed.id '.
+                'left join contact as contact on contact.id = completed.billing_id '.
+                'where reminder.user_id = ? and reminder.is_completed = 1 '.
+                'order by modified_on asc';
+            $query = $this->db->query($query_str, array($customer_id));
+            $count = $query->num_rows();
+            $query_str = $query_str.' limit '.$limit.' offset '.$offset;
+            $query = $this->db->query($query_str, array($customer_id));
+            $result_array = $query->result_array();
+        }
+
+        return array($result_array, $count, $count);
+    }
+
     public function getMonthReminders($month, $year, $user_id) {
         $this->db->where('YEAR(start_datetime)', $year);
         $this->db->where('MONTH(start_datetime)', $month);
@@ -2708,7 +2828,7 @@ class Admin_M extends Master_M {
     }
 
     public function completeEvent($id) {
-        $data = array('is_completed' => '1');
+        $data = array('is_completed' => '1', 'completed_on'=>date('Y-m-d H:i:s'), 'completed_by'=>$_SESSION['userRecord']['id']);
         $where = array('id' => $id);
         $this->updateRecord('user_reminder', $data, $where, FALSE);
     }

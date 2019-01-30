@@ -1170,7 +1170,15 @@ class Welcome extends Master_Controller {
                     "last_name" => $post["lastName"],
                     "phone" => $post["phone"],
                 ));
+
+                $employee = null;
+                if ($customer !== FALSE && !is_null($customer['created_by'])) {
+                    // Get the employee assigned to this customer
+                    $employee = $this->admin_m->getCustomerDetail($customer['created_by'], true);
+                }
+
                 if ($customer !== FALSE) {
+
                     // create 'New Lead' event for the customer
                     $now = date('Y-m-d H:i:s');
                     $notes = str_replace("<br/>","\n", $message);
@@ -1186,8 +1194,13 @@ class Welcome extends Master_Controller {
                             'recur_every' => ''
                         )),
                         'created_on' => $now,
+                        'created_by' => $now,
+                        'modified_on' => $now,
                         'id' => ''
                     );
+                    if ($employee !== FALSE) {
+                        $reminder['created_by'] = $employee['id'];
+                    }
                     $this->admin_m->saveCustomerReminder($reminder);
                 }
 
@@ -1205,25 +1218,17 @@ class Welcome extends Master_Controller {
                         "message" => $message
                     ));
 
-                    // If there is an employee assigned to this customer,
-                    // we need to send same email to him
-                    if ($customer !== FALSE && !is_null($customer['created_by'])) {
-
-                        // Get the employee assigned to this customer
-                        $employee = $this->admin_m->getCustomerDetail($customer['created_by'], true);
-
-                        // Send the email to him
-                        if ($employee !== FALSE && !empty($employee['username'])) {
-                            $this->mail_gen_m->queueEmail(array(
-                                "toEmailAddress" => $employee['username'],
-                                "replyToEmailAddress" => $post['email'],
-                                "replyToName" => $post['firstName'] . " " . $post['lastName'],
-                                "fromEmailAddress" => "noreply@powersporttechnologies.com",
-                                "fromName" => "Major Unit Inquiry",
-                                "subject" => "New Unit Inquiry",
-                                "message" => $message
-                            ));
-                        }
+                    // Send the email to employee
+                    if ($employee !== FALSE && !empty($employee['username'])) {
+                        $this->mail_gen_m->queueEmail(array(
+                            "toEmailAddress" => $employee['username'],
+                            "replyToEmailAddress" => $post['email'],
+                            "replyToName" => $post['firstName'] . " " . $post['lastName'],
+                            "fromEmailAddress" => "noreply@powersporttechnologies.com",
+                            "fromName" => "Major Unit Inquiry",
+                            "subject" => "New Unit Inquiry",
+                            "message" => $message
+                        ));
                     }
 
                     // JLB 04-19-18

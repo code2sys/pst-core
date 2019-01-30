@@ -234,7 +234,7 @@ abstract class Customeradmin extends Financeadmin {
         $this->renderMasterPage('admin/master_v', 'admin/customer/list_v', $this->_mainData);
     }
 
-    public function load_customer_rec($page) {
+    public function load_customer_rec($page = 0) {
         $filter = array();
         $sorting = array('first_name', 3 => 'orders', 5 => 'reminders');
         if ($_POST['order'][0]['column'] != '') {
@@ -313,7 +313,100 @@ abstract class Customeradmin extends Financeadmin {
         $this->setNav('admin/nav_v', 2);
         $this->_mainData['customer'] = $this->admin_m->getCustomerDetail($user_id);
         $this->_mainData['calendar'] = $this->getCalendarCustomer(date('m'), date('Y'), $user_id);
+        $this->_mainData['sales_persons'] = $this->admin_m->getAllCustomers(array(
+            'user_type' => 'employee',
+            'sales_person' => 1
+        ));
         $this->renderMasterPage('admin/master_v', 'admin/customer/view_v', $this->_mainData);
+    }
+
+    public function ajax_assign_employee_to_customer() {
+        $result = array(
+            "success" => false,
+            "success_message" => "",
+            "error_message" => ""
+        );
+        if (!$this->checkValidAccess('customers') && !@$_SESSION['userRecord']['admin']) {
+            $result["error_message"] = "Access Forbidden";
+            print json_encode($result);
+            return;
+        }
+
+        $employee_id = $_POST['employee'];
+        $customer_id = $_POST['customer'];
+
+        if ($this->admin_m->assignEmployeeToCustomer($employee_id, $customer_id) == FALSE) {
+            $result['error_message'] = "Invalid request";
+            print json_encode($result);
+        } else {
+            $result['success'] = true;
+            print json_encode($result);
+        }
+    }
+
+    public function get_open_activities_ajax($customer_id = NULL) {
+        $length = array_key_exists("length", $_REQUEST) ? $_REQUEST["length"] : 10;
+        $start = array_key_exists("start", $_REQUEST) ? $_REQUEST["start"] : 0;
+        $filter['custom'] = 'all';
+        if ($this->checkValidAccess('all_customers')) {
+            $filter['custom'] = 'all';
+        } else if ($this->checkValidAccess('web_customers')) {
+            $filter['custom'] = 'web';
+        } else if ($this->checkValidAccess('user_specific_customers')) {
+            $filter['custom'] = 'own';
+        }
+        list($activities, $total_count, $filtered_count) = $this->admin_m->getOpenReminders($customer_id, $length, $start, $filter);
+        $rows = array();
+        foreach ($activities as $activity) {
+            $row = array(
+                '<a class="pointer activity" data-id="'.$activity['id'].'" data-date="'.date('Y-m-d', strtotime($activity['start_datetime'])).'">'.$activity['subject'].'</a>',
+                $activity['start_datetime'],
+                $activity['end_datetime'],
+                $activity['owner_first_name'].' '.$activity['owner_last_name'],
+                $activity['modified_on'],
+            );
+            if (is_null($customer_id)) {
+                $row[] = '<a class="pointer customer" href="'. base_url('admin/customer_detail/' . $activity['customer_id']).'">'.$activity['customer_first_name'].' '.$activity['customer_last_name'].'</a>';
+            }
+            $rows[] = $row;
+        }
+        print json_encode(array(
+            "data" => $rows,
+            "draw" => array_key_exists("draw", $_REQUEST) ? $_REQUEST["draw"] : 0,
+            "recordsTotal" => $total_count,
+            "recordsFiltered" => $filtered_count,
+            "limit" => $length,
+            "offset" => $start,
+            "order_string" => $order_string,
+            "search" => ''
+        ));
+    }
+
+    public function get_closed_activities_ajax($customer_id) {
+        $length = array_key_exists("length", $_REQUEST) ? $_REQUEST["length"] : 10;
+        $start = array_key_exists("start", $_REQUEST) ? $_REQUEST["start"] : 0;
+        list($activities, $total_count, $filtered_count) = $this->admin_m->getClosedReminders($customer_id, $length, $start);
+        $rows = array();
+        foreach ($activities as $activity) {
+            $row = array(
+                '<a class="pointer activity" data-id="'.$activity['id'].'" data-date="'.date('Y-m-d', strtotime($activity['start_datetime'])).'">'.$activity['subject'].'</a>',
+                $activity['start_datetime'],
+                $activity['end_datetime'],
+                $activity['completed_first_name'].' '.$activity['completed_last_name'],
+                $activity['completed_on']
+            );
+            $rows[] = $row;
+        }
+        print json_encode(array(
+            "data" => $rows,
+            "draw" => array_key_exists("draw", $_REQUEST) ? $_REQUEST["draw"] : 0,
+            "recordsTotal" => $total_count,
+            "recordsFiltered" => $filtered_count,
+            "limit" => $length,
+            "offset" => $start,
+            "order_string" => $order_string,
+            "search" => ''
+        ));
     }
 
     //Get Calendar for the customer CRM
@@ -356,7 +449,7 @@ abstract class Customeradmin extends Financeadmin {
         if ($id != null) {
             $this->_mainData['rem'] = $this->admin_m->getReminder($id);
         }
-        $this->_mainData['dateReminder'] = $_POST['dt'];
+        $this->_mainData['dateReminder'] = isset($_POST['dt']) ? $_POST['dt'] : date('Y-m-d');
         $this->_mainData['user_id'] = $_POST['user_id'];
         $this->_mainData['tm'] = $this->halfHourTimesPopup();
         $tableView = $this->load->view('admin/customer/reminder_v', $this->_mainData, TRUE);
@@ -398,10 +491,13 @@ abstract class Customeradmin extends Financeadmin {
             $arr['start_datetime'] = date('Y-m-d H:i:s', strtotime($this->input->post('start_date') . ' ' . $this->input->post('start_time')));
             $arr['end_datetime'] = date('Y-m-d H:i:s', strtotime($this->input->post('end_date') . ' ' . $this->input->post('end_time')));
             $arr['data'] = json_encode(array('recur' => $this->input->post('recur'), 'recur_per' => $this->input->post('recur_per'), 'recur_evry' => $this->input->post('rcr_evry')));
-            $arr['created_on'] = date('Y-m-d H:i:s');
+            $arr['modified_on'] = date('Y-m-d H:i:s');
 
             if ($id != null) {
                 $arr['id'] = $id;
+            } else {
+                $arr['created_on'] = date('Y-m-d H:i:s');
+                $arr['created_by'] = $_SESSION['userRecord']['id'];
             }
             $parent = $this->admin_m->saveCustomerReminder($arr);
             if ($id != null) {
