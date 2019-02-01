@@ -2719,6 +2719,8 @@ class Admin_M extends Master_M {
                 $params[] = $_SESSION['userRecord']['id'];
             } else if ($filter['custom'] == 'web') {
                 $query_str = $query_str. ' left join user as customer on reminder.user_id = customer.id and customer.created_by is null ';
+            } else {
+                $query_str = $query_str. ' join user as customer on reminder.user_id = customer.id ';
             }
             $query_str = $query_str.
                 'left join contact as customer_contact on customer_contact.id = customer.billing_id '.

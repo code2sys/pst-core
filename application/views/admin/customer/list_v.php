@@ -129,7 +129,7 @@ $(document).ready(function() {
 			"ordering" : false,
 			"searching" : false,
 			"ajax" : {
-				"url" : "<?php echo base_url('admin/get_open_activities_ajax/'); ?>",
+				"url" : "<?php echo base_url('admin/ajax_get_open_activities/'); ?>",
 				"type" : "POST",
 				"cache" : false
 			},

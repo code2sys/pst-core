@@ -320,6 +320,28 @@ abstract class Customeradmin extends Financeadmin {
         $this->renderMasterPage('admin/master_v', 'admin/customer/view_v', $this->_mainData);
     }
 
+    public function ajax_save_notes($customer_id) {
+        $note = $_POST['note'];
+        $this->load->model('user_note_m');
+        $note_id = $this->user_note_m->addNote($customer_id, $note, $_SESSION['userRecord']['id']);
+        if ($note_id == FALSE) {
+            print json_encode(array('result'=>FALSE));
+        } else {
+            $note = $this->user_note_m->getNote($note_id);
+            if ($note !== FALSE) {
+                print json_encode(array('result'=>TRUE, 'note' => $note));
+            } else {
+                print json_encode(array('result'=>TRUE));
+            }
+        }
+    }
+
+    public function ajax_get_customer_notes($customer_id) {
+        $this->load->model('user_note_m');
+        $notes = $this->user_note_m->getNotes($customer_id);
+        print json_encode(array('count' => count($notes), 'notes' => $notes));
+    }
+
     public function ajax_assign_employee_to_customer() {
         $result = array(
             "success" => false,
@@ -344,7 +366,7 @@ abstract class Customeradmin extends Financeadmin {
         }
     }
 
-    public function get_open_activities_ajax($customer_id = NULL) {
+    public function ajax_get_open_activities($customer_id = NULL) {
         $length = array_key_exists("length", $_REQUEST) ? $_REQUEST["length"] : 10;
         $start = array_key_exists("start", $_REQUEST) ? $_REQUEST["start"] : 0;
         $filter['custom'] = 'all';
@@ -382,7 +404,7 @@ abstract class Customeradmin extends Financeadmin {
         ));
     }
 
-    public function get_closed_activities_ajax($customer_id) {
+    public function ajax_get_closed_activities($customer_id) {
         $length = array_key_exists("length", $_REQUEST) ? $_REQUEST["length"] : 10;
         $start = array_key_exists("start", $_REQUEST) ? $_REQUEST["start"] : 0;
         list($activities, $total_count, $filtered_count) = $this->admin_m->getClosedReminders($customer_id, $length, $start);

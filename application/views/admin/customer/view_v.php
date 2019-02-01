@@ -9,11 +9,33 @@
 }
 .bnz-frm input{width:270px; height:20px; padding:4px; background:#F6F6F6; border:1px solid #AAA; border-radius:3px;}
 .dsply-dtl{width:45%; float:left; height:30px;}
-.nts{width:100%; float:left; margin:15px 0 15px 0;}
-.nts label{width:100%; display:block; font-weight:bold;}
-.nts textarea{width:99%; height:80px;}
-.nts input[type=submit]{float:right; margin:7px 0 0 0; padding:5px 12px;}
+.notes-section{width:100%; float:left; margin:15px 0 15px 0;}
+.notes-section label{width:100%; display:block; font-weight:bold;}
+.notes-section textarea{width:99%; height:80px;}
+.notes-section input[type=submit]{float:right; margin:7px 0 0 0; padding:5px 12px;}
+.notes-section-footer .show-less { display:none;}
+.notes-section-footer .show-more { display:block;}
+.notes-section-footer.expanded .show-less { display:block;}
+.notes-section-footer.expanded .show-more { display:none;}
+
+.notes-section .text-wrapper {display:flex;flex-direction:column;align-items:flex-start;}
+.notes-view {padding: 8px 0px;}
+.notes-view .note-view {display:flex; align-items:flex-start;justify-content:start;padding:4px 0px;border-bottom:1px solid #AAA;}
+.notes-view .note-view .portrait-wrapper {display:flex;width:32px;height:32px;justify-content:center;}
+.notes-view .note-view .portrait-wrapper img{max-width:32px;max-height:32px;object-fit: contain;}
+.notes-view .note-view .note-detail {display:flex; flex-direction:column;flex:1;}
+.notes-view .note-view .note-info {padding-top:4px;}
+.notes-view:not(.expanded) .notes-holder .note-view:nth-child(n+3) {display:none;}
+.notes-view.has-few .notes-section-footer{display:none;}
+.notes-view .notes-section-footer {background: #EEE;padding:8px;display: flex;justify-content: space-between;}
+.notes-view .notes-section-footer .show-less { display:none;color:#06C;cursor:pointer;}
+.notes-view .notes-section-footer .show-more { display:block;color:#06C;cursor:pointer;}
+.notes-view.expanded .notes-section-footer .show-less { display:block;}
+.notes-view.expanded .notes-section-footer .show-more { display:none;}
 </style>
+<script type="application/javascript" src="/assets/underscore/underscore-min.js" ></script>
+<script type="application/javascript" src="/assets/backbone/backbone-min.js" ></script>
+<script type="application/javascript"  src="/assets/js_front/moment.js"></script>
 <div class="content_wrap" style="background:white; float:left;">
 	<div class="content">
 		<div class="tabular_data">
@@ -194,10 +216,14 @@
 					<?php endif; ?>
 					<tr>
 						<td>
-							<div class="nts">
+							<div class="notes-section">
 								<label>Notes</label>
-								<textarea name="notes"><?php echo $customer['notes'];?></textarea>
-								<input type="submit" name="submit" value="Save">
+								<div class="text-wrapper">
+									<textarea id="notes"><?php echo $customer['notes'];?></textarea>
+									<a class="button save">Save</a>
+								</div>
+								<div id="notes-wrapper" class="notes-wrapper">
+								</div>
 							</div>
 						</td>
 					</tr>
@@ -293,7 +319,161 @@
 	</div>
 </div>
 <div class="cstm-pup"></div>
+<script type="text/template" id="NotesView">
+<div class="notes-holder"></div>
+
+<div class="notes-section-footer">
+	<a class="show-less">Show Less</a>
+	<a class="show-more">View Previous Notes</a>
+	<span class="total_count"></span>
+</div>
+</script>
+<script type="text/template" id="NoteView">
+	<div class="portrait-wrapper">
+		<img src="<?php echo $assets; ?>/images/icon_user.png">
+	</div>
+	<div class="note-detail">
+		<span class=""><%= obj.note %></span>
+		<div class="note-info">
+			<span>&#8226;&nbsp;Add Note&nbsp;&#8226;</span>
+			<i class='fa fa-clock-o'></i>
+			<span class="date"><%= obj.created_at_ago %></span>
+			<span class="author">by <%= obj.author_first_name %> <%= obj.author_last_name %></span>
+		</div>
+	</div>
+</script>
 <script>
+
+window.NoteModel = Backbone.Model.extend({
+	defaults : {
+		"id" : 0,
+		"user_id": 0,
+		"note" : "",
+		"created_at" : "",
+		"created_at_timestamp": "",
+		"created_by" : "",
+		"author_first_name":"",
+		"author_last_name":"",
+		"created_at_ago" : "",
+	},
+	initialize: function() {
+		this.set({"created_at_ago": moment.unix(this.get("created_at_timestamp")).fromNow()});
+	}
+});
+
+window.NoteCollection = Backbone.Collection.extend({
+	model: NoteModel,
+	comparator: function(x) {
+		return -parseInt(x.get("id"), 10);
+	}
+});
+
+window.NoteView = Backbone.View.extend({
+	className: "note-view",
+	template: _.template($("#NoteView").html()),
+	events: {
+
+	},
+	initialize: function(options) {
+		this.options = options || {};
+		_.bindAll(this, "render", "subrender");
+	},
+	"subrender" : function() {
+	},
+	"render" : function() {
+		$(this.el).html(this.template(this.model.toJSON()));
+		this.subrender();
+		return this;
+	}
+});
+
+window.NotesView = Backbone.View.extend({
+	className: "notes-view",
+	template: _.template($("#NotesView").html()),
+	events: {
+		"click .show-less": "showLess",
+		"click .show-more": "showMore",
+	},
+	initialize: function(options) {
+		this.options = options || {};
+		_.bindAll(this, "render", "reload","showLess","showMore","addNote");
+	}, 
+	showLess: function() {
+		$(this.el).removeClass('expanded');
+		this.expanded = false;
+		this.refreshCount();
+	},
+	showMore: function() {
+		$(this.el).removeClass('expanded').addClass('expanded');
+		this.expanded = true;
+		this.refreshCount();
+	},
+	addNote: function(noteObj) {
+		var that = this;
+		that.notes.unshift(noteObj);
+		var noteModel = new NoteModel(noteObj);
+		that.$(".notes-holder").prepend(new NoteView({
+			model: noteModel
+		}).render().el);
+		that.refreshCount();
+	},
+	refreshCount: function() {
+		var that = this;
+		if (that.expanded) {
+			that.$(".total_count").html(that.notes.length + '/' + that.notes.length);
+		} else {
+			that.$(".total_count").html(Math.min(2, that.notes.length) + '/' + that.notes.length);
+		}
+	},
+	reload: function() {
+		var that = this;
+		$.post( this.options.ajax_url, {}, function( result ){
+			try {
+				res = JSON.parse(result);
+				if (res.notes) {
+					that.$(".notes-holder").html("");
+					that.notes = res.notes;
+					var notesCollection = new NoteCollection(res.notes);
+					for (var i = 0; i < notesCollection.length; i++) {
+						var m = notesCollection.at(i);
+						that.$(".notes-holder").append(new NoteView({
+							model: m
+						}).render().el);
+					}
+					if (notesCollection.length < 3) {
+						$(that.el).removeClass('has-few').addClass('has-few');
+					}
+
+					that.refreshCount();
+				}
+			} catch(e) {
+				console.log(e);
+			}
+			
+			
+		});
+		// for (var i = 0; i < mySpecGroupCollection.length; i++) {
+		// 	this.$(".holder").append(new NoteView({
+		// 		model: mySpecGroupCollection.at(i)
+		// 	}).render().el);
+		// }
+	},
+	"render" : function() {
+		$(this.el).html(this.template({}));
+		this.reload();
+		this.expanded = false;
+		return this;
+	}
+});
+
+function FormatNumberLength(num, length) {
+    var r = "" + num;
+    while (r.length < length) {
+        r = "0" + r;
+    }
+    return r;
+}
+
 $(document).on('click', '.prev, .next', function() {
 	$('#loading-background').show();
 	var mnth = $(this).data('month');
@@ -311,7 +491,8 @@ $(document).on('click', '.prev, .next', function() {
 			year = parseInt(year)+1;
 		}
 	}
-	var ajax_url = "<?php echo site_url('admin/getCalendarCustomer/');?>/"+mnth+'/'+year+"/<?php echo $user_id;?>"+'/true';
+	var m = FormatNumberLength(mnth, 2);
+	var ajax_url = "<?php echo site_url('admin/getCalendarCustomer/');?>/"+m+'/'+year+"/<?php echo $user_id;?>"+'/true';
 	$.post( ajax_url, {}, function( result ){
 		$('.clndr').html(result);
 		$('#loading-background').hide();
@@ -385,6 +566,26 @@ $(document).on('change', '#sales_owner', function() {
 	});
 });
 
+$(document).on('click', '.notes-section a.save', function() {
+	var ajax_url = "<?php echo site_url('admin/ajax_save_notes/');?>/"+"/<?php echo $user_id;?>";
+	var note = $('#notes').val();
+	if (note.trim().length <= 0) {
+		return;
+	}
+	$.post( ajax_url, {'note':note.trim()}, function( result ){
+		try {
+			var res = JSON.parse(result);
+			if (res.result && res.note) {
+				if (window.notesView) {
+					window.notesView.addNote(res.note);
+				}
+			}
+		} catch(e) {
+
+		}
+	});
+});
+
 $(window).load(function() {
 	$(".open_activities table").dataTable({
 		"processing" : true,
@@ -392,7 +593,7 @@ $(window).load(function() {
 		"ordering" : false,
 		"searching" : false,
 		"ajax" : {
-			"url" : "<?php echo base_url('admin/get_open_activities_ajax/'.$customer['id']); ?>",
+			"url" : "<?php echo base_url('admin/ajax_get_open_activities/'.$customer['id']); ?>",
 			"type" : "POST",
 			"cache" : false
 		},
@@ -416,7 +617,7 @@ $(window).load(function() {
 		"ordering" : false,
 		"searching" : false,
 		"ajax" : {
-			"url" : "<?php echo base_url('admin/get_closed_activities_ajax/'.$customer['id']); ?>",
+			"url" : "<?php echo base_url('admin/ajax_get_closed_activities/'.$customer['id']); ?>",
 			"type" : "POST",
 			"cache" : false
 		},
@@ -434,5 +635,13 @@ $(window).load(function() {
 			null,
 		]
 	});
+
+
+	var notesView = new NotesView({
+		ajax_url : "<?php echo site_url('admin/ajax_get_customer_notes/');?>"+"/<?php echo $user_id;?>"
+	});
+	window.notesView = notesView;
+	$("#notes-wrapper").html(notesView.render().el);
 });
+
 </script>
