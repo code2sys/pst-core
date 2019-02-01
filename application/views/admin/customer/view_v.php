@@ -424,6 +424,11 @@ window.NotesView = Backbone.View.extend({
 		} else {
 			that.$(".total_count").html(Math.min(2, that.notes.length) + '/' + that.notes.length);
 		}
+		if (that.notes.length < 3) {
+			$(that.el).removeClass('has-few').addClass('has-few');
+		} else {
+			$(that.el).removeClass('has-few');
+		}
 	},
 	reload: function() {
 		var that = this;
@@ -440,10 +445,6 @@ window.NotesView = Backbone.View.extend({
 							model: m
 						}).render().el);
 					}
-					if (notesCollection.length < 3) {
-						$(that.el).removeClass('has-few').addClass('has-few');
-					}
-
 					that.refreshCount();
 				}
 			} catch(e) {
