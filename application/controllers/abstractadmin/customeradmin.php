@@ -251,6 +251,8 @@ abstract class Customeradmin extends Financeadmin {
             $filter['custom'] = 'web';
         } else if ($this->checkValidAccess('user_specific_customers')) {
             $filter['custom'] = 'own';
+        } else if ($this->checkValidAccess('all_user_specific_customers')) {
+            $filter['custom'] = 'all_own';
         }
 
         $customers = $this->admin_m->getAllCustomers($filter, $_POST['length'], $_POST['start']);
@@ -320,10 +322,14 @@ abstract class Customeradmin extends Financeadmin {
         $this->renderMasterPage('admin/master_v', 'admin/customer/view_v', $this->_mainData);
     }
 
-    public function ajax_save_notes($customer_id) {
+    public function ajax_save_notes($customer_id, $note_id = NULL) {
         $note = $_POST['note'];
         $this->load->model('user_note_m');
-        $note_id = $this->user_note_m->addNote($customer_id, $note, $_SESSION['userRecord']['id']);
+        if (is_null($note_id)) {
+            $note_id = $this->user_note_m->addNote($customer_id, $note, $_SESSION['userRecord']['id']);
+        } else {
+            $note_id = $this->user_note_m->updateNote($note_id, $note);
+        }
         if ($note_id == FALSE) {
             print json_encode(array('result'=>FALSE));
         } else {
@@ -334,6 +340,12 @@ abstract class Customeradmin extends Financeadmin {
                 print json_encode(array('result'=>TRUE));
             }
         }
+    }
+
+    public function ajax_delete_note($note_id) {
+        $this->load->model('user_note_m');
+        $this->user_note_m->deleteNote($note_id);
+        print json_encode(array('result'=>TRUE));
     }
 
     public function ajax_get_customer_notes($customer_id) {
@@ -376,6 +388,8 @@ abstract class Customeradmin extends Financeadmin {
             $filter['custom'] = 'web';
         } else if ($this->checkValidAccess('user_specific_customers')) {
             $filter['custom'] = 'own';
+        } else if ($this->checkValidAccess('all_user_specific_customers')) {
+            $filter['custom'] = 'all_own';
         }
         list($activities, $total_count, $filtered_count) = $this->admin_m->getOpenReminders($customer_id, $length, $start, $filter);
         $rows = array();

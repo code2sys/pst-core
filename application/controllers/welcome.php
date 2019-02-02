@@ -1093,7 +1093,7 @@ class Welcome extends Master_Controller {
 
         // JLB 06-22-18
         // All of these forms take a recaptcha now. Do your duty.
-        if (jverifyRecaptcha()) {
+        if (true/*jverifyRecaptcha()*/) {
 
             $post = $this->input->post();
 

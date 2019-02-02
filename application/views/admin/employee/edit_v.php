@@ -66,10 +66,24 @@ label{cursor:pointer;}
 							<td><input class="flds" type="password" name="cpassword" value=""></td>
 						</tr>
 						<tr>
+							<td class="lft">Active</td>
+							<td>
+								<input type="radio" name="status" value="1" <?php echo $employee['status'] == 1 ? 'checked' : '';?>>Yes
+								<input type="radio" name="status" value="0" <?php echo $employee['status'] == 0 ? 'checked' : '';?>>No
+							</td>
+						</tr>
+						<tr>
 							<td class="lft">Super User</td>
 							<td>
 								<input type="radio" name="admin" value="1" <?php echo $employee['admin'] == 1 ? 'checked' : '';?>>Yes
 								<input type="radio" name="admin" value="0" <?php echo $employee['admin'] == 0 ? 'checked' : '';?>>No
+							</td>
+						</tr>
+						<tr>
+							<td class="lft">Lead Manager</td>
+							<td>
+								<input type="radio" name="lead_manager" value="1" <?php echo $employee['lead_manager'] == 1 ? 'checked' : '';?>>Yes
+								<input type="radio" name="lead_manager" value="0" <?php echo $employee['lead_manager'] == 0 ? 'checked' : '';?>>No
 							</td>
 						</tr>
 						<tr>
@@ -85,13 +99,6 @@ label{cursor:pointer;}
 								<label class="checkbox">
 									<input type="checkbox" value="1" name="in_round_robin" <?php echo $employee['in_round_robin'] == 1 ? 'checked' : '';?>/>
 								</label>
-							</td>
-						</tr>
-						<tr>
-							<td class="lft">Active</td>
-							<td>
-								<input type="radio" name="status" value="1" <?php echo $employee['status'] == 1 ? 'checked' : '';?>>Yes
-								<input type="radio" name="status" value="0" <?php echo $employee['status'] == 0 ? 'checked' : '';?>>No
 							</td>
 						</tr>
 						<tr>
@@ -168,7 +175,10 @@ label{cursor:pointer;}
 										<input type="radio" value="web_customers" name="prmsion" <?php echo in_array('web_customers', $employee['permissions']) ? 'checked' : '';?>/>Web Customers
 									</label>
 									<label class="checkbox">
-										<input type="radio" value="user_specific_customers" name="prmsion" <?php echo in_array('user_specific_customers', $employee['permissions']) ? 'checked' : '';?>/>User Specific Customers
+										<input type="radio" id="user_specific_customers" value="user_specific_customers" name="prmsion" <?php echo in_array('user_specific_customers', $employee['permissions']) ? 'checked' : '';?>/>User Specific Customers
+									</label>
+									<label class="checkbox">
+										<input type="radio" id="all_user_specific_customers" value="all_user_specific_customers" name="prmsion" <?php echo in_array('all_user_specific_customers', $employee['permissions']) ? 'checked' : '';?>/>All User Specified Customers
 									</label>
 								</div>
                                 <div class="twnty">
@@ -216,12 +226,40 @@ label{cursor:pointer;}
 </div>
 <script>
 jQuery(function() {
+	<?php if ($employee['sales_person'] == 1): ?>
+		$('input[name="permission[customers]"]').prop('checked', true);
+		$('input[name="permission[customers]"]').attr('disabled', true);
+		$('#user_specific_customers').prop('checked', true);
+		$('input[name="prmsion"]').attr('disabled', true);
+		$('input[name="lead_manager"][value="0"]').prop('checked', true);
+	<?php endif; ?>
+	<?php if ($employee['lead_manager'] == 1): ?>
+		$('input[name="permission[customers]"]').prop('checked', true);
+		$('input[name="permission[customers]"]').attr('disabled', true);
+		$('#all_user_specific_customers').prop('checked', true);
+		$('input[name="prmsion"]').attr('disabled', true);
+		$('input[name="sales_person"][value="0"]').prop('checked', true);
+	<?php endif; ?>
 	$('input[name="sales_person"]').change(function() {
 		if (this.value == '1') {
-			$('input[name="permission[customers]"]').attr('checked', 'checked');
+			$('input[name="permission[customers]"]').prop('checked', true);
 			$('input[name="permission[customers]"]').attr('disabled', true);
-			$('input[name="prmsion"]').attr('checked', true);
+			$('#user_specific_customers').prop('checked', true);
 			$('input[name="prmsion"]').attr('disabled', true);
+			$('input[name="lead_manager"][value="0"]').prop('checked', true);
+		} else {
+			$('input[name="permission[customers]"]').attr('disabled', false);
+			$('input[name="prmsion"]').attr('disabled', false);
+		}
+	});
+
+	$('input[name="lead_manager"]').change(function() {
+		if (this.value == '1') {
+			$('input[name="permission[customers]"]').prop('checked', true);
+			$('input[name="permission[customers]"]').attr('disabled', true);
+			$('#all_user_specific_customers').prop('checked', true);
+			$('input[name="prmsion"]').attr('disabled', true);
+			$('input[name="sales_person"][value="0"]').prop('checked', true);
 		} else {
 			$('input[name="permission[customers]"]').attr('disabled', false);
 			$('input[name="prmsion"]').attr('disabled', false);

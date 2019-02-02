@@ -37,6 +37,30 @@ class User_note_m extends Master_M {
     }
 
     /**
+	 * updateNote
+	 * 
+	 *
+	 * @access public
+	 * @param int $user_id
+	 * @param string $message
+	 * @return int - record's id if SUCCESS or FALSE if FAILURE
+	 */
+    public function updateNote($note_id, $message) {
+        $data = array(
+            'note' => $message,
+        );
+        $where = array(
+            'id' => $note_id
+        );
+        $this->updateRecord('user_note', $data, $where, FALSE);
+		return $note_id;
+    }
+
+    public function deleteNote($note_id) {
+        $this->deleteRecord('user_note', array('id' => $note_id));
+    }
+
+    /**
 	 * getNotes
 	 * 
 	 * Get the notes for the customer with user_id

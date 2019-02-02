@@ -20,10 +20,12 @@
 
 .notes-section .text-wrapper {display:flex;flex-direction:column;align-items:flex-start;}
 .notes-view {padding: 8px 0px;}
-.notes-view .note-view {display:flex; align-items:flex-start;justify-content:start;padding:4px 0px;border-bottom:1px solid #AAA;}
+.notes-view .note-view {display:flex; align-items:flex-start;justify-content:start;padding:4px 0px;border-bottom:1px solid #AAA;position:relative;}
 .notes-view .note-view .portrait-wrapper {display:flex;width:32px;height:32px;justify-content:center;}
 .notes-view .note-view .portrait-wrapper img{max-width:32px;max-height:32px;object-fit: contain;}
 .notes-view .note-view .note-detail {display:flex; flex-direction:column;flex:1;}
+.notes-view .note-view .note-actions {position: absolute;top:0;right:0;display:flex;}
+.notes-view .note-view .note-actions a {min-width:24px;min-height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#06C;}
 .notes-view .note-view .note-info {padding-top:4px;}
 .notes-view:not(.expanded) .notes-holder .note-view:nth-child(n+3) {display:none;}
 .notes-view.has-few .notes-section-footer{display:none;}
@@ -335,11 +337,14 @@
 	<div class="note-detail">
 		<span class=""><%= obj.note %></span>
 		<div class="note-info">
-			<span>&#8226;&nbsp;Add Note&nbsp;&#8226;</span>
 			<i class='fa fa-clock-o'></i>
 			<span class="date"><%= obj.created_at_ago %></span>
 			<span class="author">by <%= obj.author_first_name %> <%= obj.author_last_name %></span>
 		</div>
+	</div>
+	<div class="note-actions">
+		<a class="edit"><i class="fa fa-pencil"></i></a>
+		<a class="delete"><i class="fa fa-trash"></i></a>
 	</div>
 </script>
 <script>
@@ -372,11 +377,24 @@ window.NoteView = Backbone.View.extend({
 	className: "note-view",
 	template: _.template($("#NoteView").html()),
 	events: {
-
+		"click a.edit": "edit",
+		"click a.delete": "remove",
 	},
 	initialize: function(options) {
 		this.options = options || {};
-		_.bindAll(this, "render", "subrender");
+		_.bindAll(this, "render", "subrender", "edit", "remove");
+	},
+	"edit": function() {
+		window.current_note_id = this.model.get('id');
+		console.log(window.current_note_id);
+		$('#notes').val(this.model.get('note'));
+		$('#notes')[0].focus();
+	},
+	"remove": function() {
+		var ajax_url = "<?php echo site_url('admin/ajax_delete_note/');?>/"+"/" + this.model.get('id');
+		$.post( ajax_url, {}, function( result ){
+			window.notesView.reload();
+		});
 	},
 	"subrender" : function() {
 	},
@@ -573,17 +591,13 @@ $(document).on('click', '.notes-section a.save', function() {
 	if (note.trim().length <= 0) {
 		return;
 	}
+	if (window.current_note_id) {
+		ajax_url = ajax_url + "/" + window.current_note_id;
+		window.current_note_id = undefined;
+	}
+	$('#notes').val('');
 	$.post( ajax_url, {'note':note.trim()}, function( result ){
-		try {
-			var res = JSON.parse(result);
-			if (res.result && res.note) {
-				if (window.notesView) {
-					window.notesView.addNote(res.note);
-				}
-			}
-		} catch(e) {
-
-		}
+		window.notesView.reload();
 	});
 });
 

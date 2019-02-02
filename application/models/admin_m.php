@@ -1986,6 +1986,8 @@ class Admin_M extends Master_M {
                 $this->db->where('user.created_by', $_SESSION['userRecord']['id']);
             } else if ($filter['custom'] == 'web') {
                 $this->db->where('user.created_by IS NULL');
+            } else if ($filter['custom'] == 'all_own') {
+                $this->db->where('user.created_by is NOT NULL', NULL, FALSE);
             }
 
             if ($limit > 0) {
@@ -2244,7 +2246,7 @@ class Admin_M extends Master_M {
                 'contact.email AS email, ' .
                 'contact.phone AS phone, ' .
                 'contact.company AS company, user.id, user.status, user.admin, user.cc_permission, user.username, user.notes, user.user_type, '.
-                'user.created_by, user.in_round_robin, user.ran_round_robin_at, user.sales_person'
+                'user.created_by, user.in_round_robin, user.ran_round_robin_at, user.sales_person, user.lead_manager'
         );
         //$where = array("user.first_name != ''" => null);
         $this->db->join('contact', 'contact.id = user.billing_id');
@@ -2347,6 +2349,7 @@ class Admin_M extends Master_M {
             'cc_permission' => $data['cc_permission'] == 1 ? 1 : 0,
             'admin' => $data['admin'] == 1 ? 1 : 0,
             'sales_person' => $data['sales_person'] == 1 ? 1 : 0,
+            'lead_manager' => $data['lead_manager'] == 1 ? 1 : 0,
             'in_round_robin' => $data['in_round_robin'] == 1 ? 1 : 0,
             'ran_round_robin_at' => isset($data['ran_round_robin_at']) ? $data['ran_round_robin_at'] : time(),
             'status' => $data['status'] == 1 ? 1 : 0,
@@ -2356,6 +2359,10 @@ class Admin_M extends Master_M {
         
         if ($data['sales_person'] == 1) {
             $data['prmsion'] = 'user_specific_customers';
+            $data['permission']['customers'] = 'customers';
+        }
+        if ($data['lead_manager'] == 1) {
+            $data['prmsion'] = 'all_user_specific_customers';
             $data['permission']['customers'] = 'customers';
         }
 
@@ -2383,6 +2390,7 @@ class Admin_M extends Master_M {
         }
         $userData['cc_permission'] = $data['cc_permission'] == 1 ? 1 : 0;
         $userData['sales_person'] = $data['sales_person'] == 1 ? 1 : 0;
+        $userData['lead_manager'] = $data['lead_manager'] == 1 ? 1 : 0;
         $userData['in_round_robin'] = $data['in_round_robin'] == 1 ? 1 : 0;
         $userData['admin'] = $data['admin'] == 1 ? 1 : 0;
         $userData['status'] = $data['status'] == 1 ? 1 : 0;
@@ -2402,6 +2410,10 @@ class Admin_M extends Master_M {
 
         if ($data['sales_person'] == 1) {
             $data['prmsion'] = 'user_specific_customers';
+            $data['permission']['customers'] = 'customers';
+        }
+        if ($data['lead_manager'] == 1) {
+            $data['prmsion'] = 'all_user_specific_customers';
             $data['permission']['customers'] = 'customers';
         }
         if ($data['prmsion'] != '') {
@@ -2441,6 +2453,7 @@ class Admin_M extends Master_M {
         if (empty($existing_users)) {
             if ($assign_round_robin) {
                 $this->db->where('in_round_robin', 1);
+                $this->db->where('status', 1);
                 $this->db->order_by('ran_round_robin_at', 'ASC');
                 $this->db->limit(1);
                 $employee = $this->selectRecord('user');
@@ -2449,7 +2462,7 @@ class Admin_M extends Master_M {
 
                     // move the employee to the last of the round robin list
                     $where = array('id' => $employee['id']);
-                    $employee_data = array('ran_round_robin_at', time());
+                    $employee_data = array('ran_round_robin_at'=>time());
                     $this->updateRecord('user', $employee_data, $where, FALSE);
                 }
             }
@@ -2719,6 +2732,8 @@ class Admin_M extends Master_M {
                 $params[] = $_SESSION['userRecord']['id'];
             } else if ($filter['custom'] == 'web') {
                 $query_str = $query_str. ' left join user as customer on reminder.user_id = customer.id and customer.created_by is null ';
+            } else if ($filter['custom' == 'all_own']) {
+                $query_str = $query_str. ' left join user as customer on reminder.user_id = customer.id and customer.created_by is not null ';
             } else {
                 $query_str = $query_str. ' join user as customer on reminder.user_id = customer.id ';
             }
