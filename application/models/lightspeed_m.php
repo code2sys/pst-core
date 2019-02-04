@@ -284,7 +284,6 @@ class Lightspeed_M extends Master_M {
 
         global $LIGHTSPEED_CONSIGNMENT_USED;
         if (isset($LIGHTSPEED_CONSIGNMENT_USED) && $LIGHTSPEED_CONSIGNMENT_USED && $bike->NewUsed == "C") {
-            print "***** Found Consignment " . $bike->StockNumber . "******\n";
             $bike->NewUsed = "U"; // This was requested for IHM, but I bet this applies to every single Lightspeed. Still, let's not break anyone else out there, but I suspect we'll make this different in the future.
         }
 
