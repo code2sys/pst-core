@@ -1,14 +1,71 @@
 <style>
 .tabular_data td{border:1px solid white;}
+.pointer {cursor:pointer;color:#06C;}
+.activities table {border:unset;}
+.activities table thead th {background: #EEE;border:unset;}
+.activities td {border-bottom: 1px solid #AAA;}
+.activities .dataTables_length {
+	margin-bottom:4px;
+}
 .bnz-frm input{width:270px; height:20px; padding:4px; background:#F6F6F6; border:1px solid #AAA; border-radius:3px;}
 .dsply-dtl{width:45%; float:left; height:30px;}
-.nts{width:100%; float:left; margin:15px 0 15px 0;}
-.nts label{width:100%; display:block; font-weight:bold;}
-.nts textarea{width:99%; height:80px;}
-.nts input[type=submit]{float:right; margin:7px 0 0 0; padding:5px 12px;}
+.notes-section{width:100%; float:left; margin:15px 0 15px 0;}
+.notes-section label{width:100%; display:block; font-weight:bold;}
+.notes-section textarea{width:99%; height:80px;}
+.notes-section input[type=submit]{float:right; margin:7px 0 0 0; padding:5px 12px;}
+.notes-section-footer .show-less { display:none;}
+.notes-section-footer .show-more { display:block;}
+.notes-section-footer.expanded .show-less { display:block;}
+.notes-section-footer.expanded .show-more { display:none;}
+
+.notes-section .text-wrapper {display:flex;flex-direction:column;align-items:flex-start;}
+.notes-view {padding: 8px 0px;}
+.notes-view .note-view {display:flex; align-items:flex-start;justify-content:start;padding:4px 0px;border-bottom:1px solid #AAA;position:relative;}
+.notes-view .note-view .portrait-wrapper {display:flex;width:32px;height:32px;justify-content:center;}
+.notes-view .note-view .portrait-wrapper img{max-width:32px;max-height:32px;object-fit: contain;}
+.notes-view .note-view .note-detail {display:flex; flex-direction:column;flex:1;}
+.notes-view .note-view .note-actions {position: absolute;top:0;right:0;display:flex;}
+.notes-view .note-view .note-actions a {min-width:24px;min-height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#06C;}
+.notes-view .note-view .note-info {padding-top:4px;}
+.notes-view:not(.expanded) .notes-holder .note-view:nth-child(n+3) {display:none;}
+.notes-view.has-few .notes-section-footer{display:none;}
+.notes-view .notes-section-footer {background: #EEE;padding:8px;display: flex;justify-content: space-between;}
+.notes-view .notes-section-footer .show-less { display:none;color:#06C;cursor:pointer;}
+.notes-view .notes-section-footer .show-more { display:block;color:#06C;cursor:pointer;}
+.notes-view.expanded .notes-section-footer .show-less { display:block;}
+.notes-view.expanded .notes-section-footer .show-more { display:none;}
 </style>
+<script type="application/javascript" src="/assets/underscore/underscore-min.js" ></script>
+<script type="application/javascript" src="/assets/backbone/backbone-min.js" ></script>
+<script type="application/javascript"  src="/assets/js_front/moment.js"></script>
 <div class="content_wrap" style="background:white; float:left;">
 	<div class="content">
+		<?php if (ENABLE_CRM) { ?>
+		<div class="tabular_data">
+			<table width="100%" style="float:left; margin:0 3% 0 0;">
+				<tr class="billing_display">
+					<td style="width:50%">
+						<div style="display:flex;align-items:center;justify-content:center;">
+							<h1 style="color:black;font-size:24px;">Sales Lead Owner</h1>
+							<select id="sales_owner" name="created_by" style="margin:8px;max-width:200px">
+							<option value="">None</option>
+							<?php
+							foreach($sales_persons as $sales_person): ?>
+								<option value="<?php echo $sales_person['id']?>" <?php echo $customer['created_by'] == $sales_person['id'] ? 'selected': '';?>>
+								<?php echo $sales_person['first_name'].' '.$sales_person['last_name'].'('.$sales_person['email'].')';?>
+								</option>
+							<?php endforeach;?>
+							<option value="-1" <?php echo $customer['created_by'] == -1 ? 'selected': '';?>>Service</option>
+							</select>
+						</div>
+					</td>
+					<td style="width:50%">
+					</td>
+				</tr>
+			</table>
+		</div>
+		<?php } ?>
+		
 		<h1 style="padding:5px; letter-spacing:0px; font-size:26px;"><i class="fa fa-users"></i>&nbsp;Customer Details</h1>
 		<div id="listTable">
 			<div class="tabular_data">
@@ -163,10 +220,14 @@
 					<?php endif; ?>
 					<tr>
 						<td>
-							<div class="nts">
+							<div class="notes-section">
 								<label>Notes</label>
-								<textarea name="notes"><?php echo $customer['notes'];?></textarea>
-								<input type="submit" name="submit" value="Save">
+								<div class="text-wrapper">
+									<textarea id="notes"><?php echo $customer['notes'];?></textarea>
+									<a class="button save">Save</a>
+								</div>
+								<div id="notes-wrapper" class="notes-wrapper">
+								</div>
 							</div>
 						</td>
 					</tr>
@@ -178,7 +239,64 @@
 							<?php echo $calendar;?>
 						</td>
 					</tr>
+					<?php if (ENABLE_CRM) { ?>
+					<tr>
+						<td class="">
+							<div class="open_activities activities">
+								<div style="margin-top:8px">
+									<h3 style="float:left">Open Activities</h3>
+									<a class="new_task pointer" style="float:right;">+ New Task</a>
+								</div>
+								<table width="100%" cellpadding="10" id="open_activities_table_v">
+									<thead>
+										<tr>
+											<th>Subject</th>
+											<th>From</th>
+											<th>To</th>
+											<th>Activity Owner</th>
+											<th>Modified Time</th>
+										</tr>
+									</thead>
+									<tbody>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="">
+							<div class="closed_activities activities">
+								<h3 style="margin-top:8px">Closed Activities</h3>
+								<table width="100%" cellpadding="10" id="closed_activities_table_v">
+									<thead>
+										<tr>
+											<th>Subject</th>
+											<th>From</th>
+											<th>To</th>
+											<th>Closed By</th>
+											<th>Closed Date</th>
+										</tr>
+									</thead>
+									<tbody>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</td>
+					</tr>
+					<?php } ?>
 				</table>
+				</form>
+
+				<?php if (ENABLE_CUSTOMER_PRICING) {
+					$CI =& get_instance();
+					?>
+					<div style="width: 45%; float: left;margin-bottom:20px;">
+					<?php echo $CI->load->view("admin/customer/backbone_customerpricing_widget", array("user_id" => $user_id), true); ?>
+					</div>
+					<?php
+				} ?>
 				<div style="width:10px;"></div>
 				<div class="dsply-dtl">
 					<p>Displaying <strong> <?php echo count($customer['orders']);?> </strong> - <strong> <?php echo count($customer['orders']);?> </strong> of <strong> <?php count($customer['orders']);?> </strong> Order(s)</p>
@@ -201,23 +319,185 @@
 					<?php endforeach;
 					endif; ?>
 				</table>
-				</form>
-
-				<?php if (ENABLE_CUSTOMER_PRICING) {
-					$CI =& get_instance();
-					?>
-					<div style="width: 45%; float: left;">
-					<?php echo $CI->load->view("admin/customer/backbone_customerpricing_widget", array("user_id" => $user_id), true); ?>
-					</div>
-					<?php
-				} ?>
 
 			</div>
 		</div>
 	</div>
 </div>
 <div class="cstm-pup"></div>
+<script type="text/template" id="NotesView">
+<div class="notes-holder"></div>
+
+<div class="notes-section-footer">
+	<a class="show-less">Show Less</a>
+	<a class="show-more">View Previous Notes</a>
+	<span class="total_count"></span>
+</div>
+</script>
+<script type="text/template" id="NoteView">
+	<div class="portrait-wrapper">
+		<img src="<?php echo $assets; ?>/images/icon_user.png">
+	</div>
+	<div class="note-detail">
+		<span class=""><%= obj.note %></span>
+		<div class="note-info">
+			<i class='fa fa-clock-o'></i>
+			<span class="date"><%= obj.created_at_ago %></span>
+			<span class="author">by <%= obj.author_first_name %> <%= obj.author_last_name %></span>
+		</div>
+	</div>
+	<div class="note-actions">
+		<a class="edit"><i class="fa fa-pencil"></i></a>
+		<a class="delete"><i class="fa fa-trash"></i></a>
+	</div>
+</script>
 <script>
+<?php if (ENABLE_CRM) { ?>
+window.NoteModel = Backbone.Model.extend({
+	defaults : {
+		"id" : 0,
+		"user_id": 0,
+		"note" : "",
+		"created_at" : "",
+		"created_at_timestamp": "",
+		"created_by" : "",
+		"author_first_name":"",
+		"author_last_name":"",
+		"created_at_ago" : "",
+	},
+	initialize: function() {
+		this.set({"created_at_ago": moment.unix(this.get("created_at_timestamp")).fromNow()});
+	}
+});
+
+window.NoteCollection = Backbone.Collection.extend({
+	model: NoteModel,
+	comparator: function(x) {
+		return -parseInt(x.get("id"), 10);
+	}
+});
+
+window.NoteView = Backbone.View.extend({
+	className: "note-view",
+	template: _.template($("#NoteView").html()),
+	events: {
+		"click a.edit": "edit",
+		"click a.delete": "remove",
+	},
+	initialize: function(options) {
+		this.options = options || {};
+		_.bindAll(this, "render", "subrender", "edit", "remove");
+	},
+	"edit": function() {
+		window.current_note_id = this.model.get('id');
+		console.log(window.current_note_id);
+		$('#notes').val(this.model.get('note'));
+		$('#notes')[0].focus();
+	},
+	"remove": function() {
+		var ajax_url = "<?php echo site_url('admin/ajax_delete_note/');?>/"+"/" + this.model.get('id');
+		$.post( ajax_url, {}, function( result ){
+			window.notesView.reload();
+		});
+	},
+	"subrender" : function() {
+	},
+	"render" : function() {
+		$(this.el).html(this.template(this.model.toJSON()));
+		this.subrender();
+		return this;
+	}
+});
+
+window.NotesView = Backbone.View.extend({
+	className: "notes-view",
+	template: _.template($("#NotesView").html()),
+	events: {
+		"click .show-less": "showLess",
+		"click .show-more": "showMore",
+	},
+	initialize: function(options) {
+		this.options = options || {};
+		_.bindAll(this, "render", "reload","showLess","showMore","addNote");
+	}, 
+	showLess: function() {
+		$(this.el).removeClass('expanded');
+		this.expanded = false;
+		this.refreshCount();
+	},
+	showMore: function() {
+		$(this.el).removeClass('expanded').addClass('expanded');
+		this.expanded = true;
+		this.refreshCount();
+	},
+	addNote: function(noteObj) {
+		var that = this;
+		that.notes.unshift(noteObj);
+		var noteModel = new NoteModel(noteObj);
+		that.$(".notes-holder").prepend(new NoteView({
+			model: noteModel
+		}).render().el);
+		that.refreshCount();
+	},
+	refreshCount: function() {
+		var that = this;
+		if (that.expanded) {
+			that.$(".total_count").html(that.notes.length + '/' + that.notes.length);
+		} else {
+			that.$(".total_count").html(Math.min(2, that.notes.length) + '/' + that.notes.length);
+		}
+		if (that.notes.length < 3) {
+			$(that.el).removeClass('has-few').addClass('has-few');
+		} else {
+			$(that.el).removeClass('has-few');
+		}
+	},
+	reload: function() {
+		var that = this;
+		$.post( this.options.ajax_url, {}, function( result ){
+			try {
+				res = JSON.parse(result);
+				if (res.notes) {
+					that.$(".notes-holder").html("");
+					that.notes = res.notes;
+					var notesCollection = new NoteCollection(res.notes);
+					for (var i = 0; i < notesCollection.length; i++) {
+						var m = notesCollection.at(i);
+						that.$(".notes-holder").append(new NoteView({
+							model: m
+						}).render().el);
+					}
+					that.refreshCount();
+				}
+			} catch(e) {
+				console.log(e);
+			}
+			
+			
+		});
+		// for (var i = 0; i < mySpecGroupCollection.length; i++) {
+		// 	this.$(".holder").append(new NoteView({
+		// 		model: mySpecGroupCollection.at(i)
+		// 	}).render().el);
+		// }
+	},
+	"render" : function() {
+		$(this.el).html(this.template({}));
+		this.reload();
+		this.expanded = false;
+		return this;
+	}
+});
+
+<?php } ?>
+function FormatNumberLength(num, length) {
+    var r = "" + num;
+    while (r.length < length) {
+        r = "0" + r;
+    }
+    return r;
+}
+
 $(document).on('click', '.prev, .next', function() {
 	$('#loading-background').show();
 	var mnth = $(this).data('month');
@@ -235,7 +515,8 @@ $(document).on('click', '.prev, .next', function() {
 			year = parseInt(year)+1;
 		}
 	}
-	var ajax_url = "<?php echo site_url('admin/getCalendarCustomer/');?>/"+mnth+'/'+year+"/<?php echo $user_id;?>"+'/true';
+	var m = FormatNumberLength(mnth, 2);
+	var ajax_url = "<?php echo site_url('admin/getCalendarCustomer/');?>/"+m+'/'+year+"/<?php echo $user_id;?>"+'/true';
 	$.post( ajax_url, {}, function( result ){
 		$('.clndr').html(result);
 		$('#loading-background').hide();
@@ -249,6 +530,28 @@ $(document).on('click', '.calendar-day', function() {
 		$('#loading-background').show();
 		var dt = $(this).data('dt');
 		var ajax_url = "<?php echo site_url('admin/getReminderPopUpCustomer/');?>";
+		$.post( ajax_url, {'dt':dt, 'user_id': "<?php echo $user_id;?>"}, function( result ){
+			$('.cstm-pup').html(result);
+			$('#loading-background').hide();
+		});
+	}
+});
+$(document).on('click', 'a.new_task', function() {
+	if( !$(this).hasClass('childOpened') ) {
+		$('#loading-background').show();
+		var ajax_url = "<?php echo site_url('admin/getReminderPopUpCustomer/');?>";
+		$.post( ajax_url, {'user_id': "<?php echo $user_id;?>"}, function( result ){
+			$('.cstm-pup').html(result);
+			$('#loading-background').hide();
+		});
+	}
+});
+$(document).on('click', 'a.activity', function() {
+	if( !$(this).hasClass('childOpened') ) {
+		$('#loading-background').show();
+		var dt = $(this).attr('data-date');
+		var id = $(this).attr('data-id');
+		var ajax_url = "<?php echo site_url('admin/getReminderPopUpCustomer/');?>/"+id;
 		$.post( ajax_url, {'dt':dt, 'user_id': "<?php echo $user_id;?>"}, function( result ){
 			$('.cstm-pup').html(result);
 			$('#loading-background').hide();
@@ -281,4 +584,87 @@ $(document).on('click', '.dlt', function() {
 		window.location.href = "<?php echo site_url('admin/deleteReminderPopUpCustomer/');?>/"+id+'/'+user;
 	}
 });
+<?php if (ENABLE_CRM) { ?>
+$(document).on('change', '#sales_owner', function() {
+	var ajax_url = "<?php echo site_url('admin/ajax_assign_employee_to_customer/');?>";
+	$.post( ajax_url, {'customer':"<?php echo $user_id;?>", 'employee': $(this).val()}, function(){
+	});
+});
+<?php } ?>
+
+$(document).on('click', '.notes-section a.save', function() {
+	var ajax_url = "<?php echo site_url('admin/ajax_save_notes/');?>/"+"/<?php echo $user_id;?>";
+	var note = $('#notes').val();
+	if (note.trim().length <= 0) {
+		return;
+	}
+	if (window.current_note_id) {
+		ajax_url = ajax_url + "/" + window.current_note_id;
+		window.current_note_id = undefined;
+	}
+	$('#notes').val('');
+	$.post( ajax_url, {'note':note.trim()}, function( result ){
+		window.notesView.reload();
+	});
+});
+
+<?php if (ENABLE_CRM) { ?>
+$(window).load(function() {
+	$(".open_activities table").dataTable({
+		"processing" : true,
+		"serverSide" : true,
+		"ordering" : false,
+		"searching" : false,
+		"ajax" : {
+			"url" : "<?php echo base_url('admin/ajax_get_open_activities/'.$customer['id']); ?>",
+			"type" : "POST",
+			"cache" : false
+		},
+		"data" : [],
+		"paging" : true,
+		"info" : true,
+		"stateSave" : true,
+		"fnDrawCallback": function() {
+		},
+		"columns" : [
+			null,
+			null,
+			null,
+			null,
+			null,
+		],
+	});
+	$(".closed_activities table").dataTable({
+		"processing" : true,
+		"serverSide" : true,
+		"ordering" : false,
+		"searching" : false,
+		"ajax" : {
+			"url" : "<?php echo base_url('admin/ajax_get_closed_activities/'.$customer['id']); ?>",
+			"type" : "POST",
+			"cache" : false
+		},
+		"data" : [],
+		"paging" : true,
+		"info" : true,
+		"stateSave" : true,
+		"fnDrawCallback": function() {
+		},
+		"columns" : [
+			null,
+			null,
+			null,
+			null,
+			null,
+		]
+	});
+
+
+	var notesView = new NotesView({
+		ajax_url : "<?php echo site_url('admin/ajax_get_customer_notes/');?>"+"/<?php echo $user_id;?>"
+	});
+	window.notesView = notesView;
+	$("#notes-wrapper").html(notesView.render().el);
+});
+<?php } ?>
 </script>

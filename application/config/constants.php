@@ -60,6 +60,9 @@ if (!defined('LIGHTSPEED_PST_LICENSE_KEY')) {
     define('LIGHTSPEED_PST_LICENSE_KEY', 'Unit');
 }
 
+if (!defined('ENABLE_CRM')) {
+    define('ENABLE_CRM', false);
+}
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

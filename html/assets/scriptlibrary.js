@@ -84,6 +84,7 @@ if (!window.calculatePricesForPaymentCalculator) {
         var motorcycle = window.motorcycles[motorcycleId];
         var retailPrice = parseFloat(motorcycle.retail_price.replace(/,/g, ''));
         var salePrice = parseFloat(motorcycle.sale_price.replace(/,/g, ''));
+        var origSalePrice = salePrice;
         var downPayment = parseFloat(motorcycle.down_payment.replace(/,/g, ''));
         var term = parseFloat(motorcycle.term);
         var interest = parseFloat(motorcycle.interest_rate);
@@ -118,8 +119,8 @@ if (!window.calculatePricesForPaymentCalculator) {
             term = parseFloat(termObj.term.replace(/,/g, ''));
         }
 
-        var savingPrice = retailPrice - salePrice;
-        var price = isNaN(salePrice) ? retailPrice : salePrice;
+        var savingPrice = isNaN(origSalePrice) || (origSalePrice <= 0.1) ? (retailPrice - salePrice) : 0;
+        var price = isNaN(origSalePrice) || (origSalePrice <= 0.1) ? retailPrice : salePrice;
         var principal = price - downPayment;
         var monthlyInterest = (interest / (12 * 100));
         var monthlyPayment = principal * (monthlyInterest / (1 - Math.pow((1 + monthlyInterest), -term) ));
