@@ -25,7 +25,7 @@ if (isset($motorcycle) && array_key_exists("id", $motorcycle) && $motorcycle["id
     $saving = $retail_price - $sale_price;
     mustache_tmpl_set($major_unit_payment_calculator_modal_template, "motorcycle_retail_price", $retail_price > 0.1 ? number_format($retail_price, 2) : false);
     mustache_tmpl_set($major_unit_payment_calculator_modal_template, "motorcycle_sale_price", $sale_price > 0.1 ? number_format($sale_price, 2) : false);
-    mustache_tmpl_set($major_unit_payment_calculator_modal_template, "motorcycle_saving_price", $saving > 0 ? number_format($saving, 2) : false);
+    mustache_tmpl_set($major_unit_payment_calculator_modal_template, "motorcycle_saving_price", $saving > 0 && $sale_price > 0.1 ? number_format($saving, 2) : false);
 
     if (isset($motorcycle_image) && $motorcycle_image != "") {
         mustache_tmpl_set($major_unit_payment_calculator_modal_template, "motorcycle_image", $motorcycle_image);
@@ -49,6 +49,7 @@ if (isset($motorcycle) && array_key_exists("id", $motorcycle) && $motorcycle["id
 if (isset($payment_option)) {
 
     mustache_tmpl_set($major_unit_payment_calculator_modal_template, 'display_base_payment', true);
+    $sale_price_zero =$motorcycle["sale_price"] === "" || is_null($motorcycle["sale_price"]) || ($motorcycle["sale_price"] == "0.00") || ($motorcycle["sale_price"] == 0) || (floatVal($motorcycle["sale_price"]) < 0.01);
     $price = $sale_price_zero ? $motorcycle['retail_price'] : $motorcycle['sale_price'];
     $moneydown = $payment_option["base_down_payment"];
     $interest = $payment_option["data"]["interest_rate"];

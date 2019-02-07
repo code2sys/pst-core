@@ -284,7 +284,7 @@ class Pages_M extends Master_M
                 case "Slider":
 
                     // slider
-                    $bannerImages = $this->admin_m->getSliderImages($pageId, $page_section_id);
+                    $bannerImages = $this->admin_m->getSliderImages($pageId, $page_section_id, true);
                     $data = array();
                     if(!is_null($bannerImages) && is_array($bannerImages) && count($bannerImages) > 0)
                     {

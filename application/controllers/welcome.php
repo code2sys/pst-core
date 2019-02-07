@@ -1101,6 +1101,7 @@ class Welcome extends Master_Controller {
                 $result["error_message"] = "Please provide a valid email address so we can contact you.";
             } else {
 
+                $this->load->model("admin_m");
                 $this->load->model('motorcycle_m');
                 $this->load->model('trafficlogpro_m');
 
@@ -1159,6 +1160,57 @@ class Welcome extends Master_Controller {
                     if (array_key_exists($field, $post) && trim($post[$field]) != "") {
                         $message .= $label . ": " . $post[$field] . "<br/>";
                         $actual_value = true;
+                    }
+                }
+
+                if (defined('ENABLE_CRM') && ENABLE_CRM) { 
+
+                    // Create new customer and assign 'in round robin' employee to the customer
+                    $customer = $this->admin_m->createCustomerIfNotExist(array(
+                        "email" => $post["email"],
+                        "first_name" => $post["firstName"],
+                        "last_name" => $post["lastName"],
+                        "phone" => $post["phone"],
+                    ));
+
+                    $employee = null;
+                    if ($customer !== FALSE && !is_null($customer['created_by'])) {
+                        // Get the employee assigned to this customer
+                        $employee = $this->admin_m->getCustomerDetail($customer['created_by'], true);
+                    }
+
+                    if ($customer !== FALSE) {
+
+                        // create 'New Lead' event for the customer
+                        $now = date('Y-m-d H:i:s');
+                        $notes = str_replace("<br/>","\n", $message);
+                        $reminder = array(
+                            'notes' => $notes,
+                            'subject' => 'New Lead',
+                            'user_id' => $customer['id'],
+                            'start_datetime' => date('Y-m-d H:i:s'),
+                            'end_datetime' => date('Y-m-d H:i:s'),
+                            'data' => json_encode(array(
+                                'recur' => false,
+                                'recur_per' => false,
+                                'recur_every' => ''
+                            )),
+                            'created_on' => $now,
+                            'created_by' => $customer['created_by'],
+                            'modified_on' => $now,
+                            'id' => ''
+                        );
+                        if ($employee !== FALSE) {
+                            $reminder['created_by'] = $employee['id'];
+                        }
+                        $this->admin_m->saveCustomerReminder($reminder);
+                    }
+                    
+                    if ($employee !== FALSE) {
+                        if (!empty($employee['email']))
+                            $toEmail = $toEmail.",".$employee['email'];
+                        else if (!empty($employee['username']))
+                            $toEmail = $toEmail.",".$employee['username'];
                     }
                 }
 

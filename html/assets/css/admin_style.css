@@ -1131,7 +1131,7 @@ td.calendar-day, td.calendar-day-np { width:120px; height: 100px; padding:5px; b
 .benzsw .benzpopup .popcntnt .rw .ryt select{height:30px; width:20%; border:1px solid silver;}
 .benzsw .benzpopup .popcntnt textarea{width:99%; padding:5px; border:1px solid silver; height:120px;}
 .calendar-day-head{background:rgb(221, 243, 254) !important; text-shadow:none !important; border:1px solid black !important;}
-.calendar-day.crntdt{background:rgb(0, 114, 198) !important; color:white !important;}
+.calendar-day.crntdt{background:rgb(0, 114, 198) !important;}
 p.day-rem1{float:left; background:rgb(180, 223, 255) !important; margin:0px 0 5px -5px !important; padding:3px 3px; width:105% !important; line-height:12px; font-size:12px;}
 
 p.cmplt{background-color:green !important;float:left; margin:0px 0 5px -5px !important; padding:3px 3px; width:105% !important; line-height:12px !important; font-size:12px !important; color:white !important;}

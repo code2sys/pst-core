@@ -825,16 +825,10 @@ class Pages extends Master_Controller {
 
 			// Send email
 			$this->config->load('sitesettings');
-			$serviceEmail = $this->pages_m->getServiceEmail();
+            $serviceEmail = $this->pages_m->getServiceEmail();
+            $toEmail = $serviceEmail;
 			//$serviceEmail = "bdvojcek@yahoo.com";
-			//echo $serviceEmail;exit;
-			
-			$mailData = array('toEmailAddress' => $serviceEmail,
-  	                    'subject' => 'Service Schedule Request',
-  	                    'fromEmailAddress' => "noreply@powersporttechnologies.com",
-  	                    'fromName' => "Service Request",
-  	                    'replyToEmailAddress' => $this->input->post('email'),
-  	                    'replyToName' => $this->config->item('replyToName'));
+            //echo $serviceEmail;exit;
 			$templateData = array(
 					'fname' => $this->input->post('fname'),
 					'lname' => $this->input->post('lname'),
@@ -856,19 +850,75 @@ class Pages extends Master_Controller {
 					'workdone' => $this->input->post('workdone'),
 					'company' => $this->input->post('company'),
 					'company_name' => $this->config->item('company_name')
-			);
+            );
+            
+            // create customer and generate event
+            if (defined('ENABLE_CRM') && ENABLE_CRM)
+            {
+                $this->load->model("admin_m");
+                $customer = $this->admin_m->createCustomerIfNotExist(array(
+                    "email" => $this->input->post('email'),
+                    "first_name" => $this->input->post('fname'),
+                    "last_name" => $this->input->post('lname'),
+                    "phone" => $this->input->post('phone'),
+                    "street_address" => $this->input->post('address'),
+                    "city" => $this->input->post('city'),
+                    "state" => $this->input->post('state'),
+                    "zip" => $this->input->post('zipcode')
+                ), false, 'service');
+
+                $message = '';
+                foreach($templateData as $k => $v) {
+                    $message .= $k . ':' . $v . PHP_EOL;
+                }
+
+                if ($customer !== FALSE) {
+
+                    // create 'New Lead' event for the customer
+                    $now = date('Y-m-d H:i:s');
+                    $reminder = array(
+                        'notes' => $message,
+                        'subject' => 'Service Request',
+                        'user_id' => $customer['id'],
+                        'start_datetime' => date('Y-m-d H:i:s'),
+                        'end_datetime' => date('Y-m-d H:i:s'),
+                        'data' => json_encode(array(
+                            'recur' => false,
+                            'recur_per' => false,
+                            'recur_every' => ''
+                        )),
+                        'created_on' => $now,
+                        'created_by' => -1,
+                        'modified_on' => $now,
+                        'id' => ''
+                    );
+                    $this->admin_m->saveCustomerReminder($reminder);
+                }
+
+                $employees = $this->admin_m->getServiceEmployees();
+                foreach($employees as $employee) {
+                    $toEmail = $toEmail.','.$employee['lost_password_email'];
+                }
+            }
+            
+			$mailData = array('toEmailAddress' => $toEmail,
+            'subject' => 'Service Schedule Request',
+            'fromEmailAddress' => "noreply@powersporttechnologies.com",
+            'fromName' => "Service Request",
+            'replyToEmailAddress' => $this->input->post('email'),
+            'replyToName' => $this->config->item('replyToName'));
 
 			$textTemplate = 'email/servicerequest_html_v';
 			$htmlTemplate = 'email/servicerequest_html_v';
 
-  		$templateData['emailBodyImg'] = site_url('assets/email_images/email_body.jpg');
-  		$templateData['emailFooterImg'] = site_url('assets/email_images/email_footer.png');
-  		$templateData['emailHeadImg'] = site_url('assets/email_images/email_head.jpg');
-  		$templateData['emailShadowImg'] = site_url('assets/email_images/email_shadow.png');
-  		$this->load->model('mail_gen_m');
-  		$this->_mainData['success'] = $this->mail_gen_m->generateFromView($mailData, $templateData, $htmlTemplate, $textTemplate);
+            $templateData['emailBodyImg'] = site_url('assets/email_images/email_body.jpg');
+            $templateData['emailFooterImg'] = site_url('assets/email_images/email_footer.png');
+            $templateData['emailHeadImg'] = site_url('assets/email_images/email_head.jpg');
+            $templateData['emailShadowImg'] = site_url('assets/email_images/email_shadow.png');
+            $this->load->model('mail_gen_m');
+            $this->_mainData['success'] = $this->mail_gen_m->generateFromView($mailData, $templateData, $htmlTemplate, $textTemplate);
 		}
-  	}
+    }
 	
   	private function loadGoogleMaps()
   	{
@@ -1124,7 +1174,7 @@ class Pages extends Master_Controller {
   		$this->_mainData['widgets'] = $this->pages_m->getWidgets();
   		$js = '<script type="text/javascript" src="' . $this->_mainData['assets'] . '/ckeditor4/ckeditor.js"></script>';
   		$this->loadJS($js);
-  		$this->_mainData['edit_config'] = $this->_mainData['assets'] . '/js/htmleditor.js';
+  		$this->_mainData['edit_config'] = $this->_mainData['assets'] . '/js/page_htmleditor.js';
 
   		// We have to compute the flags based on the page information
         global $PSTAPI;
@@ -1349,7 +1399,22 @@ class Pages extends Master_Controller {
 			$this->admin_m->removeImage($id, $this->config->item('upload_path'));  
 		}
         redirect('pages/edit/'.$pageId);
-	}
+    }
+    
+    public function ajax_edit_image($id) {
+        $data = array();
+        if (isset($_POST['start_date'])) {
+            $data['start_date'] = $_POST['start_date'];
+        } else if (isset($_POST['end_date'])){
+            $data['end_date'] = $_POST['end_date'];
+        } else {
+            print json_encode(array('success' => FALSE));
+            return;
+        }
+
+        $this->admin_m->updateSliderData($id, $data);  
+        print json_encode(array('success' => TRUE));
+    }
 
 	protected function cleanYouTubeURL($url) {
         $piece = "https://www.youtube.com/watch?v=";

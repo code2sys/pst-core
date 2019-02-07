@@ -1,6 +1,7 @@
 <!-- JLB: I would like to strangle whoever required two versions of this -->
 <script src="/assets/insourced/jquery-1.12.4.js"></script>
 <script src="/assets/insourced/jquery-ui.js"></script>
+<link rel="stylesheet" href="/assets/js/jquery-ui/jquery-ui.min.css" type="text/css" >
 <link rel="stylesheet" href="/assets/css_front/jquery.dataTables.min.css" type="text/css" >
 <script src="/assets/js_front/jquery.dataTables.min.js"></script>
 <script src="/assets/js_front/moment.js"></script>
@@ -702,7 +703,7 @@
         <?php echo form_hidden('order', $slider); ?>
         <div class="tab_content">
             <div class="hidden_table">
-                <table width="auto" cellpadding="12">
+                <table width="100%" cellpadding="12">
                     <tr>
                         <td colspan="3">
                             <strong>Banner Display Time:</strong> <input type="text" name="slider_seconds" value="<?php echo $section['slider_seconds']; ?>" /> seconds
@@ -771,6 +772,14 @@
                                         <td>
                                             <img src="<?php echo base_url($media); ?>/<?php echo $img['image']; ?>" width="200px">
                                             <input type="text" name="banner_link[<?php echo $img['id'];?>]" value="<?php echo $img['banner_link'];?>" placeholder="Enter URL" class="sortbannerCls text middle">
+                                        </td>
+                                        <td valign="top">
+                                            <span style="line-height: 36px;">Start Date:</span>
+                                            <input type="date" name="start_date[<?php echo $img['id'];?>]" value="<?php echo empty($img['start_date']) ? '' : date_format(date_create($img['start_date']), 'Y-m-d');?>" class="banner-start-date" data-id="<?php echo $img['id']?>">
+                                        </td>
+                                        <td valign="top">
+                                            <span style="line-height: 36px;">End Date:</span>
+                                            <input type="date" name="end_date[<?php echo $img['id'];?>]" value="<?php echo empty($img['end_date']) ? '' : date_format(date_create($img['end_date']), 'Y-m-d');?>" class="banner-end-date" data-id="<?php echo $img['id']?>">
                                         </td>
                                         <td valign="top">
                                             <b><a href="<?php echo base_url('pages/remove_image/' . $img['id'] . '/' . $pageRec['id']); ?>">Remove Image</a></b>
@@ -882,7 +891,41 @@
 	    $("#sortable").append('<li class="draggable ui-state-highlight ui-draggable ui-draggable-handle" style="display: list-item;"><input type="hidden" value="' + type + '" name="page_section_ids[]">New ' + type + '<a class="dragRemove" onclick="removeWidget(this);" href="javascript:void(0);" style="display: inline;">x</a>');
     }
 
+    window.ajaxRequests = {};
 
+    function updateBannerInfo(id, name, value) {
+        var reqId = 'banner_edit_' + id + name;
+        if (window.ajaxRequests.hasOwnProperty(reqId)) {
+            window.ajaxRequests[reqId].abort();
+        }
+
+        var formData = new FormData();
+        formData.append(name, value);
+        window.ajaxRequests[reqId] = $.ajax({
+            url: '/pages/ajax_edit_image/' + id,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            data: formData,
+            success: function(response) {
+            },
+            error: function(response) {
+            }
+        });
+    }
+
+    jQuery(function() {
+        $('.banner-start-date').datepicker({ dateFormat: "yy-mm-dd" });
+        $('.banner-start-date').on('change', function() {
+            updateBannerInfo($(this).attr('data-id'), 'start_date', $(this).val());
+        });
+
+        $('.banner-end-date').datepicker({ dateFormat: "yy-mm-dd" });
+        $('.banner-end-date').on('change', function() {
+            updateBannerInfo($(this).attr('data-id'), 'end_date', $(this).val());
+        });
+    });
 
     </script>
 
@@ -894,7 +937,6 @@
     }
 
     .sortableBannerTable{
-        width:120%;
         height:auto;
         padding:30px;
     }

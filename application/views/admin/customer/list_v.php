@@ -7,6 +7,12 @@
 .tabular_data td{padding:8px 3px !important; font-family:'Open Sans',sans-serif;}
 .tabular_data table, th, td{border-top:1px solid #BBB !important; border:none;}
 table.dataTable thead th, table.dataTable thead td{border-bottom:0px solid #111 !important;}
+.open_activities {
+	display: block;
+    width: 100%;
+    float: left;
+	margin: 16px 0px;
+}
 </style>
 
 <!-- BOOTSTRAP CSS AND JS CODE STARTS HERE -->
@@ -34,6 +40,28 @@ table.dataTable thead th, table.dataTable thead td{border-bottom:0px solid #111 
 				</div>
 			</form>
 		</div>
+		<?php if (ENABLE_CRM) { ?>
+		<div id="listTable" class="open_activities">
+			<div style="margin-top:8px">
+				<h3 style="float:left">Open Activities</h3>
+			</div>
+			<table width="100%" cellpadding="10" id="open_activities_table_v">
+				<thead>
+					<tr>
+						<th>Subject</th>
+						<th>From</th>
+						<th>To</th>
+						<th>Activity Owner</th>
+						<th>Modified Time</th>
+						<th>Customer</th>
+					</tr>
+				</thead>
+				<tbody>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+		<?php } ?>
 		
 		<div id="listTable">
 			<div class="tabular_data">
@@ -94,7 +122,36 @@ $(document).ready(function() {
  
                 }
             }
-        } );
+		} );
+		
+		<?php if (ENABLE_CRM) { ?>
+
+		$(".open_activities table").dataTable({
+			"processing" : true,
+			"serverSide" : true,
+			"ordering" : false,
+			"searching" : false,
+			"ajax" : {
+				"url" : "<?php echo base_url('admin/ajax_get_open_activities/'); ?>",
+				"type" : "POST",
+				"cache" : false
+			},
+			"data" : [],
+			"paging" : true,
+			"info" : true,
+			"stateSave" : true,
+			"fnDrawCallback": function() {
+			},
+			"columns" : [
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+			],
+		});
+		<?php } ?>
     });
 </script>
 <script>
@@ -117,10 +174,29 @@ $(document).on('click', '.day-rem-evnt', function() {
 		$('#loading-background').hide();
 	});
 });
+$(document).on('click', 'a.activity', function() {
+	if( !$(this).hasClass('childOpened') ) {
+		$('#loading-background').show();
+		var dt = $(this).attr('data-date');
+		var id = $(this).attr('data-id');
+		var ajax_url = "<?php echo site_url('admin/getReminderPopUpCustomer/');?>/"+id;
+		$.post( ajax_url, {'dt':dt, 'user_id': "<?php echo $user_id;?>"}, function( result ){
+			$('.cstm-pup').html(result);
+			$('#loading-background').hide();
+		});
+	}
+});
 $(document).on('click', '.clspopup', function() {
 	$('.cstm-pup').html('');
 });
 $(document).on('click', '.svcls', function() {
 	$('#reminder_form').submit();
+});
+$(document).on('click', '.dlt', function() {
+	if( confirm("Are you sure you want to delete this event")) {
+		var id = $(this).data('id');
+		var user = $(this).data('user');
+		window.location.href = "<?php echo site_url('admin/deleteReminderPopUpCustomer/');?>/"+id+'/'+user;
+	}
 });
 </script>

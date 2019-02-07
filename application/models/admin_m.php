@@ -19,10 +19,17 @@ class Admin_M extends Master_M {
         return $record;
     }
 
-    public function getSliderImages($pageId, $page_section_id) {
-        $where = array('pageId' => $pageId, "page_section_id" => $page_section_id);
+    public function getSliderImages($pageId, $page_section_id = NULL, $only_valid = false) {
+        $this->db->where('pageId', $pageId);
+        if (!is_null($page_section_id)) {
+            $this->db->where('page_section_id', $page_section_id);
+        }
+        if ($only_valid) {
+            $this->db->where('(start_date is null or start_date <= CURDATE())');
+            $this->db->where('(end_date is null or end_date >= CURDATE())');
+        }
         $this->db->order_by('order ASC');
-        $records = $this->selectRecords('slider', $where);
+        $records = $this->selectRecords('slider');
         return $records;
     }
 
@@ -1963,8 +1970,8 @@ class Admin_M extends Master_M {
                     'contact.country AS country, ' .
                     'contact.email AS email, ' .
                     'contact.phone AS phone, ' .
-                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status,' .
-                    "(select count(distinct `order_status`.`order_id`) from `order_status` inner join `order` on `order`.`id` = `order_status`.`order_id` where `order`.`user_id` = `user`.`id`) as orders, (select c.first_name from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee"
+                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, user.created_by, ' .
+                    "(select count(distinct `order_status`.`order_id`) from `order_status` inner join `order` on `order`.`id` = `order_status`.`order_id` where `order`.`user_id` = `user`.`id`) as orders, (select concat((c.first_name), (' '), (c.last_name)) as field from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee"
             );
             //select count(distinct order_status.order_id), order_status.status from `order_status` inner join `order` on order.id = order_status.order_id where order.user_id = 8;
             $this->db->join('contact', 'contact.id = user.billing_id');
@@ -1986,6 +1993,10 @@ class Admin_M extends Master_M {
                 $this->db->where('user.created_by', $_SESSION['userRecord']['id']);
             } else if ($filter['custom'] == 'web') {
                 $this->db->where('user.created_by IS NULL');
+            } else if ($filter['custom'] == 'all_own') {
+                $this->db->where('user.created_by > 0');
+            } else if ($filter['custom'] == 'service') {
+                $this->db->where(' user.created_by', -1);
             }
 
             if ($limit > 0) {
@@ -2065,8 +2076,8 @@ class Admin_M extends Master_M {
                     'contact.country AS country, ' .
                     'contact.email AS email, ' .
                     'contact.phone AS phone, ' .
-                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, ' .
-                    '(select c.first_name from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee,' .
+                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, user.created_by, ' .
+                    '(select concat((c.first_name), (" "), (c.last_name)) as field from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee,' .
                     "(select 10 from user_reminder as ur inner join user as us on us.id = ur.user_id where ur.start_datetime <= '" . $dt . "' and ur.user_id=user.id and ur.is_completed = '0' limit 1) as strt_tm"
             );
             $this->db->join('contact', 'contact.id = user.billing_id');
@@ -2085,6 +2096,10 @@ class Admin_M extends Master_M {
                 $this->db->where('user.created_by', $_SESSION['userRecord']['id']);
             } else if ($filter['custom'] == 'web') {
                 $this->db->where('user.created_by IS NULL');
+            } else if ($filter['custom'] == 'all_own') {
+                $this->db->where('user.created_by > 0');
+            } else if ($filter['custom'] == 'service') {
+                $this->db->where('user.created_by', -1);
             }
 
             if ($limit > 0) {
@@ -2094,7 +2109,7 @@ class Admin_M extends Master_M {
             $this->db->order_by("strt_tm DESC");
 
             $this->db->group_by('user.id');
-            $records = $this->selectRecords('user', $where);
+            $records = $this->selectRecords('user');
 
             foreach ($records as &$record) {
                 $this->db->select('order.id AS order_id, order_status.status ');
@@ -2138,8 +2153,8 @@ class Admin_M extends Master_M {
                     'contact.country AS country, ' .
                     'contact.email AS email, ' .
                     'contact.phone AS phone, ' .
-                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, ' .
-                    '(select c.first_name from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee'
+                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, user.created_by, ' .
+                    '(select concat((c.first_name), (" "), (c.last_name)) as field from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee'
             );
             $this->db->join('contact', 'contact.id = user.billing_id');
 
@@ -2153,10 +2168,22 @@ class Admin_M extends Master_M {
                 $this->db->where('user.user_type = "' . $filter['user_type'] . '"');
             }
 
+            if (isset($filter['employee_type'])) {
+                if (is_array($filter['employee_type'])) {
+                    $this->db->where_in('user.employee_type', $filter['employee_type']);
+                } else {
+                    $this->db->where('user.employee_type', $filter['employee_type']);
+                }
+            }
+
             if ($filter['custom'] == 'own') {
                 $this->db->where('user.created_by', $_SESSION['userRecord']['id']);
             } else if ($filter['custom'] == 'web') {
                 $this->db->where('user.created_by IS NULL');
+            } else if ($filter['custom'] == 'all_own') {
+                $this->db->where('user.created_by > 0');
+            } else if ($filter['custom'] == 'service') {
+                $this->db->where('user.created_by', -1);
             }
 
             if ($limit > 0) {
@@ -2224,6 +2251,16 @@ class Admin_M extends Master_M {
             $this->db->where('user.user_type = "' . $filter['user_type'] . '"');
         }
 
+        if ($filter['custom'] == 'own') {
+            $this->db->where('user.created_by', $_SESSION['userRecord']['id']);
+        } else if ($filter['custom'] == 'web') {
+            $this->db->where('user.created_by IS NULL and user.source is null');
+        } else if ($filter['custom'] == 'all_own') {
+            $this->db->where('user.created_by > 0');
+        } else if ($filter['custom'] == 'service') {
+            $this->db->where('user.created_by', -1);
+        }
+
         $record = $this->selectRecord('user', $where);
         return $record['cnt'];
     }
@@ -2243,7 +2280,8 @@ class Admin_M extends Master_M {
                 'contact.country AS country, ' .
                 'contact.email AS email, ' .
                 'contact.phone AS phone, ' .
-                'contact.company AS company, user.id, user.status, user.admin, user.cc_permission, user.username, user.notes, user.user_type'
+                'contact.company AS company, user.id, user.status, user.admin, user.cc_permission, user.username, user.notes, user.user_type, '.
+                'user.created_by, user.in_round_robin, user.ran_round_robin_at, user.employee_type'
         );
         //$where = array("user.first_name != ''" => null);
         $this->db->join('contact', 'contact.id = user.billing_id');
@@ -2337,6 +2375,22 @@ class Admin_M extends Master_M {
             'phone' => @$data['phone'],
         );
         $billingId = $this->createRecord('contact', $contactData, FALSE);
+
+        $employee_type = NULL;
+        if ($data['lead_manager'] == 1) {
+            $employee_type = 'lead_manager';
+            $data['prmsion'] = 'all_user_specific_customers';
+            $data['permission']['customers'] = 'customers';
+        } else if ($data['sales_person'] == 1) {
+            $employee_type = 'sales_person';
+            $data['prmsion'] = 'user_specific_customers';
+            $data['permission']['customers'] = 'customers';
+        } else if ($data['service_employee'] == 1) {
+            $employee_type = 'service_employee';
+            $data['prmsion'] = 'service_customers';
+            $data['permission']['customers'] = 'customers';
+        }
+
         $userData = array(
             'username' => $data['username'],
             'password' => $this->encrypt->encode($data['password']),
@@ -2345,6 +2399,9 @@ class Admin_M extends Master_M {
             'user_type' => 'employee',
             'cc_permission' => $data['cc_permission'] == 1 ? 1 : 0,
             'admin' => $data['admin'] == 1 ? 1 : 0,
+            'employee_type' => $employee_type,
+            'in_round_robin' => $data['in_round_robin'] == 1 ? 1 : 0,
+            'ran_round_robin_at' => isset($data['ran_round_robin_at']) ? $data['ran_round_robin_at'] : time(),
             'status' => $data['status'] == 1 ? 1 : 0,
         );
         $userId = $this->createRecord('user', $userData, FALSE);
@@ -2364,12 +2421,33 @@ class Admin_M extends Master_M {
     }
 
     public function updateEmployeeInfo($data) {
+        $where = array('id' => $data['id']);
+        $oldUserData = $this->selectRecord('user', $where);
+
         $userData = array();
         if (@$data['password']) {
             $this->load->library('encrypt');
             $userData['password'] = $this->encrypt->encode($data['password']);
         }
+
+        $employee_type = NULL;
+        if ($data['lead_manager'] == 1) {
+            $employee_type = 'lead_manager';
+            $data['prmsion'] = 'all_user_specific_customers';
+            $data['permission']['customers'] = 'customers';
+        } else if ($data['sales_person'] == 1) {
+            $employee_type = 'sales_person';
+            $data['prmsion'] = 'user_specific_customers';
+            $data['permission']['customers'] = 'customers';
+        } else if ($data['service_employee'] == 1) {
+            $employee_type = 'service_employee';
+            $data['prmsion'] = 'service_customers';
+            $data['permission']['customers'] = 'customers';
+        }
+
         $userData['cc_permission'] = $data['cc_permission'] == 1 ? 1 : 0;
+        $userData['employee_type'] = $employee_type;
+        $userData['in_round_robin'] = $data['in_round_robin'] == 1 ? 1 : 0;
         $userData['admin'] = $data['admin'] == 1 ? 1 : 0;
         $userData['status'] = $data['status'] == 1 ? 1 : 0;
         if (array_key_exists("username", $data)) {
@@ -2377,6 +2455,9 @@ class Admin_M extends Master_M {
         }
         if (array_key_exists("email", $data)) {
             $userData["lost_password_email"] = $data["email"];
+        }
+        if ($oldUserData['in_round_robin'] == 0 && $userData['in_round_robin'] == 1) {
+            $userData['ran_round_robin_at'] = time();
         }
         $where = array('id' => $data['id']);
         $this->updateRecord('user', $userData, $where, FALSE);
@@ -2396,6 +2477,63 @@ class Admin_M extends Master_M {
         unset($data['billing_id']);
         $return = $this->updateRecord('contact', $data, $where, FALSE);
         return $return;
+    }
+
+    public function assignEmployeeToCustomer($employee_id, $customer_id) {
+        if ($employee_id != -1) {
+            $employee = $this->selectRecord('user', array('id' => $employee_id));
+            if ($employee == FALSE) {
+                return FALSE;
+            }
+        }
+
+        $customer = $this->selectRecord('user', array('id' => $customer_id));
+        if ($customer == FALSE) {
+            return FALSE;
+        }
+
+        $data['created_by'] = $employee_id;
+        $where = array('id' => $customer_id);
+        $this->updateRecord('user', $data, $where, FALSE);
+        return true;
+    }
+
+    public function getServiceEmployees() {
+        $this->db->where('employee_type', 'service_employee');
+        $employees = $this->selectRecords('user');
+        return $employees;
+    }
+
+    public function createCustomerIfNotExist($data, $assign_round_robin = true, $source = 'lead') {
+        $existing_users = $this->selectRecords('user', array('username' => $data['email']));
+        $data['source'] = $source;
+        if (empty($existing_users)) {
+            if ($source == 'lead' && $assign_round_robin) {
+                $this->db->where('in_round_robin', 1);
+                $this->db->where('status', 1);
+                $this->db->order_by('ran_round_robin_at', 'ASC');
+                $this->db->limit(1);
+                $employee = $this->selectRecord('user');
+                if ($employee !== FALSE) {
+                    $data['created_by'] = $employee['id'];
+
+                    // move the employee to the last of the round robin list
+                    $where = array('id' => $employee['id']);
+                    $employee_data = array('ran_round_robin_at'=>time());
+                    $this->updateRecord('user', $employee_data, $where, FALSE);
+                }
+            } else if ($source == 'service') {
+                $data['created_by'] = -1;
+            }
+            $this->createNewCustomer($data);
+        }
+
+        $existing_users = $this->selectRecords('user', array('username' => $data['email']));
+        if (empty($existing_users)) {
+            return FALSE;
+        }
+
+        return $this->getCustomerDetail($existing_users[0]['id']);
     }
 
     public function createNewCustomer($data) {
@@ -2420,7 +2558,8 @@ class Admin_M extends Master_M {
             'billing_id' => @$billingId,
             'user_type' => 'normal',
             'admin' => 0,
-            'created_by' => $data['created_by']
+            'created_by' => $data['created_by'],
+            'source' => @$data['source']
         );
         $userId = $this->createRecord('user', $userData, FALSE);
         return $userId;
@@ -2631,6 +2770,107 @@ class Admin_M extends Master_M {
         return $success;
     }
 
+    public function getOpenReminders($customer_id = NULL, $limit = 5, $offset = 0, $filter = array()) {
+        $result_array = array();
+        $count = 0;
+        if (is_null($customer_id)) {
+            $params = array();
+            $query_str = 'select reminder.*, '.
+                'reminder.created_by as owner_id,'.
+                'owner.username as owner_username, '.
+                'contact.first_name as owner_first_name, '.
+                'contact.last_name as owner_last_name, '.
+                'customer.id as customer_id, '.
+                'customer_contact.first_name as customer_first_name, '.
+                'customer_contact.last_name as customer_last_name '.
+                'from user_reminder as reminder '.
+                'left join user as owner on reminder.created_by = owner.id '.
+                'left join contact as contact on contact.id = owner.billing_id ';
+
+            if ($filter['custom'] == 'own') {
+                $query_str = $query_str. ' inner join user as customer on reminder.user_id = customer.id and customer.created_by = ? ';
+                $params[] = $_SESSION['userRecord']['id'];
+            } else if ($filter['custom'] == 'web') {
+                $query_str = $query_str. ' inner join user as customer on reminder.user_id = customer.id and customer.created_by is null and customer.source is null';
+            } else if ($filter['custom'] == 'all_own') {
+                $query_str = $query_str. ' inner join user as customer on reminder.user_id = customer.id and customer.created_by > 0 ';
+            } else if ($filter['custom'] == 'service') {
+                $query_str = $query_str. ' inner join user as customer on reminder.user_id = customer.id and customer.created_by = ? ';
+                $params[] = -1;
+            } else {
+                $query_str = $query_str. ' inner join user as customer on reminder.user_id = customer.id ';
+            }
+            $query_str = $query_str.
+                'left join contact as customer_contact on customer_contact.id = customer.billing_id '.
+                'where reminder.is_completed = 0 ';
+            $query_str .= ' order by modified_on asc';
+            $query = $this->db->query($query_str, $params);
+            $count = $query->num_rows();
+            $query_str = $query_str.' limit '.$limit.' offset '.$offset;
+            $query = $this->db->query($query_str, $params);
+            $result_array = $query->result_array();
+        } else {
+            $query_str = 'select reminder.*, '.
+                'reminder.created_by as owner_id,'.
+                'owner.username as owner_username, '.
+                'contact.first_name as owner_first_name, '.
+                'contact.last_name as owner_last_name '.
+                'from user_reminder as reminder '.
+                'left join user as owner on reminder.created_by = owner.id '.
+                'left join contact as contact on contact.id = owner.billing_id '.
+                'where reminder.user_id = ? and reminder.is_completed = 0 '.
+                'order by modified_on asc';
+
+            $query = $this->db->query($query_str, array($customer_id));
+            $count = $query->num_rows();
+            $query_str = $query_str.' limit '.$limit.' offset '.$offset;
+            $query = $this->db->query($query_str, array($customer_id));
+            $result_array = $query->result_array();
+        }
+        return array($result_array, $count, $count);
+    }
+
+    public function getClosedReminders($customer_id = NULL, $limit = 5, $offset = 0) {
+        $result_array = array();
+        $count = 0;
+        $pages = 0;
+        if (is_null($customer_id)) {
+            $query_str = 'select reminder.*, '.
+                'completed.id as completed_user_id, '.
+                'completed.username as completed_username, '.
+                'contact.first_name as completed_first_name, '.
+                'contact.last_name as completed_last_name '.
+                'from user_reminder as reminder '.
+                'left join user as completed on reminder.completed_by = completed.id '.
+                'left join contact as contact on contact.id = completed.billing_id '.
+                'where reminder.is_completed = 1 '.
+                'order by modified_on asc';
+            $query = $this->db->query($query_str);
+            $count = $query->num_rows();
+            $query_str = $query_str.' limit '.$limit.' offset '.$offset;
+            $query = $this->db->query($query_str);
+            $result_array = $query->result_array();
+        } else {
+            $query_str = 'select reminder.*, '.
+                'completed.id as completed_user_id, '.
+                'completed.username as completed_username, '.
+                'contact.first_name as completed_first_name, '.
+                'contact.last_name as completed_last_name '.
+                'from user_reminder as reminder '.
+                'left join user as completed on reminder.completed_by = completed.id '.
+                'left join contact as contact on contact.id = completed.billing_id '.
+                'where reminder.user_id = ? and reminder.is_completed = 1 '.
+                'order by modified_on asc';
+            $query = $this->db->query($query_str, array($customer_id));
+            $count = $query->num_rows();
+            $query_str = $query_str.' limit '.$limit.' offset '.$offset;
+            $query = $this->db->query($query_str, array($customer_id));
+            $result_array = $query->result_array();
+        }
+
+        return array($result_array, $count, $count);
+    }
+
     public function getMonthReminders($month, $year, $user_id) {
         $this->db->where('YEAR(start_datetime)', $year);
         $this->db->where('MONTH(start_datetime)', $month);
@@ -2668,7 +2908,7 @@ class Admin_M extends Master_M {
     }
 
     public function completeEvent($id) {
-        $data = array('is_completed' => '1');
+        $data = array('is_completed' => '1', 'completed_on'=>date('Y-m-d H:i:s'), 'completed_by'=>$_SESSION['userRecord']['id']);
         $where = array('id' => $id);
         $this->updateRecord('user_reminder', $data, $where, FALSE);
     }
@@ -3238,6 +3478,10 @@ class Admin_M extends Master_M {
     public function updateSliderLink( $id, $link ) {
         $where = array('id' => $id);
         $data = array('banner_link' => $link);
+        $this->updateRecord('slider', $data, $where, FALSE);
+    }
+    public function updateSliderData( $id, $data ) {
+        $where = array('id' => $id);
         $this->updateRecord('slider', $data, $where, FALSE);
     }
 
