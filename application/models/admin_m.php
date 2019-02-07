@@ -2372,11 +2372,11 @@ class Admin_M extends Master_M {
         $employee_type = NULL;
         if ($data['lead_manager'] == 1) {
             $employee_type = 'lead_manager';
-            $data['prmsion'] = 'user_specific_customers';
+            $data['prmsion'] = 'all_user_specific_customers';
             $data['permission']['customers'] = 'customers';
         } else if ($data['sales_person'] == 1) {
             $employee_type = 'sales_person';
-            $data['prmsion'] = 'all_user_specific_customers';
+            $data['prmsion'] = 'user_specific_customers';
             $data['permission']['customers'] = 'customers';
         } else if ($data['service_employee'] == 1) {
             $employee_type = 'service_employee';

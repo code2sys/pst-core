@@ -853,7 +853,7 @@ class Pages extends Master_Controller {
             );
             
             // create customer and generate event
-            if (defined('ENABLE_CRM') && ENABLE_CRM) { 
+            if (defined('ENABLE_CRM') && ENABLE_CRM)
             {
                 $this->load->model("admin_m");
                 $customer = $this->admin_m->createCustomerIfNotExist(array(
@@ -911,14 +911,14 @@ class Pages extends Master_Controller {
 			$textTemplate = 'email/servicerequest_html_v';
 			$htmlTemplate = 'email/servicerequest_html_v';
 
-  		$templateData['emailBodyImg'] = site_url('assets/email_images/email_body.jpg');
-  		$templateData['emailFooterImg'] = site_url('assets/email_images/email_footer.png');
-  		$templateData['emailHeadImg'] = site_url('assets/email_images/email_head.jpg');
-  		$templateData['emailShadowImg'] = site_url('assets/email_images/email_shadow.png');
-  		$this->load->model('mail_gen_m');
-  		$this->_mainData['success'] = $this->mail_gen_m->generateFromView($mailData, $templateData, $htmlTemplate, $textTemplate);
+            $templateData['emailBodyImg'] = site_url('assets/email_images/email_body.jpg');
+            $templateData['emailFooterImg'] = site_url('assets/email_images/email_footer.png');
+            $templateData['emailHeadImg'] = site_url('assets/email_images/email_head.jpg');
+            $templateData['emailShadowImg'] = site_url('assets/email_images/email_shadow.png');
+            $this->load->model('mail_gen_m');
+            $this->_mainData['success'] = $this->mail_gen_m->generateFromView($mailData, $templateData, $htmlTemplate, $textTemplate);
 		}
-  	}
+    }
 	
   	private function loadGoogleMaps()
   	{
