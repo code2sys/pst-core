@@ -1963,8 +1963,8 @@ class Admin_M extends Master_M {
                     'contact.country AS country, ' .
                     'contact.email AS email, ' .
                     'contact.phone AS phone, ' .
-                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status,' .
-                    "(select count(distinct `order_status`.`order_id`) from `order_status` inner join `order` on `order`.`id` = `order_status`.`order_id` where `order`.`user_id` = `user`.`id`) as orders, (select c.first_name from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee"
+                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, user.created_by, ' .
+                    "(select count(distinct `order_status`.`order_id`) from `order_status` inner join `order` on `order`.`id` = `order_status`.`order_id` where `order`.`user_id` = `user`.`id`) as orders, (select concat((c.first_name), (' '), (c.last_name)) as field from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee"
             );
             //select count(distinct order_status.order_id), order_status.status from `order_status` inner join `order` on order.id = order_status.order_id where order.user_id = 8;
             $this->db->join('contact', 'contact.id = user.billing_id');
@@ -1987,7 +1987,9 @@ class Admin_M extends Master_M {
             } else if ($filter['custom'] == 'web') {
                 $this->db->where('user.created_by IS NULL');
             } else if ($filter['custom'] == 'all_own') {
-                $this->db->where('user.created_by is NOT NULL', NULL, FALSE);
+                $this->db->where('user.created_by > 0');
+            } else if ($filter['custom'] == 'service') {
+                $this->db->where(' user.created_by', -1);
             }
 
             if ($limit > 0) {
@@ -2067,8 +2069,8 @@ class Admin_M extends Master_M {
                     'contact.country AS country, ' .
                     'contact.email AS email, ' .
                     'contact.phone AS phone, ' .
-                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, ' .
-                    '(select c.first_name from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee,' .
+                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, user.created_by, ' .
+                    '(select concat((c.first_name), (" "), (c.last_name)) as field from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee,' .
                     "(select 10 from user_reminder as ur inner join user as us on us.id = ur.user_id where ur.start_datetime <= '" . $dt . "' and ur.user_id=user.id and ur.is_completed = '0' limit 1) as strt_tm"
             );
             $this->db->join('contact', 'contact.id = user.billing_id');
@@ -2087,6 +2089,10 @@ class Admin_M extends Master_M {
                 $this->db->where('user.created_by', $_SESSION['userRecord']['id']);
             } else if ($filter['custom'] == 'web') {
                 $this->db->where('user.created_by IS NULL');
+            } else if ($filter['custom'] == 'all_own') {
+                $this->db->where('user.created_by > 0');
+            } else if ($filter['custom'] == 'service') {
+                $this->db->where('user.created_by', -1);
             }
 
             if ($limit > 0) {
@@ -2096,7 +2102,7 @@ class Admin_M extends Master_M {
             $this->db->order_by("strt_tm DESC");
 
             $this->db->group_by('user.id');
-            $records = $this->selectRecords('user', $where);
+            $records = $this->selectRecords('user');
 
             foreach ($records as &$record) {
                 $this->db->select('order.id AS order_id, order_status.status ');
@@ -2140,8 +2146,8 @@ class Admin_M extends Master_M {
                     'contact.country AS country, ' .
                     'contact.email AS email, ' .
                     'contact.phone AS phone, ' .
-                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, ' .
-                    '(select c.first_name from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee'
+                    'contact.company AS company, user.username as uemail, user.id, user.last_login, user.admin, user.status, user.created_by, ' .
+                    '(select concat((c.first_name), (" "), (c.last_name)) as field from contact as c inner join user as u on u.billing_id = c.id where u.id=user.created_by) as employee'
             );
             $this->db->join('contact', 'contact.id = user.billing_id');
 
@@ -2155,10 +2161,22 @@ class Admin_M extends Master_M {
                 $this->db->where('user.user_type = "' . $filter['user_type'] . '"');
             }
 
+            if (isset($filter['employee_type'])) {
+                if (is_array($filter['employee_type'])) {
+                    $this->db->where_in('user.employee_type', $filter['employee_type']);
+                } else {
+                    $this->db->where('user.employee_type', $filter['employee_type']);
+                }
+            }
+
             if ($filter['custom'] == 'own') {
                 $this->db->where('user.created_by', $_SESSION['userRecord']['id']);
             } else if ($filter['custom'] == 'web') {
                 $this->db->where('user.created_by IS NULL');
+            } else if ($filter['custom'] == 'all_own') {
+                $this->db->where('user.created_by > 0');
+            } else if ($filter['custom'] == 'service') {
+                $this->db->where('user.created_by', -1);
             }
 
             if ($limit > 0) {
@@ -2226,6 +2244,16 @@ class Admin_M extends Master_M {
             $this->db->where('user.user_type = "' . $filter['user_type'] . '"');
         }
 
+        if ($filter['custom'] == 'own') {
+            $this->db->where('user.created_by', $_SESSION['userRecord']['id']);
+        } else if ($filter['custom'] == 'web') {
+            $this->db->where('user.created_by IS NULL and user.source is null');
+        } else if ($filter['custom'] == 'all_own') {
+            $this->db->where('user.created_by > 0');
+        } else if ($filter['custom'] == 'service') {
+            $this->db->where('user.created_by', -1);
+        }
+
         $record = $this->selectRecord('user', $where);
         return $record['cnt'];
     }
@@ -2246,7 +2274,7 @@ class Admin_M extends Master_M {
                 'contact.email AS email, ' .
                 'contact.phone AS phone, ' .
                 'contact.company AS company, user.id, user.status, user.admin, user.cc_permission, user.username, user.notes, user.user_type, '.
-                'user.created_by, user.in_round_robin, user.ran_round_robin_at, user.sales_person, user.lead_manager'
+                'user.created_by, user.in_round_robin, user.ran_round_robin_at, user.employee_type'
         );
         //$where = array("user.first_name != ''" => null);
         $this->db->join('contact', 'contact.id = user.billing_id');
@@ -2340,6 +2368,22 @@ class Admin_M extends Master_M {
             'phone' => @$data['phone'],
         );
         $billingId = $this->createRecord('contact', $contactData, FALSE);
+
+        $employee_type = NULL;
+        if ($data['lead_manager'] == 1) {
+            $employee_type = 'lead_manager';
+            $data['prmsion'] = 'user_specific_customers';
+            $data['permission']['customers'] = 'customers';
+        } else if ($data['sales_person'] == 1) {
+            $employee_type = 'sales_person';
+            $data['prmsion'] = 'all_user_specific_customers';
+            $data['permission']['customers'] = 'customers';
+        } else if ($data['service_employee'] == 1) {
+            $employee_type = 'service_employee';
+            $data['prmsion'] = 'service_customers';
+            $data['permission']['customers'] = 'customers';
+        }
+
         $userData = array(
             'username' => $data['username'],
             'password' => $this->encrypt->encode($data['password']),
@@ -2348,23 +2392,13 @@ class Admin_M extends Master_M {
             'user_type' => 'employee',
             'cc_permission' => $data['cc_permission'] == 1 ? 1 : 0,
             'admin' => $data['admin'] == 1 ? 1 : 0,
-            'sales_person' => $data['sales_person'] == 1 ? 1 : 0,
-            'lead_manager' => $data['lead_manager'] == 1 ? 1 : 0,
+            'employee_type' => $employee_type,
             'in_round_robin' => $data['in_round_robin'] == 1 ? 1 : 0,
             'ran_round_robin_at' => isset($data['ran_round_robin_at']) ? $data['ran_round_robin_at'] : time(),
             'status' => $data['status'] == 1 ? 1 : 0,
         );
         $userId = $this->createRecord('user', $userData, FALSE);
         $permissions = $this->db->query("delete from userpermissions where user_id = '" . $userId . "'");
-        
-        if ($data['sales_person'] == 1) {
-            $data['prmsion'] = 'user_specific_customers';
-            $data['permission']['customers'] = 'customers';
-        }
-        if ($data['lead_manager'] == 1) {
-            $data['prmsion'] = 'all_user_specific_customers';
-            $data['permission']['customers'] = 'customers';
-        }
 
         if ($data['prmsion'] != '') {
             $data['permission'][$data['prmsion']] = $data['prmsion'];
@@ -2388,9 +2422,24 @@ class Admin_M extends Master_M {
             $this->load->library('encrypt');
             $userData['password'] = $this->encrypt->encode($data['password']);
         }
+
+        $employee_type = NULL;
+        if ($data['lead_manager'] == 1) {
+            $employee_type = 'lead_manager';
+            $data['prmsion'] = 'all_user_specific_customers';
+            $data['permission']['customers'] = 'customers';
+        } else if ($data['sales_person'] == 1) {
+            $employee_type = 'sales_person';
+            $data['prmsion'] = 'user_specific_customers';
+            $data['permission']['customers'] = 'customers';
+        } else if ($data['service_employee'] == 1) {
+            $employee_type = 'service_employee';
+            $data['prmsion'] = 'service_customers';
+            $data['permission']['customers'] = 'customers';
+        }
+
         $userData['cc_permission'] = $data['cc_permission'] == 1 ? 1 : 0;
-        $userData['sales_person'] = $data['sales_person'] == 1 ? 1 : 0;
-        $userData['lead_manager'] = $data['lead_manager'] == 1 ? 1 : 0;
+        $userData['employee_type'] = $employee_type;
         $userData['in_round_robin'] = $data['in_round_robin'] == 1 ? 1 : 0;
         $userData['admin'] = $data['admin'] == 1 ? 1 : 0;
         $userData['status'] = $data['status'] == 1 ? 1 : 0;
@@ -2408,14 +2457,6 @@ class Admin_M extends Master_M {
 
         $permissions = $this->db->query("delete from userpermissions where user_id = '" . $data['id'] . "'");
 
-        if ($data['sales_person'] == 1) {
-            $data['prmsion'] = 'user_specific_customers';
-            $data['permission']['customers'] = 'customers';
-        }
-        if ($data['lead_manager'] == 1) {
-            $data['prmsion'] = 'all_user_specific_customers';
-            $data['permission']['customers'] = 'customers';
-        }
         if ($data['prmsion'] != '') {
             $data['permission'][$data['prmsion']] = $data['prmsion'];
         }
@@ -2432,9 +2473,11 @@ class Admin_M extends Master_M {
     }
 
     public function assignEmployeeToCustomer($employee_id, $customer_id) {
-        $employee = $this->selectRecord('user', array('id' => $employee_id));
-        if ($employee == FALSE) {
-            return FALSE;
+        if ($employee_id != -1) {
+            $employee = $this->selectRecord('user', array('id' => $employee_id));
+            if ($employee == FALSE) {
+                return FALSE;
+            }
         }
 
         $customer = $this->selectRecord('user', array('id' => $customer_id));
@@ -2448,10 +2491,17 @@ class Admin_M extends Master_M {
         return true;
     }
 
-    public function createCustomerIfNotExist($data, $assign_round_robin = true) {
+    public function getServiceEmployees() {
+        $this->db->where('employee_type', 'service_employee');
+        $employees = $this->selectRecords('user');
+        return $employees;
+    }
+
+    public function createCustomerIfNotExist($data, $assign_round_robin = true, $source = 'lead') {
         $existing_users = $this->selectRecords('user', array('username' => $data['email']));
+        $data['source'] = $source;
         if (empty($existing_users)) {
-            if ($assign_round_robin) {
+            if ($source == 'lead' && $assign_round_robin) {
                 $this->db->where('in_round_robin', 1);
                 $this->db->where('status', 1);
                 $this->db->order_by('ran_round_robin_at', 'ASC');
@@ -2465,6 +2515,8 @@ class Admin_M extends Master_M {
                     $employee_data = array('ran_round_robin_at'=>time());
                     $this->updateRecord('user', $employee_data, $where, FALSE);
                 }
+            } else if ($source == 'service') {
+                $data['created_by'] = -1;
             }
             $this->createNewCustomer($data);
         }
@@ -2499,7 +2551,8 @@ class Admin_M extends Master_M {
             'billing_id' => @$billingId,
             'user_type' => 'normal',
             'admin' => 0,
-            'created_by' => $data['created_by']
+            'created_by' => $data['created_by'],
+            'source' => @$data['source']
         );
         $userId = $this->createRecord('user', $userData, FALSE);
         return $userId;
@@ -2716,7 +2769,7 @@ class Admin_M extends Master_M {
         if (is_null($customer_id)) {
             $params = array();
             $query_str = 'select reminder.*, '.
-                'owner.id as owner_id,'.
+                'reminder.created_by as owner_id,'.
                 'owner.username as owner_username, '.
                 'contact.first_name as owner_first_name, '.
                 'contact.last_name as owner_last_name, '.
@@ -2728,14 +2781,17 @@ class Admin_M extends Master_M {
                 'left join contact as contact on contact.id = owner.billing_id ';
 
             if ($filter['custom'] == 'own') {
-                $query_str = $query_str. ' join user as customer on reminder.user_id = customer.id and customer.created_by = ? ';
+                $query_str = $query_str. ' inner join user as customer on reminder.user_id = customer.id and customer.created_by = ? ';
                 $params[] = $_SESSION['userRecord']['id'];
             } else if ($filter['custom'] == 'web') {
-                $query_str = $query_str. ' left join user as customer on reminder.user_id = customer.id and customer.created_by is null ';
-            } else if ($filter['custom' == 'all_own']) {
-                $query_str = $query_str. ' left join user as customer on reminder.user_id = customer.id and customer.created_by is not null ';
+                $query_str = $query_str. ' inner join user as customer on reminder.user_id = customer.id and customer.created_by is null and customer.source is null';
+            } else if ($filter['custom'] == 'all_own') {
+                $query_str = $query_str. ' inner join user as customer on reminder.user_id = customer.id and customer.created_by > 0 ';
+            } else if ($filter['custom'] == 'service') {
+                $query_str = $query_str. ' inner join user as customer on reminder.user_id = customer.id and customer.created_by = ? ';
+                $params[] = -1;
             } else {
-                $query_str = $query_str. ' join user as customer on reminder.user_id = customer.id ';
+                $query_str = $query_str. ' inner join user as customer on reminder.user_id = customer.id ';
             }
             $query_str = $query_str.
                 'left join contact as customer_contact on customer_contact.id = customer.billing_id '.
@@ -2748,7 +2804,7 @@ class Admin_M extends Master_M {
             $result_array = $query->result_array();
         } else {
             $query_str = 'select reminder.*, '.
-                'owner.id as owner_id,'.
+                'reminder.created_by as owner_id,'.
                 'owner.username as owner_username, '.
                 'contact.first_name as owner_first_name, '.
                 'contact.last_name as owner_last_name '.
@@ -2794,7 +2850,7 @@ class Admin_M extends Master_M {
                 'contact.first_name as completed_first_name, '.
                 'contact.last_name as completed_last_name '.
                 'from user_reminder as reminder '.
-                'left join user as completed on reminder.user_id = completed.id '.
+                'left join user as completed on reminder.completed_by = completed.id '.
                 'left join contact as contact on contact.id = completed.billing_id '.
                 'where reminder.user_id = ? and reminder.is_completed = 1 '.
                 'order by modified_on asc';

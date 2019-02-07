@@ -253,6 +253,8 @@ abstract class Customeradmin extends Financeadmin {
             $filter['custom'] = 'own';
         } else if ($this->checkValidAccess('all_user_specific_customers')) {
             $filter['custom'] = 'all_own';
+        } else if ($this->checkValidAccess('service_customers')) {
+            $filter['custom'] = 'service';
         }
 
         $customers = $this->admin_m->getAllCustomers($filter, $_POST['length'], $_POST['start']);
@@ -266,7 +268,11 @@ abstract class Customeradmin extends Financeadmin {
             } else {
                 $attention = '';
             }
-            $data[] = array($v['first_name'] . ' ' . $v['last_name'], $v['phone'], $v['email'], $v['orders'], $v['employee'], $attention, $str);
+            $employee = $v['employee'];
+            if ($v['created_by'] == -1) {
+                $employee = 'SERVICE';
+            }
+            $data[] = array($v['first_name'] . ' ' . $v['last_name'], $v['phone'], $v['email'], $v['orders'], $employee, $attention, $str);
         }
 
         $cntCustomers = $this->admin_m->getAllCustomersCount($filter);
@@ -317,7 +323,7 @@ abstract class Customeradmin extends Financeadmin {
         $this->_mainData['calendar'] = $this->getCalendarCustomer(date('m'), date('Y'), $user_id);
         $this->_mainData['sales_persons'] = $this->admin_m->getAllCustomers(array(
             'user_type' => 'employee',
-            'sales_person' => 1
+            'employee_type' => array('sales_person', 'lead_manager')
         ));
         $this->renderMasterPage('admin/master_v', 'admin/customer/view_v', $this->_mainData);
     }
@@ -390,15 +396,21 @@ abstract class Customeradmin extends Financeadmin {
             $filter['custom'] = 'own';
         } else if ($this->checkValidAccess('all_user_specific_customers')) {
             $filter['custom'] = 'all_own';
+        } else if ($this->checkValidAccess('service_customers')) {
+            $filter['custom'] = 'service';
         }
         list($activities, $total_count, $filtered_count) = $this->admin_m->getOpenReminders($customer_id, $length, $start, $filter);
         $rows = array();
         foreach ($activities as $activity) {
+            $owner = $activity['owner_first_name'].' '.$activity['owner_last_name'];
+            if ($activity['owner_id'] == -1) {
+                $owner = 'SERVICE';
+            }
             $row = array(
                 '<a class="pointer activity" data-id="'.$activity['id'].'" data-date="'.date('Y-m-d', strtotime($activity['start_datetime'])).'">'.$activity['subject'].'</a>',
                 $activity['start_datetime'],
                 $activity['end_datetime'],
-                $activity['owner_first_name'].' '.$activity['owner_last_name'],
+                $owner,
                 $activity['modified_on'],
             );
             if (is_null($customer_id)) {
@@ -428,7 +440,7 @@ abstract class Customeradmin extends Financeadmin {
                 '<a class="pointer activity" data-id="'.$activity['id'].'" data-date="'.date('Y-m-d', strtotime($activity['start_datetime'])).'">'.$activity['subject'].'</a>',
                 $activity['start_datetime'],
                 $activity['end_datetime'],
-                $activity['completed_first_name'].' '.$activity['completed_last_name'],
+                $activity['completed_first_name'].' '.$activity['completed_last_name'].'('.$activity['completed_username'].')',
                 $activity['completed_on']
             );
             $rows[] = $row;
@@ -682,6 +694,10 @@ abstract class Customeradmin extends Financeadmin {
                 //if( $this->checkValidAccess('user_specific_customers') ) {
                 $post['created_by'] = $_SESSION['userRecord']['id'];
                 //}
+
+                if( $this->checkValidAccess('service_customers') ) {
+                    $post['created_by'] = -1;
+                }
 
                 $updated = $this->admin_m->createNewCustomer($post);
                 redirect('admin/customers/');

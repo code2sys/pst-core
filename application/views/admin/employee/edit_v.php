@@ -79,28 +79,37 @@ label{cursor:pointer;}
 								<input type="radio" name="admin" value="0" <?php echo $employee['admin'] == 0 ? 'checked' : '';?>>No
 							</td>
 						</tr>
+						<?php if (ENABLE_CRM) { ?>
 						<tr>
 							<td class="lft">Lead Manager</td>
 							<td>
-								<input type="radio" name="lead_manager" value="1" <?php echo $employee['lead_manager'] == 1 ? 'checked' : '';?>>Yes
-								<input type="radio" name="lead_manager" value="0" <?php echo $employee['lead_manager'] == 0 ? 'checked' : '';?>>No
+								<input type="radio" name="lead_manager" value="1" <?php echo $employee['employee_type'] == 'lead_manager' ? 'checked' : '';?>>Yes
+								<input type="radio" name="lead_manager" value="0" <?php echo $employee['employee_type'] != 'lead_manager' ? 'checked' : '';?>>No
 							</td>
 						</tr>
 						<tr>
 							<td class="lft">Sales Person</td>
 							<td>
-								<input type="radio" name="sales_person" value="1" <?php echo $employee['sales_person'] == 1 ? 'checked' : '';?>>Yes
-								<input type="radio" name="sales_person" value="0" <?php echo $employee['sales_person'] == 0 ? 'checked' : '';?>>No
+								<input type="radio" name="sales_person" value="1" <?php echo $employee['employee_type'] == 'sales_person' ? 'checked' : '';?>>Yes
+								<input type="radio" name="sales_person" value="0" <?php echo $employee['employee_type'] != 'sales_person' ? 'checked' : '';?>>No
 							</td>
 						</tr>
 						<tr>
-							<td class="lft">Include in Round Robin</td>
+							<td class="lft">Include in Round Robin (Sales Leads Only)</td>
 							<td>
 								<label class="checkbox">
 									<input type="checkbox" value="1" name="in_round_robin" <?php echo $employee['in_round_robin'] == 1 ? 'checked' : '';?>/>
 								</label>
 							</td>
 						</tr>
+						<tr>
+							<td class="lft">Service Employee</td>
+							<td>
+								<input type="radio" name="service_employee" value="1" <?php echo $employee['employee_type'] == 'service_employee' ? 'checked' : '';?>>Yes
+								<input type="radio" name="service_employee" value="0" <?php echo $employee['employee_type'] != 'service_employee' ? 'checked' : '';?>>No
+							</td>
+						</tr>
+						<?php } ?>
 						<tr>
 							<td colspan="2">
 								<div class="twnty">
@@ -177,9 +186,14 @@ label{cursor:pointer;}
 									<label class="checkbox">
 										<input type="radio" id="user_specific_customers" value="user_specific_customers" name="prmsion" <?php echo in_array('user_specific_customers', $employee['permissions']) ? 'checked' : '';?>/>User Specific Customers
 									</label>
+									<?php if (ENABLE_CRM) { ?>
 									<label class="checkbox">
 										<input type="radio" id="all_user_specific_customers" value="all_user_specific_customers" name="prmsion" <?php echo in_array('all_user_specific_customers', $employee['permissions']) ? 'checked' : '';?>/>All User Specified Customers
 									</label>
+									<label class="checkbox">
+										<input type="radio" id="service_customers" value="service_customers" name="prmsion" <?php echo in_array('service_customers', $employee['permissions']) ? 'checked' : '';?>/>Service Customers
+									</label>
+									<?php } ?>
 								</div>
                                 <div class="twnty">
                                     <h4>Inquiries</h4>
@@ -225,45 +239,65 @@ label{cursor:pointer;}
 	</div>
 </div>
 <script>
-jQuery(function() {
-	<?php if ($employee['sales_person'] == 1): ?>
-		$('input[name="permission[customers]"]').prop('checked', true);
-		$('input[name="permission[customers]"]').attr('disabled', true);
-		$('#user_specific_customers').prop('checked', true);
-		$('input[name="prmsion"]').attr('disabled', true);
-		$('input[name="lead_manager"][value="0"]').prop('checked', true);
-	<?php endif; ?>
-	<?php if ($employee['lead_manager'] == 1): ?>
-		$('input[name="permission[customers]"]').prop('checked', true);
-		$('input[name="permission[customers]"]').attr('disabled', true);
-		$('#all_user_specific_customers').prop('checked', true);
-		$('input[name="prmsion"]').attr('disabled', true);
-		$('input[name="sales_person"][value="0"]').prop('checked', true);
-	<?php endif; ?>
-	$('input[name="sales_person"]').change(function() {
-		if (this.value == '1') {
+<?php if (ENABLE_CRM) { ?>
+	function toggleSalesPerson(val) {
+		if (val == '1') {
 			$('input[name="permission[customers]"]').prop('checked', true);
 			$('input[name="permission[customers]"]').attr('disabled', true);
 			$('#user_specific_customers').prop('checked', true);
 			$('input[name="prmsion"]').attr('disabled', true);
 			$('input[name="lead_manager"][value="0"]').prop('checked', true);
+			$('input[name="service_employee"][value="0"]').prop('checked', true);
 		} else {
 			$('input[name="permission[customers]"]').attr('disabled', false);
 			$('input[name="prmsion"]').attr('disabled', false);
 		}
-	});
+	}
 
-	$('input[name="lead_manager"]').change(function() {
-		if (this.value == '1') {
+	function toggleLeadManager(val) {
+		if (val == '1') {
 			$('input[name="permission[customers]"]').prop('checked', true);
 			$('input[name="permission[customers]"]').attr('disabled', true);
 			$('#all_user_specific_customers').prop('checked', true);
 			$('input[name="prmsion"]').attr('disabled', true);
 			$('input[name="sales_person"][value="0"]').prop('checked', true);
+			$('input[name="service_employee"][value="0"]').prop('checked', true);
 		} else {
 			$('input[name="permission[customers]"]').attr('disabled', false);
 			$('input[name="prmsion"]').attr('disabled', false);
 		}
+	}
+
+	function toggleServiceEmployee(val) {
+		if (val == '1') {
+			$('input[name="permission[customers]"]').prop('checked', true);
+			$('input[name="permission[customers]"]').attr('disabled', true);
+			$('#service_customers').prop('checked', true);
+			$('input[name="prmsion"]').attr('disabled', true);
+			$('input[name="sales_person"][value="0"]').prop('checked', true);
+			$('input[name="lead_manager"][value="0"]').prop('checked', true);
+		} else {
+			$('input[name="permission[customers]"]').attr('disabled', false);
+			$('input[name="prmsion"]').attr('disabled', false);
+		}
+	}
+	jQuery(function() {
+		<?php if ($employee['employee_type'] == 'sales_person') { ?>
+		toggleSalesPerson('1');
+		<?php } else if ($employee['employee_type'] == 'lead_manager') { ?>
+		toggleLeadManager('1');
+		<?php } else if ($employee['employee_type'] == 'service_employee') { ?>
+		toggleServiceEmployee('1');
+		<?php } ?>
+		$('input[name="sales_person"]').change(function() {
+			toggleSalesPerson(this.value);
+		});
+		$('input[name="lead_manager"]').change(function() {
+			toggleLeadManager(this.value);
+		});
+		$('input[name="service_employee"]').change(function() {
+			toggleServiceEmployee(this.value);
+		});
 	});
-});
+<?php } ?>
 </script>

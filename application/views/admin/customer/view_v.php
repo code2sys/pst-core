@@ -40,13 +40,13 @@
 <script type="application/javascript"  src="/assets/js_front/moment.js"></script>
 <div class="content_wrap" style="background:white; float:left;">
 	<div class="content">
+		<?php if (ENABLE_CRM) { ?>
 		<div class="tabular_data">
 			<table width="100%" style="float:left; margin:0 3% 0 0;">
 				<tr class="billing_display">
 					<td style="width:50%">
 						<div style="display:flex;align-items:center;justify-content:center;">
 							<h1 style="color:black;font-size:24px;">Sales Lead Owner</h1>
-							
 							<select id="sales_owner" name="created_by" style="margin:8px;max-width:200px">
 							<option value="">None</option>
 							<?php
@@ -55,6 +55,7 @@
 								<?php echo $sales_person['first_name'].' '.$sales_person['last_name'].'('.$sales_person['email'].')';?>
 								</option>
 							<?php endforeach;?>
+							<option value="-1" <?php echo $customer['created_by'] == -1 ? 'selected': '';?>>Service</option>
 							</select>
 						</div>
 					</td>
@@ -63,6 +64,7 @@
 				</tr>
 			</table>
 		</div>
+		<?php } ?>
 		
 		<h1 style="padding:5px; letter-spacing:0px; font-size:26px;"><i class="fa fa-users"></i>&nbsp;Customer Details</h1>
 		<div id="listTable">
@@ -237,6 +239,7 @@
 							<?php echo $calendar;?>
 						</td>
 					</tr>
+					<?php if (ENABLE_CRM) { ?>
 					<tr>
 						<td class="">
 							<div class="open_activities activities">
@@ -282,6 +285,7 @@
 							</div>
 						</td>
 					</tr>
+					<?php } ?>
 				</table>
 				</form>
 
@@ -348,7 +352,7 @@
 	</div>
 </script>
 <script>
-
+<?php if (ENABLE_CRM) { ?>
 window.NoteModel = Backbone.Model.extend({
 	defaults : {
 		"id" : 0,
@@ -485,6 +489,7 @@ window.NotesView = Backbone.View.extend({
 	}
 });
 
+<?php } ?>
 function FormatNumberLength(num, length) {
     var r = "" + num;
     while (r.length < length) {
@@ -579,11 +584,13 @@ $(document).on('click', '.dlt', function() {
 		window.location.href = "<?php echo site_url('admin/deleteReminderPopUpCustomer/');?>/"+id+'/'+user;
 	}
 });
+<?php if (ENABLE_CRM) { ?>
 $(document).on('change', '#sales_owner', function() {
 	var ajax_url = "<?php echo site_url('admin/ajax_assign_employee_to_customer/');?>";
 	$.post( ajax_url, {'customer':"<?php echo $user_id;?>", 'employee': $(this).val()}, function(){
 	});
 });
+<?php } ?>
 
 $(document).on('click', '.notes-section a.save', function() {
 	var ajax_url = "<?php echo site_url('admin/ajax_save_notes/');?>/"+"/<?php echo $user_id;?>";
@@ -601,6 +608,7 @@ $(document).on('click', '.notes-section a.save', function() {
 	});
 });
 
+<?php if (ENABLE_CRM) { ?>
 $(window).load(function() {
 	$(".open_activities table").dataTable({
 		"processing" : true,
@@ -658,5 +666,5 @@ $(window).load(function() {
 	window.notesView = notesView;
 	$("#notes-wrapper").html(notesView.render().el);
 });
-
+<?php } ?>
 </script>

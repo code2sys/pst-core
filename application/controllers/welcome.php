@@ -1093,7 +1093,7 @@ class Welcome extends Master_Controller {
 
         // JLB 06-22-18
         // All of these forms take a recaptcha now. Do your duty.
-        if (true/*jverifyRecaptcha()*/) {
+        if (jverifyRecaptcha()) {
 
             $post = $this->input->post();
 
@@ -1163,45 +1163,55 @@ class Welcome extends Master_Controller {
                     }
                 }
 
-                // Create new customer and assign 'in round robin' employee to the customer
-                $customer = $this->admin_m->createCustomerIfNotExist(array(
-                    "email" => $post["email"],
-                    "first_name" => $post["firstName"],
-                    "last_name" => $post["lastName"],
-                    "phone" => $post["phone"],
-                ));
+                if (defined('ENABLE_CRM') && ENABLE_CRM) { 
 
-                $employee = null;
-                if ($customer !== FALSE && !is_null($customer['created_by'])) {
-                    // Get the employee assigned to this customer
-                    $employee = $this->admin_m->getCustomerDetail($customer['created_by'], true);
-                }
+                    // Create new customer and assign 'in round robin' employee to the customer
+                    $customer = $this->admin_m->createCustomerIfNotExist(array(
+                        "email" => $post["email"],
+                        "first_name" => $post["firstName"],
+                        "last_name" => $post["lastName"],
+                        "phone" => $post["phone"],
+                    ));
 
-                if ($customer !== FALSE) {
-
-                    // create 'New Lead' event for the customer
-                    $now = date('Y-m-d H:i:s');
-                    $notes = str_replace("<br/>","\n", $message);
-                    $reminder = array(
-                        'notes' => $notes,
-                        'subject' => 'New Lead',
-                        'user_id' => $customer['id'],
-                        'start_datetime' => date('Y-m-d H:i:s'),
-                        'end_datetime' => date('Y-m-d H:i:s'),
-                        'data' => json_encode(array(
-                            'recur' => false,
-                            'recur_per' => false,
-                            'recur_every' => ''
-                        )),
-                        'created_on' => $now,
-                        'created_by' => $now,
-                        'modified_on' => $now,
-                        'id' => ''
-                    );
-                    if ($employee !== FALSE) {
-                        $reminder['created_by'] = $employee['id'];
+                    $employee = null;
+                    if ($customer !== FALSE && !is_null($customer['created_by'])) {
+                        // Get the employee assigned to this customer
+                        $employee = $this->admin_m->getCustomerDetail($customer['created_by'], true);
                     }
-                    $this->admin_m->saveCustomerReminder($reminder);
+
+                    if ($customer !== FALSE) {
+
+                        // create 'New Lead' event for the customer
+                        $now = date('Y-m-d H:i:s');
+                        $notes = str_replace("<br/>","\n", $message);
+                        $reminder = array(
+                            'notes' => $notes,
+                            'subject' => 'New Lead',
+                            'user_id' => $customer['id'],
+                            'start_datetime' => date('Y-m-d H:i:s'),
+                            'end_datetime' => date('Y-m-d H:i:s'),
+                            'data' => json_encode(array(
+                                'recur' => false,
+                                'recur_per' => false,
+                                'recur_every' => ''
+                            )),
+                            'created_on' => $now,
+                            'created_by' => $customer['created_by'],
+                            'modified_on' => $now,
+                            'id' => ''
+                        );
+                        if ($employee !== FALSE) {
+                            $reminder['created_by'] = $employee['id'];
+                        }
+                        $this->admin_m->saveCustomerReminder($reminder);
+                    }
+                    
+                    if ($employee !== FALSE) {
+                        if (!empty($employee['email']))
+                            $toEmail = $toEmail.",".$employee['email'];
+                        else if (!empty($employee['username']))
+                            $toEmail = $toEmail.",".$employee['username'];
+                    }
                 }
 
                 if ($actual_value) {
@@ -1217,19 +1227,6 @@ class Welcome extends Master_Controller {
                         "subject" => "New Unit Inquiry",
                         "message" => $message
                     ));
-
-                    // Send the email to employee
-                    if ($employee !== FALSE && !empty($employee['username'])) {
-                        $this->mail_gen_m->queueEmail(array(
-                            "toEmailAddress" => $employee['username'],
-                            "replyToEmailAddress" => $post['email'],
-                            "replyToName" => $post['firstName'] . " " . $post['lastName'],
-                            "fromEmailAddress" => "noreply@powersporttechnologies.com",
-                            "fromName" => "Major Unit Inquiry",
-                            "subject" => "New Unit Inquiry",
-                            "message" => $message
-                        ));
-                    }
 
                     // JLB 04-19-18
                     // Is the configuration in there for echoing leads to CDK?

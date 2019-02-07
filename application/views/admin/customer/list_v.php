@@ -40,7 +40,7 @@ table.dataTable thead th, table.dataTable thead td{border-bottom:0px solid #111 
 				</div>
 			</form>
 		</div>
-
+		<?php if (ENABLE_CRM) { ?>
 		<div id="listTable" class="open_activities">
 			<div style="margin-top:8px">
 				<h3 style="float:left">Open Activities</h3>
@@ -61,6 +61,7 @@ table.dataTable thead th, table.dataTable thead td{border-bottom:0px solid #111 
 				</tbody>
 			</table>
 		</div>
+		<?php } ?>
 		
 		<div id="listTable">
 			<div class="tabular_data">
@@ -121,7 +122,9 @@ $(document).ready(function() {
  
                 }
             }
-        } );
+		} );
+		
+		<?php if (ENABLE_CRM) { ?>
 
 		$(".open_activities table").dataTable({
 			"processing" : true,
@@ -148,6 +151,7 @@ $(document).ready(function() {
 				null,
 			],
 		});
+		<?php } ?>
     });
 </script>
 <script>
