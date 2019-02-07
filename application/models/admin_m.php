@@ -19,10 +19,17 @@ class Admin_M extends Master_M {
         return $record;
     }
 
-    public function getSliderImages($pageId, $page_section_id) {
-        $where = array('pageId' => $pageId, "page_section_id" => $page_section_id);
+    public function getSliderImages($pageId, $page_section_id = NULL, $only_valid = false) {
+        $this->db->where('pageId', $pageId);
+        if (!is_null($page_section_id)) {
+            $this->db->where('page_section_id', $page_section_id);
+        }
+        if ($only_valid) {
+            $this->db->where('(start_date is null or start_date <= CURDATE())');
+            $this->db->where('(end_date is null or end_date >= CURDATE())');
+        }
         $this->db->order_by('order ASC');
-        $records = $this->selectRecords('slider', $where);
+        $records = $this->selectRecords('slider');
         return $records;
     }
 
@@ -3238,6 +3245,10 @@ class Admin_M extends Master_M {
     public function updateSliderLink( $id, $link ) {
         $where = array('id' => $id);
         $data = array('banner_link' => $link);
+        $this->updateRecord('slider', $data, $where, FALSE);
+    }
+    public function updateSliderData( $id, $data ) {
+        $where = array('id' => $id);
         $this->updateRecord('slider', $data, $where, FALSE);
     }
 

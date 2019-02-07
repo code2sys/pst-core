@@ -1124,7 +1124,7 @@ class Pages extends Master_Controller {
   		$this->_mainData['widgets'] = $this->pages_m->getWidgets();
   		$js = '<script type="text/javascript" src="' . $this->_mainData['assets'] . '/ckeditor4/ckeditor.js"></script>';
   		$this->loadJS($js);
-  		$this->_mainData['edit_config'] = $this->_mainData['assets'] . '/js/htmleditor.js';
+  		$this->_mainData['edit_config'] = $this->_mainData['assets'] . '/js/page_htmleditor.js';
 
   		// We have to compute the flags based on the page information
         global $PSTAPI;
@@ -1349,7 +1349,22 @@ class Pages extends Master_Controller {
 			$this->admin_m->removeImage($id, $this->config->item('upload_path'));  
 		}
         redirect('pages/edit/'.$pageId);
-	}
+    }
+    
+    public function ajax_edit_image($id) {
+        $data = array();
+        if (isset($_POST['start_date'])) {
+            $data['start_date'] = $_POST['start_date'];
+        } else if (isset($_POST['end_date'])){
+            $data['end_date'] = $_POST['end_date'];
+        } else {
+            print json_encode(array('success' => FALSE));
+            return;
+        }
+
+        $this->admin_m->updateSliderData($id, $data);  
+        print json_encode(array('success' => TRUE));
+    }
 
 	protected function cleanYouTubeURL($url) {
         $piece = "https://www.youtube.com/watch?v=";
