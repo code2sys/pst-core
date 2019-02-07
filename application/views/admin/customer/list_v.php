@@ -192,4 +192,11 @@ $(document).on('click', '.clspopup', function() {
 $(document).on('click', '.svcls', function() {
 	$('#reminder_form').submit();
 });
+$(document).on('click', '.dlt', function() {
+	if( confirm("Are you sure you want to delete this event")) {
+		var id = $(this).data('id');
+		var user = $(this).data('user');
+		window.location.href = "<?php echo site_url('admin/deleteReminderPopUpCustomer/');?>/"+id+'/'+user;
+	}
+});
 </script>
