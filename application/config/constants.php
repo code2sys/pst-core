@@ -57,7 +57,7 @@ if (!defined('LIGHTSPEED_PST_PASSWORD')) {
 }
 
 if (!defined('LIGHTSPEED_PST_LICENSE_KEY')) {
-    define('LIGHTSPEED_PST_LICENSE_KEY', 'Unit');
+    define('LIGHTSPEED_PST_LICENSE_KEY', 'PowersportsTechnologies');
 }
 
 if (!defined('ENABLE_CRM')) {
